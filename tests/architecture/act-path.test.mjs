@@ -8,7 +8,7 @@ import {
 test("empty registry primary prefers Contact only when email exists", () => {
   assert.deepEqual(emptyRegistryPrimaryCta("hello@blueskyz.labs"), {
     href: "/contact/",
-    label: "Contact",
+    label: "Contact us",
   });
   assert.deepEqual(emptyRegistryPrimaryCta(null), {
     href: "/about/",

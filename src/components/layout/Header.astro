@@ -8,7 +8,9 @@ import { getPublicProducts } from "@/lib/products";
 
 const hasPublicProducts = (await getPublicProducts()).length > 0;
 const primaryCta = hasPublicProducts
-  ? { href: "/products/", label: "Explore products" }
+  ? SITE.contactEmail
+    ? { href: "/contact/", label: "Contact us" }
+    : { href: "/products/", label: "Explore products" }
   : emptyRegistryPrimaryCta(SITE.contactEmail);
 ---
 

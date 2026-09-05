@@ -1,10 +1,5 @@
 ---
-const principles = [
-  "Make complexity clearer.",
-  "Use intelligence with purpose.",
-  "Respect human agency.",
-  "Build for real-world use.",
-];
+import { BRAND_PRINCIPLES, SITE } from "@/data/site";
 ---
 
 <section
@@ -15,14 +10,19 @@ const principles = [
     One house
   </h2>
   <p class="mt-4 max-w-2xl text-lg text-[var(--text-secondary)]">
-    We don’t build around one category. We build around a way of thinking.
+    {SITE.motto} We don’t build around one category. We build around a way of thinking.
   </p>
-  <ul
-    class="mt-10 divide-y divide-[var(--border-subtle)] border-y border-[var(--border-subtle)]"
-  >
+  <ul class="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
     {
-      principles.map((item) => (
-        <li class="py-4 text-lg text-[var(--text-primary)]">{item}</li>
+      BRAND_PRINCIPLES.map((item) => (
+        <li class="border-t border-[var(--border-subtle)] pt-5">
+          <p class="text-sm font-semibold tracking-[0.14em] text-[var(--brand-cobalt)] uppercase">
+            {item.name}
+          </p>
+          <p class="mt-2 text-base text-[var(--text-primary)]">
+            {item.summary}
+          </p>
+        </li>
       ))
     }
   </ul>

@@ -28,7 +28,20 @@ import { FOOTER_LINKS, SITE } from "@/data/site";
     <p
       class="max-w-2xl text-sm text-[color-mix(in_srgb,var(--brand-porcelain)_72%,white)]"
     >
+      <span class="font-medium text-[var(--brand-porcelain)]"
+        >{SITE.taglineLead}{" "}
+        {SITE.taglineAccent}</span
+      >
+    </p>
+    <p
+      class="max-w-2xl text-sm text-[color-mix(in_srgb,var(--brand-porcelain)_72%,white)]"
+    >
       {SITE.proposition}
+    </p>
+    <p
+      class="text-xs tracking-[0.12em] text-[color-mix(in_srgb,var(--brand-porcelain)_58%,white)] uppercase"
+    >
+      {SITE.motto}
     </p>
   </Container>
 </footer>
