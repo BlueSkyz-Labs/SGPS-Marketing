@@ -13,45 +13,69 @@ const emptySecondary = emptyRegistrySecondaryCta(SITE.contactEmail);
 ---
 
 <section
-  class="hero-plane relative isolate overflow-hidden border-b border-[var(--border-subtle)]"
+  class="hero-plane hero-plane--ink relative isolate overflow-hidden border-b border-white/10"
   aria-labelledby="hero-title"
 >
-  <div class="hero-atmosphere" aria-hidden="true"></div>
+  <div class="hero-atmosphere hero-atmosphere--ink" aria-hidden="true"></div>
   <Reveal
     as="div"
-    class="relative mx-auto w-full max-w-6xl px-4 py-20 sm:px-6 sm:py-28 lg:px-8"
+    class="relative mx-auto grid w-full max-w-6xl gap-10 px-4 py-20 sm:px-6 sm:py-28 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] lg:items-center lg:px-8"
   >
-    <BrandLockup size="hero" />
-    <h1
-      id="hero-title"
-      class="mt-6 max-w-[18ch] text-4xl font-semibold tracking-tight text-[var(--text-primary)] sm:text-5xl lg:text-6xl"
+    <div>
+      <BrandLockup size="hero" surface="ink" />
+      <h1
+        id="hero-title"
+        class="mt-8 max-w-[14ch] text-4xl font-semibold tracking-tight text-[var(--brand-porcelain)] sm:text-5xl lg:text-6xl"
+      >
+        <span class="block">{SITE.taglineLead}</span>
+        <span class="mt-1 block text-[var(--brand-cobalt)]"
+          >{SITE.taglineAccent}</span
+        >
+      </h1>
+      <p
+        class="mt-5 max-w-xl text-lg text-[color-mix(in_srgb,var(--brand-porcelain)_78%,transparent)]"
+      >
+        {SITE.proposition}
+      </p>
+      <p
+        class="mt-3 max-w-xl text-sm text-[color-mix(in_srgb,var(--brand-porcelain)_62%,transparent)]"
+      >
+        {SITE.supporting}
+      </p>
+      <div class="mt-10 flex flex-wrap gap-3">
+        {
+          hasPublicProducts ? (
+            <>
+              <ButtonLink href="/products/">Explore Our Products</ButtonLink>
+              <ButtonLink href="/about/" variant="on-ink">
+                About BlueSkyz
+              </ButtonLink>
+            </>
+          ) : (
+            <>
+              <ButtonLink href={emptyPrimary.href}>
+                {emptyPrimary.label}
+              </ButtonLink>
+              <ButtonLink href={emptySecondary.href} variant="on-ink">
+                {emptySecondary.label}
+              </ButtonLink>
+            </>
+          )
+        }
+      </div>
+    </div>
+    <div
+      class="hero-mark-stage mx-auto w-full max-w-md lg:max-w-none"
+      aria-hidden="true"
     >
-      {SITE.proposition}
-    </h1>
-    <p class="mt-5 max-w-xl text-lg text-[var(--text-secondary)]">
-      Thoughtful digital products shaped around real people, real decisions, and
-      real-world use.
-    </p>
-    <div class="mt-10 flex flex-wrap gap-3">
-      {
-        hasPublicProducts ? (
-          <>
-            <ButtonLink href="/products/">Explore products</ButtonLink>
-            <ButtonLink href="/about/" variant="secondary">
-              About BlueSkyz
-            </ButtonLink>
-          </>
-        ) : (
-          <>
-            <ButtonLink href={emptyPrimary.href}>
-              {emptyPrimary.label}
-            </ButtonLink>
-            <ButtonLink href={emptySecondary.href} variant="secondary">
-              {emptySecondary.label}
-            </ButtonLink>
-          </>
-        )
-      }
+      <img
+        src="/brand/blueskyz/r4d/symbol_mono_porcelain.svg"
+        alt=""
+        width="420"
+        height="420"
+        class="hero-mark mx-auto block h-auto w-[min(100%,22rem)] drop-shadow-[0_0_48px_color-mix(in_srgb,var(--brand-cobalt)_45%,transparent)]"
+        decoding="async"
+      />
     </div>
   </Reveal>
 </section>

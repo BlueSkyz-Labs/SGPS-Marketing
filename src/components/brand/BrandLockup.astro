@@ -2,9 +2,11 @@
 interface Props {
   size?: "header" | "hero" | "footer";
   href?: string;
+  /** Porcelain (default) or Ink surfaces — picks outlined lockup polarity. */
+  surface?: "porcelain" | "ink";
 }
 
-const { size = "header", href } = Astro.props;
+const { size = "header", href, surface = "porcelain" } = Astro.props;
 
 type LockupGeometry = {
   height: number;
@@ -12,27 +14,23 @@ type LockupGeometry = {
   src: string;
 };
 
-function lockupGeometry(value: "header" | "hero" | "footer"): LockupGeometry {
-  // Horizontal lockup viewBox 900×190 → keep aspect 900/190 ≈ 4.737
+function lockupGeometry(
+  value: "header" | "hero" | "footer",
+  surfaceValue: "porcelain" | "ink",
+): LockupGeometry {
+  // Horizontal lockup viewBox ≈ 900×190 → aspect ~4.737
+  const onInk = surfaceValue === "ink" || value === "footer";
+  const src = onInk
+    ? "/brand/blueskyz/r4d/lockup_horizontal_light.svg"
+    : "/brand/blueskyz/r4d/lockup_horizontal_dark.svg";
+
   switch (value) {
     case "header":
-      return {
-        height: 28,
-        width: 133,
-        src: "/brand/blueskyz/r4d/lockup_horizontal_dark.svg",
-      };
+      return { height: 28, width: 133, src };
     case "hero":
-      return {
-        height: 44,
-        width: 208,
-        src: "/brand/blueskyz/r4d/lockup_horizontal_dark.svg",
-      };
+      return { height: 44, width: 208, src };
     case "footer":
-      return {
-        height: 28,
-        width: 133,
-        src: "/brand/blueskyz/r4d/lockup_horizontal_light.svg",
-      };
+      return { height: 28, width: 133, src };
     default: {
       const _exhaustive: never = value;
       return _exhaustive;
@@ -40,7 +38,7 @@ function lockupGeometry(value: "header" | "hero" | "footer"): LockupGeometry {
   }
 }
 
-const geometry = lockupGeometry(size);
+const geometry = lockupGeometry(size, surface);
 const Tag = href ? "a" : "p";
 const className = [
   "brand-lockup inline-flex min-h-11 items-center no-underline",

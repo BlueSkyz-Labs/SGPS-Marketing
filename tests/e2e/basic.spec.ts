@@ -6,7 +6,10 @@ test.describe("Smoke — Astro foundation", () => {
     expect(response, "navigation response").not.toBeNull();
     expect(response!.status(), "HTTP status").toBeLessThan(400);
     await expect(page.getByRole("heading", { level: 1 })).toContainText(
-      "complex things feel naturally clear",
+      "Intelligence. Elevated.",
+    );
+    await expect(page.getByRole("heading", { level: 1 })).toContainText(
+      "Impact.",
     );
     await expect(page.locator("main#main-content")).toBeVisible();
   });

@@ -1,18 +1,19 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import Container from "@/components/layout/Container.astro";
+import { SITE } from "@/data/site";
 ---
 
 <BaseLayout
   title="About"
-  description="About BlueSkyz Labs — products that make complex things feel naturally clear."
+  description={`About BlueSkyz Labs — ${SITE.proposition}`}
 >
   <section class="py-16">
     <Container>
       <h1 class="text-3xl font-semibold tracking-tight">About BlueSkyz</h1>
       <p class="mt-4 max-w-2xl text-[var(--text-secondary)]">
-        BlueSkyz Labs builds digital products that make complex things feel
-        naturally clear.
+        {SITE.proposition}
+        {SITE.supporting}
       </p>
       <p class="mt-4 text-sm font-medium text-[var(--text-muted)]">
         Tony Nguyen — Founder &amp; CEO

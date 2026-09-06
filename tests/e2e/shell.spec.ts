@@ -21,7 +21,10 @@ test("shell exposes skip link and product-led nav", async ({ page }) => {
     }),
   ).toBeVisible();
   await expect(page.getByRole("heading", { level: 1 })).toContainText(
-    "complex things feel naturally clear",
+    "Intelligence. Elevated.",
+  );
+  await expect(page.getByRole("heading", { level: 1 })).toContainText(
+    "Impact.",
   );
 });
 

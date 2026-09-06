@@ -1,7 +1,7 @@
 ---
 interface Props {
   href: string;
-  variant?: "primary" | "secondary";
+  variant?: "primary" | "secondary" | "on-ink";
   class?: string;
 }
 const { href, variant = "primary", class: className = "" } = Astro.props;
@@ -13,9 +13,12 @@ const isExternal = /^https?:\/\//i.test(href);
   rel={isExternal ? "noopener noreferrer" : undefined}
   class:list={[
     "inline-flex min-h-11 items-center justify-center rounded-lg px-5 py-2.5 text-sm font-semibold no-underline",
-    variant === "primary" && "bg-[#1d4ed8] text-[#ffffff] hover:bg-[#1e40af]",
+    variant === "primary" &&
+      "bg-[var(--brand-cobalt)] text-[#ffffff] hover:bg-[#1d4ed8]",
     variant === "secondary" &&
       "border border-[var(--border-subtle)] bg-[#ffffff] text-[var(--text-primary)] hover:bg-[var(--surface-subtle)]",
+    variant === "on-ink" &&
+      "border border-white/25 bg-transparent text-[var(--brand-porcelain)] hover:bg-white/10",
     className,
   ]}
 >

@@ -12,7 +12,7 @@ export function emptyRegistryPrimaryCta(
   contactEmail: string | null | undefined,
 ): ActCta {
   if (contactEmail) {
-    return { href: "/contact/", label: "Contact" };
+    return { href: "/contact/", label: "Contact us" };
   }
   return { href: "/about/", label: "About BlueSkyz" };
 }

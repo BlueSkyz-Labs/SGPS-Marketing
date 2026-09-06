@@ -5,7 +5,10 @@ test("homepage explains BlueSkyz and rejects old positioning", async ({
 }) => {
   await page.goto("/");
   await expect(page.getByRole("heading", { level: 1 })).toContainText(
-    /build products.*complex.*clear/i,
+    /Intelligence\.\s*Elevated\./i,
+  );
+  await expect(page.getByRole("heading", { level: 1 })).toContainText(
+    /Impact\./i,
   );
   await expect(
     page.getByRole("link", { name: /About BlueSkyz/i }).first(),
