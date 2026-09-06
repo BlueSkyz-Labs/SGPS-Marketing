@@ -1,0 +1,38 @@
+name: Lockfile Probe
+
+on:
+  push:
+    branches:
+      - audit/pin-wrangler-deploy-2026-09-07
+
+permissions:
+  contents: read
+
+jobs:
+  generate-lockfile:
+    name: Generate Wrangler lockfile
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout exact candidate
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - name: Set up Node 24.20.0
+        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
+        with:
+          node-version: 24.20.0
+      - name: Activate project package manager
+        run: |
+          corepack enable
+          pnpm --version
+      - name: Resolve locked deployment CLI
+        run: pnpm install --lockfile-only --no-frozen-lockfile
+      - name: Upload generated lockfile
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: wrangler-lockfile-${{ github.sha }}
+          path: pnpm-lock.yaml
+          if-no-files-found: error
+          retention-days: 1
