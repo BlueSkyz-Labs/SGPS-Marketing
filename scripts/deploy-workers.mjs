@@ -25,4 +25,4 @@ function run(command, args) {
 run("pnpm", ["build"]);
 run("pnpm", ["check:client-budget"]);
 run("pnpm", ["check:static-links"]);
-run("npx", ["wrangler", "deploy"]);
+run("pnpm", ["wrangler", "deploy"]);
