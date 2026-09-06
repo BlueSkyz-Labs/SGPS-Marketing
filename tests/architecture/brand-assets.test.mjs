@@ -38,7 +38,11 @@ function countDarkPixelsInRgbPng(path) {
       height = png.readUInt32BE(dataStart + 4);
       assert.equal(png[dataStart + 8], 8, "OG PNG must remain 8-bit");
       assert.equal(png[dataStart + 9], 2, "OG PNG must remain RGB");
-      assert.equal(png[dataStart + 10], 0, "unsupported PNG compression method");
+      assert.equal(
+        png[dataStart + 10],
+        0,
+        "unsupported PNG compression method",
+      );
       assert.equal(png[dataStart + 11], 0, "unsupported PNG filter method");
       assert.equal(png[dataStart + 12], 0, "OG PNG must remain non-interlaced");
     } else if (type === "IDAT") {
@@ -56,7 +60,11 @@ function countDarkPixelsInRgbPng(path) {
   const bytesPerPixel = 3;
   const stride = width * bytesPerPixel;
   const raw = inflateSync(Buffer.concat(idat));
-  assert.equal(raw.length, height * (stride + 1), "unexpected PNG scanline size");
+  assert.equal(
+    raw.length,
+    height * (stride + 1),
+    "unexpected PNG scanline size",
+  );
 
   let dark = 0;
   let previous = Buffer.alloc(stride);
