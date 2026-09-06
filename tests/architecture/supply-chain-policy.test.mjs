@@ -25,3 +25,24 @@ test("pnpm supply-chain policy is explicit and fail closed", () => {
     /minimum-release-age|minimumReleaseAge|dangerouslyAllowAllBuilds|ignore-scripts|ignoreScripts/,
   );
 });
+
+test("GitHub source assurance is immutable, least privilege, and secretless", () => {
+  const workflow = readIfPresent(".github/workflows/quality-gates.yml");
+
+  assert.match(workflow, /^name:\s*Source Assurance/m);
+  assert.match(workflow, /permissions:\s*\n\s+contents:\s*read/);
+  assert.match(workflow, /name:\s*Quality Gates/);
+  assert.match(workflow, /name:\s*Browser Assurance/);
+
+  const actionRefs = [...workflow.matchAll(/uses:\s*[^@\s]+@([^\s#]+)/g)].map(
+    ([, ref]) => ref,
+  );
+  assert.ok(actionRefs.length >= 2, "expected pinned checkout/setup-node actions");
+  for (const ref of actionRefs) {
+    assert.match(ref, /^[0-9a-f]{40}$/, `action ref must be a full SHA: ${ref}`);
+  }
+
+  assert.doesNotMatch(workflow, /secrets\./);
+  assert.doesNotMatch(workflow, /CLOUDFLARE|wrangler|deploy:workers/);
+  assert.doesNotMatch(workflow, /permissions:\s*write-all|contents:\s*write/);
+});
