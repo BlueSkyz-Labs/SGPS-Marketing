@@ -1,0 +1,72 @@
+name: Source Assurance
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+concurrency:
+  group: source-assurance-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  quality-gates:
+    name: Quality Gates
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout exact candidate
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+      - name: Set up Node 24.20.0
+        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
+        with:
+          node-version: 24.20.0
+      - name: Activate project package manager
+        run: |
+          corepack enable
+          pnpm --version
+      - name: Install frozen dependency graph
+        run: pnpm install --frozen-lockfile
+      - name: Architecture contracts
+        run: pnpm test:architecture
+      - name: Typecheck
+        run: pnpm typecheck
+      - name: Lint
+        run: pnpm lint
+      - name: Formatting
+        run: pnpm format:check
+      - name: Static build
+        run: pnpm build
+      - name: Client JavaScript budget
+        run: pnpm check:client-budget
+      - name: Static links
+        run: pnpm check:static-links
+
+  browser-assurance:
+    name: Browser Assurance
+    needs: quality-gates
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout exact candidate
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+      - name: Set up Node 24.20.0
+        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
+        with:
+          node-version: 24.20.0
+      - name: Activate project package manager
+        run: |
+          corepack enable
+          pnpm --version
+      - name: Install frozen dependency graph
+        run: pnpm install --frozen-lockfile
+      - name: Install Chromium runtime
+        run: pnpm exec playwright install --with-deps chromium
+      - name: Playwright and axe assurance
+        run: pnpm exec playwright test --project=chromium
+      - name: Lighthouse CI
+        run: pnpm lighthouse
