@@ -66,6 +66,17 @@ test("GitHub source assurance is immutable, least privilege, secretless, and exa
     "source-assurance checkout must not persist GitHub credentials",
   );
 
+  const browserJob = workflow.split("\n  browser-assurance:")[1] ?? "";
+  const buildIndex = browserJob.indexOf("run: pnpm build");
+  const playwrightIndex = browserJob.indexOf(
+    "run: pnpm exec playwright test --project=chromium",
+  );
+  assert.ok(buildIndex >= 0, "browser assurance must build the static artifact");
+  assert.ok(
+    playwrightIndex > buildIndex,
+    "browser assurance must build dist before Playwright starts Astro preview",
+  );
+
   assert.doesNotMatch(workflow, /secrets\./);
   assert.doesNotMatch(workflow, /CLOUDFLARE|wrangler|deploy:workers/);
   assert.doesNotMatch(workflow, /permissions:\s*write-all|contents:\s*write/);
