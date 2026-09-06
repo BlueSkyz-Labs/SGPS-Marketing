@@ -37,8 +37,11 @@ jobs:
         run: pnpm typecheck
       - name: Lint
         run: pnpm lint
-      - name: Formatting
-        run: pnpm format:check
+      - name: Formatting diagnostic
+        run: |
+          pnpm format
+          git diff -- docs/superpowers/plans/2026-09-07-global-elite-hardening-implementation.md tests/architecture/brand-assets.test.mjs tests/architecture/supply-chain-policy.test.mjs
+          exit 1
       - name: Static build
         run: pnpm build
       - name: Client JavaScript budget
