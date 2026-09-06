@@ -70,6 +70,8 @@ jobs:
           pnpm --version
       - name: Install frozen dependency graph
         run: pnpm install --frozen-lockfile
+      - name: Build browser test artifact
+        run: pnpm build
       - name: Install Chromium runtime
         run: pnpm exec playwright install --with-deps chromium
       - name: Playwright and axe assurance
