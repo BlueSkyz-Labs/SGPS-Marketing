@@ -25,12 +25,14 @@
 ### Task 1: Lock the supply-chain contract with a failing architecture test
 
 **Files:**
+
 - Create: `tests/architecture/supply-chain-policy.test.mjs`
 - Later modify: `package.json`
 - Later create: `pnpm-workspace.yaml`
 - Later delete: `.npmrc`
 
 **Interfaces:**
+
 - Consumes: Node built-in `node:test`, `node:assert/strict`, filesystem reads used by existing architecture tests.
 - Produces: regression assertions for package-manager floor and pnpm project policy.
 
@@ -47,7 +49,10 @@ assert.match(workspace, /minimumReleaseAgeIgnoreMissingTime:\s*false/);
 assert.match(workspace, /blockExoticSubdeps:\s*true/);
 assert.match(workspace, /strictDepBuilds:\s*true/);
 assert.doesNotMatch(workspace, /dangerouslyAllowAllBuilds/);
-assert.doesNotMatch(npmrc, /minimum-release-age|dangerouslyAllowAllBuilds|ignore-scripts/);
+assert.doesNotMatch(
+  npmrc,
+  /minimum-release-age|dangerouslyAllowAllBuilds|ignore-scripts/,
+);
 ```
 
 Also assert `allowBuilds:` exists so lifecycle-script execution cannot silently widen.
@@ -84,10 +89,12 @@ Expected: zero failures.
 ### Task 2: Add an immutable, least-privilege source-assurance workflow
 
 **Files:**
+
 - Create: `.github/workflows/quality-gates.yml`
 - Modify: `tests/architecture/supply-chain-policy.test.mjs`
 
 **Interfaces:**
+
 - Consumes: package scripts in `package.json`; Node 24.20.0; project pnpm pin.
 - Produces: required-check candidates `Quality Gates` and `Browser Assurance`.
 
@@ -143,12 +150,14 @@ Create/update PR, inspect the exact head workflow run, and require both jobs to 
 ### Task 3: Reconcile governance source-of-truth documents
 
 **Files:**
+
 - Modify: `docs/QA_STRATEGY.md`
 - Modify: `AGENTS.md`
 - Modify: `docs/superpowers/plans/2026-09-03-remaining-convergence.md`
 - Create: `docs/evidence/2026-09-07-global-elite-hardening.md`
 
 **Interfaces:**
+
 - Consumes: status-check names from Task 2 and verified repository `rulesets=[]` state.
 - Produces: truthful operator/agent guidance that distinguishes implemented CI from pending ruleset enforcement.
 
@@ -179,6 +188,7 @@ Record baseline SHA, ruleset read (`[]`), stale PR #67 state, supply-chain findi
 **Files:** GitHub metadata only.
 
 **Interfaces:**
+
 - Consumes: verified main history and PR #67 metadata.
 - Produces: clean PR backlog and an exact governance remediation ticket.
 
@@ -205,6 +215,7 @@ Close only those proven fully landed/superseded. Do not bulk-close ambiguous act
 **Files:** all changed files plus GitHub PR metadata.
 
 **Interfaces:**
+
 - Consumes: Tasks 1–4.
 - Produces: verified hardening commit on `main` or a precise blocker report if GitHub prevents promotion.
 
