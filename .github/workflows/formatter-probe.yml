@@ -1,0 +1,44 @@
+name: Formatter Probe
+
+on:
+  push:
+    branches:
+      - audit/pin-wrangler-deploy-2026-09-07
+
+permissions:
+  contents: read
+
+jobs:
+  format-tests:
+    name: Capture canonical test formatting
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout exact candidate
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - name: Set up Node 24.20.0
+        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
+        with:
+          node-version: 24.20.0
+      - name: Activate integrity-pinned package manager
+        run: |
+          corepack enable
+          pnpm --version
+      - name: Install locked tools without lifecycle scripts
+        run: pnpm install --frozen-lockfile --ignore-scripts
+      - name: Format targeted tests
+        run: pnpm exec prettier --write tests/architecture/supply-chain-policy.test.mjs tests/architecture/deploy-toolchain.test.mjs
+      - name: Verify canonical formatting
+        run: pnpm exec prettier --check tests/architecture/supply-chain-policy.test.mjs tests/architecture/deploy-toolchain.test.mjs
+      - name: Upload canonical source
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: canonical-test-format-${{ github.sha }}
+          path: |
+            tests/architecture/supply-chain-policy.test.mjs
+            tests/architecture/deploy-toolchain.test.mjs
+          if-no-files-found: error
+          retention-days: 1
