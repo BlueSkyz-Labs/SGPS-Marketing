@@ -1,8 +1,10 @@
 packages:
   - "."
 
-minimumReleaseAgeExclude:
-  - astro@7.3.1
-
+minimumReleaseAge: 1440
+minimumReleaseAgeStrict: true
+minimumReleaseAgeIgnoreMissingTime: false
+blockExoticSubdeps: true
+strictDepBuilds: true
 allowBuilds:
   esbuild: true
