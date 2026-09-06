@@ -37,3 +37,11 @@ upgrade was not blocked on that refresh.
 1. Squash-merge PR #67 into `main` (token with `pull_requests: write` / merge).
 2. Refresh agent GitHub credentials so future `gh` / ManagePullRequest work.
 3. Owner-gated: production emails · Issue #8 rulesets · public product YAML · photography · Cursor App `sgps-core` grant.
+
+## Main alignment (2026-09-06 later)
+
+| Item       | Value                                                                |
+| ---------- | -------------------------------------------------------------------- |
+| `main` SHA | `6862bf4` (direct squash push; PAT cannot `mergePullRequest`)        |
+| PR #67     | Still OPEN in GitHub UI if agent cannot close — content is on `main` |
+| Live       | Re-verified on `tonydemo.com` + workers.dev after main tip deploy    |
