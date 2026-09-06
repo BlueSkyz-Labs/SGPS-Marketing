@@ -10,3 +10,4 @@ Each file: `NNNN-short-slug.md` — chronological, never edited, only added.
 | 0002 | 2026-09-03 | Cloudflare-first CI economics        | Accepted   |
 | 0003 | 2026-09-03 | Custom Nav over Radix NavigationMenu | Accepted   |
 | 0004 | 2026-09-04 | BlueSkyz Web V1 framework selection  | Accepted   |
+| 0005 | 2026-09-07 | Dual-control source assurance        | Accepted   |
