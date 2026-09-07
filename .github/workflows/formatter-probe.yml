@@ -1,4 +1,4 @@
-name: Formatter Probe
+name: Wrangler Diagnostic Assurance
 
 on:
   push:
@@ -8,11 +8,15 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: wrangler-diagnostic-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
-  format-tests:
-    name: Capture canonical test formatting
+  verify:
+    name: Verify locked Wrangler graph
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 15
     steps:
       - name: Checkout exact candidate
         uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
@@ -27,18 +31,21 @@ jobs:
         run: |
           corepack enable
           pnpm --version
-      - name: Install locked tools without lifecycle scripts
-        run: pnpm install --frozen-lockfile --ignore-scripts
-      - name: Format targeted tests
-        run: pnpm exec prettier --write tests/architecture/supply-chain-policy.test.mjs tests/architecture/deploy-toolchain.test.mjs
-      - name: Verify canonical formatting
-        run: pnpm exec prettier --check tests/architecture/supply-chain-policy.test.mjs tests/architecture/deploy-toolchain.test.mjs
-      - name: Upload canonical source
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
-        with:
-          name: canonical-test-format-${{ github.sha }}
-          path: |
-            tests/architecture/supply-chain-policy.test.mjs
-            tests/architecture/deploy-toolchain.test.mjs
-          if-no-files-found: error
-          retention-days: 1
+      - name: Clean frozen install with lifecycle policy enforced
+        run: pnpm install --frozen-lockfile
+      - name: Verify deployment toolchain contract
+        run: node --test tests/architecture/deploy-toolchain.test.mjs
+      - name: Verify full architecture contracts
+        run: pnpm test:architecture
+      - name: Typecheck
+        run: pnpm typecheck
+      - name: Lint
+        run: pnpm lint
+      - name: Formatting
+        run: pnpm format:check
+      - name: Static build
+        run: pnpm build
+      - name: Client JavaScript budget
+        run: pnpm check:client-budget
+      - name: Static links
+        run: pnpm check:static-links
