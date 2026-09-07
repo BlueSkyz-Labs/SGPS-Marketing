@@ -1,4 +1,4 @@
-name: Wrangler Diagnostic Assurance
+name: Canonical Docs Formatter Probe
 
 on:
   push:
@@ -8,20 +8,16 @@ on:
 permissions:
   contents: read
 
-concurrency:
-  group: wrangler-diagnostic-${{ github.ref }}
-  cancel-in-progress: true
-
 jobs:
-  verify:
-    name: Verify locked Wrangler graph
+  format-doc:
+    name: Capture canonical remaining-convergence formatting
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 10
     steps:
-      - name: Checkout exact candidate
+      - name: Checkout exact hardening candidate
         uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
         with:
-          ref: ${{ github.sha }}
+          ref: 285d339a130a0a0c1fbba67fe48872b680bacb7c
           persist-credentials: false
       - name: Set up Node 24.20.0
         uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
@@ -31,23 +27,16 @@ jobs:
         run: |
           corepack enable
           pnpm --version
-      - name: Clean frozen install with lifecycle policy enforced
-        run: pnpm install --frozen-lockfile
-      - name: Audit locked dependency graph
-        run: pnpm audit --audit-level=high
-      - name: Verify deployment toolchain contract
-        run: node --test tests/architecture/deploy-toolchain.test.mjs
-      - name: Verify full architecture contracts
-        run: pnpm test:architecture
-      - name: Typecheck
-        run: pnpm typecheck
-      - name: Lint
-        run: pnpm lint
-      - name: Formatting
-        run: pnpm format:check
-      - name: Static build
-        run: pnpm build
-      - name: Client JavaScript budget
-        run: pnpm check:client-budget
-      - name: Static links
-        run: pnpm check:static-links
+      - name: Install locked formatter without lifecycle scripts
+        run: pnpm install --frozen-lockfile --ignore-scripts
+      - name: Apply canonical formatting
+        run: pnpm exec prettier --write docs/superpowers/plans/2026-09-03-remaining-convergence.md
+      - name: Verify canonical formatting
+        run: pnpm exec prettier --check docs/superpowers/plans/2026-09-03-remaining-convergence.md
+      - name: Upload canonical document
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: canonical-remaining-convergence-${{ github.sha }}
+          path: docs/superpowers/plans/2026-09-03-remaining-convergence.md
+          if-no-files-found: error
+          retention-days: 1
