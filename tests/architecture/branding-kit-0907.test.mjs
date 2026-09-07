@@ -46,7 +46,7 @@ test("runtime branding is routed through one migration adapter instead of compon
   const brand = readFileSync("src/data/brand.ts", "utf8");
   assert.match(brand, /BlueSkyzLabs_Brand_Kit_Production_v4/);
   assert.match(brand, /legacy-r4d-fallback/);
-  assert.match(brand, /\/brand\/blueskyz\/r4d\//);
+  assert.match(brand, /\/brand\/blueskyz\/r4d/);
 
   for (const path of [
     "src/components/brand/BrandLockup.astro",
@@ -56,7 +56,7 @@ test("runtime branding is routed through one migration adapter instead of compon
     const source = readFileSync(path, "utf8");
     assert.doesNotMatch(
       source,
-      /\/brand\/blueskyz\/r4d\//,
+      /\/brand\/blueskyz\/r4d/,
       `${path} must use the centralized brand adapter`,
     );
   }
