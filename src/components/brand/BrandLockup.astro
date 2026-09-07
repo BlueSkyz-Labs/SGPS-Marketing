@@ -1,8 +1,10 @@
 ---
+import { BRAND_ASSETS } from "@/data/brand";
+
 interface Props {
   size?: "header" | "hero" | "footer";
   href?: string;
-  /** Porcelain (default) or Ink surfaces — picks outlined lockup polarity. */
+  /** Light or dark surface polarity; runtime asset mapping is centralized. */
   surface?: "porcelain" | "ink";
 }
 
@@ -18,11 +20,11 @@ function lockupGeometry(
   value: "header" | "hero" | "footer",
   surfaceValue: "porcelain" | "ink",
 ): LockupGeometry {
-  // Horizontal lockup viewBox ≈ 900×190 → aspect ~4.737
+  // Current fallback lockup viewBox ≈ 900×190 → aspect ~4.737.
   const onInk = surfaceValue === "ink" || value === "footer";
   const src = onInk
-    ? "/brand/blueskyz/r4d/lockup_horizontal_light.svg"
-    : "/brand/blueskyz/r4d/lockup_horizontal_dark.svg";
+    ? BRAND_ASSETS.lockupHorizontalLight
+    : BRAND_ASSETS.lockupHorizontalDark;
 
   switch (value) {
     case "header":
