@@ -1,27 +1,32 @@
 ---
-import BaseLayout from "@/layouts/BaseLayout.astro";
 import Container from "@/components/layout/Container.astro";
+import BrandStory from "@/components/sections/BrandStory.astro";
+import BaseLayout from "@/layouts/BaseLayout.astro";
 import { SITE } from "@/data/site";
 ---
 
 <BaseLayout
-  title="About"
-  description={`About BlueSkyz Labs — ${SITE.proposition}`}
+  title="About BlueSkyz"
+  description="Meet BlueSkyz Labs, the product house founded by Tony Nguyen in Ho Chi Minh City."
 >
-  <section class="py-16">
-    <Container>
-      <h1 class="text-3xl font-semibold tracking-tight">About BlueSkyz</h1>
-      <p class="mt-4 max-w-2xl text-[var(--text-secondary)]">
-        {SITE.proposition}
-        {SITE.supporting}
+  <Container class="py-16 sm:py-20">
+    <section class="max-w-3xl" aria-labelledby="about-page-title">
+      <p
+        class="text-xs font-semibold tracking-[0.16em] text-[var(--text-muted)] uppercase"
+      >
+        About BlueSkyz
       </p>
-      <p class="mt-4 text-sm font-medium text-[var(--text-muted)]">
-        Tony Nguyen — Founder &amp; CEO
+      <h1
+        id="about-page-title"
+        class="mt-4 text-4xl font-semibold tracking-tight sm:text-5xl"
+      >
+        Build with clarity. Earn trust through the work.
+      </h1>
+      <p class="mt-6 max-w-2xl text-lg leading-8 text-[var(--text-secondary)]">
+        {SITE.proposition} {SITE.supporting}
       </p>
-      <p class="mt-8 max-w-2xl text-sm text-[var(--text-muted)]">
-        Extended founder or company biography publishes when approved for the
-        public site. This page stays BlueSkyz-led, not a personal portfolio.
-      </p>
-    </Container>
-  </section>
+    </section>
+
+    <BrandStory />
+  </Container>
 </BaseLayout>
