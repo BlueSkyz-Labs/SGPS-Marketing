@@ -1,4 +1,4 @@
-name: Branding 0907 TDD Probe
+name: Branding 0907 Full QA Probe
 
 on:
   push:
@@ -13,10 +13,10 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  targeted:
-    name: Branding identity contract
+  source-gates:
+    name: Branding Source Gates
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 20
     steps:
       - name: Checkout exact candidate
         uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
@@ -27,5 +27,53 @@ jobs:
         uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
         with:
           node-version: 24.20.0
-      - name: Run Branding Kit 0907 contracts
-        run: node --test tests/architecture/branding-kit-0907.test.mjs tests/architecture/seo-contract.test.mjs
+      - name: Activate project package manager
+        run: |
+          corepack enable
+          pnpm --version
+      - name: Install frozen graph
+        run: pnpm install --frozen-lockfile
+      - name: Architecture contracts
+        run: pnpm test:architecture
+      - name: Typecheck
+        run: pnpm typecheck
+      - name: Lint
+        run: pnpm lint
+      - name: Formatting
+        run: pnpm format:check
+      - name: Static build
+        run: pnpm build
+      - name: Client JavaScript budget
+        run: pnpm check:client-budget
+      - name: Static links
+        run: pnpm check:static-links
+
+  browser-gates:
+    name: Branding Browser Gates
+    needs: source-gates
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: Checkout exact candidate
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - name: Set up Node 24.20.0
+        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
+        with:
+          node-version: 24.20.0
+      - name: Activate project package manager
+        run: |
+          corepack enable
+          pnpm --version
+      - name: Install frozen graph
+        run: pnpm install --frozen-lockfile
+      - name: Build static artifact
+        run: pnpm build
+      - name: Install Chromium
+        run: pnpm exec playwright install --with-deps chromium
+      - name: Playwright and axe
+        run: pnpm exec playwright test --project=chromium
+      - name: Lighthouse CI
+        run: pnpm exec lhci autorun
