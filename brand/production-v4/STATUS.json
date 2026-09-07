@@ -1,0 +1,36 @@
+{
+  "brand": "BlueSkyz Labs",
+  "canonicalKit": "BlueSkyzLabs_Brand_Kit_Production_v4",
+  "version": "v4",
+  "status": "FINAL_PRODUCTION_READY",
+  "supersedes": "BlueSkyz_Identity_R4d_Production_Master_Candidate_v1.1",
+  "archive": {
+    "file": "BlueSkyzLabs_Brand_Kit_Production_v4.zip",
+    "expectedSha256": "9534d34ef91a039f59da916426f4ca465c142d743c0b263671e9d0411693b75d",
+    "importedIntoRepository": false
+  },
+  "verifiedProductionAudit": {
+    "totalFiles": 242,
+    "rasterFiles": 153,
+    "svgFiles": 46,
+    "pdfFiles": 18,
+    "guidelinesPages": 10,
+    "dimensionChecks": 20,
+    "zipIntegrityErrors": 0,
+    "errors": 0,
+    "warnings": 0
+  },
+  "identity": {
+    "founder": "Tony Nguyen",
+    "role": "Founder & CEO",
+    "location": "Ho Chi Minh City, Vietnam",
+    "domain": "blueskyzlabs.com"
+  },
+  "runtimePolicy": {
+    "canonicalSource": "BlueSkyzLabs_Brand_Kit_Production_v4",
+    "legacyR4dMayRemainAsTemporaryRuntimeFallback": true,
+    "legacyR4dIsCanonical": false,
+    "promoteV4VisualAssetsOnlyAfterExactArchiveChecksumMatch": true,
+    "doNotReconstructOrApproximateMissingV4BinaryAssets": true
+  }
+}
