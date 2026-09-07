@@ -2,6 +2,8 @@
 import BrandLockup from "@/components/brand/BrandLockup.astro";
 import Container from "@/components/layout/Container.astro";
 import { FOOTER_LINKS, SITE } from "@/data/site";
+
+const publicWebsiteHost = new URL(SITE.publicWebsite).hostname;
 ---
 
 <footer
@@ -42,6 +44,20 @@ import { FOOTER_LINKS, SITE } from "@/data/site";
       class="text-xs tracking-[0.12em] text-[color-mix(in_srgb,var(--brand-porcelain)_58%,white)] uppercase"
     >
       {SITE.motto}
+    </p>
+    <p
+      class="flex flex-wrap items-center gap-x-2 gap-y-1 border-t border-white/10 pt-5 text-xs text-[color-mix(in_srgb,var(--brand-porcelain)_62%,white)]"
+    >
+      <span>{SITE.founder.name}</span>
+      <span aria-hidden="true">·</span>
+      <span>{SITE.location.locality}</span>
+      <span aria-hidden="true">·</span>
+      <a
+        href={SITE.publicWebsite}
+        class="inline-flex min-h-11 items-center text-[color-mix(in_srgb,var(--brand-porcelain)_82%,white)] underline decoration-white/25 underline-offset-4 hover:text-white hover:decoration-white"
+      >
+        {publicWebsiteHost}
+      </a>
     </p>
   </Container>
 </footer>
