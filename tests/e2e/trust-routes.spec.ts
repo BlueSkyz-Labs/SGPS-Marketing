@@ -57,10 +57,11 @@ test("/about/ shows approved Branding Kit 0907 public identity", async ({
   page,
 }) => {
   await page.goto("/about/");
-  await expect(page.getByText(/Tony Nguyen/).first()).toBeVisible();
-  await expect(page.getByText(/Founder & CEO/).first()).toBeVisible();
-  await expect(page.getByText(/Ho Chi Minh City/).first()).toBeVisible();
-  const website = page.getByRole("link", { name: "blueskyzlabs.com" });
+  const main = page.getByRole("main");
+  await expect(main.getByText(/Tony Nguyen/).first()).toBeVisible();
+  await expect(main.getByText(/Founder & CEO/).first()).toBeVisible();
+  await expect(main.getByText(/Ho Chi Minh City/).first()).toBeVisible();
+  const website = main.getByRole("link", { name: "blueskyzlabs.com" });
   await expect(website).toBeVisible();
   await expect(website).toHaveAttribute("href", "https://blueskyzlabs.com");
 });
