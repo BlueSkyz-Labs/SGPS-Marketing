@@ -27,5 +27,5 @@ jobs:
         uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
         with:
           node-version: 24.20.0
-      - name: Run Branding Kit 0907 identity contract
-        run: node --test tests/architecture/branding-kit-0907.test.mjs
+      - name: Run Branding Kit 0907 contracts
+        run: node --test tests/architecture/branding-kit-0907.test.mjs tests/architecture/seo-contract.test.mjs
