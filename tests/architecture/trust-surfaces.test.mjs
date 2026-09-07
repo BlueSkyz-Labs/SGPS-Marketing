@@ -53,10 +53,19 @@ test("flagship proof section is evidence-gated and optional", () => {
   assert.match(home, /FlagshipProof/);
 });
 
-test("about page publishes approved founder title without invented biography", () => {
+test("about page publishes centralized approved founder identity without invented biography", () => {
   const about = readFileSync("src/pages/about.astro", "utf8");
-  assert.match(about, /Tony Nguyen — Founder/);
-  assert.doesNotMatch(about, /global offices|bank-grade|military-grade/i);
+  const story = readFileSync("src/components/sections/BrandStory.astro", "utf8");
+  const site = readFileSync("src/data/site.ts", "utf8");
+
+  assert.match(about, /BrandStory/);
+  assert.match(story, /SITE\.founder/);
+  assert.match(site, /name:\s*"Tony Nguyen"/);
+  assert.match(site, /role:\s*"Founder & CEO"/);
+  assert.doesNotMatch(
+    `${about}\n${story}`,
+    /global offices|bank-grade|military-grade/i,
+  );
 });
 
 test("SECURITY.md advisory URL matches site constant", () => {
