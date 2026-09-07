@@ -1,0 +1,28 @@
+name: Production v4 Prettier Probe
+
+on:
+  push:
+    branches:
+      - brand/branding-kit-0907-integration
+
+permissions:
+  contents: read
+
+jobs:
+  format:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
+        with:
+          node-version: 24.20.0
+      - run: corepack enable
+      - run: pnpm install --frozen-lockfile --ignore-scripts
+      - name: Print canonical diff
+        run: |
+          pnpm exec prettier --write tests/architecture/branding-kit-0907.test.mjs
+          git diff -- tests/architecture/branding-kit-0907.test.mjs
