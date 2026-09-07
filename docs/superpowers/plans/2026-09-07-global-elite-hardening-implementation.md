@@ -1,240 +1,126 @@
 # Global Elite Hardening Implementation Plan
 
-> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
+> **Execution record:** this plan is the hardening execution contract. Checkboxes track verified execution; unresolved external controls remain open rather than being documented as PASS.
 
 **Goal:** Add fail-closed supply-chain policy and enforceable PR source-assurance evidence while preserving Cloudflare Workers as the deployment authority.
 
-**Architecture:** A secretless GitHub Actions workflow produces deterministic PR status checks from the same commands already trusted locally. pnpm policy moves into `pnpm-workspace.yaml` with explicit supply-chain controls. Architecture tests make these controls regression-resistant, and governance documentation/issue state is reconciled to what GitHub actually enforces.
+**Architecture:** A secretless GitHub Actions workflow produces deterministic exact-head source checks. pnpm policy is fail-closed in `pnpm-workspace.yaml`; deployment tooling is locked in the project graph. Cloudflare Workers Builds remains preview/production deployment authority.
 
 **Tech Stack:** Astro 7, TypeScript 6, pnpm 11, Node 24, GitHub Actions, Playwright/axe, Lighthouse CI, Cloudflare Workers Builds.
 
 **Spec:** `docs/superpowers/specs/2026-09-07-global-elite-hardening-design.md`
 
-## Global Constraints
+## Global constraints
 
 - No production/cloud deployment from GitHub Actions and no Cloudflare secrets in GitHub workflow jobs.
-- GitHub workflow token permissions are `contents: read` only.
-- Every external action reference is pinned to a full 40-character commit SHA.
-- Project package manager is pnpm `11.25.0`; pnpm 12 is out of scope.
+- GitHub workflow token permission is `contents: read` only; checkout credentials are not persisted.
+- Every external GitHub Action reference is pinned to a full 40-character SHA.
+- Project package manager is pnpm `11.25.0` with Corepack SHA-512 integrity; pnpm 12 is out of scope.
 - Do not invent corporate emails, legal/product claims, proof assets, photography, or domain facts.
 - Do not close Issue #8 until an active ruleset is read back from GitHub.
-- Never weaken existing architecture, typecheck, lint, formatting, build, client-budget, static-link, Playwright/axe, Lighthouse, public-truth, CSP, or header controls.
+- Never weaken architecture, typecheck, lint, formatting, build, client-budget, static-link, Playwright/axe, Lighthouse, public-truth, CSP, or header controls.
+- Dependency lifecycle scripts remain explicit allowlist only; no wildcard or `dangerouslyAllowAllBuilds` bypass.
 
 ---
 
-### Task 1: Lock the supply-chain contract with a failing architecture test
+### Task 1: Lock the package-manager supply-chain contract
 
-**Files:**
+**Files:** `tests/architecture/supply-chain-policy.test.mjs`, `package.json`, `pnpm-workspace.yaml`, `.npmrc`.
 
-- Create: `tests/architecture/supply-chain-policy.test.mjs`
-- Later modify: `package.json`
-- Later create: `pnpm-workspace.yaml`
-- Later delete: `.npmrc`
+- [x] Write the architecture contract before policy remediation.
+- [x] Verify the baseline fails the new contract for the intended reasons.
+- [x] Pin `packageManager` to integrity-verified pnpm 11.25.0 and engine `>=11.25.0 <12`.
+- [x] Move active policy to `pnpm-workspace.yaml`: `minimumReleaseAge: 1440`, strict release-time handling, `blockExoticSubdeps: true`, `strictDepBuilds: true`.
+- [x] Remove the inert/unsafe `.npmrc` project policy.
+- [x] Discover required lifecycle scripts through clean frozen-install failures rather than guessing; allow only `esbuild` and, after Wrangler integration proved it necessary, `workerd`.
+- [x] Verify architecture contracts and clean frozen installs without disabling security controls.
 
-**Interfaces:**
-
-- Consumes: Node built-in `node:test`, `node:assert/strict`, filesystem reads used by existing architecture tests.
-- Produces: regression assertions for package-manager floor and pnpm project policy.
-
-- [ ] **Step 1: Write the failing test**
-
-The test reads `package.json`, `pnpm-workspace.yaml`, and `.npmrc` if present. Assert:
-
-```js
-assert.equal(pkg.packageManager, "pnpm@11.25.0");
-assert.equal(pkg.engines.pnpm, ">=11.25.0 <12");
-assert.match(workspace, /minimumReleaseAge:\s*1440/);
-assert.match(workspace, /minimumReleaseAgeStrict:\s*true/);
-assert.match(workspace, /minimumReleaseAgeIgnoreMissingTime:\s*false/);
-assert.match(workspace, /blockExoticSubdeps:\s*true/);
-assert.match(workspace, /strictDepBuilds:\s*true/);
-assert.doesNotMatch(workspace, /dangerouslyAllowAllBuilds/);
-assert.doesNotMatch(
-  npmrc,
-  /minimum-release-age|dangerouslyAllowAllBuilds|ignore-scripts/,
-);
-```
-
-Also assert `allowBuilds:` exists so lifecycle-script execution cannot silently widen.
-
-- [ ] **Step 2: Verify RED**
-
-Run through the PR workflow once the test-only commit exists. Expected failure: missing `pnpm-workspace.yaml` and/or packageManager mismatch (`11.6.0` vs `11.25.0`).
-
-- [ ] **Step 3: Implement the minimal policy**
-
-Create `pnpm-workspace.yaml` with:
-
-```yaml
-minimumReleaseAge: 1440
-minimumReleaseAgeStrict: true
-minimumReleaseAgeIgnoreMissingTime: false
-blockExoticSubdeps: true
-strictDepBuilds: true
-allowBuilds: {}
-```
-
-Update `package.json` to `packageManager: pnpm@11.25.0` and `engines.pnpm: ">=11.25.0 <12"`. Delete `.npmrc` because it contains no auth/registry settings and its non-auth pnpm policy is inert/misleading under pnpm 11.
-
-- [ ] **Step 4: Verify GREEN / discover required build scripts**
-
-Run a clean frozen install in GitHub Actions. If `strictDepBuilds` reports an unapproved dependency build, add only the exact package(s) demonstrated necessary to `allowBuilds` and rerun. Do not use `dangerouslyAllowAllBuilds` or wildcard approval.
-
-- [ ] **Step 5: Run `pnpm test:architecture` and preserve all existing architecture gates**
-
-Expected: zero failures.
+**Invariant:** `dangerouslyAllowAllBuilds`, wildcard lifecycle approval, mutable package-manager selection, or a widened pnpm major range are regressions.
 
 ---
 
-### Task 2: Add an immutable, least-privilege source-assurance workflow
+### Task 2: Add immutable least-privilege Source Assurance
 
-**Files:**
+**Files:** `.github/workflows/quality-gates.yml`, `tests/architecture/supply-chain-policy.test.mjs`.
 
-- Create: `.github/workflows/quality-gates.yml`
-- Modify: `tests/architecture/supply-chain-policy.test.mjs`
-
-**Interfaces:**
-
-- Consumes: package scripts in `package.json`; Node 24.20.0; project pnpm pin.
-- Produces: required-check candidates `Quality Gates` and `Browser Assurance`.
-
-- [ ] **Step 1: Extend the architecture test before creating the workflow**
-
-Assert the workflow file exists and contains:
-
-```text
-permissions:
-  contents: read
-```
-
-Assert every `uses:` value ends in `@[0-9a-f]{40}` and that the workflow does not reference `secrets.` or deployment commands (`wrangler`, `deploy:workers`).
-
-- [ ] **Step 2: Verify RED**
-
-Run `pnpm test:architecture`. Expected: failure because `.github/workflows/quality-gates.yml` does not exist.
-
-- [ ] **Step 3: Add the workflow**
-
-Use only:
-
-- `actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803` (v6 commit resolved from the action repository)
-- `actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38` (v6 commit resolved from the action repository)
-
-Workflow requirements:
-
-```yaml
-name: Source Assurance
-on:
-  pull_request:
-  push:
-    branches: [main]
-permissions:
-  contents: read
-concurrency:
-  group: source-assurance-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
-  cancel-in-progress: true
-```
-
-`Quality Gates` runs frozen install then architecture, typecheck, lint, format, build, client budget and static links. `Browser Assurance` depends on `Quality Gates`, installs Chromium with system dependencies, runs Playwright Chromium (which includes axe coverage in the repository suite), then Lighthouse CI. Each job has a bounded timeout.
-
-- [ ] **Step 4: Verify GREEN on architecture test**
-
-Expected: workflow-policy assertions pass.
-
-- [ ] **Step 5: Verify the actual PR workflow**
-
-Create/update PR, inspect the exact head workflow run, and require both jobs to finish successfully. If failure is caused by environment/bootstrap rather than product code, fix the workflow root cause without weakening tests.
+- [x] Add failing workflow-policy assertions before the workflow existed.
+- [x] Add `Source Assurance` using full-SHA `actions/checkout` and `actions/setup-node`.
+- [x] Restrict workflow permissions to `contents: read`; set `persist-credentials: false` and exact candidate SHA checkout in both jobs.
+- [x] Keep workflow secretless and free of Cloudflare/deployment commands.
+- [x] Add bounded `Quality Gates` job: frozen install → architecture → typecheck → lint → format → build → client budget → static links.
+- [x] Add bounded `Browser Assurance` job after Quality Gates: static build → Chromium bootstrap → Playwright/axe → Lighthouse.
+- [x] Root-cause workflow bootstrap/formatting failures without suppressing tests; verify both jobs green on PR #68 candidate `b2b3779e1c910e372677e6f093065a7b96f37e90`.
+- [ ] Re-verify both jobs on the **final combined PR head** after all hardening/docs changes.
 
 ---
 
-### Task 3: Reconcile governance source-of-truth documents
+### Task 2A: Lock the Cloudflare deployment CLI
 
-**Files:**
+**Finding:** recovery deployment used `npx wrangler deploy` without Wrangler in the committed project graph, allowing release-time CLI resolution drift.
 
-- Modify: `docs/QA_STRATEGY.md`
-- Modify: `AGENTS.md`
-- Modify: `docs/superpowers/plans/2026-09-03-remaining-convergence.md`
-- Create: `docs/evidence/2026-09-07-global-elite-hardening.md`
+**Files:** `package.json`, `pnpm-lock.yaml`, `pnpm-workspace.yaml`, `scripts/deploy-workers.mjs`, `tests/architecture/deploy-toolchain.test.mjs`.
 
-**Interfaces:**
-
-- Consumes: status-check names from Task 2 and verified repository `rulesets=[]` state.
-- Produces: truthful operator/agent guidance that distinguishes implemented CI from pending ruleset enforcement.
-
-- [ ] **Step 1: Update QA strategy**
-
-Replace the blanket GitHub-Actions prohibition with the dual-control model:
-
-- GitHub = secretless source assurance / future required status checks.
-- Cloudflare Workers Builds = preview, production truth gate and deployment.
-- GitHub workflow must never deploy or hold Cloudflare credentials.
-
-- [ ] **Step 2: Update AGENTS.md**
-
-Require branch + PR for normal changes, record `Quality Gates` / `Browser Assurance`, and state that direct-to-main is emergency-only while Issue #8 remains open.
-
-- [ ] **Step 3: Update remaining convergence**
-
-Mark creation of source-assurance checks as complete only after their PR run is verified. Keep ruleset creation/read-back unchecked and owner/external.
-
-- [ ] **Step 4: Add evidence**
-
-Record baseline SHA, ruleset read (`[]`), stale PR #67 state, supply-chain finding, action pin SHAs, PR/run evidence, and residual blockers. Never label pending ruleset enforcement as complete.
+- [x] Write a deploy-toolchain architecture contract rejecting bare/mutable deployment resolution.
+- [x] Pin project-local `wrangler@4.127.1` and commit the lockfile.
+- [x] Change repository recovery deploy to `pnpm wrangler deploy`.
+- [x] Run clean frozen-install diagnostics; observe `ERR_PNPM_IGNORED_BUILDS` for `workerd` rather than broadening policy blindly.
+- [x] Verify `workerd` is the locked Wrangler runtime binary installer/version checker, then allow only `workerd: true` in addition to existing `esbuild: true`.
+- [x] Verify isolated exact-head clean install, targeted deploy contract, full architecture suite, typecheck, lint, format, static build, client budget and static links.
+- [x] Verify Cloudflare preview succeeds after the lifecycle-policy remediation.
+- [x] Port only the five verified repository files into PR #68 via an atomic fast-forward tree commit; do not carry the temporary diagnostic workflow.
+- [ ] Verify the **combined PR head** through official `Quality Gates`, `Browser Assurance`, and Cloudflare preview.
+- [ ] **EXTERNAL:** normalize stored Cloudflare trigger deploy commands to explicit `pnpm wrangler ...`; the current frozen install contains the pinned Wrangler, but external config should match the repository contract.
 
 ---
 
-### Task 4: Clean stale PR state and update Issue #8
+### Task 3: Reconcile governance sources of truth
 
-**Files:** GitHub metadata only.
+**Files:** `README.md`, `docs/QA_STRATEGY.md`, `AGENTS.md`, `docs/superpowers/plans/2026-09-03-remaining-convergence.md`, `docs/evidence/2026-09-07-global-elite-hardening.md`.
 
-**Interfaces:**
-
-- Consumes: verified main history and PR #67 metadata.
-- Produces: clean PR backlog and an exact governance remediation ticket.
-
-- [ ] **Step 1: Re-fetch PR #67**
-
-Confirm it remains draft/open and its documented landed commit (`6862bf4`) is an ancestor of current `main`.
-
-- [ ] **Step 2: Close PR #67 as superseded**
-
-Update state to `closed`; do not merge its stale head over newer `main`.
-
-- [ ] **Step 3: Update Issue #8**
-
-Keep it open. Replace obsolete expected check language with exact checks `Quality Gates` and `Browser Assurance`; document the connector limitation (ruleset reads available, no create/update ruleset action) and preserve direct-push rejection/read-back as acceptance criteria.
-
-- [ ] **Step 4: Search for other open PRs**
-
-Close only those proven fully landed/superseded. Do not bulk-close ambiguous active work.
+- [x] Replace the obsolete blanket GitHub-Actions prohibition with ADR 0005 dual control.
+- [x] Document GitHub Source Assurance as secretless source-only verification and Cloudflare Workers Builds as deployment authority.
+- [x] Update agent/operator guidance to normal branch → PR → exact-head checks → merge; direct-to-main is emergency-only while Issue #8 is open.
+- [x] Reconcile remaining-convergence to distinguish implemented checks from absent ruleset enforcement.
+- [x] Record baseline, findings, remediation evidence, action pins/check names, Wrangler root cause and residual external blockers.
+- [x] Correct README package-manager/CI drift.
+- [ ] **EXTERNAL:** correct the stale GitHub repository description (still references retired Next.js/Framer Motion/Pages architecture); the available connector exposes read but no repository-description write action.
 
 ---
 
-### Task 5: Full verification, red-team re-audit, and promotion
+### Task 4: Clean stale PR state and maintain governance ticket truth
 
-**Files:** all changed files plus GitHub PR metadata.
+- [x] Re-fetch PR #67 and verify its material commit had already landed on `main`.
+- [x] Close PR #67 as superseded instead of merging its stale head.
+- [x] Keep Issue #8 open and update it to exact required-check names `Quality Gates` and `Browser Assurance`.
+- [x] Preserve direct-push rejection, strict/up-to-date checks, conversation resolution, deletion/force-push blocking and ruleset read-back as Issue #8 acceptance criteria.
+- [x] Search other open PR state; do not bulk-close ambiguous work.
+- [ ] **EXTERNAL:** create/verify the active `main` ruleset. Current read-back remains `[]`; CI/documentation are not enforcement.
 
-**Interfaces:**
+---
 
-- Consumes: Tasks 1–4.
-- Produces: verified hardening commit on `main` or a precise blocker report if GitHub prevents promotion.
+### Task 5: Full verification, red-team and promotion
 
-- [ ] **Step 1: Verify exact-head checks**
+- [ ] Verify final exact-head `Quality Gates` success.
+- [ ] Verify final exact-head `Browser Assurance` success.
+- [ ] Verify final exact-head Cloudflare preview success.
+- [ ] Review final diff/dependency graph for accidental files, dead/duplicate implementation, unresolved conflicts and stale TODO/FIXME/HACK.
+- [ ] Red-team secrets, permissive build settings, workflow write permissions/secrets/unpinned actions, mutable deployment commands, unsafe JSON-LD, CSP wildcards, non-production URL poisoning, misleading product/proof claims and chained supply-chain paths.
+- [ ] Review PR threads/reviews and resolve every material finding.
+- [ ] Confirm two consecutive deep-audit passes add no meaningful agent-actionable finding beyond documented residual external/owner items.
+- [ ] Mark PR ready and squash-merge **only** the verified head using `expected_head_sha`; never direct-push as fallback.
+- [ ] Post-merge read-back: verify `main`, merged PR, main workflow status, Cloudflare status and rulesets.
 
-Inspect workflow run/jobs/logs. Required result: `Quality Gates` success and `Browser Assurance` success on the current PR head.
+## Acceptance criteria
 
-- [ ] **Step 2: Red-team the diff and repository**
+1. Final PR head has successful `Quality Gates`, `Browser Assurance`, and Cloudflare preview evidence.
+2. Package-manager and deploy-toolchain security contracts pass on clean frozen install.
+3. GitHub Source Assurance is read-only, secretless, exact-head and full-SHA pinned.
+4. Cloudflare deployment authority remains outside GitHub Actions.
+5. PR #67 is closed as superseded; Issue #8 remains open while rulesets are `[]`.
+6. Documentation does not confuse implemented CI with enforcement or invent missing production truth.
+7. No agent-fixable P0/P1 remains before promotion.
+8. Residual owner/external items are explicit and UNKNOWN/NOT VERIFIED is never promoted to PASS.
 
-Search for secrets, permissive build settings, workflow `secrets.`, write permissions, unpinned actions, deployment commands, `TODO/FIXME/HACK`, direct unsafe JSON-LD output, CSP wildcards, and stale governance claims.
+## Evidence
 
-- [ ] **Step 3: Review PR threads/reviews and resolve material findings**
-
-Do not self-approve around an actual failed check or unresolved security finding.
-
-- [ ] **Step 4: Merge only the verified PR**
-
-Use squash merge with `expected_head_sha`. Do not fall back to a direct push if PR merge is denied; preserving the newly established control path is part of the remediation.
-
-- [ ] **Step 5: Post-merge read-back**
-
-Verify `main` moved to the merge commit, fetch the merged PR, inspect post-merge workflow status where available, and re-read rulesets. Issue #8 remains open unless rulesets become non-empty and satisfy the acceptance criteria.
+See `docs/evidence/2026-09-07-global-elite-hardening.md` for Detected → Remediated → Verified evidence and residual blockers.
