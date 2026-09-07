@@ -18,20 +18,20 @@
 
 **Current baseline (2026-09-07 hardening pass):**
 
-| Area | Status |
-| --- | --- |
-| C1.1 technical foundation | Landed on `main` through the R4d/trust/SEO convergence series |
-| Astro 7 static architecture | PASS; ADR 0004 remains authoritative |
-| Public product registry | Intentionally empty until proof-backed owner facts exist |
-| R4d provenance | LANDED from approved `sgps-core` source revision; Cursor App grant remains external |
-| Cloudflare Workers Builds | CONNECTED; preview/production deployment authority remains Cloudflare |
-| GitHub Source Assurance | IMPLEMENTED under ADR 0005; exact-head `Quality Gates` + `Browser Assurance` verified on PR #68 |
-| `main` ruleset | **EXTERNAL BLOCKER** — read-back remains `rulesets=[]`; Issue #8 stays OPEN |
-| Supply-chain policy | REMEDIATED — integrity-pinned pnpm 11.25.0, minimum release age, exotic-subdep blocking, strict build allowlist |
-| Deployment CLI | REMEDIATED in repo — Wrangler 4.127.1 is project-local/locked; only required `esbuild` + `workerd` lifecycle builds allowed |
-| Temporary domain | `tonydemo.com` wired as owner-approved temporary site identity |
-| Production emails / truth gate | **EXTERNAL BLOCKER** — contact/security emails remain unset; production truth gate must not be faked |
-| Field RUM | Design recorded; production enablement remains a privacy/owner decision |
+| Area                           | Status                                                                                                                      |
+| ------------------------------ | --------------------------------------------------------------------------------------------------------------------------- |
+| C1.1 technical foundation      | Landed on `main` through the R4d/trust/SEO convergence series                                                               |
+| Astro 7 static architecture    | PASS; ADR 0004 remains authoritative                                                                                        |
+| Public product registry        | Intentionally empty until proof-backed owner facts exist                                                                    |
+| R4d provenance                 | LANDED from approved `sgps-core` source revision; Cursor App grant remains external                                         |
+| Cloudflare Workers Builds      | CONNECTED; preview/production deployment authority remains Cloudflare                                                       |
+| GitHub Source Assurance        | IMPLEMENTED under ADR 0005; exact-head `Quality Gates` + `Browser Assurance` verified on PR #68                             |
+| `main` ruleset                 | **EXTERNAL BLOCKER** — read-back remains `rulesets=[]`; Issue #8 stays OPEN                                                 |
+| Supply-chain policy            | REMEDIATED — integrity-pinned pnpm 11.25.0, minimum release age, exotic-subdep blocking, strict build allowlist             |
+| Deployment CLI                 | REMEDIATED in repo — Wrangler 4.127.1 is project-local/locked; only required `esbuild` + `workerd` lifecycle builds allowed |
+| Temporary domain               | `tonydemo.com` wired as owner-approved temporary site identity                                                              |
+| Production emails / truth gate | **EXTERNAL BLOCKER** — contact/security emails remain unset; production truth gate must not be faked                        |
+| Field RUM                      | Design recorded; production enablement remains a privacy/owner decision                                                     |
 
 ---
 
