@@ -40,27 +40,34 @@ test("Production v4 is the canonical Branding 0907 source and R4d is superseded"
   assert.equal(legacyManifest.designState, "DESIGN_FREEZE_CANDIDATE");
 });
 
-test("runtime branding is routed through one migration adapter instead of component-level R4d paths", () => {
-  assert.equal(existsSync("src/data/brand.ts"), true, "brand adapter must exist");
-
-  const brand = readFileSync("src/data/brand.ts", "utf8");
-  assert.match(brand, /BlueSkyzLabs_Brand_Kit_Production_v4/);
-  assert.match(brand, /legacy-r4d-fallback/);
-  assert.match(brand, /\/brand\/blueskyz\/r4d/);
-
-  for (const path of [
-    "src/components/brand/BrandLockup.astro",
-    "src/components/sections/BrandStory.astro",
-    "src/layouts/BaseLayout.astro",
-  ]) {
-    const source = readFileSync(path, "utf8");
-    assert.doesNotMatch(
-      source,
-      /\/brand\/blueskyz\/r4d/,
-      `${path} must use the centralized brand adapter`,
+test(
+  "runtime branding is routed through one migration adapter instead of component-level R4d paths",
+  () => {
+    assert.equal(
+      existsSync("src/data/brand.ts"),
+      true,
+      "brand adapter must exist",
     );
-  }
-});
+
+    const brand = readFileSync("src/data/brand.ts", "utf8");
+    assert.match(brand, /BlueSkyzLabs_Brand_Kit_Production_v4/);
+    assert.match(brand, /legacy-r4d-fallback/);
+    assert.match(brand, /\/brand\/blueskyz\/r4d/);
+
+    for (const path of [
+      "src/components/brand/BrandLockup.astro",
+      "src/components/sections/BrandStory.astro",
+      "src/layouts/BaseLayout.astro",
+    ]) {
+      const source = readFileSync(path, "utf8");
+      assert.doesNotMatch(
+        source,
+        /\/brand\/blueskyz\/r4d/,
+        `${path} must use the centralized brand adapter`,
+      );
+    }
+  },
+);
 
 test("approved Production v4 public identity is centralized", () => {
   const site = readFileSync("src/data/site.ts", "utf8");
