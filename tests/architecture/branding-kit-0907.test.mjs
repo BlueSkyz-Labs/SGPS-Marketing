@@ -40,3 +40,21 @@ test("About integrates a BlueSkyz-led verified R4d brand story", () => {
   assert.match(story, /SITE\.publicWebsite/);
   assert.doesNotMatch(story, /\bISO\b|\bSOC\b|bank-grade|military-grade/i);
 });
+
+test("homepage and footer consume the centralized founder and location identity", () => {
+  const homeAbout = readFileSync(
+    "src/components/sections/AboutBlueSkyz.astro",
+    "utf8",
+  );
+  const footer = readFileSync("src/components/layout/Footer.astro", "utf8");
+
+  assert.match(homeAbout, /SITE\.founder/);
+  assert.match(homeAbout, /SITE\.location/);
+  assert.match(homeAbout, /href="\/about\/"/);
+  assert.doesNotMatch(homeAbout, /Tony Nguyen/);
+
+  assert.match(footer, /SITE\.founder/);
+  assert.match(footer, /SITE\.location/);
+  assert.match(footer, /SITE\.publicWebsite/);
+  assert.doesNotMatch(footer, /Tony Nguyen/);
+});
