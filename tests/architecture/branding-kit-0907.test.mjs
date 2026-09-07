@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import test from "node:test";
 
 test("approved Branding Kit 0907 public identity is centralized without promoting R4d provenance", () => {
@@ -19,4 +19,24 @@ test("approved Branding Kit 0907 public identity is centralized without promotin
   assert.equal(manifest.canonicalMasterbrandPromoted, false);
   assert.equal(manifest.status, "IDENTITY_PROTOTYPE_READY");
   assert.equal(manifest.designState, "DESIGN_FREEZE_CANDIDATE");
+});
+
+test("About integrates a BlueSkyz-led verified R4d brand story", () => {
+  const about = readFileSync("src/pages/about.astro", "utf8");
+
+  assert.equal(
+    existsSync("src/components/sections/BrandStory.astro"),
+    true,
+    "BrandStory.astro must exist",
+  );
+  assert.match(about, /BrandStory/);
+  assert.doesNotMatch(about, /publishes when approved/i);
+
+  const story = readFileSync("src/components/sections/BrandStory.astro", "utf8");
+  assert.match(story, /symbol_material_expression\.svg/);
+  assert.match(story, /BRAND_PRINCIPLES/);
+  assert.match(story, /SITE\.founder/);
+  assert.match(story, /SITE\.location/);
+  assert.match(story, /SITE\.publicWebsite/);
+  assert.doesNotMatch(story, /\bISO\b|\bSOC\b|bank-grade|military-grade/i);
 });
