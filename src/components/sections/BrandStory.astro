@@ -1,4 +1,5 @@
 ---
+import { BRAND_ASSETS } from "@/data/brand";
 import { BRAND_PRINCIPLES, SITE } from "@/data/site";
 
 const locationLabel = `${SITE.location.locality}, ${SITE.location.country}`;
@@ -73,7 +74,7 @@ const locationLabel = `${SITE.location.locality}, ${SITE.location.country}`;
   >
     <div class="mx-auto max-w-sm" aria-hidden="true">
       <img
-        src="/brand/blueskyz/r4d/symbol_material_expression.svg"
+        src={BRAND_ASSETS.materialExpression}
         alt=""
         width="520"
         height="520"
