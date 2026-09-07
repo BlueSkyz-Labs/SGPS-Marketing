@@ -33,6 +33,8 @@ jobs:
           pnpm --version
       - name: Clean frozen install with lifecycle policy enforced
         run: pnpm install --frozen-lockfile
+      - name: Audit locked dependency graph
+        run: pnpm audit --audit-level=high
       - name: Verify deployment toolchain contract
         run: node --test tests/architecture/deploy-toolchain.test.mjs
       - name: Verify full architecture contracts
