@@ -53,9 +53,16 @@ test("/security/ exposes private vulnerability reporting CTA", async ({
   );
 });
 
-test("/about/ shows approved founder title", async ({ page }) => {
+test("/about/ shows approved Branding Kit 0907 public identity", async ({
+  page,
+}) => {
   await page.goto("/about/");
-  await expect(page.getByText(/Tony Nguyen — Founder & CEO/i)).toBeVisible();
+  await expect(page.getByText(/Tony Nguyen/).first()).toBeVisible();
+  await expect(page.getByText(/Founder & CEO/).first()).toBeVisible();
+  await expect(page.getByText(/Ho Chi Minh City/).first()).toBeVisible();
+  const website = page.getByRole("link", { name: "blueskyzlabs.com" });
+  await expect(website).toBeVisible();
+  await expect(website).toHaveAttribute("href", "https://blueskyzlabs.com");
 });
 
 test("/privacy/ summarizes practical trust answers", async ({ page }) => {
