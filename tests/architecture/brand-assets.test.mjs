@@ -52,15 +52,26 @@ function decodePngScanlines(bytes) {
   }
 
   assert.equal(bitDepth, 8, "OG PNG must use 8-bit channels");
-  assert.equal(interlace, 0, "OG PNG must be non-interlaced for deterministic validation");
-  assert.ok([0, 2, 4, 6].includes(colorType), `unsupported PNG color type ${colorType}`);
+  assert.equal(
+    interlace,
+    0,
+    "OG PNG must be non-interlaced for deterministic validation",
+  );
+  assert.ok(
+    [0, 2, 4, 6].includes(colorType),
+    `unsupported PNG color type ${colorType}`,
+  );
   assert.ok(width && height, "PNG IHDR dimensions must exist");
   assert.ok(idat.length > 0, "PNG must contain image data");
 
   const channels = { 0: 1, 2: 3, 4: 2, 6: 4 }[colorType];
   const stride = width * channels;
   const raw = inflateSync(Buffer.concat(idat));
-  assert.equal(raw.length, height * (stride + 1), "unexpected PNG scanline length");
+  assert.equal(
+    raw.length,
+    height * (stride + 1),
+    "unexpected PNG scanline length",
+  );
 
   const rows = [];
   let rawOffset = 0;
@@ -82,7 +93,8 @@ function decodePngScanlines(bytes) {
       if (filter === 0) row[x] = value;
       else if (filter === 1) row[x] = (value + left) & 0xff;
       else if (filter === 2) row[x] = (value + up) & 0xff;
-      else if (filter === 3) row[x] = (value + Math.floor((left + up) / 2)) & 0xff;
+      else if (filter === 3)
+        row[x] = (value + Math.floor((left + up) / 2)) & 0xff;
       else if (filter === 4) {
         row[x] = (value + paethPredictor(left, up, upLeft)) & 0xff;
       } else {

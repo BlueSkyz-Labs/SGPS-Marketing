@@ -32,7 +32,10 @@ test("About integrates a BlueSkyz-led verified R4d brand story", () => {
   assert.match(about, /BrandStory/);
   assert.doesNotMatch(about, /publishes when approved/i);
 
-  const story = readFileSync("src/components/sections/BrandStory.astro", "utf8");
+  const story = readFileSync(
+    "src/components/sections/BrandStory.astro",
+    "utf8",
+  );
   assert.match(story, /symbol_material_expression\.svg/);
   assert.match(story, /BRAND_PRINCIPLES/);
   assert.match(story, /SITE\.founder/);

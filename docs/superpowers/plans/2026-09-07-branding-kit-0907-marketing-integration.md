@@ -25,10 +25,12 @@
 ### Task 1: Lock Branding Kit 0907 identity/truth contract
 
 **Files:**
+
 - Create: `tests/architecture/branding-kit-0907.test.mjs`
 - Modify: `src/data/site.ts`
 
 **Interfaces:**
+
 - Consumes: `SITE`, `BRAND_PRINCIPLES`, existing R4d provenance files.
 - Produces: `SITE.publicWebsite`, `SITE.founder`, `SITE.location` for all later tasks.
 
@@ -93,12 +95,14 @@ Commit as `feat: centralize approved BlueSkyz public identity`.
 ### Task 2: Replace placeholder About copy with verified brand-story composition
 
 **Files:**
+
 - Create: `src/components/sections/BrandStory.astro`
 - Modify: `src/pages/about.astro`
 - Modify: `tests/architecture/branding-kit-0907.test.mjs`
 - Modify: `tests/e2e/trust-routes.spec.ts`
 
 **Interfaces:**
+
 - Consumes: `SITE.founder`, `SITE.location`, `SITE.publicWebsite`, `BRAND_PRINCIPLES`, `/brand/blueskyz/r4d/symbol_material_expression.svg`.
 - Produces: reusable static brand-story section used by About.
 
@@ -150,12 +154,14 @@ Commit as `feat: integrate approved BlueSkyz brand story`.
 ### Task 3: Bring founder/location signature into homepage and footer
 
 **Files:**
+
 - Modify: `src/components/sections/AboutBlueSkyz.astro`
 - Modify: `src/components/layout/Footer.astro`
 - Modify: `tests/architecture/branding-kit-0907.test.mjs`
 - Modify: `tests/e2e/home-c1.spec.ts`
 
 **Interfaces:**
+
 - Consumes: centralized `SITE` fields from Task 1.
 - Produces: consistent homepage/footer trust signature without duplicating identity literals.
 
@@ -194,12 +200,14 @@ Commit as `feat: publish centralized founder and location signature`.
 ### Task 4: Enrich Organization structured data without breaking canonical truth
 
 **Files:**
+
 - Modify: `src/lib/seo.ts`
 - Modify: `src/layouts/BaseLayout.astro`
 - Modify: `tests/architecture/seo-contract.test.mjs`
 - Modify: `tests/architecture/branding-kit-0907.test.mjs`
 
 **Interfaces:**
+
 - Consumes: `SITE.url`, `SITE.founder`, `SITE.location`.
 - Produces: `organizationJsonLd(siteUrl, identity)` with founder/locality metadata while retaining runtime URL.
 
@@ -250,10 +258,12 @@ Commit as `feat: add founder locality to organization schema`.
 ### Task 5: Record provenance/evidence and run full quality gates
 
 **Files:**
+
 - Create: `docs/evidence/2026-09-07-branding-kit-0907-integration.md`
 - Modify: `docs/superpowers/plans/2026-09-07-branding-kit-0907-marketing-integration.md` only to mark executed steps after evidence exists.
 
 **Interfaces:**
+
 - Consumes: Tasks 1–4 and remote preview/CI evidence.
 - Produces: truthful integration record and PR-ready branch.
 

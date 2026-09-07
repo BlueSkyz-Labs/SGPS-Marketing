@@ -55,7 +55,10 @@ test("flagship proof section is evidence-gated and optional", () => {
 
 test("about page publishes centralized approved founder identity without invented biography", () => {
   const about = readFileSync("src/pages/about.astro", "utf8");
-  const story = readFileSync("src/components/sections/BrandStory.astro", "utf8");
+  const story = readFileSync(
+    "src/components/sections/BrandStory.astro",
+    "utf8",
+  );
   const site = readFileSync("src/data/site.ts", "utf8");
 
   assert.match(about, /BrandStory/);

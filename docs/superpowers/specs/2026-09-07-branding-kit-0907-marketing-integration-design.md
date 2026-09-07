@@ -35,14 +35,14 @@ Approved 0907 **content/identity** is integrated now; future exact 0907 binary a
 Extend `SITE` with explicit public identity fields:
 
 ```ts
-publicWebsite: "https://blueskyzlabs.com"
+publicWebsite: "https://blueskyzlabs.com";
 founder: {
-  name: "Tony Nguyen"
-  role: "Founder & CEO"
+  name: "Tony Nguyen";
+  role: "Founder & CEO";
 }
 location: {
-  locality: "Ho Chi Minh City"
-  country: "Vietnam"
+  locality: "Ho Chi Minh City";
+  country: "Vietnam";
 }
 ```
 
