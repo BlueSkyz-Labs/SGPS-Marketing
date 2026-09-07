@@ -57,6 +57,7 @@ ADR 0005 supersedes the old blanket avoidance of GitHub Actions. GitHub Actions 
 - [x] Connect `BlueSkyz-Labs/SGPS-Marketing` → Worker `blueskyz-web` Builds
 - [x] Preview trigger enabled; production-only truth gate omitted while required emails are absent
 - [x] Confirm Builds emits successful preview/deployment checks
+- [x] Canonical build recipe includes `pnpm build`, `pnpm check:client-budget`, and `pnpm check:static-links`
 - [x] Temporary `PUBLIC_SITE_URL=https://tonydemo.com` configured for builds
 - [x] Pin repository Wrangler CLI and lock transitive deployment graph
 - [ ] **EXTERNAL:** normalize Cloudflare configured deploy commands from `npx wrangler ...` to project-local `pnpm wrangler ...`; current frozen install contains the pinned Wrangler so `npx` resolves locally, but external config should match the repository contract explicitly
