@@ -13,10 +13,21 @@ test("SEO helpers keep absolute URLs and Organization JSON-LD truthful", async (
     "https://example.com/about/",
   );
 
-  const org = seo.organizationJsonLd("https://example.com/");
+  const org = seo.organizationJsonLd("https://example.com/", {
+    founder: { name: "Tony Nguyen" },
+    location: { locality: "Ho Chi Minh City", countryCode: "VN" },
+  });
   assert.equal(org["@type"], "Organization");
   assert.equal(org.name, "BlueSkyz Labs");
   assert.equal(org.url, "https://example.com/");
+  assert.deepEqual(org.founder, {
+    "@type": "Person",
+    name: "Tony Nguyen",
+  });
+  assert.equal(org.address.addressLocality, "Ho Chi Minh City");
+  assert.equal(org.address.addressCountry, "VN");
+  assert.equal("email" in org, false);
+  assert.equal("sameAs" in org, false);
 
   assert.equal(
     seo.safeJsonLd({ name: "</script><script>alert(1)" }),
@@ -30,6 +41,8 @@ test("BaseLayout wires canonical, OG, and structured data via shared non-prod he
   assert.match(layout, /og:image/);
   assert.match(layout, /application\/ld\+json/);
   assert.match(layout, /organizationJsonLd/);
+  assert.match(layout, /SITE\.founder/);
+  assert.match(layout, /SITE\.location/);
   assert.match(layout, /websiteJsonLd/);
   assert.match(layout, /safeJsonLd/);
   assert.match(layout, /isNonProductionSiteUrl/);
