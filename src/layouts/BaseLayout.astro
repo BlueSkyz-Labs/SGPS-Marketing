@@ -1,6 +1,7 @@
 ---
 import Header from "@/components/layout/Header.astro";
 import Footer from "@/components/layout/Footer.astro";
+import { BRAND_ASSETS } from "@/data/brand";
 import { SITE } from "@/data/site";
 import {
   absoluteUrl,
@@ -50,15 +51,11 @@ const robotsNoindex = noindex || isNonProductionSiteUrl(SITE.url);
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width" />
-    <link
-      rel="icon"
-      href="/brand/blueskyz/r4d/micro_mark_ink.svg"
-      type="image/svg+xml"
-    />
+    <link rel="icon" href={BRAND_ASSETS.faviconSvg} type="image/svg+xml" />
     <link rel="icon" href="/favicon.ico" sizes="any" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="manifest" href="/site.webmanifest" />
-    <meta name="theme-color" content="#0B1020" />
+    <meta name="theme-color" content={BRAND_ASSETS.fallbackThemeColor} />
     <meta name="description" content={description} />
     <title>{fullTitle}</title>
     <link rel="canonical" href={canonical} />
