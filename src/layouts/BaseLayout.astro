@@ -32,7 +32,16 @@ const {
 const fullTitle = title.includes(SITE.name) ? title : `${title} · ${SITE.name}`;
 const canonical = canonicalForPath(path, SITE.url);
 const ogImageUrl = absoluteUrl(SITE.url, ogImage);
-const structuredData = [organizationJsonLd(SITE.url), websiteJsonLd(SITE.url)];
+const structuredData = [
+  organizationJsonLd(SITE.url, {
+    founder: SITE.founder,
+    location: {
+      locality: SITE.location.locality,
+      countryCode: "VN",
+    },
+  }),
+  websiteJsonLd(SITE.url),
+];
 const robotsNoindex = noindex || isNonProductionSiteUrl(SITE.url);
 ---
 
