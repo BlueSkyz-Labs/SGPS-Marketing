@@ -10,10 +10,24 @@ import { SITE } from "@/data/site";
     About BlueSkyz
   </h2>
   <p class="mt-4 max-w-2xl text-[var(--text-secondary)]">
-    {SITE.proposition}
-    {SITE.supporting}
+    {SITE.proposition} {SITE.supporting}
   </p>
-  <p class="mt-4 text-sm font-medium text-[var(--text-muted)]">
-    Tony Nguyen — Founder &amp; CEO
-  </p>
+  <div
+    class="mt-6 flex flex-col gap-4 border-t border-[var(--border-subtle)] pt-5 sm:flex-row sm:items-center sm:justify-between"
+  >
+    <div>
+      <p class="text-sm font-semibold text-[var(--text-primary)]">
+        {SITE.founder.name} — {SITE.founder.role}
+      </p>
+      <p class="mt-1 text-sm text-[var(--text-muted)]">
+        {SITE.location.locality}
+      </p>
+    </div>
+    <a
+      href="/about/"
+      class="inline-flex min-h-11 items-center text-sm font-semibold text-[var(--action-primary)] underline decoration-[color-mix(in_srgb,var(--action-primary)_35%,transparent)] underline-offset-4 hover:decoration-current"
+    >
+      Read the BlueSkyz story
+    </a>
+  </div>
 </section>
