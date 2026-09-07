@@ -1,4 +1,4 @@
-name: Branding 0907 Canonical Formatter Probe
+name: Branding 0907 Full QA Probe
 
 on:
   push:
@@ -8,16 +8,20 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: branding-0907-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
-  format:
-    name: Capture canonical Branding 0907 formatting
+  source-gates:
+    name: Branding Source Gates
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 20
     steps:
-      - name: Checkout verified content candidate
+      - name: Checkout exact candidate
         uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
         with:
-          ref: 2ca22a5b98f16d07f3a3674ef7d0f97c3fd8dacd
+          ref: ${{ github.sha }}
           persist-credentials: false
       - name: Set up Node 24.20.0
         uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
@@ -27,33 +31,49 @@ jobs:
         run: |
           corepack enable
           pnpm --version
-      - name: Install locked formatter without lifecycle scripts
-        run: pnpm install --frozen-lockfile --ignore-scripts
-      - name: Apply canonical Prettier output
-        run: |
-          pnpm exec prettier --write \
-            docs/superpowers/plans/2026-09-07-branding-kit-0907-marketing-integration.md \
-            docs/superpowers/specs/2026-09-07-branding-kit-0907-marketing-integration-design.md \
-            src/components/sections/AboutBlueSkyz.astro \
-            src/components/sections/BrandStory.astro \
-            src/pages/about.astro \
-            tests/architecture/brand-assets.test.mjs \
-            tests/architecture/branding-kit-0907.test.mjs \
-            tests/architecture/trust-surfaces.test.mjs
-      - name: Verify canonical formatting
-        run: pnpm exec prettier --check "**/*.{astro,ts,tsx,js,mjs,json,md,css,yaml,yml}"
-      - name: Upload canonical files
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+      - name: Install frozen graph
+        run: pnpm install --frozen-lockfile
+      - name: Architecture contracts
+        run: pnpm test:architecture
+      - name: Typecheck
+        run: pnpm typecheck
+      - name: Lint
+        run: pnpm lint
+      - name: Formatting
+        run: pnpm format:check
+      - name: Static build
+        run: pnpm build
+      - name: Client JavaScript budget
+        run: pnpm check:client-budget
+      - name: Static links
+        run: pnpm check:static-links
+
+  browser-gates:
+    name: Branding Browser Gates
+    needs: source-gates
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: Checkout exact candidate
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
         with:
-          name: branding-0907-canonical-format
-          path: |
-            docs/superpowers/plans/2026-09-07-branding-kit-0907-marketing-integration.md
-            docs/superpowers/specs/2026-09-07-branding-kit-0907-marketing-integration-design.md
-            src/components/sections/AboutBlueSkyz.astro
-            src/components/sections/BrandStory.astro
-            src/pages/about.astro
-            tests/architecture/brand-assets.test.mjs
-            tests/architecture/branding-kit-0907.test.mjs
-            tests/architecture/trust-surfaces.test.mjs
-          if-no-files-found: error
-          retention-days: 1
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - name: Set up Node 24.20.0
+        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
+        with:
+          node-version: 24.20.0
+      - name: Activate project package manager
+        run: |
+          corepack enable
+          pnpm --version
+      - name: Install frozen graph
+        run: pnpm install --frozen-lockfile
+      - name: Build static artifact
+        run: pnpm build
+      - name: Install Chromium
+        run: pnpm exec playwright install --with-deps chromium
+      - name: Playwright and axe
+        run: pnpm exec playwright test --project=chromium
+      - name: Lighthouse CI
+        run: pnpm exec lhci autorun
