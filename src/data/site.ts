@@ -11,6 +11,16 @@ export const SITE = {
   supporting:
     "Designed with clarity. Engineered with depth. Delivered with quiet excellence.",
   motto: "Build with clarity. Scale with confidence.",
+  /** Approved public brand identity; does not replace env-driven canonical URL. */
+  publicWebsite: "https://blueskyzlabs.com",
+  founder: {
+    name: "Tony Nguyen",
+    role: "Founder & CEO",
+  },
+  location: {
+    locality: "Ho Chi Minh City",
+    country: "Vietnam",
+  },
   url: import.meta.env.PUBLIC_SITE_URL?.trim() || localFallback,
   contactEmail: import.meta.env.PUBLIC_CONTACT_EMAIL?.trim() || null,
   securityEmail: import.meta.env.PUBLIC_SECURITY_EMAIL?.trim() || null,
