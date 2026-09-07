@@ -7,12 +7,34 @@ export function safeJsonLd(data: unknown): string {
   return JSON.stringify(data).replace(/</g, "\\u003c");
 }
 
-export function organizationJsonLd(siteUrl: string) {
+export interface OrganizationIdentity {
+  founder: {
+    name: string;
+  };
+  location: {
+    locality: string;
+    countryCode: string;
+  };
+}
+
+export function organizationJsonLd(
+  siteUrl: string,
+  identity: OrganizationIdentity,
+) {
   return {
     "@context": "https://schema.org",
     "@type": "Organization",
     name: "BlueSkyz Labs",
     url: siteUrl,
+    founder: {
+      "@type": "Person",
+      name: identity.founder.name,
+    },
+    address: {
+      "@type": "PostalAddress",
+      addressLocality: identity.location.locality,
+      addressCountry: identity.location.countryCode,
+    },
   } as const;
 }
 
