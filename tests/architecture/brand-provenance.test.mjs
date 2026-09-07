@@ -7,7 +7,7 @@ const m = JSON.parse(
   readFileSync("public/brand/blueskyz/r4d/brand-manifest.json", "utf8"),
 );
 
-test("R4d kit projection preserves candidate provenance", () => {
+test("R4d legacy fallback preserves its candidate provenance", () => {
   assert.equal(m.assetId, "BLUESKYZ-MASTERBRAND-R4D");
   assert.equal(m.assetVersion, "1.1.0");
   assert.equal(m.canonicalName, "BlueSkyz Labs");
@@ -22,7 +22,7 @@ test("R4d kit projection preserves candidate provenance", () => {
   assert.equal(existsSync(m.kitPath), true);
 });
 
-test("R4d production masters match brand-manifest digests", () => {
+test("R4d fallback masters still match their legacy manifest digests", () => {
   const files = {
     "symbol_mono_ink.svg": m.fileSha256.symbol_mono_ink,
     "micro_mark_ink.svg": m.fileSha256.micro_mark_ink,
@@ -41,11 +41,18 @@ test("R4d production masters match brand-manifest digests", () => {
   }
 });
 
-test("header and footer use R4d outlined horizontal lockups", () => {
+test("header and footer route lockups through the centralized brand adapter", () => {
+  const adapter = readFileSync("src/data/brand.ts", "utf8");
   const lockup = readFileSync("src/components/brand/BrandLockup.astro", "utf8");
-  assert.match(lockup, /\/brand\/blueskyz\/r4d\/lockup_horizontal_dark\.svg/);
-  assert.match(lockup, /\/brand\/blueskyz\/r4d\/lockup_horizontal_light\.svg/);
+
+  assert.match(adapter, /lockup_horizontal_dark\.svg/);
+  assert.match(adapter, /lockup_horizontal_light\.svg/);
+  assert.match(adapter, /legacy-r4d-fallback/);
+  assert.match(lockup, /BRAND_ASSETS\.lockupHorizontalDark/);
+  assert.match(lockup, /BRAND_ASSETS\.lockupHorizontalLight/);
+  assert.doesNotMatch(lockup, /\/brand\/blueskyz\/r4d/);
   assert.doesNotMatch(lockup, /SITE\.name/);
+
   for (const path of [
     "src/components/layout/Header.astro",
     "src/components/layout/Footer.astro",
