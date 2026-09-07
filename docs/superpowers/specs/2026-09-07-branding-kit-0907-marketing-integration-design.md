@@ -1,12 +1,22 @@
 # Branding Kit 0907 → Marketing Integration Design
 
-**Status:** Approved for implementation by owner on 2026-09-07.
+**Status:** Owner-approved implementation, corrected to the exact Production v4 source of truth on 2026-09-07.
 
-## Intent
+## Canonical source of truth
 
-Integrate the approved Branding Kit 0907 public identity into the BlueSkyz Labs marketing site without weakening the existing C1.1 product-house architecture, public-truth controls, R4d provenance, accessibility, performance or deployment boundaries.
+The only canonical branding source for this workstream is:
 
-## Approved public identity facts
+- **Kit:** `BlueSkyzLabs_Brand_Kit_Production_v4`
+- **Archive:** `BlueSkyzLabs_Brand_Kit_Production_v4.zip`
+- **Expected SHA-256:** `9534d34ef91a039f59da916426f4ca465c142d743c0b263671e9d0411693b75d`
+- **Status:** FINAL — production-ready
+- **Verified audit:** 242 files; 153 raster; 46 SVG; 18 PDF; Guidelines v4 10 pages; 20 dimension checks PASS; ZIP integrity 0 errors; 0 errors / 0 warnings.
+
+`BlueSkyz_Identity_R4d_Production_Master_Candidate_v1.1` is **superseded** by Production v4. R4d may remain in the repository only as a legacy archive or temporary runtime fallback while the exact v4 archive bytes are unavailable. R4d MUST NOT be described, tested, or promoted as the canonical visual source of truth.
+
+The repository records this boundary in `brand/production-v4/STATUS.json`.
+
+## Approved public identity
 
 - Brand: **BlueSkyz Labs**
 - Founder: **Tony Nguyen — Founder & CEO**
@@ -15,24 +25,17 @@ Integrate the approved Branding Kit 0907 public identity into the BlueSkyz Labs 
 
 These facts may be used in public marketing copy, trust surfaces and structured data. No business/security email, legal entity name, trademark status, customer claim, certification, social profile or product claim is inferred from them.
 
-## Provenance boundary
+## Production v4 direction
 
-The repository already contains and verifies `BlueSkyz_Identity_R4d_Production_Master_Candidate_v1.1`, including outlined vector lockups, symbol/micro mark, material-expression symbol, raster assets, web icons, tokens, guidelines and SHA-256 provenance. That package remains the visual runtime core.
+The finalized Production v4 system is an agency-grade production identity for web, social, pitch decks, product UI and merchandise. Its positioning is an AI-native software/product engineering studio with a calm, technical and execution-focused personality. The visual thesis is **“The future is blue, but the system is dark.”** The system uses a deep navy foundation with electric-cyan signal and lavender intelligence accents. The logo symbol is a stylized B/S interlock / BlueSkyz horizon-signal, not a generic chain icon.
 
-The exact Branding Kit 0907 archive is not present as a checksum-verifiable repository package in the current source tree. Therefore this integration MUST NOT:
-
-- relabel R4d v1.1 as an exact 0907 package;
-- change `canonicalMasterbrandPromoted` from `false`;
-- change `IDENTITY_PROTOTYPE_READY` / `DESIGN_FREEZE_CANDIDATE` provenance state without a new verified package;
-- fabricate missing banner, badge, social, photography or mockup files.
-
-Approved 0907 **content/identity** is integrated now; future exact 0907 binary assets can be imported as a separate provenance-controlled change.
+Do not mix in R4d palette, typography, logo geometry, gradients or icon rules merely because R4d assets are already present in this repository. The exact Production v4 files/specification remain authoritative whenever a visual value conflicts.
 
 ## Architecture
 
-### 1. Site identity source of truth
+### 1. Identity source of truth
 
-Extend `SITE` with explicit public identity fields:
+`SITE` centralizes:
 
 ```ts
 publicWebsite: "https://blueskyzlabs.com";
@@ -46,36 +49,33 @@ location: {
 }
 ```
 
-`SITE.url` remains environment-driven through `PUBLIC_SITE_URL`. This preserves correct preview/canonical/noindex behavior and avoids claiming that DNS/Cloudflare already serves `blueskyzlabs.com`.
+`SITE.url` remains environment-driven through `PUBLIC_SITE_URL`. This preserves preview/noindex/canonical correctness and does not imply that the current Cloudflare deployment already serves the custom domain.
 
-`SITE.publicWebsite` is approved brand identity content, not the build-time canonical override.
+### 2. Visual asset adapter
 
-### 2. BlueSkyz-led brand story
+Production v4 runtime assets are imported under a dedicated canonical path such as:
 
-The site remains a **BlueSkyz Labs product house**, not a personal portfolio. Founder visibility is a trust signal.
+`public/brand/blueskyz/v4/`
 
-Replace the placeholder About biography with concise approved brand narrative:
+The runtime may switch logo, symbol, social/OG, icon, banner and token references to v4 **only after** the imported archive matches the expected SHA-256 and the web projection is verified against the Production v4 package.
 
-- BlueSkyz Labs is a product house based in Ho Chi Minh City.
-- It builds intelligent digital products around clarity, trust and useful impact.
-- Tony Nguyen is shown as founder, without an invented personal biography or résumé.
-- Brand principles remain Intelligence, Elevation, Trust and Impact.
+Until then:
 
-Add a static brand-story composition that uses the already-verified R4d `symbol_material_expression.svg` and the existing `BRAND_PRINCIPLES`. It must use semantic HTML, intrinsic image sizing, no client JavaScript and no fake certification/status badges.
+- do not copy R4d assets into a v4 directory;
+- do not rename R4d files to look like v4;
+- do not synthesize approximate v4 logo geometry or typography from memory;
+- do not mark `archive.importedIntoRepository=true`;
+- keep any legacy runtime fallback explicitly documented as fallback, not canonical branding.
 
-### 3. Homepage and footer integration
+### 3. BlueSkyz-led brand story
 
-Homepage About surface should expose the founder/location trust signal and link to `/about/` for the full story.
+The website remains a **BlueSkyz Labs product house**, not a Tony Nguyen personal portfolio. Founder visibility is a trust signal.
 
-Footer should carry a restrained brand signature:
-
-`Tony Nguyen · Ho Chi Minh City · blueskyzlabs.com`
-
-The website link may point to `https://blueskyzlabs.com` as an owner-approved public identity fact. It is not evidence that the current Cloudflare deployment has moved there.
+The About/Home/Footer copy may use the approved founder/location/domain identity now. Visual artwork must migrate from legacy R4d artwork to exact Production v4 assets when the archive is available and checksum-verified.
 
 ### 4. Structured data
 
-Extend `organizationJsonLd` so Organization JSON-LD can include:
+Organization JSON-LD may include:
 
 ```json
 {
@@ -88,52 +88,51 @@ Extend `organizationJsonLd` so Organization JSON-LD can include:
 }
 ```
 
-The Organization `url` remains the runtime `SITE.url`, because previews must describe their actual canonical identity. No `email`, `sameAs`, legal name, tax identifier, certification or physical street address is added.
+The Organization `url` remains runtime `SITE.url`. Do not add unverified `email`, `sameAs`, legal name, tax identifier, certification or physical street address.
 
-### 5. Social / banner assets
+### 5. Social / banner / YouTube assets
 
-Existing `public/social/og-default.png` and verified app/web icons remain active. Do not invent or synthesize platform banners merely to claim kit completeness. Exact 0907 YouTube/social/banner assets require a future checksum-verifiable asset import before runtime promotion.
+Production v4 is the canonical source for web/social/YouTube/banner/mockup deliverables. Existing R4d-derived OG/app icons can remain only as temporary legacy runtime assets. They must be replaced by exact v4 exports when the canonical archive is imported; no approximated replacement is allowed.
 
-## UX and accessibility constraints
+## UX, accessibility and performance constraints
 
-- Preserve Porcelain / Ink / Cobalt R4d palette and existing contrast decisions.
-- New content must remain WCAG 2.2 AA-compatible.
+- Production v4 visual rules supersede R4d visual rules.
+- WCAG 2.2 AA remains mandatory for web usage even if a raw brand color requires an accessible UI derivative.
 - No all-caps status-pill proliferation or fake trust badges.
-- Decorative brand artwork uses empty alt text and intrinsic dimensions.
-- Founder/location/website information must remain readable without motion or JavaScript.
-- Mobile layout must stack cleanly at the existing 320px floor.
-
-## Performance constraints
-
-- No new runtime dependency.
-- No new client JavaScript.
-- Reuse existing verified SVG assets instead of adding heavyweight screenshots to runtime.
+- Decorative artwork uses empty alt text and intrinsic dimensions.
+- Founder/location/website information remains readable without motion or JavaScript.
+- Mobile layout keeps the existing 320px floor.
+- No new runtime dependency, external script or client JavaScript solely for branding.
 - Existing client-JS and Lighthouse budgets remain unchanged.
 
 ## Security / truth constraints
 
 - Keep public-truth and non-production canonical behavior fail-closed.
-- Do not add emails unless verified values are provided separately.
-- Do not alter CSP/header controls.
-- Do not add external scripts, analytics or third-party embeds.
+- Do not add emails unless separately verified.
+- Do not alter CSP/header controls for branding.
+- Do not add external analytics/embeds as part of this work.
 - No unsupported customer, certification, uptime, security-grade or product-maturity claims.
 
 ## Verification contract
 
-TDD architecture tests must prove:
+Tests/evidence must prove:
 
-1. approved founder/location/public website are centralized in `SITE`;
-2. About no longer contains the placeholder approval text;
-3. About uses verified R4d material-expression artwork and the existing four principles;
-4. homepage/footer consume centralized identity instead of duplicating divergent literals;
-5. structured data includes founder/locality but no invented email/social/legal fields;
-6. R4d provenance state remains unpromoted;
-7. existing architecture, typecheck, lint, format, build, static-link, client-budget, Playwright/axe and Lighthouse gates remain green.
+1. `BlueSkyzLabs_Brand_Kit_Production_v4` is recorded as canonical and R4d as superseded;
+2. expected archive SHA-256 is fixed in-repo;
+3. founder/location/public website are centralized in `SITE`;
+4. structured data includes founder/locality but no invented email/social/legal fields;
+5. no R4d asset is relabeled as a v4 asset;
+6. visual runtime promotion to v4 cannot be declared complete until exact archive import + checksum verification;
+7. architecture, typecheck, lint, format, build, static-link, client-budget, Playwright/axe and Lighthouse gates remain green after migration.
+
+## Current external dependency
+
+The exact `BlueSkyzLabs_Brand_Kit_Production_v4.zip` binary created in the Branding 0907 session is not mounted in this chat runtime, is not present in the current repository, and is not discoverable in File Library. Therefore binary-level asset migration is blocked in this session by artifact availability only. The website must not pretend otherwise.
 
 ## Non-goals
 
-- DNS or Cloudflare custom-domain cutover to `blueskyzlabs.com`.
+- DNS/Cloudflare custom-domain cutover.
 - Adding production contact/security email.
-- Rebranding BlueSkyz Labs into Tony Nguyen's personal portfolio.
-- Importing or fabricating missing exact 0907 binary assets.
+- Rebranding BlueSkyz Labs into a personal portfolio.
+- Reconstructing Production v4 visual assets from memory or from R4d.
 - Changing product registry/public-product claims.
