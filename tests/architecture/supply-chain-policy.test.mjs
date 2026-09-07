@@ -38,9 +38,9 @@ test("GitHub source assurance is immutable, least privilege, secretless, and exa
   assert.match(workflow, /name:\s*Quality Gates/);
   assert.match(workflow, /name:\s*Browser Assurance/);
 
-  const actionRefs = [
-    ...workflow.matchAll(/uses:\s*[^@\s]+@([^\s#]+)/g),
-  ].map(([, ref]) => ref);
+  const actionRefs = [...workflow.matchAll(/uses:\s*[^@\s]+@([^\s#]+)/g)].map(
+    ([, ref]) => ref,
+  );
   assert.ok(
     actionRefs.length >= 2,
     "expected pinned checkout/setup-node actions",
@@ -74,7 +74,10 @@ test("GitHub source assurance is immutable, least privilege, secretless, and exa
   const playwrightIndex = browserJob.indexOf(
     "run: pnpm exec playwright test --project=chromium",
   );
-  assert.ok(buildIndex >= 0, "browser assurance must build the static artifact");
+  assert.ok(
+    buildIndex >= 0,
+    "browser assurance must build the static artifact",
+  );
   assert.ok(
     playwrightIndex > buildIndex,
     "browser assurance must build dist before Playwright starts Astro preview",
