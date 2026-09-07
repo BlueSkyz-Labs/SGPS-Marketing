@@ -2,11 +2,46 @@ import assert from "node:assert/strict";
 import { existsSync, readFileSync } from "node:fs";
 import test from "node:test";
 
-test("approved Branding Kit 0907 public identity is centralized without promoting R4d provenance", () => {
-  const site = readFileSync("src/data/site.ts", "utf8");
-  const manifest = JSON.parse(
+const V4_SHA256 =
+  "9534d34ef91a039f59da916426f4ca465c142d743c0b263671e9d0411693b75d";
+
+test("Production v4 is the canonical Branding 0907 source and R4d is superseded", () => {
+  const status = JSON.parse(
+    readFileSync("brand/production-v4/STATUS.json", "utf8"),
+  );
+  const legacyManifest = JSON.parse(
     readFileSync("public/brand/blueskyz/r4d/brand-manifest.json", "utf8"),
   );
+
+  assert.equal(status.canonicalKit, "BlueSkyzLabs_Brand_Kit_Production_v4");
+  assert.equal(status.version, "v4");
+  assert.equal(status.status, "FINAL_PRODUCTION_READY");
+  assert.equal(status.archive.expectedSha256, V4_SHA256);
+  assert.equal(
+    status.supersedes,
+    "BlueSkyz_Identity_R4d_Production_Master_Candidate_v1.1",
+  );
+  assert.equal(status.runtimePolicy.legacyR4dIsCanonical, false);
+  assert.equal(
+    status.runtimePolicy.canonicalSource,
+    "BlueSkyzLabs_Brand_Kit_Production_v4",
+  );
+  assert.equal(
+    status.runtimePolicy.doNotReconstructOrApproximateMissingV4BinaryAssets,
+    true,
+  );
+
+  const v4RuntimeExists = existsSync("public/brand/blueskyz/v4");
+  assert.equal(status.archive.importedIntoRepository, v4RuntimeExists);
+
+  // Legacy provenance remains truthful while R4d is only a temporary fallback.
+  assert.equal(legacyManifest.canonicalMasterbrandPromoted, false);
+  assert.equal(legacyManifest.status, "IDENTITY_PROTOTYPE_READY");
+  assert.equal(legacyManifest.designState, "DESIGN_FREEZE_CANDIDATE");
+});
+
+test("approved Production v4 public identity is centralized", () => {
+  const site = readFileSync("src/data/site.ts", "utf8");
 
   assert.match(site, /publicWebsite:\s*"https:\/\/blueskyzlabs\.com"/);
   assert.match(site, /founder:\s*\{/);
@@ -15,13 +50,9 @@ test("approved Branding Kit 0907 public identity is centralized without promotin
   assert.match(site, /location:\s*\{/);
   assert.match(site, /locality:\s*"Ho Chi Minh City"/);
   assert.match(site, /country:\s*"Vietnam"/);
-
-  assert.equal(manifest.canonicalMasterbrandPromoted, false);
-  assert.equal(manifest.status, "IDENTITY_PROTOTYPE_READY");
-  assert.equal(manifest.designState, "DESIGN_FREEZE_CANDIDATE");
 });
 
-test("About integrates a BlueSkyz-led verified R4d brand story", () => {
+test("About integrates the BlueSkyz-led public identity without binding to a legacy visual asset", () => {
   const about = readFileSync("src/pages/about.astro", "utf8");
 
   assert.equal(
@@ -36,7 +67,6 @@ test("About integrates a BlueSkyz-led verified R4d brand story", () => {
     "src/components/sections/BrandStory.astro",
     "utf8",
   );
-  assert.match(story, /symbol_material_expression\.svg/);
   assert.match(story, /BRAND_PRINCIPLES/);
   assert.match(story, /SITE\.founder/);
   assert.match(story, /SITE\.location/);
