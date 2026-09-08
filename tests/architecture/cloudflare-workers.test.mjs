@@ -16,6 +16,7 @@ test("Workers serves the Astro static build", () => {
   assert.match(wrangler, /\[observability\.logs\]/);
   assert.match(wrangler, /invocation_logs\s*=\s*true/);
   assert.match(wrangler, /persist\s*=\s*true/);
+  assert.match(wrangler, /redact_query_string\s*=\s*true/);
   assert.doesNotMatch(wrangler, /workers_dev\s*=\s*true/);
   assert.doesNotMatch(wrangler, /pages_build_output_dir/);
   assert.equal(existsSync(".github/workflows/qa.yml"), false);
