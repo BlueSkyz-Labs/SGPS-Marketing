@@ -1,5 +1,13 @@
 ---
+import { brandAssets } from "@/data/brand-assets";
 import { BRAND_PRINCIPLES, SITE } from "@/data/site";
+
+const principleIcons = [
+  brandAssets.principles.intelligence,
+  brandAssets.principles.elevation,
+  brandAssets.principles.trust,
+  brandAssets.principles.impact,
+] as const;
 ---
 
 <section
@@ -14,8 +22,16 @@ import { BRAND_PRINCIPLES, SITE } from "@/data/site";
   </p>
   <ul class="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
     {
-      BRAND_PRINCIPLES.map((item) => (
+      BRAND_PRINCIPLES.map((item, index) => (
         <li class="border-t border-[var(--border-subtle)] pt-5">
+          <img
+            src={principleIcons[index]}
+            alt=""
+            width="64"
+            height="64"
+            class="mb-5 h-14 w-14"
+            loading="lazy"
+          />
           <p class="text-sm font-semibold tracking-[0.14em] text-[var(--brand-cobalt)] uppercase">
             {item.name}
           </p>

@@ -2,14 +2,13 @@ const localFallback = "http://localhost:4321";
 
 export const SITE = {
   name: "BlueSkyz Labs",
-  /** Primary hero line — R4d comprehensive mockup (2026-09-05). */
+  /** Primary hero line — BlueSkyz Labs Production Brand Kit v4. */
   taglineLead: "Intelligence. Elevated.",
   taglineAccent: "Impact.",
   /** Supporting sentence under the tagline. */
   proposition:
     "We build intelligent products that empower people and elevate the way work gets done.",
-  supporting:
-    "Designed with clarity. Engineered with depth. Delivered with quiet excellence.",
+  supporting: "A higher perspective builds a brighter tomorrow.",
   motto: "Build with clarity. Scale with confidence.",
   url: import.meta.env.PUBLIC_SITE_URL?.trim() || localFallback,
   contactEmail: import.meta.env.PUBLIC_CONTACT_EMAIL?.trim() || null,
@@ -35,7 +34,7 @@ export const FOOTER_LINKS = [
   { label: "Security", href: "/security/" },
 ] as const;
 
-/** R4d brand principles from owner comprehensive mockup (not product claims). */
+/** v4 brand principles from the owner production kit (not product claims). */
 export const BRAND_PRINCIPLES = [
   {
     name: "Intelligence",

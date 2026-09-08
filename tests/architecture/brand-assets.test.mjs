@@ -1,5 +1,4 @@
 import assert from "node:assert/strict";
-import { createHash } from "node:crypto";
 import { existsSync, readFileSync } from "node:fs";
 import test from "node:test";
 import { inflateSync } from "node:zlib";
@@ -140,19 +139,23 @@ test("committed OG assets exist for masterbrand social previews", () => {
   assert.equal(existsSync("public/og-image.png"), false);
 });
 
-test("OG image contains opaque ink pixels from the R4d symbol", () => {
+test("OG image contains opaque ink pixels from the v4 masterbrand", () => {
   const { dark, height, width } = countDarkPixelsInRgbPng(
     "public/social/og-default.png",
   );
   assert.deepEqual([width, height], [1200, 630]);
-  assert.ok(dark > 2000, `expected R4d ink cluster, found ${dark} dark pixels`);
+  assert.ok(dark > 2000, `expected v4 ink cluster, found ${dark} dark pixels`);
 });
 
-test("favicon is not the prior rounded-rect placeholder", () => {
+test("favicon is the Production v4 PWA master", () => {
   assert.equal(existsSync("public/favicon.ico"), true);
   const bytes = readFileSync("public/favicon.ico");
-  assert.ok(bytes.byteLength > 400, "favicon should carry mark detail");
-  const digest = createHash("sha256").update(bytes).digest("hex");
-  // Prior geometric placeholder digest prefix (live pre-fix).
-  assert.notEqual(digest.slice(0, 16), "fde16ee9101c2288");
+  const source = readFileSync(
+    "brand/blueskyz-production-v4/03_ICONS/01_FAVICON_PWA/favicon.ico",
+  );
+  assert.deepEqual(
+    bytes,
+    source,
+    "favicon must remain byte-identical to the v4 source",
+  );
 });

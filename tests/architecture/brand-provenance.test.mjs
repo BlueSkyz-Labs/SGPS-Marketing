@@ -3,48 +3,49 @@ import { createHash } from "node:crypto";
 import { existsSync, readFileSync } from "node:fs";
 import test from "node:test";
 
-const m = JSON.parse(
-  readFileSync("public/brand/blueskyz/r4d/brand-manifest.json", "utf8"),
-);
+const kitRoot = "brand/blueskyz-production-v4";
+const standardsPath = `${kitRoot}/00_START_HERE/BRAND_STANDARDS.md`;
+const checksumsPath = `${kitRoot}/00_START_HERE/SHA256SUMS.txt`;
 
-test("R4d kit projection preserves candidate provenance", () => {
-  assert.equal(m.assetId, "BLUESKYZ-MASTERBRAND-R4D");
-  assert.equal(m.assetVersion, "1.1.0");
-  assert.equal(m.canonicalName, "BlueSkyz Labs");
-  assert.equal(m.status, "IDENTITY_PROTOTYPE_READY");
-  assert.equal(m.designState, "DESIGN_FREEZE_CANDIDATE");
-  assert.equal(m.canonicalMasterbrandPromoted, false);
+test("Production v4 source kit preserves release provenance", () => {
   assert.equal(
-    m.kitPackage,
-    "BlueSkyz_Identity_R4d_Production_Master_Candidate_v1.1",
+    readFileSync(`${kitRoot}/00_START_HERE/VERSION.txt`, "utf8").trim(),
+    "BlueSkyz Labs Brand Kit\nVersion: 4.0.0\nRelease date: 2026-09-07\nStatus: Production candidate - verified for digital deployment",
   );
-  assert.equal(m.runtimeFontDependencyForWordmark, "NONE_VECTOR_OUTLINES");
-  assert.equal(existsSync(m.kitPath), true);
+  assert.match(readFileSync(standardsPath, "utf8"), /blueskyzlabs\.com/i);
+  assert.equal(existsSync(checksumsPath), true);
+  assert.match(readFileSync(checksumsPath, "utf8"), /02_LOGOS\/01_VECTOR_SVG/);
 });
 
-test("R4d production masters match brand-manifest digests", () => {
-  const files = {
-    "symbol_mono_ink.svg": m.fileSha256.symbol_mono_ink,
-    "micro_mark_ink.svg": m.fileSha256.micro_mark_ink,
-    "lockup_horizontal_dark.svg": m.fileSha256.lockup_horizontal_dark,
-    "lockup_horizontal_light.svg": m.fileSha256.lockup_horizontal_light,
-    "brand_tokens.json": m.fileSha256.brand_tokens,
-  };
-  for (const [name, expected] of Object.entries(files)) {
-    const path = `public/brand/blueskyz/r4d/${name}`;
+test("Production v4 canonical masters are present and checksum-verifiable", () => {
+  const files = [
+    "02_LOGOS/01_VECTOR_SVG/FULL_LOCKUPS/blueskyzlabs_horizontal_flat_light.svg",
+    "02_LOGOS/01_VECTOR_SVG/FULL_LOCKUPS/blueskyzlabs_horizontal_reverse_white.svg",
+    "02_LOGOS/02_PNG_TRANSPARENT/blueskyzlabs_prismatic_full_lockup_transparent.png",
+    "03_ICONS/01_FAVICON_PWA/favicon.ico",
+    "03_ICONS/03_PRODUCT_ICONS/apexagent.svg",
+  ];
+  const checksums = readFileSync(checksumsPath, "utf8");
+  for (const relativePath of files) {
+    const path = `${kitRoot}/${relativePath}`;
     assert.equal(existsSync(path), true, `${path} must exist`);
     const digest = createHash("sha256")
-      .update(readFileSync(path, "utf8").replaceAll("\r\n", "\n"))
+      .update(readFileSync(path))
       .digest("hex");
-    assert.equal(digest, expected, `${name} sha256 mismatch`);
-    assert.match(expected, /^[0-9a-f]{64}$/);
+    assert.match(checksums, new RegExp(`${digest}\\s+${relativePath}`));
   }
 });
 
-test("header and footer use R4d outlined horizontal lockups", () => {
+test("header and footer use Production v4 lockups", () => {
   const lockup = readFileSync("src/components/brand/BrandLockup.astro", "utf8");
-  assert.match(lockup, /\/brand\/blueskyz\/r4d\/lockup_horizontal_dark\.svg/);
-  assert.match(lockup, /\/brand\/blueskyz\/r4d\/lockup_horizontal_light\.svg/);
+  assert.match(
+    lockup,
+    /\/brand\/blueskyz\/v4\/logos\/horizontal-flat-light\.svg/,
+  );
+  assert.match(
+    lockup,
+    /\/brand\/blueskyz\/v4\/logos\/horizontal-reverse-white\.svg/,
+  );
   assert.doesNotMatch(lockup, /SITE\.name/);
   for (const path of [
     "src/components/layout/Header.astro",

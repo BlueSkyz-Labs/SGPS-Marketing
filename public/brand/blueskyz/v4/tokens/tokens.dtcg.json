@@ -1,0 +1,300 @@
+{
+  "$schema": "https://design-tokens.github.io/community-group/format/",
+  "brand": {
+    "name": {
+      "$value": "BlueSkyz Labs",
+      "$type": "string"
+    },
+    "website": {
+      "$value": "https://blueskyzlabs.com",
+      "$type": "string"
+    }
+  },
+  "color": {
+    "ink": {
+      "$value": "#0B1020",
+      "$type": "color"
+    },
+    "porcelain": {
+      "$value": "#F7F8FA",
+      "$type": "color"
+    },
+    "cobalt": {
+      "$value": "#2564FF",
+      "$type": "color"
+    },
+    "slate900": {
+      "$value": "#0F172A",
+      "$type": "color"
+    },
+    "slate700": {
+      "$value": "#334155",
+      "$type": "color"
+    },
+    "slate650": {
+      "$value": "#475569",
+      "$type": "color"
+    },
+    "slate500": {
+      "$value": "#64748B",
+      "$type": "color"
+    },
+    "slate300": {
+      "$value": "#CBD5E1",
+      "$type": "color"
+    },
+    "slate100": {
+      "$value": "#F1F5F9",
+      "$type": "color"
+    },
+    "actionDark": {
+      "$value": "#1D4ED8",
+      "$type": "color"
+    },
+    "white": {
+      "$value": "#FFFFFF",
+      "$type": "color"
+    }
+  },
+  "semantic": {
+    "light": {
+      "textPrimary": {
+        "$value": "{color.ink}",
+        "$type": "color"
+      },
+      "textSecondary": {
+        "$value": "{color.slate650}",
+        "$type": "color"
+      },
+      "surface": {
+        "$value": "{color.porcelain}",
+        "$type": "color"
+      },
+      "action": {
+        "$value": "{color.cobalt}",
+        "$type": "color"
+      },
+      "actionSmallText": {
+        "$value": "{color.actionDark}",
+        "$type": "color"
+      },
+      "border": {
+        "$value": "{color.slate300}",
+        "$type": "color"
+      }
+    },
+    "dark": {
+      "textPrimary": {
+        "$value": "{color.white}",
+        "$type": "color"
+      },
+      "textSecondary": {
+        "$value": "{color.slate300}",
+        "$type": "color"
+      },
+      "surface": {
+        "$value": "{color.ink}",
+        "$type": "color"
+      },
+      "action": {
+        "$value": "{color.cobalt}",
+        "$type": "color"
+      },
+      "border": {
+        "$value": "{color.slate700}",
+        "$type": "color"
+      }
+    }
+  },
+  "typography": {
+    "fontFamily": {
+      "$value": "Inter, ui-sans-serif, system-ui, sans-serif",
+      "$type": "fontFamily"
+    },
+    "size": {
+      "xs": {
+        "$value": "12px",
+        "$type": "dimension"
+      },
+      "sm": {
+        "$value": "14px",
+        "$type": "dimension"
+      },
+      "md": {
+        "$value": "16px",
+        "$type": "dimension"
+      },
+      "lg": {
+        "$value": "20px",
+        "$type": "dimension"
+      },
+      "xl": {
+        "$value": "24px",
+        "$type": "dimension"
+      },
+      "2xl": {
+        "$value": "32px",
+        "$type": "dimension"
+      },
+      "3xl": {
+        "$value": "48px",
+        "$type": "dimension"
+      },
+      "4xl": {
+        "$value": "64px",
+        "$type": "dimension"
+      },
+      "5xl": {
+        "$value": "80px",
+        "$type": "dimension"
+      }
+    },
+    "lineHeight": {
+      "tight": {
+        "$value": 1.05,
+        "$type": "number"
+      },
+      "display": {
+        "$value": 1.1,
+        "$type": "number"
+      },
+      "heading": {
+        "$value": 1.2,
+        "$type": "number"
+      },
+      "body": {
+        "$value": 1.5,
+        "$type": "number"
+      }
+    }
+  },
+  "spacing": {
+    "0": {
+      "$value": "0px",
+      "$type": "dimension"
+    },
+    "1": {
+      "$value": "4px",
+      "$type": "dimension"
+    },
+    "2": {
+      "$value": "8px",
+      "$type": "dimension"
+    },
+    "3": {
+      "$value": "12px",
+      "$type": "dimension"
+    },
+    "4": {
+      "$value": "16px",
+      "$type": "dimension"
+    },
+    "5": {
+      "$value": "20px",
+      "$type": "dimension"
+    },
+    "6": {
+      "$value": "24px",
+      "$type": "dimension"
+    },
+    "8": {
+      "$value": "32px",
+      "$type": "dimension"
+    },
+    "10": {
+      "$value": "40px",
+      "$type": "dimension"
+    },
+    "12": {
+      "$value": "48px",
+      "$type": "dimension"
+    },
+    "16": {
+      "$value": "64px",
+      "$type": "dimension"
+    },
+    "20": {
+      "$value": "80px",
+      "$type": "dimension"
+    },
+    "24": {
+      "$value": "96px",
+      "$type": "dimension"
+    },
+    "32": {
+      "$value": "128px",
+      "$type": "dimension"
+    }
+  },
+  "radius": {
+    "sm": {
+      "$value": "8px",
+      "$type": "dimension"
+    },
+    "md": {
+      "$value": "12px",
+      "$type": "dimension"
+    },
+    "lg": {
+      "$value": "20px",
+      "$type": "dimension"
+    },
+    "xl": {
+      "$value": "28px",
+      "$type": "dimension"
+    },
+    "pill": {
+      "$value": "999px",
+      "$type": "dimension"
+    }
+  },
+  "motion": {
+    "duration": {
+      "fast": {
+        "$value": "120ms",
+        "$type": "duration"
+      },
+      "normal": {
+        "$value": "200ms",
+        "$type": "duration"
+      },
+      "slow": {
+        "$value": "320ms",
+        "$type": "duration"
+      }
+    },
+    "easing": {
+      "standard": {
+        "$value": [
+          0.2,
+          0,
+          0,
+          1
+        ],
+        "$type": "cubicBezier"
+      }
+    }
+  },
+  "breakpoint": {
+    "sm": {
+      "$value": "640px",
+      "$type": "dimension"
+    },
+    "md": {
+      "$value": "768px",
+      "$type": "dimension"
+    },
+    "lg": {
+      "$value": "1024px",
+      "$type": "dimension"
+    },
+    "xl": {
+      "$value": "1280px",
+      "$type": "dimension"
+    },
+    "2xl": {
+      "$value": "1536px",
+      "$type": "dimension"
+    }
+  }
+}

@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="BlueSkyz Labs logo"><defs>
+              <linearGradient id="wingA_light" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#CBD5E1"/><stop offset="1" stop-color="#94A3B8"/></linearGradient>
+              <linearGradient id="wingB_light" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#64748B"/><stop offset="1" stop-color="#334155"/></linearGradient>
+              <linearGradient id="base_light" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#2564FF"/><stop offset="1" stop-color="#0B1020"/></linearGradient>
+            </defs><g transform="translate(0 0) scale(1.00000000)"><path d="M72 432 C118 285 226 139 394 54 C326 166 278 256 255 334 C196 329 130 369 72 432 Z" fill="url(#wingA_light)"/><path d="M394 54 C353 165 333 276 371 408 L255 334 C289 244 326 138 394 54 Z" fill="url(#wingB_light)"/><path d="M72 432 C151 363 213 333 255 334 L371 408 C292 363 193 364 72 432 Z" fill="url(#base_light)"/></g></svg>
