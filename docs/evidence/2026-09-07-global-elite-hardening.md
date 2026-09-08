@@ -55,7 +55,7 @@ The local Lighthouse SEO score remains 0.69 only because `PUBLIC_SITE_URL=http:/
 
 **Verified:** multiple PR #68 candidate heads have completed `Quality Gates`, `Browser Assurance`, and `Workers Builds: blueskyz-web` successfully. The final combined head is re-verified before any promotion decision.
 
-**Residual external:** `GET /repos/BlueSkyz-Labs/SGPS-Marketing/rulesets` still returns `[]`. Issue #8 remains open. CI existence is not treated as ruleset enforcement; the available GitHub capability exposes ruleset reads but no ruleset create/update administration action.
+**Remediated after handoff:** GitHub ruleset `main-promotion-governance` (`22500299`) was created active on 2026-09-08 and read back from `GET /repos/BlueSkyz-Labs/SGPS-Marketing/rulesets/22500299`. The read-back confirms target `refs/heads/main`, pull-request-before-merge, strict required checks `Quality Gates` and `Browser Assurance`, conversation resolution, non-fast-forward blocking, deletion blocking, and no bypass actors. A direct-write mutation test was intentionally not attempted because the safety contract forbids a potentially mutating proof; the ruleset API read-back is the recorded non-destructive enforcement evidence. Issue #8 was updated and closed after this verification.
 
 ### P2 — governance/documentation drift
 
@@ -67,7 +67,7 @@ The local Lighthouse SEO score remains 0.69 only because `PUBLIC_SITE_URL=http:/
 
 **Detected:** GitHub repository description still advertises the retired Next.js/Framer Motion/Cloudflare Pages architecture and `portfolio.tonydemo.com`.
 
-**Status:** **EXTERNAL CONFIG UPDATE REQUIRED**. Current connector can read repository metadata but exposes no repository-description update action. In-repo README/ADR documentation is authoritative and corrected.
+**Remediated after handoff:** GitHub repository description was updated and read back as: `BlueSkyz Labs marketing site — Astro 7 static architecture on Cloudflare Workers, with evidence-gated product truth and hardened source assurance.`
 
 ## Threat model / red-team scope
 

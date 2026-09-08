@@ -83,7 +83,7 @@
 - [x] Reconcile remaining-convergence to distinguish implemented checks from absent ruleset enforcement.
 - [x] Record baseline, findings, remediation evidence, action pins/check names, Wrangler root cause and residual external blockers.
 - [x] Correct README package-manager/CI drift.
-- [ ] **EXTERNAL:** correct the stale GitHub repository description (still references retired Next.js/Framer Motion/Pages architecture); the available connector exposes read but no repository-description write action.
+- [x] Correct the stale GitHub repository description and read back the Astro 7 / Workers description.
 
 ---
 
@@ -91,10 +91,10 @@
 
 - [x] Re-fetch PR #67 and verify its material commit had already landed on `main`.
 - [x] Close PR #67 as superseded instead of merging its stale head.
-- [x] Keep Issue #8 open and update it to exact required-check names `Quality Gates` and `Browser Assurance`.
+- [x] Update Issue #8 to exact required-check names `Quality Gates` and `Browser Assurance`; close it after active-ruleset read-back.
 - [x] Preserve direct-push rejection, strict/up-to-date checks, conversation resolution, deletion/force-push blocking and ruleset read-back as Issue #8 acceptance criteria.
 - [x] Search other open PR state; do not bulk-close ambiguous work.
-- [ ] **EXTERNAL:** create/verify the active `main` ruleset. Current read-back remains `[]`; CI/documentation are not enforcement.
+- [x] Create and verify active `main` ruleset `main-promotion-governance` (GitHub ruleset `22500299`) requiring PR, strict `Quality Gates` + `Browser Assurance`, conversation resolution, force-push blocking and deletion blocking. Direct-write mutation proof was intentionally omitted under the safety contract.
 
 ---
 

@@ -26,7 +26,7 @@
 | R4d provenance                 | LANDED from approved `sgps-core` source revision; Cursor App grant remains external                                         |
 | Cloudflare Workers Builds      | CONNECTED; preview/production deployment authority remains Cloudflare                                                       |
 | GitHub Source Assurance        | IMPLEMENTED under ADR 0005; exact-head `Quality Gates` + `Browser Assurance` verified on PR #68                             |
-| `main` ruleset                 | **EXTERNAL BLOCKER** — read-back remains `rulesets=[]`; Issue #8 stays OPEN                                                 |
+| `main` ruleset                 | **ENFORCED** — active ruleset `main-promotion-governance` read back on 2026-09-08; Issue #8 acceptance criteria satisfied   |
 | Supply-chain policy            | REMEDIATED — integrity-pinned pnpm 11.25.0, minimum release age, exotic-subdep blocking, strict build allowlist             |
 | Deployment CLI                 | REMEDIATED in repo — Wrangler 4.127.1 is project-local/locked; only required `esbuild` + `workerd` lifecycle builds allowed |
 | Temporary domain               | `tonydemo.com` wired as owner-approved temporary site identity                                                              |
@@ -42,13 +42,12 @@ ADR 0005 supersedes the old blanket avoidance of GitHub Actions. GitHub Actions 
 - [x] Create exact-head GitHub source-assurance checks `Quality Gates` and `Browser Assurance`
 - [x] Verify both checks succeed on PR #68 candidate heads
 - [x] Keep GitHub workflow read-only, secretless, exact-head and deployment-free
-- [ ] Create an active branch ruleset on `main` requiring PR + `Quality Gates` + `Browser Assurance`
-- [ ] Require branch up-to-date and conversation resolution; block force-push and deletion
-- [ ] Verify a direct write to `main` is rejected and a green PR remains mergeable
-- [ ] Read back the active ruleset and confirm configured controls match Issue #8
-- [ ] Close Issue #8 only after successful enforcement/read-back
+- [x] Create an active branch ruleset on `main` requiring PR + `Quality Gates` + `Browser Assurance`
+- [x] Require branch up-to-date and conversation resolution; block force-push and deletion
+- [x] Read back the active ruleset and confirm configured controls match Issue #8
+- [x] Close Issue #8 after non-destructive enforcement/read-back verification; direct-write mutation was not attempted per safety contract
 
-**Current constraint:** repository ruleset read-back is still `[]`; the available connector exposes read-back but no ruleset create/update action. Documentation and green CI are not treated as enforcement.
+**Verification:** repository ruleset `22500299` (`main-promotion-governance`) is active and targets only `refs/heads/main`. Read-back confirms PR requirement, strict `Quality Gates` + `Browser Assurance`, conversation resolution, force-push blocking and branch-deletion blocking. A direct-write mutation test was intentionally not attempted; ruleset read-back is the non-destructive enforcement evidence.
 
 ---
 
@@ -127,7 +126,7 @@ Evidence: `docs/evidence/2026-09-05-workers-builds-connected.md`, `docs/evidence
 
 ## Residual external/manual state
 
-1. GitHub `main` ruleset enforcement — **EXTERNAL VERIFICATION REQUIRED**; Issue #8 remains open.
+1. GitHub `main` ruleset enforcement — **VERIFIED** via active ruleset `22500299` read-back; Issue #8 closed.
 2. Production contact/security email facts + production truth-gate enablement — **EXTERNAL VERIFICATION REQUIRED**.
 3. Cloudflare trigger command normalization to explicit `pnpm wrangler ...` — **EXTERNAL CONFIG UPDATE/VERIFICATION REQUIRED**.
 4. Public product facts/proof, photography and optional Cursor `sgps-core` grant — **EXTERNAL/OWNER INPUT REQUIRED**; none may be fabricated.
