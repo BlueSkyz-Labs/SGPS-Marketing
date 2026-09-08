@@ -34,7 +34,7 @@ test("R4d production masters match brand-manifest digests", () => {
     const path = `public/brand/blueskyz/r4d/${name}`;
     assert.equal(existsSync(path), true, `${path} must exist`);
     const digest = createHash("sha256")
-      .update(readFileSync(path))
+      .update(readFileSync(path, "utf8").replaceAll("\r\n", "\n"))
       .digest("hex");
     assert.equal(digest, expected, `${name} sha256 mismatch`);
     assert.match(expected, /^[0-9a-f]{64}$/);
