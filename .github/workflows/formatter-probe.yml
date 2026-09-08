@@ -1,4 +1,4 @@
-name: Residual Security and SEO Diagnostics
+name: Fully Patched Tooling Assurance
 
 on:
   push:
@@ -9,14 +9,14 @@ permissions:
   contents: read
 
 concurrency:
-  group: residual-diagnostics-${{ github.ref }}
+  group: fully-patched-tooling-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
-  audit-details:
-    name: Enumerate residual dependency advisories
+  verify:
+    name: Verify fully patched LHCI graph
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 25
     steps:
       - name: Checkout exact candidate
         uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
@@ -33,32 +33,29 @@ jobs:
           pnpm --version
       - name: Clean frozen install
         run: pnpm install --frozen-lockfile
-      - name: Enumerate moderate-and-higher advisories
+      - name: Audit moderate-and-higher advisories
         run: pnpm audit --audit-level=moderate
-
-  seo-details:
-    name: Explain Lighthouse SEO warning
-    runs-on: ubuntu-latest
-    timeout-minutes: 20
-    steps:
-      - name: Checkout exact candidate
-        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
-        with:
-          ref: ${{ github.sha }}
-          persist-credentials: false
-      - name: Set up Node 24.20.0
-        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
-        with:
-          node-version: 24.20.0
-      - name: Activate integrity-pinned package manager
-        run: |
-          corepack enable
-          pnpm --version
-      - name: Clean frozen install
-        run: pnpm install --frozen-lockfile
+      - name: Tooling advisory contract
+        run: node --test tests/architecture/tooling-vulnerabilities.test.mjs
+      - name: Architecture contracts
+        run: pnpm test:architecture
+      - name: Typecheck
+        run: pnpm typecheck
+      - name: Lint
+        run: pnpm lint
+      - name: Formatting
+        run: pnpm format:check
+      - name: Static build
+        run: pnpm build
+      - name: Client JavaScript budget
+        run: pnpm check:client-budget
+      - name: Static links
+        run: pnpm check:static-links
       - name: Install Chromium runtime
         run: pnpm exec playwright install --with-deps chromium
-      - name: Run Lighthouse CI
+      - name: Playwright and axe assurance
+        run: pnpm exec playwright test --project=chromium
+      - name: Lighthouse CI compatibility/regression
         run: pnpm lighthouse
       - name: Explain non-perfect SEO audits
         run: |
