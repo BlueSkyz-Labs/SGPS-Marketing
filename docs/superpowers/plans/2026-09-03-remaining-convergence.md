@@ -31,6 +31,8 @@
 | Production contact/security emails | **EXTERNAL / OWNER INPUT REQUIRED**; public-truth gate must not be faked |
 | Field RUM | Design exists; production enablement remains an explicit privacy/owner decision |
 
+Canonical production build recipe includes `pnpm build`, `pnpm check:client-budget`, and `pnpm check:static-links`.
+
 ---
 
 ## Residual task graph
