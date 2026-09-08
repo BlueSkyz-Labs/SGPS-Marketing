@@ -1,6 +1,6 @@
 # Global Elite hardening evidence — 2026-09-07 / post-merge reconciliation 2026-09-08
 
-> **Evidence status:** the original hardening campaign is promoted and historical. The former pre-merge promotion rule for PR #68 has been satisfied and is superseded by the outcome/read-back below. New findings are recorded as new Detected → Remediated → Verified work rather than pretending the repository is frozen at the 2026-09-07 baseline.
+> **Evidence status:** the original hardening campaign is promoted and historical. PR #68 and the follow-up privacy/anti-drift PR #75 are merged and provider-verified. New findings are recorded as new Detected → Remediated → Verified work rather than pretending the repository is frozen at the 2026-09-07 baseline.
 
 ## Scope and immutable references
 
@@ -10,6 +10,8 @@
 - PR #68: `security: fail-closed supply chain and source assurance`
 - PR #68 final head: `3da147b7ae7d7da7c5f60c9120dc7087e35d0690`
 - PR #68 merge commit: `f3079c7c1c7385e4f7079a08f537bf1f34578980`
+- PR #75 final head: `9b5038b57a7920977704c2e9e71e9ae03a5f8253`
+- PR #75 merge commit: `b050cb9fd216f5b0bb305cde51a731faf0d95c96`
 - Governing decisions: ADR 0004 (Astro 7 / Workers Static Assets) and ADR 0005 (GitHub Source Assurance + Cloudflare deployment dual control)
 
 ## Detected → remediated → verified
@@ -52,15 +54,17 @@ The local Lighthouse SEO reduction caused by intentional localhost/preview `noin
 
 **Detected after promotion:** `main@2b4ff555917318cccf29400d637d82483909f0d7` persisted invocation logs with full head sampling but did not set Workers observability query-string redaction. Because invocation telemetry includes request URLs, persisting raw query strings creates unnecessary privacy/data-minimization exposure for campaign identifiers or future user-supplied URL parameters.
 
-**Remediated in PR #75 candidate:** `wrangler.toml` sets `redact_query_string = true` under `[observability.logs]` while retaining observability, invocation logs and existing routing hardening. `tests/architecture/cloudflare-workers.test.mjs` now requires the redaction setting.
+**Remediated and promoted in PR #75:** `wrangler.toml` sets `redact_query_string = true` under `[observability.logs]` while retaining observability, invocation logs and existing routing hardening. `tests/architecture/cloudflare-workers.test.mjs` requires the redaction setting.
 
 **TDD evidence:** test-only commit `2104bf12866dd754a79a37fdf483753cc884a071` completed frozen install and dependency audit, then failed at Architecture contracts as expected because the production setting was absent. Minimal implementation commit `2b9434b122c932fe0b000084eaee08de06640727` subsequently passed dependency audit and the architecture contract.
 
-**Pre-final exact-head evidence:** reconciled candidate `ccbe44943dfeae7769f0b44b3780c5a57496d180` completed `Quality Gates` successfully (check `102131251485`), `Browser Assurance` successfully (check `102131490731`; Playwright/axe 33/33 and Lighthouse 3/3 processed), and `Workers Builds: blueskyz-web` successfully (check `102131656594`, Cloudflare build `202d09f1-41d0-4d02-86bc-2e2a8ae9d277`, version `b62222a9-1f8f-4d4e-9437-8e9a4a677092`). This evidence predates this ledger-only commit, so the new final exact head must independently rerun the same gates before promotion; no prior green is promoted to final by assumption.
+**Final PR #75 evidence:** exact head `9b5038b57a7920977704c2e9e71e9ae03a5f8253` completed `Quality Gates` successfully (check `102132579642`), `Browser Assurance` successfully (check `102132850879`; Playwright/axe and Lighthouse), and `Workers Builds: blueskyz-web` successfully (check `102133101923`, Cloudflare build `eb18b5e0-d1c4-4e14-af6a-7f19b6e5e559`, version `11bbc33e-a8cf-4067-ae5b-16cdc1b47761`). Two consecutive settled-head deep-audit/red-team cycles produced no additional meaningful agent-actionable finding before promotion.
+
+**Post-merge read-back:** PR #75 merged through the protected PR path on 2026-09-08 as `main@b050cb9fd216f5b0bb305cde51a731faf0d95c96`. That merge SHA independently completed `Quality Gates` successfully (check `102134804565`), `Browser Assurance` successfully (check `102135040015`), and `Workers Builds: blueskyz-web` successfully (check `102135197945`, Cloudflare build `e4a087cc-7f31-41ee-b0fb-ad0ffdb04320`, version `7d47b3ae-7e8e-48d9-8024-c389e115c332`). Repository read-back showed zero open pull requests and zero open issues after the merge.
 
 ### P2 — governance / documentation drift
 
-**Detected:** README/residual plans/evidence accumulated stale descriptions of pnpm, Source Assurance, unresolved ruleset state, Cloudflare command normalization and the pre-merge status of PR #68.
+**Detected:** README/residual plans/evidence accumulated stale descriptions of pnpm, Source Assurance, unresolved ruleset state, Cloudflare command normalization and pre-/post-merge status.
 
 **Remediated:** README/QA/AGENTS/ADR guidance were reconciled during the original hardening; the post-merge reconciliation marks the hardening plan as historical/promoted and narrows the active remaining-convergence plan to genuine owner/privacy/product-direction gaps. Historical evidence is retained but obsolete pre-merge instructions are explicitly superseded by immutable promotion outcomes.
 
@@ -105,4 +109,4 @@ Applicable attack/privacy paths include dependency/lifecycle compromise, mutable
 
 ## Current promotion rule
 
-PR #68 is already merged; its former pre-merge rule is satisfied and superseded. New work such as PR #75 must independently meet the active `main` ruleset: current exact-head `Quality Gates` and `Browser Assurance` must pass, provider deployment evidence must be green for the candidate, material review findings must be resolved, and no actionable P0/P1 may remain. Direct-to-`main` is not an acceptable fallback.
+PR #68 and PR #75 are already merged; their former pre-merge rules are satisfied and superseded. Any future work must independently meet the active `main` ruleset: current exact-head `Quality Gates` and `Browser Assurance` must pass, provider deployment evidence must be green where applicable, material review findings must be resolved, and no actionable P0/P1 may remain. Direct-to-`main` is not an acceptable fallback.
