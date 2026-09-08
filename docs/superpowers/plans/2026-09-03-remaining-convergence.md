@@ -59,7 +59,7 @@ ADR 0005 supersedes the old blanket avoidance of GitHub Actions. GitHub Actions 
 - [x] Canonical build recipe includes `pnpm build`, `pnpm check:client-budget`, and `pnpm check:static-links`
 - [x] Temporary `PUBLIC_SITE_URL=https://tonydemo.com` configured for builds
 - [x] Pin repository Wrangler CLI and lock transitive deployment graph
-- [ ] **EXTERNAL:** normalize Cloudflare configured deploy commands from `npx wrangler ...` to project-local `pnpm wrangler ...`; current frozen install contains the pinned Wrangler so `npx` resolves locally, but external config should match the repository contract explicitly
+- [x] **EXTERNAL:** normalize Cloudflare configured deploy commands from `npx wrangler ...` to project-local `pnpm wrangler ...` (verified on 2026-09-08 for preview and production triggers)
 - [ ] When production emails exist, add `pnpm validate:public-truth` to the production promotion command
 
 Evidence: `docs/evidence/2026-09-05-workers-builds-connected.md`, `docs/evidence/2026-09-07-global-elite-hardening.md`.

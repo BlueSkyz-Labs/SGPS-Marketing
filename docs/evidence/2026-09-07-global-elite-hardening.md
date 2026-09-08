@@ -26,7 +26,7 @@
 
 **Verified:** isolated exact-head diagnostics ran a clean frozen install, deployment-toolchain contract, full architecture suite, typecheck, lint, formatting, static build, client-JS budget and static links successfully. Cloudflare preview also succeeded after the required `workerd` lifecycle build was explicitly allowlisted.
 
-**Residual external:** Cloudflare's stored trigger commands were previously configured as `npx wrangler deploy` / `npx wrangler versions upload`. With the frozen project install they resolve the pinned local Wrangler, but the external configuration should be normalized to explicit `pnpm wrangler ...`; no Cloudflare configuration write connector is available in this session.
+**Resolved external:** Cloudflare's stored preview and production trigger commands were read back on 2026-09-08 as `pnpm wrangler versions upload` and `pnpm wrangler deploy`. A successful preview build (`08257cfc-b247-4549-803f-3c7bd9e56d67`) and successful main build (`ae87e9ee-29e0-40a2-bd36-5f863e6538ac`) confirm the normalized commands.
 
 ### P1 — vulnerable Lighthouse/LHCI transitive tooling graph
 
