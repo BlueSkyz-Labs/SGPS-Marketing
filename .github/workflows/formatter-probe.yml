@@ -1,3 +1,4 @@
+# verifier trigger: patched graph committed via lifecycle-free writer
 name: Tooling Security Assurance
 
 on:
