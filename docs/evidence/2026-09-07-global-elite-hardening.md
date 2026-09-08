@@ -54,7 +54,9 @@ The local Lighthouse SEO reduction caused by intentional localhost/preview `noin
 
 **Remediated in PR #75 candidate:** `wrangler.toml` sets `redact_query_string = true` under `[observability.logs]` while retaining observability, invocation logs and existing routing hardening. `tests/architecture/cloudflare-workers.test.mjs` now requires the redaction setting.
 
-**TDD evidence:** test-only commit `2104bf12866dd754a79a37fdf483753cc884a071` completed frozen install and dependency audit, then failed at Architecture contracts as expected because the production setting was absent. Minimal implementation commit `2b9434b122c932fe0b000084eaee08de06640727` subsequently passed dependency audit and the architecture contract. Final exact-head source/browser/provider verification is required after documentation reconciliation before PR #75 promotion; `UNKNOWN/IN PROGRESS` is not recorded as PASS.
+**TDD evidence:** test-only commit `2104bf12866dd754a79a37fdf483753cc884a071` completed frozen install and dependency audit, then failed at Architecture contracts as expected because the production setting was absent. Minimal implementation commit `2b9434b122c932fe0b000084eaee08de06640727` subsequently passed dependency audit and the architecture contract.
+
+**Pre-final exact-head evidence:** reconciled candidate `ccbe44943dfeae7769f0b44b3780c5a57496d180` completed `Quality Gates` successfully (check `102131251485`), `Browser Assurance` successfully (check `102131490731`; Playwright/axe 33/33 and Lighthouse 3/3 processed), and `Workers Builds: blueskyz-web` successfully (check `102131656594`, Cloudflare build `202d09f1-41d0-4d02-86bc-2e2a8ae9d277`, version `b62222a9-1f8f-4d4e-9437-8e9a4a677092`). This evidence predates this ledger-only commit, so the new final exact head must independently rerun the same gates before promotion; no prior green is promoted to final by assumption.
 
 ### P2 — governance / documentation drift
 
