@@ -3,125 +3,130 @@
 > **For agentic workers:** Execute only items that are still open and safe.
 > Do not claim Issue #8 closed without verified GitHub ruleset reads.
 
-**Goal:** Close residual gaps after C1.1 Astro foundation (`main` through #52)
-without inventing owner-gated domain, email, legal, product, or R4d facts.
+**Goal:** Close residual gaps after C1.1 Astro foundation without inventing owner-gated domain, email, legal, product, or R4d facts.
 
 **Canonical SoT:**
 
 - Spec: `docs/superpowers/specs/2026-09-03-blueskyz-web-v1-c1-1-design.md`
 - Plan: `docs/superpowers/plans/2026-09-04-blueskyz-web-v1-c1-1-implementation.md`
 - ADR 0004: `ASTRO_7` → Cloudflare Workers Static Assets
+- ADR 0005: GitHub Source Assurance + Cloudflare deployment dual control
+- Hardening plan: `docs/superpowers/plans/2026-09-07-global-elite-hardening-implementation.md`
 
 **Permission evidence:** `docs/evidence/2026-09-04-permission-blockers.md`  
-**Live redeploy evidence:** `docs/evidence/2026-09-04-workers-redeploy.md`
+**Hardening evidence:** `docs/evidence/2026-09-07-global-elite-hardening.md`
 
-**Current baseline (2026-09-05 agent @ trust/SEO/truth hardening pass):**
+**Current baseline (2026-09-07 hardening pass):**
 
-| Area                                               | Status                                                                                           |
-| -------------------------------------------------- | ------------------------------------------------------------------------------------------------ |
-| C1.1 Tasks 1–3, 5–14 technical foundation          | Landed on `main` (#43–#54)                                                                       |
-| Product profile route `/products/[slug]/`          | Landed on `main` (#46)                                                                           |
-| Trust-path CTA / FlagshipProof / SoT hygiene       | Landed on `main` (#48–#54)                                                                       |
-| Customer copy / empty-state CTA / schema CTA truth | Landed (#55–#57)                                                                                 |
-| Staging-host claim denylist + non-prod sitemap/404 | Landed (#57)                                                                                     |
-| Empty-email Act path + stable workers.dev noindex  | This pass (`docs/evidence/2026-09-05-act-path-workers-noindex.md`)                               |
-| Live Workers surface vs `main`                     | **IN SYNC** post-#64 (`a926019`, Builds `c03d83fa…`)                                             |
-| Honest empty public product registry               | PASS                                                                                             |
-| In-repo material work                              | Prior “exhausted” claim falsified; this pass closes new P1s                                      |
-| R4d Task 4 (`sgps-core` import)                    | **LANDED** this pass — SHA `28dbbc7e…` via `PORTFOLIO_GITHUB_TOKEN`; Cursor App still omits repo |
-| Cloudflare Workers Builds for `blueskyz-web`       | **CLOSED 2026-09-05** — Git Connect + build `2fa74438…` success                                  |
-| Draft PR #33 (`/so-tro`, Next atelier)             | **CLOSED** (superseded; do not reopen/merge into Astro `main`)                                   |
-| Issue #8 main ruleset                              | **Owner deferred** — rulesets `[]` by owner; leave #8 open                                       |
-| Temporary domain `tonydemo.com`                    | **IN PROGRESS** — custom domains + Builds `PUBLIC_SITE_URL` set                                  |
-| Production emails / legal / founder copy           | **Owner/evidence** — emails still empty                                                          |
+| Area                           | Status                                                                                                                      |
+| ------------------------------ | --------------------------------------------------------------------------------------------------------------------------- |
+| C1.1 technical foundation      | Landed on `main` through the R4d/trust/SEO convergence series                                                               |
+| Astro 7 static architecture    | PASS; ADR 0004 remains authoritative                                                                                        |
+| Public product registry        | Intentionally empty until proof-backed owner facts exist                                                                    |
+| R4d provenance                 | LANDED from approved `sgps-core` source revision; Cursor App grant remains external                                         |
+| Cloudflare Workers Builds      | CONNECTED; preview/production deployment authority remains Cloudflare                                                       |
+| GitHub Source Assurance        | IMPLEMENTED under ADR 0005; exact-head `Quality Gates` + `Browser Assurance` verified on PR #68                             |
+| `main` ruleset                 | **ENFORCED** — active ruleset `main-promotion-governance` read back on 2026-09-08; Issue #8 acceptance criteria satisfied   |
+| Supply-chain policy            | REMEDIATED — integrity-pinned pnpm 11.25.0, minimum release age, exotic-subdep blocking, strict build allowlist             |
+| Deployment CLI                 | REMEDIATED in repo — Wrangler 4.127.1 is project-local/locked; only required `esbuild` + `workerd` lifecycle builds allowed |
+| Temporary domain               | `tonydemo.com` wired as owner-approved temporary site identity                                                              |
+| Production emails / truth gate | **EXTERNAL BLOCKER** — contact/security emails remain unset; production truth gate must not be faked                        |
+| Field RUM                      | Design recorded; production enablement remains a privacy/owner decision                                                     |
 
 ---
 
-### Task 1: Enable main promotion ruleset (Issue #8)
+### Task 1: Enforce main promotion ruleset (Issue #8)
 
-**Owner deferred (2026-09-05):** owner disabled all main GitHub rules; API read
-`rulesets: []`. Keep Issue #8 open until owner wants enforcement again.
+ADR 0005 supersedes the old blanket avoidance of GitHub Actions. GitHub Actions now owns **secretless source assurance only**; Cloudflare Workers Builds remains deployment authority.
 
-- [ ] Recreate active branch ruleset on `main` per Issue #8 checklist (when owner re-enables)
-- [ ] Prefer Cloudflare Workers Builds / local source-gate evidence names over resurrecting required GitHub Actions workload
-- [ ] Set the **actual** Cloudflare check name in the ruleset once GitHub surfaces it
-- [ ] Verify direct push to `main` is rejected; green PR remains mergeable
-- [ ] Close Issue #8 only after read-back verification
+- [x] Create exact-head GitHub source-assurance checks `Quality Gates` and `Browser Assurance`
+- [x] Verify both checks succeed on PR #68 candidate heads
+- [x] Keep GitHub workflow read-only, secretless, exact-head and deployment-free
+- [x] Create an active branch ruleset on `main` requiring PR + `Quality Gates` + `Browser Assurance`
+- [x] Require branch up-to-date and conversation resolution; block force-push and deletion
+- [x] Read back the active ruleset and confirm configured controls match Issue #8
+- [x] Close Issue #8 after non-destructive enforcement/read-back verification; direct-write mutation was not attempted per safety contract
+
+**Verification:** repository ruleset `22500299` (`main-promotion-governance`) is active and targets only `refs/heads/main`. Read-back confirms PR requirement, strict `Quality Gates` + `Browser Assurance`, conversation resolution, force-push blocking and branch-deletion blocking. A direct-write mutation test was intentionally not attempted; ruleset read-back is the non-destructive enforcement evidence.
 
 ---
 
 ### Task 2: Cloudflare Workers Builds wiring
 
-- [x] Connect `BlueSkyz-Labs/SGPS-Marketing` → Worker `blueskyz-web` Builds (API 2026-09-05)
-- [x] Preview trigger enabled (`*` except `main`); truth gate omitted while emails absent
-- [x] Confirm Builds list is non-empty (`total_count≥1`, first build success)
-- [x] Temporary `PUBLIC_SITE_URL=https://tonydemo.com` on production + preview triggers
-- [ ] When production emails exist: add `pnpm validate:public-truth` to production build command
-- Evidence: `docs/evidence/2026-09-05-workers-builds-connected.md`, `docs/evidence/2026-09-05-owner-domain-sgps-core.md`
+- [x] Connect `BlueSkyz-Labs/SGPS-Marketing` → Worker `blueskyz-web` Builds
+- [x] Preview trigger enabled; production-only truth gate omitted while required emails are absent
+- [x] Confirm Builds emits successful preview/deployment checks
+- [x] Canonical build recipe includes `pnpm build`, `pnpm check:client-budget`, and `pnpm check:static-links`
+- [x] Temporary `PUBLIC_SITE_URL=https://tonydemo.com` configured for builds
+- [x] Pin repository Wrangler CLI and lock transitive deployment graph
+- [ ] **EXTERNAL:** normalize Cloudflare configured deploy commands from `npx wrangler ...` to project-local `pnpm wrangler ...`; current frozen install contains the pinned Wrangler so `npx` resolves locally, but external config should match the repository contract explicitly
+- [ ] When production emails exist, add `pnpm validate:public-truth` to the production promotion command
+
+Evidence: `docs/evidence/2026-09-05-workers-builds-connected.md`, `docs/evidence/2026-09-07-global-elite-hardening.md`.
 
 ---
 
-### Task 3: Custom domain DNS
+### Task 3: Custom domain and production identity
 
-- [x] Temporary owner domain `tonydemo.com` (emails still empty)
+- [x] Temporary owner domain `tonydemo.com`
 - [x] Custom domains `tonydemo.com` / `www.tonydemo.com` / `blueskyz.tonydemo.com` → `blueskyz-web`
-- [x] Builds `PUBLIC_SITE_URL=https://tonydemo.com`
-- [ ] Owner supplies `PUBLIC_CONTACT_EMAIL` + `PUBLIC_SECURITY_EMAIL` later
-- Evidence: `docs/evidence/2026-09-05-owner-domain-sgps-core.md`
+- [x] Canonical/sitemap behavior verified in prior evidence
+- [ ] **EXTERNAL:** owner supplies verified `PUBLIC_CONTACT_EMAIL` + `PUBLIC_SECURITY_EMAIL`
+- [ ] Enable and verify production `validate:public-truth` only after those facts exist
 
 ---
 
-### Task 4: R4d brand provenance (C1.1 Task 4)
+### Task 4: R4d brand provenance
 
-- [ ] Add `sgps-core` to **Cursor** GitHub App selected repos (still `selected` + only `SGPS-Marketing`; `gh api /installation/repositories` does not list `sgps-core`)
-- [x] Import exact `symbol_mono_ink.svg`, `micro_mark_ink.svg`, `brand_tokens.json` + manifest from `sgps-core` main `28dbbc7e28442173c367212096e9095b9e09c0d6` (`PORTFOLIO_GITHUB_TOKEN`)
-- [x] Owner Production Master Candidate v1.1 applied (outlined lockups/wordmarks + web icons)
-- [x] Site uses kit horizontal lockup SVG; evidence `docs/evidence/2026-09-05-r4d-branding-kit-applied.md`
-- [x] Rasterize committed R4d SVG into favicon.ico + social OG (no geometric placeholder)
-- [x] Empty public registry: email-aware Act soft-land (Contact if email; else About/Security; omit hollow Featured)
-- Evidence: `docs/evidence/2026-09-05-r4d-sgps-core-import.md`, `docs/evidence/2026-09-05-r4d-social-empty-ux.md`
+- [ ] **EXTERNAL:** add private `sgps-core` to Cursor GitHub App selected repositories if future direct Cursor reads are desired
+- [x] Approved R4d source imported from `sgps-core` revision `28dbbc7e28442173c367212096e9095b9e09c0d6`
+- [x] Production Master Candidate v1.1 applied with provenance/checksums
+- [x] Site uses approved lockups/icons/tokens rather than geometric placeholders
+- [x] Empty public registry fails honest/soft rather than fabricating products or CTAs
 
 ---
 
 ### Task 5: Brand photography / About portrait
 
-- [ ] Supply public-safe About visual (no private customer imagery)
-- [ ] Keep typographic placeholders until assets exist
+- [ ] **EXTERNAL:** supply public-safe About visual when approved
+- [x] Keep truthful typographic treatment while no approved image exists
 
 ---
 
-### Task 6: GTM `/so-tro` (#33)
+### Task 6: GTM `/so-tro`
 
-- [x] Draft PR #33 closed (2026-09-04) — superseded by Astro C1.1; **do not reopen or merge**
-- [ ] If Sổ Trọ marketing remains desired, re-implement as an evidence-gated product entry + profile under C1.1 — do not revive Next atelier chrome
+- [x] Historical Next-era PR #33 closed as superseded; do not merge into Astro main
+- [ ] If Sổ Trọ marketing remains desired, implement it as evidence-gated C1.1 product content rather than reviving the legacy atelier runtime
 
 ---
 
 ### Task 7: Public product promotion
 
-- [ ] Re-audit candidates only with owner confirmation + proof artifacts + trust paths
-- [ ] Promote YAML entries with `public: true` only after the §6 gate
+- [ ] **EXTERNAL:** obtain owner-confirmed product facts, proof artifacts and trust paths
+- [ ] Promote YAML entries with `public: true` only after schema + proof + public-truth gates pass
 
 ---
 
-### Task 8: Residual QA (G9 / G10)
+### Task 8: Residual QA / observability
 
-- [x] G9: privacy-conscious field INP/RUM **design** recorded (`docs/evidence/2026-09-04-g9-field-rum-design.md`) — enablement still owner-gated
-- [x] G10: visual baseline **lifecycle** recorded (`docs/evidence/2026-09-04-g10-visual-baseline-lifecycle.md`) — baselines not yet a merge gate
+- [x] Privacy-conscious field INP/RUM design recorded
+- [x] Visual-baseline lifecycle recorded
+- [ ] **JUSTIFIED EXCEPTION:** production RUM remains disabled until collection purpose/provider/retention/privacy treatment is approved; static marketing operation does not require inventing telemetry
 
 ---
 
-## Autonomous-safe work already landed (do not redo)
+## Autonomous-safe work already completed
 
-- Temporary domain wiring (2026-09-05): owner `tonydemo.com` allowlisted for site identity only; Builds `PUBLIC_SITE_URL`; custom domains; live canonical/sitemap verified; emails still empty so truth gate stays deferred; `sgps-core` still blocked (Cursor App selected-repos omits it — CF App can see repo)
-- Trust/SEO/truth hardening (2026-09-05): customer jargon scrub; empty featured CTA → Contact; `*.pages.dev` / product `*.tonydemo.com` / trailing-dot FQDN denylist; Try banned for concept/prototype/development + waitlist; 404 always noindex; non-prod empty sitemap; HSTS preload evidence corrected; regression tests
-- Customer-facing copy hygiene (no `docs/evidence` / env jargon); privacy practical summary; Support email fallback; product profile publicLabel-only; schema coherence + production claim URLs; muted AA contrast; HSTS preload deferred; JSON-LD escape; status chrome (#55)
-- Product proof contract + static links + WCAG 2.2 axe + Playwright bootstrap + live Workers redeploy evidence (#51)
-- Public-truth rejects example/preview hosts; product URLs https-only; support recourse CTAs; Builds recipe includes `check:static-links` (#53)
+- Astro 7 static C1.1 architecture, product truth/schema, trust routes, SEO/canonical/noindex, security headers/CSP, WCAG/axe browser coverage, client-JS/static-link budgets and Lighthouse promotion checks.
+- R4d provenance and production assets; empty-product and empty-email paths remain truthful.
+- Cloudflare Workers Static Assets + Builds connected; legacy Pages deployment retired.
+- ADR 0005 dual-control Source Assurance added with full-SHA Actions, `contents: read`, exact candidate checkout and no Cloudflare credentials/deploy authority.
+- pnpm supply-chain policy moved to active project configuration; package manager integrity pinned; dependency lifecycle builds fail closed.
+- Wrangler recovery/deploy CLI pinned locally and covered by architecture contract; `workerd` was allowlisted only after a clean-install failure proved it required a lifecycle build.
 
-- Lucide v1 + SocialIcons (#36) — historical atelier era
-- Experience polish + Pages.dev smoke (#37 / #39) — historical
-- Button/Dialog inventory (#38) — historical
-- TypeScript 6 / React 19.2 / security baseline — historical
-- Astro 7 foundation through E4 (#43) + SoT sync (#44) + Pages disable note (#45)
-- Product profile routes, C1.1 OG generator, porcelain atmosphere, trust-route e2e, security CTA, FlagshipProof scaffold (#46+)
+## Residual external/manual state
+
+1. GitHub `main` ruleset enforcement — **VERIFIED** via active ruleset `22500299` read-back; Issue #8 closed.
+2. Production contact/security email facts + production truth-gate enablement — **EXTERNAL VERIFICATION REQUIRED**.
+3. Cloudflare trigger command normalization to explicit `pnpm wrangler ...` — **EXTERNAL CONFIG UPDATE/VERIFICATION REQUIRED**.
+4. Public product facts/proof, photography and optional Cursor `sgps-core` grant — **EXTERNAL/OWNER INPUT REQUIRED**; none may be fabricated.

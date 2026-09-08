@@ -16,7 +16,8 @@ Core principles:
 - **Exact-head evidence.** A green run belongs to the commit SHA it tested.
 - **Do not weaken gates to land a change.** Fix the root cause or escalate a product/risk decision.
 - **Static-export truth.** Browser and Lighthouse tests exercise the same `dist/` artifact Workers Static Assets serve.
-- **Cloudflare-native remote compute.** GitHub remains source + PR review; do not reintroduce required GitHub Actions workload.
+- **Dual-control remote assurance.** GitHub Actions provides secretless source assurance; Cloudflare Workers Builds remains preview/production build and deploy authority.
+- **No deployment authority in GitHub Actions.** Source-assurance workflows must not receive Cloudflare credentials or invoke deployment commands.
 
 ---
 
@@ -35,6 +36,17 @@ pnpm check:static-links
 ```
 
 Full Playwright matrix and Lighthouse are promotion/preview evidence, not every-commit hooks. Install browsers once with `pnpm test:e2e:install` before `pnpm test:e2e`.
+
+### GitHub source assurance
+
+`.github/workflows/quality-gates.yml` emits two exact-SHA checks:
+
+- **Quality Gates** — frozen install, architecture, typecheck, lint, format, static build, client-JS budget and static-link validation.
+- **Browser Assurance** — Chromium Playwright/axe plus Lighthouse CI after `Quality Gates` succeeds.
+
+The workflow is intentionally secretless and read-only (`contents: read`), checks out the exact PR head or `main` push SHA with `persist-credentials: false`, and pins external actions to full commit SHAs. It is a source-control assurance layer, not a deployment pipeline.
+
+Until Issue #8 is implemented and read back as an active ruleset, these checks exist but are not technically required by GitHub before a direct push or merge. Normal operation remains branch → PR; direct-to-`main` is emergency-only.
 
 ---
 
@@ -62,10 +74,11 @@ Full Playwright matrix and Lighthouse are promotion/preview evidence, not every-
 feature branch
   → local source gate
   → PR
+  → GitHub Source Assurance (Quality Gates → Browser Assurance)
   → Cloudflare Workers preview (Workers Builds)
-  → Playwright/axe + Lighthouse + E4 review
+  → E4 / preview review
   → merge main
-  → production truth gate + build (`validate:public-truth` + build + client budget)
+  → production truth gate + build (`validate:public-truth` + build + client budget + static links)
   → post-deploy smoke
 ```
 
@@ -82,7 +95,7 @@ preview branches: enabled
 
 Preview builds may omit `validate:public-truth` when production-only domain/email variables are intentionally absent, but must still build and pass static gates (`check:client-budget`, `check:static-links`).
 
-**Do not** recreate this pipeline in `.github/workflows`.
+Do not duplicate Cloudflare deployment or environment-bound production truth in `.github/workflows`; GitHub Actions is limited to source assurance.
 
 Legacy Cloudflare Pages project `blueskyz-labs-portfolio` is superseded by Workers Static Assets. On 2026-09-04 Git deployments were disabled via Cloudflare API (`deployments_enabled=false`, preview=`none`), and `destination_dir` was corrected from `.next` → `dist` so an accidental re-enable cannot revive the Next output contract. Canonical host remains Workers (`blueskyz-web`).
 
