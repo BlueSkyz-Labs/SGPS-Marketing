@@ -1,132 +1,112 @@
 # Remaining Convergence Plan — Owner-gated & residual gaps
 
-> **For agentic workers:** Execute only items that are still open and safe.
-> Do not claim Issue #8 closed without verified GitHub ruleset reads.
+> **Active residual execution contract.** Execute only items that remain open, safe and evidence-backed. Historical promotion work is recorded in the hardening plan/evidence; resolved provider controls are not residual blockers.
 
-**Goal:** Close residual gaps after C1.1 Astro foundation without inventing owner-gated domain, email, legal, product, or R4d facts.
+**Goal:** Close remaining Product Truth and owner/privacy gaps after the Astro 7 / Cloudflare Workers foundation without inventing email, legal, product, proof or photography facts.
 
-**Canonical SoT:**
+## Canonical source of truth
 
 - Spec: `docs/superpowers/specs/2026-09-03-blueskyz-web-v1-c1-1-design.md`
-- Plan: `docs/superpowers/plans/2026-09-04-blueskyz-web-v1-c1-1-implementation.md`
+- Implementation plan: `docs/superpowers/plans/2026-09-04-blueskyz-web-v1-c1-1-implementation.md`
 - ADR 0004: `ASTRO_7` → Cloudflare Workers Static Assets
 - ADR 0005: GitHub Source Assurance + Cloudflare deployment dual control
-- Hardening plan: `docs/superpowers/plans/2026-09-07-global-elite-hardening-implementation.md`
+- Historical hardening execution: `docs/superpowers/plans/2026-09-07-global-elite-hardening-implementation.md`
+- Hardening evidence: `docs/evidence/2026-09-07-global-elite-hardening.md`
 
-**Permission evidence:** `docs/evidence/2026-09-04-permission-blockers.md`  
-**Hardening evidence:** `docs/evidence/2026-09-07-global-elite-hardening.md`
+## Current verified baseline
 
-**Current baseline (2026-09-07 hardening pass):**
+| Area                               | Current state                                                                                                            |
+| ---------------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
+| Astro 7 static architecture        | VERIFIED; ADR 0004 remains authoritative                                                                                 |
+| Public product registry            | Intentionally empty until proof-backed owner facts exist                                                                 |
+| Brand provenance                   | Approved BlueSkyz Production Brand Kit v4 assets/tokens are landed with provenance evidence                              |
+| Cloudflare Workers Builds          | VERIFIED deployment authority; GitHub Actions remains source-assurance only                                              |
+| GitHub Source Assurance            | VERIFIED exact-head `Quality Gates` + `Browser Assurance`                                                                |
+| `main` governance                  | ENFORCED by active ruleset `main-promotion-governance` (`22500299`)                                                      |
+| Supply chain                       | Fail-closed pnpm 11.25.0 policy, lifecycle allowlist, dependency audit and pinned tooling                                |
+| Deployment CLI                     | Project-local `wrangler@4.127.1`; provider commands verified as `pnpm wrangler versions upload` / `pnpm wrangler deploy` |
+| Worker public routing              | `workers_dev = false`, `preview_urls = false`; custom-domain path remains canonical                                      |
+| Worker observability               | Persisted invocation logs enabled; query strings are required to be redacted by architecture contract                    |
+| Temporary production identity      | `tonydemo.com` remains the owner-approved temporary site identity                                                        |
+| Production contact/security emails | **EXTERNAL / OWNER INPUT REQUIRED**; public-truth gate must not be faked                                                 |
+| Field RUM                          | Design exists; production enablement remains an explicit privacy/owner decision                                          |
 
-| Area                           | Status                                                                                                                      |
-| ------------------------------ | --------------------------------------------------------------------------------------------------------------------------- |
-| C1.1 technical foundation      | Landed on `main` through the R4d/trust/SEO convergence series                                                               |
-| Astro 7 static architecture    | PASS; ADR 0004 remains authoritative                                                                                        |
-| Public product registry        | Intentionally empty until proof-backed owner facts exist                                                                    |
-| R4d provenance                 | LANDED from approved `sgps-core` source revision; Cursor App grant remains external                                         |
-| Cloudflare Workers Builds      | CONNECTED; preview/production deployment authority remains Cloudflare                                                       |
-| GitHub Source Assurance        | IMPLEMENTED under ADR 0005; exact-head `Quality Gates` + `Browser Assurance` verified on PR #68                             |
-| `main` ruleset                 | **ENFORCED** — active ruleset `main-promotion-governance` read back on 2026-09-08; Issue #8 acceptance criteria satisfied   |
-| Supply-chain policy            | REMEDIATED — integrity-pinned pnpm 11.25.0, minimum release age, exotic-subdep blocking, strict build allowlist             |
-| Deployment CLI                 | REMEDIATED in repo — Wrangler 4.127.1 is project-local/locked; only required `esbuild` + `workerd` lifecycle builds allowed |
-| Temporary domain               | `tonydemo.com` wired as owner-approved temporary site identity                                                              |
-| Production emails / truth gate | **EXTERNAL BLOCKER** — contact/security emails remain unset; production truth gate must not be faked                        |
-| Field RUM                      | Design recorded; production enablement remains a privacy/owner decision                                                     |
-
----
-
-### Task 1: Enforce main promotion ruleset (Issue #8)
-
-ADR 0005 supersedes the old blanket avoidance of GitHub Actions. GitHub Actions now owns **secretless source assurance only**; Cloudflare Workers Builds remains deployment authority.
-
-- [x] Create exact-head GitHub source-assurance checks `Quality Gates` and `Browser Assurance`
-- [x] Verify both checks succeed on PR #68 candidate heads
-- [x] Keep GitHub workflow read-only, secretless, exact-head and deployment-free
-- [x] Create an active branch ruleset on `main` requiring PR + `Quality Gates` + `Browser Assurance`
-- [x] Require branch up-to-date and conversation resolution; block force-push and deletion
-- [x] Read back the active ruleset and confirm configured controls match Issue #8
-- [x] Close Issue #8 after non-destructive enforcement/read-back verification; direct-write mutation was not attempted per safety contract
-
-**Verification:** repository ruleset `22500299` (`main-promotion-governance`) is active and targets only `refs/heads/main`. Read-back confirms PR requirement, strict `Quality Gates` + `Browser Assurance`, conversation resolution, force-push blocking and branch-deletion blocking. A direct-write mutation test was intentionally not attempted; ruleset read-back is the non-destructive enforcement evidence.
+Canonical production build recipe includes `pnpm build`, `pnpm check:client-budget`, and `pnpm check:static-links`.
 
 ---
 
-### Task 2: Cloudflare Workers Builds wiring
+## Residual task graph
 
-- [x] Connect `BlueSkyz-Labs/SGPS-Marketing` → Worker `blueskyz-web` Builds
-- [x] Preview trigger enabled; production-only truth gate omitted while required emails are absent
-- [x] Confirm Builds emits successful preview/deployment checks
-- [x] Canonical build recipe includes `pnpm build`, `pnpm check:client-budget`, and `pnpm check:static-links`
-- [x] Temporary `PUBLIC_SITE_URL=https://tonydemo.com` configured for builds
-- [x] Pin repository Wrangler CLI and lock transitive deployment graph
-- [x] **EXTERNAL:** normalize Cloudflare configured deploy commands from `npx wrangler ...` to project-local `pnpm wrangler ...` (verified on 2026-09-08 for preview and production triggers)
-- [ ] When production emails exist, add `pnpm validate:public-truth` to the production promotion command
+### Task 1 — Production contact/security truth
 
-Evidence: `docs/evidence/2026-09-05-workers-builds-connected.md`, `docs/evidence/2026-09-07-global-elite-hardening.md`.
+State: **EXTERNAL / OWNER INPUT REQUIRED**
 
----
+- [ ] Owner supplies verified `PUBLIC_CONTACT_EMAIL`.
+- [ ] Owner supplies verified `PUBLIC_SECURITY_EMAIL`.
+- [ ] After both facts exist, add `pnpm validate:public-truth` to the production promotion command/config.
+- [ ] Verify the production truth gate and resulting public contact/security paths without placeholders.
 
-### Task 3: Custom domain and production identity
+**Safety invariant:** missing facts remain missing; no invented address may be used to obtain a green build.
 
-- [x] Temporary owner domain `tonydemo.com`
-- [x] Custom domains `tonydemo.com` / `www.tonydemo.com` / `blueskyz.tonydemo.com` → `blueskyz-web`
-- [x] Canonical/sitemap behavior verified in prior evidence
-- [ ] **EXTERNAL:** owner supplies verified `PUBLIC_CONTACT_EMAIL` + `PUBLIC_SECURITY_EMAIL`
-- [ ] Enable and verify production `validate:public-truth` only after those facts exist
+### Task 2 — Public product promotion
 
----
+State: **EXTERNAL / OWNER INPUT REQUIRED**
 
-### Task 4: R4d brand provenance
+- [ ] Obtain owner-confirmed product facts, lifecycle state, proof artifacts and trust paths.
+- [ ] Promote YAML entries with `public: true` only after schema, proof and public-truth gates pass.
 
-- [ ] **EXTERNAL:** add private `sgps-core` to Cursor GitHub App selected repositories if future direct Cursor reads are desired
-- [x] Approved R4d source imported from `sgps-core` revision `28dbbc7e28442173c367212096e9095b9e09c0d6`
-- [x] Production Master Candidate v1.1 applied with provenance/checksums
-- [x] Site uses approved lockups/icons/tokens rather than geometric placeholders
-- [x] Empty public registry fails honest/soft rather than fabricating products or CTAs
+**Safety invariant:** the empty public registry is a truthful state, not a defect to bypass.
 
----
+### Task 3 — Public-safe photography / About visual
 
-### Task 5: Brand photography / About portrait
+State: **EXTERNAL / OWNER INPUT REQUIRED**
 
-- [ ] **EXTERNAL:** supply public-safe About visual when approved
-- [x] Keep truthful typographic treatment while no approved image exists
+- [ ] Supply an approved public-safe About visual if/when desired.
+- [x] Until then, retain the truthful typographic treatment rather than fabricate photography.
 
----
+### Task 4 — Optional direct private SGPS source access
 
-### Task 6: GTM `/so-tro`
+State: **EXTERNAL / OPTIONAL**
 
-- [x] Historical Next-era PR #33 closed as superseded; do not merge into Astro main
-- [ ] If Sổ Trọ marketing remains desired, implement it as evidence-gated C1.1 product content rather than reviving the legacy atelier runtime
+- [ ] Add private `sgps-core` to the Cursor GitHub App selected repositories only if future direct Cursor reads are desired.
+- [x] Existing approved brand source was already imported from immutable `sgps-core` provenance; current runtime does not depend on live Cursor access.
 
----
+### Task 5 — Production RUM
 
-### Task 7: Public product promotion
+State: **JUSTIFIED PRIVACY EXCEPTION / OWNER DECISION**
 
-- [ ] **EXTERNAL:** obtain owner-confirmed product facts, proof artifacts and trust paths
-- [ ] Promote YAML entries with `public: true` only after schema + proof + public-truth gates pass
+- [x] Privacy-conscious field INP/RUM design is recorded.
+- [x] Visual-baseline lifecycle is recorded.
+- [ ] Enable production RUM only after collection purpose, provider, retention and privacy treatment are explicitly approved.
 
----
+**Rationale:** this static marketing product does not require invented telemetry to be operationally valid; privacy minimization outranks analytics convenience.
 
-### Task 8: Residual QA / observability
+### Task 6 — Optional GTM `/so-tro`
 
-- [x] Privacy-conscious field INP/RUM design recorded
-- [x] Visual-baseline lifecycle recorded
-- [ ] **JUSTIFIED EXCEPTION:** production RUM remains disabled until collection purpose/provider/retention/privacy treatment is approved; static marketing operation does not require inventing telemetry
+State: **FUTURE / PRODUCT-DIRECTION DEPENDENT**
+
+- [x] Historical Next-era PR #33 is superseded and must not be revived into Astro `main`.
+- [ ] If Sổ Trọ marketing is still desired, implement it as new evidence-gated Astro C1.1 product content under a separate approved product scope.
 
 ---
 
-## Autonomous-safe work already completed
+## Autonomous controls already verified
 
-- Astro 7 static C1.1 architecture, product truth/schema, trust routes, SEO/canonical/noindex, security headers/CSP, WCAG/axe browser coverage, client-JS/static-link budgets and Lighthouse promotion checks.
-- R4d provenance and production assets; empty-product and empty-email paths remain truthful.
-- Cloudflare Workers Static Assets + Builds connected; legacy Pages deployment retired.
-- ADR 0005 dual-control Source Assurance added with full-SHA Actions, `contents: read`, exact candidate checkout and no Cloudflare credentials/deploy authority.
-- pnpm supply-chain policy moved to active project configuration; package manager integrity pinned; dependency lifecycle builds fail closed.
-- Wrangler recovery/deploy CLI pinned locally and covered by architecture contract; `workerd` was allowlisted only after a clean-install failure proved it required a lifecycle build.
+- Astro static architecture, product-truth/schema, trust routes, canonical/noindex behavior, CSP/security headers, JSON-LD escaping and proof provenance.
+- WCAG/axe browser coverage, Lighthouse, client-JS budget, static-link validation and dependency vulnerability audit.
+- GitHub Source Assurance is read-only, secretless, exact-head and full-SHA pinned.
+- Active `main` ruleset requires PR, strict `Quality Gates` + `Browser Assurance`, conversation resolution, and blocks non-fast-forward/deletion with no bypass actors.
+- Cloudflare preview/production trigger commands are normalized to project-local pinned Wrangler and verified through provider builds.
+- Worker `workers.dev` and preview routes are disabled; observability configuration is persisted in `wrangler.toml` and protected by architecture tests.
+- Package-manager supply-chain policy and dependency lifecycle scripts fail closed.
+- Public product and missing-email paths fail honestly instead of fabricating content/CTAs.
 
 ## Residual external/manual state
 
-1. GitHub `main` ruleset enforcement — **VERIFIED** via active ruleset `22500299` read-back; Issue #8 closed.
-2. Production contact/security email facts + production truth-gate enablement — **EXTERNAL VERIFICATION REQUIRED**.
-3. Cloudflare trigger command normalization to explicit `pnpm wrangler ...` — **EXTERNAL CONFIG UPDATE/VERIFICATION REQUIRED**.
-4. Public product facts/proof, photography and optional Cursor `sgps-core` grant — **EXTERNAL/OWNER INPUT REQUIRED**; none may be fabricated.
+1. Production contact/security email facts + production public-truth promotion gate — **EXTERNAL / OWNER INPUT REQUIRED**.
+2. Public product facts/proof and optional photography — **EXTERNAL / OWNER INPUT REQUIRED**.
+3. Optional Cursor `sgps-core` repository grant — **EXTERNAL / OPTIONAL**, not a runtime blocker.
+4. Production RUM — **JUSTIFIED PRIVACY EXCEPTION / OWNER DECISION** until purpose/provider/retention/privacy treatment exists.
+5. Optional `/so-tro` GTM scope — **FUTURE / PRODUCT-DIRECTION DEPENDENT**.
+
+Everything else previously listed as a provider/governance blocker (main ruleset, repository metadata and Cloudflare Wrangler command normalization) is resolved and must not be reported as outstanding without new contrary evidence.
