@@ -24,9 +24,28 @@
 
 **Remediated:** pinned project-local `wrangler@4.127.1`, committed the resulting lockfile, changed the recovery deploy script to `pnpm wrangler deploy`, and added `tests/architecture/deploy-toolchain.test.mjs`.
 
-**Verified:** isolated exact-head diagnostic ran a clean frozen install, deployment-toolchain contract, full architecture suite, typecheck, lint, formatting, static build, client-JS budget and static links successfully. Cloudflare preview also succeeded after the required `workerd` lifecycle build was explicitly allowlisted.
+**Verified:** isolated exact-head diagnostics ran a clean frozen install, deployment-toolchain contract, full architecture suite, typecheck, lint, formatting, static build, client-JS budget and static links successfully. Cloudflare preview also succeeded after the required `workerd` lifecycle build was explicitly allowlisted.
 
 **Residual external:** Cloudflare's stored trigger commands were previously configured as `npx wrangler deploy` / `npx wrangler versions upload`. With the frozen project install they resolve the pinned local Wrangler, but the external configuration should be normalized to explicit `pnpm wrangler ...`; no Cloudflare configuration write connector is available in this session.
+
+### P1 — vulnerable Lighthouse/LHCI transitive tooling graph
+
+**Detected:** `pnpm audit` found two High advisories in the LHCI-only development graph: vulnerable `tmp` path traversal and `extract-zip` symlink traversal. After removing those High paths, a full Moderate audit identified vulnerable `uuid` and `qs` versions beneath `@lhci/cli`.
+
+**Remediated:** kept `@lhci/cli@0.15.1` API surface stable while applying narrow pnpm workspace overrides: `tmp: 0.2.7`, `lighthouse: 13.4.1`, `uuid: 11.1.1`, and `qs: 6.16.0`. The Lighthouse override removes the `extract-zip` path. `tests/architecture/tooling-vulnerabilities.test.mjs` rejects regression to the vulnerable graph.
+
+**Verified:** a lifecycle-free writer generated the lockfile while holding temporary write permission; dependency lifecycle code was not executed with the write token. A separate exact-head read-only verifier then proved:
+
+- clean frozen install and supply-chain policy validation PASS;
+- `pnpm audit --audit-level=moderate` → `No known vulnerabilities found`;
+- tooling advisory contract PASS;
+- architecture contracts 88/88 PASS;
+- typecheck 0 errors/warnings/hints, ESLint and Prettier PASS;
+- static build, client-JS budget and static links PASS;
+- Playwright Chromium + axe 33/33 PASS;
+- Lighthouse CI runs 3/3 PASS with the overridden Lighthouse runtime.
+
+The local Lighthouse SEO score remains 0.69 only because `PUBLIC_SITE_URL=http://127.0.0.1:3000` intentionally triggers the non-production `noindex` control; diagnostic output identified the sole failed SEO audit as `is-crawlable`. This is a **JUSTIFIED LOCAL-TEST EXCEPTION**, not a production SEO defect and not a reason to weaken the preview noindex behavior.
 
 ### P1 — GitHub source promotion had no enforceable exact-head signal
 
@@ -34,13 +53,13 @@
 
 **Remediated:** ADR 0005 adds `Source Assurance` with two jobs: `Quality Gates` and `Browser Assurance`. Both check out the exact candidate SHA, use `contents: read`, do not persist checkout credentials, use full 40-character action SHAs, reference no repository secrets, and contain no Cloudflare deployment command.
 
-**Verified:** on PR #68 candidate `b2b3779e1c910e372677e6f093065a7b96f37e90`, `Quality Gates`, `Browser Assurance`, and `Workers Builds: blueskyz-web` all completed successfully before Wrangler integration. The combined head is re-verified again before promotion.
+**Verified:** multiple PR #68 candidate heads have completed `Quality Gates`, `Browser Assurance`, and `Workers Builds: blueskyz-web` successfully. The final combined head is re-verified before any promotion decision.
 
-**Residual external:** `GET /repos/BlueSkyz-Labs/SGPS-Marketing/rulesets` still returns `[]`. Issue #8 remains open. CI existence is not treated as ruleset enforcement.
+**Residual external:** `GET /repos/BlueSkyz-Labs/SGPS-Marketing/rulesets` still returns `[]`. Issue #8 remains open. CI existence is not treated as ruleset enforcement; the available GitHub capability exposes ruleset reads but no ruleset create/update administration action.
 
 ### P2 — governance/documentation drift
 
-**Detected:** README/remaining-convergence still described pnpm 11.6 and/or the superseded blanket prohibition on GitHub Actions; PR #67 remained misleadingly open after its material change had already landed.
+**Detected:** README/remaining-convergence described obsolete pnpm and/or source-assurance behavior; PR #67 remained misleadingly open after its material change had already landed.
 
 **Remediated:** README, QA strategy, AGENTS guidance, ADR index and remaining-convergence were reconciled to ADR 0005. PR #67 was closed as superseded rather than merged over newer `main`.
 
@@ -58,19 +77,22 @@ Controls reviewed include dependency/lifecycle compromise, action pinning and CI
 
 ## Security and QA evidence
 
-- Architecture contracts: 85/85 passed before deploy-toolchain integration; isolated deploy hardening raised the suite to 87/87 and passed.
-- Typecheck: zero errors/warnings/hints on verified candidate runs.
-- ESLint: zero-warning gate passed.
-- Prettier: canonical formatting gate passed after formatter-root-cause remediation.
-- Build/static export, client JavaScript budget and static-link validation passed on verified candidates.
-- Playwright Chromium + axe and Lighthouse passed on PR #68 candidate before final combined-head verification.
-- Cloudflare preview Builds succeeded for the hardening candidate and after the Wrangler lifecycle-policy remediation.
+- Architecture contracts: 88/88 PASS on the fully patched tooling diagnostic graph.
+- Dependency audit: Moderate-and-higher audit PASS with no known vulnerabilities on that exact graph.
+- Typecheck: zero errors/warnings/hints.
+- ESLint and Prettier: PASS.
+- Build/static export, client JavaScript budget and static-link validation: PASS.
+- Playwright Chromium + axe: 33/33 PASS.
+- Lighthouse: 3/3 runs processed successfully; local `is-crawlable` warning is explained by intentional preview `noindex` behavior.
+- Cloudflare preview Builds succeeded on preceding integrated hardening heads; final combined-head read-back is required before promotion.
 - Security headers/CSP, public-truth gates, product-schema behavior, JSON-LD escaping, noindex/SEO and proof provenance are regression-tested architecture contracts.
 
 ## Supply-chain review
 
-- Astro remains on the current 7.3.1 line and above the patched floors for the reviewed Astro XSS advisories.
-- Wrangler 4.127.1 is deliberately locked rather than blindly taking a just-published version and is above the patched floor for the reviewed Wrangler command-injection advisory.
+- pnpm 11.25.0 is integrity-pinned through Corepack metadata and constrained to major 11.
+- Lifecycle builds are fail-closed and limited to `esbuild` and `workerd`.
+- Wrangler 4.127.1 is project-local and lockfile-pinned.
+- LHCI transitive advisories are constrained by explicit workspace overrides plus a regression test; Moderate-and-higher audit is clean on the verified graph.
 - Dependabot covers pnpm and GitHub Actions with bounded update noise.
 - No production release artifacts are published through GitHub Releases; Cloudflare Workers Builds is the managed deployment authority. SLSA-style signed release artifacts are therefore not asserted as implemented.
 
@@ -82,4 +104,4 @@ Controls reviewed include dependency/lifecycle compromise, action pinning and CI
 
 ## Promotion rule
 
-Do not merge #68 until the **current combined head** has successful `Quality Gates`, `Browser Assurance`, and Cloudflare preview evidence, material PR review findings are resolved, and final diff/red-team review finds no remaining agent-fixable P0/P1. Merge must use the PR path with `expected_head_sha`; direct-to-`main` is not an acceptable fallback.
+Do not merge #68 until the **current combined head** has successful `Quality Gates`, `Browser Assurance`, and Cloudflare preview evidence, material PR review findings are resolved, final diff/red-team review finds no remaining agent-fixable P0/P1, and governance requirements in the committed execution contract are satisfied or explicitly reclassified by an authoritative decision. Merge must use the PR path with `expected_head_sha`; direct-to-`main` is not an acceptable fallback.
