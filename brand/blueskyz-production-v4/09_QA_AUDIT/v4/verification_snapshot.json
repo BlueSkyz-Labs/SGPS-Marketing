@@ -1,0 +1,14 @@
+{
+  "version": "4.0.0",
+  "audit_date": "2026-09-07",
+  "status": "PASS_WITH_CONTROLLED_EXTERNAL_GATES",
+  "platform_update": {
+    "linkedin_company_cover": "1512x256"
+  },
+  "critical_dimensions_checked": 18,
+  "pdf_guidelines_pages": 10,
+  "external_gates": [
+    "specialty_print_vendor_proof",
+    "trademark_legal_clearance"
+  ]
+}

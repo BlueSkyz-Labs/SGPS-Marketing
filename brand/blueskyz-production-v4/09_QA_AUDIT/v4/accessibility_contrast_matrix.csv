@@ -1,0 +1,8 @@
+﻿Foreground,Background,Contrast ratio,WCAG AA normal text,Recommended use
+#0B1020,#F7F8FA,17.82,PASS,Primary text
+#2564FF,#F7F8FA,4.55,PASS,Brand accent/link
+#334155,#F7F8FA,9.74,PASS,Secondary text
+#475569,#F7F8FA,7.13,PASS,Supporting text
+#64748B,#F7F8FA,4.48,FAIL normal text,Decorative/large only
+#FFFFFF,#0B1020,18.93,PASS,Text on dark
+#2564FF,#0B1020,3.92,FAIL normal text,Accent on dark

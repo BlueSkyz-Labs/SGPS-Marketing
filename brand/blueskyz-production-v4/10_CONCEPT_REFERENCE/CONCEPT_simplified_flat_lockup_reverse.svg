@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 360" role="img" aria-label="BlueSkyz Labs horizontal core lockup">
+<g transform="translate(20,5) scale(.66)">
+<defs><linearGradient id="g1" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#CBD5E1"/><stop offset="1" stop-color="#F7F8FA"/></linearGradient><linearGradient id="g2" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#2564FF"/><stop offset="1" stop-color="#0B1020"/></linearGradient></defs>
+<path d="M72 432 C118 285 226 139 394 54 C326 166 278 256 255 334 C196 329 130 369 72 432 Z" fill="url(#g1)" stroke="#334155" stroke-width="4"/>
+<path d="M394 54 C353 165 333 276 371 408 L255 334 C289 244 326 138 394 54 Z" fill="#CBD5E1" stroke="#334155" stroke-width="4"/>
+<path d="M72 432 C151 363 213 333 255 334 L371 408 C292 363 193 364 72 432 Z" fill="url(#g2)" stroke="#0B1020" stroke-width="4"/>
+<path d="M145 390 C218 346 276 340 334 377" fill="none" stroke="#2564FF" stroke-width="10" stroke-linecap="round" opacity=".9"/>
+</g>
+<text x="390" y="165" font-family="Inter,Arial,sans-serif" font-size="126" font-weight="600" letter-spacing="28" fill="#FFFFFF">BLUESKYZ</text>
+<text x="584" y="278" font-family="Inter,Arial,sans-serif" font-size="80" font-weight="600" letter-spacing="48" fill="#2564FF">LABS</text>
+</svg>

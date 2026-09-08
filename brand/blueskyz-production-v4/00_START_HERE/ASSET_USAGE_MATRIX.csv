@@ -1,0 +1,23 @@
+﻿Channel,Asset,Size,Format,Path,Status/Note
+Website,Open Graph,1200x630,PNG,04_DIGITAL/01_WEBSITE/open_graph_1200x630.png,GO
+Website,Hero,1920x1080,PNG,04_DIGITAL/01_WEBSITE/website_hero_1920x1080.png,GO
+LinkedIn,Personal cover,1584x396,PNG,04_DIGITAL/02_SOCIAL_LINKEDIN/linkedin_personal_cover_1584x396.png,GO
+LinkedIn,Company Page cover,1512x256,PNG,04_DIGITAL/02_SOCIAL_LINKEDIN/linkedin_company_cover_1512x256.png,GO - official current recommendation
+LinkedIn,Company logo,400x400,PNG,04_DIGITAL/02_SOCIAL_LINKEDIN/linkedin_company_logo_400x400.png,GO
+X,Header,1500x500,PNG,04_DIGITAL/03_SOCIAL_X/x_header_1500x500.png,GO
+X,Post landscape,1600x900,PNG,04_DIGITAL/03_SOCIAL_X/POSTS/x_post_landscape_1600x900.png,GO
+Facebook,Cover,1640x624,PNG,04_DIGITAL/04_SOCIAL_FACEBOOK/facebook_cover_1640x624.png,GO - review crop after upload
+Facebook,Link/post,1200x630,PNG,04_DIGITAL/04_SOCIAL_FACEBOOK/facebook_link_post_1200x630.png,GO
+Instagram,Square post,1080x1080,PNG,04_DIGITAL/05_SOCIAL_INSTAGRAM/instagram_post_square_1080x1080.png,GO
+Instagram,Portrait post,1080x1350,PNG,04_DIGITAL/05_SOCIAL_INSTAGRAM/instagram_post_portrait_1080x1350.png,GO
+Instagram,Story/Reel cover,1080x1920,PNG,04_DIGITAL/05_SOCIAL_INSTAGRAM/instagram_story_1080x1920.png,GO
+TikTok,Profile,256x256,PNG,04_DIGITAL/06_SOCIAL_TIKTOK/tiktok_profile_256x256.png,GO
+TikTok,Story cover,1080x1920,PNG,04_DIGITAL/06_SOCIAL_TIKTOK/tiktok_story_cover_1080x1920.png,GO
+YouTube,Channel art,2560x1440,PNG,04_DIGITAL/07_YOUTUBE/youtube_channel_art_2560x1440_SAFE.png,GO - critical content centered
+YouTube,Thumbnail,1280x720,PNG,04_DIGITAL/07_YOUTUBE/youtube_thumbnail_1280x720.png,GO
+YouTube,Channel profile,800x800,PNG,04_DIGITAL/07_YOUTUBE/EXTRAS/youtube_channel_profile_800x800.png,GO
+YouTube,Shorts cover,1080x1920,PNG,04_DIGITAL/07_YOUTUBE/EXTRAS/youtube_shorts_cover_1080x1920.png,GO
+YouTube,End screen base,1920x1080,PNG,04_DIGITAL/07_YOUTUBE/EXTRAS/youtube_end_screen_base_1920x1080.png,GO
+Email,Header,1200x400,PNG,04_DIGITAL/08_EMAIL/email_header_1200x400.png,GO
+Presentation,Title background,1920x1080,PNG,04_DIGITAL/09_PRESENTATION_VIDEO/presentation_title_background_1920x1080.png,GO
+Video calls,Teams/Zoom,1920x1080,PNG,04_DIGITAL/09_PRESENTATION_VIDEO/teams_zoom_background_1920x1080.png,GO
