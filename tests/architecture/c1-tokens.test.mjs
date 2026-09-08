@@ -8,7 +8,7 @@ test("C1.1 tokens use R4d primitives without legacy gold", () => {
   for (const value of [
     "--brand-ink: #0b1020",
     "--brand-porcelain: #f7f8fa",
-    "--brand-cobalt: #2568ff",
+    "--brand-cobalt: #2564ff",
     "--surface-primary",
     "--surface-inverse",
     "--text-primary",
