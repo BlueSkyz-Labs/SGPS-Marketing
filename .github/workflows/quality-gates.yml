@@ -34,6 +34,8 @@ jobs:
           pnpm --version
       - name: Install frozen dependency graph
         run: pnpm install --frozen-lockfile
+      - name: Dependency vulnerability audit
+        run: pnpm audit --audit-level=moderate
       - name: Architecture contracts
         run: pnpm test:architecture
       - name: Typecheck

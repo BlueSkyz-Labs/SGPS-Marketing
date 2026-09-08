@@ -37,6 +37,7 @@ test("GitHub source assurance is immutable, least privilege, secretless, and exa
   assert.match(workflow, /permissions:\s*\n\s+contents:\s*read/);
   assert.match(workflow, /name:\s*Quality Gates/);
   assert.match(workflow, /name:\s*Browser Assurance/);
+  assert.match(workflow, /run:\s*pnpm audit --audit-level=moderate/);
 
   const actionRefs = [...workflow.matchAll(/uses:\s*[^@\s]+@([^\s#]+)/g)].map(
     ([, ref]) => ref,
