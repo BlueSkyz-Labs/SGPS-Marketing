@@ -12,6 +12,7 @@ test("runtime publishes the v4 web asset projection", () => {
     "public/icons/MASKABLE/android-maskable-512x512.png",
     "public/icons/safari-pinned-tab.svg",
     "public/brand/blueskyz/v4/logos/horizontal-flat-dark.svg",
+    "public/brand/blueskyz/v4/logos/horizontal-flat-light.svg",
     "public/brand/blueskyz/v4/logos/horizontal-reverse-white.svg",
     "public/brand/blueskyz/v4/principles/intelligence.svg",
     "public/brand/blueskyz/v4/products/apexagent.svg",

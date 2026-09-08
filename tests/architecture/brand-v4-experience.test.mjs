@@ -11,7 +11,7 @@ test("v4 hero uses the supplied website artwork and flat lockup", () => {
   assert.match(site, /taglineAccent: "Impact\."/);
   assert.match(
     lockup,
-    /\/brand\/blueskyz\/v4\/logos\/horizontal-flat-dark\.svg/,
+    /\/brand\/blueskyz\/v4\/logos\/horizontal-flat-light\.svg/,
   );
   assert.match(
     lockup,
