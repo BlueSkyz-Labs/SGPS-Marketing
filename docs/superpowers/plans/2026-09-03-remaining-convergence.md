@@ -15,21 +15,21 @@
 
 ## Current verified baseline
 
-| Area | Current state |
-| --- | --- |
-| Astro 7 static architecture | VERIFIED; ADR 0004 remains authoritative |
-| Public product registry | Intentionally empty until proof-backed owner facts exist |
-| Brand provenance | Approved BlueSkyz Production Brand Kit v4 assets/tokens are landed with provenance evidence |
-| Cloudflare Workers Builds | VERIFIED deployment authority; GitHub Actions remains source-assurance only |
-| GitHub Source Assurance | VERIFIED exact-head `Quality Gates` + `Browser Assurance` |
-| `main` governance | ENFORCED by active ruleset `main-promotion-governance` (`22500299`) |
-| Supply chain | Fail-closed pnpm 11.25.0 policy, lifecycle allowlist, dependency audit and pinned tooling |
-| Deployment CLI | Project-local `wrangler@4.127.1`; provider commands verified as `pnpm wrangler versions upload` / `pnpm wrangler deploy` |
-| Worker public routing | `workers_dev = false`, `preview_urls = false`; custom-domain path remains canonical |
-| Worker observability | Persisted invocation logs enabled; query strings are required to be redacted by architecture contract |
-| Temporary production identity | `tonydemo.com` remains the owner-approved temporary site identity |
-| Production contact/security emails | **EXTERNAL / OWNER INPUT REQUIRED**; public-truth gate must not be faked |
-| Field RUM | Design exists; production enablement remains an explicit privacy/owner decision |
+| Area                               | Current state                                                                                                            |
+| ---------------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
+| Astro 7 static architecture        | VERIFIED; ADR 0004 remains authoritative                                                                                 |
+| Public product registry            | Intentionally empty until proof-backed owner facts exist                                                                 |
+| Brand provenance                   | Approved BlueSkyz Production Brand Kit v4 assets/tokens are landed with provenance evidence                              |
+| Cloudflare Workers Builds          | VERIFIED deployment authority; GitHub Actions remains source-assurance only                                              |
+| GitHub Source Assurance            | VERIFIED exact-head `Quality Gates` + `Browser Assurance`                                                                |
+| `main` governance                  | ENFORCED by active ruleset `main-promotion-governance` (`22500299`)                                                      |
+| Supply chain                       | Fail-closed pnpm 11.25.0 policy, lifecycle allowlist, dependency audit and pinned tooling                                |
+| Deployment CLI                     | Project-local `wrangler@4.127.1`; provider commands verified as `pnpm wrangler versions upload` / `pnpm wrangler deploy` |
+| Worker public routing              | `workers_dev = false`, `preview_urls = false`; custom-domain path remains canonical                                      |
+| Worker observability               | Persisted invocation logs enabled; query strings are required to be redacted by architecture contract                    |
+| Temporary production identity      | `tonydemo.com` remains the owner-approved temporary site identity                                                        |
+| Production contact/security emails | **EXTERNAL / OWNER INPUT REQUIRED**; public-truth gate must not be faked                                                 |
+| Field RUM                          | Design exists; production enablement remains an explicit privacy/owner decision                                          |
 
 Canonical production build recipe includes `pnpm build`, `pnpm check:client-budget`, and `pnpm check:static-links`.
 
