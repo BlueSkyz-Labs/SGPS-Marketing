@@ -9,3 +9,6 @@ strictDepBuilds: true
 allowBuilds:
   esbuild: true
   workerd: true
+overrides:
+  tmp: 0.2.7
+  lighthouse: 13.4.1
