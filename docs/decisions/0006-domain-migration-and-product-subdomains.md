@@ -74,10 +74,13 @@ account. The zone-wide baseline for every product, admin, and super hostname is:
 - HTTPS-only redirects enabled, TLS minimum set to 1.2, TLS 1.3 enabled, and
   SSL mode set to Full while the Worker custom domains terminate TLS at
   Cloudflare.
-- HSTS enabled for one day with `include_subdomains=true`, `nosniff=true`, and
+- HSTS enabled for one year with `include_subdomains=true`, `nosniff=true`, and
   preload disabled until the domain migration has completed and all subdomains
   have been verified.
 - Browser Integrity Check, HTTP/3, and Brotli remain enabled.
+- Production Workers use the canonical custom domains with `workers.dev` and
+  version-preview routes disabled; Workers Builds remains the deployment
+  authority for production promotion.
 
 The Worker paid plan does not automatically upgrade the zone’s website plan;
 features unavailable on the current zone plan must be added only after an
