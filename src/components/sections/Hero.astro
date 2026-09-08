@@ -2,6 +2,7 @@
 import BrandLockup from "@/components/brand/BrandLockup.astro";
 import ButtonLink from "@/components/ui/ButtonLink.astro";
 import Reveal from "@/components/ui/Reveal.astro";
+import { brandAssets } from "@/data/brand-assets";
 import { SITE } from "@/data/site";
 import { emptyRegistryPrimaryCta, emptyRegistrySecondaryCta } from "@/lib/act";
 import { getPublicProducts } from "@/lib/products";
@@ -19,13 +20,13 @@ const emptySecondary = emptyRegistrySecondaryCta(SITE.contactEmail);
   <div class="hero-atmosphere hero-atmosphere--ink" aria-hidden="true"></div>
   <Reveal
     as="div"
-    class="relative mx-auto grid w-full max-w-6xl gap-10 px-4 py-20 sm:px-6 sm:py-28 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] lg:items-center lg:px-8"
+    class="relative mx-auto grid w-full max-w-7xl gap-10 px-4 py-16 sm:px-6 sm:py-24 lg:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)] lg:items-center lg:px-8"
   >
     <div>
       <BrandLockup size="hero" surface="ink" />
       <h1
         id="hero-title"
-        class="mt-8 max-w-[14ch] text-4xl font-semibold tracking-tight text-[var(--brand-porcelain)] sm:text-5xl lg:text-6xl"
+        class="mt-8 max-w-[11ch] text-4xl font-semibold tracking-tight text-[var(--brand-porcelain)] sm:text-5xl lg:text-7xl"
       >
         <span class="block">{SITE.taglineLead}</span>
         <span class="mt-1 block text-[var(--brand-cobalt)]"
@@ -33,12 +34,12 @@ const emptySecondary = emptyRegistrySecondaryCta(SITE.contactEmail);
         >
       </h1>
       <p
-        class="mt-5 max-w-xl text-lg text-[color-mix(in_srgb,var(--brand-porcelain)_78%,transparent)]"
+        class="mt-5 max-w-xl text-lg leading-relaxed text-[color-mix(in_srgb,var(--brand-porcelain)_82%,transparent)]"
       >
         {SITE.proposition}
       </p>
       <p
-        class="mt-3 max-w-xl text-sm text-[color-mix(in_srgb,var(--brand-porcelain)_62%,transparent)]"
+        class="mt-3 max-w-xl text-sm leading-relaxed text-[color-mix(in_srgb,var(--brand-porcelain)_68%,transparent)]"
       >
         {SITE.supporting}
       </p>
@@ -64,18 +65,23 @@ const emptySecondary = emptyRegistrySecondaryCta(SITE.contactEmail);
         }
       </div>
     </div>
-    <div
-      class="hero-mark-stage mx-auto w-full max-w-md lg:max-w-none"
-      aria-hidden="true"
+    <figure
+      class="hero-art-frame relative mx-auto w-full overflow-hidden rounded-[var(--radius-xl)] border border-white/15 bg-[var(--brand-ink)] shadow-2xl shadow-black/30"
+      aria-label="BlueSkyz Labs brand mark above a bright horizon"
     >
-      <img
-        src="/brand/blueskyz/r4d/symbol_mono_porcelain.svg"
-        alt=""
-        width="420"
-        height="420"
-        class="hero-mark mx-auto block h-auto w-[min(100%,22rem)] drop-shadow-[0_0_48px_color-mix(in_srgb,var(--brand-cobalt)_45%,transparent)]"
-        decoding="async"
-      />
-    </div>
+      <picture>
+        <source srcset={brandAssets.hero.avif} type="image/avif" />
+        <source srcset={brandAssets.hero.webp} type="image/webp" />
+        <img
+          src={brandAssets.hero.png}
+          alt=""
+          width="1920"
+          height="1080"
+          class="hero-art block h-auto w-full"
+          decoding="async"
+          fetchpriority="high"
+        />
+      </picture>
+    </figure>
   </Reveal>
 </section>

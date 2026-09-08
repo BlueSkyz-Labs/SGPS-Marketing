@@ -18,19 +18,19 @@ function lockupGeometry(
   value: "header" | "hero" | "footer",
   surfaceValue: "porcelain" | "ink",
 ): LockupGeometry {
-  // Horizontal lockup viewBox ≈ 900×190 → aspect ~4.737
+  // v4 horizontal lockup viewBox 1650×520 → aspect ~3.173.
   const onInk = surfaceValue === "ink" || value === "footer";
   const src = onInk
-    ? "/brand/blueskyz/r4d/lockup_horizontal_light.svg"
-    : "/brand/blueskyz/r4d/lockup_horizontal_dark.svg";
+    ? "/brand/blueskyz/v4/logos/horizontal-reverse-white.svg"
+    : "/brand/blueskyz/v4/logos/horizontal-flat-dark.svg";
 
   switch (value) {
     case "header":
-      return { height: 28, width: 133, src };
+      return { height: 50, width: 160, src };
     case "hero":
-      return { height: 44, width: 208, src };
+      return { height: 76, width: 240, src };
     case "footer":
-      return { height: 28, width: 133, src };
+      return { height: 50, width: 160, src };
     default: {
       const _exhaustive: never = value;
       return _exhaustive;
