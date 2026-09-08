@@ -14,7 +14,7 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro check && astro build && node scripts/verify-static-export.mjs",
-    "start": "astro preview --host 127.0.0.1 --port 3000",
+    "start": "node scripts/run-preview.mjs",
     "typecheck": "astro check",
     "lint": "eslint . --max-warnings=0",
     "lint:fix": "eslint . --fix --max-warnings=0",
@@ -26,7 +26,7 @@
     "check:client-budget": "node scripts/check-client-budget.mjs",
     "check:static-links": "node scripts/check-static-links.mjs",
     "deploy:workers": "node scripts/deploy-workers.mjs",
-    "lighthouse": "PUBLIC_SITE_URL=http://127.0.0.1:3000 pnpm build && lhci autorun",
+    "lighthouse": "node scripts/run-lighthouse.mjs",
     "prepare": "git config core.hooksPath .githooks || true",
     "validate:public-truth": "node scripts/validate-public-truth.mjs"
   },

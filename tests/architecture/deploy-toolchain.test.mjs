@@ -11,13 +11,16 @@ test("Workers deployment uses a project-local locked Wrangler", () => {
   assert.equal(pkg.devDependencies?.wrangler, "4.127.1");
   assert.match(
     lockfile,
-    /wrangler:\n\s+specifier: 4\.127\.1\n\s+version: 4\.127\.1/,
+    /wrangler:\r?\n\s+specifier: 4\.127\.1\r?\n\s+version: 4\.127\.1/,
   );
   assert.match(deployScript, /run\("pnpm", \["wrangler", "deploy"\]\)/);
   assert.doesNotMatch(deployScript, /run\("npx"|wrangler@latest|pnpm.*dlx/);
 });
 
 test("Wrangler runtime lifecycle scripts are explicitly allowlisted", () => {
-  assert.match(workspace, /allowBuilds:\n\s+esbuild: true\n\s+workerd: true/);
+  assert.match(
+    workspace,
+    /allowBuilds:\r?\n\s+esbuild: true\r?\n\s+workerd: true/,
+  );
   assert.doesNotMatch(workspace, /dangerouslyAllowAllBuilds/);
 });
