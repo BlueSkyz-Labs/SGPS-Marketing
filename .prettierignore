@@ -11,3 +11,7 @@ coverage/
 public/brand/blueskyz/r4d/symbol_mono_ink.svg
 public/brand/blueskyz/r4d/micro_mark_ink.svg
 public/brand/blueskyz/r4d/brand_tokens.json
+
+# Production v4 source and token projections are checksum-sensitive.
+brand/blueskyz-production-v4/
+public/brand/blueskyz/v4/tokens/
