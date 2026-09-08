@@ -1,0 +1,64 @@
+name: Tooling Remediation Finalizer
+
+on:
+  push:
+    branches:
+      - audit/pin-wrangler-deploy-2026-09-07
+
+permissions:
+  contents: write
+
+concurrency:
+  group: tooling-remediation-finalizer-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  finalize:
+    name: Generate patched lockfile without lifecycle execution
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout exact candidate with temporary write credential
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: true
+      - name: Set up Node 24.20.0
+        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
+        with:
+          node-version: 24.20.0
+      - name: Activate integrity-pinned package manager
+        run: |
+          corepack enable
+          pnpm --version
+      - name: Apply narrow tooling overrides
+        run: |
+          node <<'NODE'
+          const fs = require('node:fs');
+          const path = 'package.json';
+          const pkg = JSON.parse(fs.readFileSync(path, 'utf8'));
+          pkg.pnpm = pkg.pnpm || {};
+          pkg.pnpm.overrides = {
+            ...(pkg.pnpm.overrides || {}),
+            tmp: '0.2.7',
+            lighthouse: '13.4.1'
+          };
+          fs.writeFileSync(path, JSON.stringify(pkg, null, 2) + '\n');
+          NODE
+      - name: Resolve lockfile only with lifecycle scripts disabled
+        run: pnpm install --lockfile-only --no-frozen-lockfile --ignore-scripts
+      - name: Verify high-severity audit before commit
+        run: pnpm audit --audit-level=high
+      - name: Verify traversal contract from manifest and lockfile
+        run: node --test tests/architecture/tooling-vulnerabilities.test.mjs
+      - name: Remove temporary writer from resulting tree
+        run: rm .github/workflows/tooling-remediation-finalizer.yml
+      - name: Inspect and publish atomic diagnostic commit
+        run: |
+          git config user.name 'BlueSkyz-Labs Automation'
+          git config user.email '35994305+blackangelz@users.noreply.github.com'
+          git add package.json pnpm-lock.yaml .github/workflows/tooling-remediation-finalizer.yml
+          git diff --cached --check
+          git diff --cached --stat
+          git commit -m 'security: patch Lighthouse tooling traversal graph'
+          git push origin HEAD:audit/pin-wrangler-deploy-2026-09-07
