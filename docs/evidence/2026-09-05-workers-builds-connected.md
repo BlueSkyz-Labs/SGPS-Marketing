@@ -26,8 +26,8 @@ Production + preview build:
 pnpm install --frozen-lockfile && pnpm build && pnpm check:client-budget && pnpm check:static-links
 ```
 
-- Production deploy: `npx wrangler deploy` (branch `main`)
-- Preview deploy: `npx wrangler versions upload` (all branches except `main`)
+- Production deploy: `pnpm wrangler deploy` (branch `main`; verified 2026-09-08)
+- Preview deploy: `pnpm wrangler versions upload` (all branches except `main`; verified 2026-09-08)
 - Trigger env: `PUBLIC_SITE_URL=https://blueskyz-web.thinhnguyen-km10.workers.dev`
 
 `pnpm validate:public-truth` is **intentionally omitted** until owner supplies a
