@@ -10,6 +10,15 @@ const lockedVersions = (name) =>
     ([, version]) => version,
   );
 
+const assertAllLockedAt = (name, expected) => {
+  const versions = lockedVersions(name);
+  assert.ok(versions.length > 0, `${name} must exist in the lockfile`);
+  assert.ok(
+    versions.every((version) => version === expected),
+    `${name} must resolve only to ${expected}; found ${versions.join(", ")}`,
+  );
+};
+
 test("Lighthouse tooling graph excludes known traversal and resource-exhaustion advisories", () => {
   assert.match(workspace, /overrides:/);
   assert.match(workspace, /\n\s+tmp: 0\.2\.7/);
@@ -19,6 +28,6 @@ test("Lighthouse tooling graph excludes known traversal and resource-exhaustion 
 
   assert.doesNotMatch(lockfile, /\n\s*extract-zip@/);
   assert.doesNotMatch(lockfile, /\n\s*tmp@(?:0\.1\.|0\.2\.[0-6](?:\D|$))/);
-  assert.deepEqual(lockedVersions("uuid"), ["11.1.1"]);
-  assert.deepEqual(lockedVersions("qs"), ["6.16.0"]);
+  assertAllLockedAt("uuid", "11.1.1");
+  assertAllLockedAt("qs", "6.16.0");
 });
