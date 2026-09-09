@@ -1,4 +1,4 @@
-name: One-shot format readback
+name: One-shot format and self-clean
 
 on:
   push:
@@ -8,17 +8,17 @@ on:
       - .github/workflows/one-shot-format-readonly.yml
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
-  format-readback:
+  format-and-clean:
     runs-on: ubuntu-24.04
     steps:
       - name: Checkout exact branch commit
         uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
         with:
           ref: ${{ github.sha }}
-          persist-credentials: false
+          persist-credentials: true
       - name: Set up Node 24.20.0
         uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
         with:
@@ -30,10 +30,11 @@ jobs:
           pnpm --version
       - name: Install formatter graph without lifecycle scripts
         run: pnpm install --frozen-lockfile --ignore-scripts
-      - name: Format exact files and print canonical contents
+      - name: Format exact files, self-clean, and push
         shell: bash
         run: |
           set -euo pipefail
+          branch="audit/canonical-domain-architecture-convergence-20260909"
           files=(
             AGENTS.md
             architecture/sgps-model.json
@@ -42,9 +43,12 @@ jobs:
             tests/architecture/sgps-architecture-model.test.mjs
           )
           pnpm exec prettier --write "${files[@]}"
-          for f in "${files[@]}"; do
-            echo "FORMAT_FILE_BEGIN:$f"
-            base64 -w0 "$f"
-            echo
-            echo "FORMAT_FILE_END:$f"
-          done
+          git rm .github/workflows/one-shot-format-readonly.yml
+          git add "${files[@]}"
+          expected=$(printf '%s\n' ".github/workflows/one-shot-format-readonly.yml" "${files[@]}" | sort)
+          actual=$(git diff --cached --name-only | sort)
+          test "$actual" = "$expected"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "style: canonicalize convergence artifacts"
+          git push origin "HEAD:${branch}"
