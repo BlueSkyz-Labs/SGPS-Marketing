@@ -39,17 +39,17 @@
     "@astrojs/check": "^0.9.6",
     "@axe-core/playwright": "4.13.0",
     "@lhci/cli": "0.15.1",
-    "@playwright/test": "1.62.1",
+    "@playwright/test": "1.63.0",
     "@tailwindcss/vite": "^4.3.3",
     "@types/node": "^22.9.0",
     "eslint": "^9.15.0",
     "eslint-plugin-astro": "^1.5.0",
-    "postcss": "^8.4.49",
+    "postcss": "^8.5.28",
     "prettier": "^3.3.3",
     "prettier-plugin-astro": "^0.14.1",
     "tailwindcss": "^4.3.3",
     "typescript": "^6.0.3",
     "typescript-eslint": "^8.69.0",
-    "wrangler": "4.127.1"
+    "wrangler": "4.129.0"
   }
 }

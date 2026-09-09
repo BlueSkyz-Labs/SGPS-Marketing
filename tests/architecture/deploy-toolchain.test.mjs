@@ -8,10 +8,10 @@ const workspace = readFileSync("pnpm-workspace.yaml", "utf8");
 const deployScript = readFileSync("scripts/deploy-workers.mjs", "utf8");
 
 test("Workers deployment uses a project-local locked Wrangler", () => {
-  assert.equal(pkg.devDependencies?.wrangler, "4.127.1");
+  assert.equal(pkg.devDependencies?.wrangler, "4.129.0");
   assert.match(
     lockfile,
-    /wrangler:\r?\n\s+specifier: 4\.127\.1\r?\n\s+version: 4\.127\.1/,
+    /wrangler:\r?\n\s+specifier: 4\.129\.0\r?\n\s+version: 4\.129\.0/,
   );
   assert.match(deployScript, /run\("pnpm", \["wrangler", "deploy"\]\)/);
   assert.doesNotMatch(deployScript, /run\("npx"|wrangler@latest|pnpm.*dlx/);
