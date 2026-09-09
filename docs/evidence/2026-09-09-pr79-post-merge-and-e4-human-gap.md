@@ -19,17 +19,17 @@ PR #79 (`fix: enforce cross-browser E4 source assurance`) merged normally into `
 
 Exact merge-SHA evidence:
 
-| Evidence | Result |
-| --- | --- |
-| GitHub Source Assurance run `34320230835` — `Quality Gates` | PASS |
-| GitHub Source Assurance run `34320230835` — full Playwright/axe matrix | PASS |
-| Chromium | PASS through repository `pnpm test:e2e` matrix |
-| Firefox | PASS through repository `pnpm test:e2e` matrix |
-| WebKit / Safari-class | PASS through repository `pnpm test:e2e` matrix |
-| Mobile Chromium project | PASS through repository `pnpm test:e2e` matrix |
-| Lighthouse CI | PASS |
-| Cloudflare Workers Build `59291439-2fd6-4573-887b-e4702d6c61c1` | PASS |
-| Cloudflare version | `1dfd1475-6ff2-40db-a184-d46ba924e048` |
+| Evidence                                                               | Result                                         |
+| ---------------------------------------------------------------------- | ---------------------------------------------- |
+| GitHub Source Assurance run `34320230835` — `Quality Gates`            | PASS                                           |
+| GitHub Source Assurance run `34320230835` — full Playwright/axe matrix | PASS                                           |
+| Chromium                                                               | PASS through repository `pnpm test:e2e` matrix |
+| Firefox                                                                | PASS through repository `pnpm test:e2e` matrix |
+| WebKit / Safari-class                                                  | PASS through repository `pnpm test:e2e` matrix |
+| Mobile Chromium project                                                | PASS through repository `pnpm test:e2e` matrix |
+| Lighthouse CI                                                          | PASS                                           |
+| Cloudflare Workers Build `59291439-2fd6-4573-887b-e4702d6c61c1`        | PASS                                           |
+| Cloudflare version                                                     | `1dfd1475-6ff2-40db-a184-d46ba924e048`         |
 
 PR #79 also hardened the protected `Browser Assurance` contract so future protected candidates install Chromium, Firefox and WebKit and execute the repository-level `pnpm test:e2e` matrix instead of narrowing the promotion gate to Chromium only.
 
