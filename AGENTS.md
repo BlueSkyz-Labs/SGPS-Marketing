@@ -15,11 +15,11 @@ Trusted current source of truth only:
 | Derived architecture views         | `architecture/derived-views.json` — `VIEW_IS_DERIVED_NOT_ARCHITECTURE_TRUTH`                                                                                    |
 | Decisions index                    | `docs/decisions/README.md`                                                                                                                                      |
 
-Latest immutable post-merge convergence evidence: `docs/evidence/2026-09-09-pr77-post-merge.md`.
+Latest immutable post-merge assurance / E4 truth evidence: `docs/evidence/2026-09-09-pr79-post-merge-and-e4-human-gap.md`.
 
 ## Hard rules
 
-- Do **not** invent corporate emails, legal prose, product claims, screenshots, photography, or owner/product facts.
+- Do **not** invent corporate emails, legal prose, product claims, screenshots, photography, owner/product facts, user-research participants, quotes, completion rates or acceptance outcomes.
 - Prefer the smallest **sufficient** root-cause change over symptom patches.
 - Never weaken tests, lint, truth gates, dependency audit, security controls, or provider governance to go green.
 - Canonical organizational origin is `https://blueskyzlabs.com` per ADR 0006. `tonydemo.com` is retired/transition history and must not pass the production public-truth gate.
@@ -30,7 +30,7 @@ Latest immutable post-merge convergence evidence: `docs/evidence/2026-09-09-pr77
 - GitHub Actions is **source assurance only**: read-only token, no persisted checkout credentials, no Cloudflare secrets, no deployment commands.
 - Cloudflare Workers Builds remains preview/production build and deployment authority.
 - SGPS architecture truth lives in `architecture/sgps-model.json`; diagrams/views are derived. Provider/runtime evidence outranks stale authored topology and must trigger reconciliation.
-- Automated/browser E4 evidence does **not** substitute for real-user customer-task and brand-interpretation evidence required by the C1.1 experience contract; agent walkthroughs are preflight only.
+- Automated/browser E4 evidence does **not** substitute for real-user customer-task and brand-interpretation evidence required by the C1.1 experience contract; agent walkthroughs and LLM simulations are preflight only.
 
 ## Source gates
 
