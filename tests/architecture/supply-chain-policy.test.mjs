@@ -83,7 +83,7 @@ test("GitHub source assurance is pinned and least privilege", () => {
   const browserJob = workflow.split("\n  browser-assurance:")[1] ?? "";
   const buildIndex = browserJob.indexOf("run: pnpm build");
   const installIndex = browserJob.indexOf(
-    "run: pnpm exec playwright install --with-deps chromium firefox webkit",
+    "pnpm exec playwright install --with-deps chromium firefox webkit",
   );
   const playwrightIndex = browserJob.indexOf("run: pnpm test:e2e");
   assert.ok(
