@@ -1,4 +1,4 @@
-import { readFileSync } from "node:fs";
+import { readFileSync, writeFileSync } from "node:fs";
 import { format } from "prettier";
 
 const MODEL_PATH = "architecture/sgps-model.json";
@@ -190,6 +190,6 @@ if (process.argv[1]?.endsWith("generate-architecture-views.mjs")) {
       process.exit(1);
     }
   } else {
-    process.stdout.write(rendered);
+    writeFileSync(VIEWS_PATH, rendered);
   }
 }
