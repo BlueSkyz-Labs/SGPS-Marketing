@@ -86,9 +86,10 @@
       "criticality": "high",
       "dataClassification": "public",
       "trustBoundary": "github-actions-read-only",
+      "interfaces": ["Quality Gates", "Browser Assurance"],
       "sourceEvidence": {
         "repository": "BlueSkyz-Labs/SGPS-Marketing",
-        "revision": "7ae91bf27ad2182f04722a9d3b2fc7dedb1838b4",
+        "revision": "3737c726af1cffc2d9018096d7dc57b03cf6d127",
         "path": ".github/workflows/quality-gates.yml"
       }
     },
