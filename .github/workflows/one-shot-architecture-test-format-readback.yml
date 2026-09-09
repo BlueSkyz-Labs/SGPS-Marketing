@@ -1,4 +1,4 @@
-name: One-shot architecture test format readback
+name: One-shot architecture test format diff
 
 on:
   push:
@@ -30,13 +30,10 @@ jobs:
           pnpm --version
       - name: Install formatter graph without lifecycle scripts
         run: pnpm install --frozen-lockfile --ignore-scripts
-      - name: Print canonical formatted file
+      - name: Print canonical formatting diff
         shell: bash
         run: |
           set -euo pipefail
           file="tests/architecture/sgps-architecture-model.test.mjs"
           pnpm exec prettier --write "$file"
-          echo "FORMAT_FILE_BEGIN"
-          base64 -w0 "$file"
-          echo
-          echo "FORMAT_FILE_END"
+          git diff -- "$file"
