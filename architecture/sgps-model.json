@@ -89,7 +89,7 @@
       "interfaces": ["Quality Gates", "Browser Assurance"],
       "sourceEvidence": {
         "repository": "BlueSkyz-Labs/SGPS-Marketing",
-        "revision": "3737c726af1cffc2d9018096d7dc57b03cf6d127",
+        "revision": "15094e5a2a77a1ff83f38fecedd92e6a00bfa653",
         "path": ".github/workflows/quality-gates.yml"
       }
     },

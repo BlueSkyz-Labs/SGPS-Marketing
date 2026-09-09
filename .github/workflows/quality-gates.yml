@@ -16,7 +16,7 @@ concurrency:
 jobs:
   quality-gates:
     name: Quality Gates
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 15
     steps:
       - name: Checkout exact candidate
@@ -54,7 +54,7 @@ jobs:
   browser-assurance:
     name: Browser Assurance
     needs: quality-gates
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 20
     steps:
       - name: Checkout exact candidate
