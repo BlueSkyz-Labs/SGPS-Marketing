@@ -1,0 +1,198 @@
+{
+  "schemaVersion": "sgps.architecture/v1alpha1",
+  "invariant": "VIEW_IS_DERIVED_NOT_ARCHITECTURE_TRUTH",
+  "lastVerified": "2026-09-09",
+  "scope": "BlueSkyz Labs public marketing system",
+  "notes": "Authentication, application API, database, queue, mutable transaction store, tenant isolation, and session controls are N/A for the current static marketing site; absence of those entities is intentional rather than assumed PASS.",
+  "entities": [
+    {
+      "id": "portfolio.blueskyz-labs",
+      "kind": "Portfolio",
+      "name": "BlueSkyz Labs",
+      "owner": "BlueSkyz Labs",
+      "lifecycle": "active",
+      "criticality": "medium",
+      "dataClassification": "public",
+      "trustBoundary": "organizational"
+    },
+    {
+      "id": "domain.corporate-web",
+      "kind": "Domain",
+      "name": "Corporate Web",
+      "parentId": "portfolio.blueskyz-labs",
+      "owner": "BlueSkyz Labs",
+      "lifecycle": "active",
+      "criticality": "medium",
+      "dataClassification": "public",
+      "trustBoundary": "public-internet"
+    },
+    {
+      "id": "system.sgps-marketing",
+      "kind": "System",
+      "name": "SGPS Marketing",
+      "parentId": "domain.corporate-web",
+      "owner": "BlueSkyz Labs",
+      "repository": "BlueSkyz-Labs/SGPS-Marketing",
+      "lifecycle": "active",
+      "criticality": "medium",
+      "dataClassification": "public",
+      "trustBoundary": "github-source-build-to-cloudflare-edge",
+      "interfaces": ["https://blueskyzlabs.com"],
+      "sourceEvidence": {
+        "repository": "BlueSkyz-Labs/SGPS-Marketing",
+        "revision": "7ae91bf27ad2182f04722a9d3b2fc7dedb1838b4",
+        "path": "src/"
+      }
+    },
+    {
+      "id": "component.astro-static-site",
+      "kind": "Component",
+      "name": "Astro Static Site",
+      "parentId": "system.sgps-marketing",
+      "owner": "BlueSkyz Labs",
+      "lifecycle": "active",
+      "criticality": "medium",
+      "dataClassification": "public",
+      "trustBoundary": "browser-visible-static-output",
+      "sourceEvidence": {
+        "repository": "BlueSkyz-Labs/SGPS-Marketing",
+        "revision": "7ae91bf27ad2182f04722a9d3b2fc7dedb1838b4",
+        "path": "src/"
+      }
+    },
+    {
+      "id": "component.public-truth-gate",
+      "kind": "Component",
+      "name": "Public Truth Gate",
+      "parentId": "system.sgps-marketing",
+      "owner": "BlueSkyz Labs",
+      "lifecycle": "active",
+      "criticality": "high",
+      "dataClassification": "public",
+      "trustBoundary": "build-time-truth-validation",
+      "sourceEvidence": {
+        "repository": "BlueSkyz-Labs/SGPS-Marketing",
+        "revision": "7ae91bf27ad2182f04722a9d3b2fc7dedb1838b4",
+        "path": "src/lib/truth.ts"
+      }
+    },
+    {
+      "id": "component.source-assurance",
+      "kind": "Component",
+      "name": "GitHub Source Assurance",
+      "parentId": "system.sgps-marketing",
+      "owner": "BlueSkyz Labs",
+      "lifecycle": "active",
+      "criticality": "high",
+      "dataClassification": "public",
+      "trustBoundary": "github-actions-read-only",
+      "sourceEvidence": {
+        "repository": "BlueSkyz-Labs/SGPS-Marketing",
+        "revision": "7ae91bf27ad2182f04722a9d3b2fc7dedb1838b4",
+        "path": ".github/workflows/quality-gates.yml"
+      }
+    },
+    {
+      "id": "data.product-registry",
+      "kind": "DataResource",
+      "name": "Public Product Registry",
+      "parentId": "system.sgps-marketing",
+      "owner": "BlueSkyz Labs",
+      "lifecycle": "active",
+      "criticality": "medium",
+      "dataClassification": "public-owner-gated",
+      "trustBoundary": "repository-content",
+      "sourceEvidence": {
+        "repository": "BlueSkyz-Labs/SGPS-Marketing",
+        "revision": "7ae91bf27ad2182f04722a9d3b2fc7dedb1838b4",
+        "path": "src/data/products/"
+      }
+    },
+    {
+      "id": "infra.cloudflare-worker",
+      "kind": "InfrastructureResource",
+      "name": "Cloudflare Worker Static Assets",
+      "parentId": "system.sgps-marketing",
+      "owner": "BlueSkyz Labs",
+      "lifecycle": "active",
+      "criticality": "high",
+      "dataClassification": "public",
+      "trustBoundary": "cloudflare-edge",
+      "environment": "production",
+      "region": "global-edge",
+      "sourceEvidence": {
+        "repository": "BlueSkyz-Labs/SGPS-Marketing",
+        "revision": "7ae91bf27ad2182f04722a9d3b2fc7dedb1838b4",
+        "path": "wrangler.toml"
+      }
+    },
+    {
+      "id": "external.github",
+      "kind": "ExternalDependency",
+      "name": "GitHub",
+      "parentId": "domain.corporate-web",
+      "owner": "GitHub",
+      "lifecycle": "external",
+      "criticality": "high",
+      "dataClassification": "source-metadata",
+      "trustBoundary": "external-scm"
+    },
+    {
+      "id": "external.npm-registry",
+      "kind": "ExternalDependency",
+      "name": "npm Registry",
+      "parentId": "domain.corporate-web",
+      "owner": "npm",
+      "lifecycle": "external",
+      "criticality": "high",
+      "dataClassification": "public-packages",
+      "trustBoundary": "external-package-registry"
+    },
+    {
+      "id": "external.cloudflare",
+      "kind": "ExternalDependency",
+      "name": "Cloudflare",
+      "parentId": "domain.corporate-web",
+      "owner": "Cloudflare",
+      "lifecycle": "external",
+      "criticality": "high",
+      "dataClassification": "public-request-metadata",
+      "trustBoundary": "external-edge-provider"
+    },
+    {
+      "id": "deployment.production",
+      "kind": "Deployment",
+      "name": "Production Deployment",
+      "parentId": "system.sgps-marketing",
+      "owner": "BlueSkyz Labs",
+      "lifecycle": "active",
+      "criticality": "high",
+      "dataClassification": "public",
+      "trustBoundary": "cloudflare-production",
+      "environment": "production",
+      "region": "global-edge",
+      "sourceEvidence": {
+        "repository": "BlueSkyz-Labs/SGPS-Marketing",
+        "revision": "7ae91bf27ad2182f04722a9d3b2fc7dedb1838b4",
+        "path": "wrangler.toml"
+      }
+    }
+  ],
+  "relationships": [
+    {"id": "rel.portfolio-contains-domain", "type": "contains", "from": "portfolio.blueskyz-labs", "to": "domain.corporate-web"},
+    {"id": "rel.domain-contains-system", "type": "contains", "from": "domain.corporate-web", "to": "system.sgps-marketing"},
+    {"id": "rel.system-contains-astro", "type": "contains", "from": "system.sgps-marketing", "to": "component.astro-static-site"},
+    {"id": "rel.system-contains-truth", "type": "contains", "from": "system.sgps-marketing", "to": "component.public-truth-gate"},
+    {"id": "rel.system-contains-assurance", "type": "contains", "from": "system.sgps-marketing", "to": "component.source-assurance"},
+    {"id": "rel.system-contains-products", "type": "contains", "from": "system.sgps-marketing", "to": "data.product-registry"},
+    {"id": "rel.system-contains-deployment", "type": "contains", "from": "system.sgps-marketing", "to": "deployment.production"},
+    {"id": "rel.astro-reads-products", "type": "reads", "from": "component.astro-static-site", "to": "data.product-registry"},
+    {"id": "rel.truth-validates-products", "type": "validates", "from": "component.public-truth-gate", "to": "data.product-registry"},
+    {"id": "rel.assurance-assures-system", "type": "assures", "from": "component.source-assurance", "to": "system.sgps-marketing"},
+    {"id": "rel.system-depends-github", "type": "depends_on", "from": "system.sgps-marketing", "to": "external.github"},
+    {"id": "rel.system-depends-npm", "type": "depends_on", "from": "system.sgps-marketing", "to": "external.npm-registry"},
+    {"id": "rel.system-depends-cloudflare", "type": "depends_on", "from": "system.sgps-marketing", "to": "external.cloudflare"},
+    {"id": "rel.deployment-deploys-worker", "type": "deploys_to", "from": "deployment.production", "to": "infra.cloudflare-worker"},
+    {"id": "rel.worker-depends-cloudflare", "type": "depends_on", "from": "infra.cloudflare-worker", "to": "external.cloudflare"}
+  ]
+}
