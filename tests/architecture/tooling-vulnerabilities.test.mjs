@@ -7,7 +7,7 @@ const lockfile = readFileSync("pnpm-lock.yaml", "utf8");
 
 const lockedVersions = (name) =>
   [...lockfile.matchAll(new RegExp(`^  ${name}@([^:]+):$`, "gm"))].map(
-    ([, version]) => version,
+    ([, version]) => version.replace(/\(.+$/, ""),
   );
 
 const assertAllLockedAt = (name, expected) => {
