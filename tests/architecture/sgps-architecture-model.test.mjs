@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { execFileSync } from "node:child_process";
 import { readFileSync } from "node:fs";
 import test from "node:test";
 
@@ -80,8 +81,15 @@ test("SGPS architecture model is canonical, typed, and graph-valid", () => {
   }
   assertNoParentCycles(entitiesById);
 
+  const relationshipIds = new Set();
   for (const relation of model.relationships) {
     assert.match(relation.id, /^rel\.[a-z0-9.-]+$/);
+    assert.equal(
+      relationshipIds.has(relation.id),
+      false,
+      `duplicate relationship id ${relation.id}`,
+    );
+    relationshipIds.add(relation.id);
     assert.ok(
       ALLOWED_RELATIONSHIP_TYPES.has(relation.type),
       `invalid relationship type ${relation.type}`,
@@ -115,4 +123,25 @@ test("static-site model does not fabricate backend architecture", () => {
     "API/Event entities require real repository/runtime evidence and are N/A for the current static site",
   );
   assert.match(model.notes ?? "", /auth.*database.*queue.*N\/A/i);
+});
+
+test("derived architecture views are deterministic and explicitly non-authoritative", () => {
+  execFileSync(process.execPath, ["scripts/generate-architecture-views.mjs", "--check"], {
+    stdio: "pipe",
+  });
+  const views = JSON.parse(readFileSync("architecture/derived-views.json", "utf8"));
+  assert.equal(views.invariant, "VIEW_IS_DERIVED_NOT_ARCHITECTURE_TRUTH");
+  assert.deepEqual(
+    views.views.map((view) => view.id),
+    [
+      "portfolio-landscape",
+      "system-context",
+      "component",
+      "dependency",
+      "data-flow",
+      "deployment",
+      "security-trust",
+      "ownership",
+    ],
+  );
 });
