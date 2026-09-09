@@ -176,12 +176,18 @@ test("derived architecture views are deterministic and explicitly non-authoritat
   );
 });
 
-test("architecture view command provides a real deterministic regeneration path", () => {
-  const script = readFileSync("scripts/generate-architecture-views.mjs", "utf8");
-  const packageJson = JSON.parse(readFileSync("package.json", "utf8"));
-  assert.equal(
-    packageJson.scripts["architecture:views"],
-    "node scripts/generate-architecture-views.mjs",
-  );
-  assert.match(script, /writeFileSync\(VIEWS_PATH, rendered\)/);
-});
+test(
+  "architecture view command provides a real deterministic regeneration path",
+  () => {
+    const script = readFileSync(
+      "scripts/generate-architecture-views.mjs",
+      "utf8",
+    );
+    const packageJson = JSON.parse(readFileSync("package.json", "utf8"));
+    assert.equal(
+      packageJson.scripts["architecture:views"],
+      "node scripts/generate-architecture-views.mjs",
+    );
+    assert.match(script, /writeFileSync\(VIEWS_PATH, rendered\)/);
+  },
+);
