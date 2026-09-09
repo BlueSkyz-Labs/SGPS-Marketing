@@ -1,0 +1,48 @@
+name: One-shot final evidence format and self-clean
+
+on:
+  push:
+    branches:
+      - audit/canonical-domain-architecture-convergence-20260909
+    paths:
+      - .github/workflows/one-shot-final-evidence-format.yml
+
+permissions:
+  contents: write
+
+jobs:
+  format-and-clean:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout exact branch commit
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: true
+      - name: Set up Node 24.20.0
+        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
+        with:
+          node-version: 24.20.0
+          check-latest: false
+      - name: Activate pinned pnpm
+        run: |
+          corepack enable
+          pnpm --version
+      - name: Install formatter graph without lifecycle scripts
+        run: pnpm install --frozen-lockfile --ignore-scripts
+      - name: Format exact evidence file, self-clean, and push
+        shell: bash
+        run: |
+          set -euo pipefail
+          branch="audit/canonical-domain-architecture-convergence-20260909"
+          file="docs/evidence/2026-09-07-global-elite-hardening.md"
+          pnpm exec prettier --write "$file"
+          git rm .github/workflows/one-shot-final-evidence-format.yml
+          git add "$file"
+          expected=$(printf '%s\n' ".github/workflows/one-shot-final-evidence-format.yml" "$file" | sort)
+          actual=$(git diff --cached --name-only | sort)
+          test "$actual" = "$expected"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "style: finalize convergence evidence format"
+          git push origin "HEAD:${branch}"
