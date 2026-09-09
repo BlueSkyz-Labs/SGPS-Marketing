@@ -40,7 +40,7 @@
       "interfaces": ["https://blueskyzlabs.com"],
       "sourceEvidence": {
         "repository": "BlueSkyz-Labs/SGPS-Marketing",
-        "revision": "7ae91bf27ad2182f04722a9d3b2fc7dedb1838b4",
+        "revision": "6442ce0c64f5d28abfb3718887a886d664d50014",
         "path": "src/"
       }
     },
@@ -72,7 +72,7 @@
       "trustBoundary": "build-time-truth-validation",
       "sourceEvidence": {
         "repository": "BlueSkyz-Labs/SGPS-Marketing",
-        "revision": "7ae91bf27ad2182f04722a9d3b2fc7dedb1838b4",
+        "revision": "6442ce0c64f5d28abfb3718887a886d664d50014",
         "path": "src/lib/truth.ts"
       }
     },
