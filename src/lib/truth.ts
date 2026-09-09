@@ -82,7 +82,8 @@ function isCanonicalPublicSiteUrl(value: string | undefined): boolean {
     const url = new URL(value);
     return (
       url.protocol === "https:" &&
-      bareHostname(url.hostname.toLowerCase()) === "blueskyzlabs.com" &&
+      url.origin === CANONICAL_PUBLIC_SITE_ORIGIN &&
+      url.hostname === "blueskyzlabs.com" &&
       url.port === "" &&
       url.username === "" &&
       url.password === "" &&
