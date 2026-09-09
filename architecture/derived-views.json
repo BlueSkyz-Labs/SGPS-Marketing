@@ -1,0 +1,176 @@
+{
+  "schemaVersion": "sgps.architecture.views/v1alpha1",
+  "sourceModel": "architecture/sgps-model.json",
+  "sourceModelLastVerified": "2026-09-09",
+  "invariant": "VIEW_IS_DERIVED_NOT_ARCHITECTURE_TRUTH",
+  "views": [
+    {
+      "id": "portfolio-landscape",
+      "title": "Portfolio Landscape",
+      "entityIds": [
+        "domain.corporate-web",
+        "external.cloudflare",
+        "external.github",
+        "external.npm-registry",
+        "portfolio.blueskyz-labs",
+        "system.sgps-marketing"
+      ],
+      "relationshipIds": [
+        "rel.domain-contains-system",
+        "rel.portfolio-contains-domain",
+        "rel.system-depends-cloudflare",
+        "rel.system-depends-github",
+        "rel.system-depends-npm"
+      ]
+    },
+    {
+      "id": "system-context",
+      "title": "System Context",
+      "entityIds": [
+        "component.astro-static-site",
+        "component.public-truth-gate",
+        "component.source-assurance",
+        "data.product-registry",
+        "deployment.production",
+        "external.cloudflare",
+        "external.github",
+        "external.npm-registry",
+        "infra.cloudflare-worker",
+        "system.sgps-marketing"
+      ],
+      "relationshipIds": [
+        "rel.assurance-assures-system",
+        "rel.astro-reads-products",
+        "rel.deployment-deploys-worker",
+        "rel.system-contains-assurance",
+        "rel.system-contains-astro",
+        "rel.system-contains-deployment",
+        "rel.system-contains-products",
+        "rel.system-contains-truth",
+        "rel.system-depends-cloudflare",
+        "rel.system-depends-github",
+        "rel.system-depends-npm",
+        "rel.truth-validates-products",
+        "rel.worker-depends-cloudflare"
+      ]
+    },
+    {
+      "id": "component",
+      "title": "Container / Component",
+      "entityIds": [
+        "component.astro-static-site",
+        "component.public-truth-gate",
+        "component.source-assurance",
+        "data.product-registry",
+        "system.sgps-marketing"
+      ],
+      "relationshipIds": [
+        "rel.assurance-assures-system",
+        "rel.astro-reads-products",
+        "rel.system-contains-assurance",
+        "rel.system-contains-astro",
+        "rel.system-contains-products",
+        "rel.system-contains-truth",
+        "rel.truth-validates-products"
+      ]
+    },
+    {
+      "id": "dependency",
+      "title": "Dependency",
+      "entityIds": [
+        "external.cloudflare",
+        "external.github",
+        "external.npm-registry",
+        "infra.cloudflare-worker",
+        "system.sgps-marketing"
+      ],
+      "relationshipIds": [
+        "rel.system-depends-cloudflare",
+        "rel.system-depends-github",
+        "rel.system-depends-npm",
+        "rel.worker-depends-cloudflare"
+      ]
+    },
+    {
+      "id": "data-flow",
+      "title": "Data Flow",
+      "entityIds": [
+        "component.astro-static-site",
+        "component.public-truth-gate",
+        "data.product-registry"
+      ],
+      "relationshipIds": [
+        "rel.astro-reads-products",
+        "rel.truth-validates-products"
+      ]
+    },
+    {
+      "id": "deployment",
+      "title": "Deployment",
+      "entityIds": [
+        "deployment.production",
+        "external.cloudflare",
+        "infra.cloudflare-worker"
+      ],
+      "relationshipIds": [
+        "rel.deployment-deploys-worker",
+        "rel.worker-depends-cloudflare"
+      ]
+    },
+    {
+      "id": "security-trust",
+      "title": "Security / Trust",
+      "entityIds": [
+        "component.astro-static-site",
+        "component.public-truth-gate",
+        "component.source-assurance",
+        "data.product-registry",
+        "deployment.production",
+        "domain.corporate-web",
+        "external.cloudflare",
+        "external.github",
+        "external.npm-registry",
+        "infra.cloudflare-worker",
+        "portfolio.blueskyz-labs",
+        "system.sgps-marketing"
+      ],
+      "relationshipIds": [
+        "rel.assurance-assures-system",
+        "rel.astro-reads-products",
+        "rel.deployment-deploys-worker",
+        "rel.domain-contains-system",
+        "rel.portfolio-contains-domain",
+        "rel.system-contains-assurance",
+        "rel.system-contains-astro",
+        "rel.system-contains-deployment",
+        "rel.system-contains-products",
+        "rel.system-contains-truth",
+        "rel.system-depends-cloudflare",
+        "rel.system-depends-github",
+        "rel.system-depends-npm",
+        "rel.truth-validates-products",
+        "rel.worker-depends-cloudflare"
+      ]
+    },
+    {
+      "id": "ownership",
+      "title": "Ownership",
+      "owners": {
+        "BlueSkyz Labs": [
+          "component.astro-static-site",
+          "component.public-truth-gate",
+          "component.source-assurance",
+          "data.product-registry",
+          "deployment.production",
+          "domain.corporate-web",
+          "infra.cloudflare-worker",
+          "portfolio.blueskyz-labs",
+          "system.sgps-marketing"
+        ],
+        "Cloudflare": ["external.cloudflare"],
+        "GitHub": ["external.github"],
+        "npm": ["external.npm-registry"]
+      }
+    }
+  ]
+}
