@@ -134,3 +134,5 @@ Applicable attack/privacy paths include dependency/lifecycle compromise, mutable
 ## Current promotion rule
 
 PR #68 and PR #75 are already merged; their former pre-merge rules are satisfied and superseded. Any future work must independently meet the active `main` ruleset: current exact-head `Quality Gates` and `Browser Assurance` must pass, provider deployment evidence must be green where applicable, material review findings must be resolved, and no actionable P0/P1 may remain. Direct-to-`main` is not an acceptable fallback.
+
+For PR #77 and later promotions, bot-pushed helper commits are not accepted as final source-assurance evidence; promotion evidence must bind the settled exact head that actually received the required Source Assurance checks.
