@@ -1,0 +1,59 @@
+name: One-shot branch formatter
+
+on:
+  push:
+    branches:
+      - audit/canonical-domain-architecture-convergence-20260909
+    paths:
+      - .github/workflows/format-one-shot.yml
+
+permissions:
+  contents: write
+
+jobs:
+  format:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout branch head
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with:
+          ref: audit/canonical-domain-architecture-convergence-20260909
+          fetch-depth: 1
+
+      - name: Set up Node 24.20.0
+        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
+        with:
+          node-version: 24.20.0
+          check-latest: false
+
+      - name: Activate pinned pnpm
+        run: |
+          corepack enable
+          pnpm --version
+
+      - name: Install frozen dependency graph
+        run: pnpm install --frozen-lockfile
+
+      - name: Format intended files only
+        run: |
+          pnpm exec prettier --write \
+            AGENTS.md \
+            architecture/sgps-model.json \
+            docs/superpowers/plans/2026-09-03-remaining-convergence.md \
+            scripts/generate-architecture-views.mjs \
+            tests/architecture/sgps-architecture-model.test.mjs
+
+      - name: Verify architecture and formatting
+        run: |
+          pnpm test:architecture
+          pnpm format:check
+
+      - name: Commit formatted files and remove one-shot workflow
+        run: |
+          rm .github/workflows/format-one-shot.yml
+          git config user.name "BlueSkyz-Labs Automation"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add AGENTS.md architecture/sgps-model.json docs/superpowers/plans/2026-09-03-remaining-convergence.md scripts/generate-architecture-views.mjs tests/architecture/sgps-architecture-model.test.mjs .github/workflows/format-one-shot.yml
+          git diff --cached --check
+          git commit -m "style: normalize convergence artifacts"
+          git push origin HEAD:audit/canonical-domain-architecture-convergence-20260909
