@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { execFileSync } from "node:child_process";
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import test from "node:test";
 
 const model = JSON.parse(readFileSync("architecture/sgps-model.json", "utf8"));
@@ -134,6 +134,19 @@ test("SGPS marketing system binds architecture claims to immutable Git evidence"
     "BlueSkyz-Labs/SGPS-Marketing",
   );
   assert.match(system.sourceEvidence?.revision ?? "", /^[0-9a-f]{40}$/);
+});
+
+test("local architecture source-evidence paths exist in the verified checkout", () => {
+  for (const entity of model.entities) {
+    const evidence = entity.sourceEvidence;
+    if (!evidence || evidence.repository !== "BlueSkyz-Labs/SGPS-Marketing") {
+      continue;
+    }
+    assert.ok(
+      existsSync(evidence.path),
+      `${entity.id} sourceEvidence.path does not exist: ${evidence.path}`,
+    );
+  }
 });
 
 test("source assurance model tracks the protected promotion interfaces", () => {

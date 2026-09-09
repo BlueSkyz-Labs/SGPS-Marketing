@@ -105,8 +105,8 @@
       "trustBoundary": "repository-content",
       "sourceEvidence": {
         "repository": "BlueSkyz-Labs/SGPS-Marketing",
-        "revision": "7ae91bf27ad2182f04722a9d3b2fc7dedb1838b4",
-        "path": "src/data/products/"
+        "revision": "4fd0265d7d38012af79266edde7bf8e7e46d0e8e",
+        "path": "src/content/products/"
       }
     },
     {
