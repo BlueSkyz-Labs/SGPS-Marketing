@@ -4,6 +4,8 @@ export interface PublicTruthInput {
   securityEmail?: string;
 }
 
+export const CANONICAL_PUBLIC_SITE_ORIGIN = "https://blueskyzlabs.com";
+
 /** RFC 2606 / common non-production hosts that must never pass a production truth gate. */
 const RESERVED_HOST_SUFFIXES = [
   "example.com",
@@ -49,25 +51,9 @@ function isReservedDocumentationHost(hostname: string): boolean {
   );
 }
 
-/**
- * Owner-authorized temporary site hosts on tonydemo.com (2026-09-05).
- * Product/staging subdomains (sotro, portfolio, …) stay non-production.
- * Emails remain unset — `validatePublicTruth` still fails until owner supplies them.
- */
-const TEMPORARY_SITE_HOSTS = new Set([
-  "tonydemo.com",
-  "www.tonydemo.com",
-  "blueskyz.tonydemo.com",
-]);
-
-function isTemporarySiteHost(hostname: string): boolean {
-  return TEMPORARY_SITE_HOSTS.has(bareHostname(hostname));
-}
-
-/** Preview / staging hosts that must never pass as production claim identity. */
+/** Preview, staging, and retired temporary hosts that must never pass as production identity. */
 function isPreviewOrStagingHost(hostname: string): boolean {
   const bare = bareHostname(hostname);
-  if (isTemporarySiteHost(bare)) return false;
   return (
     bare === "workers.dev" ||
     bare.endsWith(".workers.dev") ||
@@ -80,15 +66,33 @@ function isPreviewOrStagingHost(hostname: string): boolean {
 
 /**
  * Sites that must not be treated as indexable production identity.
- * Includes local/dev hosts, workers.dev / pages.dev previews, staging
- * `*.tonydemo.com` product hosts (except owner-approved temporary site hosts),
- * and RFC 2606 documentation domains.
+ * Includes local/dev hosts, workers.dev / pages.dev previews, the retired
+ * tonydemo.com zone, and RFC 2606 documentation domains.
  */
 export function isNonProductionSiteUrl(siteUrl: string): boolean {
   const hostname = hostnameOf(siteUrl);
   if (!hostname) return true;
   if (isPreviewOrStagingHost(hostname)) return true;
   return isReservedDocumentationHost(hostname);
+}
+
+function isCanonicalPublicSiteUrl(value: string | undefined): boolean {
+  if (!value) return false;
+  try {
+    const url = new URL(value);
+    return (
+      url.protocol === "https:" &&
+      bareHostname(url.hostname.toLowerCase()) === "blueskyzlabs.com" &&
+      url.port === "" &&
+      url.username === "" &&
+      url.password === "" &&
+      url.pathname === "/" &&
+      url.search === "" &&
+      url.hash === ""
+    );
+  } catch {
+    return false;
+  }
 }
 
 function isPlausibleEmail(value: string | undefined): boolean {
@@ -99,11 +103,9 @@ function isPlausibleEmail(value: string | undefined): boolean {
 
 export function validatePublicTruth(input: PublicTruthInput): string[] {
   const errors: string[] = [];
-  if (!input.siteUrl?.startsWith("https://")) {
-    errors.push("PUBLIC_SITE_URL must be an https URL");
-  } else if (isNonProductionSiteUrl(input.siteUrl)) {
+  if (!isCanonicalPublicSiteUrl(input.siteUrl)) {
     errors.push(
-      "PUBLIC_SITE_URL must be a canonical corporate https domain (not localhost, workers.dev, pages.dev, staging, or documentation/example hosts)",
+      `PUBLIC_SITE_URL must be the canonical BlueSkyz Labs origin ${CANONICAL_PUBLIC_SITE_ORIGIN}`,
     );
   }
   if (!isPlausibleEmail(input.contactEmail)) {
