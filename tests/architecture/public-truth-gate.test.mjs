@@ -112,6 +112,7 @@ test("public truth gate accepts only the exact canonical BlueSkyz organizational
     "https://www.tonydemo.com",
     "https://blueskyz.tonydemo.com",
     "https://www.blueskyzlabs.com",
+    "https://blueskyzlabs.com.",
     "https://blueskyzlabs.com/products/",
     "https://blueskyzlabs.com/?preview=1",
     "https://blueskyzlabs.com:8443/",
