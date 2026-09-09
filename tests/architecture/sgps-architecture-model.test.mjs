@@ -141,7 +141,10 @@ test("source assurance model tracks the protected promotion interfaces", () => {
     (entity) => entity.id === "component.source-assurance",
   );
   assert.ok(assurance, "missing component.source-assurance");
-  assert.deepEqual(assurance.interfaces, ["Quality Gates", "Browser Assurance"]);
+  assert.deepEqual(assurance.interfaces, [
+    "Quality Gates",
+    "Browser Assurance",
+  ]);
   assert.match(assurance.sourceEvidence?.revision ?? "", /^[0-9a-f]{40}$/);
 
   const workflow = readFileSync(".github/workflows/quality-gates.yml", "utf8");
