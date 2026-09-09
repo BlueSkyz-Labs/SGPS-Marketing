@@ -37,7 +37,10 @@ export function deriveArchitectureViews(model) {
   const views = [];
 
   let entityIds = new Set(
-    entityIdsForKinds(model, new Set(["Portfolio", "Domain", "System", "ExternalDependency"])),
+    entityIdsForKinds(
+      model,
+      new Set(["Portfolio", "Domain", "System", "ExternalDependency"]),
+    ),
   );
   views.push({
     id: "portfolio-landscape",
@@ -107,7 +110,9 @@ export function deriveArchitectureViews(model) {
     id: "data-flow",
     title: "Data Flow",
     entityIds: sorted(entityIds),
-    relationshipIds: sorted(dataRelationships.map((relationship) => relationship.id)),
+    relationshipIds: sorted(
+      dataRelationships.map((relationship) => relationship.id),
+    ),
   });
 
   entityIds = new Set(

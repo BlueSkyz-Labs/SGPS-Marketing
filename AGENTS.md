@@ -2,18 +2,18 @@
 
 Trusted current source of truth only:
 
-| Role | Path |
-| --- | --- |
-| Experience contract | `docs/superpowers/specs/2026-09-03-blueskyz-web-v1-c1-1-design.md` — substantive design remains authoritative; its pre-implementation status text is historical |
-| Historical implementation plan | `docs/superpowers/plans/2026-09-04-blueskyz-web-v1-c1-1-implementation.md` |
-| Active residual / owner-gated work | `docs/superpowers/plans/2026-09-03-remaining-convergence.md` |
-| Framework decision | `docs/decisions/0004-web-framework-selection.md` (`ASTRO_7`) |
-| Source assurance decision | `docs/decisions/0005-dual-control-source-assurance.md`; historical pre-ruleset wording is superseded by provider read-back |
-| Canonical domain decision | `docs/decisions/0006-domain-migration-and-product-subdomains.md` |
-| Architecture decision | `docs/decisions/0007-sgps-architecture-canonical-model.md` |
-| Canonical architecture model | `architecture/sgps-model.json` |
-| Derived architecture views | `architecture/derived-views.json` — `VIEW_IS_DERIVED_NOT_ARCHITECTURE_TRUTH` |
-| Decisions index | `docs/decisions/README.md` |
+| Role                               | Path                                                                                                                                                            |
+| ---------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Experience contract                | `docs/superpowers/specs/2026-09-03-blueskyz-web-v1-c1-1-design.md` — substantive design remains authoritative; its pre-implementation status text is historical |
+| Historical implementation plan     | `docs/superpowers/plans/2026-09-04-blueskyz-web-v1-c1-1-implementation.md`                                                                                      |
+| Active residual / owner-gated work | `docs/superpowers/plans/2026-09-03-remaining-convergence.md`                                                                                                    |
+| Framework decision                 | `docs/decisions/0004-web-framework-selection.md` (`ASTRO_7`)                                                                                                    |
+| Source assurance decision          | `docs/decisions/0005-dual-control-source-assurance.md`; historical pre-ruleset wording is superseded by provider read-back                                      |
+| Canonical domain decision          | `docs/decisions/0006-domain-migration-and-product-subdomains.md`                                                                                                |
+| Architecture decision              | `docs/decisions/0007-sgps-architecture-canonical-model.md`                                                                                                      |
+| Canonical architecture model       | `architecture/sgps-model.json`                                                                                                                                  |
+| Derived architecture views         | `architecture/derived-views.json` — `VIEW_IS_DERIVED_NOT_ARCHITECTURE_TRUTH`                                                                                    |
+| Decisions index                    | `docs/decisions/README.md`                                                                                                                                      |
 
 ## Hard rules
 

@@ -179,20 +179,95 @@
     }
   ],
   "relationships": [
-    {"id": "rel.portfolio-contains-domain", "type": "contains", "from": "portfolio.blueskyz-labs", "to": "domain.corporate-web"},
-    {"id": "rel.domain-contains-system", "type": "contains", "from": "domain.corporate-web", "to": "system.sgps-marketing"},
-    {"id": "rel.system-contains-astro", "type": "contains", "from": "system.sgps-marketing", "to": "component.astro-static-site"},
-    {"id": "rel.system-contains-truth", "type": "contains", "from": "system.sgps-marketing", "to": "component.public-truth-gate"},
-    {"id": "rel.system-contains-assurance", "type": "contains", "from": "system.sgps-marketing", "to": "component.source-assurance"},
-    {"id": "rel.system-contains-products", "type": "contains", "from": "system.sgps-marketing", "to": "data.product-registry"},
-    {"id": "rel.system-contains-deployment", "type": "contains", "from": "system.sgps-marketing", "to": "deployment.production"},
-    {"id": "rel.astro-reads-products", "type": "reads", "from": "component.astro-static-site", "to": "data.product-registry"},
-    {"id": "rel.truth-validates-products", "type": "validates", "from": "component.public-truth-gate", "to": "data.product-registry"},
-    {"id": "rel.assurance-assures-system", "type": "assures", "from": "component.source-assurance", "to": "system.sgps-marketing"},
-    {"id": "rel.system-depends-github", "type": "depends_on", "from": "system.sgps-marketing", "to": "external.github"},
-    {"id": "rel.system-depends-npm", "type": "depends_on", "from": "system.sgps-marketing", "to": "external.npm-registry"},
-    {"id": "rel.system-depends-cloudflare", "type": "depends_on", "from": "system.sgps-marketing", "to": "external.cloudflare"},
-    {"id": "rel.deployment-deploys-worker", "type": "deploys_to", "from": "deployment.production", "to": "infra.cloudflare-worker"},
-    {"id": "rel.worker-depends-cloudflare", "type": "depends_on", "from": "infra.cloudflare-worker", "to": "external.cloudflare"}
+    {
+      "id": "rel.portfolio-contains-domain",
+      "type": "contains",
+      "from": "portfolio.blueskyz-labs",
+      "to": "domain.corporate-web"
+    },
+    {
+      "id": "rel.domain-contains-system",
+      "type": "contains",
+      "from": "domain.corporate-web",
+      "to": "system.sgps-marketing"
+    },
+    {
+      "id": "rel.system-contains-astro",
+      "type": "contains",
+      "from": "system.sgps-marketing",
+      "to": "component.astro-static-site"
+    },
+    {
+      "id": "rel.system-contains-truth",
+      "type": "contains",
+      "from": "system.sgps-marketing",
+      "to": "component.public-truth-gate"
+    },
+    {
+      "id": "rel.system-contains-assurance",
+      "type": "contains",
+      "from": "system.sgps-marketing",
+      "to": "component.source-assurance"
+    },
+    {
+      "id": "rel.system-contains-products",
+      "type": "contains",
+      "from": "system.sgps-marketing",
+      "to": "data.product-registry"
+    },
+    {
+      "id": "rel.system-contains-deployment",
+      "type": "contains",
+      "from": "system.sgps-marketing",
+      "to": "deployment.production"
+    },
+    {
+      "id": "rel.astro-reads-products",
+      "type": "reads",
+      "from": "component.astro-static-site",
+      "to": "data.product-registry"
+    },
+    {
+      "id": "rel.truth-validates-products",
+      "type": "validates",
+      "from": "component.public-truth-gate",
+      "to": "data.product-registry"
+    },
+    {
+      "id": "rel.assurance-assures-system",
+      "type": "assures",
+      "from": "component.source-assurance",
+      "to": "system.sgps-marketing"
+    },
+    {
+      "id": "rel.system-depends-github",
+      "type": "depends_on",
+      "from": "system.sgps-marketing",
+      "to": "external.github"
+    },
+    {
+      "id": "rel.system-depends-npm",
+      "type": "depends_on",
+      "from": "system.sgps-marketing",
+      "to": "external.npm-registry"
+    },
+    {
+      "id": "rel.system-depends-cloudflare",
+      "type": "depends_on",
+      "from": "system.sgps-marketing",
+      "to": "external.cloudflare"
+    },
+    {
+      "id": "rel.deployment-deploys-worker",
+      "type": "deploys_to",
+      "from": "deployment.production",
+      "to": "infra.cloudflare-worker"
+    },
+    {
+      "id": "rel.worker-depends-cloudflare",
+      "type": "depends_on",
+      "from": "infra.cloudflare-worker",
+      "to": "external.cloudflare"
+    }
   ]
 }
