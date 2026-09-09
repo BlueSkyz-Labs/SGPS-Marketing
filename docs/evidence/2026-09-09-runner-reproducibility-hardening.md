@@ -30,11 +30,9 @@ This ledger records the P2 reproducibility finding discovered during the post-ar
 
 Exact candidate: `7adb122e2e4b8e148efa0c0e381bc39504ce4994`.
 
-| Gate | Evidence | Result |
-| --- | --- | --- |
-| Quality Gates | check `102472408316` | PASS |
-| Browser Assurance | check `102472646148` | PASS |
-| Cloudflare Workers Build | check `102472665619`, build `b1a72495-b00a-4108-ad55-1bdbcb47ae05`, version `b6b2231f-e0f7-4669-877a-74e16fb5d658` | PASS |
+- Quality Gates: check `102472408316` — PASS.
+- Browser Assurance: check `102472646148` — PASS.
+- Cloudflare Workers Build: check `102472665619`, build `b1a72495-b00a-4108-ad55-1bdbcb47ae05`, version `b6b2231f-e0f7-4669-877a-74e16fb5d658` — PASS.
 
 Quality evidence includes frozen install, dependency vulnerability audit, 103/103 architecture contracts, typecheck, lint, formatting, static build, client-JS budget, and static-link validation. Browser Assurance includes the repository cross-browser Playwright/axe matrix and Lighthouse CI on the pinned runner family.
 
