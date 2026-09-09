@@ -18,25 +18,25 @@
 
 ## Current verified baseline
 
-| Area                               | Current state                                                                                                                                                              |
-| ---------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Astro 7 static architecture        | VERIFIED; ADR 0004 remains authoritative                                                                                                                                   |
-| SGPS:Experience                    | FULL design contract adopted; automated/runtime/browser gates exist; human C1.1 acceptance remains OPEN until required real-user evidence exists                           |
-| SGPS:Architecture                  | Canonical model + deterministic derived views are required by ADR 0007 and architecture contracts                                                                          |
-| Canonical organizational identity  | `https://blueskyzlabs.com` per ADR 0006; retired `tonydemo.com` hosts must fail production truth validation                                                                |
-| Public product registry            | Intentionally empty until proof-backed owner facts exist                                                                                                                   |
-| Brand provenance                   | Approved BlueSkyz Production Brand Kit v4 assets/tokens are landed with provenance evidence                                                                                |
-| Cloudflare Workers Builds          | VERIFIED deployment authority; GitHub Actions remains source-assurance only                                                                                                |
-| GitHub Source Assurance            | VERIFIED exact-head `Quality Gates` + protected full cross-browser `Browser Assurance`                                                                                     |
-| PR #79 post-merge baseline         | VERIFIED on `3737c726af1cffc2d9018096d7dc57b03cf6d127`: Quality Gates + Chromium/Firefox/WebKit/mobile Playwright/axe + Lighthouse + Workers Build PASS                    |
-| Human E4 comprehension/trust       | **OPEN — EXTERNAL / HUMAN EVIDENCE REQUIRED**; authoritative C1.1 requires real-user customer-task + brand-interpretation evidence; 2026-09-04 evidence is agent-only      |
-| `main` governance                  | ENFORCED by active ruleset `main-promotion-governance` (`22500299`)                                                                                                        |
-| Supply chain                       | Fail-closed pnpm 11.25.0 policy, lifecycle allowlist, Moderate+ dependency audit and pinned tooling                                                                        |
-| Deployment CLI                     | Project-local `wrangler@4.127.1`; provider commands use project-local Wrangler                                                                                             |
-| Worker public routing              | `workers_dev = false`, `preview_urls = false`; custom-domain path remains canonical                                                                                        |
-| Worker observability               | Persisted invocation logs enabled; query strings redacted by architecture contract                                                                                         |
-| Production contact/security emails | **EXTERNAL / OWNER INPUT REQUIRED**; public-truth gate must not be faked                                                                                                   |
-| Field RUM                          | Design exists; production enablement remains an explicit privacy/owner decision                                                                                            |
+| Area                               | Current state                                                                                                                                                         |
+| ---------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Astro 7 static architecture        | VERIFIED; ADR 0004 remains authoritative                                                                                                                              |
+| SGPS:Experience                    | FULL design contract adopted; automated/runtime/browser gates exist; human C1.1 acceptance remains OPEN until required real-user evidence exists                      |
+| SGPS:Architecture                  | Canonical model + deterministic derived views are required by ADR 0007 and architecture contracts                                                                     |
+| Canonical organizational identity  | `https://blueskyzlabs.com` per ADR 0006; retired `tonydemo.com` hosts must fail production truth validation                                                           |
+| Public product registry            | Intentionally empty until proof-backed owner facts exist                                                                                                              |
+| Brand provenance                   | Approved BlueSkyz Production Brand Kit v4 assets/tokens are landed with provenance evidence                                                                           |
+| Cloudflare Workers Builds          | VERIFIED deployment authority; GitHub Actions remains source-assurance only                                                                                           |
+| GitHub Source Assurance            | VERIFIED exact-head `Quality Gates` + protected full cross-browser `Browser Assurance`                                                                                |
+| PR #79 post-merge baseline         | VERIFIED on `3737c726af1cffc2d9018096d7dc57b03cf6d127`: Quality Gates + Chromium/Firefox/WebKit/mobile Playwright/axe + Lighthouse + Workers Build PASS               |
+| Human E4 comprehension/trust       | **OPEN — EXTERNAL / HUMAN EVIDENCE REQUIRED**; authoritative C1.1 requires real-user customer-task + brand-interpretation evidence; 2026-09-04 evidence is agent-only |
+| `main` governance                  | ENFORCED by active ruleset `main-promotion-governance` (`22500299`)                                                                                                   |
+| Supply chain                       | Fail-closed pnpm 11.25.0 policy, lifecycle allowlist, Moderate+ dependency audit and pinned tooling                                                                   |
+| Deployment CLI                     | Project-local `wrangler@4.127.1`; provider commands use project-local Wrangler                                                                                        |
+| Worker public routing              | `workers_dev = false`, `preview_urls = false`; custom-domain path remains canonical                                                                                   |
+| Worker observability               | Persisted invocation logs enabled; query strings redacted by architecture contract                                                                                    |
+| Production contact/security emails | **EXTERNAL / OWNER INPUT REQUIRED**; public-truth gate must not be faked                                                                                              |
+| Field RUM                          | Design exists; production enablement remains an explicit privacy/owner decision                                                                                       |
 
 Canonical source build recipe includes frozen install, dependency audit, `pnpm test:architecture`, `pnpm build`, `pnpm check:client-budget`, and `pnpm check:static-links`. Browser Assurance adds the repository Playwright/axe matrix across Chromium, Firefox, WebKit/Safari-class and mobile Chromium, followed by Lighthouse. These automated gates do not substitute for the real-user E4 evidence class.
 
