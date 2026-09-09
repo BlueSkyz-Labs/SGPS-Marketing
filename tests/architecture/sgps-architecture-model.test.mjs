@@ -136,6 +136,23 @@ test("SGPS marketing system binds architecture claims to immutable Git evidence"
   assert.match(system.sourceEvidence?.revision ?? "", /^[0-9a-f]{40}$/);
 });
 
+test("source assurance model tracks the protected promotion interfaces", () => {
+  const assurance = model.entities.find(
+    (entity) => entity.id === "component.source-assurance",
+  );
+  assert.ok(assurance, "missing component.source-assurance");
+  assert.deepEqual(assurance.interfaces, [
+    "Quality Gates",
+    "Browser Assurance",
+  ]);
+  assert.match(assurance.sourceEvidence?.revision ?? "", /^[0-9a-f]{40}$/);
+
+  const workflow = readFileSync(".github/workflows/quality-gates.yml", "utf8");
+  assert.match(workflow, /name: Quality Gates/);
+  assert.match(workflow, /name: Browser Assurance/);
+  assert.match(workflow, /run: pnpm test:e2e/);
+});
+
 test("static-site model does not fabricate backend architecture", () => {
   const prohibitedKinds = new Set(["API", "Event"]);
   const fabricated = model.entities.filter((entity) =>
