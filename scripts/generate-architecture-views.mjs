@@ -1,4 +1,5 @@
 import { readFileSync } from "node:fs";
+import { format } from "prettier";
 
 const MODEL_PATH = "architecture/sgps-model.json";
 const VIEWS_PATH = "architecture/derived-views.json";
@@ -167,13 +168,14 @@ export function deriveArchitectureViews(model) {
   };
 }
 
-function renderedViews() {
+async function renderedViews() {
   const model = JSON.parse(readFileSync(MODEL_PATH, "utf8"));
-  return `${JSON.stringify(deriveArchitectureViews(model), null, 2)}\n`;
+  const json = `${JSON.stringify(deriveArchitectureViews(model), null, 2)}\n`;
+  return format(json, { filepath: VIEWS_PATH });
 }
 
 if (process.argv[1]?.endsWith("generate-architecture-views.mjs")) {
-  const rendered = renderedViews();
+  const rendered = await renderedViews();
   if (process.argv.includes("--check")) {
     const committed = readFileSync(VIEWS_PATH, "utf8");
     if (committed !== rendered) {
