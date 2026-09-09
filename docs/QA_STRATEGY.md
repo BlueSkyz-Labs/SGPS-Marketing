@@ -41,12 +41,12 @@ Full Playwright matrix and Lighthouse are promotion/preview evidence, not every-
 
 `.github/workflows/quality-gates.yml` emits two exact-SHA checks:
 
-- **Quality Gates** — frozen install, architecture, typecheck, lint, format, static build, client-JS budget and static-link validation.
-- **Browser Assurance** — Chromium Playwright/axe plus Lighthouse CI after `Quality Gates` succeeds.
+- **Quality Gates** — frozen install, dependency vulnerability audit, architecture, typecheck, lint, format, static build, client-JS budget and static-link validation.
+- **Browser Assurance** — the repository E4 Playwright/axe matrix across Chromium, Firefox, WebKit/Safari-class and mobile Chromium, followed by Lighthouse CI after `Quality Gates` succeeds.
 
 The workflow is intentionally secretless and read-only (`contents: read`), checks out the exact PR head or `main` push SHA with `persist-credentials: false`, and pins external actions to full commit SHAs. It is a source-control assurance layer, not a deployment pipeline.
 
-Until Issue #8 is implemented and read back as an active ruleset, these checks exist but are not technically required by GitHub before a direct push or merge. Normal operation remains branch → PR; direct-to-`main` is emergency-only.
+Active ruleset `main-promotion-governance` (`22500299`) protects `main`: a pull request is required; strict `Quality Gates` and `Browser Assurance` must pass; review conversations must be resolved; non-fast-forward updates and deletion are blocked; and no bypass actors are configured. Issue #8 is resolved/closed. Direct-to-`main` is not a fallback.
 
 ---
 
@@ -60,11 +60,14 @@ Until Issue #8 is implemented and read back as an active ruleset, these checks e
 
 - Playwright: Chromium, Firefox, WebKit, mobile Chromium (`pnpm test:e2e`)
 - Browser bootstrap: `pnpm test:e2e:install`
+- Protected PR/main assurance: installs Chromium + Firefox + WebKit with OS dependencies, then runs `pnpm test:e2e`
 - axe tags: WCAG 2.0 / 2.1 / 2.2 A+AA (`wcag2a`, `wcag2aa`, `wcag21a`, `wcag21aa`, `wcag22a`, `wcag22aa`)
 - Static internal links/assets: `pnpm check:static-links` (after `pnpm build`)
 - Optional remote target: `PLAYWRIGHT_BASE_URL`
 - Local server: `pnpm start` (Astro preview on `127.0.0.1:3000`)
 - Lighthouse CI: three desktop runs against Astro preview; categories ≥0.90; CLS ≤0.05
+
+Automated/browser assurance is necessary but does **not** substitute for the real-user customer-task and brand-interpretation evidence required by the authoritative C1.1 E4 contract. An agent walkthrough is preflight evidence, not human acceptance.
 
 ---
 
@@ -93,7 +96,7 @@ command: pnpm install --frozen-lockfile && pnpm validate:public-truth && pnpm bu
 preview branches: enabled
 ```
 
-Preview builds may omit `validate:public-truth` when production-only domain/email variables are intentionally absent, but must still build and pass static gates (`check:client-budget`, `check:static-links`).
+Preview builds may omit `validate:public-truth` when production-only email variables are intentionally absent, but must still build and pass static gates (`check:client-budget`, `check:static-links`).
 
 Do not duplicate Cloudflare deployment or environment-bound production truth in `.github/workflows`; GitHub Actions is limited to source assurance.
 
@@ -105,8 +108,8 @@ Legacy Cloudflare Pages project `blueskyz-labs-portfolio` is superseded by Worke
 
 `pnpm validate:public-truth` requires:
 
-- `PUBLIC_SITE_URL` (canonical corporate https domain — not localhost, `*.workers.dev`, or RFC 2606 / `example.*` documentation hosts)
-- `PUBLIC_CONTACT_EMAIL` (plausible `local@domain.tld`)
-- `PUBLIC_SECURITY_EMAIL` (plausible `local@domain.tld`)
+- `PUBLIC_SITE_URL=https://blueskyzlabs.com` — exact canonical organizational origin per ADR 0006; retired `tonydemo.com`, localhost, preview/staging hosts, alternate origins, paths, query strings and non-default ports are rejected
+- `PUBLIC_CONTACT_EMAIL` (owner-supplied plausible `local@domain.tld`)
+- `PUBLIC_SECURITY_EMAIL` (owner-supplied plausible `local@domain.tld`)
 
-Production promotion is blocked until these are owner-supplied. Do not invent domain/email fallbacks.
+Canonical site identity is decided. Production promotion remains blocked on the two verified owner-supplied email facts; do not invent email fallbacks.
