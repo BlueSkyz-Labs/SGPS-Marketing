@@ -74,9 +74,9 @@ jobs:
         run: pnpm install --frozen-lockfile
       - name: Build browser test artifact
         run: pnpm build
-      - name: Install Chromium runtime
-        run: pnpm exec playwright install --with-deps chromium
+      - name: Install Playwright runtimes
+        run: pnpm exec playwright install --with-deps chromium firefox webkit
       - name: Playwright and axe assurance
-        run: pnpm exec playwright test --project=chromium
+        run: pnpm test:e2e
       - name: Lighthouse CI
         run: pnpm lighthouse
