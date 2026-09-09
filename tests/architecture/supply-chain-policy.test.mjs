@@ -30,7 +30,7 @@ test("pnpm supply-chain policy is explicit and fail closed", () => {
   );
 });
 
-test("GitHub source assurance is immutable, least privilege, secretless, exact-head, cross-browser, and runner-pinned", () => {
+test("GitHub source assurance is pinned and least privilege", () => {
   const workflow = readIfPresent(".github/workflows/quality-gates.yml");
 
   assert.match(workflow, /^name:\s*Source Assurance/m);
@@ -39,9 +39,9 @@ test("GitHub source assurance is immutable, least privilege, secretless, exact-h
   assert.match(workflow, /name:\s*Browser Assurance/);
   assert.match(workflow, /run:\s*pnpm audit --audit-level=moderate/);
 
-  const runnerLabels = [
-    ...workflow.matchAll(/runs-on:\s*([^\s#]+)/g),
-  ].map(([, label]) => label);
+  const runnerLabels = [...workflow.matchAll(/runs-on:\s*([^\s#]+)/g)].map(
+    ([, label]) => label,
+  );
   assert.deepEqual(
     runnerLabels,
     ["ubuntu-24.04", "ubuntu-24.04"],
