@@ -75,7 +75,13 @@ jobs:
       - name: Build browser test artifact
         run: pnpm build
       - name: Install Playwright runtimes
-        run: pnpm exec playwright install --with-deps chromium firefox webkit
+        timeout-minutes: 10
+        run: |
+          for attempt in 1 2 3; do
+            pnpm exec playwright install --with-deps chromium firefox webkit && break
+            echo "Attempt $attempt failed; waiting 20s before retry..."
+            sleep 20
+          done
       - name: Playwright and axe assurance
         run: pnpm test:e2e
       - name: Lighthouse CI
