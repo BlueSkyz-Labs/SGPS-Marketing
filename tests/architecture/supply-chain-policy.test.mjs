@@ -30,7 +30,7 @@ test("pnpm supply-chain policy is explicit and fail closed", () => {
   );
 });
 
-test("GitHub source assurance is immutable, least privilege, secretless, and exact-head", () => {
+test("GitHub source assurance is immutable, least privilege, secretless, exact-head, and cross-browser", () => {
   const workflow = readIfPresent(".github/workflows/quality-gates.yml");
 
   assert.match(workflow, /^name:\s*Source Assurance/m);
@@ -72,16 +72,26 @@ test("GitHub source assurance is immutable, least privilege, secretless, and exa
 
   const browserJob = workflow.split("\n  browser-assurance:")[1] ?? "";
   const buildIndex = browserJob.indexOf("run: pnpm build");
-  const playwrightIndex = browserJob.indexOf(
-    "run: pnpm exec playwright test --project=chromium",
+  const installIndex = browserJob.indexOf(
+    "run: pnpm exec playwright install --with-deps chromium firefox webkit",
   );
+  const playwrightIndex = browserJob.indexOf("run: pnpm test:e2e");
   assert.ok(
     buildIndex >= 0,
     "browser assurance must build the static artifact",
   );
   assert.ok(
-    playwrightIndex > buildIndex,
-    "browser assurance must build dist before Playwright starts Astro preview",
+    installIndex > buildIndex,
+    "browser assurance must install Chromium, Firefox and WebKit after the build",
+  );
+  assert.ok(
+    playwrightIndex > installIndex,
+    "browser assurance must enforce the repository cross-browser Playwright matrix",
+  );
+  assert.doesNotMatch(
+    browserJob,
+    /run:\s*pnpm exec playwright test --project=chromium\s*$/m,
+    "protected Browser Assurance must not silently narrow the E4 matrix to Chromium-only",
   );
 
   assert.doesNotMatch(workflow, /secrets\./);

@@ -30,11 +30,12 @@ Latest immutable post-merge convergence evidence: `docs/evidence/2026-09-09-pr77
 - GitHub Actions is **source assurance only**: read-only token, no persisted checkout credentials, no Cloudflare secrets, no deployment commands.
 - Cloudflare Workers Builds remains preview/production build and deployment authority.
 - SGPS architecture truth lives in `architecture/sgps-model.json`; diagrams/views are derived. Provider/runtime evidence outranks stale authored topology and must trigger reconciliation.
+- Automated/browser E4 evidence does **not** substitute for real-user customer-task and brand-interpretation evidence required by the C1.1 experience contract; agent walkthroughs are preflight only.
 
 ## Source gates
 
 Canonical source-assurance path:
 
-`frozen install → dependency audit → architecture contracts → typecheck → lint → format → build → client budget → static links → browser/axe → Lighthouse`
+`frozen install → dependency audit → architecture contracts → typecheck → lint → format → build → client budget → static links → cross-browser/axe → Lighthouse`
 
-Architecture-affecting changes must regenerate/check derived views with `pnpm architecture:views:check`. GitHub Source Assurance repeats deterministic source gates and adds Chromium Playwright/axe + Lighthouse evidence for PR/main candidates. See `README.md` and `docs/QA_STRATEGY.md` for full commands and promotion flow.
+Architecture-affecting changes must regenerate/check derived views with `pnpm architecture:views:check`. GitHub Source Assurance repeats deterministic source gates and runs the repository E4 Playwright/axe matrix across Chromium, Firefox, WebKit/Safari-class and mobile Chromium, followed by Lighthouse evidence for PR/main candidates. See `README.md` and `docs/QA_STRATEGY.md` for full commands and promotion flow.
