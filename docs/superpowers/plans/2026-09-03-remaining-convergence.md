@@ -1,37 +1,41 @@
 # Remaining Convergence Plan — Owner-gated & residual gaps
 
-> **Active residual execution contract.** Execute only items that remain open, safe and evidence-backed. Historical promotion work is recorded in the hardening plan/evidence; resolved provider controls are not residual blockers.
+> **Active residual execution contract.** Execute only items that remain open, safe and evidence-backed. Newer accepted ADRs and provider controls supersede older implementation-status wording. Historical promotion work remains in evidence/plan history and is not a current blocker.
 
 **Goal:** Close remaining Product Truth and owner/privacy gaps after the Astro 7 / Cloudflare Workers foundation without inventing email, legal, product, proof or photography facts.
 
 ## Canonical source of truth
 
-- Spec: `docs/superpowers/specs/2026-09-03-blueskyz-web-v1-c1-1-design.md`
-- Implementation plan: `docs/superpowers/plans/2026-09-04-blueskyz-web-v1-c1-1-implementation.md`
-- ADR 0004: `ASTRO_7` → Cloudflare Workers Static Assets
-- ADR 0005: GitHub Source Assurance + Cloudflare deployment dual control
-- Historical hardening execution: `docs/superpowers/plans/2026-09-07-global-elite-hardening-implementation.md`
-- Hardening evidence: `docs/evidence/2026-09-07-global-elite-hardening.md`
+- Experience spec: `docs/superpowers/specs/2026-09-03-blueskyz-web-v1-c1-1-design.md` — substantive design remains authoritative; pre-implementation status text is historical.
+- Historical implementation plan: `docs/superpowers/plans/2026-09-04-blueskyz-web-v1-c1-1-implementation.md`.
+- ADR 0004: `ASTRO_7` → Cloudflare Workers Static Assets.
+- ADR 0005: GitHub Source Assurance + Cloudflare deployment dual control. Historical pre-ruleset wording is superseded by provider read-back.
+- ADR 0006: canonical organizational origin `https://blueskyzlabs.com`; `tonydemo.com` is retired/transition history, not valid production identity.
+- ADR 0007: SGPS-native canonical architecture model at `architecture/sgps-model.json`; all views are derived.
+- Historical hardening execution: `docs/superpowers/plans/2026-09-07-global-elite-hardening-implementation.md`.
+- Hardening evidence: `docs/evidence/2026-09-07-global-elite-hardening.md`.
 
 ## Current verified baseline
 
-| Area                               | Current state                                                                                                            |
-| ---------------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
-| Astro 7 static architecture        | VERIFIED; ADR 0004 remains authoritative                                                                                 |
-| Public product registry            | Intentionally empty until proof-backed owner facts exist                                                                 |
-| Brand provenance                   | Approved BlueSkyz Production Brand Kit v4 assets/tokens are landed with provenance evidence                              |
-| Cloudflare Workers Builds          | VERIFIED deployment authority; GitHub Actions remains source-assurance only                                              |
-| GitHub Source Assurance            | VERIFIED exact-head `Quality Gates` + `Browser Assurance`                                                                |
-| `main` governance                  | ENFORCED by active ruleset `main-promotion-governance` (`22500299`)                                                      |
-| Supply chain                       | Fail-closed pnpm 11.25.0 policy, lifecycle allowlist, dependency audit and pinned tooling                                |
-| Deployment CLI                     | Project-local `wrangler@4.127.1`; provider commands verified as `pnpm wrangler versions upload` / `pnpm wrangler deploy` |
-| Worker public routing              | `workers_dev = false`, `preview_urls = false`; custom-domain path remains canonical                                      |
-| Worker observability               | Persisted invocation logs enabled; query strings are required to be redacted by architecture contract                    |
-| Temporary production identity      | `tonydemo.com` remains the owner-approved temporary site identity                                                        |
-| Production contact/security emails | **EXTERNAL / OWNER INPUT REQUIRED**; public-truth gate must not be faked                                                 |
-| Field RUM                          | Design exists; production enablement remains an explicit privacy/owner decision                                          |
+| Area                               | Current state                                                                                                                                          |
+| ---------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Astro 7 static architecture        | VERIFIED; ADR 0004 remains authoritative                                                                                                               |
+| SGPS:Experience                    | FULL design contract adopted; runtime/browser gates exist; historical pre-implementation status text is superseded by promoted implementation evidence |
+| SGPS:Architecture                  | Canonical model + deterministic derived views are required by ADR 0007 and architecture contracts                                                      |
+| Canonical organizational identity  | `https://blueskyzlabs.com` per ADR 0006; retired `tonydemo.com` hosts must fail production truth validation                                            |
+| Public product registry            | Intentionally empty until proof-backed owner facts exist                                                                                               |
+| Brand provenance                   | Approved BlueSkyz Production Brand Kit v4 assets/tokens are landed with provenance evidence                                                            |
+| Cloudflare Workers Builds          | VERIFIED deployment authority; GitHub Actions remains source-assurance only                                                                            |
+| GitHub Source Assurance            | VERIFIED exact-head `Quality Gates` + `Browser Assurance`                                                                                              |
+| `main` governance                  | ENFORCED by active ruleset `main-promotion-governance` (`22500299`)                                                                                    |
+| Supply chain                       | Fail-closed pnpm 11.25.0 policy, lifecycle allowlist, Moderate+ dependency audit and pinned tooling                                                    |
+| Deployment CLI                     | Project-local `wrangler@4.127.1`; provider commands use project-local Wrangler                                                                         |
+| Worker public routing              | `workers_dev = false`, `preview_urls = false`; custom-domain path remains canonical                                                                    |
+| Worker observability               | Persisted invocation logs enabled; query strings redacted by architecture contract                                                                     |
+| Production contact/security emails | **EXTERNAL / OWNER INPUT REQUIRED**; public-truth gate must not be faked                                                                               |
+| Field RUM                          | Design exists; production enablement remains an explicit privacy/owner decision                                                                        |
 
-Canonical production build recipe includes `pnpm build`, `pnpm check:client-budget`, and `pnpm check:static-links`.
+Canonical source build recipe includes frozen install, dependency audit, `pnpm test:architecture`, `pnpm build`, `pnpm check:client-budget`, and `pnpm check:static-links`. Browser Assurance adds Playwright/axe and Lighthouse.
 
 ---
 
@@ -46,14 +50,14 @@ State: **EXTERNAL / OWNER INPUT REQUIRED**
 - [ ] After both facts exist, add `pnpm validate:public-truth` to the production promotion command/config.
 - [ ] Verify the production truth gate and resulting public contact/security paths without placeholders.
 
-**Safety invariant:** missing facts remain missing; no invented address may be used to obtain a green build.
+**Safety invariant:** missing facts remain missing; no invented address may be used to obtain a green build. Canonical site identity itself is no longer owner-unknown: ADR 0006 fixes it at `https://blueskyzlabs.com`.
 
 ### Task 2 — Public product promotion
 
 State: **EXTERNAL / OWNER INPUT REQUIRED**
 
 - [ ] Obtain owner-confirmed product facts, lifecycle state, proof artifacts and trust paths.
-- [ ] Promote YAML entries with `public: true` only after schema, proof and public-truth gates pass.
+- [ ] Promote entries with `public: true` only after schema, proof and public-truth gates pass.
 
 **Safety invariant:** the empty public registry is a truthful state, not a defect to bypass.
 
@@ -100,6 +104,7 @@ State: **FUTURE / PRODUCT-DIRECTION DEPENDENT**
 - Worker `workers.dev` and preview routes are disabled; observability configuration is persisted in `wrangler.toml` and protected by architecture tests.
 - Package-manager supply-chain policy and dependency lifecycle scripts fail closed.
 - Public product and missing-email paths fail honestly instead of fabricating content/CTAs.
+- SGPS architecture model integrity and derived-view freshness are automated contracts; `DIAGRAM ≠ ARCHITECTURE TRUTH`.
 
 ## Residual external/manual state
 
@@ -109,4 +114,4 @@ State: **FUTURE / PRODUCT-DIRECTION DEPENDENT**
 4. Production RUM — **JUSTIFIED PRIVACY EXCEPTION / OWNER DECISION** until purpose/provider/retention/privacy treatment exists.
 5. Optional `/so-tro` GTM scope — **FUTURE / PRODUCT-DIRECTION DEPENDENT**.
 
-Everything else previously listed as a provider/governance blocker (main ruleset, repository metadata and Cloudflare Wrangler command normalization) is resolved and must not be reported as outstanding without new contrary evidence.
+Resolved provider/governance/domain decisions must not be reported as outstanding without new contrary evidence. Unknown or stale provider/runtime state is not PASS and must be re-read before future promotion work.

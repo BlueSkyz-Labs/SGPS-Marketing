@@ -62,6 +62,30 @@ The local Lighthouse SEO reduction caused by intentional localhost/preview `noin
 
 **Post-merge read-back:** PR #75 merged through the protected PR path on 2026-09-08 as `main@b050cb9fd216f5b0bb305cde51a731faf0d95c96`. That merge SHA independently completed `Quality Gates` successfully (check `102134804565`), `Browser Assurance` successfully (check `102135040015`), and `Workers Builds: blueskyz-web` successfully (check `102135197945`, Cloudflare build `e4a087cc-7f31-41ee-b0fb-ad0ffdb04320`, version `7d47b3ae-7e8e-48d9-8024-c389e115c332`). Repository read-back showed zero open pull requests and zero open issues after the merge.
 
+### P1 — canonical production identity drift after ADR 0006
+
+**Detected 2026-09-09:** ADR 0006 had already selected `https://blueskyzlabs.com` as the canonical organizational origin, but `src/lib/truth.ts` still exempted `tonydemo.com`, `www.tonydemo.com`, and `blueskyz.tonydemo.com` from non-production classification. Current SoT therefore conflicted with the newer accepted domain decision.
+
+**Remediated in PR #77:** removed the temporary-host exemption and made the production truth gate accept only the exact canonical BlueSkyz origin while continuing to reject local, preview, documentation, staging, alternate-port, path, query, and retired `tonydemo.com` identities. `.env.example`, `AGENTS.md`, and the active residual plan were reconciled to ADR 0006 without rewriting historical evidence.
+
+**TDD evidence:** the test-only candidate first failed exactly on retired `tonydemo.com` acceptance and the missing SGPS architecture model. After implementation, the canonical-origin assertions pass in Architecture contracts.
+
+### P1 — new Wrangler/Miniflare transitive `sharp` advisory
+
+**Detected 2026-09-09:** a fresh `pnpm audit --audit-level=moderate` failed High because `wrangler@4.127.1 → miniflare` resolved `sharp@0.35.2`, below the patched `0.35.4` floor.
+
+**Remediated in PR #77:** added the narrow workspace override `sharp: 0.35.4` and regenerated the lockfile with lifecycle scripts disabled. The repository already used the patched Sharp line through other tooling, so the change avoided an unnecessary Wrangler upgrade.
+
+**Verified before final promotion:** clean frozen install accepts the regenerated lockfile and `pnpm audit --audit-level=moderate` reports no known vulnerabilities. Final exact-head promotion checks remain governed by the normal PR ruleset rather than by the temporary lockfile/formatting helpers.
+
+### P2 — missing SGPS-native canonical architecture model
+
+**Detected 2026-09-09:** architecture truth existed across ADRs/config/code but there was no SGPS-native machine-readable canonical model. This left portfolio/system topology, ownership, trust boundaries, data-resource classification, deployment, and external dependencies without a single deterministic architecture source.
+
+**Remediated in PR #77:** ADR 0007 adopts `architecture/sgps-model.json` as canonical architecture truth with stable IDs, immutable Git evidence references, graph-valid relationships, explicit N/A backend surface, and the invariant `VIEW_IS_DERIVED_NOT_ARCHITECTURE_TRUTH`. `scripts/generate-architecture-views.mjs` derives deterministic portfolio, context, component, dependency, data-flow, deployment, security/trust, and ownership views. Architecture tests fail closed on duplicate IDs, unknown parents/endpoints, parent cycles, invalid relation types, stale derived views, or fabricated API/Event entities.
+
+**Factory learning:** a first deterministic-view implementation exposed a formatter/generator representation mismatch. The generator now formats generated JSON through the project-pinned Prettier implementation, so the derived-view freshness gate and repository format gate share one canonical representation instead of fighting each other.
+
 ### P2 — governance / documentation drift
 
 **Detected:** README/residual plans/evidence accumulated stale descriptions of pnpm, Source Assurance, unresolved ruleset state, Cloudflare command normalization and pre-/post-merge status.
@@ -110,3 +134,5 @@ Applicable attack/privacy paths include dependency/lifecycle compromise, mutable
 ## Current promotion rule
 
 PR #68 and PR #75 are already merged; their former pre-merge rules are satisfied and superseded. Any future work must independently meet the active `main` ruleset: current exact-head `Quality Gates` and `Browser Assurance` must pass, provider deployment evidence must be green where applicable, material review findings must be resolved, and no actionable P0/P1 may remain. Direct-to-`main` is not an acceptable fallback.
+
+For PR #77 and later promotions, bot-pushed helper commits are not accepted as final source-assurance evidence; promotion evidence must bind the settled exact head that actually received the required Source Assurance checks.

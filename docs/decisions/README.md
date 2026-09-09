@@ -12,3 +12,4 @@ Each file: `NNNN-short-slug.md` — chronological, never edited, only added.
 | 0004 | 2026-09-04 | BlueSkyz Web V1 framework selection         | Accepted   |
 | 0005 | 2026-09-07 | Dual-control source assurance               | Accepted   |
 | 0006 | 2026-09-08 | BlueSkyz Labs domain and product subdomains | Accepted   |
+| 0007 | 2026-09-09 | SGPS-native canonical architecture model    | Accepted   |

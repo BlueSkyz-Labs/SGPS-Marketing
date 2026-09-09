@@ -23,8 +23,8 @@ test("public truth gate rejects documentation and preview hosts", () => {
   for (const siteUrl of cases) {
     const errors = validatePublicTruth({
       siteUrl,
-      contactEmail: "owner@blueskyz.example",
-      securityEmail: "security@blueskyz.example",
+      contactEmail: "owner@blueskyzlabs.com",
+      securityEmail: "security@blueskyzlabs.com",
     });
     assert.ok(
       errors.some((e) => e.includes("PUBLIC_SITE_URL")),
@@ -35,7 +35,7 @@ test("public truth gate rejects documentation and preview hosts", () => {
 
 test("public truth gate rejects placeholder emails", () => {
   const errors = validatePublicTruth({
-    siteUrl: "https://blueskyz.labs",
+    siteUrl: "https://blueskyzlabs.com",
     contactEmail: "@",
     securityEmail: "not-an-email",
   });
@@ -43,7 +43,7 @@ test("public truth gate rejects placeholder emails", () => {
   assert.ok(errors.some((e) => e.includes("PUBLIC_SECURITY_EMAIL")));
 });
 
-test("isNonProductionSiteUrl covers local, workers.dev, and example hosts", () => {
+test("isNonProductionSiteUrl covers local, workers.dev, example, and retired temporary hosts", () => {
   assert.equal(isNonProductionSiteUrl("http://localhost:4321"), true);
   assert.equal(isNonProductionSiteUrl("https://127.0.0.1"), true);
   assert.equal(isNonProductionSiteUrl("https://[::1]/"), true);
@@ -55,15 +55,17 @@ test("isNonProductionSiteUrl covers local, workers.dev, and example hosts", () =
     ),
     true,
   );
-  assert.equal(isNonProductionSiteUrl("https://blueskyz.labs"), false);
+  assert.equal(isNonProductionSiteUrl("https://tonydemo.com/"), true);
+  assert.equal(isNonProductionSiteUrl("https://www.tonydemo.com/"), true);
+  assert.equal(isNonProductionSiteUrl("https://blueskyz.tonydemo.com/"), true);
 });
 
 test("public truth gate rejects IPv6 loopback and .example TLD", () => {
   for (const siteUrl of ["https://[::1]", "https://docs.example"]) {
     const errors = validatePublicTruth({
       siteUrl,
-      contactEmail: "owner@blueskyz.labs",
-      securityEmail: "security@blueskyz.labs",
+      contactEmail: "owner@blueskyzlabs.com",
+      securityEmail: "security@blueskyzlabs.com",
     });
     assert.ok(
       errors.some((e) => e.includes("PUBLIC_SITE_URL")),
@@ -88,27 +90,38 @@ test("isNonProductionSiteUrl rejects pages.dev, tonydemo staging, and trailing-d
   assert.equal(isNonProductionSiteUrl("https://portfolio.tonydemo.com/"), true);
   assert.equal(isNonProductionSiteUrl("https://demo.workers.dev./"), true);
   assert.equal(isNonProductionSiteUrl("https://example.com./"), true);
-  assert.equal(isNonProductionSiteUrl("https://blueskyz.labs"), false);
 });
 
-test("isNonProductionSiteUrl allows owner temporary tonydemo site hosts only", () => {
-  assert.equal(isNonProductionSiteUrl("https://tonydemo.com/"), false);
-  assert.equal(isNonProductionSiteUrl("https://www.tonydemo.com/"), false);
-  assert.equal(isNonProductionSiteUrl("https://blueskyz.tonydemo.com/"), false);
-  assert.equal(isNonProductionSiteUrl("https://tonydemo.com./"), false);
-  // Product/staging hosts on the same zone stay non-production for claims.
-  assert.equal(isNonProductionSiteUrl("https://sotro.tonydemo.com/"), true);
-  assert.equal(isNonProductionSiteUrl("https://dashboard.tonydemo.com/"), true);
-});
+test("public truth gate accepts only the exact canonical BlueSkyz organizational origin", () => {
+  const validEmails = {
+    contactEmail: "owner@blueskyzlabs.com",
+    securityEmail: "security@blueskyzlabs.com",
+  };
 
-test("public truth gate accepts temporary tonydemo site URL but still requires emails", () => {
-  const errors = validatePublicTruth({
-    siteUrl: "https://tonydemo.com",
+  const canonicalErrors = validatePublicTruth({
+    siteUrl: "https://blueskyzlabs.com",
+    ...validEmails,
   });
   assert.equal(
-    errors.some((e) => e.includes("PUBLIC_SITE_URL")),
+    canonicalErrors.some((e) => e.includes("PUBLIC_SITE_URL")),
     false,
   );
-  assert.ok(errors.some((e) => e.includes("PUBLIC_CONTACT_EMAIL")));
-  assert.ok(errors.some((e) => e.includes("PUBLIC_SECURITY_EMAIL")));
+
+  for (const siteUrl of [
+    "https://tonydemo.com",
+    "https://www.tonydemo.com",
+    "https://blueskyz.tonydemo.com",
+    "https://www.blueskyzlabs.com",
+    "https://blueskyzlabs.com.",
+    "https://blueskyzlabs.com/products/",
+    "https://blueskyzlabs.com/?preview=1",
+    "https://blueskyzlabs.com:8443/",
+    "https://blueskyz.labs",
+  ]) {
+    const errors = validatePublicTruth({ siteUrl, ...validEmails });
+    assert.ok(
+      errors.some((e) => e.includes("PUBLIC_SITE_URL")),
+      `expected canonical-origin rejection for ${siteUrl}`,
+    );
+  }
 });
