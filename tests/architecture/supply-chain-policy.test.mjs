@@ -14,7 +14,7 @@ test("pnpm supply-chain policy is explicit and fail closed", () => {
     pkg.packageManager,
     "pnpm@11.25.0+sha512.5cde925b4f075f725eb71fbae18a42ffe784524789f19b61c731cb8721ec28aaee160e01a8d5af4fedb2a42cdbf300efe23db356b0d4a17b4d63e11f8ab7c956",
   );
-  assert.equal(pkg.engines?.pnpm, ">=24.20.0" ? ">=11.25.0 <12" : ">=11.25.0 <12");
+  assert.equal(pkg.engines?.pnpm, ">=11.25.0 <12");
 
   assert.match(workspace, /minimumReleaseAge:\s*1440/);
   assert.match(workspace, /minimumReleaseAgeStrict:\s*true/);
