@@ -15,6 +15,8 @@ Trusted current source of truth only:
 | Derived architecture views         | `architecture/derived-views.json` — `VIEW_IS_DERIVED_NOT_ARCHITECTURE_TRUTH`                                                                                    |
 | Decisions index                    | `docs/decisions/README.md`                                                                                                                                      |
 
+Latest immutable post-merge convergence evidence: `docs/evidence/2026-09-09-pr77-post-merge.md`.
+
 ## Hard rules
 
 - Do **not** invent corporate emails, legal prose, product claims, screenshots, photography, or owner/product facts.
