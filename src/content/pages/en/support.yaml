@@ -1,0 +1,9 @@
+lang: en
+slug: support
+title: Support
+description: Get help with BlueSkyz Labs products and services.
+sections:
+  hero:
+    heading: Support
+  intro: Product-specific support links are available on each product page.
+  corporate_note: For corporate support inquiries, please use the contact form.

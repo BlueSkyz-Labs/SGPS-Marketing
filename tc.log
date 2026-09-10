@@ -1,0 +1,190 @@
+[WARN] Unsupported engine: wanted: {"node":">=24.20.0"} (current: {"node":"v24.17.0","pnpm":"11.25.0"})
+$ astro check
+[2m11:42:24[22m [34m[vite][39m Re-optimizing dependencies because vite config has changed
+[2m11:42:26[22m [34m[content][39m Syncing content
+[33m[1m11:42:26[22m [WARN] [glob-loader][39m No files found matching "**/*.{yaml,yml,json}" in directory "src\content\products"
+[33m[1m11:42:26[22m [WARN] [glob-loader][39m **pages** contains multiple entries with the same slug: `contact`. Slugs must be unique.
+
+Entries: 
+- src/content/pages/vi/contact.yaml
+- src/content/pages/en/contact.yaml
+[33m[1m11:42:26[22m [WARN] [glob-loader][39m **pages** contains multiple entries with the same slug: `about`. Slugs must be unique.
+
+Entries: 
+- src/content/pages/vi/about.yaml
+- src/content/pages/en/about.yaml
+[33m[1m11:42:26[22m [WARN] [glob-loader][39m **pages** contains multiple entries with the same slug: `privacy`. Slugs must be unique.
+
+Entries: 
+- src/content/pages/vi/privacy.yaml
+- src/content/pages/en/privacy.yaml
+[33m[1m11:42:26[22m [WARN] [glob-loader][39m **pages** contains multiple entries with the same slug: `security`. Slugs must be unique.
+
+Entries: 
+- src/content/pages/vi/security.yaml
+- src/content/pages/en/security.yaml
+[33m[1m11:42:26[22m [WARN] [glob-loader][39m **pages** contains multiple entries with the same slug: `landing`. Slugs must be unique.
+
+Entries: 
+- src/content/pages/vi/landing.yaml
+- src/content/pages/en/landing.yaml
+[33m[1m11:42:26[22m [WARN] [glob-loader][39m **pages** contains multiple entries with the same slug: `support`. Slugs must be unique.
+
+Entries: 
+- src/content/pages/vi/support.yaml
+- src/content/pages/en/support.yaml
+[33m[1m11:42:26[22m [WARN] [glob-loader][39m **pages** contains multiple entries with the same slug: `about`. Slugs must be unique.
+
+Entries: 
+- src/content/pages/en/about.yaml
+- src/content/pages/vi/about.yaml
+[33m[1m11:42:26[22m [WARN] [glob-loader][39m **pages** contains multiple entries with the same slug: `landing`. Slugs must be unique.
+
+Entries: 
+- src/content/pages/en/landing.yaml
+- src/content/pages/vi/landing.yaml
+[33m[1m11:42:26[22m [WARN] [glob-loader][39m **pages** contains multiple entries with the same slug: `contact`. Slugs must be unique.
+
+Entries: 
+- src/content/pages/en/contact.yaml
+- src/content/pages/vi/contact.yaml
+[33m[1m11:42:26[22m [WARN] [glob-loader][39m **pages** contains multiple entries with the same slug: `privacy`. Slugs must be unique.
+
+Entries: 
+- src/content/pages/en/privacy.yaml
+- src/content/pages/vi/privacy.yaml
+[33m[1m11:42:26[22m [WARN] [glob-loader][39m **pages** contains multiple entries with the same slug: `security`. Slugs must be unique.
+
+Entries: 
+- src/content/pages/en/security.yaml
+- src/content/pages/vi/security.yaml
+[33m[1m11:42:26[22m [WARN] [glob-loader][39m **pages** contains multiple entries with the same slug: `support`. Slugs must be unique.
+
+Entries: 
+- src/content/pages/en/support.yaml
+- src/content/pages/vi/support.yaml
+[2m11:42:26[22m [34m[content][39m Synced content
+[2m11:42:26[22m [34m[types][39m Generated [2m1.43s[22m
+[2m11:42:26[22m [34m[check][39m Getting diagnostics for Astro files in C:\00. AI Project\SGPS-Marketing...
+[96msrc/pages/en/about.astro[0m:[93m6[0m:[93m26[0m - [91merror[0m[90m ts(7006): [0mParameter 'p' implicitly has an 'any' type.
+
+[7m6[0m const page = pages.find((p) => p.data.slug === "about");
+[7m [0m [91m                         ~[0m
+[96msrc/pages/en/about.astro[0m:[93m5[0m:[93m47[0m - [91merror[0m[90m ts(7031): [0mBinding element 'data' implicitly has an 'any' type.
+
+[7m5[0m const pages = await getCollection("pages", ({ data }) => data.lang === "en");
+[7m [0m [91m                                              ~~~~[0m
+
+[96msrc/pages/en/contact.astro[0m:[93m6[0m:[93m26[0m - [91merror[0m[90m ts(7006): [0mParameter 'p' implicitly has an 'any' type.
+
+[7m6[0m const page = pages.find((p) => p.data.slug === "contact");
+[7m [0m [91m                         ~[0m
+[96msrc/pages/en/contact.astro[0m:[93m5[0m:[93m47[0m - [91merror[0m[90m ts(7031): [0mBinding element 'data' implicitly has an 'any' type.
+
+[7m5[0m const pages = await getCollection("pages", ({ data }) => data.lang === "en");
+[7m [0m [91m                                              ~~~~[0m
+
+[96msrc/pages/en/index.astro[0m:[93m7[0m:[93m29[0m - [91merror[0m[90m ts(7006): [0mParameter 'p' implicitly has an 'any' type.
+
+[7m7[0m const landing = pages.find((p) => p.data.slug === "landing");
+[7m [0m [91m                            ~[0m
+[96msrc/pages/en/index.astro[0m:[93m6[0m:[93m47[0m - [91merror[0m[90m ts(7031): [0mBinding element 'data' implicitly has an 'any' type.
+
+[7m6[0m const pages = await getCollection("pages", ({ data }) => data.lang === "en");
+[7m [0m [91m                                              ~~~~[0m
+[96msrc/pages/en/index.astro[0m:[93m4[0m:[93m1[0m - [93mwarning[0m[90m ts(6133): [0m'SITE' is declared but its value is never read.
+
+[7m4[0m import { SITE } from "@/data/site";
+[7m [0m [93m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+[96msrc/pages/en/privacy.astro[0m:[93m6[0m:[93m26[0m - [91merror[0m[90m ts(7006): [0mParameter 'p' implicitly has an 'any' type.
+
+[7m6[0m const page = pages.find((p) => p.data.slug === "privacy");
+[7m [0m [91m                         ~[0m
+[96msrc/pages/en/privacy.astro[0m:[93m5[0m:[93m47[0m - [91merror[0m[90m ts(7031): [0mBinding element 'data' implicitly has an 'any' type.
+
+[7m5[0m const pages = await getCollection("pages", ({ data }) => data.lang === "en");
+[7m [0m [91m                                              ~~~~[0m
+
+[96msrc/pages/en/security.astro[0m:[93m6[0m:[93m26[0m - [91merror[0m[90m ts(7006): [0mParameter 'p' implicitly has an 'any' type.
+
+[7m6[0m const page = pages.find((p) => p.data.slug === "security");
+[7m [0m [91m                         ~[0m
+[96msrc/pages/en/security.astro[0m:[93m5[0m:[93m47[0m - [91merror[0m[90m ts(7031): [0mBinding element 'data' implicitly has an 'any' type.
+
+[7m5[0m const pages = await getCollection("pages", ({ data }) => data.lang === "en");
+[7m [0m [91m                                              ~~~~[0m
+
+[96msrc/pages/en/support.astro[0m:[93m6[0m:[93m26[0m - [91merror[0m[90m ts(7006): [0mParameter 'p' implicitly has an 'any' type.
+
+[7m6[0m const page = pages.find((p) => p.data.slug === "support");
+[7m [0m [91m                         ~[0m
+[96msrc/pages/en/support.astro[0m:[93m5[0m:[93m47[0m - [91merror[0m[90m ts(7031): [0mBinding element 'data' implicitly has an 'any' type.
+
+[7m5[0m const pages = await getCollection("pages", ({ data }) => data.lang === "en");
+[7m [0m [91m                                              ~~~~[0m
+
+[96msrc/pages/vi/about.astro[0m:[93m6[0m:[93m26[0m - [91merror[0m[90m ts(7006): [0mParameter 'p' implicitly has an 'any' type.
+
+[7m6[0m const page = pages.find((p) => p.data.slug === "about");
+[7m [0m [91m                         ~[0m
+[96msrc/pages/vi/about.astro[0m:[93m5[0m:[93m47[0m - [91merror[0m[90m ts(7031): [0mBinding element 'data' implicitly has an 'any' type.
+
+[7m5[0m const pages = await getCollection("pages", ({ data }) => data.lang === "vi");
+[7m [0m [91m                                              ~~~~[0m
+
+[96msrc/pages/vi/contact.astro[0m:[93m6[0m:[93m26[0m - [91merror[0m[90m ts(7006): [0mParameter 'p' implicitly has an 'any' type.
+
+[7m6[0m const page = pages.find((p) => p.data.slug === "contact");
+[7m [0m [91m                         ~[0m
+[96msrc/pages/vi/contact.astro[0m:[93m5[0m:[93m47[0m - [91merror[0m[90m ts(7031): [0mBinding element 'data' implicitly has an 'any' type.
+
+[7m5[0m const pages = await getCollection("pages", ({ data }) => data.lang === "vi");
+[7m [0m [91m                                              ~~~~[0m
+
+[96msrc/pages/vi/index.astro[0m:[93m7[0m:[93m29[0m - [91merror[0m[90m ts(7006): [0mParameter 'p' implicitly has an 'any' type.
+
+[7m7[0m const landing = pages.find((p) => p.data.slug === "landing");
+[7m [0m [91m                            ~[0m
+[96msrc/pages/vi/index.astro[0m:[93m6[0m:[93m47[0m - [91merror[0m[90m ts(7031): [0mBinding element 'data' implicitly has an 'any' type.
+
+[7m6[0m const pages = await getCollection("pages", ({ data }) => data.lang === "vi");
+[7m [0m [91m                                              ~~~~[0m
+[96msrc/pages/vi/index.astro[0m:[93m4[0m:[93m1[0m - [93mwarning[0m[90m ts(6133): [0m'SITE' is declared but its value is never read.
+
+[7m4[0m import { SITE } from "@/data/site";
+[7m [0m [93m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+[96msrc/pages/vi/privacy.astro[0m:[93m6[0m:[93m26[0m - [91merror[0m[90m ts(7006): [0mParameter 'p' implicitly has an 'any' type.
+
+[7m6[0m const page = pages.find((p) => p.data.slug === "privacy");
+[7m [0m [91m                         ~[0m
+[96msrc/pages/vi/privacy.astro[0m:[93m5[0m:[93m47[0m - [91merror[0m[90m ts(7031): [0mBinding element 'data' implicitly has an 'any' type.
+
+[7m5[0m const pages = await getCollection("pages", ({ data }) => data.lang === "vi");
+[7m [0m [91m                                              ~~~~[0m
+
+[96msrc/pages/vi/security.astro[0m:[93m6[0m:[93m26[0m - [91merror[0m[90m ts(7006): [0mParameter 'p' implicitly has an 'any' type.
+
+[7m6[0m const page = pages.find((p) => p.data.slug === "security");
+[7m [0m [91m                         ~[0m
+[96msrc/pages/vi/security.astro[0m:[93m5[0m:[93m47[0m - [91merror[0m[90m ts(7031): [0mBinding element 'data' implicitly has an 'any' type.
+
+[7m5[0m const pages = await getCollection("pages", ({ data }) => data.lang === "vi");
+[7m [0m [91m                                              ~~~~[0m
+
+[96msrc/pages/vi/support.astro[0m:[93m6[0m:[93m26[0m - [91merror[0m[90m ts(7006): [0mParameter 'p' implicitly has an 'any' type.
+
+[7m6[0m const page = pages.find((p) => p.data.slug === "support");
+[7m [0m [91m                         ~[0m
+[96msrc/pages/vi/support.astro[0m:[93m5[0m:[93m47[0m - [91merror[0m[90m ts(7031): [0mBinding element 'data' implicitly has an 'any' type.
+
+[7m5[0m const pages = await getCollection("pages", ({ data }) => data.lang === "vi");
+[7m [0m [91m                                              ~~~~[0m
+
+Result (52 files): 
+- 24 errors
+- 0 warnings
+- 2 hints
+
+[ELIFECYCLE] Command failed with exit code 1.

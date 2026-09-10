@@ -1,0 +1,45 @@
+---
+import {
+  SUPPORTED_LANGUAGES,
+  LANGUAGES,
+  getAlternatePath,
+  getLanguageFromPath,
+} from "@/lib/i18n";
+
+interface Props {
+  variant?: "light" | "dark";
+}
+
+const { variant = "light" } = Astro.props;
+const currentPath = Astro.url.pathname;
+const currentLang = getLanguageFromPath(currentPath);
+---
+
+<div class="flex items-center gap-1" role="navigation" aria-label="Language">
+  {
+    SUPPORTED_LANGUAGES.map((lang) => {
+      const isActive = currentLang === lang;
+      const activeClasses =
+        variant === "dark"
+          ? "text-[var(--brand-porcelain)] bg-white/10"
+          : "text-[var(--text-primary)] bg-[var(--surface-subtle)]";
+      const idleClasses =
+        variant === "dark"
+          ? "text-[color-mix(in_srgb,var(--brand-porcelain)_82%,white)] hover:text-white"
+          : "text-[var(--text-secondary)] hover:text-[var(--text-primary)]";
+      return (
+        <a
+          href={getAlternatePath(currentPath, lang)}
+          hreflang={LANGUAGES[lang].hreflang}
+          aria-current={isActive ? "page" : undefined}
+          class:list={[
+            "inline-flex min-h-11 items-center px-3 text-sm font-medium no-underline rounded-md transition-colors",
+            isActive ? activeClasses : idleClasses,
+          ]}
+        >
+          {LANGUAGES[lang].label}
+        </a>
+      );
+    })
+  }
+</div>

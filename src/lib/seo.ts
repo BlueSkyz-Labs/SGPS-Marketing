@@ -1,3 +1,5 @@
+import { SUPPORTED_LANGUAGES, LANGUAGES, getAlternatePath } from "./i18n.ts";
+
 export function absoluteUrl(base: string, path: string): string {
   return new URL(path, base.endsWith("/") ? base : `${base}/`).toString();
 }
@@ -39,12 +41,31 @@ export function canonicalForPath(path: string, siteUrl: string): string {
   return absoluteUrl(siteUrl, normalized);
 }
 
+export interface HreflangLink {
+  hreflang: string;
+  href: string;
+}
+
+export function hreflangLinks(path: string, siteUrl: string): HreflangLink[] {
+  return SUPPORTED_LANGUAGES.map((lang) => ({
+    hreflang: LANGUAGES[lang].hreflang,
+    href: canonicalForPath(getAlternatePath(path, lang), siteUrl),
+  }));
+}
+
 export const PUBLIC_STATIC_PATHS = [
-  "/",
-  "/products/",
-  "/about/",
-  "/contact/",
-  "/support/",
-  "/privacy/",
-  "/security/",
+  "/en/",
+  "/en/products/",
+  "/en/about/",
+  "/en/contact/",
+  "/en/support/",
+  "/en/privacy/",
+  "/en/security/",
+  "/vi/",
+  "/vi/products/",
+  "/vi/about/",
+  "/vi/contact/",
+  "/vi/support/",
+  "/vi/privacy/",
+  "/vi/security/",
 ] as const;

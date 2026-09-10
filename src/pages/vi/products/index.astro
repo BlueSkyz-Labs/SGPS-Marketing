@@ -1,0 +1,57 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Container from "@/components/layout/Container.astro";
+import ProductCard from "@/components/product/ProductCard.astro";
+import ButtonLink from "@/components/ui/ButtonLink.astro";
+import { SITE } from "@/data/site";
+import { emptyRegistryPrimaryCta, emptyRegistrySecondaryCta } from "@/lib/act";
+import { getPublicProducts } from "@/lib/products";
+
+const products = await getPublicProducts();
+const emptyPrimary = emptyRegistryPrimaryCta(SITE.contactEmail);
+const emptySecondary = emptyRegistrySecondaryCta(SITE.contactEmail);
+const emptyDescription = products.length
+  ? "Khám phá sản phẩm BlueSkyz Labs với trạng thái và bằng chứng trung thực."
+  : "BlueSkyz Labs chưa công bố sản phẩm công khai nào. Danh sách xuất hiện khi sản phẩm sẵn sàng đánh giá.";
+---
+
+<BaseLayout
+  title="Sản phẩm"
+  description={emptyDescription}
+  path="/vi/products/"
+>
+  <section class="py-16">
+    <Container>
+      <h1 class="text-3xl font-semibold tracking-tight">Sản phẩm</h1>
+      <p class="mt-4 max-w-2xl text-[var(--text-secondary)]">
+        Sản phẩm xuất hiện ở đây khi chúng sẵn sàng đánh giá. Chúng tôi chỉ công
+        bố những gì bạn có thể xác minh.
+      </p>
+      {
+        products.length === 0 ? (
+          <div class="mt-8 max-w-2xl border-y border-[var(--border-subtle)] py-6">
+            <p class="text-[var(--text-secondary)]">
+              Chưa có sản phẩm công khai nào được công bố. Khi một sản phẩm sẵn
+              sàng đánh giá, nó sẽ xuất hiện ở đây với trạng thái và bằng chứng
+              rõ ràng.
+            </p>
+            <div class="mt-6 flex flex-wrap gap-3">
+              <ButtonLink href={emptyPrimary.href}>
+                {emptyPrimary.label}
+              </ButtonLink>
+              <ButtonLink href={emptySecondary.href} variant="secondary">
+                {emptySecondary.label}
+              </ButtonLink>
+            </div>
+          </div>
+        ) : (
+          <div class="mt-8 grid gap-4 md:grid-cols-2">
+            {products.map((product) => (
+              <ProductCard product={product} />
+            ))}
+          </div>
+        )
+      }
+    </Container>
+  </section>
+</BaseLayout>

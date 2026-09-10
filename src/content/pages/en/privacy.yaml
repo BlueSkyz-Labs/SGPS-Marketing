@@ -1,0 +1,17 @@
+lang: en
+slug: privacy
+title: Privacy
+description: BlueSkyz Labs privacy policy for corporate website data practices.
+sections:
+  hero:
+    heading: Privacy
+  intro: This page documents BlueSkyz Labs corporate website data practices.
+  collection:
+    heading: What we collect
+    content: We collect minimal data necessary to operate this website and improve visitor experience. We do not sell personal data to third parties.
+  usage:
+    heading: How we use data
+    content: Data is used solely for website operation, security, and aggregate analytics. We use privacy-conscious first-party analytics.
+  contact:
+    heading: Contact
+    content: For privacy inquiries, please contact us through the security reporting path.

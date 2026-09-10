@@ -1,0 +1,17 @@
+lang: vi
+slug: security
+title: Bảo mật
+description: Chính sách báo cáo bảo mật và công bố lỗ hổng của BlueSkyz Labs.
+sections:
+  hero:
+    heading: Bảo mật
+  intro: Chúng tôi xem trọng bảo mật và hoan nghênh việc công bố có trách nhiệm.
+  reporting:
+    heading: Cách báo cáo
+    content: Vui lòng sử dụng tính năng báo cáo lỗ hổng riêng tư của GitHub để gửi các vấn đề bảo mật.
+    cta: Mở GitHub Advisory
+    href: https://github.com/BlueSkyz-Labs/SGPS-Marketing/security/advisories/new
+  disclosure:
+    heading: Chính sách công bố
+    content: Chúng tôi tuân theo các thực hành công bố có trách nhiệm. Vui lòng cho thời gian hợp lý để khắc phục trước khi công bố công khai.
+  note: Đây là một trang web doanh nghiệp tĩnh, không có tài khoản người dùng hay lưu trữ dữ liệu nhạy cảm.

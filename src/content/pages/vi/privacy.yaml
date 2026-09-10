@@ -1,0 +1,17 @@
+lang: vi
+slug: privacy
+title: Quyền riêng tư
+description: Chính sách quyền riêng tư của BlueSkyz Labs cho các thực hành dữ liệu trên trang web doanh nghiệp.
+sections:
+  hero:
+    heading: Quyền riêng tư
+  intro: Trang này ghi lại các thực hành dữ liệu trên trang web doanh nghiệp của BlueSkyz Labs.
+  collection:
+    heading: Chúng tôi thu thập gì
+    content: Chúng tôi thu thập dữ liệu tối thiểu cần thiết để vận hành trang web này và cải thiện trải nghiệm của khách truy cập. Chúng tôi không bán dữ liệu cá nhân cho bên thứ ba.
+  usage:
+    heading: Chúng tôi sử dụng dữ liệu như thế nào
+    content: Dữ liệu chỉ được sử dụng cho việc vận hành trang web, bảo mật và phân tích tổng hợp. Chúng tôi sử dụng phân tích bên thứ nhất có ý thức về quyền riêng tư.
+  contact:
+    heading: Liên hệ
+    content: Đối với các thắc mắc về quyền riêng tư, vui lòng liên hệ với chúng tôi qua đường dẫn báo cáo bảo mật.

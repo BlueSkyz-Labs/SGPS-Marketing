@@ -1,0 +1,43 @@
+lang: en
+slug: index
+title: BlueSkyz Labs
+description: We build intelligent products that empower people and elevate the way work gets done.
+sections:
+  hero:
+    heading: Intelligence. Elevated. Impact.
+    subheading: We build intelligent products that empower people and elevate the way work gets done.
+    supporting: A higher perspective builds a brighter tomorrow.
+  onewhouse:
+    heading: One house
+    intro: Build with clarity. Scale with confidence. We don't build around one category. We build around a way of thinking.
+    principles:
+      - name: Intelligence
+        summary: Deep thinking. Smart solutions.
+      - name: Elevation
+        summary: Better perspective. Greater impact.
+      - name: Trust
+        summary: Reliable, secure, consistent.
+      - name: Impact
+        summary: Real value. Real change.
+  trust:
+    heading: Trust
+    intro: Product maturity stays explicit. Privacy, security, and support paths are first-class routes — not slogans.
+    links:
+      - label: Privacy
+        href: /en/privacy/
+      - label: Security
+        href: /en/security/
+      - label: Support
+        href: /en/support/
+  about:
+    heading: About BlueSkyz
+    content: We build intelligent products that empower people and elevate the way work gets done. A higher perspective builds a brighter tomorrow.
+    founder_name: Tony Nguyen
+    founder_title: Founder & CEO
+  nextstep:
+    heading: Next step
+    intro: No public products are published yet. Learn who we are, or use the security reporting path when you need a working trust channel.
+    primaryCta: About BlueSkyz
+    primaryHref: /en/about/
+    secondaryCta: Security
+    secondaryHref: /en/security/

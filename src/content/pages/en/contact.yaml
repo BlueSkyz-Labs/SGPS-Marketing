@@ -1,0 +1,9 @@
+lang: en
+slug: contact
+title: Contact
+description: Get in touch with BlueSkyz Labs for business, security, or general inquiries.
+sections:
+  hero:
+    heading: Contact
+  intro: For business partnerships, security reporting, or general inquiries.
+  email_note: Email contact is currently unavailable. Please use the security reporting path for urgent matters.

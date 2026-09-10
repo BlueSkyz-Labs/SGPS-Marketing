@@ -1,0 +1,17 @@
+lang: en
+slug: security
+title: Security
+description: BlueSkyz Labs security reporting and vulnerability disclosure policy.
+sections:
+  hero:
+    heading: Security
+  intro: We take security seriously and welcome responsible disclosure.
+  reporting:
+    heading: How to report
+    content: Please use GitHub private vulnerability reporting to submit security issues.
+    cta: Open GitHub Advisory
+    href: https://github.com/BlueSkyz-Labs/SGPS-Marketing/security/advisories/new
+  disclosure:
+    heading: Disclosure policy
+    content: We follow responsible disclosure practices. Please allow reasonable time for remediation before public disclosure.
+  note: This is a static corporate site with no user accounts or sensitive data storage.

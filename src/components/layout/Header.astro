@@ -1,6 +1,7 @@
 ---
 import BrandLockup from "@/components/brand/BrandLockup.astro";
 import Container from "@/components/layout/Container.astro";
+import LanguageSwitcher from "@/components/layout/LanguageSwitcher.astro";
 import ButtonLink from "@/components/ui/ButtonLink.astro";
 import { NAV, SITE } from "@/data/site";
 import { emptyRegistryPrimaryCta } from "@/lib/act";
@@ -31,6 +32,7 @@ const primaryCta = hasPublicProducts
           </a>
         ))
       }
+      <LanguageSwitcher />
       <ButtonLink href={primaryCta.href} variant="primary"
         >{primaryCta.label}</ButtonLink
       >
@@ -55,6 +57,7 @@ const primaryCta = hasPublicProducts
               </a>
             ))
           }
+          <LanguageSwitcher />
           <ButtonLink href={primaryCta.href} class="w-full"
             >{primaryCta.label}</ButtonLink
           >
