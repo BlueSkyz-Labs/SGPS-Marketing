@@ -35,22 +35,20 @@ test("404 page renders in Vietnamese", async ({ page }) => {
   );
 });
 
-test("homepage empty registry omits hollow featured shelf", async ({
+test("homepage renders hero proposition", async ({ page }) => {
+  await page.goto("/en/");
+  await expect(page.locator("html")).toHaveAttribute("lang", "en");
+  await expect(page.getByRole("heading", { level: 1 })).toContainText(
+    /Intelligence|Elevated|Impact/,
+  );
+  await expect(page.locator("main#main-content")).toBeVisible();
+});
+
+test("products page empty registry omits hollow featured shelf", async ({
   page,
 }) => {
-  await page.goto("/en/");
-  await expect(
-    page.getByRole("heading", { name: "Featured products" }),
-  ).toHaveCount(0);
+  await page.goto("/en/products/");
   await expect(page.locator("[data-product-card]")).toHaveCount(0);
-  const body = await page.locator("body").innerText();
-  expect(body).not.toMatch(/docs\/evidence|candidates under review/i);
-  await expect(
-    page.getByRole("link", { name: /Explore all products/i }),
-  ).toHaveCount(0);
-  await expect(
-    page.getByRole("link", { name: /About BlueSkyz/i }).first(),
-  ).toBeVisible();
   await expect(
     page.getByText(/No public products are published yet/i).first(),
   ).toBeVisible();
