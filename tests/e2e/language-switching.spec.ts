@@ -12,12 +12,8 @@ test("language switcher renders in header and footer", async ({ page }) => {
   await page.goto("/en/");
   const header = page.locator("header");
   const footer = page.locator("footer");
-  await expect(
-    header.getByRole("link", { name: "Tiếng Việt" }),
-  ).toBeAttached();
-  await expect(
-    footer.getByRole("link", { name: "Tiếng Việt" }),
-  ).toBeAttached();
+  await expect(header.getByRole("link", { name: "Tiếng Việt" })).toBeAttached();
+  await expect(footer.getByRole("link", { name: "Tiếng Việt" })).toBeAttached();
 });
 
 test("hreflang links present on all pages", async ({ page }) => {
