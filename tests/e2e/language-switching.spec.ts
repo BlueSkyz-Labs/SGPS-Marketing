@@ -8,12 +8,13 @@ test("language switcher navigates between en and vi", async ({ page }) => {
   await expect(page.locator("html")).toHaveAttribute("lang", "vi");
 });
 
-test("language switcher renders in header and footer", async ({ page }) => {
+test("language switcher renders in footer on all viewports", async ({
+  page,
+}) => {
   await page.goto("/en/");
-  const header = page.locator("header");
   const footer = page.locator("footer");
-  await expect(header.getByRole("link", { name: "Tiếng Việt" })).toBeAttached();
   await expect(footer.getByRole("link", { name: "Tiếng Việt" })).toBeAttached();
+  await expect(footer.getByRole("link", { name: "English" })).toBeAttached();
 });
 
 test("hreflang links present on all pages", async ({ page }) => {
