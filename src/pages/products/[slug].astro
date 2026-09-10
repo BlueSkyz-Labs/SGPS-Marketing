@@ -48,6 +48,7 @@ const proofLinks = [
   { href: data.proof.securityUrl, label: "Security" },
   { href: data.proof.supportUrl, label: "Support" },
 ].filter((link): link is { href: string; label: string } => Boolean(link.href));
+Astro.redirect("/en/products/");
 ---
 
 <BaseLayout
