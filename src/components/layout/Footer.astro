@@ -1,6 +1,7 @@
 ---
 import BrandLockup from "@/components/brand/BrandLockup.astro";
 import Container from "@/components/layout/Container.astro";
+import LanguageSwitcher from "@/components/layout/LanguageSwitcher.astro";
 import { FOOTER_LINKS, SITE } from "@/data/site";
 ---
 
@@ -9,6 +10,7 @@ import { FOOTER_LINKS, SITE } from "@/data/site";
 >
   <Container class="flex flex-col gap-6 py-12">
     <BrandLockup size="footer" />
+    <LanguageSwitcher />
     <nav aria-label="Footer">
       <ul class="flex flex-wrap gap-x-5 gap-y-3">
         {

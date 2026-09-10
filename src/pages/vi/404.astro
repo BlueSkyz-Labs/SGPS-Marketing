@@ -1,0 +1,37 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Container from "@/components/layout/Container.astro";
+import ButtonLink from "@/components/ui/ButtonLink.astro";
+
+const { lang } = Astro.props;
+const isVi = lang === "vi";
+---
+
+<BaseLayout
+  title={isVi ? "Không tìm thấy trang" : "Page not found"}
+  description={isVi
+    ? "Trang bạn yêu cầu không tìm thấy."
+    : "The page you requested could not be found."}
+  path={isVi ? "/vi/404/" : "/en/404/"}
+  noindex={true}
+>
+  <section class="py-20">
+    <Container>
+      <h1 class="text-3xl font-semibold tracking-tight">
+        {isVi ? "Không tìm thấy trang." : "Page not found."}
+      </h1>
+      <p class="mt-4 text-[var(--text-muted)]">
+        {
+          isVi
+            ? "Trang bạn yêu cầu không tồn tại hoặc đã bị di chuyển."
+            : "The page you requested does not exist or has been moved."
+        }
+      </p>
+      <div class="mt-8 flex gap-4">
+        <ButtonLink href={isVi ? "/vi/" : "/en/"} variant="primary"
+          >{isVi ? "Về trang chủ" : "Go home"}</ButtonLink
+        >
+      </div>
+    </Container>
+  </section>
+</BaseLayout>

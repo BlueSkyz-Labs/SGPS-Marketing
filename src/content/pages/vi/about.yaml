@@ -1,0 +1,24 @@
+lang: vi
+slug: about
+title: Về BlueSkyz
+description: BlueSkyz Labs xây dựng những sản phẩm thông minh để trao quyền cho con người và nâng tầm cách công việc được thực hiện.
+sections:
+  hero:
+    heading: Về BlueSkyz
+  content:
+    heading: Sứ mệnh của chúng tôi
+    intro: Chúng tôi xây dựng những sản phẩm thông minh để trao quyền cho con người và nâng tầm cách công việc được thực hiện. Một góc nhìn cao hơn xây dựng một ngày mai tươi sáng hơn.
+    founder_name: Tony Nguyen
+    founder_title: Nhà sáng lập & CEO
+  principles:
+    heading: Một nhà
+    intro: Chúng tôi không xây dựng quanh một danh mục. Chúng tôi xây dựng quanh một cách suy nghĩ.
+    items:
+      - name: Trí tuệ
+        summary: Suy nghĩ sâu sắc. Giải pháp thông minh.
+      - name: Nâng tầm
+        summary: Góc nhìn tốt hơn. Tác động lớn hơn.
+      - name: Tin cậy
+        summary: Đáng tin cậy, an toàn, nhất quán.
+      - name: Tác động
+        summary: Giá trị thật. Thay đổi thật.

@@ -1,0 +1,43 @@
+lang: vi
+slug: index
+title: BlueSkyz Labs
+description: Chúng tôi xây dựng những sản phẩm thông minh để trao quyền cho con người và nâng tầm cách công việc được thực hiện.
+sections:
+  hero:
+    heading: Trí tuệ. Nâng tầm. Tác động.
+    subheading: Chúng tôi xây dựng những sản phẩm thông minh để trao quyền cho con người và nâng tầm cách công việc được thực hiện.
+    supporting: Một góc nhìn cao hơn xây dựng một ngày mai tươi sáng hơn.
+  onewhouse:
+    heading: Một nhà
+    intro: Xây dựng với sự rõ ràng. Mở rộng với sự tự tin. Chúng tôi không xây dựng quanh một danh mục. Chúng tôi xây dựng quanh một cách suy nghĩ.
+    principles:
+      - name: Trí tuệ
+        summary: Suy nghĩ sâu sắc. Giải pháp thông minh.
+      - name: Nâng tầm
+        summary: Góc nhìn tốt hơn. Tác động lớn hơn.
+      - name: Tin cậy
+        summary: Đáng tin cậy, an toàn, nhất quán.
+      - name: Tác động
+        summary: Giá trị thật. Thay đổi thật.
+  trust:
+    heading: Tin cậy
+    intro: Độ trưởng thành của sản phẩm luôn được thể hiện rõ ràng. Quyền riêng tư, bảo mật và hỗ trợ là những đường dẫn hạng nhất — không phải khẩu hiệu.
+    links:
+      - label: Quyền riêng tư
+        href: /vi/privacy/
+      - label: Bảo mật
+        href: /vi/security/
+      - label: Hỗ trợ
+        href: /vi/support/
+  about:
+    heading: Về BlueSkyz
+    content: Chúng tôi xây dựng những sản phẩm thông minh để trao quyền cho con người và nâng tầm cách công việc được thực hiện. Một góc nhìn cao hơn xây dựng một ngày mai tươi sáng hơn.
+    founder_name: Tony Nguyen
+    founder_title: Nhà sáng lập & CEO
+  nextstep:
+    heading: Bước tiếp theo
+    intro: Chưa có sản phẩm công khai nào được xuất bản. Tìm hiểu chúng tôi là ai, hoặc sử dụng đường dẫn báo cáo bảo mật khi bạn cần một kênh tin cậy đang hoạt động.
+    primaryCta: Về BlueSkyz
+    primaryHref: /vi/about/
+    secondaryCta: Bảo mật
+    secondaryHref: /vi/security/

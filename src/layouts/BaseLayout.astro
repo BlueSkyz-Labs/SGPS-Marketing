@@ -6,10 +6,12 @@ import {
   absoluteUrl,
   canonicalForPath,
   defaultOgImagePath,
+  hreflangLinks,
   organizationJsonLd,
   safeJsonLd,
   websiteJsonLd,
 } from "@/lib/seo";
+import { getAlternatePath, getLanguageFromPath } from "@/lib/i18n";
 import { isNonProductionSiteUrl } from "@/lib/truth";
 import "@/styles/global.css";
 
@@ -30,6 +32,7 @@ const {
 } = Astro.props;
 
 const fullTitle = title.includes(SITE.name) ? title : `${title} · ${SITE.name}`;
+const currentLang = getLanguageFromPath(path);
 const canonical = canonicalForPath(path, SITE.url);
 const ogImageUrl = absoluteUrl(SITE.url, ogImage);
 const structuredData = [organizationJsonLd(SITE.url), websiteJsonLd(SITE.url)];
@@ -37,7 +40,7 @@ const robotsNoindex = noindex || isNonProductionSiteUrl(SITE.url);
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang={currentLang}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width" />
@@ -51,6 +54,16 @@ const robotsNoindex = noindex || isNonProductionSiteUrl(SITE.url);
     <meta name="description" content={description} />
     <title>{fullTitle}</title>
     <link rel="canonical" href={canonical} />
+    {
+      hreflangLinks(path, SITE.url).map((link) => (
+        <link rel="alternate" hreflang={link.hreflang} href={link.href} />
+      ))
+    }
+    <link
+      rel="alternate"
+      hreflang="x-default"
+      href={canonicalForPath(getAlternatePath(path, "en"), SITE.url)}
+    />
     {robotsNoindex ? <meta name="robots" content="noindex, nofollow" /> : null}
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content={SITE.name} />

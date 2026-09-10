@@ -1,0 +1,23 @@
+---
+import { getCollection, type CollectionEntry } from "astro:content";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+
+type PageEntry = CollectionEntry<"pages">;
+
+const pages = await getCollection(
+  "pages",
+  ({ data }: { data: PageEntry["data"] }) => data.lang === "vi",
+);
+const page = pages.find((p: PageEntry) => p.data.slug === "privacy");
+---
+
+<BaseLayout
+  title={page!.data.title}
+  description={page!.data.description}
+  path="/vi/privacy/"
+>
+  <article class="prose max-w-none">
+    <h1>{page!.data.sections.hero.heading}</h1>
+    <p>{page!.data.sections.intro}</p>
+  </article>
+</BaseLayout>

@@ -1,0 +1,56 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Container from "@/components/layout/Container.astro";
+import ProductCard from "@/components/product/ProductCard.astro";
+import ButtonLink from "@/components/ui/ButtonLink.astro";
+import { SITE } from "@/data/site";
+import { emptyRegistryPrimaryCta, emptyRegistrySecondaryCta } from "@/lib/act";
+import { getPublicProducts } from "@/lib/products";
+
+const products = await getPublicProducts();
+const emptyPrimary = emptyRegistryPrimaryCta(SITE.contactEmail);
+const emptySecondary = emptyRegistrySecondaryCta(SITE.contactEmail);
+const emptyDescription = products.length
+  ? "Explore BlueSkyz Labs products with truthful status and evidence."
+  : "BlueSkyz Labs has not published public products yet. Listings appear when products are ready to evaluate.";
+---
+
+<BaseLayout
+  title="Products"
+  description={emptyDescription}
+  path="/en/products/"
+>
+  <section class="py-16">
+    <Container>
+      <h1 class="text-3xl font-semibold tracking-tight">Products</h1>
+      <p class="mt-4 max-w-2xl text-[var(--text-secondary)]">
+        Products appear here when they are ready to evaluate. We publish only
+        what you can verify.
+      </p>
+      {
+        products.length === 0 ? (
+          <div class="mt-8 max-w-2xl border-y border-[var(--border-subtle)] py-6">
+            <p class="text-[var(--text-secondary)]">
+              No public products are published yet. When a product is ready to
+              evaluate, it will appear here with clear status and evidence.
+            </p>
+            <div class="mt-6 flex flex-wrap gap-3">
+              <ButtonLink href={emptyPrimary.href}>
+                {emptyPrimary.label}
+              </ButtonLink>
+              <ButtonLink href={emptySecondary.href} variant="secondary">
+                {emptySecondary.label}
+              </ButtonLink>
+            </div>
+          </div>
+        ) : (
+          <div class="mt-8 grid gap-4 md:grid-cols-2">
+            {products.map((product) => (
+              <ProductCard product={product} />
+            ))}
+          </div>
+        )
+      }
+    </Container>
+  </section>
+</BaseLayout>

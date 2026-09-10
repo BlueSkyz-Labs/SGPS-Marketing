@@ -1,0 +1,9 @@
+lang: vi
+slug: contact
+title: Liên hệ
+description: Liên hệ với BlueSkyz Labs cho các vấn đề kinh doanh, bảo mật hoặc thắc mắc chung.
+sections:
+  hero:
+    heading: Liên hệ
+  intro: Dành cho hợp tác kinh doanh, báo cáo bảo mật hoặc thắc mắc chung.
+  email_note: Liên hệ qua email hiện chưa khả dụng. Vui lòng sử dụng đường dẫn báo cáo bảo mật cho các vấn đề khẩn cấp.
