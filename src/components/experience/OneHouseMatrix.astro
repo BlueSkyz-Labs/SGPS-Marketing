@@ -1,0 +1,64 @@
+---
+import { brandAssets } from "@/data/brand-assets";
+import {
+  PRINCIPLE_DIMENSION_KEYS,
+  PRINCIPLE_DIMENSION_LABELS,
+  PRINCIPLE_MATRIX,
+} from "@/data/experience";
+
+interface Props {
+  lang?: "en" | "vi";
+}
+
+const { lang = "en" } = Astro.props;
+
+const principleIcons = [
+  brandAssets.principles.intelligence,
+  brandAssets.principles.elevation,
+  brandAssets.principles.trust,
+  brandAssets.principles.impact,
+] as const;
+---
+
+<ul
+  class="mt-10 divide-y divide-[var(--border-subtle)] rounded-lg border border-[var(--border-subtle)] bg-white"
+  data-principle-matrix
+>
+  {
+    PRINCIPLE_MATRIX.map((principle, index) => (
+      <li class="p-6 transition-colors hover:bg-[color-mix(in_srgb,var(--brand-cobalt)_3%,white)] sm:p-7">
+        <div class="grid gap-5 lg:grid-cols-[minmax(0,20rem)_minmax(0,1fr)] lg:gap-10">
+          <div>
+            <div class="flex items-center gap-3">
+              <img
+                src={principleIcons[index]}
+                alt=""
+                width="28"
+                height="28"
+                loading="lazy"
+              />
+              <h3 class="text-lg font-semibold tracking-tight">
+                {principle.name[lang]}
+              </h3>
+            </div>
+            <p class="mt-2 text-sm text-[var(--text-muted)]">
+              {principle.summary[lang]}
+            </p>
+          </div>
+          <dl class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 lg:gap-6">
+            {PRINCIPLE_DIMENSION_KEYS.map((key) => (
+              <div>
+                <dt class="text-[0.65rem] font-semibold tracking-[0.14em] text-[var(--text-muted)] uppercase">
+                  {PRINCIPLE_DIMENSION_LABELS[key][lang]}
+                </dt>
+                <dd class="mt-1.5 text-sm leading-relaxed text-[var(--text-secondary)]">
+                  {principle.dimensions[key][lang]}
+                </dd>
+              </div>
+            ))}
+          </dl>
+        </div>
+      </li>
+    ))
+  }
+</ul>
