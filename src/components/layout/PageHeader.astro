@@ -1,6 +1,6 @@
 ---
 interface Props {
-  eyebrow: string;
+  eyebrow?: string;
   title: string;
   lede?: string;
 }
@@ -9,13 +9,18 @@ const { eyebrow, title, lede } = Astro.props;
 ---
 
 <header class="max-w-3xl">
-  <p
-    class="text-xs font-semibold tracking-[0.18em] text-[var(--text-muted)] uppercase"
-  >
-    {eyebrow}
-  </p>
+  {
+    eyebrow ? (
+      <p class="text-xs font-semibold tracking-[0.18em] text-[var(--text-muted)] uppercase">
+        {eyebrow}
+      </p>
+    ) : null
+  }
   <h1
-    class="mt-3 text-4xl font-semibold tracking-tight text-balance sm:text-5xl"
+    class:list={[
+      "text-4xl font-semibold tracking-tight text-balance sm:text-5xl",
+      eyebrow && "mt-3",
+    ]}
   >
     {title}
   </h1>
