@@ -31,6 +31,32 @@ test("client budget sums Brotli bytes of local scripts referenced by dist/index.
   rmSync(distDir, { recursive: true, force: true });
 });
 
+test("client budget flags inline executable scripts as a CSP violation", () => {
+  const distDir = join(".tmp", "client-budget-inline");
+  rmSync(distDir, { recursive: true, force: true });
+  mkdirSync(distDir, { recursive: true });
+
+  writeFileSync(
+    join(distDir, "index.html"),
+    `<!doctype html><html><head><script type="module">console.log("inline");</script><script type="application/ld+json">{"a":1}</script></head><body></body></html>\n`,
+  );
+
+  const result = measureClientJsBudget(distDir);
+  assert.equal(
+    result.inlineScripts.length,
+    1,
+    "exactly one inline executable script must be flagged",
+  );
+  assert.equal(result.withinBudget, false);
+  assert.equal(
+    result.inlineScripts[0].path,
+    join(distDir, "index.html"),
+    "flagged page path must be reported",
+  );
+
+  rmSync(distDir, { recursive: true, force: true });
+});
+
 test("client budget tracks the worst-case page across all routes", () => {
   const distDir = join(".tmp", "client-budget-multipage");
   rmSync(distDir, { recursive: true, force: true });
