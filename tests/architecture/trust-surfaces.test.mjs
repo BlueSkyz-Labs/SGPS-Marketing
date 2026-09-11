@@ -16,8 +16,15 @@ test("support empty state offers contact and security recourse", () => {
 });
 
 test("trust section links meet touch-target floor", () => {
+  // S+ Task 4: links moved from sections/Trust.astro into the authoritative
+  // TrustLedger component; the assertion follows the rendered links.
+  const ledgerComponent = readFileSync(
+    "src/components/experience/TrustLedger.astro",
+    "utf8",
+  );
+  assert.match(ledgerComponent, /min-h-11/);
   const trust = readFileSync("src/components/sections/Trust.astro", "utf8");
-  assert.match(trust, /min-h-11/);
+  assert.match(trust, /TrustLedger/);
 });
 
 test("security surface exposes actionable private reporting CTA", () => {
