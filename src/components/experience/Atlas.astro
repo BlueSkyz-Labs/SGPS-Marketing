@@ -1,0 +1,235 @@
+---
+import { buildAtlasModel, type AtlasNodeKind } from "@/lib/atlas";
+import { getPublicProducts } from "@/lib/products";
+
+interface Props {
+  lang?: "en" | "vi";
+}
+
+const { lang = "en" } = Astro.props;
+const isVi = lang === "vi";
+
+const products = await getPublicProducts();
+const { nodes, edges } = buildAtlasModel(lang, products);
+
+const kindLabels: Record<AtlasNodeKind, string> = {
+  brand: isVi ? "Thương hiệu" : "Brand",
+  principle: isVi ? "Nguyên tắc" : "Principle",
+  trust: isVi ? "Tin cậy" : "Trust",
+  product: isVi ? "Sản phẩm" : "Product",
+};
+
+const heading = "BlueSkyz Atlas";
+const lede = isVi
+  ? "Sơ đồ hóa từ chính những nguồn trang này công bố: thương hiệu mẹ, các nguyên tắc và những bề mặt tin cậy có thể xác minh. Nút sản phẩm chỉ xuất hiện khi sản phẩm thật được công bố."
+  : "Mapped from the same sources this site publishes: the masterbrand, its principles, and verifiable trust surfaces. Product nodes appear only when real products are public.";
+
+const emptyLabel = isVi
+  ? "Chưa có sản phẩm công khai nào được công bố."
+  : "No public products are published yet.";
+
+// Deterministic constellation layouts (no randomness): a landscape plate for
+// desktop and a portrait plate for narrow screens so labels stay legible.
+const desktopPositions = new Map<string, { x: number; y: number }>();
+desktopPositions.set("brand", { x: 320, y: 164 });
+nodes
+  .filter((node) => node.kind === "principle")
+  .forEach((node, index) => {
+    desktopPositions.set(node.id, { x: 88 + index * 154.6, y: 52 });
+  });
+nodes
+  .filter((node) => node.kind === "trust")
+  .forEach((node, index) => {
+    desktopPositions.set(node.id, { x: 130 + index * 190, y: 276 });
+  });
+nodes
+  .filter((node) => node.kind === "product")
+  .forEach((node, index) => {
+    desktopPositions.set(node.id, { x: 600, y: 96 + index * 44 });
+  });
+
+const mobilePositions = new Map<string, { x: number; y: number }>();
+mobilePositions.set("brand", { x: 180, y: 272 });
+nodes
+  .filter((node) => node.kind === "principle")
+  .forEach((node, index) => {
+    const column = index % 2;
+    const row = Math.floor(index / 2);
+    mobilePositions.set(node.id, { x: 92 + column * 176, y: 66 + row * 112 });
+  });
+nodes
+  .filter((node) => node.kind === "trust")
+  .forEach((node, index) => {
+    mobilePositions.set(node.id, { x: 60 + index * 120, y: 392 });
+  });
+nodes
+  .filter((node) => node.kind === "product")
+  .forEach((node, index) => {
+    mobilePositions.set(node.id, { x: 330, y: 210 + index * 40 });
+  });
+---
+
+<section
+  class="border-b border-[var(--border-subtle)] py-16 lg:py-20"
+  aria-labelledby="atlas-title"
+>
+  <h2
+    id="atlas-title"
+    class="text-3xl font-semibold tracking-tight text-balance sm:text-4xl"
+  >
+    {heading}
+  </h2>
+  <p class="mt-4 max-w-2xl text-lg text-[var(--text-secondary)] text-pretty">
+    {lede}
+  </p>
+
+  <div data-atlas class="mt-10">
+    <svg
+      viewBox="0 0 640 320"
+      role="presentation"
+      aria-hidden="true"
+      class="hidden w-full md:block"
+    >
+      {
+        edges.map((edge) => {
+          const from = desktopPositions.get(edge.from);
+          const to = desktopPositions.get(edge.to);
+          if (!from || !to) return null;
+          return (
+            <line
+              x1={from.x}
+              y1={from.y}
+              x2={to.x}
+              y2={to.y}
+              stroke="color-mix(in srgb, var(--brand-cobalt) 35%, transparent)"
+              stroke-width="1"
+            />
+          );
+        })
+      }
+      {
+        nodes.map((node) => {
+          const point = desktopPositions.get(node.id);
+          if (!point) return null;
+          const isBrand = node.kind === "brand";
+          return (
+            <g>
+              <circle
+                cx={point.x}
+                cy={point.y}
+                r={isBrand ? 10 : 6}
+                fill={
+                  isBrand
+                    ? "var(--brand-cobalt)"
+                    : node.kind === "trust"
+                      ? "var(--brand-porcelain)"
+                      : "color-mix(in srgb, var(--brand-cobalt) 55%, white)"
+                }
+                stroke="color-mix(in srgb, var(--brand-cobalt) 45%, transparent)"
+                stroke-width="1"
+              />
+              <text
+                x={point.x}
+                y={point.y - 18}
+                text-anchor="middle"
+                font-size="12"
+                fill="var(--text-muted)"
+              >
+                {node.label}
+              </text>
+            </g>
+          );
+        })
+      }
+    </svg>
+
+    <svg
+      viewBox="0 0 360 424"
+      role="presentation"
+      aria-hidden="true"
+      class="w-full md:hidden"
+    >
+      {
+        edges.map((edge) => {
+          const from = mobilePositions.get(edge.from);
+          const to = mobilePositions.get(edge.to);
+          if (!from || !to) return null;
+          return (
+            <line
+              x1={from.x}
+              y1={from.y}
+              x2={to.x}
+              y2={to.y}
+              stroke="color-mix(in srgb, var(--brand-cobalt) 35%, transparent)"
+              stroke-width="1"
+            />
+          );
+        })
+      }
+      {
+        nodes.map((node) => {
+          const point = mobilePositions.get(node.id);
+          if (!point) return null;
+          const isBrand = node.kind === "brand";
+          return (
+            <g>
+              <circle
+                cx={point.x}
+                cy={point.y}
+                r={isBrand ? 11 : 6}
+                fill={
+                  isBrand
+                    ? "var(--brand-cobalt)"
+                    : node.kind === "trust"
+                      ? "var(--brand-porcelain)"
+                      : "color-mix(in srgb, var(--brand-cobalt) 55%, white)"
+                }
+                stroke="color-mix(in srgb, var(--brand-cobalt) 45%, transparent)"
+                stroke-width="1"
+              />
+              <text
+                x={point.x}
+                y={point.y - 18}
+                text-anchor="middle"
+                font-size="14"
+                fill="var(--text-muted)"
+              >
+                {node.label}
+              </text>
+            </g>
+          );
+        })
+      }
+    </svg>
+
+    <ul
+      class="mt-8 divide-y divide-[var(--border-subtle)] rounded-lg border border-[var(--border-subtle)] bg-white"
+    >
+      {
+        nodes.map((node) => (
+          <li
+            data-atlas-node
+            data-atlas-kind={node.kind}
+            class="flex items-center justify-between gap-4 px-4"
+          >
+            <a
+              href={node.href}
+              class="inline-flex min-h-11 items-center text-sm font-medium text-[var(--text-primary)] no-underline hover:text-[var(--action-primary)]"
+            >
+              {node.label}
+            </a>
+            <span class="text-[0.65rem] font-semibold tracking-[0.14em] text-[var(--text-muted)] uppercase">
+              {kindLabels[node.kind]}
+            </span>
+          </li>
+        ))
+      }
+    </ul>
+
+    {
+      products.length === 0 && (
+        <p class="mt-4 text-sm text-[var(--text-muted)]">{emptyLabel}</p>
+      )
+    }
+  </div>
+</section>

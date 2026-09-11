@@ -11,6 +11,11 @@ const trustSection = readFileSync(
   "src/components/sections/Trust.astro",
   "utf8",
 );
+const atlasSource = readFileSync("src/lib/atlas.ts", "utf8");
+const atlasComponent = readFileSync(
+  "src/components/experience/Atlas.astro",
+  "utf8",
+);
 
 test("trust ledger uses only truthful states and evidence kinds", () => {
   // Lock the declared type unions themselves.
@@ -100,4 +105,37 @@ test("the trust section renders through the ledger model", () => {
     "ledger component must consume the shared ledger data",
   );
   assert.match(ledgerComponent, /TRUST_LEDGER/);
+});
+
+test("atlas derives nodes only from truth sources", () => {
+  assert.match(
+    atlasSource,
+    /export type AtlasNodeKind = "brand" \| "principle" \| "trust" \| "product";/,
+    "atlas node kinds must be exactly brand|principle|trust|product",
+  );
+  assert.match(
+    atlasSource,
+    /PRINCIPLE_MATRIX/,
+    "principle nodes must come from the shared experience model",
+  );
+  assert.match(
+    atlasSource,
+    /TRUST_LEDGER/,
+    "trust nodes must come from the verifiable trust ledger",
+  );
+  assert.match(
+    atlasSource,
+    /ProductEntry/,
+    "product nodes must come from the public product registry type",
+  );
+  assert.match(
+    atlasComponent,
+    /aria-hidden="true"/,
+    "decorative SVG must be hidden from assistive technology",
+  );
+  assert.match(
+    atlasComponent,
+    /data-atlas-node/,
+    "semantic representation must expose meaningful nodes",
+  );
 });
