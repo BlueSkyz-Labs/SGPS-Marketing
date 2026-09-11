@@ -88,3 +88,23 @@ test("product route helpers are locale-aware", () => {
   assert.match(productRoutes, /getProductProfilePath/);
   assert.match(productRoutes, /`\/\$\{lang\}\/products\//);
 });
+
+test("locale-prefixed CTA helpers are never double-prefixed by consumers", () => {
+  const hero = read("src/components/sections/Hero.astro");
+  const nextStep = read("src/components/sections/NextStep.astro");
+  for (const [name, source] of [
+    ["Hero", hero],
+    ["NextStep", nextStep],
+  ]) {
+    assert.doesNotMatch(
+      source,
+      /\/(en|vi)\$\{empty/,
+      `${name} must not re-prefix locale-aware CTA hrefs`,
+    );
+    assert.doesNotMatch(
+      source,
+      /emptyPrimary\.label ===|emptySecondary\.label ===/,
+      `${name} must not re-map already-localized CTA labels`,
+    );
+  }
+});

@@ -35,13 +35,10 @@ const emptyDescription = products.length
               evaluate, it will appear here with clear status and evidence.
             </p>
             <div class="mt-6 flex flex-wrap gap-3">
-              <ButtonLink href={`/en${emptyPrimary.href}`}>
+              <ButtonLink href={emptyPrimary.href}>
                 {emptyPrimary.label}
               </ButtonLink>
-              <ButtonLink
-                href={`/en${emptySecondary.href}`}
-                variant="secondary"
-              >
+              <ButtonLink href={emptySecondary.href} variant="secondary">
                 {emptySecondary.label}
               </ButtonLink>
             </div>

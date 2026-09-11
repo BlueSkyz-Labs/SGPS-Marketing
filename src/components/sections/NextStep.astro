@@ -53,26 +53,9 @@ const emptySecondary = emptyRegistrySecondaryCta(SITE.contactEmail, lang);
         </>
       ) : (
         <>
-          <ButtonLink
-            href={isVi ? `/vi${emptyPrimary.href}` : `/en${emptyPrimary.href}`}
-          >
-            {isVi
-              ? emptyPrimary.label === "About BlueSkyz"
-                ? "Về BlueSkyz"
-                : emptyPrimary.label
-              : emptyPrimary.label}
-          </ButtonLink>
-          <ButtonLink
-            href={
-              isVi ? `/vi${emptySecondary.href}` : `/en${emptySecondary.href}`
-            }
-            variant="secondary"
-          >
-            {isVi
-              ? emptySecondary.label === "Security"
-                ? "Bảo mật"
-                : emptySecondary.label
-              : emptySecondary.label}
+          <ButtonLink href={emptyPrimary.href}>{emptyPrimary.label}</ButtonLink>
+          <ButtonLink href={emptySecondary.href} variant="secondary">
+            {emptySecondary.label}
           </ButtonLink>
         </>
       )
