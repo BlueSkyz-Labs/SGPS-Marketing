@@ -25,7 +25,7 @@ const STATUS_CLASSES: Record<TrustState, string> = {
 <ul class="mt-10 flex flex-col gap-3" data-trust-ledger>
   {
     TRUST_LEDGER.map((entry) => (
-      <li>
+      <li data-trust-surface={entry.id}>
         <a
           href={entry.href[lang]}
           class="group grid min-h-11 gap-2 rounded-lg border border-[var(--border-subtle)] bg-white p-5 no-underline transition-[border-color,box-shadow] duration-150 hover:border-[var(--action-primary)] hover:shadow-sm sm:grid-cols-[minmax(0,14rem)_minmax(0,1fr)_auto] sm:items-center sm:gap-6"

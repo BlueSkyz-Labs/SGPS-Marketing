@@ -91,6 +91,11 @@ const robotsNoindex = noindex || isNonProductionSiteUrl(SITE.url);
     <a class="skip-link" href="#main-content">Skip to main content</a>
     <Header />
     <CommandNavigator />
+    <script>
+      import { initAnalyticsBridge } from "@/scripts/analytics-bridge";
+
+      initAnalyticsBridge();
+    </script>
     <main id="main-content" class="flex-1" tabindex="-1">
       <slot />
       <JourneyBar />
