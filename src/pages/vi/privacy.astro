@@ -1,6 +1,7 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import Container from "@/components/layout/Container.astro";
+import PageHeader from "@/components/layout/PageHeader.astro";
 import { SITE } from "@/data/site";
 
 const hasBusinessEmail = Boolean(SITE.contactEmail);
@@ -11,56 +12,64 @@ const hasBusinessEmail = Boolean(SITE.contactEmail);
   description="Thông tin quyền riêng tư cho BlueSkyz Labs."
   path="/vi/privacy/"
 >
-  <section class="py-16">
+  <section class="py-16 lg:py-24">
     <Container>
-      <h1 class="text-3xl font-semibold tracking-tight">Quyền riêng tư</h1>
-      <p class="mt-4 max-w-2xl text-[var(--text-secondary)]">
-        Trang doanh nghiệp này là nội dung tiếp thị tĩnh. Văn bản pháp lý đầy đủ
-        về quyền riêng tư sẽ được công bố khi BlueSkyz phê duyệt.
-      </p>
-      <dl class="mt-10 max-w-2xl space-y-6">
-        <div>
+      <PageHeader
+        eyebrow="Quyền riêng tư"
+        title="Ranh giới dữ liệu rõ ràng"
+        lede="Trang doanh nghiệp này là nội dung tiếp thị tĩnh. Văn bản pháp lý đầy đủ về quyền riêng tư sẽ được công bố khi BlueSkyz phê duyệt."
+      />
+      <dl class="mt-12 max-w-2xl space-y-8">
+        <div
+          class="rounded-xl border border-[var(--border-subtle)] bg-white p-6"
+        >
           <dt class="text-sm font-semibold tracking-tight">
             Những gì được thu thập
           </dt>
-          <dd class="mt-2 text-[var(--text-secondary)]">
+          <dd class="mt-2 text-sm leading-relaxed text-[var(--text-secondary)]">
             Trang này không yêu cầu tài khoản, biểu mẫu hoặc cookie theo dõi cho
             việc duyệt web cơ bản. Nhật ký yêu cầu của máy chủ web và CDN tiêu
             chuẩn có thể ghi lại dữ liệu kết nối kỹ thuật như địa chỉ IP, user
             agent và URL được yêu cầu.
           </dd>
         </div>
-        <div>
+        <div
+          class="rounded-xl border border-[var(--border-subtle)] bg-white p-6"
+        >
           <dt class="text-sm font-semibold tracking-tight">Tại sao</dt>
-          <dd class="mt-2 text-[var(--text-secondary)]">
+          <dd class="mt-2 text-sm leading-relaxed text-[var(--text-secondary)]">
             Nhật ký yêu cầu tồn tại vì mục đích bảo mật, ngăn chặn lạm dụng và
             phân phối tài sản tĩnh đáng tin cậy — không phải cho hồ sơ quảng
             cáo.
           </dd>
         </div>
-        <div>
+        <div
+          class="rounded-xl border border-[var(--border-subtle)] bg-white p-6"
+        >
           <dt class="text-sm font-semibold tracking-tight">Cách sử dụng</dt>
-          <dd class="mt-2 text-[var(--text-secondary)]">
+          <dd class="mt-2 text-sm leading-relaxed text-[var(--text-secondary)]">
             Nhật ký vẫn thuộc về các nhà vận hành nền tảng lưu trữ cho mục đích
             vận hành. Không có pixel quảng cáo bên thứ ba hoặc script ghi phiên
             nào được triển khai trên nền tảng này.
           </dd>
         </div>
-        <div>
+        <div
+          class="rounded-xl border border-[var(--border-subtle)] bg-white p-6"
+        >
           <dt class="text-sm font-semibold tracking-tight">
             Xóa và quyền riêng tư sản phẩm
           </dt>
-          <dd class="mt-2 text-[var(--text-secondary)]">
+          <dd class="mt-2 text-sm leading-relaxed text-[var(--text-secondary)]">
             Không có tài khoản khách hàng trên trang doanh nghiệp này để xuất
             hoặc xóa. Thực hành quyền riêng tư cụ thể theo sản phẩm sẽ được công
             bố trên từng bề mặt sản phẩm khi sản phẩm đó công khai.
           </dd>
         </div>
       </dl>
-      <div class="mt-10 flex flex-wrap gap-4">
+      <div class="mt-12 flex flex-wrap gap-3">
         <a
           href="/vi/security/"
-          class="inline-flex min-h-11 items-center text-sm font-semibold text-[var(--action-primary)] no-underline hover:underline"
+          class="inline-flex min-h-11 items-center rounded-lg border border-[var(--border-subtle)] bg-white px-5 text-sm font-semibold text-[var(--text-primary)] no-underline transition-colors hover:border-[var(--action-primary)]"
         >
           Báo cáo bảo mật
         </a>
@@ -68,14 +77,14 @@ const hasBusinessEmail = Boolean(SITE.contactEmail);
           hasBusinessEmail ? (
             <a
               href="/vi/contact/"
-              class="inline-flex min-h-11 items-center text-sm font-semibold text-[var(--action-primary)] no-underline hover:underline"
+              class="inline-flex min-h-11 items-center rounded-lg border border-[var(--border-subtle)] bg-white px-5 text-sm font-semibold text-[var(--text-primary)] no-underline transition-colors hover:border-[var(--action-primary)]"
             >
               Liên hệ BlueSkyz
             </a>
           ) : (
             <a
               href="/vi/about/"
-              class="inline-flex min-h-11 items-center text-sm font-semibold text-[var(--action-primary)] no-underline hover:underline"
+              class="inline-flex min-h-11 items-center rounded-lg border border-[var(--border-subtle)] bg-white px-5 text-sm font-semibold text-[var(--text-primary)] no-underline transition-colors hover:border-[var(--action-primary)]"
             >
               Về BlueSkyz
             </a>

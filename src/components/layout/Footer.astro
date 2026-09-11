@@ -7,23 +7,35 @@ import { getLanguageFromPath } from "@/lib/i18n";
 
 const currentPath = Astro.url.pathname;
 const lang = getLanguageFromPath(currentPath);
+const isVi = lang === "vi";
 const FOOTER_LINKS = getFooterLinks(lang);
+
+const taglineLead = isVi ? "Trí tuệ. Nâng tầm." : SITE.taglineLead;
+const taglineAccent = isVi ? "Tác động." : SITE.taglineAccent;
+const proposition = isVi
+  ? "Chúng tôi xây dựng những sản phẩm thông minh để trao quyền cho con người và nâng tầm cách công việc được thực hiện."
+  : SITE.proposition;
+const motto = isVi
+  ? "Xây dựng với sự rõ ràng. Mở rộng với sự tự tin."
+  : SITE.motto;
 ---
 
 <footer
   class="mt-auto bg-[var(--surface-inverse)] text-[var(--brand-porcelain)]"
 >
-  <Container class="flex flex-col gap-6 py-12">
-    <BrandLockup size="footer" />
-    <LanguageSwitcher variant="dark" />
+  <Container class="flex flex-col gap-10 py-14">
+    <div class="flex flex-wrap items-center justify-between gap-6">
+      <BrandLockup size="footer" />
+      <LanguageSwitcher variant="dark" />
+    </div>
     <nav aria-label="Footer">
-      <ul class="flex flex-wrap gap-x-5 gap-y-3">
+      <ul class="flex flex-wrap gap-x-7 gap-y-1">
         {
           FOOTER_LINKS.map((item) => (
             <li>
               <a
                 href={item.href}
-                class="inline-flex min-h-11 items-center text-sm text-[color-mix(in_srgb,var(--brand-porcelain)_82%,white)] no-underline hover:text-white"
+                class="inline-flex min-h-11 items-center text-sm text-[color-mix(in_srgb,var(--brand-porcelain)_82%,white)] no-underline transition-colors hover:text-white"
               >
                 {item.label}
               </a>
@@ -32,23 +44,27 @@ const FOOTER_LINKS = getFooterLinks(lang);
         }
       </ul>
     </nav>
-    <p
-      class="max-w-2xl text-sm text-[color-mix(in_srgb,var(--brand-porcelain)_72%,white)]"
-    >
-      <span class="font-medium text-[var(--brand-porcelain)]"
-        >{SITE.taglineLead}{" "}
-        {SITE.taglineAccent}</span
+    <div class="flex flex-col gap-3 border-t border-white/10 pt-6">
+      <p
+        class="max-w-2xl text-sm text-[color-mix(in_srgb,var(--brand-porcelain)_72%,white)]"
       >
-    </p>
-    <p
-      class="max-w-2xl text-sm text-[color-mix(in_srgb,var(--brand-porcelain)_72%,white)]"
-    >
-      {SITE.proposition}
-    </p>
-    <p
-      class="text-xs tracking-[0.12em] text-[color-mix(in_srgb,var(--brand-porcelain)_58%,white)] uppercase"
-    >
-      {SITE.motto}
-    </p>
+        <span class="font-medium text-[var(--brand-porcelain)]"
+          >{taglineLead}{" "}
+          <span class="text-[color-mix(in_srgb,var(--brand-cobalt)_70%,white)]"
+            >{taglineAccent}</span
+          ></span
+        >
+      </p>
+      <p
+        class="max-w-2xl text-sm text-[color-mix(in_srgb,var(--brand-porcelain)_72%,white)]"
+      >
+        {proposition}
+      </p>
+      <p
+        class="text-xs tracking-[0.12em] text-[color-mix(in_srgb,var(--brand-porcelain)_58%,white)] uppercase"
+      >
+        {motto}
+      </p>
+    </div>
   </Container>
 </footer>

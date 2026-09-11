@@ -5,18 +5,24 @@ const links = [
     label: "Privacy",
     viHref: "/vi/privacy/",
     viLabel: "Quyền riêng tư",
+    desc: "How corporate-site data is handled",
+    viDesc: "Cách dữ liệu trang doanh nghiệp được xử lý",
   },
   {
     href: "/security/",
     label: "Security",
     viHref: "/vi/security/",
     viLabel: "Bảo mật",
+    desc: "Private vulnerability reporting",
+    viDesc: "Báo cáo lỗ hổng riêng tư",
   },
   {
     href: "/support/",
     label: "Support",
     viHref: "/vi/support/",
     viLabel: "Hỗ trợ",
+    desc: "Working help and recourse paths",
+    viDesc: "Đường dẫn trợ giúp và khắc phục",
   },
 ];
 
@@ -28,28 +34,44 @@ const isVi = lang === "vi";
 ---
 
 <section
-  class="border-b border-[var(--border-subtle)] py-16"
+  class="border-b border-[var(--border-subtle)] py-16 lg:py-20"
   aria-labelledby="trust-title"
 >
-  <h2 id="trust-title" class="text-3xl font-semibold tracking-tight">
-    {isVi ? "Tin cậy" : "Trust"}
+  <h2
+    id="trust-title"
+    class="text-3xl font-semibold tracking-tight text-balance sm:text-4xl"
+  >
+    {isVi ? "Tin cậy bạn có thể xác minh" : "Trust you can verify"}
   </h2>
-  <p class="mt-4 max-w-2xl text-[var(--text-secondary)]">
+  <p class="mt-4 max-w-2xl text-lg text-[var(--text-secondary)] text-pretty">
     {
       isVi
-        ? "Mức độ trưởng thành của sản phẩm được thể hiện rõ ràng. Đường dẫn đến quyền riêng tư, bảo mật và hỗ trợ là những tuyến đường hạng nhất — không phải khẩu hiệu."
-        : "Product maturity stays explicit. Privacy, security, and support paths are first-class routes — not slogans."
+        ? "Đường dẫn đến quyền riêng tư, bảo mật và hỗ trợ là những tuyến đường hạng nhất — không phải khẩu hiệu."
+        : "Privacy, security, and support paths are first-class routes — not slogans."
     }
   </p>
-  <ul class="mt-8 flex flex-wrap gap-4">
+  <ul class="mt-10 grid gap-4 sm:grid-cols-3">
     {
       links.map((link) => (
         <li>
           <a
             href={isVi ? link.viHref : link.href}
-            class="inline-flex min-h-11 items-center text-sm font-semibold text-[var(--action-primary)] no-underline hover:underline"
+            class="group flex min-h-11 flex-col gap-1 rounded-lg border border-[var(--border-subtle)] bg-white p-5 no-underline transition-[border-color,box-shadow] duration-150 hover:border-[var(--action-primary)] hover:shadow-sm"
           >
-            {isVi ? link.viLabel : link.label}
+            <span class="flex items-center justify-between gap-2">
+              <span class="text-base font-semibold tracking-tight text-[var(--text-primary)]">
+                {isVi ? link.viLabel : link.label}
+              </span>
+              <span
+                aria-hidden="true"
+                class="text-[var(--action-primary)] transition-transform group-hover:translate-x-0.5"
+              >
+                →
+              </span>
+            </span>
+            <span class="text-sm text-[var(--text-muted)]">
+              {isVi ? link.viDesc : link.desc}
+            </span>
           </a>
         </li>
       ))

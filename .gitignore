@@ -83,6 +83,9 @@ public/*.placeholder
 # Isolated agent worktrees
 .worktrees/
 
+# Local agent session artifacts (plans, audits, screenshots)
+.hermes/
+
 # one-time framework benchmark fixtures
 .tmp/framework-benchmark/
 

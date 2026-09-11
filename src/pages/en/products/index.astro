@@ -1,6 +1,7 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import Container from "@/components/layout/Container.astro";
+import PageHeader from "@/components/layout/PageHeader.astro";
 import ProductCard from "@/components/product/ProductCard.astro";
 import ButtonLink from "@/components/ui/ButtonLink.astro";
 import { SITE } from "@/data/site";
@@ -20,17 +21,16 @@ const emptyDescription = products.length
   description={emptyDescription}
   path="/en/products/"
 >
-  <section class="py-16">
+  <section class="py-16 lg:py-24">
     <Container>
-      <h1 class="text-3xl font-semibold tracking-tight">Products</h1>
-      <p class="mt-4 max-w-2xl text-[var(--text-secondary)]">
-        Products appear here when they are ready to evaluate. We publish only
-        what you can verify.
-      </p>
+      <PageHeader
+        title="Products you can verify"
+        lede="Products appear here when they are ready to evaluate. We publish only what you can verify."
+      />
       {
         products.length === 0 ? (
-          <div class="mt-8 max-w-2xl border-y border-[var(--border-subtle)] py-6">
-            <p class="text-[var(--text-secondary)]">
+          <div class="mt-12 max-w-2xl rounded-xl border border-[var(--border-subtle)] bg-white p-6">
+            <p class="text-sm leading-relaxed text-[var(--text-secondary)]">
               No public products are published yet. When a product is ready to
               evaluate, it will appear here with clear status and evidence.
             </p>
@@ -47,7 +47,7 @@ const emptyDescription = products.length
             </div>
           </div>
         ) : (
-          <div class="mt-8 grid gap-4 md:grid-cols-2">
+          <div class="mt-12 grid gap-4 md:grid-cols-2">
             {products.map((product) => (
               <ProductCard product={product} />
             ))}

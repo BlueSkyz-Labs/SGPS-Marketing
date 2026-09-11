@@ -15,11 +15,14 @@ const emptyPrimary = emptyRegistryPrimaryCta(SITE.contactEmail);
 const emptySecondary = emptyRegistrySecondaryCta(SITE.contactEmail);
 ---
 
-<section class="py-16" aria-labelledby="next-title">
-  <h2 id="next-title" class="text-3xl font-semibold tracking-tight">
-    {isVi ? "Bước tiếp theo" : "Next step"}
+<section class="py-16 lg:py-20" aria-labelledby="next-title">
+  <h2
+    id="next-title"
+    class="text-3xl font-semibold tracking-tight text-balance sm:text-4xl"
+  >
+    {isVi ? "Bắt đầu từ điều bạn cần" : "Start with what you need"}
   </h2>
-  <p class="mt-4 max-w-2xl text-[var(--text-secondary)]">
+  <p class="mt-4 max-w-2xl text-lg text-[var(--text-secondary)] text-pretty">
     {
       hasPublicProducts
         ? isVi
