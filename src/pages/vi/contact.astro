@@ -1,6 +1,7 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import Container from "@/components/layout/Container.astro";
+import PageHeader from "@/components/layout/PageHeader.astro";
 import { SITE, SECURITY_ADVISORY_URL } from "@/data/site";
 
 const hasBusinessEmail = Boolean(SITE.contactEmail);
@@ -8,42 +9,45 @@ const hasBusinessEmail = Boolean(SITE.contactEmail);
 
 <BaseLayout
   title="Liên hệ"
-  description="Liên hệ với BlueSkyz Labs cho các vấn đề kinh doanh, bảo mật hoặc thắc mắc chung."
+  description="Liên hệ BlueSkyz Labs cho kinh doanh, bảo mật hoặc thông tin chung."
   path="/vi/contact/"
 >
-  <section class="py-16">
+  <section class="py-16 lg:py-24">
     <Container>
-      <h1 class="text-3xl font-semibold tracking-tight">Liên hệ</h1>
-      <p class="mt-4 max-w-2xl text-[var(--text-secondary)]">
-        Liên hệ với BlueSkyz qua kênh phù hợp với nhu cầu của bạn. Địa chỉ email
-        sẽ xuất hiện ở đây khi BlueSkyz công bố.
-      </p>
-      <ul
-        class="mt-10 divide-y divide-[var(--border-subtle)] border-y border-[var(--border-subtle)]"
-      >
+      <PageHeader
+        eyebrow="Liên hệ"
+        title="Đi đúng kênh bạn cần"
+        lede="Tiếp cận BlueSkyz qua kênh phù hợp với nhu cầu của bạn. Địa chỉ email sẽ xuất hiện khi BlueSkyz công bố chúng."
+      />
+      <ul class="mt-12 grid gap-4 sm:grid-cols-2">
         {
           !hasBusinessEmail ? (
-            <li class="py-6">
+            <li class="flex flex-col rounded-xl border border-[var(--border-subtle)] bg-white p-6">
               <h2 class="text-lg font-semibold tracking-tight">Bảo mật</h2>
-              <p class="mt-2 max-w-2xl text-[var(--text-secondary)]">
-                Sử dụng tính năng báo cáo lỗ hổng riêng tư của GitHub. Email bảo
-                mật sẽ xuất hiện ở đây khi BlueSkyz công bố.
+              <p class="mt-2 flex-1 text-sm leading-relaxed text-[var(--text-secondary)]">
+                Sử dụng báo cáo lỗ hổng riêng tư của GitHub. Email bảo mật sẽ
+                xuất hiện ở đây khi BlueSkyz công bố.
               </p>
               <a
                 href={SECURITY_ADVISORY_URL}
                 rel="noopener noreferrer"
-                class="mt-4 inline-flex min-h-11 items-center text-sm font-semibold text-[var(--action-primary)] no-underline hover:underline"
+                class="mt-5 inline-flex min-h-11 items-center gap-1.5 text-sm font-semibold text-[var(--action-primary)] no-underline hover:underline"
               >
                 Mở báo cáo lỗ hổng riêng tư
+                <span aria-hidden="true">→</span>
               </a>
             </li>
           ) : null
         }
-        <li class="py-6">
+        <li
+          class="flex flex-col rounded-xl border border-[var(--border-subtle)] bg-white p-6"
+        >
           <h2 class="text-lg font-semibold tracking-tight">
             Kinh doanh / chung
           </h2>
-          <p class="mt-2 max-w-2xl text-[var(--text-secondary)]">
+          <p
+            class="mt-2 flex-1 text-sm leading-relaxed text-[var(--text-secondary)]"
+          >
             {
               hasBusinessEmail ? (
                 <>
@@ -57,7 +61,7 @@ const hasBusinessEmail = Boolean(SITE.contactEmail);
                   cho các yêu cầu kinh doanh.
                 </>
               ) : (
-                "Email doanh nghiệp sẽ xuất hiện ở đây khi BlueSkyz công bố. Trong thời gian chờ, hãy sử dụng trang Về BlueSkyz để hiểu chúng tôi là ai, hoặc Báo cáo bảo mật như một kênh tin cậy có thể hành động."
+                "Địa chỉ email kinh doanh sẽ xuất hiện khi BlueSkyz công bố. Trong thời gian đó, hãy xem trang Về chúng tôi, hoặc sử dụng kênh báo cáo Bảo mật như một kênh tin cậy có thể hoạt động ngay."
               )
             }
           </p>

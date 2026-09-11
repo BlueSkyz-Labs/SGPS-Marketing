@@ -1,6 +1,7 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import Container from "@/components/layout/Container.astro";
+import PageHeader from "@/components/layout/PageHeader.astro";
 import { SITE } from "@/data/site";
 
 const hasBusinessEmail = Boolean(SITE.contactEmail);
@@ -11,55 +12,63 @@ const hasBusinessEmail = Boolean(SITE.contactEmail);
   description="Privacy information for BlueSkyz Labs."
   path="/en/privacy/"
 >
-  <section class="py-16">
+  <section class="py-16 lg:py-24">
     <Container>
-      <h1 class="text-3xl font-semibold tracking-tight">Privacy</h1>
-      <p class="mt-4 max-w-2xl text-[var(--text-secondary)]">
-        This corporate site is static marketing content. Full legal privacy
-        wording publishes when BlueSkyz approves it.
-      </p>
-      <dl class="mt-10 max-w-2xl space-y-6">
-        <div>
+      <PageHeader
+        eyebrow="Privacy"
+        title="Clear data boundaries"
+        lede="This corporate site is static marketing content. Full legal privacy wording publishes when BlueSkyz approves it."
+      />
+      <dl class="mt-12 max-w-2xl space-y-8">
+        <div
+          class="rounded-xl border border-[var(--border-subtle)] bg-white p-6"
+        >
           <dt class="text-sm font-semibold tracking-tight">
             What is collected
           </dt>
-          <dd class="mt-2 text-[var(--text-secondary)]">
+          <dd class="mt-2 text-sm leading-relaxed text-[var(--text-secondary)]">
             This site does not require accounts, forms, or tracking cookies for
             basic browsing. Standard web server and CDN request logs may record
             technical connection data such as IP address, user agent, and
             requested URL.
           </dd>
         </div>
-        <div>
+        <div
+          class="rounded-xl border border-[var(--border-subtle)] bg-white p-6"
+        >
           <dt class="text-sm font-semibold tracking-tight">Why</dt>
-          <dd class="mt-2 text-[var(--text-secondary)]">
+          <dd class="mt-2 text-sm leading-relaxed text-[var(--text-secondary)]">
             Request logs exist for security, abuse prevention, and reliable
             delivery of static assets — not for advertising profiles.
           </dd>
         </div>
-        <div>
+        <div
+          class="rounded-xl border border-[var(--border-subtle)] bg-white p-6"
+        >
           <dt class="text-sm font-semibold tracking-tight">How it is used</dt>
-          <dd class="mt-2 text-[var(--text-secondary)]">
+          <dd class="mt-2 text-sm leading-relaxed text-[var(--text-secondary)]">
             Logs stay with the hosting platform operators for operational
             purposes. No third-party ad pixels or session-recording scripts ship
             on this foundation.
           </dd>
         </div>
-        <div>
+        <div
+          class="rounded-xl border border-[var(--border-subtle)] bg-white p-6"
+        >
           <dt class="text-sm font-semibold tracking-tight">
             Deletion and product privacy
           </dt>
-          <dd class="mt-2 text-[var(--text-secondary)]">
+          <dd class="mt-2 text-sm leading-relaxed text-[var(--text-secondary)]">
             There is no customer account on this corporate site to export or
             delete. Product-specific privacy practices publish on each product
             surface when that product is public.
           </dd>
         </div>
       </dl>
-      <div class="mt-10 flex flex-wrap gap-4">
+      <div class="mt-12 flex flex-wrap gap-3">
         <a
           href="/en/security/"
-          class="inline-flex min-h-11 items-center text-sm font-semibold text-[var(--action-primary)] no-underline hover:underline"
+          class="inline-flex min-h-11 items-center rounded-lg border border-[var(--border-subtle)] bg-white px-5 text-sm font-semibold text-[var(--text-primary)] no-underline transition-colors hover:border-[var(--action-primary)]"
         >
           Security reporting
         </a>
@@ -67,14 +76,14 @@ const hasBusinessEmail = Boolean(SITE.contactEmail);
           hasBusinessEmail ? (
             <a
               href="/en/contact/"
-              class="inline-flex min-h-11 items-center text-sm font-semibold text-[var(--action-primary)] no-underline hover:underline"
+              class="inline-flex min-h-11 items-center rounded-lg border border-[var(--border-subtle)] bg-white px-5 text-sm font-semibold text-[var(--text-primary)] no-underline transition-colors hover:border-[var(--action-primary)]"
             >
               Contact BlueSkyz
             </a>
           ) : (
             <a
               href="/en/about/"
-              class="inline-flex min-h-11 items-center text-sm font-semibold text-[var(--action-primary)] no-underline hover:underline"
+              class="inline-flex min-h-11 items-center rounded-lg border border-[var(--border-subtle)] bg-white px-5 text-sm font-semibold text-[var(--text-primary)] no-underline transition-colors hover:border-[var(--action-primary)]"
             >
               About BlueSkyz
             </a>

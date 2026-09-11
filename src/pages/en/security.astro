@@ -1,6 +1,7 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import Container from "@/components/layout/Container.astro";
+import PageHeader from "@/components/layout/PageHeader.astro";
 import { SITE, SECURITY_ADVISORY_URL } from "@/data/site";
 ---
 
@@ -9,16 +10,16 @@ import { SITE, SECURITY_ADVISORY_URL } from "@/data/site";
   description="Security contact and reporting for BlueSkyz Labs."
   path="/en/security/"
 >
-  <section class="py-16">
+  <section class="py-16 lg:py-24">
     <Container>
-      <h1 class="text-3xl font-semibold tracking-tight">Security</h1>
-      <p class="mt-4 max-w-2xl text-[var(--text-secondary)]">
-        Report security issues through a private channel. Do not open a public
-        GitHub issue for vulnerability reports.
-      </p>
+      <PageHeader
+        eyebrow="Security"
+        title="Report privately, responsibly"
+        lede="Report security issues through a private channel. Do not open a public GitHub issue for vulnerability reports."
+      />
       {
         SITE.securityEmail ? (
-          <p class="mt-4 max-w-2xl text-[var(--text-secondary)]">
+          <p class="mt-8 max-w-2xl text-[var(--text-secondary)]">
             Email{" "}
             <a
               href={`mailto:${SITE.securityEmail}`}
@@ -30,16 +31,17 @@ import { SITE, SECURITY_ADVISORY_URL } from "@/data/site";
           </p>
         ) : null
       }
-      <p class="mt-6">
+      <div class="mt-10">
         <a
           href={SECURITY_ADVISORY_URL}
           rel="noopener noreferrer"
-          class="inline-flex min-h-11 items-center text-sm font-semibold text-[var(--action-primary)] no-underline hover:underline"
+          class="inline-flex min-h-11 items-center gap-1.5 rounded-lg bg-[var(--action-primary)] px-5 text-sm font-semibold text-white no-underline transition-opacity hover:opacity-90"
         >
           Open private vulnerability reporting
+          <span aria-hidden="true">→</span>
         </a>
-      </p>
-      <p class="mt-4 max-w-2xl text-sm text-[var(--text-muted)]">
+      </div>
+      <p class="mt-6 max-w-2xl text-sm text-[var(--text-muted)]">
         No bug-bounty, SLA, or certification badges are published without
         verified evidence.
       </p>

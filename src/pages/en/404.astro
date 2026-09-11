@@ -2,6 +2,7 @@
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import Container from "@/components/layout/Container.astro";
 import ButtonLink from "@/components/ui/ButtonLink.astro";
+import PageHeader from "@/components/layout/PageHeader.astro";
 ---
 
 <BaseLayout
@@ -10,14 +11,18 @@ import ButtonLink from "@/components/ui/ButtonLink.astro";
   path="/en/404/"
   noindex={true}
 >
-  <section class="py-20">
+  <section class="py-20 lg:py-28">
     <Container>
-      <h1 class="text-3xl font-semibold tracking-tight">Page not found.</h1>
-      <p class="mt-4 text-[var(--text-muted)]">
-        The page you requested does not exist or has been moved.
-      </p>
-      <div class="mt-8 flex gap-4">
+      <PageHeader
+        eyebrow="404"
+        title="This page doesn't exist"
+        lede="The page you requested does not exist or has been moved. Here are working paths instead."
+      />
+      <div class="mt-10 flex flex-wrap gap-3">
         <ButtonLink href="/en/" variant="primary">Go home</ButtonLink>
+        <ButtonLink href="/en/products/" variant="secondary">
+          Browse products
+        </ButtonLink>
       </div>
     </Container>
   </section>
