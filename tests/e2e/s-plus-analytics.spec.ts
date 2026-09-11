@@ -128,12 +128,18 @@ test("duplicate events inside the dedupe window collapse", async ({ page }) => {
   await page.goto("/en/");
   await page.locator("[data-intent-lens]").waitFor();
   await instrument(page);
-  const verify = page
-    .locator("[data-intent-lens]")
-    .getByRole("button", { name: "Verify trust" });
-  await verify.click();
-  await verify.click();
-  await verify.click();
+  // Three rapid toggles (press, unpress, press) executed in a single task so
+  // the dedupe window is exercised deterministically regardless of CI load.
+  await page.evaluate(() => {
+    const verify = document.querySelector(
+      '[data-intent-lens] button[data-intent="verify-trust"]',
+    );
+    if (verify instanceof HTMLButtonElement) {
+      verify.click();
+      verify.click();
+      verify.click();
+    }
+  });
   const events = (await telemetry(page)).filter(
     (event) => event.name === "intent_selected",
   );
