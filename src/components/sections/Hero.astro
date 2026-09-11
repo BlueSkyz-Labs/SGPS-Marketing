@@ -1,5 +1,6 @@
 ---
 import BrandLockup from "@/components/brand/BrandLockup.astro";
+import HorizonField from "@/components/experience/HorizonField.astro";
 import ButtonLink from "@/components/ui/ButtonLink.astro";
 import Reveal from "@/components/ui/Reveal.astro";
 import { brandAssets } from "@/data/brand-assets";
@@ -27,6 +28,7 @@ const emptySecondary = emptyRegistrySecondaryCta(SITE.contactEmail);
   aria-labelledby="hero-title"
 >
   <div class="hero-atmosphere hero-atmosphere--ink" aria-hidden="true"></div>
+  <HorizonField />
   <Reveal
     as="div"
     class="relative mx-auto grid w-full max-w-7xl gap-10 px-4 py-16 sm:px-6 sm:py-24 lg:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)] lg:items-center lg:px-8"
