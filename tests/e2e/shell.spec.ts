@@ -2,7 +2,7 @@ import { expect, test } from "@playwright/test";
 
 test("shell exposes skip link and product-led nav", async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 800 });
-  await page.goto("/");
+  await page.goto("/en/");
   await expect(
     page.getByRole("link", { name: "Skip to main content" }),
   ).toBeAttached();
@@ -29,7 +29,7 @@ test("shell exposes skip link and product-led nav", async ({ page }) => {
 });
 
 test("footer exposes trust routes", async ({ page }) => {
-  await page.goto("/");
+  await page.goto("/en/");
   const footer = page.getByRole("contentinfo");
   await expect(footer.getByRole("link", { name: "Support" })).toBeVisible();
   await expect(footer.getByRole("link", { name: "Privacy" })).toBeVisible();

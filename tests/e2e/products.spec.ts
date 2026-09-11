@@ -3,7 +3,7 @@ import { expect, test } from "@playwright/test";
 test("products index is honest when the public registry is empty", async ({
   page,
 }) => {
-  await page.goto("/products/");
+  await page.goto("/en/products/");
   await expect(
     page.getByRole("heading", { level: 1, name: /Products/i }),
   ).toBeVisible();

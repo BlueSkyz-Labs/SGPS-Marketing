@@ -48,7 +48,7 @@ for (const route of ROUTES) {
 }
 
 test("skip link moves focus to main content", async ({ page }) => {
-  await page.goto("/");
+  await page.goto("/en/");
   await page.keyboard.press("Tab");
   const skip = page.getByRole("link", { name: /Skip to main content/i });
   await expect(skip).toBeFocused();
@@ -58,7 +58,7 @@ test("skip link moves focus to main content", async ({ page }) => {
 
 test("mobile menu disclosure is keyboard operable", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
-  await page.goto("/");
+  await page.goto("/en/");
   const summary = page.locator("header details summary");
   await expect(summary).toBeVisible();
   await summary.focus();

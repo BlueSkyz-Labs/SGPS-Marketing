@@ -13,6 +13,9 @@ interface Props {
 const { lang = "en" } = Astro.props;
 const isVi = lang === "vi";
 
+const taglineLead = isVi ? "Trí tuệ. Nâng tầm." : SITE.taglineLead;
+const taglineAccent = isVi ? "Tác động." : SITE.taglineAccent;
+
 const products = await getPublicProducts();
 const hasPublicProducts = products.length > 0;
 const emptyPrimary = emptyRegistryPrimaryCta(SITE.contactEmail);
@@ -34,9 +37,9 @@ const emptySecondary = emptyRegistrySecondaryCta(SITE.contactEmail);
         id="hero-title"
         class="mt-8 max-w-[11ch] text-4xl font-semibold tracking-tight text-[var(--brand-porcelain)] sm:text-5xl lg:text-7xl"
       >
-        <span class="block">{SITE.taglineLead}</span>
+        <span class="block">{taglineLead}</span>
         <span class="mt-1 block text-[var(--brand-cobalt)]"
-          >{SITE.taglineAccent}</span
+          >{taglineAccent}</span
         >
       </h1>
       <p

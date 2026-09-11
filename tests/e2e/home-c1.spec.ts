@@ -3,7 +3,7 @@ import { expect, test } from "@playwright/test";
 test("homepage explains BlueSkyz and rejects old positioning", async ({
   page,
 }) => {
-  await page.goto("/");
+  await page.goto("/en/");
   await expect(page.getByRole("heading", { level: 1 })).toContainText(
     /Intelligence\.\s*Elevated\./i,
   );
@@ -20,7 +20,7 @@ test("homepage explains BlueSkyz and rejects old positioning", async ({
 
 test("320px homepage has no horizontal overflow", async ({ page }) => {
   await page.setViewportSize({ width: 320, height: 720 });
-  await page.goto("/");
+  await page.goto("/en/");
   expect(
     await page.evaluate(
       () =>
@@ -31,7 +31,7 @@ test("320px homepage has no horizontal overflow", async ({ page }) => {
 });
 
 test("homepage keeps the C1.1 customer order landmarks", async ({ page }) => {
-  await page.goto("/");
+  await page.goto("/en/");
   // Featured shelf is omitted while the public registry is empty.
   await expect(
     page.getByRole("heading", { name: "Featured products" }),
