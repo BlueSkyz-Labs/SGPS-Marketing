@@ -1,0 +1,41 @@
+---
+import Container from "@/components/layout/Container.astro";
+import { getJourneyActions } from "@/lib/journey";
+import { getLanguageFromPath } from "@/lib/i18n";
+
+const pathname = Astro.url.pathname;
+const lang = getLanguageFromPath(pathname);
+const actions = getJourneyActions(pathname, lang);
+const navLabel = lang === "vi" ? "Bước tiếp theo" : "Next steps";
+---
+
+{
+  actions.length > 0 && (
+    <nav
+      class="border-t border-[var(--border-subtle)] bg-[var(--surface-subtle)]"
+      aria-label={navLabel}
+      data-journey-bar
+    >
+      <Container class="flex flex-col gap-3 py-6 sm:flex-row sm:items-center sm:justify-between">
+        <p class="text-xs font-semibold tracking-[0.18em] text-[var(--text-muted)] uppercase">
+          {navLabel}
+        </p>
+        <ul class="flex flex-wrap gap-3">
+          {actions.map((action) => (
+            <li>
+              <a
+                class="inline-flex min-h-11 items-center gap-1.5 rounded-lg border border-[var(--border-subtle)] bg-white px-4 text-sm font-semibold text-[var(--text-primary)] no-underline transition-[border-color,box-shadow] duration-150 hover:border-[var(--action-primary)] hover:shadow-sm"
+                href={action.href}
+              >
+                {action.label}
+                <span aria-hidden="true" class="text-[var(--action-primary)]">
+                  →
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </Container>
+    </nav>
+  )
+}

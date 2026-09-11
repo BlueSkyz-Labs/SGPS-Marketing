@@ -12,6 +12,9 @@ const currentPath = Astro.url.pathname;
 const lang = getLanguageFromPath(currentPath);
 const NAV = getNav(lang);
 
+const isActive = (href: string): boolean =>
+  currentPath.replace(/\/+$/, "") === href.replace(/\/+$/, "");
+
 const hasPublicProducts = (await getPublicProducts()).length > 0;
 const primaryCta = hasPublicProducts
   ? SITE.contactEmail
@@ -31,6 +34,7 @@ const primaryCta = hasPublicProducts
         NAV.map((item) => (
           <a
             href={item.href}
+            aria-current={isActive(item.href) ? "page" : undefined}
             class="inline-flex min-h-11 items-center px-3 text-sm font-medium text-[var(--text-secondary)] no-underline hover:text-[var(--text-primary)]"
           >
             {item.label}
@@ -56,6 +60,7 @@ const primaryCta = hasPublicProducts
             NAV.map((item) => (
               <a
                 href={item.href}
+                aria-current={isActive(item.href) ? "page" : undefined}
                 class="min-h-11 rounded-md px-3 py-2 text-sm font-medium text-[var(--text-primary)] no-underline hover:bg-[var(--surface-subtle)]"
               >
                 {item.label}
