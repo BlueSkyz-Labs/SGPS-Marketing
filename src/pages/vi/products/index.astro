@@ -9,8 +9,8 @@ import { emptyRegistryPrimaryCta, emptyRegistrySecondaryCta } from "@/lib/act";
 import { getPublicProducts } from "@/lib/products";
 
 const products = await getPublicProducts();
-const emptyPrimary = emptyRegistryPrimaryCta(SITE.contactEmail);
-const emptySecondary = emptyRegistrySecondaryCta(SITE.contactEmail);
+const emptyPrimary = emptyRegistryPrimaryCta(SITE.contactEmail, "vi");
+const emptySecondary = emptyRegistrySecondaryCta(SITE.contactEmail, "vi");
 const emptyDescription = products.length
   ? "Khám phá sản phẩm BlueSkyz Labs với trạng thái và bằng chứng trung thực."
   : "BlueSkyz Labs chưa công bố sản phẩm công khai nào. Danh sách xuất hiện khi sản phẩm sẵn sàng đánh giá.";
@@ -36,15 +36,12 @@ const emptyDescription = products.length
               rõ ràng.
             </p>
             <div class="mt-6 flex flex-wrap gap-3">
-              <ButtonLink href={`/vi${emptyPrimary.href}`}>
+              <ButtonLink href={emptyPrimary.href}>
                 {emptyPrimary.label === "About BlueSkyz"
                   ? "Về BlueSkyz"
                   : emptyPrimary.label}
               </ButtonLink>
-              <ButtonLink
-                href={`/vi${emptySecondary.href}`}
-                variant="secondary"
-              >
+              <ButtonLink href={emptySecondary.href} variant="secondary">
                 {emptySecondary.label === "Security"
                   ? "Bảo mật"
                   : emptySecondary.label}
@@ -54,7 +51,7 @@ const emptyDescription = products.length
         ) : (
           <div class="mt-12 grid gap-4 md:grid-cols-2">
             {products.map((product) => (
-              <ProductCard product={product} />
+              <ProductCard product={product} lang="vi" />
             ))}
           </div>
         )

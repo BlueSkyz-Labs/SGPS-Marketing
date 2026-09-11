@@ -9,8 +9,8 @@ import { emptyRegistryPrimaryCta, emptyRegistrySecondaryCta } from "@/lib/act";
 import { getPublicProducts } from "@/lib/products";
 
 const products = await getPublicProducts();
-const emptyPrimary = emptyRegistryPrimaryCta(SITE.contactEmail);
-const emptySecondary = emptyRegistrySecondaryCta(SITE.contactEmail);
+const emptyPrimary = emptyRegistryPrimaryCta(SITE.contactEmail, "en");
+const emptySecondary = emptyRegistrySecondaryCta(SITE.contactEmail, "en");
 const emptyDescription = products.length
   ? "Explore BlueSkyz Labs products with truthful status and evidence."
   : "BlueSkyz Labs has not published public products yet. Listings appear when products are ready to evaluate.";
@@ -35,13 +35,10 @@ const emptyDescription = products.length
               evaluate, it will appear here with clear status and evidence.
             </p>
             <div class="mt-6 flex flex-wrap gap-3">
-              <ButtonLink href={`/en${emptyPrimary.href}`}>
+              <ButtonLink href={emptyPrimary.href}>
                 {emptyPrimary.label}
               </ButtonLink>
-              <ButtonLink
-                href={`/en${emptySecondary.href}`}
-                variant="secondary"
-              >
+              <ButtonLink href={emptySecondary.href} variant="secondary">
                 {emptySecondary.label}
               </ButtonLink>
             </div>
@@ -49,7 +46,7 @@ const emptyDescription = products.length
         ) : (
           <div class="mt-12 grid gap-4 md:grid-cols-2">
             {products.map((product) => (
-              <ProductCard product={product} />
+              <ProductCard product={product} lang="en" />
             ))}
           </div>
         )

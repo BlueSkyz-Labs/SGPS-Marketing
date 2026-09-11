@@ -19,8 +19,8 @@ const taglineAccent = isVi ? "Tác động." : SITE.taglineAccent;
 
 const products = await getPublicProducts();
 const hasPublicProducts = products.length > 0;
-const emptyPrimary = emptyRegistryPrimaryCta(SITE.contactEmail);
-const emptySecondary = emptyRegistrySecondaryCta(SITE.contactEmail);
+const emptyPrimary = emptyRegistryPrimaryCta(SITE.contactEmail, lang);
+const emptySecondary = emptyRegistrySecondaryCta(SITE.contactEmail, lang);
 ---
 
 <section
@@ -78,30 +78,11 @@ const emptySecondary = emptyRegistrySecondaryCta(SITE.contactEmail);
             </>
           ) : (
             <>
-              <ButtonLink
-                href={
-                  isVi ? `/vi${emptyPrimary.href}` : `/en${emptyPrimary.href}`
-                }
-              >
-                {isVi
-                  ? emptyPrimary.label === "About BlueSkyz"
-                    ? "Về BlueSkyz"
-                    : emptyPrimary.label
-                  : emptyPrimary.label}
+              <ButtonLink href={emptyPrimary.href}>
+                {emptyPrimary.label}
               </ButtonLink>
-              <ButtonLink
-                href={
-                  isVi
-                    ? `/vi${emptySecondary.href}`
-                    : `/en${emptySecondary.href}`
-                }
-                variant="on-ink"
-              >
-                {isVi
-                  ? emptySecondary.label === "Security"
-                    ? "Bảo mật"
-                    : emptySecondary.label
-                  : emptySecondary.label}
+              <ButtonLink href={emptySecondary.href} variant="on-ink">
+                {emptySecondary.label}
               </ButtonLink>
             </>
           )

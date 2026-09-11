@@ -1,0 +1,37 @@
+---
+// @ts-nocheck — synthetic fixture data; this app never ships and is never typechecked by repo gates.
+import FeaturedProducts from "@/components/sections/FeaturedProducts.astro";
+import FlagshipProof from "@/components/sections/FlagshipProof.astro";
+
+const product = {
+  data: {
+    slug: "fixture-product",
+    name: "Fixture Product",
+    public: true,
+    displayOrder: 1,
+    featuredTier: "hero",
+    publicLabel: "In development",
+    shortDescription: "Fixture description for parity checks.",
+    endorsement: "Fixture endorsement",
+    capabilities: ["Capability one", "Capability two", "Capability three"],
+    primaryAction: { href: "/vi/contact/", label: "Liên hệ" },
+    proof: {
+      screenshot: {
+        src: "/fixture.png",
+        alt: "Fixture",
+        width: 10,
+        height: 10,
+      },
+    },
+  },
+};
+---
+
+<!doctype html>
+<html lang="vi">
+  <head><meta charset="utf-8" /><title>Parity fixture VI</title></head>
+  <body>
+    <FeaturedProducts products={[product]} lang="vi" />
+    <FlagshipProof product={product} lang="vi" />
+  </body>
+</html>

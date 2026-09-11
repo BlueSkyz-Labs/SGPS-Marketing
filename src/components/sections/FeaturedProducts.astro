@@ -2,17 +2,24 @@
 import type { CollectionEntry } from "astro:content";
 import ProductCard from "@/components/product/ProductCard.astro";
 import ButtonLink from "@/components/ui/ButtonLink.astro";
+import { SHARED_LABELS, labelFor, type Language } from "@/data/site";
+import { getProductIndexPath } from "@/lib/product-routes";
 
 interface Props {
   products: CollectionEntry<"products">[];
+  lang: Language;
 }
 
-const { products } = Astro.props;
+const { products, lang } = Astro.props;
 const hero = products.find((p) => p.data.featuredTier === "hero");
 const featured = products
   .filter((p) => p.data.featuredTier === "featured")
   .slice(0, 2);
 const ecosystem = products.filter((p) => p.data.featuredTier === "ecosystem");
+const headingLabel = labelFor(SHARED_LABELS.featuredHeading, lang);
+const bodyLabel = labelFor(SHARED_LABELS.featuredBody, lang);
+const ctaLabel = labelFor(SHARED_LABELS.exploreAllProducts, lang);
+const indexPath = getProductIndexPath(lang);
 ---
 
 {
@@ -24,26 +31,26 @@ const ecosystem = products.filter((p) => p.data.featuredTier === "ecosystem");
       <div class="flex flex-wrap items-end justify-between gap-4">
         <div>
           <h2 id="featured-title" class="text-3xl font-semibold tracking-tight">
-            Featured products
+            {headingLabel}
           </h2>
-          <p class="mt-3 max-w-2xl text-[var(--text-secondary)]">
-            Only products with verified public evidence appear here.
-          </p>
+          <p class="mt-3 max-w-2xl text-[var(--text-secondary)]">{bodyLabel}</p>
         </div>
-        <ButtonLink href="/products/" variant="secondary">
-          Explore all products
+        <ButtonLink href={indexPath} variant="secondary">
+          {ctaLabel}
         </ButtonLink>
       </div>
 
       <div class="mt-8 grid gap-4">
-        {hero ? <ProductCard product={hero} emphasis="hero" /> : null}
+        {hero ? (
+          <ProductCard product={hero} lang={lang} emphasis="hero" />
+        ) : null}
         {(featured.length > 0 || ecosystem.length > 0) && (
           <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
             {featured.map((product) => (
-              <ProductCard product={product} />
+              <ProductCard product={product} lang={lang} />
             ))}
             {ecosystem.map((product) => (
-              <ProductCard product={product} />
+              <ProductCard product={product} lang={lang} />
             ))}
           </div>
         )}

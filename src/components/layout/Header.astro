@@ -3,7 +3,7 @@ import BrandLockup from "@/components/brand/BrandLockup.astro";
 import Container from "@/components/layout/Container.astro";
 import LanguageSwitcher from "@/components/layout/LanguageSwitcher.astro";
 import ButtonLink from "@/components/ui/ButtonLink.astro";
-import { SITE, getNav } from "@/data/site";
+import { SITE, SHARED_LABELS, labelFor, getNav } from "@/data/site";
 import { emptyRegistryPrimaryCta } from "@/lib/act";
 import { getPublicProducts } from "@/lib/products";
 import { getLanguageFromPath } from "@/lib/i18n";
@@ -18,9 +18,15 @@ const isActive = (href: string): boolean =>
 const hasPublicProducts = (await getPublicProducts()).length > 0;
 const primaryCta = hasPublicProducts
   ? SITE.contactEmail
-    ? { href: `/${lang}/contact/`, label: "Contact us" }
-    : { href: `/${lang}/products/`, label: "Explore products" }
-  : emptyRegistryPrimaryCta(SITE.contactEmail);
+    ? {
+        href: `/${lang}/contact/`,
+        label: labelFor(SHARED_LABELS.contactUs, lang),
+      }
+    : {
+        href: `/${lang}/products/`,
+        label: labelFor(SHARED_LABELS.exploreProducts, lang),
+      }
+  : emptyRegistryPrimaryCta(SITE.contactEmail, lang);
 ---
 
 <header
@@ -38,7 +44,7 @@ const primaryCta = hasPublicProducts
         aria-keyshortcuts="Control+K Meta+K"
         class="inline-flex min-h-11 items-center gap-2 rounded-lg border border-[var(--border-subtle)] px-3 text-sm font-medium text-[var(--text-secondary)] transition-colors hover:text-[var(--text-primary)]"
       >
-        {lang === "vi" ? "Tìm" : "Search"}
+        {labelFor(SHARED_LABELS.search, lang)}
         <kbd
           class="rounded border border-[var(--border-subtle)] bg-[var(--surface-subtle)] px-1.5 py-0.5 text-[0.65rem] font-medium"
           >Ctrl K</kbd
@@ -64,7 +70,7 @@ const primaryCta = hasPublicProducts
     <details class="relative md:hidden">
       <summary
         class="inline-flex min-h-11 min-w-11 list-none items-center justify-center rounded-lg border border-[var(--border-subtle)] px-3 text-sm font-medium"
-        >Menu</summary
+        >{labelFor(SHARED_LABELS.menu, lang)}</summary
       >
       <div
         class="absolute right-0 z-20 mt-2 w-56 rounded-lg border border-[var(--border-subtle)] bg-white p-3 shadow-sm"
@@ -76,7 +82,7 @@ const primaryCta = hasPublicProducts
             aria-keyshortcuts="Control+K Meta+K"
             class="min-h-11 rounded-md border border-[var(--border-subtle)] px-3 py-2 text-left text-sm font-medium text-[var(--text-primary)]"
           >
-            {lang === "vi" ? "Tìm trang" : "Search pages"}
+            {labelFor(SHARED_LABELS.searchPages, lang)}
           </button>
           {
             NAV.map((item) => (
