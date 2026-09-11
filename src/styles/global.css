@@ -159,6 +159,73 @@ body {
     );
 }
 
+/* S+ BlueSkyz Horizon — decorative signature field (S+ Task 2). */
+.horizon-field {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.horizon-field__halo {
+  position: absolute;
+  inset: auto -18% 26% -18%;
+  height: 56%;
+  background: radial-gradient(
+    ellipse at 50% 100%,
+    color-mix(in srgb, var(--brand-cobalt) 26%, transparent) 0%,
+    color-mix(in srgb, var(--brand-cobalt) 10%, transparent) 44%,
+    transparent 74%
+  );
+}
+
+.horizon-field__line {
+  position: absolute;
+  left: 7%;
+  right: 7%;
+  bottom: 32%;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    color-mix(in srgb, var(--brand-cobalt) 70%, transparent) 20%,
+    color-mix(in srgb, var(--brand-porcelain) 88%, transparent) 50%,
+    color-mix(in srgb, var(--brand-cobalt) 70%, transparent) 80%,
+    transparent 100%
+  );
+  box-shadow: 0 0 20px color-mix(in srgb, var(--brand-cobalt) 45%, transparent);
+  opacity: 0.85;
+}
+
+.horizon-field__depth {
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 40%;
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    color-mix(in srgb, var(--brand-ink) 45%, transparent) 58%,
+    color-mix(in srgb, var(--brand-ink) 85%, transparent) 100%
+  );
+}
+
+@media (max-width: 767px) {
+  .horizon-field__halo {
+    inset: auto -40% 16% -40%;
+    height: 50%;
+  }
+
+  .horizon-field__line {
+    left: 3%;
+    right: 3%;
+    bottom: 24%;
+  }
+
+  .horizon-field__depth {
+    height: 34%;
+  }
+}
+
 .hero-mark-stage {
   position: relative;
   display: grid;

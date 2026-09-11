@@ -1,0 +1,13 @@
+---
+interface Props {
+  class?: string;
+}
+
+const { class: className = "" } = Astro.props;
+---
+
+<div class:list={["horizon-field", className]} data-horizon aria-hidden="true">
+  <span class="horizon-field__halo"></span>
+  <span class="horizon-field__line"></span>
+  <span class="horizon-field__depth"></span>
+</div>
