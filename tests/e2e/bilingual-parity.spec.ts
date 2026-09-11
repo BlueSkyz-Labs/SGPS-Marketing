@@ -1,7 +1,14 @@
 import { test, expect } from "@playwright/test";
 import { execSync } from "node:child_process";
 import { createServer, type Server } from "node:http";
-import { readFileSync, existsSync } from "node:fs";
+import {
+  readFileSync,
+  existsSync,
+  statSync,
+  unlinkSync,
+  writeFileSync,
+} from "node:fs";
+import { tmpdir } from "node:os";
 import { extname, join, resolve } from "node:path";
 
 const FIXTURE_ROOT = resolve("tests/e2e/fixtures/parity-app");
@@ -69,30 +76,42 @@ test.describe("bilingual parity — product-present fixture", () => {
   let server: Server;
   let origin = "";
 
-  test.skip(
-    ({}, testInfo) => testInfo.project.name !== "chromium",
-    "fixture parity runs once (chromium)",
-  );
-
   const distReady = () => {
     const entry = join(FIXTURE_DIST, "en", "index.html");
     if (!existsSync(entry)) return false;
     return readFileSync(entry, "utf8").includes("</html>");
   };
 
-  test.beforeAll(async () => {
-    if (!distReady()) {
-      execSync("pnpm exec astro build --root tests/e2e/fixtures/parity-app", {
-        cwd: process.cwd(),
-        stdio: "pipe",
-      });
-      if (!distReady()) {
+  const BUILD_LOCK = join(tmpdir(), "sgps-parity-fixture-build.lock");
+
+  /** Build once even when several Playwright workers race on first use. */
+  const ensureFixtureBuilt = async () => {
+    const deadline = Date.now() + 120_000;
+    while (Date.now() < deadline) {
+      if (distReady()) return;
+      if (existsSync(BUILD_LOCK)) {
+        const age = Date.now() - statSync(BUILD_LOCK).mtimeMs;
+        if (age > 120_000) unlinkSync(BUILD_LOCK);
+        await new Promise((r) => setTimeout(r, 500));
+        continue;
+      }
+      writeFileSync(BUILD_LOCK, String(process.pid));
+      try {
         execSync("pnpm exec astro build --root tests/e2e/fixtures/parity-app", {
           cwd: process.cwd(),
           stdio: "pipe",
         });
+      } finally {
+        try {
+          unlinkSync(BUILD_LOCK);
+        } catch {}
       }
     }
+    if (!distReady()) throw new Error("parity fixture build did not complete");
+  };
+
+  test.beforeAll(async () => {
+    await ensureFixtureBuilt();
     server = createServer((req, res) => {
       const urlPath = (req.url ?? "/").split("?")[0] ?? "/";
       let filePath = join(FIXTURE_DIST, urlPath);

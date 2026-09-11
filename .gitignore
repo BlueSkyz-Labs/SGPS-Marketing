@@ -95,3 +95,4 @@ public/*.placeholder
 # Bilingual parity fixture app (tests/e2e/fixtures/parity-app) build artifacts
 tests/e2e/fixtures/parity-app/dist/
 tests/e2e/fixtures/parity-app/.astro/
+tests/e2e/fixtures/parity-app/dist/

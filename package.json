@@ -24,7 +24,7 @@
     "architecture:views": "node scripts/generate-architecture-views.mjs",
     "architecture:views:check": "node scripts/generate-architecture-views.mjs --check",
     "test:e2e:install": "playwright install chromium firefox webkit",
-    "test:e2e": "playwright test --project=chromium --project=firefox --project=webkit --project=mobile-chromium",
+    "test:e2e": "node scripts/build-parity-fixture.mjs && playwright test --project=chromium --project=firefox --project=webkit --project=mobile-chromium",
     "check:client-budget": "node scripts/check-client-budget.mjs",
     "check:static-links": "node scripts/check-static-links.mjs",
     "e4:matrix": "node scripts/e4-matrix.mjs",
