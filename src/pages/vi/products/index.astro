@@ -36,11 +36,18 @@ const emptyDescription = products.length
               rõ ràng.
             </p>
             <div class="mt-6 flex flex-wrap gap-3">
-              <ButtonLink href={emptyPrimary.href}>
-                {emptyPrimary.label}
+              <ButtonLink href={`/vi${emptyPrimary.href}`}>
+                {emptyPrimary.label === "About BlueSkyz"
+                  ? "Về BlueSkyz"
+                  : emptyPrimary.label}
               </ButtonLink>
-              <ButtonLink href={emptySecondary.href} variant="secondary">
-                {emptySecondary.label}
+              <ButtonLink
+                href={`/vi${emptySecondary.href}`}
+                variant="secondary"
+              >
+                {emptySecondary.label === "Security"
+                  ? "Bảo mật"
+                  : emptySecondary.label}
               </ButtonLink>
             </div>
           </div>

@@ -1,23 +1,28 @@
 ---
-import { getCollection, type CollectionEntry } from "astro:content";
 import BaseLayout from "@/layouts/BaseLayout.astro";
-
-type PageEntry = CollectionEntry<"pages">;
-
-const pages = await getCollection(
-  "pages",
-  ({ data }: { data: PageEntry["data"] }) => data.lang === "en",
-);
-const page = pages.find((p: PageEntry) => p.data.slug === "about");
+import Container from "@/components/layout/Container.astro";
+import { SITE } from "@/data/site";
 ---
 
 <BaseLayout
-  title={page!.data.title}
-  description={page!.data.description}
+  title="About"
+  description={`About BlueSkyz Labs — ${SITE.proposition}`}
   path="/en/about/"
 >
-  <article class="prose max-w-none">
-    <h1>{page!.data.sections?.hero?.heading}</h1>
-    <p>{page!.data.sections?.content?.intro}</p>
-  </article>
+  <section class="py-16">
+    <Container>
+      <h1 class="text-3xl font-semibold tracking-tight">About BlueSkyz</h1>
+      <p class="mt-4 max-w-2xl text-[var(--text-secondary)]">
+        {SITE.proposition}
+        {SITE.supporting}
+      </p>
+      <p class="mt-4 text-sm font-medium text-[var(--text-muted)]">
+        Tony Nguyen — Founder &amp; CEO
+      </p>
+      <p class="mt-8 max-w-2xl text-sm text-[var(--text-muted)]">
+        Extended founder or company biography publishes when approved for the
+        public site. This page stays BlueSkyz-led, not a personal portfolio.
+      </p>
+    </Container>
+  </section>
 </BaseLayout>

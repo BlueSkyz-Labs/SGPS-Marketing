@@ -7,6 +7,12 @@ import { SITE } from "@/data/site";
 import { emptyRegistryPrimaryCta, emptyRegistrySecondaryCta } from "@/lib/act";
 import { getPublicProducts } from "@/lib/products";
 
+interface Props {
+  lang?: "en" | "vi";
+}
+const { lang = "en" } = Astro.props;
+const isVi = lang === "vi";
+
 const products = await getPublicProducts();
 const hasPublicProducts = products.length > 0;
 const emptyPrimary = emptyRegistryPrimaryCta(SITE.contactEmail);
@@ -36,29 +42,61 @@ const emptySecondary = emptyRegistrySecondaryCta(SITE.contactEmail);
       <p
         class="mt-5 max-w-xl text-lg leading-relaxed text-[color-mix(in_srgb,var(--brand-porcelain)_82%,transparent)]"
       >
-        {SITE.proposition}
+        {
+          isVi
+            ? "Chúng tôi xây dựng những sản phẩm thông minh để trao quyền cho con người và nâng tầm cách công việc được thực hiện."
+            : SITE.proposition
+        }
       </p>
       <p
         class="mt-3 max-w-xl text-sm leading-relaxed text-[color-mix(in_srgb,var(--brand-porcelain)_68%,transparent)]"
       >
-        {SITE.supporting}
+        {
+          isVi
+            ? "Một góc nhìn cao hơn xây dựng một ngày mai tươi sáng hơn."
+            : SITE.supporting
+        }
       </p>
       <div class="mt-10 flex flex-wrap gap-3">
         {
           hasPublicProducts ? (
             <>
-              <ButtonLink href="/products/">Explore Our Products</ButtonLink>
-              <ButtonLink href="/about/" variant="on-ink">
-                About BlueSkyz
+              <ButtonLink href={isVi ? "/vi/products/" : "/en/products/"}>
+                {isVi ? "Khám phá sản phẩm" : "Explore Our Products"}
+              </ButtonLink>
+              <ButtonLink
+                href={isVi ? "/vi/about/" : "/en/about/"}
+                variant="on-ink"
+              >
+                {isVi ? "Về BlueSkyz" : "About BlueSkyz"}
               </ButtonLink>
             </>
           ) : (
             <>
-              <ButtonLink href={emptyPrimary.href}>
-                {emptyPrimary.label}
+              <ButtonLink
+                href={
+                  isVi ? `/vi${emptyPrimary.href}` : `/en${emptyPrimary.href}`
+                }
+              >
+                {isVi
+                  ? emptyPrimary.label === "About BlueSkyz"
+                    ? "Về BlueSkyz"
+                    : emptyPrimary.label
+                  : emptyPrimary.label}
               </ButtonLink>
-              <ButtonLink href={emptySecondary.href} variant="on-ink">
-                {emptySecondary.label}
+              <ButtonLink
+                href={
+                  isVi
+                    ? `/vi${emptySecondary.href}`
+                    : `/en${emptySecondary.href}`
+                }
+                variant="on-ink"
+              >
+                {isVi
+                  ? emptySecondary.label === "Security"
+                    ? "Bảo mật"
+                    : emptySecondary.label
+                  : emptySecondary.label}
               </ButtonLink>
             </>
           )

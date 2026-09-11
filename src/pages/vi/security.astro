@@ -1,23 +1,48 @@
 ---
-import { getCollection, type CollectionEntry } from "astro:content";
 import BaseLayout from "@/layouts/BaseLayout.astro";
-
-type PageEntry = CollectionEntry<"pages">;
-
-const pages = await getCollection(
-  "pages",
-  ({ data }: { data: PageEntry["data"] }) => data.lang === "vi",
-);
-const page = pages.find((p: PageEntry) => p.data.slug === "security");
+import Container from "@/components/layout/Container.astro";
+import { SITE, SECURITY_ADVISORY_URL } from "@/data/site";
 ---
 
 <BaseLayout
-  title={page!.data.title}
-  description={page!.data.description}
+  title="Bảo mật"
+  description="Liên hệ và báo cáo bảo mật cho BlueSkyz Labs."
   path="/vi/security/"
 >
-  <article class="prose max-w-none">
-    <h1>{page!.data.sections.hero.heading}</h1>
-    <p>{page!.data.sections.intro}</p>
-  </article>
+  <section class="py-16">
+    <Container>
+      <h1 class="text-3xl font-semibold tracking-tight">Bảo mật</h1>
+      <p class="mt-4 max-w-2xl text-[var(--text-secondary)]">
+        Báo cáo vấn đề bảo mật qua kênh riêng tư. Không mở issue GitHub công
+        khai cho các báo cáo lỗ hổng.
+      </p>
+      {
+        SITE.securityEmail ? (
+          <p class="mt-4 max-w-2xl text-[var(--text-secondary)]">
+            Email{" "}
+            <a
+              href={`mailto:${SITE.securityEmail}`}
+              class="inline-flex min-h-11 items-center font-semibold text-[var(--action-primary)] no-underline hover:underline"
+            >
+              {SITE.securityEmail}
+            </a>
+            .
+          </p>
+        ) : null
+      }
+      <p class="mt-6">
+        <a
+          href={SECURITY_ADVISORY_URL}
+          rel="noopener noreferrer"
+          class="inline-flex min-h-11 items-center text-sm font-semibold text-[var(--action-primary)] no-underline hover:underline"
+        >
+          Mở báo cáo lỗ hổng riêng tư
+        </a>
+      </p>
+      <p class="mt-4 max-w-2xl text-sm text-[var(--text-muted)]">
+        Không công bố huy hiệu bug-bounty, SLA hoặc chứng nhận nào khi chưa có
+        bằng chứng xác minh.
+      </p>
+    </Container>
+  </section>
 </BaseLayout>

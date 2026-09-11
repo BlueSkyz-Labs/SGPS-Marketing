@@ -1,29 +1,55 @@
 ---
 const links = [
-  { href: "/privacy/", label: "Privacy" },
-  { href: "/security/", label: "Security" },
-  { href: "/support/", label: "Support" },
+  {
+    href: "/privacy/",
+    label: "Privacy",
+    viHref: "/vi/privacy/",
+    viLabel: "Quyền riêng tư",
+  },
+  {
+    href: "/security/",
+    label: "Security",
+    viHref: "/vi/security/",
+    viLabel: "Bảo mật",
+  },
+  {
+    href: "/support/",
+    label: "Support",
+    viHref: "/vi/support/",
+    viLabel: "Hỗ trợ",
+  },
 ];
+
+interface Props {
+  lang?: "en" | "vi";
+}
+const { lang = "en" } = Astro.props;
+const isVi = lang === "vi";
 ---
 
 <section
   class="border-b border-[var(--border-subtle)] py-16"
   aria-labelledby="trust-title"
 >
-  <h2 id="trust-title" class="text-3xl font-semibold tracking-tight">Trust</h2>
+  <h2 id="trust-title" class="text-3xl font-semibold tracking-tight">
+    {isVi ? "Tin cậy" : "Trust"}
+  </h2>
   <p class="mt-4 max-w-2xl text-[var(--text-secondary)]">
-    Product maturity stays explicit. Privacy, security, and support paths are
-    first-class routes — not slogans.
+    {
+      isVi
+        ? "Mức độ trưởng thành của sản phẩm được thể hiện rõ ràng. Đường dẫn đến quyền riêng tư, bảo mật và hỗ trợ là những tuyến đường hạng nhất — không phải khẩu hiệu."
+        : "Product maturity stays explicit. Privacy, security, and support paths are first-class routes — not slogans."
+    }
   </p>
   <ul class="mt-8 flex flex-wrap gap-4">
     {
       links.map((link) => (
         <li>
           <a
-            href={link.href}
+            href={isVi ? link.viHref : link.href}
             class="inline-flex min-h-11 items-center text-sm font-semibold text-[var(--action-primary)] no-underline hover:underline"
           >
-            {link.label}
+            {isVi ? link.viLabel : link.label}
           </a>
         </li>
       ))

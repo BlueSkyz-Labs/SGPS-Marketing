@@ -4,6 +4,12 @@ import { SITE } from "@/data/site";
 import { emptyRegistryPrimaryCta, emptyRegistrySecondaryCta } from "@/lib/act";
 import { getPublicProducts } from "@/lib/products";
 
+interface Props {
+  lang?: "en" | "vi";
+}
+const { lang = "en" } = Astro.props;
+const isVi = lang === "vi";
+
 const hasPublicProducts = (await getPublicProducts()).length > 0;
 const emptyPrimary = emptyRegistryPrimaryCta(SITE.contactEmail);
 const emptySecondary = emptyRegistrySecondaryCta(SITE.contactEmail);
@@ -11,31 +17,59 @@ const emptySecondary = emptyRegistrySecondaryCta(SITE.contactEmail);
 
 <section class="py-16" aria-labelledby="next-title">
   <h2 id="next-title" class="text-3xl font-semibold tracking-tight">
-    Next step
+    {isVi ? "Bước tiếp theo" : "Next step"}
   </h2>
   <p class="mt-4 max-w-2xl text-[var(--text-secondary)]">
     {
       hasPublicProducts
-        ? "Explore products when they are ready to evaluate, or contact BlueSkyz when you have a concrete problem worth solving."
+        ? isVi
+          ? "Khám phá sản phẩm khi chúng sẵn sàng đánh giá, hoặc liên hệ BlueSkyz khi bạn có một vấn đề cụ thể đáng giải quyết."
+          : "Explore products when they are ready to evaluate, or contact BlueSkyz when you have a concrete problem worth solving."
         : SITE.contactEmail
-          ? "No public products are published yet. Contact BlueSkyz when you have a concrete problem worth solving, or learn who we are."
-          : "No public products are published yet. Learn who we are, or use the security reporting path when you need a working trust channel."
+          ? isVi
+            ? "Chưa có sản phẩm công khai nào được công bố. Liên hệ BlueSkyz khi bạn có một vấn đề cụ thể đáng giải quyết, hoặc tìm hiểu chúng tôi là ai."
+            : "No public products are published yet. Contact BlueSkyz when you have a concrete problem worth solving, or learn who we are."
+          : isVi
+            ? "Chưa có sản phẩm công khai nào được công bố. Tìm hiểu chúng tôi là ai, hoặc sử dụng đường dẫn báo cáo bảo mật khi bạn cần một kênh tin cậy hoạt động."
+            : "No public products are published yet. Learn who we are, or use the security reporting path when you need a working trust channel."
     }
   </p>
   <div class="mt-8 flex flex-wrap gap-3">
     {
       hasPublicProducts ? (
         <>
-          <ButtonLink href="/products/">Explore products</ButtonLink>
-          <ButtonLink href="/contact/" variant="secondary">
-            Contact
+          <ButtonLink href={isVi ? "/vi/products/" : "/en/products/"}>
+            {isVi ? "Khám phá sản phẩm" : "Explore products"}
+          </ButtonLink>
+          <ButtonLink
+            href={isVi ? "/vi/contact/" : "/en/contact/"}
+            variant="secondary"
+          >
+            {isVi ? "Liên hệ" : "Contact"}
           </ButtonLink>
         </>
       ) : (
         <>
-          <ButtonLink href={emptyPrimary.href}>{emptyPrimary.label}</ButtonLink>
-          <ButtonLink href={emptySecondary.href} variant="secondary">
-            {emptySecondary.label}
+          <ButtonLink
+            href={isVi ? `/vi${emptyPrimary.href}` : `/en${emptyPrimary.href}`}
+          >
+            {isVi
+              ? emptyPrimary.label === "About BlueSkyz"
+                ? "Về BlueSkyz"
+                : emptyPrimary.label
+              : emptyPrimary.label}
+          </ButtonLink>
+          <ButtonLink
+            href={
+              isVi ? `/vi${emptySecondary.href}` : `/en${emptySecondary.href}`
+            }
+            variant="secondary"
+          >
+            {isVi
+              ? emptySecondary.label === "Security"
+                ? "Bảo mật"
+                : emptySecondary.label
+              : emptySecondary.label}
           </ButtonLink>
         </>
       )

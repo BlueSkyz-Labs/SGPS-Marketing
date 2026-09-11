@@ -1,5 +1,11 @@
 ---
 import { SITE } from "@/data/site";
+
+interface Props {
+  lang?: "en" | "vi";
+}
+const { lang = "en" } = Astro.props;
+const isVi = lang === "vi";
 ---
 
 <section
@@ -7,13 +13,20 @@ import { SITE } from "@/data/site";
   aria-labelledby="about-title"
 >
   <h2 id="about-title" class="text-3xl font-semibold tracking-tight">
-    About BlueSkyz
+    {isVi ? "Về BlueSkyz" : "About BlueSkyz"}
   </h2>
   <p class="mt-4 max-w-2xl text-[var(--text-secondary)]">
-    {SITE.proposition}
-    {SITE.supporting}
+    {
+      isVi
+        ? "Chúng tôi xây dựng những sản phẩm thông minh để trao quyền cho con người và nâng tầm cách công việc được thực hiện. Một góc nhìn cao hơn xây dựng một ngày mai tươi sáng hơn."
+        : `${SITE.proposition} ${SITE.supporting}`
+    }
   </p>
   <p class="mt-4 text-sm font-medium text-[var(--text-muted)]">
-    Tony Nguyen — Founder &amp; CEO
+    {
+      isVi
+        ? "Tony Nguyen — Nhà sáng lập & Giám đốc điều hành"
+        : "Tony Nguyen — Founder & CEO"
+    }
   </p>
 </section>
