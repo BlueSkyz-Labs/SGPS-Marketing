@@ -62,6 +62,9 @@ test("journey bar is absent where no next step is defined", async ({
 test("primary nav marks the current page with aria-current", async ({
   page,
 }) => {
+  // Primary nav is desktop-only (hidden on mobile widths); assert explicitly
+  // at desktop width so the test is deterministic across all projects.
+  await page.setViewportSize({ width: 1280, height: 800 });
   await page.goto("/en/about/");
   const primary = page.getByRole("navigation", { name: "Primary" });
   await expect(
