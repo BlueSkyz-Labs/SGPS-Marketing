@@ -36,9 +36,13 @@ test("homepage keeps the C1.1 customer order landmarks", async ({ page }) => {
   await expect(
     page.getByRole("heading", { name: "Featured products" }),
   ).toHaveCount(0);
-  await expect(page.getByRole("heading", { name: "One house" })).toBeVisible();
-  await expect(page.getByRole("heading", { name: "Trust" })).toBeVisible();
   await expect(
-    page.getByRole("heading", { name: "About BlueSkyz" }),
+    page.getByRole("heading", { level: 2, name: "One house" }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("heading", { level: 2, name: "Trust" }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("heading", { level: 2, name: "About BlueSkyz" }),
   ).toBeVisible();
 });
