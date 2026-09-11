@@ -320,6 +320,49 @@ body {
   scroll-margin-top: 4rem;
 }
 
+/* S+ Intent Lens (Task 7) — self-selected emphasis, additive only. */
+.intent-chip {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem;
+  padding: 0 1rem;
+  border: 1px solid var(--border-subtle);
+  border-radius: 0.5rem;
+  background: white;
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition:
+    border-color var(--motion-confirmation-duration) var(--motion-ease-standard),
+    color var(--motion-confirmation-duration) var(--motion-ease-standard),
+    background-color var(--motion-confirmation-duration)
+      var(--motion-ease-standard);
+}
+
+.intent-chip:hover {
+  border-color: var(--action-primary);
+  color: var(--text-primary);
+}
+
+.intent-chip[aria-pressed="true"] {
+  border-color: var(--action-primary);
+  background: color-mix(in srgb, var(--brand-cobalt) 6%, white);
+  color: var(--action-primary);
+}
+
+/* Emphasis targets: selecting an intent only adds emphasis to relevant
+   surfaces; nothing is hidden and defaults stay complete. */
+html[data-intent="understand-blueskyz"] section:has(#house-title),
+html[data-intent="verify-trust"] section:has(#trust-title),
+html[data-intent="work-with-us"] section:has(#about-title) {
+  background: color-mix(in srgb, var(--brand-cobalt) 4%, white);
+}
+
+html[data-intent="evaluate-product"] [data-journey-bar] a[href$="/products/"] {
+  border-color: var(--action-primary);
+}
+
 .hero-mark-stage {
   position: relative;
   display: grid;
