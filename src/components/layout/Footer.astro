@@ -23,19 +23,19 @@ const motto = isVi
 <footer
   class="mt-auto bg-[var(--surface-inverse)] text-[var(--brand-porcelain)]"
 >
-  <Container class="flex flex-col gap-8 py-14">
+  <Container class="flex flex-col gap-10 py-14">
     <div class="flex flex-wrap items-center justify-between gap-6">
       <BrandLockup size="footer" />
       <LanguageSwitcher variant="dark" />
     </div>
     <nav aria-label="Footer">
-      <ul class="flex flex-wrap gap-x-6 gap-y-2">
+      <ul class="flex flex-wrap gap-x-7 gap-y-1">
         {
           FOOTER_LINKS.map((item) => (
             <li>
               <a
                 href={item.href}
-                class="inline-flex min-h-11 items-center text-sm text-[color-mix(in_srgb,var(--brand-porcelain)_82%,white)] no-underline hover:text-white"
+                class="inline-flex min-h-11 items-center text-sm text-[color-mix(in_srgb,var(--brand-porcelain)_82%,white)] no-underline transition-colors hover:text-white"
               >
                 {item.label}
               </a>
