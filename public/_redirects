@@ -1,0 +1,13 @@
+# Legacy root routes → canonical localized routes (301).
+# S+ Task 12A / issue #98: the pre-bilingual root URLs must not serve
+# duplicate content; they redirect to the canonical EN structure.
+# (Workers Static Assets honors this file; builds also emit meta-refresh
+# stubs as a fallback for hosts that do not read _redirects.)
+/about/ /en/about/ 301
+/contact/ /en/contact/ 301
+/privacy/ /en/privacy/ 301
+/security/ /en/security/ 301
+/support/ /en/support/ 301
+/products/ /en/products/ 301
+/products/* /en/products/ 301
+/ /en/ 301

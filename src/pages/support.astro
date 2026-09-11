@@ -4,7 +4,7 @@ import Container from "@/components/layout/Container.astro";
 import { SITE } from "@/data/site";
 
 const hasBusinessEmail = Boolean(SITE.contactEmail);
-Astro.redirect("/en/support/");
+return Astro.redirect("/en/support/");
 ---
 
 <BaseLayout title="Support" description="Support for BlueSkyz Labs products.">

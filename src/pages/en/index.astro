@@ -1,6 +1,9 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import Container from "@/components/layout/Container.astro";
+import Atlas from "@/components/experience/Atlas.astro";
+import ExperienceSpine from "@/components/experience/ExperienceSpine.astro";
+import IntentLens from "@/components/experience/IntentLens.astro";
 import Hero from "@/components/sections/Hero.astro";
 import FeaturedProducts from "@/components/sections/FeaturedProducts.astro";
 import FlagshipProof from "@/components/sections/FlagshipProof.astro";
@@ -21,12 +24,15 @@ const flagship = await getFlagshipProduct();
   path="/en/"
 >
   <Hero lang="en" />
+  <ExperienceSpine lang="en" />
   <Container>
+    <IntentLens lang="en" />
     <FeaturedProducts products={products} />
     <OneHouse lang="en" />
     {flagship ? <FlagshipProof product={flagship} /> : null}
     <Trust lang="en" />
     <AboutBlueSkyz lang="en" />
     <NextStep lang="en" />
+    <Atlas lang="en" />
   </Container>
 </BaseLayout>

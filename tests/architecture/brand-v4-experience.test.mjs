@@ -20,12 +20,22 @@ test("v4 hero uses the supplied website artwork and flat lockup", () => {
 });
 
 test("v4 principle icons are rendered without publishing product claims", () => {
-  const house = readFileSync("src/components/sections/OneHouse.astro", "utf8");
+  // S+ Task 5: principle icons render inside the OneHouseMatrix component;
+  // the assertions follow the rendered icons and keep the section wiring.
+  const matrix = readFileSync(
+    "src/components/experience/OneHouseMatrix.astro",
+    "utf8",
+  );
   const assets = readFileSync("src/data/brand-assets.ts", "utf8");
   for (const name of ["intelligence", "elevation", "trust", "impact"]) {
-    assert.match(house, new RegExp(`brandAssets\.principles\.${name}`));
-    assert.match(assets, new RegExp(`${name}:`));
+    assert.ok(
+      matrix.includes("brandAssets.principles." + name),
+      "matrix must render the " + name + " principle icon",
+    );
+    assert.match(assets, new RegExp(name + ":"));
   }
+  const house = readFileSync("src/components/sections/OneHouse.astro", "utf8");
+  assert.match(house, /OneHouseMatrix/);
 });
 
 test("v4 copy library description is the public brand proposition", () => {

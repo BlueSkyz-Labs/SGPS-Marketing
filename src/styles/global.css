@@ -226,6 +226,231 @@ body {
   }
 }
 
+/* S+ Elevation Spine — static story orientation (S+ Task 3). */
+.experience-spine {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  border-bottom: 1px solid var(--border-subtle);
+  background: color-mix(in srgb, white 88%, transparent);
+  backdrop-filter: blur(10px);
+}
+
+.experience-spine__list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.25rem 1.5rem;
+  margin: 0 auto;
+  max-width: 80rem;
+  padding: 0.5rem 1rem;
+  list-style: none;
+}
+
+.experience-spine__item {
+  margin: 0;
+}
+
+.experience-spine__link {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  padding: 0.25rem 0;
+  color: var(--text-secondary);
+  font-size: 0.8125rem;
+  letter-spacing: 0.01em;
+  text-decoration: none;
+  transition: color var(--motion-confirmation-duration)
+    var(--motion-ease-standard);
+}
+
+.experience-spine__link:hover {
+  color: var(--brand-cobalt);
+}
+
+.experience-spine__index {
+  color: var(--text-muted);
+  font-size: 0.6875rem;
+  letter-spacing: 0.14em;
+}
+
+@media (max-width: 767px) {
+  .experience-spine__list {
+    gap: 0.25rem 1.125rem;
+    padding: 0.625rem 0.75rem;
+  }
+
+  .experience-spine__link {
+    padding: 0.375rem 0;
+    font-size: 0.875rem;
+  }
+
+  .experience-spine__index {
+    font-size: 0.6875rem;
+    letter-spacing: 0.08em;
+  }
+}
+
+@media (max-width: 389px) {
+  .experience-spine__list {
+    gap: 0.25rem 0.75rem;
+  }
+
+  .experience-spine__link {
+    font-size: 0.8125rem;
+  }
+}
+
+@media (max-width: 359px) {
+  .experience-spine__list {
+    gap: 0.25rem 0.75rem;
+  }
+
+  .experience-spine__index {
+    display: none;
+  }
+}
+
+/* Anchor landings clear the sticky spine. */
+#hero-title,
+#house-title,
+#trust-title,
+#about-title,
+#next-title {
+  scroll-margin-top: 4rem;
+}
+
+/* S+ Intent Lens (Task 7) — self-selected emphasis, additive only. */
+.intent-chip {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem;
+  padding: 0 1rem;
+  border: 1px solid var(--border-subtle);
+  border-radius: 0.5rem;
+  background: white;
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition:
+    border-color var(--motion-confirmation-duration) var(--motion-ease-standard),
+    color var(--motion-confirmation-duration) var(--motion-ease-standard),
+    background-color var(--motion-confirmation-duration)
+      var(--motion-ease-standard);
+}
+
+.intent-chip:hover {
+  border-color: var(--action-primary);
+  color: var(--text-primary);
+}
+
+.intent-chip[aria-pressed="true"] {
+  border-color: var(--action-primary);
+  background: color-mix(in srgb, var(--brand-cobalt) 6%, white);
+  color: var(--action-primary);
+}
+
+/* Emphasis targets: selecting an intent only adds emphasis to relevant
+   surfaces; nothing is hidden and defaults stay complete. */
+html[data-intent="understand-blueskyz"] section:has(#house-title),
+html[data-intent="verify-trust"] section:has(#trust-title),
+html[data-intent="work-with-us"] section:has(#about-title) {
+  background: color-mix(in srgb, var(--brand-cobalt) 4%, white);
+}
+
+html[data-intent="evaluate-product"] [data-journey-bar] a[href$="/products/"] {
+  border-color: var(--action-primary);
+}
+
+/* S+ Native Language Continuity (Task 8) — progressive enhancement only.
+   Cross-document View Transitions apply to same-origin navigations in
+   supporting browsers (CSS capability detection); normal link navigation
+   remains the source of truth and no click interception is used.
+   prefers-reduced-motion disables the decorative transition entirely. */
+@view-transition {
+  navigation: auto;
+}
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: var(--motion-continuity-duration);
+  animation-timing-function: var(--motion-ease-standard);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
+}
+
+/* S+ Command Navigator (Task 9) — native dialog command palette. */
+.command-navigator {
+  width: min(92vw, 34rem);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  background: white;
+  color: var(--text-primary);
+  padding: 0;
+  box-shadow: 0 24px 60px -24px
+    color-mix(in srgb, var(--brand-ink) 45%, transparent);
+}
+
+.command-navigator::backdrop {
+  background: color-mix(in srgb, var(--brand-ink) 42%, transparent);
+}
+
+.command-navigator__panel {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0.875rem;
+}
+
+.command-navigator__panel input {
+  min-height: 2.75rem;
+  width: 100%;
+  border: 1px solid var(--border-subtle);
+  border-radius: 0.5rem;
+  background: white;
+  padding: 0 0.75rem;
+  font-size: 0.9375rem;
+  color: var(--text-primary);
+}
+
+.command-navigator__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-height: 18rem;
+  overflow-y: auto;
+}
+
+.command-navigator__list a {
+  display: flex;
+  min-height: 2.5rem;
+  align-items: center;
+  border-radius: 0.5rem;
+  padding: 0 0.75rem;
+  font-size: 0.9375rem;
+  color: var(--text-primary);
+  text-decoration: none;
+}
+
+.command-navigator__list a:hover,
+.command-navigator__list a:focus-visible {
+  background: var(--surface-subtle);
+}
+
+.command-navigator__empty {
+  margin: 0;
+  padding: 0.5rem 0.75rem 0.25rem;
+  font-size: 0.875rem;
+  color: var(--text-muted);
+}
+
 .hero-mark-stage {
   position: relative;
   display: grid;

@@ -1,6 +1,8 @@
 ---
 import Header from "@/components/layout/Header.astro";
 import Footer from "@/components/layout/Footer.astro";
+import CommandNavigator from "@/components/experience/CommandNavigator.astro";
+import JourneyBar from "@/components/experience/JourneyBar.astro";
 import { SITE } from "@/data/site";
 import {
   absoluteUrl,
@@ -88,8 +90,15 @@ const robotsNoindex = noindex || isNonProductionSiteUrl(SITE.url);
   <body class="flex min-h-screen flex-col">
     <a class="skip-link" href="#main-content">Skip to main content</a>
     <Header />
+    <CommandNavigator />
+    <script>
+      import { initAnalyticsBridge } from "@/scripts/analytics-bridge";
+
+      initAnalyticsBridge();
+    </script>
     <main id="main-content" class="flex-1" tabindex="-1">
       <slot />
+      <JourneyBar />
     </main>
     <Footer />
   </body>

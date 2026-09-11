@@ -1,0 +1,64 @@
+---
+import { buildNavigatorIndex } from "@/lib/navigator";
+import { getPublicProducts } from "@/lib/products";
+import { getLanguageFromPath } from "@/lib/i18n";
+
+const lang = getLanguageFromPath(Astro.url.pathname);
+const isVi = lang === "vi";
+const items = buildNavigatorIndex(lang, await getPublicProducts());
+
+const navLabel = isVi ? "Điều hướng nhanh" : "Quick navigation";
+const placeholder = isVi ? "Tìm trang…" : "Search pages…";
+const emptyLabel = isVi
+  ? "Không tìm thấy mục phù hợp."
+  : "No matching destinations.";
+---
+
+<dialog class="command-navigator" aria-label={navLabel} data-command-navigator>
+  <div class="command-navigator__panel">
+    <label class="sr-only" for="command-navigator-input">{navLabel}</label>
+    <input
+      id="command-navigator-input"
+      type="search"
+      placeholder={placeholder}
+      autocomplete="off"
+      spellcheck="false"
+      data-command-input
+    />
+    <ul class="command-navigator__list" data-command-list>
+      {
+        items.map((item) => {
+          const searchText =
+            `${item.label} ${item.aliases.join(" ")}`.toLocaleLowerCase(lang);
+          return (
+            <li
+              data-command-item
+              data-command-kind={item.kind}
+              data-search={searchText}
+            >
+              <a href={item.href}>{item.label}</a>
+            </li>
+          );
+        })
+      }
+    </ul>
+    <p class="command-navigator__empty" data-command-empty hidden>
+      {emptyLabel}
+    </p>
+  </div>
+</dialog>
+
+<noscript>
+  <style>
+    [data-command-navigator],
+    [data-command-trigger] {
+      display: none !important;
+    }
+  </style>
+</noscript>
+
+<script>
+  import { initCommandNavigator } from "@/scripts/command-navigator";
+
+  initCommandNavigator();
+</script>

@@ -11,6 +11,7 @@ export default [
       "test-results/**",
       ".lighthouseci/**",
       ".worktrees/**",
+      ".hermes/**",
     ],
   },
   ...tseslint.configs.recommended,

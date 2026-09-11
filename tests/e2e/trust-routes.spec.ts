@@ -1,12 +1,24 @@
 import { expect, test } from "@playwright/test";
 
+// Canonical trust routes (legacy root equivalents redirect to these).
 const TRUST_ROUTES = [
-  "/about/",
-  "/contact/",
-  "/support/",
-  "/privacy/",
-  "/security/",
+  "/en/about/",
+  "/en/contact/",
+  "/en/support/",
+  "/en/privacy/",
+  "/en/security/",
 ] as const;
+
+// Legacy root routes must keep working via redirect, not duplicate content.
+const LEGACY_REDIRECTS: Array<[string, string]> = [
+  ["/", "/en/"],
+  ["/about/", "/en/about/"],
+  ["/contact/", "/en/contact/"],
+  ["/privacy/", "/en/privacy/"],
+  ["/security/", "/en/security/"],
+  ["/support/", "/en/support/"],
+  ["/products/", "/en/products/"],
+];
 
 const BANNED = [
   /global offices/i,
@@ -53,10 +65,24 @@ test("/security/ exposes private vulnerability reporting CTA", async ({
   );
 });
 
-test("/about/ shows approved founder title", async ({ page }) => {
+test("/en/about/ shows approved founder title", async ({ page }) => {
   await page.goto("/en/about/");
   await expect(page.getByText(/Tony Nguyen — Founder & CEO/i)).toBeVisible();
 });
+
+for (const [from, to] of LEGACY_REDIRECTS) {
+  test(`legacy route ${from} redirects to ${to} instead of duplicating content`, async ({
+    page,
+  }) => {
+    const response = await page.goto(from, { waitUntil: "domcontentloaded" });
+    expect(response, `${from} response`).not.toBeNull();
+    expect(response!.status(), `${from} status`).toBeLessThan(400);
+    await expect(
+      page.locator('meta[http-equiv="refresh"]'),
+      `${from} must emit a redirect to ${to}`,
+    ).toHaveAttribute("content", new RegExp(to));
+  });
+}
 
 test("/privacy/ summarizes practical trust answers", async ({ page }) => {
   await page.goto("/en/privacy/");

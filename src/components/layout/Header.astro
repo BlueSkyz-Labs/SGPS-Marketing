@@ -12,6 +12,9 @@ const currentPath = Astro.url.pathname;
 const lang = getLanguageFromPath(currentPath);
 const NAV = getNav(lang);
 
+const isActive = (href: string): boolean =>
+  currentPath.replace(/\/+$/, "") === href.replace(/\/+$/, "");
+
 const hasPublicProducts = (await getPublicProducts()).length > 0;
 const primaryCta = hasPublicProducts
   ? SITE.contactEmail
@@ -27,10 +30,23 @@ const primaryCta = hasPublicProducts
     <BrandLockup href={`/${lang}/`} />
 
     <nav aria-label="Primary" class="hidden items-center gap-2 md:flex">
+      <button
+        type="button"
+        data-command-trigger
+        aria-keyshortcuts="Control+K Meta+K"
+        class="inline-flex min-h-11 items-center gap-2 rounded-lg border border-[var(--border-subtle)] px-3 text-sm font-medium text-[var(--text-secondary)] transition-colors hover:text-[var(--text-primary)]"
+      >
+        {lang === "vi" ? "Tìm" : "Search"}
+        <kbd
+          class="rounded border border-[var(--border-subtle)] bg-[var(--surface-subtle)] px-1.5 py-0.5 text-[0.65rem] font-medium"
+          >Ctrl K</kbd
+        >
+      </button>
       {
         NAV.map((item) => (
           <a
             href={item.href}
+            aria-current={isActive(item.href) ? "page" : undefined}
             class="inline-flex min-h-11 items-center px-3 text-sm font-medium text-[var(--text-secondary)] no-underline hover:text-[var(--text-primary)]"
           >
             {item.label}
@@ -52,10 +68,19 @@ const primaryCta = hasPublicProducts
         class="absolute right-0 z-20 mt-2 w-56 rounded-lg border border-[var(--border-subtle)] bg-white p-3 shadow-sm"
       >
         <nav aria-label="Mobile" class="flex flex-col gap-2">
+          <button
+            type="button"
+            data-command-trigger
+            aria-keyshortcuts="Control+K Meta+K"
+            class="min-h-11 rounded-md border border-[var(--border-subtle)] px-3 py-2 text-left text-sm font-medium text-[var(--text-primary)]"
+          >
+            {lang === "vi" ? "Tìm trang" : "Search pages"}
+          </button>
           {
             NAV.map((item) => (
               <a
                 href={item.href}
+                aria-current={isActive(item.href) ? "page" : undefined}
                 class="min-h-11 rounded-md px-3 py-2 text-sm font-medium text-[var(--text-primary)] no-underline hover:bg-[var(--surface-subtle)]"
               >
                 {item.label}

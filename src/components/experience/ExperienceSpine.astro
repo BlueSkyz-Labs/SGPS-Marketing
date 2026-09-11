@@ -1,0 +1,28 @@
+---
+import { EXPERIENCE_STAGES } from "@/data/experience";
+
+interface Props {
+  lang?: "en" | "vi";
+}
+
+const { lang = "en" } = Astro.props;
+const isVi = lang === "vi";
+const navLabel = isVi ? "Câu chuyện trang chủ" : "Homepage story";
+---
+
+<nav class="experience-spine" aria-label={navLabel}>
+  <ol class="experience-spine__list">
+    {
+      EXPERIENCE_STAGES.map((stage, index) => (
+        <li class="experience-spine__item">
+          <a class="experience-spine__link" href={`#${stage.id}`}>
+            <span class="experience-spine__index" aria-hidden="true">
+              {String(index + 1).padStart(2, "0")}
+            </span>
+            <span>{stage.label[lang]}</span>
+          </a>
+        </li>
+      ))
+    }
+  </ol>
+</nav>

@@ -1,0 +1,62 @@
+---
+interface Props {
+  lang?: "en" | "vi";
+}
+
+const { lang = "en" } = Astro.props;
+const isVi = lang === "vi";
+
+const kicker = isVi ? "Bạn đang quan tâm điều gì?" : "What brings you here?";
+
+const intents = [
+  {
+    id: "evaluate-product",
+    label: isVi ? "Đánh giá sản phẩm" : "Evaluate a product",
+  },
+  {
+    id: "understand-blueskyz",
+    label: isVi ? "Tìm hiểu BlueSkyz" : "Understand BlueSkyz",
+  },
+  { id: "verify-trust", label: isVi ? "Kiểm chứng tin cậy" : "Verify trust" },
+  {
+    id: "work-with-us",
+    label: isVi ? "Làm việc cùng chúng tôi" : "Work with us",
+  },
+] as const;
+---
+
+<div
+  class="mt-8 flex flex-col gap-3 border-b border-[var(--border-subtle)] pb-8 sm:mt-10 sm:flex-row sm:items-center sm:justify-between"
+  data-intent-lens
+>
+  <p
+    id="intent-lens-label"
+    class="text-xs font-semibold tracking-[0.18em] text-[var(--text-muted)] uppercase"
+  >
+    {kicker}
+  </p>
+  <div
+    role="group"
+    aria-labelledby="intent-lens-label"
+    class="flex flex-wrap gap-2"
+  >
+    {
+      intents.map((intent) => (
+        <button
+          type="button"
+          class="intent-chip"
+          data-intent={intent.id}
+          aria-pressed="false"
+        >
+          {intent.label}
+        </button>
+      ))
+    }
+  </div>
+</div>
+
+<script>
+  import { initIntentLens } from "@/scripts/intent-lens";
+
+  initIntentLens();
+</script>

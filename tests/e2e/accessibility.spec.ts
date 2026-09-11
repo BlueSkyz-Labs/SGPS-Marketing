@@ -1,14 +1,23 @@
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test } from "@playwright/test";
 
+// Canonical EN + VI routes (legacy root routes now 301/refresh to /en/*;
+// their redirect contract is asserted in trust-routes.spec.ts).
 const ROUTES = [
-  "/",
-  "/products/",
-  "/about/",
-  "/contact/",
-  "/support/",
-  "/privacy/",
-  "/security/",
+  "/en/",
+  "/en/products/",
+  "/en/about/",
+  "/en/contact/",
+  "/en/support/",
+  "/en/privacy/",
+  "/en/security/",
+  "/vi/",
+  "/vi/products/",
+  "/vi/about/",
+  "/vi/contact/",
+  "/vi/support/",
+  "/vi/privacy/",
+  "/vi/security/",
 ] as const;
 
 for (const route of ROUTES) {

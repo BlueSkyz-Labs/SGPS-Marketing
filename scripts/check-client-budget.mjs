@@ -39,6 +39,25 @@ function listHtmlFiles(dir) {
   return files;
 }
 
+// Inline executable scripts are rendered dead by the production CSP
+// (`script-src 'self'`); flag them so a build config change cannot silently
+// ship unrunnable interaction code.
+function collectInlineExecutableScripts(html) {
+  const inline = [];
+  const pattern = /<script\b([^>]*)>([\s\S]*?)<\/script>/gi;
+  for (const match of html.matchAll(pattern)) {
+    const attributes = match[1] ?? "";
+    if (/\bsrc\s*=/i.test(attributes)) {
+      continue;
+    }
+    if (/application\/ld\+json/i.test(attributes)) {
+      continue;
+    }
+    inline.push((match[2] ?? "").trim().slice(0, 120));
+  }
+  return inline;
+}
+
 // S+ Wave 1 / Task 1: enforce the hard client-JS ceiling against EVERY built
 // page (worst-case visitor), not only dist/index.html. A later interactive
 // wave may not exceed this budget on any route.
@@ -50,6 +69,7 @@ export function measureClientJsBudget(distDir = "dist") {
 
   const uniqueFiles = new Map();
   const pages = [];
+  const inlineScripts = [];
   let maxPageBrotliBytes = 0;
   let maxPagePath = null;
 
@@ -60,6 +80,14 @@ export function measureClientJsBudget(distDir = "dist") {
       dirname(htmlPath),
       distDir,
     );
+    const inline = collectInlineExecutableScripts(html);
+    if (inline.length > 0) {
+      inlineScripts.push({
+        path: htmlPath,
+        count: inline.length,
+        samples: inline,
+      });
+    }
     let pageBrotliBytes = 0;
 
     for (const filePath of scriptPaths) {
@@ -104,8 +132,10 @@ export function measureClientJsBudget(distDir = "dist") {
     maxPageBrotliBytes,
     maxPagePath,
     pages,
+    inlineScripts,
     budgetBytes: CLIENT_JS_HARD_BUDGET_BYTES,
     withinBudget:
+      inlineScripts.length === 0 &&
       totalBrotliBytes < CLIENT_JS_HARD_BUDGET_BYTES &&
       maxPageBrotliBytes < CLIENT_JS_HARD_BUDGET_BYTES,
   };
@@ -131,6 +161,14 @@ if (isMain) {
   const result = measureClientJsBudget("dist");
   assertNoFrameworkClientLeak("dist");
   console.log(JSON.stringify(result, null, 2));
+  if (result.inlineScripts.length > 0) {
+    console.error(
+      `Inline executable scripts violate the CSP contract (script-src 'self'): ${result.inlineScripts
+        .map((entry) => `${entry.path} (${entry.count})`)
+        .join(", ")}`,
+    );
+    process.exit(1);
+  }
   if (!result.withinBudget) {
     console.error(
       `Client JS budget exceeded: site-wide ${result.totalBrotliBytes} or worst page ${result.maxPageBrotliBytes} >= ${result.budgetBytes} (worst page: ${result.maxPagePath ?? "n/a"})`,
