@@ -363,6 +363,29 @@ html[data-intent="evaluate-product"] [data-journey-bar] a[href$="/products/"] {
   border-color: var(--action-primary);
 }
 
+/* S+ Native Language Continuity (Task 8) — progressive enhancement only.
+   Cross-document View Transitions apply to same-origin navigations in
+   supporting browsers (CSS capability detection); normal link navigation
+   remains the source of truth and no click interception is used.
+   prefers-reduced-motion disables the decorative transition entirely. */
+@view-transition {
+  navigation: auto;
+}
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: var(--motion-continuity-duration);
+  animation-timing-function: var(--motion-ease-standard);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
+}
+
 .hero-mark-stage {
   position: relative;
   display: grid;
