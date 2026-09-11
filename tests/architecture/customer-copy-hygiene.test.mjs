@@ -102,8 +102,10 @@ test("empty featured section is omitted instead of a hollow shelf", () => {
     "src/components/sections/FeaturedProducts.astro",
     "utf8",
   );
+  const labels = readFileSync("src/data/site.ts", "utf8");
   assert.match(featured, /products\.length > 0/);
-  assert.match(featured, /Explore all products/);
+  assert.match(featured, /exploreAllProducts/);
+  assert.match(labels, /Explore all products/);
   assert.doesNotMatch(featured, /No public products are published yet/);
 });
 

@@ -22,9 +22,9 @@ return Astro.redirect("/en/");
 >
   <Hero />
   <Container>
-    <FeaturedProducts products={products} />
+    <FeaturedProducts products={products} lang="en" />
     <OneHouse />
-    {flagship ? <FlagshipProof product={flagship} /> : null}
+    {flagship ? <FlagshipProof product={flagship} lang="en" /> : null}
     <Trust />
     <AboutBlueSkyz />
     <NextStep />

@@ -2,16 +2,21 @@
 import type { CollectionEntry } from "astro:content";
 import ProductStatus from "@/components/product/ProductStatus.astro";
 import ButtonLink from "@/components/ui/ButtonLink.astro";
+import { SHARED_LABELS, labelFor, type Language } from "@/data/site";
+import { getProductProfilePath } from "@/lib/product-routes";
 
 interface Props {
   product: CollectionEntry<"products">;
+  lang: Language;
 }
 
-const { product } = Astro.props;
+const { product, lang } = Astro.props;
 const { data } = product;
 const screenshot = data.proof.screenshot;
 const capabilities = data.capabilities ?? [];
-const profileHref = `/products/${data.slug}/`;
+const profileHref = getProductProfilePath(lang, data.slug);
+const profileLabel = labelFor(SHARED_LABELS.viewProfile, lang);
+const captionLabel = labelFor(SHARED_LABELS.proofCaption, lang);
 ---
 
 {
@@ -46,7 +51,7 @@ const profileHref = `/products/${data.slug}/`;
               {data.primaryAction.label}
             </ButtonLink>
             <ButtonLink href={profileHref} variant="secondary">
-              View profile
+              {profileLabel}
             </ButtonLink>
           </div>
         </div>
@@ -61,7 +66,7 @@ const profileHref = `/products/${data.slug}/`;
             decoding="async"
           />
           <figcaption class="mt-3 text-sm text-[var(--text-muted)]">
-            Verified public artifact — not a concept mock.
+            {captionLabel}
           </figcaption>
         </figure>
       </div>

@@ -1,15 +1,19 @@
 ---
 import type { CollectionEntry } from "astro:content";
 import ProductStatus from "@/components/product/ProductStatus.astro";
+import { SHARED_LABELS, labelFor, type Language } from "@/data/site";
+import { getProductProfilePath } from "@/lib/product-routes";
 
 interface Props {
   product: CollectionEntry<"products">;
+  lang: Language;
   emphasis?: "default" | "hero";
 }
 
-const { product, emphasis = "default" } = Astro.props;
+const { product, lang, emphasis = "default" } = Astro.props;
 const { data } = product;
-const profileHref = `/products/${data.slug}/`;
+const profileHref = getProductProfilePath(lang, data.slug);
+const profileLabel = labelFor(SHARED_LABELS.viewProfile, lang);
 ---
 
 <article
@@ -39,7 +43,7 @@ const profileHref = `/products/${data.slug}/`;
       href={profileHref}
       class="inline-flex min-h-11 items-center text-sm font-semibold text-[var(--action-primary)] no-underline hover:underline"
     >
-      View profile
+      {profileLabel}
     </a>
     <a
       href={data.primaryAction.href}

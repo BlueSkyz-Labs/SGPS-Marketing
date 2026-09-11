@@ -19,8 +19,8 @@ const taglineAccent = isVi ? "Tác động." : SITE.taglineAccent;
 
 const products = await getPublicProducts();
 const hasPublicProducts = products.length > 0;
-const emptyPrimary = emptyRegistryPrimaryCta(SITE.contactEmail);
-const emptySecondary = emptyRegistrySecondaryCta(SITE.contactEmail);
+const emptyPrimary = emptyRegistryPrimaryCta(SITE.contactEmail, lang);
+const emptySecondary = emptyRegistrySecondaryCta(SITE.contactEmail, lang);
 ---
 
 <section

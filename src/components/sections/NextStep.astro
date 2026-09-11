@@ -11,8 +11,8 @@ const { lang = "en" } = Astro.props;
 const isVi = lang === "vi";
 
 const hasPublicProducts = (await getPublicProducts()).length > 0;
-const emptyPrimary = emptyRegistryPrimaryCta(SITE.contactEmail);
-const emptySecondary = emptyRegistrySecondaryCta(SITE.contactEmail);
+const emptyPrimary = emptyRegistryPrimaryCta(SITE.contactEmail, lang);
+const emptySecondary = emptyRegistrySecondaryCta(SITE.contactEmail, lang);
 ---
 
 <section class="py-16 lg:py-20" aria-labelledby="next-title">

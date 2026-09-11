@@ -13,10 +13,12 @@ test("product profile route is statically wired for public entries", () => {
   assert.match(source, /primaryAction/);
 });
 
-test("product cards deep-link into profile routes", () => {
+test("product cards deep-link into locale-aware profile routes", () => {
   const card = readFileSync("src/components/product/ProductCard.astro", "utf8");
-  assert.match(card, /\/products\/\$\{data\.slug\}\//);
-  assert.match(card, /View profile/);
+  const labels = readFileSync("src/data/site.ts", "utf8");
+  assert.match(card, /getProductProfilePath\(lang, data\.slug\)/);
+  assert.match(card, /SHARED_LABELS\.viewProfile/);
+  assert.match(labels, /View profile/);
 });
 
 test("sitemap emits product profile URLs from data.slug", () => {

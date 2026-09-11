@@ -9,6 +9,8 @@ export default [
       "node_modules/**",
       "playwright-report/**",
       "test-results/**",
+      // Throwaway parity fixture app: synthetic data, never shipped, not typechecked.
+      "tests/e2e/fixtures/parity-app/**",
       ".lighthouseci/**",
       ".worktrees/**",
       ".hermes/**",
