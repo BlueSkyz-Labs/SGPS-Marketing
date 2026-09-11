@@ -5,6 +5,7 @@
 **Baseline:** `main@e68c109212102bdb94d0132dc71ed4db31fa61b8` (2026-09-12 reconciliation)
 
 **Parent specifications:**
+
 - `docs/superpowers/specs/2026-09-11-s-plus-experience-design.md`
 - `docs/superpowers/specs/2026-09-11-s-plus-v2-trust-native-design.md`
 
@@ -85,7 +86,7 @@ The public experience should answer five questions cleanly:
 
 ### S+1 — Truth-State Visual Grammar
 
-Use one compact, accessible grammar for `source-linked`, `reviewed`, `changed`, `not-published`, and `unavailable`. State uses localized text plus a non-color symbol/border/typographic distinction. No perpetual pulsing, traffic-light dashboard aesthetic, or misleading “verified” badge.
+Use one compact, accessible grammar for `source-linked`, `reviewed`, `changed`, `not-published`, and `unavailable`. State uses localized text plus a non-color symbol, border, or typographic distinction. Do not use perpetual pulsing, traffic-light dashboard styling, or a misleading “verified” badge.
 
 ### S+2 — Proof-First Empty States
 
@@ -109,15 +110,15 @@ Default view remains executive and concise. Evidence depth is progressive disclo
 
 ### S+7 — Evidence Pulse
 
-Freshness/change cues render only from explicit authored review metadata. Missing metadata is shown by omission or honest state, never inferred from deployment activity.
+Freshness and change cues render only from explicit authored review metadata. Missing metadata is shown by omission or honest state, never inferred from deployment activity.
 
 ### S+8 — Selective Bilingual Mirror
 
-High-value legal/trust statements may show authored EN/VI pairs side by side or stacked. Normal localized routes remain primary; no runtime translation or DOM scraping.
+High-value legal and trust statements may show authored EN/VI pairs side by side or stacked. Normal localized routes remain primary; no runtime translation or DOM scraping is allowed.
 
 ### S+9 — Provenance Search
 
-Extend Command Navigator with deterministic evidence items sourced from typed public integrity/trust/product data. Search returns destinations and source types, not generated answers.
+Extend Command Navigator with deterministic evidence items sourced from typed public integrity, trust, and product data. Search returns destinations and source types, not generated answers.
 
 ### S+10 — Curated Evidence Change Intelligence
 
@@ -135,105 +136,102 @@ Core rule: the graph may reference authoritative data; it may not become a secon
 
 From an eligible claim, visitors can inspect a deterministic trace:
 
-`claim → source/evidence → boundary → public surface`.
+`claim → source/evidence → boundary → public surface`
 
 The trace is semantic HTML first. Visual connectors are decorative enhancement only. It never exposes repository internals such as commit SHA, workflow ID, branch name, or CI vocabulary as user-facing proof.
 
 ### G3 — Evidence Passport
 
-Give stable public claims/evidence a shareable, print-friendly passport surface with a stable public ID, localized summary, evidence links, boundary, explicit review metadata when available, and canonical route back to context.
+Give stable public claims and evidence a shareable, print-friendly passport surface with a stable public ID, localized summary, evidence links, boundary, explicit review metadata when available, and canonical route back to context.
 
-A passport is not a certificate and must not use certification/seal language.
+A passport is not a certificate and must not use certification or seal language.
 
 ### G4 — Decision Room
 
 Provide an optional client-side, in-memory comparison workspace where a visitor can select a small bounded set of public claims, trust surfaces, or published products and compare their sourced facts side by side.
 
 Rules:
+
 - no persistence across reload;
 - no ranking or recommendation score;
 - no hidden personalization;
 - no unpublished item can enter the workspace;
-- every compared statement retains its source/boundary context.
+- every compared statement retains its source and boundary context.
 
 ### G5 — Evidence-First Mission Paths
 
-Extend the existing Intent Lens/Journey model into deterministic mission paths such as evaluate product, understand BlueSkyz, verify trust, or work with us. Paths reorder/emphasize links and evidence destinations only; they never hide facts or infer user identity.
+Extend the existing Intent Lens and Journey model into deterministic mission paths such as evaluate product, understand BlueSkyz, verify trust, or work with us. Paths reorder or emphasize links and evidence destinations only; they never hide facts or infer user identity.
 
 ### G6 — Atlas V2: Evidence Constellation
 
-Evolve Atlas V1 from a brand/principle/trust/product relationship map into an evidence-aware constellation by adding claim/evidence relationships from the Claim Fabric. Keep SVG/HTML-first, semantic alternate representation, zero required JS, and zero product nodes when the public registry is empty.
+Evolve Atlas V1 from a brand, principle, trust, and product relationship map into an evidence-aware constellation by adding claim and evidence relationships from the Claim Fabric. Keep SVG/HTML-first rendering, a semantic alternate representation, zero required JS, and zero product nodes when the public registry is empty.
 
 ### G7 — Public SGPS Manifest
 
-Expose a machine-readable public manifest, preferably under a well-known route, containing only already-public claim/evidence identifiers, localized canonical URLs, truth states, and schema version. It is designed for transparency and interoperability, not external trust scoring.
+Expose a machine-readable public manifest, preferably under a well-known route, containing only already-public claim and evidence identifiers, localized canonical URLs, truth states, and schema version. It is designed for transparency and interoperability, not external trust scoring.
 
 No private reporting destination, unpublished product name, internal repository metadata, or secret may appear.
 
 ### G8 — Verification Deep Links
 
-Every public claim/passport/lens item receives stable locale-aware anchors or routes that can be copied and shared without JavaScript. Deep links preserve language and land at a meaningful heading with correct focus/scroll-margin behavior.
+Every public claim, passport, and lens item receives stable locale-aware anchors or routes that can be copied and shared without JavaScript. Deep links preserve language and land at a meaningful heading with correct focus and scroll-margin behavior.
 
 ### G9 — Publishability Compiler
 
-Add a build-time, fail-closed contract that prevents a product/evidence-driven surface from becoming public unless its required truth fields pass explicit schema/source validation. This extends, but does not replace, `src/lib/truth.ts`.
+Add a build-time, fail-closed contract that prevents a product or evidence-driven surface from becoming public unless its required truth fields pass explicit schema and source validation. This extends, but does not replace, `src/lib/truth.ts`.
 
-The compiler reports actionable developer errors; it does not silently “repair” content or derive missing evidence.
+The compiler reports actionable developer errors; it does not silently repair content or derive missing evidence.
 
 ### G10 — Integrity Regression Firewall
 
 Create a consolidated architecture gate that detects cross-system truth drift: orphaned claims, evidence pointing to non-public routes, EN/VI parity mismatches, bare locale paths, unsupported truth labels, public product references absent from the registry, forbidden scoring language, telemetry free-text leakage, and manifest/runtime disagreement.
 
-This is a regression firewall, not a replacement for focused unit/e2e tests.
+This is a regression firewall, not a replacement for focused unit and end-to-end tests.
 
 ## 7. Data Architecture
 
-The v3 data direction is additive and reference-based:
+The v3 data direction is additive and reference-based.
 
-```ts
-export type PublicClaimKind =
-  | "brand"
-  | "principle"
-  | "trust"
-  | "product"
-  | "policy"
-  | "support";
+```text
+PublicClaimKind = brand | principle | trust | product | policy | support
 
-export interface PublicClaim {
-  id: string;
-  kind: PublicClaimKind;
-  surface: string;
-  statement: { en: string; vi: string };
-  evidenceIds: readonly string[];
-  boundaryId?: string;
-  reviewId?: string;
-}
+PublicClaim
+- id
+- kind
+- surface
+- statement.en
+- statement.vi
+- evidenceIds[]
+- optional boundaryId
+- optional reviewId
 
-export interface PublicEvidenceNode {
-  id: string;
-  kind: "route" | "artifact" | "private-reporting";
-  href: { en: string; vi: string };
-  label: { en: string; vi: string };
-}
+PublicEvidenceNode
+- id
+- kind = route | artifact | private-reporting
+- href.en
+- href.vi
+- label.en
+- label.vi
 ```
 
-Selectors build graph views from authoritative sources. Product nodes must always be derived from `getPublicProducts()`; routes must be produced from existing locale/route helpers; integrity data must remain fail-closed.
+Selectors build graph views from authoritative sources. Product nodes must always be derived from `getPublicProducts()`; routes must be produced from existing locale and route helpers; integrity data must remain fail-closed.
 
 ## 8. Interaction Architecture
 
 Client JavaScript is permitted only where it adds clear interaction value:
 
-- Decision Room selection/removal/reset;
+- Decision Room selection, removal, and reset;
 - optional copy-link feedback;
-- existing Command Navigator/Intent Lens behavior.
+- existing Command Navigator and Intent Lens behavior.
 
-Everything else defaults to semantic HTML/CSS/SVG. Client modules must be external files compatible with the existing CSP. No critical content or destination becomes JS-only.
+Everything else defaults to semantic HTML, CSS, and SVG. Client modules must be external files compatible with the existing CSP. No critical content or destination becomes JS-only.
 
 ## 9. Visual Direction
 
 v3 should look like a premium editorial intelligence system, not a cyber-security control panel.
 
 Use:
+
 - typographic hierarchy;
 - thin rules and ledgers;
 - restrained cobalt signal accents;
@@ -243,11 +241,12 @@ Use:
 - existing Horizon visual language.
 
 Avoid:
-- neon/glow overload;
+
+- neon or glow overload;
 - glass-card soup;
-- gauges, trust meters, confidence percentages;
+- gauges, trust meters, or confidence percentages;
 - permanent animated pulses;
-- terminal/console cosplay;
+- terminal or console cosplay;
 - badge inflation;
 - dense enterprise-dashboard chrome.
 
@@ -257,7 +256,7 @@ Every new capability must pass:
 
 - keyboard-only operation;
 - visible focus and deterministic focus return where dialogs are used;
-- 44px intent for interactive targets;
+- 44px target intent for interactive controls;
 - 200% text zoom;
 - 320px no-horizontal-overflow;
 - reduced-motion equivalence;
@@ -271,17 +270,17 @@ The existing 120,000-byte Brotli hard ceiling remains unchanged. A v3 wave must 
 
 No new large dependency is justified for v3. Native browser APIs, Astro, CSS, SVG, and focused vanilla TypeScript remain the default.
 
-## 12. Security / Privacy Red-Team Rules
+## 12. Security and Privacy Red-Team Rules
 
 - No arbitrary HTML from evidence data.
-- No URL is trusted merely because it is present in content; route/external destination classes must be explicit.
+- No URL is trusted merely because it is present in content; route and external destination classes must be explicit.
 - No `target=_blank` without the repository’s safe rel contract.
 - No free-text search query enters analytics telemetry.
 - No Decision Room selection is transmitted or persisted.
 - No manifest includes internal or unpublished data.
-- No public surface renders internal GitHub/CI/Cloudflare identifiers as proof.
+- No public surface renders internal GitHub, CI, or Cloudflare identifiers as proof.
 - No dynamic date source upgrades evidence freshness.
-- Any future async/contact flow requires its own bounded state/error/security design.
+- Any future asynchronous contact flow requires its own bounded state, error, and security design.
 
 ## 13. Promotion and Evidence Doctrine
 
@@ -289,12 +288,12 @@ Each runtime PR must:
 
 1. refresh current `main` and overlapping work;
 2. start from failing focused tests where behavior changes;
-3. run focused tests, architecture suite, typecheck, lint, format, build, client budget, static links, and relevant e2e;
-4. run Browser Assurance/Cloudflare checks required by the repository;
+3. run focused tests, architecture suite, typecheck, lint, format, build, client budget, static links, and relevant end-to-end tests;
+4. run Browser Assurance and Cloudflare checks required by the repository;
 5. merge only on objectively green exact-head evidence;
-6. perform post-merge production read-back for any public route/redirect/manifest behavior changed;
-7. record residual manual/human gates honestly.
+6. perform post-merge production read-back for any public route, redirect, or manifest behavior changed;
+7. record residual manual and human gates honestly.
 
 ## 14. Success Criteria
 
-v3 is successful when a visitor can move from a high-level BlueSkyz statement to its public provenance and boundary in a few understandable steps, compare public evidence without opaque scoring, share a stable evidence passport, and inspect the same truth structure in EN or VI—while the site remains static-first, extremely fast, accessible, privacy-conscious, and incapable by construction of silently inventing product/evidence truth.
+v3 is successful when a visitor can move from a high-level BlueSkyz statement to its public provenance and boundary in a few understandable steps, compare public evidence without opaque scoring, share a stable Evidence Passport, and inspect the same truth structure in EN or VI while the site remains static-first, extremely fast, accessible, privacy-conscious, and incapable by construction of silently inventing product or evidence truth.
