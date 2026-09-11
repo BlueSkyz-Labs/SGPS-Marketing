@@ -13,6 +13,7 @@ const emptySecondary = emptyRegistrySecondaryCta(SITE.contactEmail);
 const emptyDescription = products.length
   ? "Explore BlueSkyz Labs products with truthful status and evidence."
   : "BlueSkyz Labs has not published public products yet. Listings appear when products are ready to evaluate.";
+Astro.redirect("/en/products/");
 ---
 
 <BaseLayout title="Products" description={emptyDescription}>

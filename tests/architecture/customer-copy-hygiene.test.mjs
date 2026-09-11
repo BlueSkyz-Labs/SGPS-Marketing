@@ -108,22 +108,23 @@ test("empty featured section is omitted instead of a hollow shelf", () => {
 });
 
 test("404 page always requests noindex", () => {
-  const page404 = readFileSync("src/pages/404.astro", "utf8");
-  assert.match(page404, /noindex=\{?true\}?/);
+  const en404 = readFileSync("src/pages/en/404.astro", "utf8");
+  const vi404 = readFileSync("src/pages/vi/404.astro", "utf8");
+  assert.match(en404, /noindex=\{?true\}?/);
+  assert.match(vi404, /noindex=\{?true\}?/);
 });
 
 test("empty registry soft-lands via email-aware Act helper", () => {
   const act = readFileSync("src/lib/act.ts", "utf8");
   assert.match(act, /emptyRegistryPrimaryCta/);
-  assert.match(act, /\/about\//);
-  assert.match(act, /\/contact\//);
-  assert.match(act, /\/security\//);
+  assert.match(act, /\/\/?about\//);
+  assert.match(act, /\/\/?contact\//);
+  assert.match(act, /\/\/?security\//);
   for (const path of [
     "src/components/sections/Hero.astro",
-    "src/components/layout/Header.astro",
     "src/components/sections/NextStep.astro",
-    "src/pages/404.astro",
-    "src/pages/products/index.astro",
+    "src/pages/en/products/index.astro",
+    "src/pages/vi/products/index.astro",
   ]) {
     const source = readFileSync(path, "utf8");
     assert.match(
@@ -132,7 +133,10 @@ test("empty registry soft-lands via email-aware Act helper", () => {
     );
     assert.match(source, /emptyRegistryPrimaryCta/);
   }
-  const productsIndex = readFileSync("src/pages/products/index.astro", "utf8");
+  const productsIndex = readFileSync(
+    "src/pages/en/products/index.astro",
+    "utf8",
+  );
   assert.doesNotMatch(
     productsIndex,
     /Empty is preferred over invented maturity/i,

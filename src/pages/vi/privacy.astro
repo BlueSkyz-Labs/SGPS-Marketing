@@ -1,23 +1,87 @@
 ---
-import { getCollection, type CollectionEntry } from "astro:content";
 import BaseLayout from "@/layouts/BaseLayout.astro";
+import Container from "@/components/layout/Container.astro";
+import { SITE } from "@/data/site";
 
-type PageEntry = CollectionEntry<"pages">;
-
-const pages = await getCollection(
-  "pages",
-  ({ data }: { data: PageEntry["data"] }) => data.lang === "vi",
-);
-const page = pages.find((p: PageEntry) => p.data.slug === "privacy");
+const hasBusinessEmail = Boolean(SITE.contactEmail);
 ---
 
 <BaseLayout
-  title={page!.data.title}
-  description={page!.data.description}
+  title="Quyền riêng tư"
+  description="Thông tin quyền riêng tư cho BlueSkyz Labs."
   path="/vi/privacy/"
 >
-  <article class="prose max-w-none">
-    <h1>{page!.data.sections.hero.heading}</h1>
-    <p>{page!.data.sections.intro}</p>
-  </article>
+  <section class="py-16">
+    <Container>
+      <h1 class="text-3xl font-semibold tracking-tight">Quyền riêng tư</h1>
+      <p class="mt-4 max-w-2xl text-[var(--text-secondary)]">
+        Trang doanh nghiệp này là nội dung tiếp thị tĩnh. Văn bản pháp lý đầy đủ
+        về quyền riêng tư sẽ được công bố khi BlueSkyz phê duyệt.
+      </p>
+      <dl class="mt-10 max-w-2xl space-y-6">
+        <div>
+          <dt class="text-sm font-semibold tracking-tight">
+            Những gì được thu thập
+          </dt>
+          <dd class="mt-2 text-[var(--text-secondary)]">
+            Trang này không yêu cầu tài khoản, biểu mẫu hoặc cookie theo dõi cho
+            việc duyệt web cơ bản. Nhật ký yêu cầu của máy chủ web và CDN tiêu
+            chuẩn có thể ghi lại dữ liệu kết nối kỹ thuật như địa chỉ IP, user
+            agent và URL được yêu cầu.
+          </dd>
+        </div>
+        <div>
+          <dt class="text-sm font-semibold tracking-tight">Tại sao</dt>
+          <dd class="mt-2 text-[var(--text-secondary)]">
+            Nhật ký yêu cầu tồn tại vì mục đích bảo mật, ngăn chặn lạm dụng và
+            phân phối tài sản tĩnh đáng tin cậy — không phải cho hồ sơ quảng
+            cáo.
+          </dd>
+        </div>
+        <div>
+          <dt class="text-sm font-semibold tracking-tight">Cách sử dụng</dt>
+          <dd class="mt-2 text-[var(--text-secondary)]">
+            Nhật ký vẫn thuộc về các nhà vận hành nền tảng lưu trữ cho mục đích
+            vận hành. Không có pixel quảng cáo bên thứ ba hoặc script ghi phiên
+            nào được triển khai trên nền tảng này.
+          </dd>
+        </div>
+        <div>
+          <dt class="text-sm font-semibold tracking-tight">
+            Xóa và quyền riêng tư sản phẩm
+          </dt>
+          <dd class="mt-2 text-[var(--text-secondary)]">
+            Không có tài khoản khách hàng trên trang doanh nghiệp này để xuất
+            hoặc xóa. Thực hành quyền riêng tư cụ thể theo sản phẩm sẽ được công
+            bố trên từng bề mặt sản phẩm khi sản phẩm đó công khai.
+          </dd>
+        </div>
+      </dl>
+      <div class="mt-10 flex flex-wrap gap-4">
+        <a
+          href="/vi/security/"
+          class="inline-flex min-h-11 items-center text-sm font-semibold text-[var(--action-primary)] no-underline hover:underline"
+        >
+          Báo cáo bảo mật
+        </a>
+        {
+          hasBusinessEmail ? (
+            <a
+              href="/vi/contact/"
+              class="inline-flex min-h-11 items-center text-sm font-semibold text-[var(--action-primary)] no-underline hover:underline"
+            >
+              Liên hệ BlueSkyz
+            </a>
+          ) : (
+            <a
+              href="/vi/about/"
+              class="inline-flex min-h-11 items-center text-sm font-semibold text-[var(--action-primary)] no-underline hover:underline"
+            >
+              Về BlueSkyz
+            </a>
+          )
+        }
+      </div>
+    </Container>
+  </section>
 </BaseLayout>

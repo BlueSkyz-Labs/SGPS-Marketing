@@ -2,7 +2,12 @@
 import BrandLockup from "@/components/brand/BrandLockup.astro";
 import Container from "@/components/layout/Container.astro";
 import LanguageSwitcher from "@/components/layout/LanguageSwitcher.astro";
-import { FOOTER_LINKS, SITE } from "@/data/site";
+import { SITE, getFooterLinks } from "@/data/site";
+import { getLanguageFromPath } from "@/lib/i18n";
+
+const currentPath = Astro.url.pathname;
+const lang = getLanguageFromPath(currentPath);
+const FOOTER_LINKS = getFooterLinks(lang);
 ---
 
 <footer

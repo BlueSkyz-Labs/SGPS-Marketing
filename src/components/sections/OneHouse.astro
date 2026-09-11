@@ -8,6 +8,26 @@ const principleIcons = [
   brandAssets.principles.trust,
   brandAssets.principles.impact,
 ] as const;
+
+interface Props {
+  lang?: "en" | "vi";
+}
+const { lang = "en" } = Astro.props;
+const isVi = lang === "vi";
+
+const VI_PRINCIPLE_NAMES = {
+  Intelligence: "Trí tuệ",
+  Elevation: "Nâng tầm",
+  Trust: "Tin cậy",
+  Impact: "Tác động",
+} as const;
+
+const VI_PRINCIPLE_SUMMARIES = {
+  Intelligence: "Suy nghĩ sâu sắc. Giải pháp thông minh.",
+  Elevation: "Góc nhìn tốt hơn. Tác động lớn hơn.",
+  Trust: "Đáng tin cậy, an toàn, nhất quán.",
+  Impact: "Giá trị thực. Thay đổi thực.",
+} as const;
 ---
 
 <section
@@ -15,28 +35,37 @@ const principleIcons = [
   aria-labelledby="house-title"
 >
   <h2 id="house-title" class="text-3xl font-semibold tracking-tight">
-    One house
+    {isVi ? "Một nhà" : "One house"}
   </h2>
   <p class="mt-4 max-w-2xl text-lg text-[var(--text-secondary)]">
-    {SITE.motto} We don’t build around one category. We build around a way of thinking.
+    {
+      isVi
+        ? "Xây dựng với sự rõ ràng. Mở rộng với sự tự tin. Chúng tôi không xây dựng xung quanh một danh mục. Chúng tôi xây dựng xung quanh một cách suy nghĩ."
+        : `${SITE.motto} We don’t build around one category. We build around a way of thinking.`
+    }
   </p>
   <ul class="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
     {
       BRAND_PRINCIPLES.map((item, index) => (
-        <li class="border-t border-[var(--border-subtle)] pt-5">
+        <li class="rounded-lg border border-[var(--border-subtle)] p-6">
           <img
             src={principleIcons[index]}
             alt=""
-            width="64"
-            height="64"
-            class="mb-5 h-14 w-14"
+            width="32"
+            height="32"
             loading="lazy"
           />
-          <p class="text-sm font-semibold tracking-[0.14em] text-[var(--brand-cobalt)] uppercase">
-            {item.name}
-          </p>
-          <p class="mt-2 text-base text-[var(--text-primary)]">
-            {item.summary}
+          <h3 class="mt-4 text-lg font-semibold tracking-tight">
+            {isVi
+              ? VI_PRINCIPLE_NAMES[item.name as keyof typeof VI_PRINCIPLE_NAMES]
+              : item.name}
+          </h3>
+          <p class="mt-2 text-sm text-[var(--text-secondary)]">
+            {isVi
+              ? VI_PRINCIPLE_SUMMARIES[
+                  item.name as keyof typeof VI_PRINCIPLE_SUMMARIES
+                ]
+              : item.summary}
           </p>
         </li>
       ))

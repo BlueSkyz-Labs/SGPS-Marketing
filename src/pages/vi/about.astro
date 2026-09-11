@@ -1,23 +1,30 @@
 ---
-import { getCollection, type CollectionEntry } from "astro:content";
 import BaseLayout from "@/layouts/BaseLayout.astro";
-
-type PageEntry = CollectionEntry<"pages">;
-
-const pages = await getCollection(
-  "pages",
-  ({ data }: { data: PageEntry["data"] }) => data.lang === "vi",
-);
-const page = pages.find((p: PageEntry) => p.data.slug === "about");
+import Container from "@/components/layout/Container.astro";
+import { SITE } from "@/data/site";
 ---
 
 <BaseLayout
-  title={page!.data.title}
-  description={page!.data.description}
+  title="Về BlueSkyz"
+  description={`Về BlueSkyz Labs — ${SITE.proposition}`}
   path="/vi/about/"
 >
-  <article class="prose max-w-none">
-    <h1>{page!.data.sections.hero.heading}</h1>
-    <p>{page!.data.sections.content.intro}</p>
-  </article>
+  <section class="py-16">
+    <Container>
+      <h1 class="text-3xl font-semibold tracking-tight">Về BlueSkyz</h1>
+      <p class="mt-4 max-w-2xl text-[var(--text-secondary)]">
+        Chúng tôi xây dựng những sản phẩm thông minh để trao quyền cho con người
+        và nâng tầm cách công việc được thực hiện. Một góc nhìn cao hơn xây dựng
+        một ngày mai tươi sáng hơn.
+      </p>
+      <p class="mt-4 text-sm font-medium text-[var(--text-muted)]">
+        Tony Nguyen — Nhà sáng lập &amp; Giám đốc điều hành
+      </p>
+      <p class="mt-8 max-w-2xl text-sm text-[var(--text-muted)]">
+        Tiểu sử mở rộng của nhà sáng lập hoặc công ty sẽ được công bố khi được
+        phê duyệt cho trang công khai. Trang này vẫn do BlueSkyz dẫn dắt, không
+        phải hồ sơ cá nhân.
+      </p>
+    </Container>
+  </section>
 </BaseLayout>

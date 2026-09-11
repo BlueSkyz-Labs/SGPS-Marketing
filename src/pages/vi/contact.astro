@@ -1,23 +1,68 @@
 ---
-import { getCollection, type CollectionEntry } from "astro:content";
 import BaseLayout from "@/layouts/BaseLayout.astro";
+import Container from "@/components/layout/Container.astro";
+import { SITE, SECURITY_ADVISORY_URL } from "@/data/site";
 
-type PageEntry = CollectionEntry<"pages">;
-
-const pages = await getCollection(
-  "pages",
-  ({ data }: { data: PageEntry["data"] }) => data.lang === "vi",
-);
-const page = pages.find((p: PageEntry) => p.data.slug === "contact");
+const hasBusinessEmail = Boolean(SITE.contactEmail);
 ---
 
 <BaseLayout
-  title={page!.data.title}
-  description={page!.data.description}
+  title="Liên hệ"
+  description="Liên hệ với BlueSkyz Labs cho các vấn đề kinh doanh, bảo mật hoặc thắc mắc chung."
   path="/vi/contact/"
 >
-  <article class="prose max-w-none">
-    <h1>{page!.data.sections.hero.heading}</h1>
-    <p>{page!.data.sections.intro}</p>
-  </article>
+  <section class="py-16">
+    <Container>
+      <h1 class="text-3xl font-semibold tracking-tight">Liên hệ</h1>
+      <p class="mt-4 max-w-2xl text-[var(--text-secondary)]">
+        Liên hệ với BlueSkyz qua kênh phù hợp với nhu cầu của bạn. Địa chỉ email
+        sẽ xuất hiện ở đây khi BlueSkyz công bố.
+      </p>
+      <ul
+        class="mt-10 divide-y divide-[var(--border-subtle)] border-y border-[var(--border-subtle)]"
+      >
+        {
+          !hasBusinessEmail ? (
+            <li class="py-6">
+              <h2 class="text-lg font-semibold tracking-tight">Bảo mật</h2>
+              <p class="mt-2 max-w-2xl text-[var(--text-secondary)]">
+                Sử dụng tính năng báo cáo lỗ hổng riêng tư của GitHub. Email bảo
+                mật sẽ xuất hiện ở đây khi BlueSkyz công bố.
+              </p>
+              <a
+                href={SECURITY_ADVISORY_URL}
+                rel="noopener noreferrer"
+                class="mt-4 inline-flex min-h-11 items-center text-sm font-semibold text-[var(--action-primary)] no-underline hover:underline"
+              >
+                Mở báo cáo lỗ hổng riêng tư
+              </a>
+            </li>
+          ) : null
+        }
+        <li class="py-6">
+          <h2 class="text-lg font-semibold tracking-tight">
+            Kinh doanh / chung
+          </h2>
+          <p class="mt-2 max-w-2xl text-[var(--text-secondary)]">
+            {
+              hasBusinessEmail ? (
+                <>
+                  Email{" "}
+                  <a
+                    href={`mailto:${SITE.contactEmail}`}
+                    class="inline-flex min-h-11 items-center font-semibold text-[var(--action-primary)] no-underline hover:underline"
+                  >
+                    {SITE.contactEmail}
+                  </a>{" "}
+                  cho các yêu cầu kinh doanh.
+                </>
+              ) : (
+                "Email doanh nghiệp sẽ xuất hiện ở đây khi BlueSkyz công bố. Trong thời gian chờ, hãy sử dụng trang Về BlueSkyz để hiểu chúng tôi là ai, hoặc Báo cáo bảo mật như một kênh tin cậy có thể hành động."
+              )
+            }
+          </p>
+        </li>
+      </ul>
+    </Container>
+  </section>
 </BaseLayout>

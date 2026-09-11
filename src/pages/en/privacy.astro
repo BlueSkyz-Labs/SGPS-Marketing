@@ -1,23 +1,86 @@
 ---
-import { getCollection, type CollectionEntry } from "astro:content";
 import BaseLayout from "@/layouts/BaseLayout.astro";
+import Container from "@/components/layout/Container.astro";
+import { SITE } from "@/data/site";
 
-type PageEntry = CollectionEntry<"pages">;
-
-const pages = await getCollection(
-  "pages",
-  ({ data }: { data: PageEntry["data"] }) => data.lang === "en",
-);
-const page = pages.find((p: PageEntry) => p.data.slug === "privacy");
+const hasBusinessEmail = Boolean(SITE.contactEmail);
 ---
 
 <BaseLayout
-  title={page!.data.title}
-  description={page!.data.description}
+  title="Privacy"
+  description="Privacy information for BlueSkyz Labs."
   path="/en/privacy/"
 >
-  <article class="prose max-w-none">
-    <h1>{page!.data.sections.hero.heading}</h1>
-    <p>{page!.data.sections.intro}</p>
-  </article>
+  <section class="py-16">
+    <Container>
+      <h1 class="text-3xl font-semibold tracking-tight">Privacy</h1>
+      <p class="mt-4 max-w-2xl text-[var(--text-secondary)]">
+        This corporate site is static marketing content. Full legal privacy
+        wording publishes when BlueSkyz approves it.
+      </p>
+      <dl class="mt-10 max-w-2xl space-y-6">
+        <div>
+          <dt class="text-sm font-semibold tracking-tight">
+            What is collected
+          </dt>
+          <dd class="mt-2 text-[var(--text-secondary)]">
+            This site does not require accounts, forms, or tracking cookies for
+            basic browsing. Standard web server and CDN request logs may record
+            technical connection data such as IP address, user agent, and
+            requested URL.
+          </dd>
+        </div>
+        <div>
+          <dt class="text-sm font-semibold tracking-tight">Why</dt>
+          <dd class="mt-2 text-[var(--text-secondary)]">
+            Request logs exist for security, abuse prevention, and reliable
+            delivery of static assets — not for advertising profiles.
+          </dd>
+        </div>
+        <div>
+          <dt class="text-sm font-semibold tracking-tight">How it is used</dt>
+          <dd class="mt-2 text-[var(--text-secondary)]">
+            Logs stay with the hosting platform operators for operational
+            purposes. No third-party ad pixels or session-recording scripts ship
+            on this foundation.
+          </dd>
+        </div>
+        <div>
+          <dt class="text-sm font-semibold tracking-tight">
+            Deletion and product privacy
+          </dt>
+          <dd class="mt-2 text-[var(--text-secondary)]">
+            There is no customer account on this corporate site to export or
+            delete. Product-specific privacy practices publish on each product
+            surface when that product is public.
+          </dd>
+        </div>
+      </dl>
+      <div class="mt-10 flex flex-wrap gap-4">
+        <a
+          href="/en/security/"
+          class="inline-flex min-h-11 items-center text-sm font-semibold text-[var(--action-primary)] no-underline hover:underline"
+        >
+          Security reporting
+        </a>
+        {
+          hasBusinessEmail ? (
+            <a
+              href="/en/contact/"
+              class="inline-flex min-h-11 items-center text-sm font-semibold text-[var(--action-primary)] no-underline hover:underline"
+            >
+              Contact BlueSkyz
+            </a>
+          ) : (
+            <a
+              href="/en/about/"
+              class="inline-flex min-h-11 items-center text-sm font-semibold text-[var(--action-primary)] no-underline hover:underline"
+            >
+              About BlueSkyz
+            </a>
+          )
+        }
+      </div>
+    </Container>
+  </section>
 </BaseLayout>

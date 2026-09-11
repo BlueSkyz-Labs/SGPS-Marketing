@@ -1,23 +1,48 @@
 ---
-import { getCollection, type CollectionEntry } from "astro:content";
 import BaseLayout from "@/layouts/BaseLayout.astro";
-
-type PageEntry = CollectionEntry<"pages">;
-
-const pages = await getCollection(
-  "pages",
-  ({ data }: { data: PageEntry["data"] }) => data.lang === "en",
-);
-const page = pages.find((p: PageEntry) => p.data.slug === "security");
+import Container from "@/components/layout/Container.astro";
+import { SITE, SECURITY_ADVISORY_URL } from "@/data/site";
 ---
 
 <BaseLayout
-  title={page!.data.title}
-  description={page!.data.description}
+  title="Security"
+  description="Security contact and reporting for BlueSkyz Labs."
   path="/en/security/"
 >
-  <article class="prose max-w-none">
-    <h1>{page!.data.sections.hero.heading}</h1>
-    <p>{page!.data.sections.intro}</p>
-  </article>
+  <section class="py-16">
+    <Container>
+      <h1 class="text-3xl font-semibold tracking-tight">Security</h1>
+      <p class="mt-4 max-w-2xl text-[var(--text-secondary)]">
+        Report security issues through a private channel. Do not open a public
+        GitHub issue for vulnerability reports.
+      </p>
+      {
+        SITE.securityEmail ? (
+          <p class="mt-4 max-w-2xl text-[var(--text-secondary)]">
+            Email{" "}
+            <a
+              href={`mailto:${SITE.securityEmail}`}
+              class="inline-flex min-h-11 items-center font-semibold text-[var(--action-primary)] no-underline hover:underline"
+            >
+              {SITE.securityEmail}
+            </a>
+            .
+          </p>
+        ) : null
+      }
+      <p class="mt-6">
+        <a
+          href={SECURITY_ADVISORY_URL}
+          rel="noopener noreferrer"
+          class="inline-flex min-h-11 items-center text-sm font-semibold text-[var(--action-primary)] no-underline hover:underline"
+        >
+          Open private vulnerability reporting
+        </a>
+      </p>
+      <p class="mt-4 max-w-2xl text-sm text-[var(--text-muted)]">
+        No bug-bounty, SLA, or certification badges are published without
+        verified evidence.
+      </p>
+    </Container>
+  </section>
 </BaseLayout>

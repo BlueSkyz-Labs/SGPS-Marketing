@@ -13,6 +13,7 @@ import { SITE } from "@/data/site";
 
 const products = await getPublicProducts();
 const flagship = await getFlagshipProduct();
+Astro.redirect("/en/");
 ---
 
 <BaseLayout

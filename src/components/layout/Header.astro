@@ -3,15 +3,20 @@ import BrandLockup from "@/components/brand/BrandLockup.astro";
 import Container from "@/components/layout/Container.astro";
 import LanguageSwitcher from "@/components/layout/LanguageSwitcher.astro";
 import ButtonLink from "@/components/ui/ButtonLink.astro";
-import { NAV, SITE } from "@/data/site";
+import { SITE, getNav } from "@/data/site";
 import { emptyRegistryPrimaryCta } from "@/lib/act";
 import { getPublicProducts } from "@/lib/products";
+import { getLanguageFromPath } from "@/lib/i18n";
+
+const currentPath = Astro.url.pathname;
+const lang = getLanguageFromPath(currentPath);
+const NAV = getNav(lang);
 
 const hasPublicProducts = (await getPublicProducts()).length > 0;
 const primaryCta = hasPublicProducts
   ? SITE.contactEmail
-    ? { href: "/contact/", label: "Contact us" }
-    : { href: "/products/", label: "Explore products" }
+    ? { href: `/${lang}/contact/`, label: "Contact us" }
+    : { href: `/${lang}/products/`, label: "Explore products" }
   : emptyRegistryPrimaryCta(SITE.contactEmail);
 ---
 
@@ -19,7 +24,7 @@ const primaryCta = hasPublicProducts
   class="border-b border-[var(--border-subtle)] bg-[var(--surface-primary)]"
 >
   <Container class="flex min-h-16 items-center justify-between gap-4 py-3">
-    <BrandLockup href="/" />
+    <BrandLockup href={`/${lang}/`} />
 
     <nav aria-label="Primary" class="hidden items-center gap-2 md:flex">
       {

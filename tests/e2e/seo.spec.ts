@@ -3,7 +3,7 @@ import { expect, test } from "@playwright/test";
 test("home exposes canonical, OG, and Organization JSON-LD", async ({
   page,
 }) => {
-  await page.goto("/");
+  await page.goto("/en/");
   const canonical = page.locator('link[rel="canonical"]');
   await expect(canonical).toHaveAttribute("href", /\/$/);
   await expect(page.locator('meta[property="og:title"]')).toHaveAttribute(

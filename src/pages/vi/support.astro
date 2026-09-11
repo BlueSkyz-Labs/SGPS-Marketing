@@ -1,23 +1,69 @@
 ---
-import { getCollection, type CollectionEntry } from "astro:content";
 import BaseLayout from "@/layouts/BaseLayout.astro";
+import Container from "@/components/layout/Container.astro";
+import { SITE } from "@/data/site";
 
-type PageEntry = CollectionEntry<"pages">;
-
-const pages = await getCollection(
-  "pages",
-  ({ data }: { data: PageEntry["data"] }) => data.lang === "vi",
-);
-const page = pages.find((p: PageEntry) => p.data.slug === "support");
+const hasBusinessEmail = Boolean(SITE.contactEmail);
 ---
 
 <BaseLayout
-  title={page!.data.title}
-  description={page!.data.description}
+  title="Hỗ trợ"
+  description="Hỗ trợ cho các sản phẩm của BlueSkyz Labs."
   path="/vi/support/"
 >
-  <article class="prose max-w-none">
-    <h1>{page!.data.sections.hero.heading}</h1>
-    <p>{page!.data.sections.intro}</p>
-  </article>
+  <section class="py-16">
+    <Container>
+      <h1 class="text-3xl font-semibold tracking-tight">Hỗ trợ</h1>
+      <p class="mt-4 max-w-2xl text-[var(--text-secondary)]">
+        Điểm hỗ trợ cho từng sản phẩm sẽ được công bố trên trang sản phẩm tương
+        ứng khi được xác minh. Trong thời gian chờ, hãy sử dụng các kênh bên
+        dưới.
+      </p>
+      {
+        hasBusinessEmail ? (
+          <p class="mt-6 max-w-2xl text-[var(--text-secondary)]">
+            Email{" "}
+            <a
+              href={`mailto:${SITE.contactEmail}`}
+              class="inline-flex min-h-11 items-center font-semibold text-[var(--action-primary)] no-underline hover:underline"
+            >
+              {SITE.contactEmail}
+            </a>{" "}
+            cho hỗ trợ sản phẩm chung cho đến khi có kênh cụ thể theo sản phẩm.
+          </p>
+        ) : (
+          <p class="mt-6 max-w-2xl text-[var(--text-secondary)]">
+            Email hỗ trợ doanh nghiệp sẽ xuất hiện ở đây khi BlueSkyz công bố.
+            Trong thời gian chờ, Báo cáo bảo mật là kênh tin cậy có thể hành
+            động.
+          </p>
+        )
+      }
+      <div class="mt-8 flex flex-wrap gap-4">
+        <a
+          href="/vi/security/"
+          class="inline-flex min-h-11 items-center text-sm font-semibold text-[var(--action-primary)] no-underline hover:underline"
+        >
+          Báo cáo bảo mật
+        </a>
+        {
+          hasBusinessEmail ? (
+            <a
+              href="/vi/contact/"
+              class="inline-flex min-h-11 items-center text-sm font-semibold text-[var(--action-primary)] no-underline hover:underline"
+            >
+              Liên hệ BlueSkyz
+            </a>
+          ) : (
+            <a
+              href="/vi/about/"
+              class="inline-flex min-h-11 items-center text-sm font-semibold text-[var(--action-primary)] no-underline hover:underline"
+            >
+              Về BlueSkyz
+            </a>
+          )
+        }
+      </div>
+    </Container>
+  </section>
 </BaseLayout>

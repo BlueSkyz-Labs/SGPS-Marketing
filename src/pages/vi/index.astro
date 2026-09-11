@@ -1,23 +1,32 @@
 ---
-import { getCollection, type CollectionEntry } from "astro:content";
 import BaseLayout from "@/layouts/BaseLayout.astro";
+import Container from "@/components/layout/Container.astro";
+import Hero from "@/components/sections/Hero.astro";
+import FeaturedProducts from "@/components/sections/FeaturedProducts.astro";
+import FlagshipProof from "@/components/sections/FlagshipProof.astro";
+import OneHouse from "@/components/sections/OneHouse.astro";
+import Trust from "@/components/sections/Trust.astro";
+import AboutBlueSkyz from "@/components/sections/AboutBlueSkyz.astro";
+import NextStep from "@/components/sections/NextStep.astro";
+import { getFlagshipProduct, getPublicProducts } from "@/lib/products";
+import { SITE } from "@/data/site";
 
-type PageEntry = CollectionEntry<"pages">;
-
-const pages = await getCollection(
-  "pages",
-  ({ data }: { data: PageEntry["data"] }) => data.lang === "vi",
-);
-const page = pages.find((p: PageEntry) => p.data.slug === "index");
+const products = await getPublicProducts();
+const flagship = await getFlagshipProduct();
 ---
 
 <BaseLayout
-  title={page!.data.title}
-  description={page!.data.description}
+  title={SITE.name}
+  description={`${SITE.taglineLead} ${SITE.taglineAccent} — Chúng tôi xây dựng những sản phẩm thông minh để trao quyền cho con người và nâng tầm cách công việc được thực hiện.`}
   path="/vi/"
 >
-  <article class="prose max-w-none">
-    <h1>{page!.data.sections?.hero?.heading}</h1>
-    <p>{page!.data.sections?.hero?.subheading}</p>
-  </article>
+  <Hero lang="vi" />
+  <Container>
+    <FeaturedProducts products={products} />
+    <OneHouse lang="vi" />
+    {flagship ? <FlagshipProof product={flagship} /> : null}
+    <Trust lang="vi" />
+    <AboutBlueSkyz lang="vi" />
+    <NextStep lang="vi" />
+  </Container>
 </BaseLayout>
