@@ -386,6 +386,71 @@ html[data-intent="evaluate-product"] [data-journey-bar] a[href$="/products/"] {
   }
 }
 
+/* S+ Command Navigator (Task 9) — native dialog command palette. */
+.command-navigator {
+  width: min(92vw, 34rem);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  background: white;
+  color: var(--text-primary);
+  padding: 0;
+  box-shadow: 0 24px 60px -24px
+    color-mix(in srgb, var(--brand-ink) 45%, transparent);
+}
+
+.command-navigator::backdrop {
+  background: color-mix(in srgb, var(--brand-ink) 42%, transparent);
+}
+
+.command-navigator__panel {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0.875rem;
+}
+
+.command-navigator__panel input {
+  min-height: 2.75rem;
+  width: 100%;
+  border: 1px solid var(--border-subtle);
+  border-radius: 0.5rem;
+  background: white;
+  padding: 0 0.75rem;
+  font-size: 0.9375rem;
+  color: var(--text-primary);
+}
+
+.command-navigator__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-height: 18rem;
+  overflow-y: auto;
+}
+
+.command-navigator__list a {
+  display: flex;
+  min-height: 2.5rem;
+  align-items: center;
+  border-radius: 0.5rem;
+  padding: 0 0.75rem;
+  font-size: 0.9375rem;
+  color: var(--text-primary);
+  text-decoration: none;
+}
+
+.command-navigator__list a:hover,
+.command-navigator__list a:focus-visible {
+  background: var(--surface-subtle);
+}
+
+.command-navigator__empty {
+  margin: 0;
+  padding: 0.5rem 0.75rem 0.25rem;
+  font-size: 0.875rem;
+  color: var(--text-muted);
+}
+
 .hero-mark-stage {
   position: relative;
   display: grid;
