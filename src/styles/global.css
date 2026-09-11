@@ -42,6 +42,15 @@
   --motion-fast: 120ms;
   --motion-normal: 200ms;
   --motion-slow: 320ms;
+  /* S+ Motion Grammar — purpose-based tokens (Wave 1 / Task 1). */
+  --motion-orientation-duration: var(--motion-normal);
+  --motion-emphasis-duration: var(--motion-slow);
+  --motion-confirmation-duration: var(--motion-fast);
+  --motion-continuity-duration: var(--motion-slow);
+  --motion-ease-standard: cubic-bezier(0.22, 1, 0.36, 1);
+  --motion-distance-sm: 0.25rem;
+  --motion-distance-md: 0.5rem;
+  --motion-distance-lg: 1.25rem;
   color-scheme: light;
 }
 
@@ -270,6 +279,16 @@ body {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  :root {
+    --motion-orientation-duration: 0ms;
+    --motion-emphasis-duration: 0ms;
+    --motion-confirmation-duration: 0ms;
+    --motion-continuity-duration: 0ms;
+    --motion-distance-sm: 0px;
+    --motion-distance-md: 0px;
+    --motion-distance-lg: 0px;
+  }
+
   *,
   *::before,
   *::after {
