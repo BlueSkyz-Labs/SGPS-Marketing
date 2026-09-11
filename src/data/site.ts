@@ -35,7 +35,7 @@ export const SHARED_LABELS = {
   searchPages: { en: "Search pages", vi: "Tìm trang" },
   menu: { en: "Menu", vi: "Menu" },
   contactUs: { en: "Contact us", vi: "Liên hệ" },
-  aboutBlueSkyz: { en: "About BlueSkyz", vi: "Về BlueSkyz" },
+  aboutBlueSkyz: { en: "About BlueSkyz", vi: "Tìm hiểu BlueSkyz" },
   security: { en: "Security", vi: "Bảo mật" },
   exploreProducts: { en: "Explore products", vi: "Khám phá sản phẩm" },
   exploreAllProducts: {

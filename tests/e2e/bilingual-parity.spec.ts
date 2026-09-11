@@ -69,16 +69,29 @@ test.describe("bilingual parity — product-present fixture", () => {
   let server: Server;
   let origin = "";
 
-  test.beforeAll(async ({}, testInfo) => {
-    test.skip(
-      testInfo.project.name !== "chromium",
-      "fixture parity runs once (chromium)",
-    );
-    if (!existsSync(join(FIXTURE_DIST, "en", "index.html"))) {
+  test.skip(
+    ({}, testInfo) => testInfo.project.name !== "chromium",
+    "fixture parity runs once (chromium)",
+  );
+
+  const distReady = () => {
+    const entry = join(FIXTURE_DIST, "en", "index.html");
+    if (!existsSync(entry)) return false;
+    return readFileSync(entry, "utf8").includes("</html>");
+  };
+
+  test.beforeAll(async () => {
+    if (!distReady()) {
       execSync("pnpm exec astro build --root tests/e2e/fixtures/parity-app", {
         cwd: process.cwd(),
         stdio: "pipe",
       });
+      if (!distReady()) {
+        execSync("pnpm exec astro build --root tests/e2e/fixtures/parity-app", {
+          cwd: process.cwd(),
+          stdio: "pipe",
+        });
+      }
     }
     server = createServer((req, res) => {
       const urlPath = (req.url ?? "/").split("?")[0] ?? "/";
