@@ -61,9 +61,11 @@ test("atlas node links resolve to real destinations", async ({ page }) => {
         href?.startsWith("https://"),
     ).toBe(true);
   }
-  await expect(
-    atlas.locator("[data-atlas-node] a[href='/en/privacy/']"),
-  ).toHaveCount(1);
+  // v3 G6: the privacy surface is legitimately referenced by the trust
+  // node, the privacy claim node, and its evidence route.
+  expect(
+    await atlas.locator("[data-atlas-node] a[href='/en/privacy/']").count(),
+  ).toBeGreaterThanOrEqual(1);
   await expect(
     atlas.locator("[data-atlas-node] a[href='#house-title']").first(),
   ).toHaveCount(1);
