@@ -109,7 +109,7 @@
     {
       "id": "hardening-h13",
       "name": "Text-spacing (1.4.12) + forced-colors guards",
-      "status": "IN_PROGRESS",
+      "status": "MERGED",
       "evidence": "docs/evidence/2026-09-13-wave-h13-spacing-contrast.md"
     }
   ],
@@ -141,7 +141,7 @@
     "Trademark/legal clearance and specialty print (brand kit caveats)"
   ],
   "nextActionable": [
-    "Merge hardening wave H13 after exact-head green",
+    "Consolidated program ledger: docs/evidence/2026-09-13-hardening-program-summary.md",
     "Optional UI-4 remainder: atlas finesse, per-page OG images, breadcrumb JSON-LD"
   ]
 }
