@@ -110,9 +110,18 @@ test("the trust section renders through the ledger model", () => {
 test("atlas derives nodes only from truth sources", () => {
   assert.match(
     atlasSource,
-    /export type AtlasNodeKind = "brand" \| "principle" \| "trust" \| "product";/,
-    "atlas node kinds must be exactly brand|principle|trust|product",
+    /export type AtlasNodeKind/,
+    "atlas must declare its node kind union",
   );
+  // v3 G6: claim/evidence kinds join the constellation; the original four
+  // semantics must remain intact.
+  for (const kind of ["brand", "principle", "trust", "product"]) {
+    assert.ok(
+      atlasSource.includes(`| "${kind}"`) ||
+        atlasSource.includes(`"${kind}" |`),
+      `atlas must keep the ${kind} node kind`,
+    );
+  }
   assert.match(
     atlasSource,
     /PRINCIPLE_MATRIX/,

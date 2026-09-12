@@ -145,3 +145,39 @@ test("provenance search derives from public data only and transmits no query", (
   assert.match(component, /command-navigator__kind/);
   assert.match(component, /evidence: isVi \? "Bằng chứng" : "Evidence"/);
 });
+
+/* ------------------------------------------------------------------ */
+/* v3 G6 — Atlas V2 derives from the Claim Fabric, never duplicating   */
+/* claim content and never fabricating product nodes.                  */
+/* ------------------------------------------------------------------ */
+
+test("atlas claim/evidence nodes derive from the fabric only", () => {
+  const atlas = readFileSync("src/lib/atlas.ts", "utf8");
+  assert.match(atlas, /getPublicClaims/);
+  assert.match(atlas, /from "@\/lib\/claims"/);
+  // No direct data-layer import: the fabric lib is the only entry point.
+  assert.doesNotMatch(atlas, /from "@\/data\/claims"/);
+  assert.match(atlas, /kind: "claim"/);
+  assert.match(atlas, /kind: "evidence"/);
+});
+
+test("atlas does not duplicate claim statements", () => {
+  const atlas = readFileSync("src/lib/atlas.ts", "utf8");
+  const claimsData = readFileSync("src/data/claims.ts", "utf8");
+  const statements = [...claimsData.matchAll(/statement: \{\s*en: "([^"]+)"/g)]
+    .map((match) => match[1])
+    .filter((value) => value !== undefined);
+  assert.ok(statements.length > 0, "claims data must expose statements");
+  for (const statement of statements) {
+    assert.ok(
+      !atlas.includes(statement),
+      `atlas must not inline claim statement: ${statement.slice(0, 40)}…`,
+    );
+  }
+});
+
+test("product nodes exist only when the public registry does", () => {
+  const atlas = readFileSync("src/lib/atlas.ts", "utf8");
+  assert.match(atlas, /product:\$\{product\.data\.slug\}/);
+  assert.match(atlas, /for \(const product of products\)/);
+});
