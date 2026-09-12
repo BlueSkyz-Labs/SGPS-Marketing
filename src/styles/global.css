@@ -792,6 +792,10 @@ summary {
   [data-command-navigator] {
     display: none !important;
   }
+  /* A navigation affordance is dead on paper. */
+  .evidence-passport__context {
+    display: none !important;
+  }
   .evidence-details__more > summary {
     display: none;
   }
@@ -1126,4 +1130,18 @@ html[data-intent] [data-journey-bar] li[data-evidence-first="true"] a {
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--text-muted);
+}
+
+/* Wave H8 — passport polish: the context link reads as the card's footer. */
+.evidence-passport__context {
+  border-top: 1px solid var(--border-subtle);
+  padding-top: 1rem;
+}
+/* Boundary split needs a visible cue on pale tinted panels. */
+@media (min-width: 768px) {
+  .boundary-card > div + div {
+    border-left: 1px solid
+      color-mix(in srgb, var(--brand-cobalt) 30%, var(--border-subtle));
+    padding-left: 1.5rem;
+  }
 }
