@@ -50,6 +50,10 @@ jobs:
         run: pnpm check:client-budget
       - name: Static links
         run: pnpm check:static-links
+      - name: Publishability compiler
+        run: pnpm check:publishability
+      - name: Integrity regression firewall
+        run: pnpm check:integrity-firewall
 
   browser-assurance:
     name: Browser Assurance
