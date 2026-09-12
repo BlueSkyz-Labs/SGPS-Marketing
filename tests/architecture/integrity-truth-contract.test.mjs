@@ -58,9 +58,7 @@ test("integrity entries reference only public, localized facts (v3 S+5)", () => 
   const hrefs = [...block.matchAll(/href: \{ ([^}]+) \}/g)];
   assert.ok(hrefs.length >= ids.length, "every entry needs evidence hrefs");
   for (const href of hrefs) {
-    const pairs = [
-      ...href[1].matchAll(/(en|vi): ("[^"]+"|[A-Z][A-Z0-9_]+)/g),
-    ];
+    const pairs = [...href[1].matchAll(/(en|vi): ("[^"]+"|[A-Z][A-Z0-9_]+)/g)];
     assert.equal(pairs.length, 2, "evidence href must be localized");
     for (const [, , raw] of pairs) {
       if (raw.startsWith('"')) {
