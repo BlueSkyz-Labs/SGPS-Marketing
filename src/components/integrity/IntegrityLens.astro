@@ -1,7 +1,10 @@
 ---
 import { getIntegrityEntriesForSurface } from "@/lib/integrity";
+import { getPublicClaims } from "@/lib/claims";
+import { getPublicProducts } from "@/lib/products";
 import TruthState from "./TruthState.astro";
 import EvidenceDetails from "./EvidenceDetails.astro";
+import SourceTrace from "./SourceTrace.astro";
 import type { Language } from "@/data/site";
 
 interface Props {
@@ -11,6 +14,13 @@ interface Props {
 
 const { surface, lang } = Astro.props;
 const entries = getIntegrityEntriesForSurface(surface);
+const products = (await getPublicProducts()).map((product) => ({
+  slug: product.data.slug,
+  name: product.data.name,
+}));
+const claims = getPublicClaims(products).filter(
+  (resolved) => resolved.claim.surface === surface,
+);
 
 const LABELS = {
   en: { heading: "Verify this page" },
@@ -46,6 +56,17 @@ const LABELS = {
           </article>
         ))}
       </div>
+      {claims.length > 0 && (
+        <div class="integrity-lens__traces">
+          {claims.map((resolved) => (
+            <SourceTrace
+              claimId={resolved.claim.id}
+              lang={lang}
+              products={products}
+            />
+          ))}
+        </div>
+      )}
     </section>
   ) : null
 }

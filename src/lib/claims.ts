@@ -170,3 +170,70 @@ export function buildPublicClaimGraph(
     ),
   };
 }
+
+/** Ordered source-to-surface trace steps for a modeled claim (v3 G2). */
+export interface ClaimTraceStep {
+  kind: "claim" | "evidence" | "boundary" | "surface";
+  id: string;
+  label: { en: string; vi: string };
+  href?: { en: string; vi: string } | undefined;
+}
+
+const SURFACE_LABELS: Record<string, { en: string; vi: string }> = {
+  security: { en: "Security surface", vi: "Bề mặt Bảo mật" },
+  privacy: { en: "Privacy surface", vi: "Bề mặt Quyền riêng tư" },
+  products: { en: "Products surface", vi: "Bề mặt Sản phẩm" },
+};
+
+/**
+ * Deterministic trace: claim -> evidence (as declared) -> optional boundary
+ * -> surface. Missing optional nodes disappear; nothing is fabricated.
+ */
+export function getClaimTrace(
+  id: string,
+  products: PublicProductRef[],
+): ClaimTraceStep[] | null {
+  const resolved = getPublicClaim(id, products);
+  if (!resolved) return null;
+
+  const steps: ClaimTraceStep[] = [
+    {
+      kind: "claim",
+      id: resolved.claim.id,
+      label: resolved.claim.statement,
+    },
+  ];
+
+  for (const ref of resolved.evidence) {
+    steps.push({
+      kind: "evidence",
+      id: ref.id,
+      label: ref.label,
+      href: ref.href,
+    });
+  }
+
+  if (resolved.boundaryId) {
+    const boundary = BOUNDARY_INDEX.get(resolved.boundaryId);
+    if (boundary) {
+      steps.push({
+        kind: "boundary",
+        id: boundary.id,
+        label: boundary.claim,
+      });
+    }
+  }
+
+  const surfaceRoute = EVIDENCE_INDEX.get(`ev-${resolved.claim.surface}-route`);
+  steps.push({
+    kind: "surface",
+    id: resolved.claim.surface,
+    label: SURFACE_LABELS[resolved.claim.surface] ?? {
+      en: resolved.claim.surface,
+      vi: resolved.claim.surface,
+    },
+    href: surfaceRoute?.href,
+  });
+
+  return steps;
+}
