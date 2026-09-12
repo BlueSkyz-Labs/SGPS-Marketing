@@ -133,13 +133,24 @@ export function initCommandNavigator(root: ParentNode = document): void {
   // included); falls back to the first visible trigger.
   dialog.addEventListener("close", () => {
     const fallback = root.querySelector("[data-command-trigger]");
-    const target =
-      invoker && invoker.isConnected
-        ? invoker
-        : fallback instanceof HTMLElement
-          ? fallback
-          : null;
-    target?.focus();
+    const compactSummary = root.querySelector("header details summary");
+    // Focus must land on something visible: the invoking control when it is
+    // still rendered, otherwise the compact menu summary (mobile close).
+    const candidates: Array<unknown> = [invoker, fallback, compactSummary];
+    const target = candidates.find(
+      (candidate): candidate is HTMLElement =>
+        candidate instanceof HTMLElement &&
+        candidate.isConnected &&
+        // checkVisibility() understands content-visibility:hidden (closed
+        // <details>), where offsetParent still reports a box.
+        candidate.checkVisibility(),
+    );
     invoker = null;
+    // The native dialog close restores focus to the previously focused
+    // element first (which may be hidden inside a closed menu); apply our
+    // visible-candidate focus on the next task so it wins deterministically.
+    setTimeout(() => {
+      target?.focus();
+    }, 0);
   });
 }

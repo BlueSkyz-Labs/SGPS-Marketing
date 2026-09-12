@@ -62,7 +62,13 @@ test.describe("deterministic provenance search", () => {
       "open",
       "",
     );
-    await expect(trigger).toBeFocused();
+    if (await trigger.isVisible()) {
+      await expect(trigger).toBeFocused();
+    } else {
+      // Compact viewports close the menu when the dialog opens; focus lands
+      // on the visible menu summary instead of a hidden control.
+      await expect(page.locator("header details summary")).toBeFocused();
+    }
   });
 
   test("typed queries never enter dispatched event payloads", async ({
