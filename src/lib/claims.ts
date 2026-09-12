@@ -17,7 +17,7 @@ import {
   INTEGRITY_ENTRY_INDEX,
   type PublicClaim,
 } from "../data/claims.ts";
-import type { EvidenceReference } from "../data/integrity.ts";
+import type { EvidenceReference, TruthState } from "../data/integrity.ts";
 
 export interface PublicProductRef {
   slug: string;
@@ -236,4 +236,54 @@ export function getClaimTrace(
   });
 
   return steps;
+}
+
+/** Evidence passport model (v3 G3) — public, printable, shareable. */
+export interface EvidencePassportModel {
+  id: string;
+  claim: { en: string; vi: string };
+  state: TruthState;
+  evidence: EvidenceReference[];
+  boundaryId?: string | undefined;
+  boundary?:
+    | {
+        claim: { en: string; vi: string };
+        doesNotImply: { en: string; vi: string };
+      }
+    | undefined;
+  reviewedOn?: string | undefined;
+  contextHref: { en: string; vi: string };
+}
+
+export function getEvidencePassport(
+  id: string,
+  products: PublicProductRef[],
+): EvidencePassportModel | null {
+  const resolved = getPublicClaim(id, products);
+  if (!resolved) return null;
+
+  const contextRoute = EVIDENCE_INDEX.get(`ev-${resolved.claim.surface}-route`);
+  if (!contextRoute) return null;
+
+  const entry = resolved.reviewId
+    ? INTEGRITY_ENTRY_INDEX.get(resolved.reviewId)
+    : undefined;
+
+  return {
+    id: resolved.claim.id,
+    claim: resolved.claim.statement,
+    state: entry?.state ?? "source-linked",
+    evidence: resolved.evidence,
+    boundaryId: resolved.boundaryId,
+    boundary: resolved.boundaryId
+      ? BOUNDARY_INDEX.get(resolved.boundaryId)
+      : undefined,
+    reviewedOn: entry?.review?.reviewedOn,
+    contextHref: contextRoute.href,
+  };
+}
+
+/** Static passport paths for a locale — only modeled public claims. */
+export function getEvidencePassportIds(products: PublicProductRef[]): string[] {
+  return getPublicClaims(products).map((resolved) => resolved.claim.id);
 }
