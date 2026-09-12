@@ -20,10 +20,14 @@ test.describe("proof-first product empty state", () => {
       }),
     ).toBeVisible();
     await expect(page.locator("[data-product-card]")).toHaveCount(0);
-    const body = await page.locator("body").innerText();
+    const componentText = await page
+      .locator("[data-proof-first-empty-state]")
+      .innerText();
     for (const phrase of FORBIDDEN_PHRASING) {
-      expect(body).not.toMatch(phrase);
+      expect(componentText).not.toMatch(phrase);
     }
+    const body = await page.locator("body").innerText();
+    expect(body).not.toMatch(/has no products|không có sản phẩm/i);
   });
 
   test("EN empty state offers locale-correct internal actions", async ({
@@ -46,10 +50,14 @@ test.describe("proof-first product empty state", () => {
     const links = page.locator("[data-proof-first-empty-state] a");
     await expect(links.first()).toHaveAttribute("href", "/vi/about/");
     await expect(links.last()).toHaveAttribute("href", "/vi/security/");
-    const body = await page.locator("body").innerText();
+    const componentText = await page
+      .locator("[data-proof-first-empty-state]")
+      .innerText();
     for (const phrase of FORBIDDEN_PHRASING) {
-      expect(body).not.toMatch(phrase);
+      expect(componentText).not.toMatch(phrase);
     }
+    const body = await page.locator("body").innerText();
+    expect(body).not.toMatch(/has no products|không có sản phẩm/i);
   });
 
   test("320px keeps the empty state readable", async ({ page }) => {

@@ -2,6 +2,7 @@
 import type { CollectionEntry } from "astro:content";
 import ProductStatus from "@/components/product/ProductStatus.astro";
 import ButtonLink from "@/components/ui/ButtonLink.astro";
+import EvidenceDetails from "@/components/integrity/EvidenceDetails.astro";
 import { SHARED_LABELS, labelFor, type Language } from "@/data/site";
 import { getProductProfilePath } from "@/lib/product-routes";
 
@@ -43,9 +44,16 @@ const captionLabel = labelFor(SHARED_LABELS.proofCaption, lang);
               <li>{capability}</li>
             ))}
           </ul>
-          <p class="mt-4 text-xs font-medium tracking-wide text-[var(--text-muted)]">
-            {data.endorsement}
-          </p>
+          <div class="mt-6" data-flagship-evidence>
+            <EvidenceDetails
+              summary={data.endorsement}
+              evidence={[
+                { label: `${profileLabel} — ${data.name}`, href: profileHref },
+                { label: captionLabel, href: screenshot.src },
+              ]}
+              lang={lang}
+            />
+          </div>
           <div class="mt-8 flex flex-wrap gap-3">
             <ButtonLink href={data.primaryAction.href}>
               {data.primaryAction.label}
@@ -65,9 +73,6 @@ const captionLabel = labelFor(SHARED_LABELS.proofCaption, lang);
             loading="lazy"
             decoding="async"
           />
-          <figcaption class="mt-3 text-sm text-[var(--text-muted)]">
-            {captionLabel}
-          </figcaption>
         </figure>
       </div>
     </section>

@@ -33,12 +33,50 @@ test("no fabricated trust scoring or blanket verification", () => {
   );
 });
 
-test("integrity entries start fail-closed (no speculative public entries)", () => {
-  assert.match(
-    data,
-    /INTEGRITY_ENTRIES\s*=\s*\[\s*\] as const/,
-    "INTEGRITY_ENTRIES must begin as an empty, fail-closed contract",
+test("integrity entries reference only public, localized facts (v3 S+5)", () => {
+  const start = data.indexOf("INTEGRITY_ENTRIES: readonly IntegrityEntry[]");
+  assert.notEqual(start, -1, "INTEGRITY_ENTRIES must exist as a typed list");
+  const end = data.indexOf("\n];", start);
+  assert.notEqual(end, -1, "INTEGRITY_ENTRIES must be terminated");
+  const block = data.slice(start, end + 3);
+  assert.doesNotMatch(
+    block,
+    /sha|workflow|branch protection|run id|runner|deploy/i,
+    "entries must not use internal governance jargon as public proof",
   );
+  const ids = [...block.matchAll(/id: "([^"]+)"/g)].map((m) => m[1]);
+  assert.ok(ids.length >= 3, "expected at least three modeled surfaces");
+  assert.equal(new Set(ids).size, ids.length, "entry ids must be unique");
+  const surfaces = [...block.matchAll(/surface: "([^"]+)"/g)].map((m) => m[1]);
+  assert.equal(surfaces.length, ids.length, "every entry needs a surface");
+  const summaries = [...block.matchAll(/summary: \{[^}]*\}/gs)];
+  assert.equal(summaries.length, ids.length, "every entry needs a summary");
+  for (const summary of summaries) {
+    assert.match(summary[0], /en: "/, "summary needs EN");
+    assert.match(summary[0], /vi: "/, "summary needs VI");
+  }
+  const hrefs = [...block.matchAll(/href: \{ ([^}]+) \}/g)];
+  assert.ok(hrefs.length >= ids.length, "every entry needs evidence hrefs");
+  for (const href of hrefs) {
+    const pairs = [...href[1].matchAll(/(en|vi): ("[^"]+"|[A-Z][A-Z0-9_]+)/g)];
+    assert.equal(pairs.length, 2, "evidence href must be localized");
+    for (const [, , raw] of pairs) {
+      if (raw.startsWith('"')) {
+        const value = raw.slice(1, -1);
+        assert.match(
+          value,
+          /^\/|^https:\/\//,
+          `evidence href must be a public path or URL: ${value}`,
+        );
+      } else {
+        assert.match(
+          raw,
+          /^[A-Z][A-Z0-9_]+$/,
+          "identifier href values must be UPPERCASE constants",
+        );
+      }
+    }
+  }
 });
 
 test("truth-state contract covers the required states", () => {
