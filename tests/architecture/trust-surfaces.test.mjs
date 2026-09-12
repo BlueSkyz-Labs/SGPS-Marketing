@@ -22,7 +22,12 @@ test("trust section links meet touch-target floor", () => {
     "src/components/experience/TrustLedger.astro",
     "utf8",
   );
-  assert.match(ledgerComponent, /min-h-11/);
+  assert.match(ledgerComponent, /EvidenceDetails/);
+  const evidenceDetails = readFileSync(
+    "src/components/integrity/EvidenceDetails.astro",
+    "utf8",
+  );
+  assert.match(evidenceDetails, /min-h-11/);
   const trust = readFileSync("src/components/sections/Trust.astro", "utf8");
   assert.match(trust, /TrustLedger/);
 });

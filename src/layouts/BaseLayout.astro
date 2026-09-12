@@ -3,6 +3,7 @@ import Header from "@/components/layout/Header.astro";
 import Footer from "@/components/layout/Footer.astro";
 import CommandNavigator from "@/components/experience/CommandNavigator.astro";
 import JourneyBar from "@/components/experience/JourneyBar.astro";
+import IntegrityLens from "@/components/integrity/IntegrityLens.astro";
 import { SITE } from "@/data/site";
 import {
   absoluteUrl,
@@ -23,6 +24,8 @@ interface Props {
   path?: string;
   ogImage?: string;
   noindex?: boolean;
+  /** Stable integrity surface id; the lens renders only for modeled surfaces. */
+  surface?: string;
 }
 
 const {
@@ -31,6 +34,7 @@ const {
   path = Astro.url.pathname,
   ogImage = defaultOgImagePath(),
   noindex = false,
+  surface,
 } = Astro.props;
 
 const fullTitle = title.includes(SITE.name) ? title : `${title} · ${SITE.name}`;
@@ -98,6 +102,7 @@ const robotsNoindex = noindex || isNonProductionSiteUrl(SITE.url);
     </script>
     <main id="main-content" class="flex-1" tabindex="-1">
       <slot />
+      {surface ? <IntegrityLens surface={surface} lang={currentLang} /> : null}
       <JourneyBar />
     </main>
     <Footer />

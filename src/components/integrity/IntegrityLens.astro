@@ -1,0 +1,51 @@
+---
+import { getIntegrityEntriesForSurface } from "@/lib/integrity";
+import TruthState from "./TruthState.astro";
+import EvidenceDetails from "./EvidenceDetails.astro";
+import type { Language } from "@/data/site";
+
+interface Props {
+  surface: string;
+  lang: Language;
+}
+
+const { surface, lang } = Astro.props;
+const entries = getIntegrityEntriesForSurface(surface);
+
+const LABELS = {
+  en: { heading: "Verify this page" },
+  vi: { heading: "Xác minh trang này" },
+} as const;
+---
+
+{
+  entries.length > 0 ? (
+    <section
+      class="integrity-lens"
+      data-integrity-lens
+      data-surface={surface}
+      aria-labelledby={`integrity-lens-title-${surface}`}
+    >
+      <h2 id={`integrity-lens-title-${surface}`} class="integrity-lens__title">
+        {LABELS[lang].heading}
+      </h2>
+      <div class="integrity-lens__entries">
+        {entries.map((entry) => (
+          <article data-integrity-entry={entry.id}>
+            <TruthState state={entry.state} lang={lang} />
+            <EvidenceDetails
+              summary={entry.summary[lang]}
+              evidence={entry.evidence.map((ev) => ({
+                label: ev.label[lang],
+                href: ev.href[lang],
+              }))}
+              review={entry.review}
+              boundary={entry.boundary}
+              lang={lang}
+            />
+          </article>
+        ))}
+      </div>
+    </section>
+  ) : null
+}
