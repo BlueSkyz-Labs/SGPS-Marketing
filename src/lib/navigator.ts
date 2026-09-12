@@ -79,6 +79,11 @@ export function buildNavigatorIndex(
   for (const entry of INTEGRITY_ENTRIES) {
     for (const evidence of entry.evidence) {
       const href = evidence.href[lang];
+      // Machine-readable artifacts (e.g. /.well-known/sgps.json) are evidence a
+      // visitor can fetch, but they are not navigable command destinations.
+      if (evidence.kind === "artifact" || href.includes("/.well-known/")) {
+        continue;
+      }
       if (byHref.has(href)) {
         // Destinations already present keep their own aliases: evidence ids
         // (e.g. "privacy-data-practices") can name other topics and must not
