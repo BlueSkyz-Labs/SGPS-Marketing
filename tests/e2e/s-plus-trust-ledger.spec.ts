@@ -28,21 +28,23 @@ test("homepage trust ledger renders three truthful lanes on /en/", async ({
   }
 });
 
-test("every visible ledger entry reports a working route", async ({ page }) => {
+test("every ledger entry reports a working route behind its disclosure", async ({
+  page,
+}) => {
   await page.goto("/en/");
   const ledger = page.locator("[data-trust-ledger]");
-  await expect(ledger.getByRole("link", { name: /Privacy/i })).toHaveAttribute(
-    "href",
-    "/en/privacy/",
-  );
-  await expect(ledger.getByRole("link", { name: /Security/i })).toHaveAttribute(
-    "href",
-    "/en/security/",
-  );
-  await expect(ledger.getByRole("link", { name: /Support/i })).toHaveAttribute(
-    "href",
-    "/en/support/",
-  );
+  // Evidence links live behind a native disclosure (v3 S+6): assert the
+  // routes are attached, then prove one row is reachable when opened.
+  await expect(ledger.locator('a[href="/en/privacy/"]')).toBeAttached();
+  await expect(ledger.locator('a[href="/en/security/"]')).toBeAttached();
+  await expect(ledger.locator('a[href="/en/support/"]')).toBeAttached();
+  await ledger
+    .locator("details")
+    .first()
+    .evaluate((el) => {
+      (el as HTMLDetailsElement).open = true;
+    });
+  await expect(ledger.getByRole("link", { name: /Privacy/i })).toBeVisible();
 });
 
 test("ledger routes navigate without contacting external channels", async ({
@@ -51,13 +53,20 @@ test("ledger routes navigate without contacting external channels", async ({
   await page.goto("/en/");
   const ledger = page.locator("[data-trust-ledger]");
   const hrefs = await ledger
-    .getByRole("link")
+    .locator("a")
     .evaluateAll((elements) =>
       elements.map((element) => element.getAttribute("href")),
     );
+  expect(hrefs.length).toBeGreaterThan(0);
   for (const href of hrefs) {
     expect(href).toMatch(/^\/(en|vi)\//);
   }
+  await ledger
+    .locator("details")
+    .first()
+    .evaluate((el) => {
+      (el as HTMLDetailsElement).open = true;
+    });
   await ledger.getByRole("link", { name: /Privacy/i }).click();
   await expect(page).toHaveURL(/\/en\/privacy\/$/);
 });
@@ -71,9 +80,7 @@ test("trust ledger renders localized lanes on /vi/", async ({ page }) => {
     expect(text).toContain(label);
   }
   await expect(ledger.getByText(/Có sẵn/).first()).toBeVisible();
-  await expect(
-    ledger.getByRole("link", { name: /Quyền riêng tư/i }),
-  ).toHaveAttribute("href", "/vi/privacy/");
+  await expect(ledger.locator('a[href="/vi/privacy/"]')).toBeAttached();
 });
 
 test("ledger keeps accessible names free of decorative status noise", async ({
@@ -81,7 +88,14 @@ test("ledger keeps accessible names free of decorative status noise", async ({
 }) => {
   await page.goto("/en/");
   const ledger = page.locator("[data-trust-ledger]");
+  await ledger
+    .locator("details")
+    .first()
+    .evaluate((el) => {
+      (el as HTMLDetailsElement).open = true;
+    });
   const link = ledger.getByRole("link", { name: /Privacy/i });
   const name = await link.evaluate((element) => element.textContent ?? "");
   expect(name).toContain("Privacy");
+  expect(name).not.toMatch(/available|not published/i);
 });
