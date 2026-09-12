@@ -91,8 +91,14 @@
     {
       "id": "hardening-h10",
       "name": "Production smoke/observability/rollback contract + live 404 check",
-      "status": "IN_PROGRESS",
+      "status": "MERGED",
       "evidence": "docs/evidence/2026-09-12-wave-h10-ops.md"
+    },
+    {
+      "id": "hardening-h11",
+      "name": "Recovery paths + redirect chain contract",
+      "status": "IN_PROGRESS",
+      "evidence": "docs/evidence/2026-09-12-wave-h11-recovery.md"
     }
   ],
   "openOwnerDecisions": [
@@ -123,7 +129,7 @@
     "Trademark/legal clearance and specialty print (brand kit caveats)"
   ],
   "nextActionable": [
-    "Merge hardening wave H10 after exact-head green",
+    "Merge hardening wave H11 after exact-head green",
     "Optional UI-4 remainder: atlas finesse, per-page OG images, breadcrumb JSON-LD"
   ]
 }
