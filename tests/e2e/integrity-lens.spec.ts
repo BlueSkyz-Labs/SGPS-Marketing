@@ -16,6 +16,12 @@ test.describe("SGPS integrity lens", () => {
     await expect(lens.locator("[data-evidence-review]")).toHaveText(
       /2026-09-12/,
     );
+    await lens
+      .locator("details")
+      .first()
+      .evaluate((el) => {
+        (el as HTMLDetailsElement).open = true;
+      });
     await expect(
       lens.getByRole("link", {
         name: /GitHub private vulnerability reporting/i,

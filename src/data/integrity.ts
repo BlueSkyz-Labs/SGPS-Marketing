@@ -128,8 +128,8 @@ export const INTEGRITY_ENTRIES: readonly IntegrityEntry[] = [
     surface: "products",
     state: "not-published",
     summary: {
-      en: "The public registry currently lists no products; listings appear only with verifiable public evidence.",
-      vi: "Danh mục công khai hiện chưa có sản phẩm; mục chỉ xuất hiện khi có bằng chứng công khai xác minh được.",
+      en: "The public registry stays quiet by design: listings appear only when a product's evidence is ready to verify.",
+      vi: "Danh mục công khai giữ im lặng có chủ đích: mục chỉ xuất hiện khi bằng chứng của sản phẩm sẵn sàng để xác minh.",
     },
     evidence: [
       {
