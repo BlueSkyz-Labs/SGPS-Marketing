@@ -18,16 +18,22 @@ import { SITE } from "@/data/site";
         lede={`${SITE.proposition} ${SITE.supporting}`}
       />
       <div
-        class="mt-12 max-w-2xl rounded-xl border border-[var(--border-subtle)] bg-white p-6"
+        class="mt-12 max-w-2xl rounded-xl border border-[var(--border-subtle)] border-l-[3px] border-l-[color-mix(in_srgb,var(--brand-cobalt)_60%,var(--border-subtle))] bg-white p-6"
       >
         <p
-          class="text-sm font-semibold tracking-tight text-[var(--text-primary)]"
+          class="text-[0.65rem] font-semibold tracking-[0.14em] text-[var(--text-muted)] uppercase"
+        >
+          Note
+        </p>
+        <p
+          class="mt-2 text-sm font-semibold tracking-tight text-[var(--text-primary)]"
         >
           Tony Nguyen — Founder &amp; CEO
         </p>
-        <p class="mt-3 text-sm leading-relaxed text-[var(--text-secondary)]">
-          Extended founder or company biography publishes when approved for the
-          public site. This page stays BlueSkyz-led, not a personal portfolio.
+        <p class="mt-3 text-sm leading-[1.65] text-[var(--text-secondary)]">
+          This page stays company-led. Founder detail publishes only when
+          approved for the public site — nothing here is written ahead of that
+          approval.
         </p>
       </div>
     </Container>

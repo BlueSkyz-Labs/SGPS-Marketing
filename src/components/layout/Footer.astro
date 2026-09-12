@@ -28,14 +28,14 @@ const motto = isVi
       <BrandLockup size="footer" />
       <LanguageSwitcher variant="dark" />
     </div>
-    <nav aria-label="Footer">
+    <nav aria-label={isVi ? "Chân trang" : "Footer"}>
       <ul class="flex flex-wrap gap-x-7 gap-y-1">
         {
           FOOTER_LINKS.map((item) => (
             <li>
               <a
                 href={item.href}
-                class="inline-flex min-h-11 items-center text-sm text-[color-mix(in_srgb,var(--brand-porcelain)_82%,white)] no-underline transition-colors hover:text-white"
+                class="inline-flex min-h-11 items-center text-[0.9375rem] text-[color-mix(in_srgb,var(--brand-porcelain)_86%,white)] no-underline transition-colors hover:text-white"
               >
                 {item.label}
               </a>
@@ -44,7 +44,7 @@ const motto = isVi
         }
       </ul>
     </nav>
-    <div class="flex flex-col gap-3 border-t border-white/10 pt-6">
+    <div class="flex flex-col gap-3.5 border-t border-white/10 pt-6">
       <p
         class="max-w-2xl text-sm text-[color-mix(in_srgb,var(--brand-porcelain)_72%,white)]"
       >

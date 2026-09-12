@@ -64,3 +64,24 @@ test("contact empty-email state leads with working security path", async ({
     page.getByRole("heading", { name: "Security" }).first(),
   ).toBeVisible();
 });
+
+test("unknown paths serve a real branded 404 page", async ({ page }) => {
+  const response = await page.goto("/en/this-route-does-not-exist/");
+  expect(response?.status()).toBe(404);
+  // The served 404 document must be a real page, never a blank stub.
+  await expect(page.getByRole("heading", { level: 1 })).toContainText(
+    /not found/i,
+  );
+  await expect(page.getByRole("link", { name: "Go home" })).toBeVisible();
+  await expect(page.getByRole("link", { name: /Trang chủ/i })).toBeVisible();
+});
+
+test("unknown paths under /vi/ also serve the branded 404", async ({
+  page,
+}) => {
+  const response = await page.goto("/vi/khong-ton-tai/");
+  expect(response?.status()).toBe(404);
+  await expect(page.getByRole("heading", { level: 1 })).toContainText(
+    /not found/i,
+  );
+});

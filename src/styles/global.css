@@ -815,6 +815,10 @@ summary {
 /* v3 Wave 4 — source-to-surface trace. */
 .source-trace {
   margin-top: 1.25rem;
+  background: var(--surface-subtle);
+  border: 1px solid var(--border-subtle);
+  border-radius: 0.75rem;
+  padding: 1rem 1.25rem;
 }
 .source-trace__title {
   font-size: 0.8125rem;
@@ -832,14 +836,14 @@ summary {
   position: relative;
   display: flex;
   align-items: baseline;
-  gap: 0.5rem;
+  gap: 0.625rem;
   color: var(--text-secondary);
   font-size: 0.875rem;
   line-height: 1.5;
 }
 .source-trace__role {
   flex: none;
-  font-size: 0.625rem;
+  font-size: 0.6875rem;
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -945,9 +949,10 @@ summary {
   background: #fff;
   padding: 1.25rem;
   scroll-margin-top: 6rem;
+  box-shadow: var(--elevation-1);
 }
 .decision-room__kind {
-  font-size: 0.625rem;
+  font-size: 0.6875rem;
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -1047,4 +1052,56 @@ html[data-intent] [data-journey-bar] li[data-evidence-first="true"] a {
 [id^="claim-"],
 [id^="evidence-"] {
   scroll-margin-top: 6rem;
+}
+
+/* ------------------------------------------------------------------ */
+/* Wave UI-1 — premium elevation, states, and density pass.            */
+/* ------------------------------------------------------------------ */
+:root {
+  --elevation-1:
+    0 1px 2px rgba(11, 16, 32, 0.05), 0 10px 30px -12px rgba(11, 16, 32, 0.18);
+  --elevation-2:
+    0 2px 4px rgba(11, 16, 32, 0.06), 0 18px 44px -18px rgba(11, 16, 32, 0.24);
+}
+
+.trust-ledger-card {
+  box-shadow: var(--elevation-1);
+  transition:
+    box-shadow var(--motion-normal) var(--motion-ease-standard),
+    border-color var(--motion-normal) var(--motion-ease-standard);
+}
+.trust-ledger-card:hover {
+  box-shadow: var(--elevation-2);
+  border-color: color-mix(
+    in srgb,
+    var(--brand-cobalt) 30%,
+    var(--border-subtle)
+  );
+}
+
+.atlas-list {
+  box-shadow: var(--elevation-1);
+}
+.atlas-list li {
+  padding-block: 0.125rem;
+}
+
+.evidence-passport {
+  box-shadow: var(--elevation-1);
+}
+
+.decision-room__add {
+  transition:
+    border-color var(--motion-fast) var(--motion-ease-standard),
+    background-color var(--motion-fast) var(--motion-ease-standard),
+    color var(--motion-fast) var(--motion-ease-standard),
+    transform var(--motion-fast) var(--motion-ease-standard);
+}
+.decision-room__add:hover:not(:disabled) {
+  border-color: var(--action-primary);
+  transform: translateY(-1px);
+}
+.decision-room__add[aria-pressed="true"] {
+  background: color-mix(in srgb, var(--brand-cobalt) 10%, white);
+  box-shadow: inset 0 0 0 1px var(--action-primary);
 }

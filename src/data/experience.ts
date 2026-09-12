@@ -94,7 +94,7 @@ const PRINCIPLE_DIMENSIONS: Record<
     },
     people: {
       en: "Raises the ceiling for the team and for the person at the screen.",
-      vi: "Nâng giới hạn cho đội ngũ và cho người ngồi trước màn hình.",
+      vi: "Nâng cao năng lực cho đội ngũ và người dùng.",
     },
     evidence: {
       en: "Reviewed against references and standards before shipping.",
@@ -108,7 +108,7 @@ const PRINCIPLE_DIMENSIONS: Record<
   Trust: {
     product: {
       en: "Security and privacy treated as first-class routes, not afterthoughts.",
-      vi: "Bảo mật và quyền riêng tư là những tuyến đường hạng nhất, không phải phần thêm vào.",
+      vi: "Bảo mật và quyền riêng tư là ưu tiên hàng đầu — không phải phần thêm vào.",
     },
     people: {
       en: "Working recourse paths when something goes wrong.",
