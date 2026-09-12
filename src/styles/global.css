@@ -27,6 +27,18 @@
   --focus-ring: #1d4ed8;
   --radius-card: 0.625rem;
   --font-sans: Inter, ui-sans-serif, system-ui, sans-serif;
+  /* Brand Kit v4 aliases (parity with 07_DESIGN_TOKENS/tokens.css). */
+  --brand-slate-650: #475569;
+  --brand-slate-500: #64748b; /* decorative/large only — fails AA normal text */
+  --brand-action-dark: #1d4ed8;
+  --brand-text-disabled: #94a3b8;
+  --brand-shadow-subtle: 0 8px 28px rgba(11, 16, 32, 0.12);
+  --brand-gradient-hero: linear-gradient(
+    135deg,
+    #0b1020 0%,
+    #0f172a 55%,
+    #2564ff 140%
+  );
   --space-1: 0.25rem;
   --space-2: 0.5rem;
   --space-3: 0.75rem;
@@ -52,6 +64,14 @@
   --motion-distance-md: 0.5rem;
   --motion-distance-lg: 1.25rem;
   color-scheme: light;
+}
+
+/* Brand Kit v4 dark semantics — dormant until a dark theme ships. */
+[data-theme="dark"] {
+  --text-primary: #ffffff;
+  --text-secondary: #cbd5e1;
+  --surface-primary: var(--brand-ink);
+  --border-subtle: #334155;
 }
 
 html {
