@@ -79,8 +79,14 @@
     {
       "id": "hardening-h8",
       "name": "Mobile overflow sweep, heading hierarchy fix, passport polish",
-      "status": "IN_PROGRESS",
+      "status": "MERGED",
       "evidence": "docs/evidence/2026-09-12-wave-h8-mobile.md"
+    },
+    {
+      "id": "hardening-h9",
+      "name": "Assistive-tech announcement for the command navigator",
+      "status": "IN_PROGRESS",
+      "evidence": "docs/evidence/2026-09-12-wave-h9-at-announcements.md"
     }
   ],
   "openOwnerDecisions": [
@@ -111,7 +117,7 @@
     "Trademark/legal clearance and specialty print (brand kit caveats)"
   ],
   "nextActionable": [
-    "Merge hardening wave H8 after exact-head green",
+    "Merge hardening wave H9 after exact-head green",
     "Optional UI-4 remainder: atlas finesse, per-page OG images, breadcrumb JSON-LD"
   ]
 }
