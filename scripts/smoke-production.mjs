@@ -135,6 +135,26 @@ check("sitemap lists only canonical localized routes", async () => {
   );
 });
 
+check("decision room responds with its workspace", async () => {
+  const response = await get("/en/decision-room/");
+  assert(response.status === 200, `expected 200, got ${response.status}`);
+  const html = await response.text();
+  assert(
+    html.includes("data-decision-room"),
+    "missing decision-room workspace",
+  );
+});
+
+check("evidence passport for the security claim is public", async () => {
+  const response = await get("/en/evidence/security-reporting-is-private/");
+  assert(response.status === 200, `expected 200, got ${response.status}`);
+  const html = await response.text();
+  assert(
+    html.includes("data-evidence-passport"),
+    "missing evidence passport markup",
+  );
+});
+
 check("critical navigation links are present on the EN home", async () => {
   const response = await get("/en/");
   const html = await response.text();
