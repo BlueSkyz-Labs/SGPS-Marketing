@@ -1,8 +1,14 @@
 import assert from "node:assert/strict";
 import { execFileSync } from "node:child_process";
-import { mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import {
+  mkdtempSync,
+  readFileSync,
+  readdirSync,
+  rmSync,
+  writeFileSync,
+} from "node:fs";
 import { tmpdir } from "node:os";
-import { basename, join } from "node:path";
+import { basename, dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import test from "node:test";
 import {
@@ -46,15 +52,23 @@ function runCli(args) {
   }
 }
 
-test("the real post-merge ledger resolves as the default and passes", () => {
+test("the newest post-merge ledger resolves as the default and passes", () => {
   const ledger = resolveDefaultLedger(ROOT);
-  assert.equal(basename(ledger), "2026-09-12-v3-post-merge-readback.md");
-
-  const { sha, violations } = validateLedger(readFileSync(ledger, "utf8"));
+  assert.ok(ledger, "a post-merge ledger must exist");
+  const text = readFileSync(ledger, "utf8");
+  const { sha, violations } = validateLedger(text);
 
   assert.deepEqual(violations, []);
-  assert.equal(sha, "64285ac");
   assert.match(sha, /^[0-9a-f]{7,40}$/);
+  // The resolved default must be the newest by name, not a pinned artifact.
+  const dir = dirname(ledger);
+  const newest = readdirSync(dir)
+    .filter((name) => /post-merge/i.test(name) && name.endsWith(".md"))
+    .sort()
+    .at(-1);
+  assert.equal(basename(ledger), newest);
+  // The ledger's declared revision must appear in its own text.
+  assert.ok(text.includes(sha), "declared revision must appear in the ledger");
 });
 
 test("a synthetic ledger without a deployed revision fails", () => {
@@ -94,9 +108,14 @@ test("a ledger whose read-back omits the production host fails", () => {
 
 test("CLI exits 0 and prints the observed revision for the real ledger", () => {
   const result = runCli([]);
+  const ledger = resolveDefaultLedger(ROOT);
+  const { sha } = validateLedger(readFileSync(ledger, "utf8"));
 
   assert.equal(result.status, 0);
-  assert.match(result.stdout, /Deployment evidence: PASS \(64285ac\)/);
+  assert.ok(
+    result.stdout.includes(`Deployment evidence: PASS (${sha})`),
+    `expected the CLI to print the observed revision ${sha}`,
+  );
 });
 
 test("CLI exits 1 with one FAIL line per violation", () => {
