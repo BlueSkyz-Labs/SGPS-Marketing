@@ -100,7 +100,13 @@ const robotsNoindex = noindex || isNonProductionSiteUrl(SITE.url);
     }
   </head>
   <body class="flex min-h-screen flex-col">
-    <a class="skip-link" href="#main-content">Skip to main content</a>
+    <a class="skip-link" href="#main-content">
+      {
+        currentLang === "vi"
+          ? "Chuyển đến nội dung chính"
+          : "Skip to main content"
+      }
+    </a>
     <Header />
     <CommandNavigator />
     <script>

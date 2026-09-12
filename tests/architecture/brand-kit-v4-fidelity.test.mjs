@@ -36,9 +36,18 @@ const FAVICON_FILES = [
   "site.webmanifest",
 ];
 
+const MASKABLE_FILES = [
+  "android-maskable-192x192.png",
+  "android-maskable-512x512.png",
+];
+
 const PAIRS = [
   ...FAVICON_FILES.map((file) => [
     `${KIT}/03_ICONS/01_FAVICON_PWA/${file}`,
+    `public/icons/${file}`,
+  ]),
+  ...MASKABLE_FILES.map((file) => [
+    `${KIT}/03_ICONS/01_FAVICON_PWA/MASKABLE/${file}`,
     `public/icons/${file}`,
   ]),
   [

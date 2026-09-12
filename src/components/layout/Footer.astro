@@ -28,7 +28,7 @@ const motto = isVi
       <BrandLockup size="footer" />
       <LanguageSwitcher variant="dark" />
     </div>
-    <nav aria-label="Footer">
+    <nav aria-label={isVi ? "Chân trang" : "Footer"}>
       <ul class="flex flex-wrap gap-x-7 gap-y-1">
         {
           FOOTER_LINKS.map((item) => (

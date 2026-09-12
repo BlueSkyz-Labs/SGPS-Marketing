@@ -35,3 +35,13 @@ test("footer exposes trust routes", async ({ page }) => {
   await expect(footer.getByRole("link", { name: "Privacy" })).toBeVisible();
   await expect(footer.getByRole("link", { name: "Security" })).toBeVisible();
 });
+
+test("VI shell exposes a localized skip link", async ({ page }) => {
+  await page.goto("/vi/");
+  await expect(
+    page.getByRole("link", { name: "Chuyển đến nội dung chính" }),
+  ).toBeAttached();
+  await expect(
+    page.getByRole("navigation", { name: "Chính" }).first(),
+  ).toBeAttached();
+});
