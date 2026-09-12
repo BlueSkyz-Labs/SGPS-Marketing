@@ -48,16 +48,16 @@ may depend on internal governance vocabulary.
 Record behaviour, verbatim quotes, time-on-task, and dead ends. Verbatim or
 omitted — never paraphrased into a claim.
 
-| Task | Outcome | Time | Observation (verbatim / factual) |
-| --- | --- | --- | --- |
-| 1 | `NOT RUN` | `—` | |
-| 2 | `NOT RUN` | `—` | |
-| 3 | `NOT RUN` | `—` | |
-| 4 | `NOT RUN` | `—` | |
-| 5 | `NOT RUN` | `—` | |
-| 6 | `NOT RUN` | `—` | |
-| 7 | `NOT RUN` | `—` | |
-| 8 | `NOT RUN` | `—` | |
+| Task | Outcome   | Time | Observation (verbatim / factual) |
+| ---- | --------- | ---- | -------------------------------- |
+| 1    | `NOT RUN` | `—`  |                                  |
+| 2    | `NOT RUN` | `—`  |                                  |
+| 3    | `NOT RUN` | `—`  |                                  |
+| 4    | `NOT RUN` | `—`  |                                  |
+| 5    | `NOT RUN` | `—`  |                                  |
+| 6    | `NOT RUN` | `—`  |                                  |
+| 7    | `NOT RUN` | `—`  |                                  |
+| 8    | `NOT RUN` | `—`  |                                  |
 
 **Raw record:** `NOT RECORDED` (transcript path / note file — required).
 
@@ -66,18 +66,18 @@ omitted — never paraphrased into a claim.
 Everything below is the moderator's inference, not participant fact. State the
 observation each inference rests on.
 
-| # | Inference | Rests on (observation ref) | Confidence |
-| --- | --- | --- | --- |
-| 1 | `NOT RUN` | `—` | `—` |
+| #   | Inference | Rests on (observation ref) | Confidence |
+| --- | --------- | -------------------------- | ---------- |
+| 1   | `NOT RUN` | `—`                        | `—`        |
 
 ## Comprehension and credibility defects
 
 Classify `P0` / `P1` / `P2`. P0/P1 comprehension or credibility defects block
 Premium PASS and require re-running the affected task after the fix.
 
-| Severity | Defect (observed) | Affected task | Follow-up |
-| --- | --- | --- | --- |
-| `NOT RUN` | | | |
+| Severity  | Defect (observed) | Affected task | Follow-up |
+| --------- | ----------------- | ------------- | --------- |
+| `NOT RUN` |                   |               |           |
 
 ## Status
 

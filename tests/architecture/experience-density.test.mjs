@@ -127,7 +127,8 @@ function headingLiterals(src) {
   const literals = [];
   for (const match of src.matchAll(/<h[1-6]\b[^>]*>([\s\S]*?)<\/h[1-6]>/g)) {
     const text = match[1].replace(/<[^>]*>/g, " ");
-    for (const quoted of text.matchAll(/"([^"]{2,})"/g)) literals.push(quoted[1]);
+    for (const quoted of text.matchAll(/"([^"]{2,})"/g))
+      literals.push(quoted[1]);
   }
   return literals;
 }
@@ -139,7 +140,9 @@ function pageComponents(src) {
 }
 
 function pageSectionNames(src) {
-  return pageComponents(src).filter((name) => SECTION_COMPONENT_NAMES.has(name));
+  return pageComponents(src).filter((name) =>
+    SECTION_COMPONENT_NAMES.has(name),
+  );
 }
 
 function countLiteralSections(src) {
@@ -187,7 +190,8 @@ test("homepage heading hierarchy is ordered, bounded, and one h1", () => {
     for (const level of levels) levelsUsed.add(level);
     if (levels.includes(1)) h1Owners.push(path);
     for (const literal of headingLiterals(src)) {
-      if (literal.length > longest.length) longest = { text: literal, length: literal.length };
+      if (literal.length > longest.length)
+        longest = { text: literal, length: literal.length };
     }
   }
 
@@ -282,11 +286,14 @@ test("section count per page is bounded and EN/VI homepages stay in parity", () 
   const pages = {
     "src/pages/en/index.astro": read("src/pages/en/index.astro"),
     "src/pages/vi/index.astro": read("src/pages/vi/index.astro"),
-    "src/pages/en/decision-room.astro": read("src/pages/en/decision-room.astro"),
+    "src/pages/en/decision-room.astro": read(
+      "src/pages/en/decision-room.astro",
+    ),
   };
 
   for (const [path, src] of Object.entries(pages)) {
-    const sectionCount = pageSectionNames(src).length + countLiteralSections(src);
+    const sectionCount =
+      pageSectionNames(src).length + countLiteralSections(src);
     assert.ok(
       sectionCount <= MAX_SECTIONS_PER_PAGE,
       `${path} composes ${sectionCount} sections, ceiling ${MAX_SECTIONS_PER_PAGE} — unbounded section growth is dashboard creep (${HUMAN_E4_CAVEAT})`,

@@ -289,7 +289,8 @@ export function detectLocalRepository(cwd = process.cwd()) {
 function collectEvidenceEntries(model) {
   const entries = [];
   const push = (subject, evidence) => {
-    if (evidence && typeof evidence === "object") entries.push({ subject, evidence });
+    if (evidence && typeof evidence === "object")
+      entries.push({ subject, evidence });
   };
   push("model", model?.sourceEvidence);
   for (const [index, entity] of (model?.entities ?? []).entries()) {
@@ -394,7 +395,9 @@ function main(argv = process.argv.slice(2)) {
   try {
     model = loadModel(modelPath, cwd);
   } catch (error) {
-    console.error(`FAIL model \u2014 ${error.message} (fix: point --model at architecture/sgps-model.json)`);
+    console.error(
+      `FAIL model \u2014 ${error.message} (fix: point --model at architecture/sgps-model.json)`,
+    );
     return 1;
   }
 

@@ -64,9 +64,7 @@ test("a synthetic workflow that skips a gate yields FAIL", () => {
   });
 
   assert.equal(result.status, STATUS.FAIL);
-  assert.ok(
-    result.findings.some((item) => item.subject.includes("typecheck")),
-  );
+  assert.ok(result.findings.some((item) => item.subject.includes("typecheck")));
 });
 
 test("a missing owner fact yields BLOCKED_OWNER_FACT, not PASS", () => {

@@ -26,11 +26,7 @@ const READ_BACK = [
   "- EN home `/en/` 200",
 ];
 
-function ledgerText({
-  head = HEAD,
-  smoke = SMOKE,
-  readBack = READ_BACK,
-} = {}) {
+function ledgerText({ head = HEAD, smoke = SMOKE, readBack = READ_BACK } = {}) {
   return ["# Read-back", head, "", ...smoke, "", ...readBack].join("\n");
 }
 

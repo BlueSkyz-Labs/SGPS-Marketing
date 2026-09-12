@@ -24,6 +24,7 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
           persist-credentials: false
+          fetch-depth: 0
       - name: Set up Node 24.20.0
         uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
         with:
@@ -54,6 +55,12 @@ jobs:
         run: pnpm check:publishability
       - name: Integrity regression firewall
         run: pnpm check:integrity-firewall
+      - name: Git evidence provenance
+        run: pnpm verify:git-evidence
+      - name: Promotion assurance state
+        run: pnpm check:promotion-state
+      - name: Deployment evidence ledger
+        run: pnpm check:deployment-evidence
 
   browser-assurance:
     name: Browser Assurance
@@ -66,6 +73,7 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
           persist-credentials: false
+          fetch-depth: 0
       - name: Set up Node 24.20.0
         uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
         with:

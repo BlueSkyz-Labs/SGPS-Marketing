@@ -24,10 +24,10 @@ lands in a reviewable shape instead of prose.
 
 ## Templates
 
-| Template | Use it for | Status vocabulary |
-| --- | --- | --- |
-| `human-e4-session-template.md` | one participant, one locale, one session | `NOT RUN` / `RUN` / `INVALID` |
-| `red-team-probe-template.md` | one adversarial probe against a claim or surface | `NOT RUN` / `DETECTED` / `REMEDIATED` / `OPEN` |
+| Template                       | Use it for                                       | Status vocabulary                              |
+| ------------------------------ | ------------------------------------------------ | ---------------------------------------------- |
+| `human-e4-session-template.md` | one participant, one locale, one session         | `NOT RUN` / `RUN` / `INVALID`                  |
+| `red-team-probe-template.md`   | one adversarial probe against a claim or surface | `NOT RUN` / `DETECTED` / `REMEDIATED` / `OPEN` |
 
 ## How to use
 

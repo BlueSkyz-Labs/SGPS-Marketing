@@ -42,15 +42,24 @@ test("(a) HEAD and a real path at HEAD verify PASS", () => {
 
 test("(b) a SHA-shaped but nonexistent revision is never PASS", () => {
   // Guard the premise: this object really is absent from the clone.
-  const probe = spawnSync("git", ["cat-file", "-e", `${FAKE_REVISION}^{commit}`], {
-    cwd: ROOT,
-  });
+  const probe = spawnSync(
+    "git",
+    ["cat-file", "-e", `${FAKE_REVISION}^{commit}`],
+    {
+      cwd: ROOT,
+    },
+  );
   assert.notEqual(probe.status, 0, "fixture revision must not exist locally");
 
   const result = verifyRevision(FAKE_REVISION, ROOT);
-  assert.notEqual(result.status, STATUS.PASS, "unverifiable evidence must not pass");
+  assert.notEqual(
+    result.status,
+    STATUS.PASS,
+    "unverifiable evidence must not pass",
+  );
   assert.ok(
-    result.status === STATUS.FAIL || result.status === STATUS.SHALLOW_UNVERIFIED,
+    result.status === STATUS.FAIL ||
+      result.status === STATUS.SHALLOW_UNVERIFIED,
     `unexpected status ${result.status}`,
   );
   assert.ok(result.hint.length > 0, "non-pass results must carry a fix hint");

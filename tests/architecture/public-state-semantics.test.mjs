@@ -54,7 +54,11 @@ const LIVE_VOCABULARIES = {
     trustLedgerSource,
     "src/data/trust-ledger.ts",
   ),
-  integrity: unionValues("TruthState", integritySource, "src/data/integrity.ts"),
+  integrity: unionValues(
+    "TruthState",
+    integritySource,
+    "src/data/integrity.ts",
+  ),
 };
 
 const ALL_LIVE_STATES = Object.values(LIVE_VOCABULARIES).reduce(
@@ -277,10 +281,19 @@ test("unknown values return null — fail closed", () => {
     semantics.getStateSemantics("integrity", "definitely-not-a-state"),
     null,
   );
-  assert.equal(semantics.getStateSemantics("product-availability", "Public"), null);
-  assert.equal(semantics.getStateSemantics("no-such-surface", "available"), null);
+  assert.equal(
+    semantics.getStateSemantics("product-availability", "Public"),
+    null,
+  );
+  assert.equal(
+    semantics.getStateSemantics("no-such-surface", "available"),
+    null,
+  );
   assert.equal(semantics.getStateSemantics("product-label", ""), null);
-  assert.equal(semantics.getStateSemantics("trust-ledger", "not published"), null);
+  assert.equal(
+    semantics.getStateSemantics("trust-ledger", "not published"),
+    null,
+  );
 });
 
 test("an unmapped state is still bound by the blanket assurance ban", () => {
@@ -289,7 +302,11 @@ test("an unmapped state is still bound by the blanket assurance ban", () => {
     true,
   );
   assert.equal(
-    semantics.isForbiddenMapping("no-such-surface", "whatever", "does-not-exist"),
+    semantics.isForbiddenMapping(
+      "no-such-surface",
+      "whatever",
+      "does-not-exist",
+    ),
     true,
   );
   assert.equal(
@@ -297,7 +314,11 @@ test("an unmapped state is still bound by the blanket assurance ban", () => {
     false,
   );
   assert.equal(
-    semantics.getForbiddenMappingReason("no-such-surface", "whatever", "certified"),
+    semantics.getForbiddenMappingReason(
+      "no-such-surface",
+      "whatever",
+      "certified",
+    ),
     null,
   );
 });

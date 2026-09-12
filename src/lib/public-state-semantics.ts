@@ -28,11 +28,7 @@
 
 import type { TruthState } from "../data/integrity.ts";
 import type { TrustState } from "../data/trust-ledger.ts";
-import type {
-  Availability,
-  Lifecycle,
-  PublicLabel,
-} from "./product-schema.ts";
+import type { Availability, Lifecycle, PublicLabel } from "./product-schema.ts";
 
 /** Which public surface owns a state value. */
 export type PublicSemanticSource =
@@ -44,20 +40,14 @@ export type PublicSemanticSource =
 
 /** Owning subsystem — used for wording ownership and review routing. */
 export type PublicSemanticOwner =
-  | "product-registry"
-  | "trust-ledger"
-  | "integrity-contract";
+  "product-registry" | "trust-ledger" | "integrity-contract";
 
 /**
  * The union of live vocabulary values this model covers. It is composed from
  * the canonical unions above — a reference, never a re-declaration.
  */
 export type PublicSurfaceStateValue =
-  | Lifecycle
-  | Availability
-  | PublicLabel
-  | TrustState
-  | TruthState;
+  Lifecycle | Availability | PublicLabel | TrustState | TruthState;
 
 /**
  * Canonical meaning of a public state, independent of surface wording.
@@ -93,9 +83,7 @@ export type AbsenceKey = "does-not-exist";
 
 /** Everything a state may or may not be read as. */
 export type ImpliedMeaningKey =
-  | PublicStateMeaningKey
-  | UnsupportedAssuranceKey
-  | AbsenceKey;
+  PublicStateMeaningKey | UnsupportedAssuranceKey | AbsenceKey;
 
 /**
  * Implications forbidden for *every* public state, whatever the surface.
@@ -138,7 +126,10 @@ const never = (
 ): readonly ImpliedMeaningKey[] => [...NEVER_IMPLIED_BY_ANY_STATE, ...extras];
 
 /** No product-surface state is evidence of review or of a source link. */
-const PRODUCT_NEVER: readonly ImpliedMeaningKey[] = ["reviewed", "source-linked"];
+const PRODUCT_NEVER: readonly ImpliedMeaningKey[] = [
+  "reviewed",
+  "source-linked",
+];
 
 export const PUBLIC_STATE_SEMANTICS: readonly PublicStateSemanticEntry[] = [
   /* ---------------------------------------------------------------- */
