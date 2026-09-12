@@ -784,6 +784,14 @@ summary {
 
 /* Print: evidence depth must be readable on paper (v3 S+6). */
 @media print {
+  /* Site chrome does not belong on paper. */
+  header,
+  footer,
+  .skip-link,
+  [data-journey-bar],
+  [data-command-navigator] {
+    display: none !important;
+  }
   .evidence-details__more > summary {
     display: none;
   }
