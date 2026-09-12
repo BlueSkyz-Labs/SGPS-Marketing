@@ -165,6 +165,14 @@ check("public SGPS manifest is served", async () => {
   );
 });
 
+check("machine-readable security policy is served", async () => {
+  const response = await get("/.well-known/security.txt");
+  assert(response.status === 200, `expected 200, got ${response.status}`);
+  const body = await response.text();
+  assert(body.includes("Contact:"), "security.txt must declare Contact");
+  assert(body.includes("Expires:"), "security.txt must declare Expires");
+});
+
 check("critical navigation links are present on the EN home", async () => {
   const response = await get("/en/");
   const html = await response.text();
