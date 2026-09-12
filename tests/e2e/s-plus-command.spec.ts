@@ -54,13 +54,22 @@ test("filtering narrows to matching destinations with an empty state", async ({
 test("results are real links to approved routes", async ({ page }) => {
   await page.goto("/en/");
   await page.keyboard.press("Control+k");
-  const hrefs = await page
-    .locator("[data-command-item] a")
-    .evaluateAll((elements) =>
-      elements.map((element) => element.getAttribute("href")),
-    );
-  expect(hrefs.length).toBeGreaterThan(0);
-  expect(hrefs.every((href) => href?.startsWith("/en/"))).toBe(true);
+  const items = await page.locator("[data-command-item]").evaluateAll((els) =>
+    els.map((el) => ({
+      kind: el.getAttribute("data-command-kind"),
+      href: el.querySelector("a")?.getAttribute("href") ?? "",
+    })),
+  );
+  expect(items.length).toBeGreaterThan(0);
+  for (const item of items) {
+    if (item.kind === "evidence") {
+      // Provenance evidence may be a public https endpoint (e.g. the GitHub
+      // advisory channel) — never an unknown internal route.
+      expect(item.href).toMatch(/^\/(en|vi)\/|^https:\/\//);
+    } else {
+      expect(item.href).toMatch(/^\/en\//);
+    }
+  }
   const privacy = page.locator('[data-command-item] a[href="/en/privacy/"]');
   await expect(privacy).toHaveCount(1);
   await privacy.click();

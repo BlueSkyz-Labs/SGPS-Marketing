@@ -78,12 +78,14 @@ export function buildNavigatorIndex(
   for (const entry of INTEGRITY_ENTRIES) {
     for (const evidence of entry.evidence) {
       const href = evidence.href[lang];
-      const aliases = [entry.id, entry.state, entry.summary[lang]];
       const existing = byHref.get(href);
       if (existing) {
-        existing.aliases.push(...aliases);
+        // Only identity markers merge into existing destinations; summaries
+        // can mention other topics and must not pollute unrelated matches.
+        existing.aliases.push(entry.id, entry.state);
         continue;
       }
+      const aliases = [entry.id, entry.state, entry.summary[lang]];
       const item: NavigatorItem = {
         href,
         label: evidence.label[lang],
