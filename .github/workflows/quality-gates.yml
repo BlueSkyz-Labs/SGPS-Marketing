@@ -61,6 +61,8 @@ jobs:
         run: pnpm check:promotion-state
       - name: Deployment evidence ledger
         run: pnpm check:deployment-evidence
+      - name: Product provenance
+        run: pnpm check:product-provenance
 
   browser-assurance:
     name: Browser Assurance

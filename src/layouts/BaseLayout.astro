@@ -15,6 +15,7 @@ import {
   websiteJsonLd,
 } from "@/lib/seo";
 import { getAlternatePath, getLanguageFromPath } from "@/lib/i18n";
+import { breadcrumbJsonLd } from "@/lib/breadcrumbs";
 import { isNonProductionSiteUrl } from "@/lib/truth";
 import "@/styles/global.css";
 
@@ -41,7 +42,12 @@ const fullTitle = title.includes(SITE.name) ? title : `${title} · ${SITE.name}`
 const currentLang = getLanguageFromPath(path);
 const canonical = canonicalForPath(path, SITE.url);
 const ogImageUrl = absoluteUrl(SITE.url, ogImage);
-const structuredData = [organizationJsonLd(SITE.url), websiteJsonLd(SITE.url)];
+const structuredData: Record<string, unknown>[] = [
+  organizationJsonLd(SITE.url),
+  websiteJsonLd(SITE.url),
+];
+const breadcrumb = breadcrumbJsonLd(currentLang, path, SITE.url);
+if (breadcrumb) structuredData.push(breadcrumb);
 const robotsNoindex = noindex || isNonProductionSiteUrl(SITE.url);
 ---
 

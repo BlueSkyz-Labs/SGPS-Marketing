@@ -32,6 +32,7 @@
     "verify:git-evidence": "node scripts/verify-git-evidence.mjs",
     "check:promotion-state": "node scripts/check-promotion-state.mjs",
     "check:deployment-evidence": "node scripts/validate-deployment-evidence.mjs",
+    "check:product-provenance": "node scripts/check-product-provenance.mjs",
     "e4:matrix": "node scripts/e4-matrix.mjs",
     "deploy:workers": "node scripts/deploy-workers.mjs",
     "lighthouse": "node scripts/run-lighthouse.mjs",
