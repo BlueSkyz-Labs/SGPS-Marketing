@@ -19,6 +19,8 @@ const placeholder = isVi ? "Tìm trang…" : "Search pages…";
 const emptyLabel = isVi
   ? "Không tìm thấy mục phù hợp."
   : "No matching destinations.";
+const resultTemplate = isVi ? "%n kết quả" : "%n results";
+const resultNone = isVi ? "Không có kết quả" : "No results";
 ---
 
 <dialog class="command-navigator" aria-label={navLabel} data-command-navigator>
@@ -52,6 +54,15 @@ const emptyLabel = isVi
         })
       }
     </ul>
+    <p
+      class="sr-only"
+      role="status"
+      aria-live="polite"
+      data-command-live
+      data-live-template={resultTemplate}
+      data-live-none={resultNone}
+    >
+    </p>
     <p class="command-navigator__empty" data-command-empty hidden>
       {emptyLabel}
     </p>

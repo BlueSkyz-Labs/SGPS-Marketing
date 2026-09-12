@@ -97,3 +97,26 @@ test("no-JS keeps the navigator out and base navigation sufficient", async ({
   await expect(page.getByRole("navigation", { name: "Primary" })).toBeVisible();
   await context.close();
 });
+
+test("the result count is announced to assistive tech", async ({ page }) => {
+  await page.goto("/en/");
+  await page.keyboard.press("Control+k");
+  const live = page.locator("[data-command-live]");
+  await expect(live).toHaveAttribute("aria-live", "polite");
+  await expect(live).toHaveAttribute("role", "status");
+  await expect(live).not.toHaveText("", { timeout: 5000 });
+  await expect(live).toHaveText(/results?$/);
+
+  await page.locator("[data-command-input]").fill("products");
+  await expect(live).toHaveText(/results?$/);
+
+  await page.locator("[data-command-input]").fill("zzz-no-such-destination");
+  await expect(live).toHaveText("No results");
+});
+
+test("VI announces the count in Vietnamese", async ({ page }) => {
+  await page.goto("/vi/");
+  await page.keyboard.press("Control+k");
+  const live = page.locator("[data-command-live]");
+  await expect(live).toHaveText(/kết quả/);
+});

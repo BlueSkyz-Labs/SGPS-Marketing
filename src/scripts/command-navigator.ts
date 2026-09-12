@@ -24,6 +24,7 @@ export function initCommandNavigator(root: ParentNode = document): void {
   dialog.setAttribute("data-command-ready", "");
 
   const input = dialog.querySelector("[data-command-input]");
+  const live = dialog.querySelector("[data-command-live]");
   const empty = dialog.querySelector("[data-command-empty]");
   const items = Array.from(dialog.querySelectorAll("[data-command-item]"));
   if (!(input instanceof HTMLInputElement) || items.length === 0) {
@@ -47,6 +48,14 @@ export function initCommandNavigator(root: ParentNode = document): void {
     }
     if (empty instanceof HTMLElement) {
       empty.hidden = visibleCount > 0;
+    }
+    if (live instanceof HTMLElement) {
+      const none = live.getAttribute("data-live-none") ?? "";
+      const template = live.getAttribute("data-live-template") ?? "%n";
+      live.textContent =
+        visibleCount === 0
+          ? none
+          : template.replace("%n", String(visibleCount));
     }
   };
 
