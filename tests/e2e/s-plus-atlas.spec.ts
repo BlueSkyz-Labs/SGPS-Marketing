@@ -13,18 +13,24 @@ test("atlas renders truth-derived nodes with decorative SVG hidden from AT", asy
   await expect(svgs).toHaveCount(2);
   await expect(atlas.locator("svg[aria-hidden='true']:visible")).toHaveCount(1);
 
-  const nodes = atlas.locator("[data-atlas-node]");
-  await expect(nodes).toHaveCount(8); // brand + 4 principles + 3 trust
-
-  await expect(
-    atlas.locator("[data-atlas-node][data-atlas-kind='brand']"),
-  ).toHaveCount(1);
-  await expect(
-    atlas.locator("[data-atlas-node][data-atlas-kind='principle']"),
-  ).toHaveCount(4);
-  await expect(
-    atlas.locator("[data-atlas-node][data-atlas-kind='trust']"),
-  ).toHaveCount(3);
+  // v3 G6: claim/evidence nodes join the constellation. Counts are derived
+  // per kind and must sum to the rendered node list (no hardcoded totals).
+  const countKind = async (kind: string): Promise<number> =>
+    atlas.locator(`[data-atlas-node][data-atlas-kind='${kind}']`).count();
+  const [brand, principle, trust, claim, evidence, nodes] = await Promise.all([
+    countKind("brand"),
+    countKind("principle"),
+    countKind("trust"),
+    countKind("claim"),
+    countKind("evidence"),
+    atlas.locator("[data-atlas-node]").count(),
+  ]);
+  expect(brand).toBe(1);
+  expect(principle).toBe(4);
+  expect(trust).toBe(3);
+  expect(claim).toBe(2);
+  expect(evidence).toBeGreaterThanOrEqual(1);
+  expect(brand + principle + trust + claim + evidence).toBe(nodes);
 });
 
 test("zero public products means zero product nodes (honest empty state)", async ({
@@ -47,9 +53,13 @@ test("atlas node links resolve to real destinations", async ({ page }) => {
   const hrefs = await links.evaluateAll((elements) =>
     elements.map((element) => element.getAttribute("href")),
   );
-  expect(hrefs.length).toBeGreaterThanOrEqual(7);
+  expect(hrefs.length).toBeGreaterThanOrEqual(10);
   for (const href of hrefs) {
-    expect(href?.startsWith("/en/") || href?.startsWith("#")).toBe(true);
+    expect(
+      href?.startsWith("/en/") ||
+        href?.startsWith("#") ||
+        href?.startsWith("https://"),
+    ).toBe(true);
   }
   await expect(
     atlas.locator("[data-atlas-node] a[href='/en/privacy/']"),
@@ -91,6 +101,11 @@ test("atlas renders without JavaScript", async ({ browser }) => {
   await page.goto("/en/");
   const atlas = page.locator("[data-atlas]");
   await expect(atlas).toBeVisible();
-  await expect(atlas.locator("[data-atlas-node]")).toHaveCount(8);
+  expect(await atlas.locator("[data-atlas-node]").count()).toBeGreaterThanOrEqual(
+    10,
+  );
+  await expect(
+    atlas.locator("[data-atlas-node][data-atlas-kind='claim']"),
+  ).toHaveCount(2);
   await context.close();
 });
