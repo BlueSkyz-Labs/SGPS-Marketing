@@ -1,6 +1,6 @@
 # SGPS Marketing v3.1 Convergence Hardening Design
 
-**Status:** Proposed architecture; owner review required before implementation planning
+**Status:** Approved direction; implementation planning may begin after this spec passes protected promotion.
 
 **Baseline:** `main@c430e7efc2812697dc4f05c8c17740bb50a318b5` (v3 Wave 1 / PR #123 merged)
 
@@ -13,7 +13,7 @@
 
 ## 1. Purpose
 
-v3.1 is a convergence hardening layer, not a new feature wave. Its purpose is to remove semantic and governance drift discovered after v3 Wave 1 before the site accumulates more evidence-aware surfaces.
+v3.1 is a convergence-hardening layer, not a new feature wave. Its purpose is to remove semantic and governance drift discovered after v3 Wave 1 before the site accumulates more evidence-aware surfaces.
 
 The central design rule is:
 
@@ -60,7 +60,7 @@ The repository currently has several legitimate state systems:
 - Trust Ledger state;
 - Integrity TruthState.
 
-These should not be collapsed into one mega-enum, because they answer different questions. But their public rendering relationships must be explicit or future UI can map them inconsistently.
+These should not be collapsed into one mega-enum because they answer different questions. Their public rendering relationships must be explicit so future UI cannot map them inconsistently.
 
 ### F4 — EN/VI parity does not yet cover all accessibility chrome
 
@@ -111,13 +111,13 @@ Create one authoritative definition of a publishable public product.
 Selected public proof floor:
 
 1. `public === true`;
-2. product lifecycle / availability / publicLabel coherence passes;
+2. product lifecycle, availability, and publicLabel coherence passes;
 3. a real local screenshot exists in the allowed product asset namespace;
 4. at least one public evidence destination exists in `proof` (`publicUrl`, `repositoryUrl`, or `documentationUrl`);
 5. the primary action remains a valid public HTTPS destination;
 6. capabilities and existing public-field requirements continue to pass.
 
-The empty-state copy must be updated so it describes this exact contract rather than promising a stricter “working build” requirement when a repository/documentation destination may be the valid public artifact.
+The empty-state copy must describe this exact contract rather than promising a stricter “working build” requirement when a repository or documentation destination may be the valid public artifact.
 
 The contract must fail closed at build/schema time. No inferred proof and no automatic repair.
 
@@ -126,10 +126,10 @@ The contract must fail closed at build/schema time. No inferred proof and no aut
 Define three explicit assurance stages:
 
 - **Source Assurance:** repository-owned facts; dependency audit, architecture tests, typecheck, lint, format, build, JS budget, static links, browser/axe/Lighthouse.
-- **Deployment Assurance:** exact candidate was built/deployed by the intended Cloudflare path and can be read back.
+- **Deployment Assurance:** exact candidate was built and deployed by the intended Cloudflare path and can be read back.
 - **Public Truth Assurance:** production-only environment facts satisfy `validate:public-truth`.
 
-The machine-readable promotion contract must report `PASS`, `FAIL`, or an explicit blocked state such as `BLOCKED_OWNER_FACT`; it must never fabricate email addresses or silently downgrade a missing production truth requirement.
+The machine-readable promotion contract must report `PASS`, `FAIL`, or an explicit blocked state such as `BLOCKED_OWNER_FACT`. It must never fabricate email addresses or silently downgrade a missing production truth requirement.
 
 GitHub CI must not pretend to validate production-only environment facts it does not possess. Conversely, production promotion must not claim full public-truth assurance when that gate has not actually run.
 
@@ -147,7 +147,7 @@ Examples:
 
 - `availability: public` does **not** mean `TruthState: reviewed`;
 - `TrustLedger: available` means the public trust surface exists, not that an external auditor verified it;
-- `publicLabel: Available` describes product availability, not security/privacy assurance.
+- `publicLabel: Available` describes product availability, not security or privacy assurance.
 
 No score or confidence percentage is introduced.
 
@@ -173,8 +173,8 @@ Object-level items must resolve to object-level destinations when a canonical de
 
 - Command Navigator product items use localized product-profile helpers.
 - Atlas product nodes use localized product-profile helpers.
-- principle nodes use stable principle anchors instead of one shared collection anchor when such anchors exist.
-- trust nodes may use stable evidence/section anchors only when those anchors are canonical and accessible without JavaScript.
+- Principle nodes use stable principle anchors instead of one shared collection anchor when such anchors exist.
+- Trust nodes may use stable evidence or section anchors only when those anchors are canonical and accessible without JavaScript.
 
 Collection routes remain valid for collection-level commands such as “Products”.
 
@@ -189,11 +189,11 @@ At minimum, flag unqualified public use of:
 - guaranteed;
 - audited;
 - compliant;
-- secure, when used as a blanket assurance conclusion rather than a bounded security noun/adjective in context.
+- secure, when used as a blanket assurance conclusion rather than a bounded security noun or adjective in context.
 
 Approved state vocabulary is preferred: source-linked, reviewed, public artifact, published, available, not-published, unavailable.
 
-The linter must support narrow allowlisted contexts where stronger wording is backed by a specific authoritative source. The allowlist must be explicit and reviewable; no broad directory exemption.
+The linter may support narrowly allowlisted contexts where stronger wording is backed by a specific authoritative source. The allowlist must be explicit and reviewable; no broad directory exemption is allowed.
 
 ### C7 — Fail-Closed Browser Toolchain Bootstrap
 
@@ -212,13 +212,13 @@ This capability activates only after PR #124 or an equivalent authored-review mo
 
 Review presentation must distinguish:
 
-- `reviewedOn` from changed/deployed timestamps;
-- authored review source from Git/build metadata;
+- `reviewedOn` from changed or deployed timestamps;
+- authored review source from Git or build metadata;
 - “last reviewed” from “last changed”.
 
 Dates should render with semantic `<time datetime="YYYY-MM-DD">` and locale-appropriate visible formatting. Relative-only wording such as “2 days ago” is not authoritative because it changes without evidence changes.
 
-If no authored review metadata exists, the review row is omitted or explicitly unavailable according to the parent v3 design; no date is inferred.
+If no authored review metadata exists, the review row is omitted or explicitly unavailable according to the parent v3 design. No date is inferred.
 
 ### C9 — Visual and Cognitive Density Guard
 
@@ -227,7 +227,7 @@ Introduce a lightweight regression contract for the homepage and evidence-heavy 
 The gate protects against:
 
 - multiple competing primary CTAs in one region;
-- excessive simultaneous status chips/badges;
+- excessive simultaneous status chips or badges;
 - heading-level disorder;
 - evidence controls before the executive summary;
 - horizontal overflow at 320 px and 200% text zoom;
@@ -247,7 +247,7 @@ Enable stronger human review rules only when a real independent reviewer path ex
 - at least one approving reviewer;
 - stale approval dismissed after material push;
 - last-push approval where operationally viable;
-- CODEOWNER coverage for governance/security-critical files;
+- CODEOWNER coverage for governance and security-critical files;
 - unresolved review threads continue to block merge.
 
 Until an independent reviewer exists, the repository should explicitly record `HUMAN_REVIEW_UNAVAILABLE` rather than installing a policy the owner must routinely bypass. Existing no-bypass machine gates remain authoritative.
@@ -256,18 +256,16 @@ Until an independent reviewer exists, the repository should explicitly record `H
 
 These ideas are retained, but deliberately sequenced after their dependencies instead of being added to v3.1 runtime scope.
 
-| Idea | Disposition | Dependency / reason |
-| --- | --- | --- |
-| G11 SGPS Governance Twin | AFTER-v3, first platform wave | Depends on C2; maps ADR/ruleset/workflow/deploy/read-back without changing public UX first. |
-| G15 Product Publication Rail | AFTER-v3 | Depends on C1, C3, and v3 G9 Publishability Compiler. |
-| G13 Truth Surface Compiler | AFTER-v3 | Depends on canonical Claim Fabric (G1), Publishability Compiler (G9), Regression Firewall (G10), and C3/C5. |
-| G16 Adversarial SGPS Mutation Lab | AFTER-v3 | Best built after G10 so mutations prove the firewall fails closed. |
-| G19 Semantic Design Compiler | AFTER-v3 | Depends on C3 and completion of v3 truth-state/evidence components. |
-| G17 Truth Blast-Radius Explorer | AFTER-v3 | Depends on G1 claim graph and G13 generated surface dependency graph. |
-| G12 Build-to-Browser Provenance Attestation | AFTER-v3 / evidence-gated | Depends on stable deployment identity and preferably G7 Public SGPS Manifest; signing is separate and must not be claimed without a real trust chain. |
-| G18 Portable Evidence Bundle | AFTER-v3 | Depends on G3 Evidence Passport + G7 Manifest; export must contain only already-public evidence. |
-| G14 Live Evidence Observatory | FUTURE / evidence-gated | Depends on stable public evidence identifiers and observation semantics; “reachable” must not be upgraded to “verified”. |
-| G20 Federated BlueSkyz Product House Protocol | FUTURE | Requires per-product manifest/version policy and multiple real product repositories; premature today. |
+- **G11 SGPS Governance Twin — AFTER-v3, first platform wave.** Depends on C2. It maps ADR, ruleset, workflow, deploy, and read-back state without changing public UX first.
+- **G15 Product Publication Rail — AFTER-v3.** Depends on C1, C3, and v3 G9 Publishability Compiler.
+- **G13 Truth Surface Compiler — AFTER-v3.** Depends on canonical Claim Fabric (G1), Publishability Compiler (G9), Regression Firewall (G10), C3, and C5.
+- **G16 Adversarial SGPS Mutation Lab — AFTER-v3.** Best built after G10 so mutations prove the firewall fails closed.
+- **G19 Semantic Design Compiler — AFTER-v3.** Depends on C3 and completion of v3 truth-state and evidence components.
+- **G17 Truth Blast-Radius Explorer — AFTER-v3.** Depends on G1 claim graph and G13 generated surface dependency graph.
+- **G12 Build-to-Browser Provenance Attestation — AFTER-v3 / evidence-gated.** Depends on stable deployment identity and preferably G7 Public SGPS Manifest. Signing is separate and must not be claimed without a real trust chain.
+- **G18 Portable Evidence Bundle — AFTER-v3.** Depends on G3 Evidence Passport and G7 Manifest. Export must contain only already-public evidence.
+- **G14 Live Evidence Observatory — FUTURE / evidence-gated.** Depends on stable public evidence identifiers and observation semantics. “Reachable” must not be upgraded to “verified”.
+- **G20 Federated BlueSkyz Product House Protocol — FUTURE.** Requires per-product manifest/version policy and multiple real product repositories; it is premature today.
 
 ## 8. Reconciliation with canonical v3 God-tier track
 
@@ -289,11 +287,11 @@ Recommended sequence:
 2. Refresh `main` after #124; do not copy candidate assumptions from this document.
 3. Execute v3.1 C1–C7 as the convergence core.
 4. Execute C8 only if authored review metadata is now live on `main`.
-5. Add C9 structural/density regression coverage before additional evidence-heavy homepage surfaces.
+5. Add C9 structural and density regression coverage before additional evidence-heavy homepage surfaces.
 6. Resume canonical v3 S+9/S+10 and G1–G10 waves on the hardened contracts.
 7. Re-evaluate G11/G15/G13 as the first post-v3 platform program.
 
-If PR #124 fails or materially changes, v3.1 must rebase conceptually on the merged result; it must not merge assumptions about an unmerged candidate.
+If PR #124 fails or materially changes, v3.1 must rebase conceptually on the merged result. It must not merge assumptions about an unmerged candidate.
 
 ## 10. File-boundary direction
 
@@ -304,25 +302,25 @@ Expected responsibility areas:
 - `src/lib/product-schema.ts` — public product proof floor;
 - `src/lib/products.ts` — selectors only; no second publication registry;
 - `src/data/site.ts` or a focused shared locale module — accessibility chrome labels;
-- `src/lib/navigator.ts`, `src/lib/atlas.ts`, product route helpers — canonical deep links;
-- `src/data/integrity.ts` plus a focused mapping module — state semantics, without creating a second truth registry;
-- `src/lib/truth.ts` + production verification script/docs — public truth authority and promotion-stage reporting;
+- `src/lib/navigator.ts`, `src/lib/atlas.ts`, and product route helpers — canonical deep links;
+- `src/data/integrity.ts` plus a focused mapping module — state semantics without creating a second truth registry;
+- `src/lib/truth.ts` plus production verification scripts and docs — public truth authority and promotion-stage reporting;
 - `.github/workflows/quality-gates.yml` — source assurance and fail-closed browser bootstrap only;
 - architecture tests — vocabulary, state mapping, bilingual chrome, promotion contract, proof floor;
 - E2E tests — deep links, localized accessibility chrome, no-JS, zoom/mobile, density proxies;
 - evidence docs — exact-head and post-merge read-back.
 
-Do not place all convergence logic into one “sgps.ts” or “governance.ts” mega-module.
+Do not place all convergence logic into one `sgps.ts` or `governance.ts` mega-module.
 
 ## 11. Global non-negotiables
 
 All v3 parent constraints remain binding, including:
 
 - Astro static-first architecture;
-- critical content/navigation/evidence/actions work without JavaScript;
+- critical content, navigation, evidence, and actions work without JavaScript;
 - no UI framework runtime;
-- no LLM/vector/remote semantic search for public verification;
-- no cookie/localStorage/fingerprinting/account personalization;
+- no LLM, vector, or remote semantic search for public verification;
+- no cookie, localStorage, fingerprinting, or account personalization;
 - analytics transmission remains disabled until separately approved;
 - no WebGL/3D without a later evidence-backed GO;
 - no fabricated products, evidence, customers, certifications, review dates, or assurance states;
@@ -332,7 +330,7 @@ All v3 parent constraints remain binding, including:
 - truth state is not color-only;
 - EN/VI parity includes accessibility chrome;
 - automated checks never upgrade Human E4;
-- client JS ceiling remains 120,000 B site-wide and worst-page, with the current ~1,644 B baseline treated as the performance posture to preserve, not a budget to spend casually;
+- client JS ceiling remains 120,000 B site-wide and worst-page, with the current approximately 1,644 B baseline treated as the performance posture to preserve, not a budget to spend casually;
 - no direct-to-main runtime bypass; branch → PR → exact-head checks → deployment evidence → merge → post-merge read-back.
 
 ## 12. Acceptance criteria for v3.1
@@ -340,18 +338,18 @@ All v3 parent constraints remain binding, including:
 v3.1 is complete only when all applicable items below are evidenced on exact heads:
 
 1. A public product cannot pass publication validation while violating the public proof-floor wording.
-2. Source Assurance, Deployment Assurance, and Public Truth Assurance are explicitly distinguishable in code/docs/evidence.
+2. Source Assurance, Deployment Assurance, and Public Truth Assurance are explicitly distinguishable in code, docs, and evidence.
 3. No missing production owner fact is fabricated to make a gate green.
-4. State mapping tests prevent availability/trust/integrity semantic conflation.
+4. State mapping tests prevent availability, trust, and integrity semantic conflation.
 5. Shared Vietnamese routes expose localized accessibility chrome.
-6. Product-level navigator/Atlas items resolve to canonical localized product destinations when those products exist.
+6. Product-level Navigator and Atlas items resolve to canonical localized product destinations when those products exist.
 7. Blanket assurance vocabulary is rejected unless explicitly source-scoped.
 8. Browser runtime bootstrap fails directly after the final unsuccessful install attempt.
 9. Authored review dates, if present, render semantically and are never derived from deployment metadata.
 10. New evidence UI passes existing keyboard, no-JS, reduced-motion, 320 px, and 200% zoom contracts.
 11. Structural density checks prevent evidence UX from becoming persistent dashboard clutter.
 12. Full Source Assurance and Browser Assurance pass on the exact candidate.
-13. Cloudflare candidate/deployment evidence is recorded according to the existing promotion doctrine.
+13. Cloudflare candidate or deployment evidence is recorded according to the existing promotion doctrine.
 14. Post-merge read-back confirms `main` contains the intended contracts.
 15. Human E4 remains OPEN unless real participant evidence is separately collected.
 
