@@ -22,6 +22,7 @@ function run(command, args) {
   if (result.status !== 0) process.exit(result.status ?? 1);
 }
 
+run("pnpm", ["validate:public-truth"]);
 run("pnpm", ["build"]);
 run("pnpm", ["check:client-budget"]);
 run("pnpm", ["check:static-links"]);

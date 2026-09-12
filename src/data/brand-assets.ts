@@ -1,6 +1,7 @@
 export const brandAssets = {
   logos: {
     flatDark: "/brand/blueskyz/v4/logos/horizontal-flat-dark.svg",
+    flatLight: "/brand/blueskyz/v4/logos/horizontal-flat-light.svg",
     reverseWhite: "/brand/blueskyz/v4/logos/horizontal-reverse-white.svg",
   },
   hero: {

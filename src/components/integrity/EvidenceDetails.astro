@@ -68,7 +68,8 @@ const labels = LABELS[lang];
     {
       review ? (
         <p class="evidence-details__review" data-evidence-review>
-          {labels.reviewed}: {review.reviewedOn} —{" "}
+          {labels.reviewed}:{" "}
+          <time datetime={review.reviewedOn}>{review.reviewedOn}</time> —{" "}
           {labels.sources[review.source]}
         </p>
       ) : null

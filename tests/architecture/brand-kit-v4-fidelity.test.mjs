@@ -41,6 +41,13 @@ const MASKABLE_FILES = [
   "android-maskable-512x512.png",
 ];
 
+const APPLE_FILES = [
+  "apple-touch-icon-120x120.png",
+  "apple-touch-icon-152x152.png",
+  "apple-touch-icon-167x167.png",
+  "apple-touch-icon-180x180.png",
+];
+
 const PAIRS = [
   ...FAVICON_FILES.map((file) => [
     `${KIT}/03_ICONS/01_FAVICON_PWA/${file}`,
@@ -50,6 +57,14 @@ const PAIRS = [
     `${KIT}/03_ICONS/01_FAVICON_PWA/MASKABLE/${file}`,
     `public/icons/MASKABLE/${file}`,
   ]),
+  ...APPLE_FILES.map((file) => [
+    `${KIT}/03_ICONS/01_FAVICON_PWA/APPLE/${file}`,
+    `public/icons/APPLE/${file}`,
+  ]),
+  [
+    `${KIT}/03_ICONS/01_FAVICON_PWA/browserconfig.xml`,
+    "public/browserconfig.xml",
+  ],
   [
     `${KIT}/02_LOGOS/01_VECTOR_SVG/FULL_LOCKUPS/blueskyzlabs_horizontal_flat_dark.svg`,
     "public/brand/blueskyz/v4/logos/horizontal-flat-dark.svg",
@@ -169,4 +184,35 @@ test("the document head keeps the kit favicon and theme contract", () => {
 test("the committed kit mirror reports production v4.0.0", () => {
   const version = readFileSync(`${KIT}/00_START_HERE/VERSION.txt`, "utf8");
   assert.match(version, /4\.0\.0/);
+});
+
+test("every brandAssets registry path resolves under public/", () => {
+  const registry = readFileSync("src/data/brand-assets.ts", "utf8");
+  const paths = [...registry.matchAll(/"\/brand\/[^"]+"/g)].map((match) =>
+    match[0].slice(1, -1),
+  );
+  assert.ok(paths.length >= 20, "registry must declare the published assets");
+  const missing = paths.filter((path) => !existsSync(`public${path}`));
+  assert.deepEqual(missing, [], `registry paths missing on disk: ${missing}`);
+});
+
+test("the kit motion easing is carried as a parity alias", () => {
+  const css = readFileSync("src/styles/global.css", "utf8").toLowerCase();
+  assert.ok(
+    css.includes("cubic-bezier(0.2, 0, 0, 1)"),
+    "global.css must carry the kit ease-standard curve",
+  );
+});
+
+test("public review dates render as semantic <time datetime>", () => {
+  const details = readFileSync(
+    "src/components/integrity/EvidenceDetails.astro",
+    "utf8",
+  );
+  const passport = readFileSync(
+    "src/components/integrity/EvidencePassport.astro",
+    "utf8",
+  );
+  assert.match(details, /<time datetime=\{review\.reviewedOn\}>/);
+  assert.match(passport, /<time datetime=\{passport\.reviewedOn\}>/);
 });

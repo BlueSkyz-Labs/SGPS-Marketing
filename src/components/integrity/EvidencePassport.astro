@@ -42,7 +42,8 @@ const labels = LABELS[lang];
         <TruthState state={passport.state} lang={lang} />
         {passport.reviewedOn ? (
           <span class="evidence-passport__review" data-passport-review>
-            {labels.reviewed}: {passport.reviewedOn}
+            {labels.reviewed}:{" "}
+            <time datetime={passport.reviewedOn}>{passport.reviewedOn}</time>
           </span>
         ) : null}
       </p>
