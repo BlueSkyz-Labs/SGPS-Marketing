@@ -23,6 +23,11 @@ const STATUS_CLASSES: Record<TrustState, string> = {
 };
 
 const OPEN_LABEL: Record<Language, string> = { en: "Open", vi: "Mở" };
+
+const COMPARE_LABEL: Record<Language, string> = {
+  en: "Compare in the Decision Room",
+  vi: "So sánh trong Phòng Quyết định",
+};
 ---
 
 <ul class="mt-10 flex flex-col gap-3" data-trust-ledger>
@@ -43,16 +48,25 @@ const OPEN_LABEL: Record<Language, string> = { en: "Open", vi: "Mở" };
               {STATUS_LABELS[entry.state][lang]}
             </span>
           </div>
-          <EvidenceDetails
-            summary={entry.summary[lang]}
-            evidence={[
-              {
-                label: `${OPEN_LABEL[lang]}: ${entry.label[lang]}`,
-                href: entry.href[lang],
-              },
-            ]}
-            lang={lang}
-          />
+          <div class="flex flex-col items-start gap-2">
+            <EvidenceDetails
+              summary={entry.summary[lang]}
+              evidence={[
+                {
+                  label: `${OPEN_LABEL[lang]}: ${entry.label[lang]}`,
+                  href: entry.href[lang],
+                },
+              ]}
+              lang={lang}
+            />
+            <a
+              href={`/${lang}/decision-room/#room-item-trust-${entry.id}`}
+              class="text-sm font-medium text-[var(--action-primary)] underline-offset-2 hover:underline"
+              data-decision-hook={`trust:${entry.id}`}
+            >
+              {COMPARE_LABEL[lang]} →
+            </a>
+          </div>
         </div>
       </li>
     ))
