@@ -1,0 +1,39 @@
+---
+import type { TruthState as TruthStateValue } from "@/data/integrity";
+import type { Language } from "@/data/site";
+
+interface Props {
+  state: TruthStateValue;
+  lang: Language;
+}
+
+const { state, lang } = Astro.props;
+
+/**
+ * Localized truth-state grammar. States describe publication reality only —
+ * no scoring, no confidence percentages, no certification language.
+ * Glyphs are decorative; meaning is carried by the visible text.
+ */
+const STATE_COPY: Record<
+  TruthStateValue,
+  { en: string; vi: string; glyph: string }
+> = {
+  "source-linked": { en: "Source-linked", vi: "Đã gắn nguồn", glyph: "◈" },
+  reviewed: { en: "Reviewed", vi: "Đã xem xét", glyph: "◇" },
+  changed: { en: "Changed", vi: "Đã thay đổi", glyph: "△" },
+  "not-published": { en: "Not published", vi: "Chưa công bố", glyph: "○" },
+  unavailable: { en: "Unavailable", vi: "Không khả dụng", glyph: "–" },
+};
+
+const copy = STATE_COPY[state];
+---
+
+<span
+  class="truth-state"
+  data-truth-state={state}
+  role="img"
+  aria-label={copy[lang]}
+>
+  <span class="truth-state__glyph" aria-hidden="true">{copy.glyph}</span>
+  <span class="truth-state__label">{copy[lang]}</span>
+</span>

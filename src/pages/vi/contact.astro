@@ -2,6 +2,7 @@
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import Container from "@/components/layout/Container.astro";
 import PageHeader from "@/components/layout/PageHeader.astro";
+import SafeAction from "@/components/integrity/SafeAction.astro";
 import { SITE, SECURITY_ADVISORY_URL } from "@/data/site";
 
 const hasBusinessEmail = Boolean(SITE.contactEmail);
@@ -28,14 +29,14 @@ const hasBusinessEmail = Boolean(SITE.contactEmail);
                 Sử dụng báo cáo lỗ hổng riêng tư của GitHub. Email bảo mật sẽ
                 xuất hiện ở đây khi BlueSkyz công bố.
               </p>
-              <a
-                href={SECURITY_ADVISORY_URL}
-                rel="noopener noreferrer"
-                class="mt-5 inline-flex min-h-11 items-center gap-1.5 text-sm font-semibold text-[var(--action-primary)] no-underline hover:underline"
-              >
-                Mở báo cáo lỗ hổng riêng tư
-                <span aria-hidden="true">→</span>
-              </a>
+              <div class="mt-5">
+                <SafeAction
+                  href={SECURITY_ADVISORY_URL}
+                  label="Mở báo cáo lỗ hổng riêng tư"
+                  boundary="private-reporting"
+                  lang="vi"
+                />
+              </div>
             </li>
           ) : null
         }

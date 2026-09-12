@@ -125,8 +125,6 @@ test("empty registry soft-lands via email-aware Act helper", () => {
   for (const path of [
     "src/components/sections/Hero.astro",
     "src/components/sections/NextStep.astro",
-    "src/pages/en/products/index.astro",
-    "src/pages/vi/products/index.astro",
   ]) {
     const source = readFileSync(path, "utf8");
     assert.match(
@@ -134,6 +132,21 @@ test("empty registry soft-lands via email-aware Act helper", () => {
       /getPublicProducts|hasPublicProducts|products\.length/,
     );
     assert.match(source, /emptyRegistryPrimaryCta/);
+  }
+  const proofFirst = readFileSync(
+    "src/components/product/ProofFirstEmptyState.astro",
+    "utf8",
+  );
+  assert.match(proofFirst, /emptyRegistryPrimaryCta/);
+  assert.match(proofFirst, /emptyRegistrySecondaryCta/);
+  // The registry pages delegate the empty state to the proof-first component.
+  for (const path of [
+    "src/pages/en/products/index.astro",
+    "src/pages/vi/products/index.astro",
+  ]) {
+    const source = readFileSync(path, "utf8");
+    assert.match(source, /ProofFirstEmptyState/);
+    assert.match(source, /getPublicProducts/);
   }
   const productsIndex = readFileSync(
     "src/pages/en/products/index.astro",

@@ -2,6 +2,9 @@
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import Container from "@/components/layout/Container.astro";
 import PageHeader from "@/components/layout/PageHeader.astro";
+import SafeAction from "@/components/integrity/SafeAction.astro";
+import BoundaryCard from "@/components/integrity/BoundaryCard.astro";
+import { SECURITY_BOUNDARY } from "@/data/integrity";
 import { SITE, SECURITY_ADVISORY_URL } from "@/data/site";
 ---
 
@@ -32,14 +35,15 @@ import { SITE, SECURITY_ADVISORY_URL } from "@/data/site";
         ) : null
       }
       <div class="mt-10">
-        <a
+        <SafeAction
           href={SECURITY_ADVISORY_URL}
-          rel="noopener noreferrer"
-          class="inline-flex min-h-11 items-center gap-1.5 rounded-lg bg-[var(--action-primary)] px-5 text-sm font-semibold text-white no-underline transition-opacity hover:opacity-90"
-        >
-          Open private vulnerability reporting
-          <span aria-hidden="true">→</span>
-        </a>
+          label="Open private vulnerability reporting"
+          boundary="private-reporting"
+          lang="en"
+        />
+      </div>
+      <div class="mt-10 max-w-2xl">
+        <BoundaryCard boundary={SECURITY_BOUNDARY} lang="en" />
       </div>
       <p class="mt-6 max-w-2xl text-sm text-[var(--text-muted)]">
         No bug-bounty, SLA, or certification badges are published without

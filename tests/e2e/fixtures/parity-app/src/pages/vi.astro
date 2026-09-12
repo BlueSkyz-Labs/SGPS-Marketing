@@ -2,6 +2,7 @@
 // @ts-nocheck — synthetic fixture data; this app never ships and is never typechecked by repo gates.
 import FeaturedProducts from "@/components/sections/FeaturedProducts.astro";
 import FlagshipProof from "@/components/sections/FlagshipProof.astro";
+import TruthState from "@/components/integrity/TruthState.astro";
 
 const product = {
   data: {
@@ -25,6 +26,14 @@ const product = {
     },
   },
 };
+
+const states = [
+  "source-linked",
+  "reviewed",
+  "changed",
+  "not-published",
+  "unavailable",
+];
 ---
 
 <!doctype html>
@@ -33,5 +42,8 @@ const product = {
   <body>
     <FeaturedProducts products={[product]} lang="vi" />
     <FlagshipProof product={product} lang="vi" />
+    <section data-truth-states>
+      {states.map((state) => <TruthState state={state} lang="vi" />)}
+    </section>
   </body>
 </html>

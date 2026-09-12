@@ -3,17 +3,13 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
 import Container from "@/components/layout/Container.astro";
 import PageHeader from "@/components/layout/PageHeader.astro";
 import ProductCard from "@/components/product/ProductCard.astro";
-import ButtonLink from "@/components/ui/ButtonLink.astro";
-import { SITE } from "@/data/site";
-import { emptyRegistryPrimaryCta, emptyRegistrySecondaryCta } from "@/lib/act";
+import ProofFirstEmptyState from "@/components/product/ProofFirstEmptyState.astro";
 import { getPublicProducts } from "@/lib/products";
 
 const products = await getPublicProducts();
-const emptyPrimary = emptyRegistryPrimaryCta(SITE.contactEmail, "vi");
-const emptySecondary = emptyRegistrySecondaryCta(SITE.contactEmail, "vi");
 const emptyDescription = products.length
   ? "Khám phá sản phẩm BlueSkyz Labs với trạng thái và bằng chứng trung thực."
-  : "BlueSkyz Labs chưa công bố sản phẩm công khai nào. Danh sách xuất hiện khi sản phẩm sẵn sàng đánh giá.";
+  : "Sản phẩm chỉ được công bố kèm bằng chứng công khai có thể xác minh.";
 ---
 
 <BaseLayout
@@ -29,24 +25,8 @@ const emptyDescription = products.length
       />
       {
         products.length === 0 ? (
-          <div class="mt-12 max-w-2xl rounded-xl border border-[var(--border-subtle)] bg-white p-6">
-            <p class="text-sm leading-relaxed text-[var(--text-secondary)]">
-              Chưa có sản phẩm công khai nào được công bố. Khi một sản phẩm sẵn
-              sàng đánh giá, nó sẽ xuất hiện ở đây với trạng thái và bằng chứng
-              rõ ràng.
-            </p>
-            <div class="mt-6 flex flex-wrap gap-3">
-              <ButtonLink href={emptyPrimary.href}>
-                {emptyPrimary.label === "About BlueSkyz"
-                  ? "Về BlueSkyz"
-                  : emptyPrimary.label}
-              </ButtonLink>
-              <ButtonLink href={emptySecondary.href} variant="secondary">
-                {emptySecondary.label === "Security"
-                  ? "Bảo mật"
-                  : emptySecondary.label}
-              </ButtonLink>
-            </div>
+          <div class="mt-12">
+            <ProofFirstEmptyState lang="vi" />
           </div>
         ) : (
           <div class="mt-12 grid gap-4 md:grid-cols-2">
