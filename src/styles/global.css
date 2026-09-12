@@ -880,13 +880,6 @@ summary {
   padding: 1.5rem 1.75rem;
   background: white;
 }
-.evidence-passport__kind {
-  font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--text-muted);
-}
 .evidence-passport__claim {
   margin-top: 0.5rem;
   font-size: 1.25rem;
@@ -1122,5 +1115,15 @@ html[data-intent] [data-journey-bar] li[data-evidence-first="true"] a {
   max-width: 44rem;
   font-size: 0.875rem;
   line-height: 1.6;
+  color: var(--text-muted);
+}
+
+/* Wave H7 — page-level heading for the evidence passport document. */
+.evidence-passport__page-title {
+  margin-bottom: 0.75rem;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
   color: var(--text-muted);
 }

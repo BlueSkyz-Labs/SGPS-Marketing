@@ -30,6 +30,9 @@ const title = passport ? `Bằng chứng: ${passport.claim.vi}` : "Bằng chứn
   <section class="py-16 lg:py-24">
     <Container>
       <div class="max-w-3xl">
+        <h1 class="evidence-passport__page-title" data-passport-page-title>
+          Hộ chiếu bằng chứng
+        </h1>
         <EvidencePassport id={id ?? ""} lang="vi" products={products} />
       </div>
     </Container>

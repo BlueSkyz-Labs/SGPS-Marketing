@@ -30,6 +30,9 @@ const title = passport ? `Evidence: ${passport.claim.en}` : "Evidence";
   <section class="py-16 lg:py-24">
     <Container>
       <div class="max-w-3xl">
+        <h1 class="evidence-passport__page-title" data-passport-page-title>
+          Evidence passport
+        </h1>
         <EvidencePassport id={id ?? ""} lang="en" products={products} />
       </div>
     </Container>
