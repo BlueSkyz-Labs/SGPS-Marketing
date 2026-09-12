@@ -101,9 +101,9 @@ test("atlas renders without JavaScript", async ({ browser }) => {
   await page.goto("/en/");
   const atlas = page.locator("[data-atlas]");
   await expect(atlas).toBeVisible();
-  expect(await atlas.locator("[data-atlas-node]").count()).toBeGreaterThanOrEqual(
-    10,
-  );
+  expect(
+    await atlas.locator("[data-atlas-node]").count(),
+  ).toBeGreaterThanOrEqual(10);
   await expect(
     atlas.locator("[data-atlas-node][data-atlas-kind='claim']"),
   ).toHaveCount(2);
