@@ -11,7 +11,9 @@ test.describe("evidence passport", () => {
     await page.goto(EN);
     const passport = page.locator(`[data-evidence-passport="${ID}"]`);
     await expect(passport).toBeVisible();
-    await expect(passport.getByText("Evidence passport")).toBeVisible();
+    await expect(
+      page.getByRole("heading", { level: 1, name: "Evidence passport" }),
+    ).toBeVisible();
     await expect(passport).toContainText("private GitHub channel");
     await expect(
       passport.locator('[data-truth-state="source-linked"]'),
