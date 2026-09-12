@@ -791,3 +791,50 @@ summary {
   border-radius: 999px;
   padding: 0.125rem 0.5rem;
 }
+
+/* v3 Wave 4 — source-to-surface trace. */
+.source-trace {
+  margin-top: 1.25rem;
+}
+.source-trace__title {
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+.source-trace__list {
+  margin-top: 0.5rem;
+  display: grid;
+  gap: 0.5rem;
+}
+.source-trace__step {
+  position: relative;
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+.source-trace__role {
+  flex: none;
+  font-size: 0.625rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  border: 1px solid var(--border-subtle);
+  border-radius: 999px;
+  padding: 0.125rem 0.5rem;
+}
+/* Decorative connector line between steps; empty content, zero AT impact. */
+.source-trace__step:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  left: 1.25rem;
+  bottom: -0.4rem;
+  width: 1px;
+  height: 0.3rem;
+  background: var(--border-subtle);
+}
