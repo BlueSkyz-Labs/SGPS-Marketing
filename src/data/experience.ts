@@ -61,7 +61,7 @@ const VI_PRINCIPLE_NAMES: Record<string, string> = {
 const VI_PRINCIPLE_SUMMARIES: Record<string, string> = {
   Intelligence: "Suy nghĩ sâu sắc. Giải pháp thông minh.",
   Elevation: "Góc nhìn tốt hơn. Tác động lớn hơn.",
-  Trust: "Đáng tin cậy, an toàn, nhất quán.",
+  Trust: "Tuyên bố mở. Bằng chứng kiểm chứng được.",
   Impact: "Giá trị thực. Thay đổi thực.",
 };
 

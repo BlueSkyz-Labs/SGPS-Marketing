@@ -37,8 +37,14 @@
     {
       "id": "hardening-h2",
       "name": "Git-evidence verifier, promotion state, deployment evidence, public-state semantics, density guard",
-      "status": "IN_PROGRESS",
+      "status": "MERGED",
       "evidence": "docs/evidence/2026-09-12-wave-h2-hardening.md"
+    },
+    {
+      "id": "hardening-h2b",
+      "name": "Deployment contract, public assurance language scanner, verifiable Trust copy",
+      "status": "IN_PROGRESS",
+      "evidence": "docs/evidence/2026-09-12-wave-h2b-hardening.md"
     }
   ],
   "openOwnerDecisions": [
@@ -69,7 +75,7 @@
     "Trademark/legal clearance and specialty print (brand kit caveats)"
   ],
   "nextActionable": [
-    "Merge hardening wave H2 after exact-head green",
-    "Optional UI-4: atlas finesse, footer re-grid, per-page OG images"
+    "Merge hardening wave H2b after exact-head green",
+    "Optional UI-4 remainder: atlas finesse, per-page OG images, breadcrumb JSON-LD"
   ]
 }
