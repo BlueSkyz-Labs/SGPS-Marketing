@@ -49,8 +49,14 @@
     {
       "id": "hardening-h3",
       "name": "Breadcrumb structured data, reduced-motion contract, product provenance guard",
-      "status": "IN_PROGRESS",
+      "status": "MERGED",
       "evidence": "docs/evidence/2026-09-12-wave-h3-hardening.md"
+    },
+    {
+      "id": "hardening-h4",
+      "name": "Machine-readable security policy + edge header contract",
+      "status": "IN_PROGRESS",
+      "evidence": "docs/evidence/2026-09-12-wave-h4-security.md"
     }
   ],
   "openOwnerDecisions": [
@@ -81,7 +87,7 @@
     "Trademark/legal clearance and specialty print (brand kit caveats)"
   ],
   "nextActionable": [
-    "Merge hardening wave H3 after exact-head green",
+    "Merge hardening wave H4 after exact-head green",
     "Optional UI-4 remainder: atlas finesse, per-page OG images, breadcrumb JSON-LD"
   ]
 }

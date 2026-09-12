@@ -11,11 +11,11 @@ machine-readable vulnerability-reporting policy, and pin the edge header set as
 a contract instead of an assumption. No owner facts invented: the reporting
 channel is the advisory URL the site already declares in its integrity data.
 
-| Item | Artifact | Status |
-| --- | --- | --- |
-| Security policy | `public/.well-known/security.txt` (RFC 9116) | REMEDIATED |
-| Header contract | `tests/architecture/security-surface.test.mjs` | GUARDED |
-| Runtime read-back | `scripts/smoke-production.mjs` (+1 check) | REMEDIATED |
+| Item              | Artifact                                       | Status     |
+| ----------------- | ---------------------------------------------- | ---------- |
+| Security policy   | `public/.well-known/security.txt` (RFC 9116)   | REMEDIATED |
+| Header contract   | `tests/architecture/security-surface.test.mjs` | GUARDED    |
+| Runtime read-back | `scripts/smoke-production.mjs` (+1 check)      | REMEDIATED |
 
 ## What changed
 
