@@ -103,3 +103,20 @@ test.describe("source trace without JavaScript", () => {
     await expect(trace.locator("[data-trace-step]")).toHaveCount(5);
   });
 });
+
+test("print keeps the trace readable (chromium)", async ({
+  page,
+}, testInfo) => {
+  test.skip(
+    testInfo.project.name !== "chromium",
+    "print probe is chromium-only",
+  );
+  await page.goto("/en/security/");
+  const trace = page.locator(TRACE);
+  await trace.scrollIntoViewIfNeeded();
+  await page.emulateMedia({ media: "print" });
+  await expect(trace).toBeVisible();
+  await expect(trace.locator("ol")).toBeVisible();
+  const links = trace.locator("ol a");
+  expect(await links.count()).toBeGreaterThanOrEqual(2);
+});
