@@ -27,7 +27,7 @@ const HEADING: Record<Language, string> = {
 {
   trace ? (
     <div class="source-trace" data-source-trace={claimId}>
-      <h4 class="source-trace__title">{HEADING[lang]}</h4>
+      <h3 class="source-trace__title">{HEADING[lang]}</h3>
       <ol class="source-trace__list">
         {trace.map((step) => (
           <li
