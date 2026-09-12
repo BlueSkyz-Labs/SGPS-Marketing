@@ -815,6 +815,10 @@ summary {
 /* v3 Wave 4 — source-to-surface trace. */
 .source-trace {
   margin-top: 1.25rem;
+  background: var(--surface-subtle);
+  border: 1px solid var(--border-subtle);
+  border-radius: 0.75rem;
+  padding: 1rem 1.25rem;
 }
 .source-trace__title {
   font-size: 0.8125rem;
