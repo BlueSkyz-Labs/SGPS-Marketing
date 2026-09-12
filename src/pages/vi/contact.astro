@@ -23,7 +23,7 @@ const hasBusinessEmail = Boolean(SITE.contactEmail);
       <ul class="mt-12 grid gap-4 sm:grid-cols-2">
         {
           !hasBusinessEmail ? (
-            <li class="flex flex-col rounded-xl border border-[var(--border-subtle)] bg-white p-6">
+            <li class="flex min-w-0 flex-col rounded-xl border border-[var(--border-subtle)] bg-white p-6">
               <h2 class="text-lg font-semibold tracking-tight">Bảo mật</h2>
               <p class="mt-2 flex-1 text-sm leading-relaxed text-[var(--text-secondary)]">
                 Sử dụng báo cáo lỗ hổng riêng tư của GitHub. Email bảo mật sẽ
