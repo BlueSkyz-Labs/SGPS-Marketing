@@ -173,6 +173,29 @@ check("machine-readable security policy is served", async () => {
   assert(body.includes("Expires:"), "security.txt must declare Expires");
 });
 
+check("branded 404 is served on unknown paths", async () => {
+  for (const path of [
+    "/en/no-such-page/",
+    "/vi/khong-ton-tai/",
+    "/no-such-root/",
+  ]) {
+    const response = await get(path);
+    assert(
+      response.status === 404,
+      `${path}: expected 404, got ${response.status}`,
+    );
+    const html = await response.text();
+    assert(
+      html.includes("Page not found") || html.includes("không tìm thấy"),
+      `${path}: branded 404 content missing`,
+    );
+    assert(
+      html.length > 5000,
+      `${path}: 404 page looks like a blank stub (${html.length} bytes)`,
+    );
+  }
+});
+
 check("critical navigation links are present on the EN home", async () => {
   const response = await get("/en/");
   const html = await response.text();
