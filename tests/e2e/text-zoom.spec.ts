@@ -41,12 +41,27 @@ test.describe("text zoom 200%", () => {
         let offender: string | null = null;
         const overflow = doc.scrollWidth - window.innerWidth;
         if (overflow > 1) {
-          const widest = [...document.querySelectorAll<HTMLElement>("body *")]
+          // Decorative bleed inside an overflow-hidden ancestor cannot create
+          // document scroll; report the widest element that is NOT clipped.
+          const isClipped = (el: Element): boolean => {
+            let node = el.parentElement;
+            while (node && node !== document.documentElement) {
+              const cs = getComputedStyle(node);
+              if (/(hidden|clip|auto|scroll)/.test(cs.overflowX)) return true;
+              node = node.parentElement;
+            }
+            return false;
+          };
+          const candidates = [
+            ...document.querySelectorAll<HTMLElement>("body *"),
+          ]
             .map((el) => ({ el, right: el.getBoundingClientRect().right }))
             .filter((entry) => entry.right > window.innerWidth + 1)
-            .sort((a, b) => b.right - a.right)[0];
+            .sort((a, b) => b.right - a.right);
+          const widest =
+            candidates.find((entry) => !isClipped(entry.el)) ?? candidates[0];
           if (widest) {
-            offender = `${widest.el.tagName.toLowerCase()}.${[...widest.el.classList].slice(0, 3).join(".")} (right ${Math.round(widest.right)}px)`;
+            offender = `${widest.el.tagName.toLowerCase()}.${[...widest.el.classList].slice(0, 3).join(".")} (right ${Math.round(widest.right)}px${isClipped(widest.el) ? ", clipped" : ""})`;
           }
         }
         return { overflow, offender };

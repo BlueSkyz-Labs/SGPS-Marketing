@@ -1161,3 +1161,13 @@ h2,
 h3 {
   overflow-wrap: break-word;
 }
+
+/* Wave H12 — text-zoom safety for atlas rows: the chip drops below the label
+   instead of overflowing the row at extreme text sizes. */
+.atlas-list li {
+  flex-wrap: wrap;
+}
+.atlas-list li a {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
