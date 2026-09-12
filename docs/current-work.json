@@ -61,8 +61,14 @@
     {
       "id": "hardening-h5",
       "name": "Documented gate surface (drift guard) + runtime re-probe",
-      "status": "IN_PROGRESS",
+      "status": "MERGED",
       "evidence": "docs/evidence/2026-09-12-wave-h5-doc-drift.md"
+    },
+    {
+      "id": "hardening-h6",
+      "name": "Print surface for evidence passports",
+      "status": "IN_PROGRESS",
+      "evidence": "docs/evidence/2026-09-12-wave-h6-print.md"
     }
   ],
   "openOwnerDecisions": [
@@ -93,7 +99,7 @@
     "Trademark/legal clearance and specialty print (brand kit caveats)"
   ],
   "nextActionable": [
-    "Merge hardening wave H5 after exact-head green",
+    "Merge hardening wave H6 after exact-head green",
     "Optional UI-4 remainder: atlas finesse, per-page OG images, breadcrumb JSON-LD"
   ]
 }
