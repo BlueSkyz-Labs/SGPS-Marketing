@@ -81,11 +81,26 @@ jobs:
       - name: Install Playwright runtimes
         timeout-minutes: 10
         run: |
+          set -e
+          installed=0
           for attempt in 1 2 3; do
-            pnpm exec playwright install --with-deps chromium firefox webkit && break
+            if pnpm exec playwright install --with-deps chromium firefox webkit; then
+              installed=1
+              break
+            fi
             echo "Attempt $attempt failed; waiting 20s before retry..."
             sleep 20
           done
+          if [ "$installed" != "1" ]; then
+            echo "Playwright runtime installation failed after 3 attempts" >&2
+            exit 1
+          fi
+          node -e "const {chromium,firefox,webkit}=require('@playwright/test');
+            Promise.all([chromium.launch(),firefox.launch(),webkit.launch()])
+              .then((browsers)=>Promise.all(browsers.map((b)=>b.close())))
+              .then(()=>console.log('All three browser runtimes launched successfully'))
+              .catch((error)=>{console.error(error);process.exit(1);});"
+
       - name: Playwright and axe assurance
         run: pnpm test:e2e
       - name: Lighthouse CI

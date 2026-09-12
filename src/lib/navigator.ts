@@ -1,6 +1,7 @@
 import { getFooterLinks, getNav, type Language } from "@/data/site";
 import { TRUST_LEDGER } from "@/data/trust-ledger";
 import { INTEGRITY_ENTRIES } from "@/data/integrity";
+import { getProductProfilePath } from "@/lib/product-routes";
 import type { ProductEntry } from "@/lib/products";
 
 export interface NavigatorItem {
@@ -98,7 +99,7 @@ export function buildNavigatorIndex(
 
   for (const product of products) {
     items.push({
-      href: `/${lang}/products/`,
+      href: getProductProfilePath(lang, product.data.slug),
       label: product.data.name,
       kind: "product",
       aliases: [product.data.slug, "product", "sản phẩm"],

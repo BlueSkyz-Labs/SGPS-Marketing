@@ -1,6 +1,7 @@
 import { PRINCIPLE_MATRIX, type Language } from "@/data/experience";
 import { TRUST_LEDGER } from "@/data/trust-ledger";
 import { getPublicClaims } from "@/lib/claims";
+import { getProductProfilePath } from "@/lib/product-routes";
 import type { ProductEntry } from "@/lib/products";
 
 export type AtlasNodeKind =
@@ -107,7 +108,7 @@ export function buildAtlasModel(
       id,
       kind: "product",
       label: product.data.name,
-      href: `/${lang}/products/`,
+      href: getProductProfilePath(lang, product.data.slug),
     });
     edges.push({ from: "brand", to: id });
   }

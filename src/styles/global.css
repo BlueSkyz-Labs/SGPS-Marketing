@@ -33,6 +33,8 @@
   --brand-action-dark: #1d4ed8;
   --brand-text-disabled: #94a3b8;
   --brand-shadow-subtle: 0 8px 28px rgba(11, 16, 32, 0.12);
+  /* Kit parity alias; S+ motion keeps its own curve for purpose tokens. */
+  --brand-ease-standard: cubic-bezier(0.2, 0, 0, 1);
   --brand-gradient-hero: linear-gradient(
     135deg,
     #0b1020 0%,
