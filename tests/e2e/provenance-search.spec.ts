@@ -46,7 +46,12 @@ test.describe("deterministic provenance search", () => {
 
   test("closing restores focus to the invoking control", async ({ page }) => {
     await page.goto("/en/");
-    const trigger = page.locator("[data-command-trigger]").first();
+    // Compact viewports keep the trigger inside the closed menu.
+    const menuSummary = page.locator("header details summary");
+    if (await menuSummary.isVisible()) {
+      await menuSummary.click();
+    }
+    const trigger = page.locator("[data-command-trigger]:visible").first();
     await trigger.click();
     await expect(page.locator("[data-command-navigator]")).toHaveAttribute(
       "open",

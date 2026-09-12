@@ -78,11 +78,10 @@ export function buildNavigatorIndex(
   for (const entry of INTEGRITY_ENTRIES) {
     for (const evidence of entry.evidence) {
       const href = evidence.href[lang];
-      const existing = byHref.get(href);
-      if (existing) {
-        // Only identity markers merge into existing destinations; summaries
-        // can mention other topics and must not pollute unrelated matches.
-        existing.aliases.push(entry.id, entry.state);
+      if (byHref.has(href)) {
+        // Destinations already present keep their own aliases: evidence ids
+        // (e.g. "privacy-data-practices") can name other topics and must not
+        // create false cross-topic matches.
         continue;
       }
       const aliases = [entry.id, entry.state, entry.summary[lang]];
