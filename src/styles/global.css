@@ -1016,3 +1016,9 @@ summary {
 .decision-room__reset {
   margin-top: 1rem;
 }
+
+/* v3 G5 — mission emphasis: reorder or emphasize only, never hide. */
+html[data-intent] [data-journey-bar] li[data-evidence-first="true"] a {
+  border-color: var(--action-primary);
+  box-shadow: 0 1px 2px color-mix(in srgb, var(--brand-cobalt) 18%, transparent);
+}
