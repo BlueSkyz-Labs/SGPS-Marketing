@@ -102,9 +102,15 @@
     },
     {
       "id": "hardening-h12",
-      "name": "Text-zoom safety (WCAG 1.4.4): shrinkable grid items, breakable headings",
-      "status": "IN_PROGRESS",
+      "name": "Text-zoom safety (WCAG 1.4.4): shrinkable grid items, breakable headings, wrapping atlas rows",
+      "status": "MERGED",
       "evidence": "docs/evidence/2026-09-13-wave-h12-text-zoom.md"
+    },
+    {
+      "id": "hardening-h13",
+      "name": "Text-spacing (1.4.12) + forced-colors guards",
+      "status": "IN_PROGRESS",
+      "evidence": "docs/evidence/2026-09-13-wave-h13-spacing-contrast.md"
     }
   ],
   "openOwnerDecisions": [
@@ -135,7 +141,7 @@
     "Trademark/legal clearance and specialty print (brand kit caveats)"
   ],
   "nextActionable": [
-    "Merge hardening wave H12 after exact-head green",
+    "Merge hardening wave H13 after exact-head green",
     "Optional UI-4 remainder: atlas finesse, per-page OG images, breadcrumb JSON-LD"
   ]
 }
