@@ -34,7 +34,7 @@ const COMPARE_LABEL: Record<Language, string> = {
   {
     TRUST_LEDGER.map((entry) => (
       <li data-trust-surface={entry.id}>
-        <div class="grid gap-3 rounded-lg border border-[var(--border-subtle)] bg-white p-5 sm:grid-cols-[minmax(0,14rem)_minmax(0,1fr)] sm:items-start sm:gap-6">
+        <div class="trust-ledger-card grid gap-3 rounded-lg border border-[var(--border-subtle)] bg-white p-5 sm:grid-cols-[minmax(0,14rem)_minmax(0,1fr)] sm:items-start sm:gap-6">
           <div class="flex flex-wrap items-center gap-3">
             <span class="text-base font-semibold tracking-tight text-[var(--text-primary)]">
               {entry.label[lang]}

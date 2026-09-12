@@ -23,8 +23,14 @@ const kindLabels: Record<AtlasNodeKind, string> = {
 
 // Decorative SVG labels are truncated; the semantic node list below is the
 // authoritative source of full labels.
-const truncate = (text: string, max: number): string =>
-  text.length > max ? `${text.slice(0, max - 1)}…` : text;
+const truncate = (text: string, max: number): string => {
+  if (text.length <= max) return text;
+  const cut = text.slice(0, max - 1);
+  const lastSpace = cut.lastIndexOf(" ");
+  const body =
+    lastSpace >= Math.floor(max * 0.55) ? cut.slice(0, lastSpace) : cut;
+  return `${body}…`;
+};
 
 const heading = "BlueSkyz Atlas";
 const lede = isVi
@@ -160,8 +166,8 @@ nodes
                   x={point.x}
                   y={point.y - 18}
                   text-anchor="middle"
-                  font-size="12"
-                  fill="var(--text-muted)"
+                  font-size="13"
+                  fill="var(--text-secondary)"
                 >
                   {node.kind === "claim"
                     ? truncate(node.label, 16)
@@ -238,7 +244,7 @@ nodes
     </svg>
 
     <ul
-      class="mt-8 divide-y divide-[var(--border-subtle)] rounded-lg border border-[var(--border-subtle)] bg-white"
+      class="atlas-list mt-8 divide-y divide-[var(--border-subtle)] rounded-lg border border-[var(--border-subtle)] bg-white"
     >
       {
         nodes.map((node) => (

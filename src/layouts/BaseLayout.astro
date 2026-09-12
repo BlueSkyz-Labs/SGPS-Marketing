@@ -72,6 +72,14 @@ const robotsNoindex = noindex || isNonProductionSiteUrl(SITE.url);
     />
     {robotsNoindex ? <meta name="robots" content="noindex, nofollow" /> : null}
     <meta property="og:type" content="website" />
+    <meta
+      property="og:locale"
+      content={currentLang === "vi" ? "vi_VN" : "en_US"}
+    />
+    <meta
+      property="og:locale:alternate"
+      content={currentLang === "vi" ? "en_US" : "vi_VN"}
+    />
     <meta property="og:site_name" content={SITE.name} />
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={description} />
