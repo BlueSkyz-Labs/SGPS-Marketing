@@ -17,7 +17,11 @@ import {
   INTEGRITY_ENTRY_INDEX,
   type PublicClaim,
 } from "../data/claims.ts";
-import type { EvidenceReference, TruthState } from "../data/integrity.ts";
+import type {
+  BoundaryStatement,
+  EvidenceReference,
+  TruthState,
+} from "../data/integrity.ts";
 
 export interface PublicProductRef {
   slug: string;
@@ -245,12 +249,7 @@ export interface EvidencePassportModel {
   state: TruthState;
   evidence: EvidenceReference[];
   boundaryId?: string | undefined;
-  boundary?:
-    | {
-        claim: { en: string; vi: string };
-        doesNotImply: { en: string; vi: string };
-      }
-    | undefined;
+  boundary?: BoundaryStatement | undefined;
   reviewedOn?: string | undefined;
   contextHref: { en: string; vi: string };
 }
