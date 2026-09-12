@@ -1145,3 +1145,29 @@ html[data-intent] [data-journey-bar] li[data-evidence-first="true"] a {
     padding-left: 1.5rem;
   }
 }
+
+/* Wave H12 — text-zoom safety: flex/grid items must shrink and wrap. */
+.source-trace__step {
+  min-width: 0;
+}
+.source-trace__step > * {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+/* Wave H12 — WCAG 1.4.4: long words break rather than overflow at text zoom. */
+h1,
+h2,
+h3 {
+  overflow-wrap: break-word;
+}
+
+/* Wave H12 — text-zoom safety for atlas rows: the chip drops below the label
+   instead of overflowing the row at extreme text sizes. */
+.atlas-list li {
+  flex-wrap: wrap;
+}
+.atlas-list li a {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
