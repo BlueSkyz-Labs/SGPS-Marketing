@@ -44,7 +44,7 @@ test("integrity entries reference only public, localized facts (v3 S+5)", () => 
     /sha|workflow|branch protection|run id|runner|deploy/i,
     "entries must not use internal governance jargon as public proof",
   );
-  const ids = [...block.matchAll(/id: "([^"]+)"/g)].map((m) => m[1]);
+  const ids = [...block.matchAll(/^ {4}id: "([^"]+)"/gm)].map((m) => m[1]);
   assert.ok(ids.length >= 3, "expected at least three modeled surfaces");
   assert.equal(new Set(ids).size, ids.length, "entry ids must be unique");
   const surfaces = [...block.matchAll(/surface: "([^"]+)"/g)].map((m) => m[1]);
