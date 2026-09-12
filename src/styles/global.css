@@ -608,3 +608,63 @@ summary::-webkit-details-marker {
 summary {
   list-style: none;
 }
+
+/* v3 Wave 1 — truth-state grammar (no color-only meaning, no animation). */
+.truth-state {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4em;
+  border: 1px solid var(--border-subtle);
+  border-radius: 999px;
+  padding: 0.125rem 0.625rem;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  background: var(--surface-subtle);
+}
+.truth-state__glyph {
+  font-size: 0.75em;
+  line-height: 1;
+}
+
+/* v3 Wave 1 — boundary cards. */
+.boundary-card {
+  display: grid;
+  gap: 1rem;
+  border: 1px solid var(--border-subtle);
+  border-left-width: 3px;
+  border-left-color: var(--brand-cobalt);
+  border-radius: var(--radius-card, 0.75rem);
+  padding: 1.25rem 1.5rem;
+  background: var(--surface-subtle);
+}
+@media (min-width: 768px) {
+  .boundary-card {
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+  }
+}
+.boundary-card__label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+.boundary-card__text {
+  margin-top: 0.5rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+/* v3 Wave 1 — safe action preflight context. */
+.safe-action {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.safe-action__context {
+  font-size: 0.8125rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+}

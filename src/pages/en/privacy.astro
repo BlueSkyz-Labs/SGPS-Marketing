@@ -2,6 +2,8 @@
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import Container from "@/components/layout/Container.astro";
 import PageHeader from "@/components/layout/PageHeader.astro";
+import BoundaryCard from "@/components/integrity/BoundaryCard.astro";
+import { PRIVACY_BOUNDARY } from "@/data/integrity";
 import { SITE } from "@/data/site";
 
 const hasBusinessEmail = Boolean(SITE.contactEmail);
@@ -65,6 +67,9 @@ const hasBusinessEmail = Boolean(SITE.contactEmail);
           </dd>
         </div>
       </dl>
+      <div class="mt-12 max-w-2xl">
+        <BoundaryCard boundary={PRIVACY_BOUNDARY} lang="en" />
+      </div>
       <div class="mt-12 flex flex-wrap gap-3">
         <a
           href="/en/security/"

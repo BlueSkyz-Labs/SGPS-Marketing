@@ -1,0 +1,38 @@
+---
+import ButtonLink from "@/components/ui/ButtonLink.astro";
+import { SITE, type Language } from "@/data/site";
+import { emptyRegistryPrimaryCta, emptyRegistrySecondaryCta } from "@/lib/act";
+
+interface Props {
+  lang: Language;
+}
+
+const { lang } = Astro.props;
+const primary = emptyRegistryPrimaryCta(SITE.contactEmail, lang);
+const secondary = emptyRegistrySecondaryCta(SITE.contactEmail, lang);
+
+const COPY = {
+  heading: {
+    en: "Publication requires proof",
+    vi: "Công bố cần bằng chứng",
+  },
+  body: {
+    en: "A product appears in this registry only after its public evidence — a working build, a real screenshot, and a live destination — is ready to verify. Until then this registry stays quiet by design.",
+    vi: "Sản phẩm chỉ xuất hiện trong danh mục này khi bằng chứng công khai của nó — bản chạy thật, ảnh chụp thật và một đích đến đang hoạt động — sẵn sàng để xác minh. Trước đó, danh mục giữ im lặng có chủ đích.",
+  },
+} as const;
+---
+
+<div
+  class="mt-8 max-w-2xl border-y border-[var(--border-subtle)] py-6"
+  data-proof-first-empty-state
+>
+  <h2 class="text-lg font-semibold tracking-tight">{COPY.heading[lang]}</h2>
+  <p class="mt-3 text-[var(--text-secondary)]">{COPY.body[lang]}</p>
+  <div class="mt-6 flex flex-wrap gap-3">
+    <ButtonLink href={primary.href}>{primary.label}</ButtonLink>
+    <ButtonLink href={secondary.href} variant="secondary">
+      {secondary.label}
+    </ButtonLink>
+  </div>
+</div>

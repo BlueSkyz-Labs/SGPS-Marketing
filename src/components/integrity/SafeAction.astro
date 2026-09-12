@@ -1,0 +1,44 @@
+---
+import type { Language } from "@/data/site";
+
+interface Props {
+  href: string;
+  label: string;
+  boundary: "external" | "mailto" | "private-reporting";
+  lang: Language;
+}
+
+const { href, label, boundary, lang } = Astro.props;
+
+const isExternal = /^https?:\/\//i.test(href);
+const host = isExternal ? new URL(href).host : "";
+const mailTarget = href.replace(/^mailto:/i, "");
+
+/** Visible destination context — no click interception, no modal. */
+const CONTEXT = {
+  external: {
+    en: `Opens an external site — ${host}`,
+    vi: `Mở trang bên ngoài — ${host}`,
+  },
+  mailto: {
+    en: `Opens your email app — ${mailTarget}`,
+    vi: `Mở ứng dụng email — ${mailTarget}`,
+  },
+  "private-reporting": {
+    en: "Opens GitHub private vulnerability reporting — visible only to maintainers",
+    vi: "Mở kênh báo cáo lỗ hổng riêng tư trên GitHub — chỉ người bảo trì nhìn thấy",
+  },
+} as const;
+---
+
+<div class="safe-action" data-safe-action={boundary}>
+  <a
+    href={href}
+    rel={isExternal ? "noopener noreferrer" : undefined}
+    class="inline-flex min-h-11 items-center gap-1.5 rounded-lg bg-[var(--action-primary)] px-5 text-sm font-semibold text-white no-underline transition-opacity hover:opacity-90"
+  >
+    {label}
+    <span aria-hidden="true">→</span>
+  </a>
+  <p class="safe-action__context">{CONTEXT[boundary][lang]}</p>
+</div>

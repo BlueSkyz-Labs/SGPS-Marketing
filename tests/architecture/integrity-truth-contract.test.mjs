@@ -64,3 +64,25 @@ test("public-truth validation module is preserved and not bypassed", () => {
   assert.match(lib, /getIntegrityEntriesForSurface/);
   assert.match(lib, /getIntegrityEntry/);
 });
+
+test("proof-first empty state cannot import brand assets or enumerate products", () => {
+  const empty = read("src/components/product/ProofFirstEmptyState.astro");
+  assert.doesNotMatch(empty, /brand-assets/);
+  assert.doesNotMatch(empty, /astro:content|getCollection|getPublicProducts/);
+  assert.match(empty, /en: "/);
+  assert.match(empty, /vi: "/);
+});
+
+test("authored boundary statements are localized and concrete", () => {
+  for (const name of ["SECURITY_BOUNDARY", "PRIVACY_BOUNDARY"]) {
+    const start = data.indexOf(`${name}: BoundaryStatement = {`);
+    assert.notEqual(start, -1, `${name} must exist in src/data/integrity.ts`);
+    const end = data.indexOf("};", start);
+    assert.notEqual(end, -1, `${name} must be terminated`);
+    const block = data.slice(start, end + 2);
+    assert.match(block, /claim: \{/);
+    assert.match(block, /doesNotImply: \{/);
+    assert.match(block, /en: "/);
+    assert.match(block, /vi: "/);
+  }
+});

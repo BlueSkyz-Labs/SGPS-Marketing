@@ -49,9 +49,7 @@ test("products page empty registry omits hollow featured shelf", async ({
 }) => {
   await page.goto("/en/products/");
   await expect(page.locator("[data-product-card]")).toHaveCount(0);
-  await expect(
-    page.getByText(/No public products are published yet/i).first(),
-  ).toBeVisible();
+  await expect(page.locator("[data-proof-first-empty-state]")).toBeVisible();
 });
 
 test("contact empty-email state leads with working security path", async ({

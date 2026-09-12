@@ -1,0 +1,33 @@
+---
+import type { BoundaryStatement } from "@/data/integrity";
+import type { Language } from "@/data/site";
+
+interface Props {
+  boundary: BoundaryStatement;
+  lang: Language;
+}
+
+const { boundary, lang } = Astro.props;
+
+const LABELS = {
+  en: {
+    establishes: "What this establishes",
+    notEstablishes: "What this does not establish",
+  },
+  vi: {
+    establishes: "Điều được xác lập",
+    notEstablishes: "Điều không được xác lập",
+  },
+} as const;
+---
+
+<aside class="boundary-card" data-boundary-card>
+  <div>
+    <h3 class="boundary-card__label">{LABELS[lang].establishes}</h3>
+    <p class="boundary-card__text">{boundary.claim[lang]}</p>
+  </div>
+  <div>
+    <h3 class="boundary-card__label">{LABELS[lang].notEstablishes}</h3>
+    <p class="boundary-card__text">{boundary.doesNotImply[lang]}</p>
+  </div>
+</aside>

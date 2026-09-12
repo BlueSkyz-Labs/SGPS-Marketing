@@ -3,17 +3,13 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
 import Container from "@/components/layout/Container.astro";
 import PageHeader from "@/components/layout/PageHeader.astro";
 import ProductCard from "@/components/product/ProductCard.astro";
-import ButtonLink from "@/components/ui/ButtonLink.astro";
-import { SITE } from "@/data/site";
-import { emptyRegistryPrimaryCta, emptyRegistrySecondaryCta } from "@/lib/act";
+import ProofFirstEmptyState from "@/components/product/ProofFirstEmptyState.astro";
 import { getPublicProducts } from "@/lib/products";
 
 const products = await getPublicProducts();
-const emptyPrimary = emptyRegistryPrimaryCta(SITE.contactEmail, "en");
-const emptySecondary = emptyRegistrySecondaryCta(SITE.contactEmail, "en");
 const emptyDescription = products.length
   ? "Explore BlueSkyz Labs products with truthful status and evidence."
-  : "BlueSkyz Labs has not published public products yet. Listings appear when products are ready to evaluate.";
+  : "Products are published only with verifiable public evidence.";
 ---
 
 <BaseLayout
@@ -29,19 +25,8 @@ const emptyDescription = products.length
       />
       {
         products.length === 0 ? (
-          <div class="mt-12 max-w-2xl rounded-xl border border-[var(--border-subtle)] bg-white p-6">
-            <p class="text-sm leading-relaxed text-[var(--text-secondary)]">
-              No public products are published yet. When a product is ready to
-              evaluate, it will appear here with clear status and evidence.
-            </p>
-            <div class="mt-6 flex flex-wrap gap-3">
-              <ButtonLink href={emptyPrimary.href}>
-                {emptyPrimary.label}
-              </ButtonLink>
-              <ButtonLink href={emptySecondary.href} variant="secondary">
-                {emptySecondary.label}
-              </ButtonLink>
-            </div>
+          <div class="mt-12">
+            <ProofFirstEmptyState lang="en" />
           </div>
         ) : (
           <div class="mt-12 grid gap-4 md:grid-cols-2">
