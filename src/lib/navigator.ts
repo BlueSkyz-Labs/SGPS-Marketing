@@ -1,11 +1,12 @@
 import { getFooterLinks, getNav, type Language } from "@/data/site";
 import { TRUST_LEDGER } from "@/data/trust-ledger";
+import { INTEGRITY_ENTRIES } from "@/data/integrity";
 import type { ProductEntry } from "@/lib/products";
 
 export interface NavigatorItem {
   href: string;
   label: string;
-  kind: "route" | "trust" | "product";
+  kind: "route" | "trust" | "product" | "evidence";
   aliases: string[];
 }
 
@@ -70,6 +71,29 @@ export function buildNavigatorIndex(
     };
     items.push(item);
     byHref.set(item.href, item);
+  }
+
+  // Provenance items derive from the integrity data only — public evidence
+  // destinations, merged by href so no duplicate entries exist.
+  for (const entry of INTEGRITY_ENTRIES) {
+    for (const evidence of entry.evidence) {
+      const href = evidence.href[lang];
+      if (byHref.has(href)) {
+        // Destinations already present keep their own aliases: evidence ids
+        // (e.g. "privacy-data-practices") can name other topics and must not
+        // create false cross-topic matches.
+        continue;
+      }
+      const aliases = [entry.id, entry.state, entry.summary[lang]];
+      const item: NavigatorItem = {
+        href,
+        label: evidence.label[lang],
+        kind: "evidence",
+        aliases,
+      };
+      items.push(item);
+      byHref.set(item.href, item);
+    }
   }
 
   for (const product of products) {

@@ -772,3 +772,22 @@ summary {
     display: block !important;
   }
 }
+
+/* v3 Wave 3 — provenance result type text in the navigator. */
+.command-navigator__list li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+.command-navigator__kind {
+  flex: none;
+  font-size: 0.625rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  border: 1px solid var(--border-subtle);
+  border-radius: 999px;
+  padding: 0.125rem 0.5rem;
+}

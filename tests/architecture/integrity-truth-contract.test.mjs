@@ -124,3 +124,24 @@ test("authored boundary statements are localized and concrete", () => {
     assert.match(block, /vi: "/);
   }
 });
+
+test("provenance search derives from public data only and transmits no query", () => {
+  const navigator = read("src/lib/navigator.ts");
+  const script = read("src/scripts/command-navigator.ts");
+  const component = read("src/components/experience/CommandNavigator.astro");
+  assert.match(
+    navigator,
+    /INTEGRITY_ENTRIES/,
+    "evidence items derive from integrity data",
+  );
+  assert.match(navigator, /"evidence"/, "an evidence kind must exist");
+  assert.match(navigator, /TRUST_LEDGER/, "trust data is a provenance source");
+  for (const source of [navigator, script]) {
+    assert.doesNotMatch(source, /openai|anthropic|llm|embedding|vector/i);
+    assert.doesNotMatch(source, /fetch\(|XMLHttpRequest|sendBeacon/);
+  }
+  // The navigator event carries action/kind only — never the typed query.
+  assert.doesNotMatch(script, /detail:[^}]*query/is);
+  assert.match(component, /command-navigator__kind/);
+  assert.match(component, /evidence: isVi \? "Bằng chứng" : "Evidence"/);
+});
