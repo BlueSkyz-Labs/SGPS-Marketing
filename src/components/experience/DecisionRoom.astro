@@ -1,0 +1,152 @@
+---
+import { buildDecisionItems, MAX_COMPARISON } from "@/lib/decision-room";
+import { getPublicProducts } from "@/lib/products";
+import type { Language } from "@/data/site";
+
+interface Props {
+  lang: Language;
+}
+
+const { lang } = Astro.props;
+const products = (await getPublicProducts()).map((product) => ({
+  slug: product.data.slug,
+  name: product.data.name,
+}));
+const items = buildDecisionItems(products);
+
+const COPY = {
+  en: {
+    heading: "Decision Room",
+    lede: "Place up to four public facts side by side — sourced statements, trust routes, and the boundaries that keep them honest. No verdicts, no suggestions.",
+    add: "Compare",
+    remove: "Remove",
+    reset: "Clear comparison",
+    boardTitle: "Comparison",
+    empty: "Nothing selected yet. Choose up to four items below.",
+    source: "View source",
+    count: "{n}/{max} compared",
+    full: "Comparison holds up to {max} items.",
+  },
+  vi: {
+    heading: "Phòng Quyết định",
+    lede: "Đặt tối đa bốn dữ kiện công khai cạnh nhau — tuyên bố có nguồn, các tuyến tin cậy, và ranh giới để giữ chúng trung thực. Không điểm số, không đề xuất.",
+    add: "So sánh",
+    remove: "Bỏ",
+    reset: "Xóa so sánh",
+    boardTitle: "So sánh",
+    empty: "Chưa chọn mục nào. Chọn tối đa bốn mục bên dưới.",
+    source: "Xem nguồn",
+    count: "Đang so sánh {n}/{max}",
+    full: "So sánh tối đa {max} mục.",
+  },
+} as const;
+
+const KIND_LABELS = {
+  claim: { en: "Claim", vi: "Tuyên bố" },
+  trust: { en: "Trust", vi: "Tin cậy" },
+  product: { en: "Product", vi: "Sản phẩm" },
+} as const;
+
+const copy = COPY[lang];
+const domId = (id: string): string =>
+  `room-item-${id.replace(/[^a-z0-9-]+/gi, "-")}`;
+---
+
+<section
+  class="decision-room"
+  data-decision-room
+  data-max={MAX_COMPARISON}
+  data-msg-count={copy.count}
+  data-msg-full={copy.full}
+  aria-labelledby="decision-room-title"
+>
+  <h2 id="decision-room-title" class="decision-room__title">{copy.heading}</h2>
+  <p class="decision-room__lede">{copy.lede}</p>
+
+  <div class="decision-room__items">
+    {
+      items.map((item) => (
+        <article
+          id={domId(item.id)}
+          class="decision-room__item"
+          data-decision-item={item.id}
+        >
+          <span class="decision-room__kind">
+            {KIND_LABELS[item.kind][lang]}
+          </span>
+          <h3 class="decision-room__label">{item.label[lang]}</h3>
+          {item.summary ? (
+            <p class="decision-room__summary">{item.summary[lang]}</p>
+          ) : null}
+          {item.boundaryText ? (
+            <p class="decision-room__boundary">{item.boundaryText[lang]}</p>
+          ) : null}
+          {item.evidenceHref ? (
+            <a
+              href={item.evidenceHref[lang]}
+              rel={
+                /^https?:\/\//i.test(item.evidenceHref[lang])
+                  ? "noopener noreferrer"
+                  : undefined
+              }
+              class="decision-room__source"
+            >
+              {copy.source} →
+            </a>
+          ) : null}
+          <button
+            type="button"
+            class="decision-room__add"
+            data-decision-add={item.id}
+            aria-pressed="false"
+          >
+            {copy.add}
+          </button>
+        </article>
+      ))
+    }
+  </div>
+
+  <p class="decision-room__empty" data-decision-empty-state>{copy.empty}</p>
+
+  <div class="decision-room__board" data-decision-board hidden>
+    <h3 class="decision-room__board-title">{copy.boardTitle}</h3>
+    <ul class="decision-room__rows">
+      {
+        items.map((item) => (
+          <li data-decision-row={item.id} hidden>
+            <span class="decision-room__row-label">{item.label[lang]}</span>
+            <button
+              type="button"
+              class="decision-room__remove"
+              data-decision-remove={item.id}
+            >
+              {copy.remove}
+            </button>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+
+  <button type="button" class="decision-room__reset" data-decision-reset hidden>
+    {copy.reset}
+  </button>
+
+  <p class="sr-only" role="status" aria-live="polite" data-decision-live></p>
+</section>
+
+<noscript>
+  <style>
+    [data-decision-add],
+    [data-decision-reset] {
+      display: none !important;
+    }
+  </style>
+</noscript>
+
+<script>
+  import { initDecisionRoom } from "@/scripts/decision-room";
+
+  initDecisionRoom();
+</script>
