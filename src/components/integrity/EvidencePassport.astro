@@ -1,5 +1,5 @@
 ---
-import { getEvidencePassport } from "@/lib/claims";
+import { getEvidencePassport, getClaimAnchor } from "@/lib/claims";
 import TruthState from "./TruthState.astro";
 import BoundaryCard from "./BoundaryCard.astro";
 import type { Language } from "@/data/site";
@@ -35,7 +35,9 @@ const labels = LABELS[lang];
   passport ? (
     <article class="evidence-passport" data-evidence-passport={passport.id}>
       <p class="evidence-passport__kind">{labels.kind}</p>
-      <h2 class="evidence-passport__claim">{passport.claim[lang]}</h2>
+      <h2 id={getClaimAnchor(passport.id)} class="evidence-passport__claim">
+        {passport.claim[lang]}
+      </h2>
       <p class="evidence-passport__meta">
         <TruthState state={passport.state} lang={lang} />
         {passport.reviewedOn ? (
@@ -48,7 +50,7 @@ const labels = LABELS[lang];
         <h3 class="evidence-passport__sources-title">{labels.sources}</h3>
         <ul>
           {passport.evidence.map((ref) => (
-            <li>
+            <li id={`evidence-${ref.id}`}>
               <a
                 href={ref.href[lang]}
                 rel={

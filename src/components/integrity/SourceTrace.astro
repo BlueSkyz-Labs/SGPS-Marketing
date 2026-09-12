@@ -30,7 +30,11 @@ const HEADING: Record<Language, string> = {
       <h4 class="source-trace__title">{HEADING[lang]}</h4>
       <ol class="source-trace__list">
         {trace.map((step) => (
-          <li class="source-trace__step" data-trace-step={step.kind}>
+          <li
+            class="source-trace__step"
+            data-trace-step={step.kind}
+            id={step.kind === "evidence" ? `evidence-${step.id}` : undefined}
+          >
             <span class="source-trace__role">
               {ROLE_LABELS[step.kind][lang]}
             </span>

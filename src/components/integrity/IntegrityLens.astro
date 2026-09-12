@@ -1,6 +1,6 @@
 ---
 import { getIntegrityEntriesForSurface } from "@/lib/integrity";
-import { getPublicClaims } from "@/lib/claims";
+import { getPublicClaims, getClaimAnchor } from "@/lib/claims";
 import { getPublicProducts } from "@/lib/products";
 import TruthState from "./TruthState.astro";
 import EvidenceDetails from "./EvidenceDetails.astro";
@@ -40,21 +40,31 @@ const LABELS = {
         {LABELS[lang].heading}
       </h2>
       <div class="integrity-lens__entries">
-        {entries.map((entry) => (
-          <article data-integrity-entry={entry.id}>
-            <TruthState state={entry.state} lang={lang} />
-            <EvidenceDetails
-              summary={entry.summary[lang]}
-              evidence={entry.evidence.map((ev) => ({
-                label: ev.label[lang],
-                href: ev.href[lang],
-              }))}
-              review={entry.review}
-              boundary={entry.boundary}
-              lang={lang}
-            />
-          </article>
-        ))}
+        {entries.map((entry) => {
+          const linkedClaim = claims.find(
+            (candidate) => candidate.reviewId === entry.id,
+          );
+          return (
+            <article
+              data-integrity-entry={entry.id}
+              id={
+                linkedClaim ? getClaimAnchor(linkedClaim.claim.id) : undefined
+              }
+            >
+              <TruthState state={entry.state} lang={lang} />
+              <EvidenceDetails
+                summary={entry.summary[lang]}
+                evidence={entry.evidence.map((ev) => ({
+                  label: ev.label[lang],
+                  href: ev.href[lang],
+                }))}
+                review={entry.review}
+                boundary={entry.boundary}
+                lang={lang}
+              />
+            </article>
+          );
+        })}
       </div>
       {claims.length > 0 && (
         <div class="integrity-lens__traces">
