@@ -148,6 +148,18 @@ export const INTEGRITY_ENTRIES: readonly IntegrityEntry[] = [
         href: { en: "/en/products/", vi: "/vi/products/" },
         label: { en: "Products route", vi: "Trang Sản phẩm" },
       },
+      {
+        id: "ev-public-manifest",
+        kind: "artifact",
+        href: {
+          en: "/.well-known/sgps.json",
+          vi: "/.well-known/sgps.json",
+        },
+        label: {
+          en: "Public SGPS manifest",
+          vi: "Bản kê SGPS công khai",
+        },
+      },
     ],
   },
 ];

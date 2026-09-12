@@ -23,8 +23,16 @@ const claims = getPublicClaims(products).filter(
 );
 
 const LABELS = {
-  en: { heading: "Verify this page" },
-  vi: { heading: "Xác minh trang này" },
+  en: {
+    heading: "Verify this page",
+    legend:
+      "Source-linked means every claim on this page cites at least one public source you can open.",
+  },
+  vi: {
+    heading: "Xác minh trang này",
+    legend:
+      "Đã gắn nguồn nghĩa là mọi tuyên bố trên trang này đều dẫn ít nhất một nguồn công khai bạn có thể mở.",
+  },
 } as const;
 ---
 
@@ -39,6 +47,7 @@ const LABELS = {
       <h2 id={`integrity-lens-title-${surface}`} class="integrity-lens__title">
         {LABELS[lang].heading}
       </h2>
+      <p class="integrity-lens__legend">{LABELS[lang].legend}</p>
       <div class="integrity-lens__entries">
         {entries.map((entry) => {
           const linkedClaim = claims.find(

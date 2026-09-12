@@ -49,12 +49,12 @@ const FIXES = {
 };
 
 const FORBIDDEN_LANGUAGE =
-  /\b(trust score|score:|certified|guaranteed|ranking)\b/i;
+  /\b(trust score|score:|certified|guaranteed|ranking|audited|compliant)\b/i;
 const GENERATED_DATE = /new Date\(|toISOString\(|Date\.now\(/;
 const FORBIDDEN_TELEMETRY_PROP =
   /^(query|q|email|ip|userip|body|freetext|searchterm|text)$/i;
 const PUBLIC_DESTINATION =
-  /^\/(en|vi)\/(evidence\/[a-z0-9-]+\/|products\/[a-z0-9-]+\/|decision-room\/)$/;
+  /^(\/\.well-known\/sgps\.json|\/(en|vi)\/(evidence\/[a-z0-9-]+\/|products\/[a-z0-9-]+\/|decision-room\/))$/;
 
 function defaultList(dir) {
   const root = process.cwd();

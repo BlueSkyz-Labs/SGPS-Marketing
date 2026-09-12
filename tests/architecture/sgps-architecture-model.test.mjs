@@ -3,6 +3,12 @@ import { execFileSync } from "node:child_process";
 import { existsSync, readFileSync } from "node:fs";
 import test from "node:test";
 
+import {
+  normalizeEvidencePaths,
+  verifyPath,
+  verifyRevision,
+} from "../../scripts/verify-git-evidence.mjs";
+
 const model = JSON.parse(readFileSync("architecture/sgps-model.json", "utf8"));
 
 const ALLOWED_KINDS = new Set([
@@ -147,6 +153,37 @@ test("local architecture source-evidence paths exist in the verified checkout", 
       `${entity.id} sourceEvidence.path does not exist: ${evidence.path}`,
     );
   }
+});
+
+test("source evidence resolves to real Git objects, not SHA-shaped strings", () => {
+  const problems = [];
+  for (const entity of model.entities) {
+    const evidence = entity.sourceEvidence;
+    if (!evidence || evidence.repository !== "BlueSkyz-Labs/SGPS-Marketing") {
+      continue;
+    }
+    assert.match(
+      evidence.revision ?? "",
+      /^[0-9a-f]{40}$/,
+      `${entity.id} sourceEvidence.revision must be a full commit SHA`,
+    );
+    const revision = verifyRevision(evidence.revision, process.cwd());
+    if (revision.status !== "PASS") {
+      problems.push(
+        `${entity.id}: revision ${revision.status} — ${revision.detail}`,
+      );
+      continue;
+    }
+    for (const path of normalizeEvidencePaths(evidence)) {
+      const resolved = verifyPath(evidence.revision, path, process.cwd());
+      if (resolved.status !== "PASS") {
+        problems.push(
+          `${entity.id}: ${path} ${resolved.status} — ${resolved.detail}`,
+        );
+      }
+    }
+  }
+  assert.deepEqual(problems, [], problems.join("\n"));
 });
 
 test("source assurance model tracks the protected promotion interfaces", () => {
