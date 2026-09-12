@@ -21,6 +21,8 @@ test.describe("print surface", () => {
     }
     // The evidence content itself must remain on paper.
     await expect(page.locator("main").first()).toBeVisible();
+    // A navigation affordance is dead on paper.
+    await expect(page.locator(".evidence-passport__context")).toBeHidden();
   });
 
   test("the navigator and journey bar do not print anywhere", async ({
