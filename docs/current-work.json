@@ -97,8 +97,14 @@
     {
       "id": "hardening-h11",
       "name": "Recovery paths + redirect chain contract",
-      "status": "IN_PROGRESS",
+      "status": "MERGED",
       "evidence": "docs/evidence/2026-09-12-wave-h11-recovery.md"
+    },
+    {
+      "id": "hardening-h12",
+      "name": "Text-zoom safety (WCAG 1.4.4): shrinkable grid items, breakable headings",
+      "status": "IN_PROGRESS",
+      "evidence": "docs/evidence/2026-09-13-wave-h12-text-zoom.md"
     }
   ],
   "openOwnerDecisions": [
@@ -129,7 +135,7 @@
     "Trademark/legal clearance and specialty print (brand kit caveats)"
   ],
   "nextActionable": [
-    "Merge hardening wave H11 after exact-head green",
+    "Merge hardening wave H12 after exact-head green",
     "Optional UI-4 remainder: atlas finesse, per-page OG images, breadcrumb JSON-LD"
   ]
 }
