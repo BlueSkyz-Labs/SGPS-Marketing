@@ -10,22 +10,22 @@ Follow-on hardening derived from the two read-only recon briefs over owner PRs
 #125 (v3.1 design) and #126 (principal red-team plan), executed as one wave with
 four isolated sub-agent worktrees plus the orchestrator lane.
 
-| Track | Artifact | Owner lane | Status |
-| --- | --- | --- | --- |
-| T2 | `scripts/verify-git-evidence.mjs` + `git-evidence.test.mjs` | h2a (isolated worktree) | DETECTED → REMEDIATED |
-| T4 | `scripts/check-promotion-state.mjs` + test | h2b | REMEDIATED |
-| T7 | `scripts/validate-deployment-evidence.mjs` + test | h2b | REMEDIATED |
-| T8/C3 | `src/lib/public-state-semantics.ts` + test | h2c | REMEDIATED |
-| T12/C9 | `tests/architecture/experience-density.test.mjs` + `docs/evidence/templates/*` | h2d | REMEDIATED |
-| T1 | `docs/current-work.json` + `current-work-router.test.mjs` | orchestrator | REMEDIATED |
-| T11 | `tests/architecture/integrity-evidence-topology.test.mjs` | orchestrator | REMEDIATED |
-| C6 | assurance vocabulary extension in the integrity firewall | orchestrator | REMEDIATED |
-| UI-4 | footer re-grid + integrity-lens legend (EN/VI) | orchestrator | REMEDIATED |
+| Track  | Artifact                                                                       | Owner lane              | Status                |
+| ------ | ------------------------------------------------------------------------------ | ----------------------- | --------------------- |
+| T2     | `scripts/verify-git-evidence.mjs` + `git-evidence.test.mjs`                    | h2a (isolated worktree) | DETECTED → REMEDIATED |
+| T4     | `scripts/check-promotion-state.mjs` + test                                     | h2b                     | REMEDIATED            |
+| T7     | `scripts/validate-deployment-evidence.mjs` + test                              | h2b                     | REMEDIATED            |
+| T8/C3  | `src/lib/public-state-semantics.ts` + test                                     | h2c                     | REMEDIATED            |
+| T12/C9 | `tests/architecture/experience-density.test.mjs` + `docs/evidence/templates/*` | h2d                     | REMEDIATED            |
+| T1     | `docs/current-work.json` + `current-work-router.test.mjs`                      | orchestrator            | REMEDIATED            |
+| T11    | `tests/architecture/integrity-evidence-topology.test.mjs`                      | orchestrator            | REMEDIATED            |
+| C6     | assurance vocabulary extension in the integrity firewall                       | orchestrator            | REMEDIATED            |
+| UI-4   | footer re-grid + integrity-lens legend (EN/VI)                                 | orchestrator            | REMEDIATED            |
 
 ## Real defects the wave closed
 
 1. **Provenance could false-green.** The previous architecture check asserted only
-   `existsSync(path)` plus a SHA *shape* regex — a blob SHA or any 40-hex string
+   `existsSync(path)` plus a SHA _shape_ regex — a blob SHA or any 40-hex string
    passed. Now every cited revision is resolved with `git cat-file -e <rev>^{commit}`
    and every cited path with `<rev>:<path>` (`verify:git-evidence` →
    `Git evidence: PASS (7 entries)`), and absence in a shallow clone reports
@@ -40,6 +40,14 @@ four isolated sub-agent worktrees plus the orchestrator lane.
    `source-linked` ⇏ `certified`) with a blanket ban on assurance claims.
 4. **No honest current-work router.** `docs/current-work.json` + contract now carry
    bounded statuses, real evidence paths, WIP control, and the open owner decisions.
+5. **Orphaned provenance caught by CI (round 2).** The first exact-head run failed
+   honestly: `architecture/sgps-model.json` cited two commits (`6442ce0c…` for
+   `src/`, `15094e5a…` for `.github/workflows/quality-gates.yml`) that squash merges
+   had orphaned from the promoted history — they resolved in a developer clone with
+   PR refs, but not in the candidate checkout. Both now cite the last commit on
+   `origin/main` that touched their path (`f7636a7…`, and `7600db7a…` for
+   `src/lib/truth.ts`), and `verifyAncestry` (`git merge-base --is-ancestor`) makes
+   this class of drift fail-closed instead of merely unresolvable.
 
 ## Evidence (local, exact this branch)
 

@@ -154,6 +154,38 @@ const FETCH_HINT =
  * Verify that `revision` resolves to a real commit object.
  * @returns {{status: string, subject: string, revision: string, detail: string, hint: string}}
  */
+export function verifyAncestry(revision, cwd = process.cwd()) {
+  const subject = `ancestry ${String(revision)}`;
+  const invalid = validateRevision(revision);
+  if (invalid) {
+    return failure(
+      subject,
+      revision,
+      invalid,
+      "pass a 40-hex commit SHA or a plain ref name",
+    );
+  }
+
+  if (
+    runGit(["merge-base", "--is-ancestor", String(revision), "HEAD"], cwd).ok
+  ) {
+    return {
+      status: STATUS.PASS,
+      subject,
+      revision,
+      detail: `${revision} is reachable from the checked-out candidate`,
+      hint: "",
+    };
+  }
+
+  return failure(
+    subject,
+    revision,
+    "not reachable from the checked-out candidate (orphaned by a squash merge?)",
+    "cite a commit that stays reachable from the promoted history",
+  );
+}
+
 export function verifyRevision(revision, cwd = process.cwd()) {
   const subject = `revision ${String(revision)}`;
   const invalid = validateRevision(revision);
@@ -342,6 +374,12 @@ export function verifyModelSourceEvidence(model, cwd = process.cwd()) {
         ),
       );
       continue;
+    }
+
+    const revisionCheck = verifyRevision(revision, cwd);
+    results.push({ ...revisionCheck, subject });
+    if (revisionCheck.status === STATUS.PASS) {
+      results.push({ ...verifyAncestry(revision, cwd), subject });
     }
 
     for (const path of paths) {
