@@ -34,7 +34,6 @@ const labels = LABELS[lang];
 {
   passport ? (
     <article class="evidence-passport" data-evidence-passport={passport.id}>
-      <p class="evidence-passport__kind">{labels.kind}</p>
       <h2 id={getClaimAnchor(passport.id)} class="evidence-passport__claim">
         {passport.claim[lang]}
       </h2>
