@@ -54,15 +54,7 @@ test("MISSING_EVIDENCE: unknown references fail", () => {
 });
 
 test("INVALID_LOCALE_PARITY: partial EN/VI pairs fail", () => {
-  const broken = CLAIMS.map((claim) =>
-    claim.id === REAL_CLAIM.id
-      ? {
-          ...claim,
-          evidenceIds: claim.evidenceIds,
-        }
-      : claim,
-  );
-  // Inject a boundary with a missing VI half via a synthetic claim.
+  // Inject a boundary reference on a synthetic claim.
   const failures = checkPublishability(
     [],
     [
