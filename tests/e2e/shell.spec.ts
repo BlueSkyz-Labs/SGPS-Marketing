@@ -41,7 +41,6 @@ test("VI shell exposes a localized skip link", async ({ page }) => {
   await expect(
     page.getByRole("link", { name: "Chuyển đến nội dung chính" }),
   ).toBeAttached();
-  await expect(
-    page.getByRole("navigation", { name: "Chính" }).first(),
-  ).toBeAttached();
+  // CSS locator: the primary nav is display-hidden at mobile widths.
+  await expect(page.locator('header nav[aria-label="Chính"]')).toBeAttached();
 });

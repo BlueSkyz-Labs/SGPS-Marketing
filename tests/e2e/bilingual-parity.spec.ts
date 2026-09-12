@@ -41,7 +41,7 @@ test.describe("bilingual parity — live routes (empty registry)", () => {
     page,
   }) => {
     await page.goto("/vi/");
-    const viCta = page.locator('header nav[aria-label="Primary"] a').last();
+    const viCta = page.locator('header nav[aria-label="Chính"] a').last();
     await expect(viCta).toHaveAttribute("href", /^\/vi\//);
 
     await page.goto("/en/");
