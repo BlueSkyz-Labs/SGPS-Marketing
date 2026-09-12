@@ -37,7 +37,7 @@ Failure/recovery was an unasserted QA/QC dimension:
 ## Evidence (local, exact this branch)
 
 - `pnpm exec playwright test tests/e2e/recovery-paths.spec.ts --project=chromium --workers=1` → **3/3 pass**
-- `pnpm test:architecture` → **303 pass / 0 fail** (incl. the redirect contract)
+- `pnpm test:architecture` → **299 pass / 0 fail** on this branch (303 once wave H10 lands: 300 + this wave's 3)
 
 ## Residual risk
 
