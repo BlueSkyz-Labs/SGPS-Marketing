@@ -102,6 +102,10 @@ Preview builds may omit `validate:public-truth` when production-only email varia
 
 Do not duplicate Cloudflare deployment or environment-bound production truth in `.github/workflows`; GitHub Actions is limited to source assurance.
 
+### Smoke, observability and rollback
+
+The operational contract lives in `docs/operations/production-smoke-and-rollback.md`: post-deploy verification order (smoke with `SMOKE_COMMIT_SHA`, edge-header spot check, read-back ledger), the deliberately minimal observability model (provider analytics + per-PR gates, **no client-side telemetry**), and the rollback-vs-fix-forward decision path (rollback via the previous Workers version, then mandatory re-verification; fix-forward through the normal PR gates).
+
 Legacy Cloudflare Pages project `blueskyz-labs-portfolio` is superseded by Workers Static Assets. On 2026-09-04 Git deployments were disabled via Cloudflare API (`deployments_enabled=false`, preview=`none`), and `destination_dir` was corrected from `.next` → `dist` so an accidental re-enable cannot revive the Next output contract. Canonical host remains Workers (`blueskyz-web`).
 
 ---
