@@ -55,8 +55,14 @@
     {
       "id": "hardening-h4",
       "name": "Machine-readable security policy + edge header contract",
-      "status": "IN_PROGRESS",
+      "status": "MERGED",
       "evidence": "docs/evidence/2026-09-12-wave-h4-security.md"
+    },
+    {
+      "id": "hardening-h5",
+      "name": "Documented gate surface (drift guard) + runtime re-probe",
+      "status": "IN_PROGRESS",
+      "evidence": "docs/evidence/2026-09-12-wave-h5-doc-drift.md"
     }
   ],
   "openOwnerDecisions": [
@@ -87,7 +93,7 @@
     "Trademark/legal clearance and specialty print (brand kit caveats)"
   ],
   "nextActionable": [
-    "Merge hardening wave H4 after exact-head green",
+    "Merge hardening wave H5 after exact-head green",
     "Optional UI-4 remainder: atlas finesse, per-page OG images, breadcrumb JSON-LD"
   ]
 }
