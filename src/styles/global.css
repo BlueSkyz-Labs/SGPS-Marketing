@@ -1124,3 +1124,13 @@ html[data-intent] [data-journey-bar] li[data-evidence-first="true"] a {
   line-height: 1.6;
   color: var(--text-muted);
 }
+
+/* Wave H7 — page-level heading for the evidence passport document. */
+.evidence-passport__page-title {
+  margin-bottom: 0.75rem;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
