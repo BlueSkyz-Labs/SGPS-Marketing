@@ -155,6 +155,16 @@ check("evidence passport for the security claim is public", async () => {
   );
 });
 
+check("public SGPS manifest is served", async () => {
+  const response = await get("/.well-known/sgps.json");
+  assert(response.status === 200, `expected 200, got ${response.status}`);
+  const body = await response.text();
+  assert(
+    body.includes('"schemaVersion": "1.0"'),
+    "manifest must declare schema version 1.0",
+  );
+});
+
 check("critical navigation links are present on the EN home", async () => {
   const response = await get("/en/");
   const html = await response.text();

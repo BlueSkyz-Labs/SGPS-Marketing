@@ -1022,3 +1022,9 @@ html[data-intent] [data-journey-bar] li[data-evidence-first="true"] a {
   border-color: var(--action-primary);
   box-shadow: 0 1px 2px color-mix(in srgb, var(--brand-cobalt) 18%, transparent);
 }
+
+/* v3 G8 — stable verification deep-link scroll margin (sticky-header aware). */
+[id^="claim-"],
+[id^="evidence-"] {
+  scroll-margin-top: 6rem;
+}

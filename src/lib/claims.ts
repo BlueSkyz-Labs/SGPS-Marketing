@@ -22,6 +22,7 @@ import type {
   EvidenceReference,
   TruthState,
 } from "../data/integrity.ts";
+import type { Language } from "../data/site.ts";
 
 export interface PublicProductRef {
   slug: string;
@@ -285,4 +286,18 @@ export function getEvidencePassport(
 /** Static passport paths for a locale — only modeled public claims. */
 export function getEvidencePassportIds(products: PublicProductRef[]): string[] {
   return getPublicClaims(products).map((resolved) => resolved.claim.id);
+}
+
+/* ------------------------------------------------------------------ */
+/* v3 G8 — stable verification deep links (Task 18).                   */
+/* ------------------------------------------------------------------ */
+
+/** Stable slug-safe public anchor for a claim id (never derived at random). */
+export function getClaimAnchor(id: string): string {
+  return `claim-${id.toLowerCase().replace(/[^a-z0-9-]+/g, "-")}`;
+}
+
+/** Locale-aware public evidence-passport path for a claim id. */
+export function getEvidencePassportPath(lang: Language, id: string): string {
+  return `/${lang}/evidence/${id}/`;
 }

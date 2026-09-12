@@ -107,7 +107,7 @@ test.describe("atlas v2 evidence constellation", () => {
     expect(name).toBe("none");
   });
 
-  for (const width of [320, 390, 1440]) {
+  for (const width of [320, 360, 390, 430, 1280, 1440]) {
     test(`${width}px composition has no horizontal overflow`, async ({
       page,
     }) => {
