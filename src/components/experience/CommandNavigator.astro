@@ -7,6 +7,13 @@ const lang = getLanguageFromPath(Astro.url.pathname);
 const isVi = lang === "vi";
 const items = buildNavigatorIndex(lang, await getPublicProducts());
 
+const KIND_LABELS: Record<string, string> = {
+  route: isVi ? "Trang" : "Page",
+  trust: isVi ? "Tin cậy" : "Trust",
+  product: isVi ? "Sản phẩm" : "Product",
+  evidence: isVi ? "Bằng chứng" : "Evidence",
+};
+
 const navLabel = isVi ? "Điều hướng nhanh" : "Quick navigation";
 const placeholder = isVi ? "Tìm trang…" : "Search pages…";
 const emptyLabel = isVi
@@ -37,6 +44,9 @@ const emptyLabel = isVi
               data-search={searchText}
             >
               <a href={item.href}>{item.label}</a>
+              <span class="command-navigator__kind">
+                {KIND_LABELS[item.kind] ?? item.kind}
+              </span>
             </li>
           );
         })

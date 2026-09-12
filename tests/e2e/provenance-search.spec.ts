@@ -1,0 +1,114 @@
+import { expect, test } from "@playwright/test";
+
+async function openNavigator(page: import("@playwright/test").Page) {
+  await page.keyboard.press("Control+k");
+  await expect(page.locator("[data-command-navigator]")).toHaveAttribute(
+    "open",
+    "",
+  );
+}
+
+test.describe("deterministic provenance search", () => {
+  test("EN: evidence destinations surface with an Evidence type label", async ({
+    page,
+  }) => {
+    await page.goto("/en/");
+    await openNavigator(page);
+    await page.locator("[data-command-input]").fill("advisory");
+    const item = page
+      .locator(
+        '[data-command-item][data-command-kind="evidence"]:not([hidden])',
+      )
+      .first();
+    await expect(item).toBeVisible();
+    await expect(item).toContainText("GitHub private vulnerability reporting");
+    await expect(item.locator(".command-navigator__kind")).toHaveText(
+      "Evidence",
+    );
+  });
+
+  test("VI: diacritic-insensitive query finds the localized evidence item", async ({
+    page,
+  }) => {
+    await page.goto("/vi/");
+    await openNavigator(page);
+    await page.locator("[data-command-input]").fill("bao cao lo hong");
+    const item = page
+      .locator(
+        '[data-command-item][data-command-kind="evidence"]:not([hidden])',
+      )
+      .first();
+    await expect(item).toBeVisible();
+    await expect(item.locator(".command-navigator__kind")).toHaveText(
+      "Bằng chứng",
+    );
+  });
+
+  test("closing restores focus to the invoking control", async ({ page }) => {
+    await page.goto("/en/");
+    const trigger = page.locator("[data-command-trigger]").first();
+    await trigger.click();
+    await expect(page.locator("[data-command-navigator]")).toHaveAttribute(
+      "open",
+      "",
+    );
+    await page.keyboard.press("Escape");
+    await expect(page.locator("[data-command-navigator]")).not.toHaveAttribute(
+      "open",
+      "",
+    );
+    await expect(trigger).toBeFocused();
+  });
+
+  test("typed queries never enter dispatched event payloads", async ({
+    page,
+  }) => {
+    await page.addInitScript(() => {
+      (window as unknown as { __events: unknown[] }).__events = [];
+      window.addEventListener("blueskyz:navigator", (event) => {
+        (window as unknown as { __events: unknown[] }).__events.push(
+          (event as CustomEvent).detail,
+        );
+      });
+    });
+    await page.goto("/en/");
+    await openNavigator(page);
+    await page.locator("[data-command-input]").fill("secretquery123");
+    const payloads = await page.evaluate(
+      () => (window as unknown as { __events: unknown[] }).__events,
+    );
+    const serialized = JSON.stringify(payloads);
+    expect(serialized).not.toContain("secretquery123");
+    expect(serialized).toContain("open");
+  });
+
+  test("existing route items keep their kinds (no removal)", async ({
+    page,
+  }) => {
+    await page.goto("/en/");
+    await openNavigator(page);
+    const kinds = await page
+      .locator("[data-command-item]")
+      .evaluateAll((els) =>
+        els.map((el) => el.getAttribute("data-command-kind")),
+      );
+    expect(kinds).toContain("route");
+    expect(kinds).toContain("trust");
+  });
+});
+
+test.describe("provenance search without JavaScript", () => {
+  test.use({ javaScriptEnabled: false });
+
+  test("server-rendered evidence items exist; nav links stay usable", async ({
+    page,
+  }) => {
+    await page.goto("/en/");
+    await expect(
+      page.locator('[data-command-item][data-command-kind="evidence"]'),
+    ).toHaveCount(1);
+    await expect(
+      page.locator('header nav[aria-label="Primary"] a').first(),
+    ).toBeVisible();
+  });
+});
