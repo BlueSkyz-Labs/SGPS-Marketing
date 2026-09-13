@@ -24,11 +24,13 @@
 ### Task 1: Define Living Product scene metadata boundary (G1)
 
 **Files:**
+
 - Read: product schema and public product helpers
 - Create: `src/lib/product-scene.ts`
 - Create: `tests/architecture/c3-product-scene.test.mjs`
 
 **Interfaces:**
+
 - Consumes: canonical product slug, screenshot artifact, capability identifiers, optional authored focal coordinates.
 - Produces: pure scene descriptor for rendering; it cannot introduce new capability text.
 
@@ -55,12 +57,14 @@ Do not duplicate product name, capability copy, CTA, status, or evidence in scen
 ### Task 2: Build Living Product Scene Engine (G1)
 
 **Files:**
+
 - Create: `src/components/product/LivingProductScene.astro`
 - Modify: product theatre/profile consumers where appropriate
 - Modify C3 craft stylesheet
 - Create: `tests/e2e/c3-living-product-scene.spec.ts`
 
 **Interfaces:**
+
 - Consumes: scene descriptor + canonical product entry.
 - Produces: real screenshot as dominant scene, with static focal/capability affordances and optional restrained motion.
 
@@ -79,11 +83,13 @@ Use normal figure/links/buttons/list semantics. Decorative depth must not obscur
 ### Task 3: Add Product Anatomy Hotspots (S1)
 
 **Files:**
+
 - Create or refine: `src/components/product/ProductHotspot.astro`
 - Optional: `src/scripts/product-hotspots.ts`
 - Extend: `tests/e2e/c3-living-product-scene.spec.ts`
 
 **Interfaces:**
+
 - Consumes: resolved capability id and optional product-proof link.
 - Produces: numbered/labelled accessible hotspot with canonical capability explanation.
 
@@ -98,6 +104,7 @@ Use normal figure/links/buttons/list semantics. Decorative depth must not obscur
 ### Task 4: Implement Guided Product Story Playback (G3)
 
 **Files:**
+
 - Create: `src/lib/product-story.ts`
 - Create: `src/components/product/ProductStory.astro`
 - Optional: `src/scripts/product-story.ts`
@@ -105,6 +112,7 @@ Use normal figure/links/buttons/list semantics. Decorative depth must not obscur
 - Create: `tests/e2e/c3-product-story.spec.ts`
 
 **Interfaces:**
+
 - Consumes: ordered story steps referencing canonical product capability/artifact/proof ids.
 - Produces: visitor-controlled step sequence `Problem → Product action → UI state → Outcome → Evidence`.
 
@@ -123,12 +131,14 @@ No autoplay and no scroll lock.
 ### Task 5: Add Brief / Technical Reading Modes (S6)
 
 **Files:**
+
 - Create: `src/lib/reading-mode.ts`
 - Create: `src/components/product/ReadingModeControl.astro`
 - Modify product profile presentation only
 - Create: `tests/e2e/c3-reading-mode.spec.ts`
 
 **Interfaces:**
+
 - Consumes: the same canonical product content tree.
 - Produces: `brief` and `technical` presentation views; no duplicated content registry.
 
@@ -147,12 +157,14 @@ Default must work without persistence. If URL state is used, allow only known en
 ### Task 6: Implement Truthful Product Compare (S7)
 
 **Files:**
+
 - Create: `src/lib/product-compare.ts`
 - Create: `src/components/product/ProductCompare.astro`
 - Create: `tests/architecture/c3-product-compare.test.mjs`
 - Create: `tests/e2e/c3-product-compare.spec.ts`
 
 **Interfaces:**
+
 - Consumes: 2–3 public product entries and canonical compare dimensions.
 - Produces: comparison rows with known / unknown / not-applicable values; no score/winner.
 
@@ -169,6 +181,7 @@ Examples may include lifecycle/public label, platform/surface, verified capabili
 ### Task 7: Red-team living product truth
 
 **Files:**
+
 - Evidence ledger only unless a defect is reproduced
 
 - [ ] **Step 1: remove/withhold screenshot in fixture and verify graceful honest fallback**
