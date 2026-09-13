@@ -2,20 +2,18 @@
 
 Trusted current source of truth only:
 
-| Role                               | Path                                                                                                                                                            |
-| ---------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Experience contract                | `docs/superpowers/specs/2026-09-03-blueskyz-web-v1-c1-1-design.md` — substantive design remains authoritative; its pre-implementation status text is historical |
-| Active C2 experience design        | `docs/superpowers/specs/2026-09-13-c2-cinematic-product-house-design.md` — supersedes conflicting homepage/public-composition guidance from older S+ specs       |
-| Active C2 implementation plan      | `docs/superpowers/plans/2026-09-13-c2-cinematic-product-house-implementation.md` — execute P0–P6 as separate gated waves/PRs                                   |
-| Historical implementation plan     | `docs/superpowers/plans/2026-09-04-blueskyz-web-v1-c1-1-implementation.md`                                                                                      |
-| Active residual / owner-gated work | `docs/current-work.json` — canonical current-work router, including product screenshot/owner facts, Human E4 and RUM privacy decision                           |
-| Framework decision                 | `docs/decisions/0004-web-framework-selection.md` (`ASTRO_7`)                                                                                                    |
-| Source assurance decision          | `docs/decisions/0005-dual-control-source-assurance.md`; historical pre-ruleset wording is superseded by provider read-back                                      |
-| Canonical domain decision          | `docs/decisions/0006-domain-migration-and-product-subdomains.md`                                                                                                |
-| Architecture decision              | `docs/decisions/0007-sgps-architecture-canonical-model.md`                                                                                                      |
-| Canonical architecture model       | `architecture/sgps-model.json`                                                                                                                                  |
-| Derived architecture views         | `architecture/derived-views.json` — `VIEW_IS_DERIVED_NOT_ARCHITECTURE_TRUTH`                                                                                    |
-| Decisions index                    | `docs/decisions/README.md`                                                                                                                                      |
+- **Experience contract:** `docs/superpowers/specs/2026-09-03-blueskyz-web-v1-c1-1-design.md` — substantive design remains authoritative; its pre-implementation status text is historical.
+- **Active C2 experience design:** `docs/superpowers/specs/2026-09-13-c2-cinematic-product-house-design.md` — supersedes conflicting homepage/public-composition guidance from older S+ specs.
+- **Active C2 implementation plan:** `docs/superpowers/plans/2026-09-13-c2-cinematic-product-house-implementation.md` — execute P0–P6 as separate gated waves/PRs.
+- **Historical implementation plan:** `docs/superpowers/plans/2026-09-04-blueskyz-web-v1-c1-1-implementation.md`.
+- **Active residual / owner-gated work:** `docs/current-work.json` — canonical current-work router, including product screenshot/owner facts, Human E4 and RUM privacy decision.
+- **Framework decision:** `docs/decisions/0004-web-framework-selection.md` (`ASTRO_7`).
+- **Source assurance decision:** `docs/decisions/0005-dual-control-source-assurance.md`; historical pre-ruleset wording is superseded by provider read-back.
+- **Canonical domain decision:** `docs/decisions/0006-domain-migration-and-product-subdomains.md`.
+- **Architecture decision:** `docs/decisions/0007-sgps-architecture-canonical-model.md`.
+- **Canonical architecture model:** `architecture/sgps-model.json`.
+- **Derived architecture views:** `architecture/derived-views.json` — `VIEW_IS_DERIVED_NOT_ARCHITECTURE_TRUTH`.
+- **Decisions index:** `docs/decisions/README.md`.
 
 Before C2 runtime work, refresh live `main`, open PRs/issues, `docs/current-work.json`, and any newer ADR/spec/plan. The SHA recorded in a plan is a handoff baseline, never permission to ignore newer repository truth.
 
