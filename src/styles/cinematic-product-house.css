@@ -191,9 +191,15 @@
 }
 
 /* Semantic spacing hierarchy */
-.hero-spacing-tight { gap: 0.5rem; }
-.hero-spacing-normal { gap: 1rem; }
-.hero-spacing-loose { gap: 2rem; }
+.hero-spacing-tight {
+  gap: 0.5rem;
+}
+.hero-spacing-normal {
+  gap: 1rem;
+}
+.hero-spacing-loose {
+  gap: 2rem;
+}
 
 /* -------------------------------------------------
    Decorative enhancements (motion-conditioned)
@@ -261,11 +267,11 @@
   .hero-seam {
     margin: 1.5rem 0;
   }
-  
+
   .horizon-closing {
     margin-top: 3rem;
   }
-  
+
   .hero-actions {
     gap: 0.5rem;
   }

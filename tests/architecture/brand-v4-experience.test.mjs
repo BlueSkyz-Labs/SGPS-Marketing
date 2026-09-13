@@ -6,7 +6,15 @@ test("v4 hero uses the supplied website artwork and flat lockup", () => {
   const hero = readFileSync("src/components/sections/Hero.astro", "utf8");
   const lockup = readFileSync("src/components/brand/BrandLockup.astro", "utf8");
   const site = readFileSync("src/data/site.ts", "utf8");
-  assert.match(hero, /brandAssets\.hero\.(png|webp|avif)/);
+  // C2 (approved design §9 W1 + plan Task 5) transforms the hero from a framed
+  // brand-art card into an integrated Horizon field, so the brand raster is no
+  // longer required IN the hero. Brand fidelity still means the v4 lockup, the
+  // ink plane and the tagline contract — and the removed framed card must not
+  // come back.
+  assert.match(hero, /BrandLockup/);
+  assert.match(hero, /HorizonField/);
+  assert.match(hero, /hero-plane--ink/);
+  assert.doesNotMatch(hero, /hero-art-frame|brandAssets\.hero/);
   assert.match(site, /taglineLead: "Intelligence\. Elevated\."/);
   assert.match(site, /taglineAccent: "Impact\."/);
   assert.match(
