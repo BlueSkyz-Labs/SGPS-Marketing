@@ -135,6 +135,11 @@ export const productSchema = z
     secondaryAction: action.optional(),
     proof: z
       .object({
+        // OPEN DECISION (owner, #125 C1c vs live schema): screenshot is
+        // OPTIONAL here. Flipping to a mandatory floor means replacing
+        // `productScreenshot.optional()` with `productScreenshot` below AND
+        // pointing every published product at a real /products/... asset —
+        // do not flip without the assets, or listing breaks.
         screenshot: productScreenshot.optional(),
         publicUrl: httpsUrl.optional(),
         repositoryUrl: httpsUrl.optional(),
