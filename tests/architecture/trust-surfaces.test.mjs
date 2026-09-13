@@ -60,9 +60,15 @@ test("flagship proof section is evidence-gated and optional", () => {
   assert.match(proof, /data-flagship-proof/);
   assert.match(proof, /capabilities\.slice/);
   assert.doesNotMatch(proof, /jobs\.slice/);
-  const home = readFileSync("src/pages/index.astro", "utf8");
+  // The flagship act must stay wired on the locale homepage. C2 replaces the
+  // C1.1 shelf (FlagshipProof) with the cinematic FlagshipTheatre; both satisfy
+  // the evidence-gated contract, so this guard survives the C2 migration.
+  const home = readFileSync("src/pages/en/index.astro", "utf8");
   assert.match(home, /getFlagshipProduct/);
-  assert.match(home, /FlagshipProof/);
+  assert.match(home, /FlagshipTheatre|FlagshipProof/);
+  // The retired C1.1 shelf must not come back through the legacy root path.
+  const legacyHome = readFileSync("src/pages/index.astro", "utf8");
+  assert.doesNotMatch(legacyHome, /FlagshipProof|FeaturedProducts/);
 });
 
 test("about page publishes approved founder title without invented biography", () => {

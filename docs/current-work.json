@@ -183,10 +183,12 @@
   "residualExternal": [
     "Human E4: OWNER SELF-TESTS (owner directive 2026-09-13, NON-BLOCKER). Agent-side max complete: protocol (docs/evidence/2026-09-12-v3-human-e4.md), session template + red-team template (docs/evidence/templates/). Automated substitutes already in CI (axe matrix, Lighthouse). Real-participant sessions are owner-executed.",
     "VI copy review: OWNER CROSS-CHECKS WITH ANOTHER AGENT (owner directive 2026-09-13, NON-BLOCKER). Agent fixed the 3 weakest spots + EN/VI parity guards; remainder awaits the cross-check audit.",
-    "Trademark/legal clearance and specialty print (brand kit caveats)"
+    "Trademark/legal clearance and specialty print (brand kit caveats)",
+    "Product profile locale routes: OWNER-GATED (product publication). Before the first public product ships, src/pages/{en,vi}/products/[slug].astro must render the real profile (VI copy owner-reviewed). Enforced fail-closed by tests/architecture/product-route-contract.test.mjs; evidence: docs/evidence/2026-09-13-c2-route-hygiene.md. No fact/copy invented to close it."
   ],
   "nextActionable": [
     "C2 P0: record screenshot-floor owner-fact blocker (no product may be invented)",
-    "C2 P1: lock six-act homepage contract (RED) then recompose EN/VI home"
+    "C2 P1: lock six-act homepage contract (RED) then recompose EN/VI home",
+    "Agent: keep the honest empty-registry shell; C2 P2 (art direction), P4 (evidence teaser) and the C2 contract suites are in PRs; continue P3 (flagship storytelling, product-gated) and P5 (secondary surfaces) as separate gated PRs."
   ]
 }
