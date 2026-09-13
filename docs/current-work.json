@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.0",
-  "updatedAt": "2026-09-12",
+  "updatedAt": "2026-09-13",
   "program": "God-tier v3 trust experience + hardening waves",
   "status": "converged-pending-owner-decisions",
   "authorities": {
@@ -116,12 +116,12 @@
   "openOwnerDecisions": [
     {
       "id": "owner-pr-125-126",
-      "question": "Reconcile or supersede owner PRs #125 (v3.1 design) and #126 (principal plan); #126 tip carries a debug test that blocks its own merge.",
-      "blocks": ["promotion-governance", "human-review-governance"]
+      "question": "Merge owner PRs #125 (v3.1 design) and #126 (principal plan). Agent fixed both heads on 2026-09-13 (#126: debug test removed after applying its diff; #125: prettier). Awaiting CI green + owner merge.",
+      "blocks": []
     },
     {
       "id": "screenshot-mandatory-floor",
-      "question": "#125 C1c demands a mandatory local screenshot while the live product schema (and #126 T3) keep screenshot optional. Pick one.",
+      "question": "SCAFFOLDED 2026-09-13 (product-screenshot-floor.test.mjs + OPEN DECISION marker in product-schema.ts). Owner supplies real /products/... assets and flips `productScreenshot.optional()` to required. Frame ready, mandate not flipped.",
       "blocks": ["product-publication-contract"]
     },
     {
@@ -131,17 +131,17 @@
     },
     {
       "id": "rum-provider",
-      "question": "Choose an analytics/RUM provider (transmission intentionally OFF until privacy approval).",
+      "question": "NOT DONE (owner noted 2026-09-13): no analytics/RUM provider chosen; transmission stays OFF. No agent action until privacy decision exists.",
       "blocks": []
     }
   ],
   "residualExternal": [
-    "Human E4 real participants: NOT RUN (protocol at docs/evidence/2026-09-12-v3-human-e4.md)",
-    "VI copy review by owner",
+    "Human E4: OWNER SELF-TESTS (owner directive 2026-09-13, NON-BLOCKER). Agent-side max complete: protocol (docs/evidence/2026-09-12-v3-human-e4.md), session template + red-team template (docs/evidence/templates/). Automated substitutes already in CI (axe matrix, Lighthouse). Real-participant sessions are owner-executed.",
+    "VI copy review: OWNER CROSS-CHECKS WITH ANOTHER AGENT (owner directive 2026-09-13, NON-BLOCKER). Agent fixed the 3 weakest spots + EN/VI parity guards; remainder awaits the cross-check audit.",
     "Trademark/legal clearance and specialty print (brand kit caveats)"
   ],
   "nextActionable": [
-    "Consolidated program ledger: docs/evidence/2026-09-13-hardening-program-summary.md",
-    "Optional UI-4 remainder: atlas finesse, per-page OG images, breadcrumb JSON-LD"
+    "Land owner PRs #125 + #126 after exact-head green",
+    "Owner: screenshot assets + mandate flip; Human E4 self-test; VI cross-check audit"
   ]
 }
