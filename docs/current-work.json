@@ -115,11 +115,6 @@
   ],
   "openOwnerDecisions": [
     {
-      "id": "owner-pr-125-126",
-      "question": "Merge owner PRs #125 (v3.1 design) and #126 (principal plan). Agent fixed both heads on 2026-09-13 (#126: debug test removed after applying its diff; #125: prettier). Awaiting CI green + owner merge.",
-      "blocks": []
-    },
-    {
       "id": "screenshot-mandatory-floor",
       "question": "SCAFFOLDED 2026-09-13 (product-screenshot-floor.test.mjs + OPEN DECISION marker in product-schema.ts). Owner supplies real /products/... assets and flips `productScreenshot.optional()` to required. Frame ready, mandate not flipped.",
       "blocks": ["product-publication-contract"]
@@ -141,7 +136,6 @@
     "Trademark/legal clearance and specialty print (brand kit caveats)"
   ],
   "nextActionable": [
-    "Land owner PRs #125 + #126 after exact-head green",
     "Owner: screenshot assets + mandate flip; Human E4 self-test; VI cross-check audit"
   ]
 }
