@@ -68,9 +68,15 @@ test("open owner decisions are well-formed and never auto-resolved", () => {
   }
 });
 
-test("human/external items stay NOT RUN unless real evidence exists", () => {
+test("human/external items are never promoted by automation", () => {
   const residual = router.residualExternal.join(" ");
-  assert.match(residual, /Human E4 real participants: NOT RUN/);
+  // Allowed states: NOT RUN (initial) or OWNER SELF-TESTS (explicit owner
+  // directive, still non-blocker). Anything claiming agent-run completion fails.
+  assert.match(
+    residual,
+    /Human E4: (real participants: NOT RUN|OWNER SELF-TESTS)/,
+  );
+  assert.doesNotMatch(residual, /Human E4.*(COMPLETE|PASSED|VERIFIED)/);
   const e4Protocol = "docs/evidence/2026-09-12-v3-human-e4.md";
   assert.ok(existsSync(e4Protocol), "the E4 protocol must be present");
   const protocol = readFileSync(e4Protocol, "utf8");
