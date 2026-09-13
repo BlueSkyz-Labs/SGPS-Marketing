@@ -53,8 +53,10 @@ export function hreflangLinks(path: string, siteUrl: string): HreflangLink[] {
   }));
 }
 
+// v3 G4 — Decision Room is a static public route in both locales.
 export const PUBLIC_STATIC_PATHS = [
   "/en/",
+  "/en/decision-room/",
   "/en/products/",
   "/en/about/",
   "/en/contact/",
@@ -62,6 +64,7 @@ export const PUBLIC_STATIC_PATHS = [
   "/en/privacy/",
   "/en/security/",
   "/vi/",
+  "/vi/decision-room/",
   "/vi/products/",
   "/vi/about/",
   "/vi/contact/",

@@ -23,9 +23,12 @@ test.describe("SGPS integrity lens", () => {
         (el as HTMLDetailsElement).open = true;
       });
     await expect(
-      lens.getByRole("link", {
-        name: /GitHub private vulnerability reporting/i,
-      }),
+      lens
+        .locator("[data-evidence-details]")
+        .first()
+        .getByRole("link", {
+          name: /GitHub private vulnerability reporting/i,
+        }),
     ).toHaveAttribute(
       "href",
       "https://github.com/BlueSkyz-Labs/SGPS-Marketing/security/advisories/new",

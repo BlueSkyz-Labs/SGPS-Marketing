@@ -41,10 +41,12 @@ Full Playwright matrix and Lighthouse are promotion/preview evidence, not every-
 
 `.github/workflows/quality-gates.yml` emits two exact-SHA checks:
 
-- **Quality Gates** — frozen install, dependency vulnerability audit, architecture, typecheck, lint, format, static build, client-JS budget and static-link validation.
+- **Quality Gates** — frozen install, dependency vulnerability audit, architecture contracts (`test:architecture`), typecheck, lint, format, static build, then the assurance gates in order: `check:client-budget`, `check:static-links`, `check:publishability`, `check:integrity-firewall`, `verify:git-evidence`, `check:promotion-state`, `check:deployment-evidence`, `check:product-provenance`.
 - **Browser Assurance** — the repository E4 Playwright/axe matrix across Chromium, Firefox, WebKit/Safari-class and mobile Chromium, followed by Lighthouse CI after `Quality Gates` succeeds.
 
-The workflow is intentionally secretless and read-only (`contents: read`), checks out the exact PR head or `main` push SHA with `persist-credentials: false`, and pins external actions to full commit SHAs. It is a source-control assurance layer, not a deployment pipeline.
+The checkout uses `fetch-depth: 0` so `verify:git-evidence` can resolve every cited revision to a real commit object and prove it is reachable from the candidate (no SHA-shaped strings, no squash-orphaned revisions). `check:promotion-state` reports `source`, `deployment` and `public-truth` with `PASS | FAIL | BLOCKED_OWNER_FACT`: an absent owner fact (contact/security email) is blocked, never a failure and never a pass. `check:deployment-evidence` validates the newest post-merge read-back ledger (declared revision + smoke `PASS` + host mention). `check:product-provenance` fails closed if a listed product cites a `sourceRevision` that does not resolve; an empty registry reports `IDLE`, not a silent pass.
+
+The workflow is intentionally secretless and read-only (`contents: read`), checks out the exact PR head or `main` push SHA with `persist-credentials: false`, and pins external actions to full commit SHAs. It is a source-control assurance layer, not a deployment pipeline. The machine-readable security surface (`/.well-known/security.txt`, `_headers` CSP set) is guarded by `tests/architecture/security-surface.test.mjs` and read back at deploy time by `scripts/smoke-production.mjs`.
 
 Active ruleset `main-promotion-governance` (`22500299`) protects `main`: a pull request is required; strict `Quality Gates` and `Browser Assurance` must pass; review conversations must be resolved; non-fast-forward updates and deletion are blocked; and no bypass actors are configured. Issue #8 is resolved/closed. Direct-to-`main` is not a fallback.
 
@@ -99,6 +101,10 @@ preview branches: enabled
 Preview builds may omit `validate:public-truth` when production-only email variables are intentionally absent, but must still build and pass static gates (`check:client-budget`, `check:static-links`).
 
 Do not duplicate Cloudflare deployment or environment-bound production truth in `.github/workflows`; GitHub Actions is limited to source assurance.
+
+### Smoke, observability and rollback
+
+The operational contract lives in `docs/operations/production-smoke-and-rollback.md`: post-deploy verification order (smoke with `SMOKE_COMMIT_SHA`, edge-header spot check, read-back ledger), the deliberately minimal observability model (provider analytics + per-PR gates, **no client-side telemetry**), and the rollback-vs-fix-forward decision path (rollback via the previous Workers version, then mandatory re-verification; fix-forward through the normal PR gates).
 
 Legacy Cloudflare Pages project `blueskyz-labs-portfolio` is superseded by Workers Static Assets. On 2026-09-04 Git deployments were disabled via Cloudflare API (`deployments_enabled=false`, preview=`none`), and `destination_dir` was corrected from `.next` → `dist` so an accidental re-enable cannot revive the Next output contract. Canonical host remains Workers (`blueskyz-web`).
 

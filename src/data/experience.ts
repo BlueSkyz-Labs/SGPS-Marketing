@@ -61,7 +61,7 @@ const VI_PRINCIPLE_NAMES: Record<string, string> = {
 const VI_PRINCIPLE_SUMMARIES: Record<string, string> = {
   Intelligence: "Suy nghĩ sâu sắc. Giải pháp thông minh.",
   Elevation: "Góc nhìn tốt hơn. Tác động lớn hơn.",
-  Trust: "Đáng tin cậy, an toàn, nhất quán.",
+  Trust: "Tuyên bố mở. Bằng chứng kiểm chứng được.",
   Impact: "Giá trị thực. Thay đổi thực.",
 };
 
@@ -94,7 +94,7 @@ const PRINCIPLE_DIMENSIONS: Record<
     },
     people: {
       en: "Raises the ceiling for the team and for the person at the screen.",
-      vi: "Nâng giới hạn cho đội ngũ và cho người ngồi trước màn hình.",
+      vi: "Nâng cao năng lực cho đội ngũ và người dùng.",
     },
     evidence: {
       en: "Reviewed against references and standards before shipping.",
@@ -108,7 +108,7 @@ const PRINCIPLE_DIMENSIONS: Record<
   Trust: {
     product: {
       en: "Security and privacy treated as first-class routes, not afterthoughts.",
-      vi: "Bảo mật và quyền riêng tư là những tuyến đường hạng nhất, không phải phần thêm vào.",
+      vi: "Bảo mật và quyền riêng tư là ưu tiên hàng đầu — không phải phần thêm vào.",
     },
     people: {
       en: "Working recourse paths when something goes wrong.",
@@ -169,3 +169,133 @@ export const PRINCIPLE_MATRIX: PrincipleMatrixEntry[] = BRAND_PRINCIPLES.map(
     dimensions: getDimensions(principle.name),
   }),
 );
+
+/* ------------------------------------------------------------------ */
+/* v3 G5 — Explicit mission paths (Task 15).                            */
+/* Four visitor-chosen missions. Every step points at a live canonical */
+/* route; evidence surfaces are flagged. Missions may only reorder or  */
+/* emphasize journey steps — they never hide facts, and nothing here   */
+/* is ever inferred from identity, history, or tracking.               */
+/* ------------------------------------------------------------------ */
+
+export type MissionId =
+  "evaluate-product" | "understand-blueskyz" | "verify-trust" | "work-with-us";
+
+export interface MissionStep {
+  /** Language-less canonical route from the live registry. */
+  path: string;
+  label: Record<Language, string>;
+  /** Public evidence surfaces a visitor can independently check. */
+  evidenceFirst?: boolean;
+}
+
+export interface Mission {
+  id: MissionId;
+  label: Record<Language, string>;
+  steps: MissionStep[];
+}
+
+export const MISSIONS: Mission[] = [
+  {
+    id: "evaluate-product",
+    label: { en: "Evaluate a product", vi: "Đánh giá sản phẩm" },
+    steps: [
+      {
+        path: "/decision-room/",
+        label: { en: "Decision Room", vi: "Phòng Quyết định" },
+        evidenceFirst: true,
+      },
+      {
+        path: "/products/",
+        label: {
+          en: "Check product status",
+          vi: "Kiểm tra trạng thái sản phẩm",
+        },
+        evidenceFirst: true,
+      },
+      {
+        path: "/about/",
+        label: { en: "About BlueSkyz", vi: "Về BlueSkyz" },
+      },
+      { path: "/contact/", label: { en: "Contact", vi: "Liên hệ" } },
+    ],
+  },
+  {
+    id: "understand-blueskyz",
+    label: { en: "Understand BlueSkyz", vi: "Tìm hiểu BlueSkyz" },
+    steps: [
+      { path: "/about/", label: { en: "About BlueSkyz", vi: "Về BlueSkyz" } },
+      {
+        path: "/products/",
+        label: {
+          en: "Check product status",
+          vi: "Kiểm tra trạng thái sản phẩm",
+        },
+      },
+      { path: "/support/", label: { en: "Support", vi: "Hỗ trợ" } },
+      { path: "/contact/", label: { en: "Contact", vi: "Liên hệ" } },
+    ],
+  },
+  {
+    id: "verify-trust",
+    label: { en: "Verify trust", vi: "Kiểm chứng tin cậy" },
+    steps: [
+      {
+        path: "/security/",
+        label: { en: "Security", vi: "Bảo mật" },
+        evidenceFirst: true,
+      },
+      {
+        path: "/privacy/",
+        label: { en: "Privacy", vi: "Quyền riêng tư" },
+        evidenceFirst: true,
+      },
+      {
+        path: "/decision-room/",
+        label: { en: "Decision Room", vi: "Phòng Quyết định" },
+        evidenceFirst: true,
+      },
+      { path: "/support/", label: { en: "Support", vi: "Hỗ trợ" } },
+    ],
+  },
+  {
+    id: "work-with-us",
+    label: { en: "Work with us", vi: "Làm việc cùng chúng tôi" },
+    steps: [
+      { path: "/contact/", label: { en: "Contact", vi: "Liên hệ" } },
+      { path: "/support/", label: { en: "Support", vi: "Hỗ trợ" } },
+      { path: "/about/", label: { en: "About BlueSkyz", vi: "Về BlueSkyz" } },
+      {
+        path: "/security/",
+        label: { en: "Security", vi: "Bảo mật" },
+        evidenceFirst: true,
+      },
+    ],
+  },
+];
+
+/** Mission → ordered step keys (consumed by the Journey Bar enhancement). */
+export function getMissionOrders(): Record<string, string[]> {
+  return Object.fromEntries(
+    MISSIONS.map((mission) => [
+      mission.id,
+      mission.steps.map((step) =>
+        step.path.split("/").filter(Boolean).join("/"),
+      ),
+    ]),
+  );
+}
+
+/** Mission → step keys that are public evidence surfaces. */
+export function getMissionEvidenceKeys(): Record<string, string[]> {
+  return Object.fromEntries(
+    MISSIONS.filter((mission) =>
+      mission.steps.some((step) => step.evidenceFirst),
+    ).map((mission) => [
+      mission.id,
+      mission.steps
+        .filter((step) => step.evidenceFirst)
+        .map((step) => step.path.split("/").filter(Boolean).join("/")),
+    ]),
+  );
+}

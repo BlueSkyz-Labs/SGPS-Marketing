@@ -1,0 +1,24 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Container from "@/components/layout/Container.astro";
+import PageHeader from "@/components/layout/PageHeader.astro";
+import DecisionRoom from "@/components/experience/DecisionRoom.astro";
+---
+
+<BaseLayout
+  title="Decision Room"
+  description="Compare up to four public facts side by side — sourced statements, trust routes, and their boundaries. No verdicts."
+  path="/en/decision-room/"
+>
+  <section class="py-16 lg:py-24">
+    <Container>
+      <PageHeader
+        title="Decide with sources, not verdicts"
+        lede="This room places public facts next to each other. It produces no verdict and suggests no choice."
+      />
+      <div class="mt-12">
+        <DecisionRoom lang="en" />
+      </div>
+    </Container>
+  </section>
+</BaseLayout>

@@ -1,7 +1,10 @@
 ---
 import { getIntegrityEntriesForSurface } from "@/lib/integrity";
+import { getPublicClaims, getClaimAnchor } from "@/lib/claims";
+import { getPublicProducts } from "@/lib/products";
 import TruthState from "./TruthState.astro";
 import EvidenceDetails from "./EvidenceDetails.astro";
+import SourceTrace from "./SourceTrace.astro";
 import type { Language } from "@/data/site";
 
 interface Props {
@@ -11,10 +14,25 @@ interface Props {
 
 const { surface, lang } = Astro.props;
 const entries = getIntegrityEntriesForSurface(surface);
+const products = (await getPublicProducts()).map((product) => ({
+  slug: product.data.slug,
+  name: product.data.name,
+}));
+const claims = getPublicClaims(products).filter(
+  (resolved) => resolved.claim.surface === surface,
+);
 
 const LABELS = {
-  en: { heading: "Verify this page" },
-  vi: { heading: "Xác minh trang này" },
+  en: {
+    heading: "Verify this page",
+    legend:
+      "Source-linked means every claim on this page cites at least one public source you can open.",
+  },
+  vi: {
+    heading: "Xác minh trang này",
+    legend:
+      "Đã gắn nguồn nghĩa là mọi tuyên bố trên trang này đều dẫn ít nhất một nguồn công khai bạn có thể mở.",
+  },
 } as const;
 ---
 
@@ -29,23 +47,45 @@ const LABELS = {
       <h2 id={`integrity-lens-title-${surface}`} class="integrity-lens__title">
         {LABELS[lang].heading}
       </h2>
+      <p class="integrity-lens__legend">{LABELS[lang].legend}</p>
       <div class="integrity-lens__entries">
-        {entries.map((entry) => (
-          <article data-integrity-entry={entry.id}>
-            <TruthState state={entry.state} lang={lang} />
-            <EvidenceDetails
-              summary={entry.summary[lang]}
-              evidence={entry.evidence.map((ev) => ({
-                label: ev.label[lang],
-                href: ev.href[lang],
-              }))}
-              review={entry.review}
-              boundary={entry.boundary}
-              lang={lang}
-            />
-          </article>
-        ))}
+        {entries.map((entry) => {
+          const linkedClaim = claims.find(
+            (candidate) => candidate.reviewId === entry.id,
+          );
+          return (
+            <article
+              data-integrity-entry={entry.id}
+              id={
+                linkedClaim ? getClaimAnchor(linkedClaim.claim.id) : undefined
+              }
+            >
+              <TruthState state={entry.state} lang={lang} />
+              <EvidenceDetails
+                summary={entry.summary[lang]}
+                evidence={entry.evidence.map((ev) => ({
+                  label: ev.label[lang],
+                  href: ev.href[lang],
+                }))}
+                review={entry.review}
+                boundary={entry.boundary}
+                lang={lang}
+              />
+            </article>
+          );
+        })}
       </div>
+      {claims.length > 0 && (
+        <div class="integrity-lens__traces">
+          {claims.map((resolved) => (
+            <SourceTrace
+              claimId={resolved.claim.id}
+              lang={lang}
+              products={products}
+            />
+          ))}
+        </div>
+      )}
     </section>
   ) : null
 }

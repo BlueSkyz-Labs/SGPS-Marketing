@@ -27,7 +27,7 @@ test("switching navigates for real and preserves route context", async ({
   // Focus semantics remain normal after a real navigation.
   await page.keyboard.press("Tab");
   await expect(
-    page.getByRole("link", { name: /Bỏ qua|Skip to/i }),
+    page.getByRole("link", { name: /Chuyển đến|Bỏ qua|Skip to/i }),
   ).toBeFocused();
 });
 

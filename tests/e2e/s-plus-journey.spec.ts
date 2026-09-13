@@ -86,7 +86,7 @@ test("mobile nav keeps aria-current parity", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto("/vi/about/");
   await page.locator("summary").click();
-  const mobile = page.getByRole("navigation", { name: "Mobile" });
+  const mobile = page.getByRole("navigation", { name: "Di động" });
   await expect(
     mobile.getByRole("link", { name: "Về BlueSkyz" }),
   ).toHaveAttribute("aria-current", "page");

@@ -7,11 +7,20 @@ const lang = getLanguageFromPath(Astro.url.pathname);
 const isVi = lang === "vi";
 const items = buildNavigatorIndex(lang, await getPublicProducts());
 
+const KIND_LABELS: Record<string, string> = {
+  route: isVi ? "Trang" : "Page",
+  trust: isVi ? "Tin cậy" : "Trust",
+  product: isVi ? "Sản phẩm" : "Product",
+  evidence: isVi ? "Bằng chứng" : "Evidence",
+};
+
 const navLabel = isVi ? "Điều hướng nhanh" : "Quick navigation";
 const placeholder = isVi ? "Tìm trang…" : "Search pages…";
 const emptyLabel = isVi
   ? "Không tìm thấy mục phù hợp."
   : "No matching destinations.";
+const resultTemplate = isVi ? "%n kết quả" : "%n results";
+const resultNone = isVi ? "Không có kết quả" : "No results";
 ---
 
 <dialog class="command-navigator" aria-label={navLabel} data-command-navigator>
@@ -37,11 +46,23 @@ const emptyLabel = isVi
               data-search={searchText}
             >
               <a href={item.href}>{item.label}</a>
+              <span class="command-navigator__kind">
+                {KIND_LABELS[item.kind] ?? item.kind}
+              </span>
             </li>
           );
         })
       }
     </ul>
+    <p
+      class="sr-only"
+      role="status"
+      aria-live="polite"
+      data-command-live
+      data-live-template={resultTemplate}
+      data-live-none={resultNone}
+    >
+    </p>
     <p class="command-navigator__empty" data-command-empty hidden>
       {emptyLabel}
     </p>

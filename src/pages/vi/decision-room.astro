@@ -1,0 +1,24 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Container from "@/components/layout/Container.astro";
+import PageHeader from "@/components/layout/PageHeader.astro";
+import DecisionRoom from "@/components/experience/DecisionRoom.astro";
+---
+
+<BaseLayout
+  title="Phòng Quyết định"
+  description="So sánh tối đa bốn dữ kiện công khai cạnh nhau — tuyên bố có nguồn, các tuyến tin cậy và ranh giới. Không điểm số."
+  path="/vi/decision-room/"
+>
+  <section class="py-16 lg:py-24">
+    <Container>
+      <PageHeader
+        title="Quyết định bằng nguồn, không bằng phán quyết"
+        lede="Phòng này đặt các dữ kiện công khai cạnh nhau. Không tạo phán quyết và không gợi ý lựa chọn."
+      />
+      <div class="mt-12">
+        <DecisionRoom lang="vi" />
+      </div>
+    </Container>
+  </section>
+</BaseLayout>

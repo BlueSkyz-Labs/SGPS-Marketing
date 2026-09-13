@@ -40,7 +40,7 @@
       "interfaces": ["https://blueskyzlabs.com"],
       "sourceEvidence": {
         "repository": "BlueSkyz-Labs/SGPS-Marketing",
-        "revision": "6442ce0c64f5d28abfb3718887a886d664d50014",
+        "revision": "f7636a7dbb76bb5463052a64c8c2091a24b6b438",
         "path": "src/"
       }
     },
@@ -72,7 +72,7 @@
       "trustBoundary": "build-time-truth-validation",
       "sourceEvidence": {
         "repository": "BlueSkyz-Labs/SGPS-Marketing",
-        "revision": "6442ce0c64f5d28abfb3718887a886d664d50014",
+        "revision": "7600db7a361e7d309cacadac914ab535de3705f8",
         "path": "src/lib/truth.ts"
       }
     },
@@ -89,7 +89,7 @@
       "interfaces": ["Quality Gates", "Browser Assurance"],
       "sourceEvidence": {
         "repository": "BlueSkyz-Labs/SGPS-Marketing",
-        "revision": "15094e5a2a77a1ff83f38fecedd92e6a00bfa653",
+        "revision": "f7636a7dbb76bb5463052a64c8c2091a24b6b438",
         "path": ".github/workflows/quality-gates.yml"
       }
     },

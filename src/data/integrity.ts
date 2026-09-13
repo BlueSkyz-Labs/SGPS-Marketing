@@ -6,7 +6,7 @@
  * no blanket verification, and no runtime-generated dates.
  */
 
-import { SECURITY_ADVISORY_URL } from "./site";
+import { SECURITY_ADVISORY_URL } from "./site.ts";
 
 export type TruthState =
   "source-linked" | "reviewed" | "changed" | "not-published" | "unavailable";
@@ -17,6 +17,8 @@ export interface LocalizedText {
 }
 
 export interface EvidenceReference {
+  /** Stable public evidence id referenced by the claim fabric. */
+  id: string;
   kind: "route" | "artifact" | "private-reporting";
   href: { en: string; vi: string };
   label: LocalizedText;
@@ -29,6 +31,8 @@ export interface ReviewMetadata {
 }
 
 export interface BoundaryStatement {
+  /** Stable public boundary id referenced by the claim fabric. */
+  id: string;
   claim: LocalizedText;
   doesNotImply: LocalizedText;
 }
@@ -49,6 +53,7 @@ export interface IntegrityEntry {
  * the "does not establish" half names a real, tempting over-reading.
  */
 export const SECURITY_BOUNDARY: BoundaryStatement = {
+  id: "bnd-security-reporting",
   claim: {
     en: "Private vulnerability reporting is available through GitHub security advisories, visible only to maintainers.",
     vi: "Kênh báo cáo lỗ hổng riêng tư khả dụng qua GitHub security advisories, chỉ người bảo trì nhìn thấy.",
@@ -60,6 +65,7 @@ export const SECURITY_BOUNDARY: BoundaryStatement = {
 };
 
 export const PRIVACY_BOUNDARY: BoundaryStatement = {
+  id: "bnd-privacy-collection",
   claim: {
     en: "This site sets no cookies, uses no client storage, and performs no tracking or profiling.",
     vi: "Trang này không đặt cookie, không dùng lưu trữ phía trình duyệt, và không theo dõi hay lập hồ sơ.",
@@ -85,6 +91,7 @@ export const INTEGRITY_ENTRIES: readonly IntegrityEntry[] = [
     },
     evidence: [
       {
+        id: "ev-security-advisory",
         kind: "private-reporting",
         href: { en: SECURITY_ADVISORY_URL, vi: SECURITY_ADVISORY_URL },
         label: {
@@ -93,6 +100,7 @@ export const INTEGRITY_ENTRIES: readonly IntegrityEntry[] = [
         },
       },
       {
+        id: "ev-security-route",
         kind: "route",
         href: { en: "/en/security/", vi: "/vi/security/" },
         label: { en: "Security route", vi: "Trang Bảo mật" },
@@ -111,11 +119,13 @@ export const INTEGRITY_ENTRIES: readonly IntegrityEntry[] = [
     },
     evidence: [
       {
+        id: "ev-privacy-route",
         kind: "route",
         href: { en: "/en/privacy/", vi: "/vi/privacy/" },
         label: { en: "Privacy route", vi: "Trang Quyền riêng tư" },
       },
       {
+        id: "ev-security-route",
         kind: "route",
         href: { en: "/en/security/", vi: "/vi/security/" },
         label: { en: "Security reporting route", vi: "Trang báo cáo bảo mật" },
@@ -133,9 +143,22 @@ export const INTEGRITY_ENTRIES: readonly IntegrityEntry[] = [
     },
     evidence: [
       {
+        id: "ev-products-route",
         kind: "route",
         href: { en: "/en/products/", vi: "/vi/products/" },
         label: { en: "Products route", vi: "Trang Sản phẩm" },
+      },
+      {
+        id: "ev-public-manifest",
+        kind: "artifact",
+        href: {
+          en: "/.well-known/sgps.json",
+          vi: "/.well-known/sgps.json",
+        },
+        label: {
+          en: "Public SGPS manifest",
+          vi: "Bản kê SGPS công khai",
+        },
       },
     ],
   },

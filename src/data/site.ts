@@ -127,7 +127,7 @@ export const BRAND_PRINCIPLES = [
   },
   {
     name: "Trust",
-    summary: "Reliable, secure, consistent.",
+    summary: "Open claims. Verifiable evidence.",
   },
   {
     name: "Impact",

@@ -44,7 +44,7 @@ test("integrity entries reference only public, localized facts (v3 S+5)", () => 
     /sha|workflow|branch protection|run id|runner|deploy/i,
     "entries must not use internal governance jargon as public proof",
   );
-  const ids = [...block.matchAll(/id: "([^"]+)"/g)].map((m) => m[1]);
+  const ids = [...block.matchAll(/^ {4}id: "([^"]+)"/gm)].map((m) => m[1]);
   assert.ok(ids.length >= 3, "expected at least three modeled surfaces");
   assert.equal(new Set(ids).size, ids.length, "entry ids must be unique");
   const surfaces = [...block.matchAll(/surface: "([^"]+)"/g)].map((m) => m[1]);
@@ -123,4 +123,61 @@ test("authored boundary statements are localized and concrete", () => {
     assert.match(block, /en: "/);
     assert.match(block, /vi: "/);
   }
+});
+
+test("provenance search derives from public data only and transmits no query", () => {
+  const navigator = read("src/lib/navigator.ts");
+  const script = read("src/scripts/command-navigator.ts");
+  const component = read("src/components/experience/CommandNavigator.astro");
+  assert.match(
+    navigator,
+    /INTEGRITY_ENTRIES/,
+    "evidence items derive from integrity data",
+  );
+  assert.match(navigator, /"evidence"/, "an evidence kind must exist");
+  assert.match(navigator, /TRUST_LEDGER/, "trust data is a provenance source");
+  for (const source of [navigator, script]) {
+    assert.doesNotMatch(source, /openai|anthropic|llm|embedding|vector/i);
+    assert.doesNotMatch(source, /fetch\(|XMLHttpRequest|sendBeacon/);
+  }
+  // The navigator event carries action/kind only — never the typed query.
+  assert.doesNotMatch(script, /detail:[^}]*query/is);
+  assert.match(component, /command-navigator__kind/);
+  assert.match(component, /evidence: isVi \? "Bằng chứng" : "Evidence"/);
+});
+
+/* ------------------------------------------------------------------ */
+/* v3 G6 — Atlas V2 derives from the Claim Fabric, never duplicating   */
+/* claim content and never fabricating product nodes.                  */
+/* ------------------------------------------------------------------ */
+
+test("atlas claim/evidence nodes derive from the fabric only", () => {
+  const atlas = readFileSync("src/lib/atlas.ts", "utf8");
+  assert.match(atlas, /getPublicClaims/);
+  assert.match(atlas, /from "@\/lib\/claims"/);
+  // No direct data-layer import: the fabric lib is the only entry point.
+  assert.doesNotMatch(atlas, /from "@\/data\/claims"/);
+  assert.match(atlas, /kind: "claim"/);
+  assert.match(atlas, /kind: "evidence"/);
+});
+
+test("atlas does not duplicate claim statements", () => {
+  const atlas = readFileSync("src/lib/atlas.ts", "utf8");
+  const claimsData = readFileSync("src/data/claims.ts", "utf8");
+  const statements = [...claimsData.matchAll(/statement: \{\s*en: "([^"]+)"/g)]
+    .map((match) => match[1])
+    .filter((value) => value !== undefined);
+  assert.ok(statements.length > 0, "claims data must expose statements");
+  for (const statement of statements) {
+    assert.ok(
+      !atlas.includes(statement),
+      `atlas must not inline claim statement: ${statement.slice(0, 40)}…`,
+    );
+  }
+});
+
+test("product nodes exist only when the public registry does", () => {
+  const atlas = readFileSync("src/lib/atlas.ts", "utf8");
+  assert.match(atlas, /product:\$\{product\.data\.slug\}/);
+  assert.match(atlas, /for \(const product of products\)/);
 });

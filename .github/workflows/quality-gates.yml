@@ -24,6 +24,7 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
           persist-credentials: false
+          fetch-depth: 0
       - name: Set up Node 24.20.0
         uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
         with:
@@ -50,6 +51,18 @@ jobs:
         run: pnpm check:client-budget
       - name: Static links
         run: pnpm check:static-links
+      - name: Publishability compiler
+        run: pnpm check:publishability
+      - name: Integrity regression firewall
+        run: pnpm check:integrity-firewall
+      - name: Git evidence provenance
+        run: pnpm verify:git-evidence
+      - name: Promotion assurance state
+        run: pnpm check:promotion-state
+      - name: Deployment evidence ledger
+        run: pnpm check:deployment-evidence
+      - name: Product provenance
+        run: pnpm check:product-provenance
 
   browser-assurance:
     name: Browser Assurance
@@ -62,6 +75,7 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
           persist-credentials: false
+          fetch-depth: 0
       - name: Set up Node 24.20.0
         uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
         with:
@@ -77,11 +91,26 @@ jobs:
       - name: Install Playwright runtimes
         timeout-minutes: 10
         run: |
+          set -e
+          installed=0
           for attempt in 1 2 3; do
-            pnpm exec playwright install --with-deps chromium firefox webkit && break
+            if pnpm exec playwright install --with-deps chromium firefox webkit; then
+              installed=1
+              break
+            fi
             echo "Attempt $attempt failed; waiting 20s before retry..."
             sleep 20
           done
+          if [ "$installed" != "1" ]; then
+            echo "Playwright runtime installation failed after 3 attempts" >&2
+            exit 1
+          fi
+          node -e "const {chromium,firefox,webkit}=require('@playwright/test');
+            Promise.all([chromium.launch(),firefox.launch(),webkit.launch()])
+              .then((browsers)=>Promise.all(browsers.map((b)=>b.close())))
+              .then(()=>console.log('All three browser runtimes launched successfully'))
+              .catch((error)=>{console.error(error);process.exit(1);});"
+
       - name: Playwright and axe assurance
         run: pnpm test:e2e
       - name: Lighthouse CI

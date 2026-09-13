@@ -15,7 +15,11 @@ const currentPath = Astro.url.pathname;
 const currentLang = getLanguageFromPath(currentPath);
 ---
 
-<div class="flex items-center gap-1" role="navigation" aria-label="Language">
+<div
+  class="flex items-center gap-1"
+  role="navigation"
+  aria-label={currentLang === "vi" ? "Ngôn ngữ" : "Language"}
+>
   {
     SUPPORTED_LANGUAGES.map((lang) => {
       const isActive = currentLang === lang;
