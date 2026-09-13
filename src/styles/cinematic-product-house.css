@@ -1,0 +1,288 @@
+/* C2 Cinematic Product House focused stylesheet
+ * Defines semantic classes for Ink/Porcelain act rhythm, hero layering,
+ * horizon seams, and closing signature.
+ * Extension point for future wave UI refinements.
+ */
+
+/* -------------------------------------------------
+   Hero semantic layers
+   ------------------------------------------------- */
+
+/* Ink plane — dark narrative foreground, anchors hero content */
+.hero-plane--ink {
+  background:
+    radial-gradient(
+      56rem 32rem at 82% 42%,
+      color-mix(in srgb, var(--brand-cobalt) 22%, transparent),
+      transparent 62%
+    ),
+    linear-gradient(165deg, #12182a 0%, var(--brand-ink) 42%, #070b14 100%);
+  color: var(--brand-porcelain);
+}
+
+/* Hero content layering — positions lockup above horizon */
+.hero-content {
+  position: relative;
+  z-index: 2;
+}
+
+/* -------------------------------------------------
+   Horizon seam and field
+   ------------------------------------------------- */
+
+/* Horizon container — integrates with hero plane */
+.horizon-container {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  overflow: hidden;
+}
+
+/* Horizon signature field — reinforces house identity */
+.horizon-signature {
+  position: relative;
+  z-index: 2;
+  pointer-events: none;
+  opacity: 0.85;
+  transition: opacity var(--motion-normal) var(--motion-ease-standard);
+}
+
+.horizon-signature:hover {
+  opacity: 1;
+}
+
+/* Reduced motion neutraliser for horizon decorative travel */
+@media (prefers-reduced-motion: reduce) {
+  .horizon-signature {
+    transition: none !important;
+    opacity: 0.85 !important;
+  }
+}
+
+/* -------------------------------------------------
+   Ink/Porcelain act rhythm
+   ------------------------------------------------- */
+
+/* Ink acts — dark narrative blocks (30-38% of visual field) */
+.hero-plane--ink .hero-act {
+  color: var(--brand-porcelain);
+  text-shadow: 0 1px 3px color-mix(in srgb, var(--brand-ink) 60%, transparent);
+}
+
+/* Porcelain acts — light editorial blocks (55-63% of visual field) */
+.hero-plane--porcelain .hero-act {
+  color: var(--text-primary);
+}
+
+/* Semantic contrast between act layers */
+.hero-act {
+  position: relative;
+  z-index: 3;
+}
+
+/* -------------------------------------------------
+   Brand-to-product seam
+   ------------------------------------------------- */
+
+/* Seam transitions between hero field and flagship theatre */
+.hero-seam {
+  position: relative;
+  z-index: 4;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    color-mix(in srgb, var(--brand-cobalt) 70%, transparent) 20%,
+    color-mix(in srgb, var(--brand-porcelain) 88%, transparent) 50%,
+    color-mix(in srgb, var(--brand-cobalt) 70%, transparent) 80%,
+    transparent 100%
+  );
+  opacity: 0.85;
+  margin: 2rem 0;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .hero-seam {
+    transition: opacity var(--motion-slow) var(--motion-ease-standard);
+  }
+  .hero-seam:hover {
+    opacity: 1;
+  }
+}
+
+/* -------------------------------------------------
+   Closing signature (second horizon use)
+   ------------------------------------------------- */
+
+/* Minimal decorative closing field — hidden from AT */
+.horizon-closing {
+  position: relative;
+  z-index: 5;
+  pointer-events: none;
+  opacity: 0.7;
+  margin-top: 4rem;
+}
+
+/* Override existing horizon-field opacity for signature */
+.horizon-closing .horizon-field {
+  opacity: 0.85;
+}
+
+/* -------------------------------------------------
+   Motion-safe defaults
+   ------------------------------------------------- */
+
+/* All decorative transforms require motion preference */
+.hero-transform {
+  transition-property: transform, opacity, filter;
+  transition-duration: var(--motion-normal);
+  transition-timing-function: var(--motion-ease-standard);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .hero-transform {
+    transition: inherit;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-transform {
+    transition: none !important;
+    transform: none !important;
+    opacity: 1 !important;
+  }
+}
+
+/* -------------------------------------------------
+   Essential content visibility
+   ------------------------------------------------- */
+
+/* Hero critical content must be visible immediately without animation gating */
+.hero-critical-copy,
+.hero-primary-action,
+.hero-secondary-action {
+  opacity: 1;
+  transform: none;
+  visibility: visible;
+  transition: none;
+}
+
+/* -------------------------------------------------
+   Semantic text hierarchy (required for narrative)
+   ------------------------------------------------- */
+
+.hero-headline {
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  color: var(--brand-porcelain);
+}
+
+.hero-tagline {
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  line-height: 1.3;
+}
+
+.hero-supporting {
+  font-weight: 400;
+  line-height: 1.5;
+  opacity: 0.9;
+}
+
+/* Semantic spacing hierarchy */
+.hero-spacing-tight { gap: 0.5rem; }
+.hero-spacing-normal { gap: 1rem; }
+.hero-spacing-loose { gap: 2rem; }
+
+/* -------------------------------------------------
+   Decorative enhancements (motion-conditioned)
+   ------------------------------------------------- */
+
+/* Atmosphere overlay only with motion preference */
+.hero-atmosphere {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(
+      48rem 28rem at 78% 18%,
+      color-mix(in srgb, var(--brand-cobalt) 14%, transparent),
+      transparent 68%
+    ),
+    radial-gradient(
+      36rem 22rem at 8% 88%,
+      color-mix(in srgb, var(--brand-ink) 8%, transparent),
+      transparent 70%
+    );
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .hero-atmosphere {
+    animation: hero-atmosphere-settle 700ms var(--motion-ease-standard) both;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-atmosphere {
+    animation: none !important;
+  }
+}
+
+@keyframes hero-atmosphere-settle {
+  from {
+    opacity: 0.72;
+    transform: translate3d(0, 0.4%, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+/* -------------------------------------------------
+   Action grouping semantic structure
+   ------------------------------------------------- */
+
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+  justify-content: flex-start;
+  margin-top: 2rem;
+}
+
+/* -------------------------------------------------
+   Responsive horizon integration
+   ------------------------------------------------- */
+
+@media (max-width: 767px) {
+  .hero-seam {
+    margin: 1.5rem 0;
+  }
+  
+  .horizon-closing {
+    margin-top: 3rem;
+  }
+  
+  .hero-actions {
+    gap: 0.5rem;
+  }
+}
+
+/* -------------------------------------------------
+   Decorative signature (closing) motion neutral
+   ------------------------------------------------- */
+
+.horizon-closing .horizon-field {
+  animation: none !important;
+  opacity: 0.8 !important;
+  transform: none !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .horizon-closing .horizon-field {
+    opacity: 0.7 !important;
+  }
+}
