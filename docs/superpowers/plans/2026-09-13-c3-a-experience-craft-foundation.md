@@ -25,12 +25,14 @@
 ### Task 1: Inventory C2 visual primitives and write C3 craft contracts
 
 **Files:**
+
 - Read: `src/styles/global.css`
 - Read: C2 focused stylesheet if present
 - Read: global header, product image, navigation, and route-link components
 - Create: `tests/architecture/c3-craft-contract.test.mjs`
 
 **Interfaces:**
+
 - Produces: source-level guard for one image grammar, one transition grammar, and one interaction grammar.
 
 - [ ] **Step 1: write failing assertions for C3 craft boundaries**
@@ -61,12 +63,14 @@ node --test tests/architecture/c3-craft-contract.test.mjs
 ### Task 2: Build Cinematic Screenshot Art Direction System (S2)
 
 **Files:**
+
 - Create or refine: `src/components/product/ProductVisual.astro`
 - Modify product theatre/cards/profile consumers to use it
 - Modify: `src/styles/c3-craft.css`
 - Create: `tests/e2e/c3-product-visual.spec.ts`
 
 **Interfaces:**
+
 - Consumes: real screenshot `{src, alt, width, height}` and optional authored focal metadata already approved by product truth.
 - Produces: one responsive, intrinsic-size, accessible product visual primitive.
 
@@ -91,11 +95,13 @@ Perspective/settle effects are decorative only; image visibility never depends o
 ### Task 3: Implement Editorial Typography v2 (S3)
 
 **Files:**
+
 - Modify: `src/styles/c3-craft.css`
 - Modify shared heading/prose primitives only where needed
 - Extend: bilingual/text-zoom/text-spacing E2E suites
 
 **Interfaces:**
+
 - Produces: shared type roles for display, section, product, evidence, meta, and long-form reading.
 
 - [ ] **Step 1: define semantic type roles using existing font family/tokens**
@@ -113,11 +119,13 @@ npx playwright test tests/e2e/text-zoom.spec.ts tests/e2e/text-spacing.spec.ts t
 ### Task 4: Build Scene-Aware Global Header (S4)
 
 **Files:**
+
 - Modify global header component
 - Modify: `src/styles/c3-craft.css`
 - Create: `tests/e2e/c3-header-scenes.spec.ts`
 
 **Interfaces:**
+
 - Consumes: authored page/section surface markers only.
 - Produces: stable header with contrast/density variants; navigation labels/order remain unchanged.
 
@@ -132,11 +140,13 @@ Use explicit page/section classes or a minimal observer only if CSS cannot prese
 ### Task 5: Formalize Route Transition Grammar (S5)
 
 **Files:**
+
 - Modify product/global link/image components as required
 - Modify: `src/styles/c3-craft.css`
 - Create: `tests/e2e/c3-route-transitions.spec.ts`
 
 **Interfaces:**
+
 - Produces: named native transition roles for Home→Product, Product→Evidence, Product→Product, EN↔VI.
 
 - [ ] **Step 1: test ordinary navigation with transition support absent**
@@ -154,12 +164,14 @@ npx playwright test tests/e2e/c3-route-transitions.spec.ts --project=chromium --
 ### Task 6: Author Mobile Cinematic Composition (S9)
 
 **Files:**
+
 - Modify C2 homepage/product scene layout styles
 - Modify shared product visual only where mobile rules belong
 - Extend: `tests/e2e/c3-product-visual.spec.ts`
 - Extend mobile-overflow suites
 
 **Interfaces:**
+
 - Produces: deliberate vertical mobile composition, not compressed desktop spatial layout.
 
 - [ ] **Step 1: capture baseline at 390 and 320px**
@@ -171,11 +183,13 @@ npx playwright test tests/e2e/c3-route-transitions.spec.ts --project=chromium --
 ### Task 7: Complete Microinteraction Quality Pass (S10)
 
 **Files:**
+
 - Modify shared ButtonLink/link/disclosure/tab-like controls actually used by C3/C2
 - Modify: `src/styles/c3-craft.css`
 - Create: `tests/e2e/c3-microinteractions.spec.ts`
 
 **Interfaces:**
+
 - Produces: purpose-based states for hover, focus, active/pressed, disclosure, selection, image focus, and loading feedback.
 
 - [ ] **Step 1: write keyboard/pointer state tests**
