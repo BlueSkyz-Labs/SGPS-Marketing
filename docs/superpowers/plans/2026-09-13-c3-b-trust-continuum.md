@@ -23,11 +23,13 @@
 ### Task 1: Define product-to-proof selector contract (G4)
 
 **Files:**
+
 - Read: canonical product, claim, evidence, boundary, passport and provenance modules
 - Create or extend: `src/lib/product-proof.ts`
 - Create: `tests/architecture/c3-product-proof.test.mjs`
 
 **Interfaces:**
+
 - Consumes: product slug/capability identifiers plus canonical public Claim Fabric/evidence selectors.
 - Produces: `getProductProofLinks(productSlug, capabilityId)` returning only resolvable public proof items with explicit truth state/boundary metadata.
 
@@ -48,11 +50,13 @@ Do not author new claims inside `product-proof.ts`.
 ### Task 2: Add contextual Product-to-Proof UI (G4)
 
 **Files:**
+
 - Create: `src/components/integrity/ProductProofLink.astro`
 - Integrate into C2/C3 product capability surfaces only where proof exists
 - Create: `tests/e2e/c3-product-proof.spec.ts`
 
 **Interfaces:**
+
 - Consumes: output from `getProductProofLinks`.
 - Produces: compact contextual proof affordance with boundary/truth wording and deep evidence destination.
 
@@ -65,11 +69,13 @@ Do not author new claims inside `product-proof.ts`.
 ### Task 3: Build Evidence Drawer / Evidence Peek (S8)
 
 **Files:**
+
 - Create: `src/components/integrity/EvidencePeek.astro`
 - Optional small enhancement module: `src/scripts/evidence-peek.ts`
 - Create: `tests/e2e/c3-evidence-peek.spec.ts`
 
 **Interfaces:**
+
 - Consumes: canonical proof item(s).
 - Produces: native document disclosure as baseline; optional desktop side sheet that never replaces canonical evidence routes.
 
@@ -84,12 +90,14 @@ Do not author new claims inside `product-proof.ts`.
 ### Task 4: Define Evidence-Aware Choreography grammar (G8)
 
 **Files:**
+
 - Extend C3 craft stylesheet or create focused trust-motion tokens
 - Extend truth-state component only if needed
 - Create: `tests/architecture/c3-truth-choreography.test.mjs`
 - Create: `tests/e2e/c3-truth-choreography.spec.ts`
 
 **Interfaces:**
+
 - Consumes: existing truth-state vocabulary.
 - Produces: optional presentation classes such as `truth-known`, `truth-preview`, `truth-unavailable`, `truth-unknown` without changing semantic labels.
 
@@ -104,12 +112,14 @@ Do not author new claims inside `product-proof.ts`.
 ### Task 5: Build Agent-Readable Product & Trust Passport (G9)
 
 **Files:**
+
 - Create: `src/lib/agent-passport.ts`
 - Create route such as: `src/pages/.well-known/product-trust.json.ts` or the repository-approved machine route
 - Create: `tests/architecture/c3-agent-passport.test.mjs`
 - Extend static-link/manifest tests where relevant
 
 **Interfaces:**
+
 - Consumes: canonical public products, claims, evidence references, public routes, review/freshness metadata already approved.
 - Produces: deterministic versioned JSON with no internal/private fields.
 
@@ -140,6 +150,7 @@ node --test tests/architecture/c3-agent-passport.test.mjs
 ### Task 6: Red-team Trust Continuum
 
 **Files:**
+
 - Create evidence ledger under `docs/evidence/`
 
 - [ ] **Step 1: test forged/unknown capability ids**
