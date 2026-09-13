@@ -23,10 +23,12 @@
 ### Task 1: Define public release-story schema
 
 **Files:**
+
 - Create: `src/lib/release-schema.ts` or the repository-standard content schema location
 - Create: `tests/architecture/c3-release-schema.test.mjs`
 
 **Interfaces:**
+
 - Produces a validated record with fields such as `id`, `productSlug`, `title`, `summary`, `releaseDate`, `sourceRevision/sourceUrl`, `changes[]`, optional `productSurface`, and public evidence references.
 
 - [ ] **Step 1: write tests requiring resolvable product/source identity**
@@ -38,10 +40,12 @@
 ### Task 2: Build release source adapter
 
 **Files:**
+
 - Create: `src/lib/release-adapter.ts`
 - Create: `tests/architecture/c3-release-adapter.test.mjs`
 
 **Interfaces:**
+
 - Consumes: explicitly approved release/changelog/source records.
 - Produces: validated public release-story candidates; no prose-generation authority.
 
@@ -56,11 +60,13 @@ If no reliable source exists, mark C3-F source-blocked and do not fabricate samp
 ### Task 3: Build release index and story page
 
 **Files:**
+
 - Create: public release index/detail routes under the approved IA
 - Create: `src/components/release/ReleaseStory.astro`
 - Create: `tests/e2e/c3-release-story.spec.ts`
 
 **Interfaces:**
+
 - Consumes: validated release-story records.
 - Produces: accessible release index/detail experience with canonical product/evidence links.
 
@@ -79,10 +85,12 @@ If bilingual release copy is required by the live experience contract, do not pu
 ### Task 4: Add homepage/product-page release signal with restraint
 
 **Files:**
+
 - Modify C3/C2 product surfaces only if a real current release exists
 - Create targeted E2E assertions
 
 **Interfaces:**
+
 - Produces: one concise recent-release affordance, not a feed wall.
 
 - [ ] **Step 1: show no release chrome when there is no valid release**
