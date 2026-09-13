@@ -23,10 +23,12 @@
 ### Task 1: Define explicit intent model (G5)
 
 **Files:**
+
 - Create: `src/lib/experience-intent.ts`
 - Create: `tests/architecture/c3-experience-intent.test.mjs`
 
 **Interfaces:**
+
 - Produces enum-like intents: `explore-products`, `evaluate-product`, `verify-trust`, `understand-architecture`, `work-with-us`.
 - Produces pure selector `prioritizeForIntent(items, intent)` that reorders/promotes existing items without inventing/hiding required truth.
 
@@ -41,12 +43,14 @@
 ### Task 2: Build Visitor-Controlled Experience Graph UI (G5)
 
 **Files:**
+
 - Create: `src/components/experience/IntentControl.astro`
 - Optional: `src/scripts/experience-intent.ts`
 - Modify only presentation/order hooks on C3/C2 surfaces
 - Create: `tests/e2e/c3-experience-intent.spec.ts`
 
 **Interfaces:**
+
 - Consumes: current intent enum and existing routes/actions.
 - Produces: explicit control and local page presentation priority.
 
@@ -61,10 +65,12 @@
 ### Task 3: Define fidelity tier resolver (G6)
 
 **Files:**
+
 - Create: `src/lib/experience-fidelity.ts`
 - Create: `tests/architecture/c3-experience-fidelity.test.mjs`
 
 **Interfaces:**
+
 - Produces `static-premium | restrained | cinematic` from explicit preference overrides and standards-based capability/preferences.
 
 - [ ] **Step 1: write deterministic resolver tests**
@@ -82,11 +88,13 @@ Prefer CSS/media queries where possible; JS only reads what is necessary to choo
 ### Task 4: Apply Adaptive Fidelity Engine (G6)
 
 **Files:**
+
 - Create: `src/components/experience/FidelityBoundary.astro` only if a component boundary is useful
 - Modify C3 craft/living-product enhancement entry points
 - Create: `tests/e2e/c3-fidelity.spec.ts`
 
 **Interfaces:**
+
 - Consumes: fidelity tier.
 - Produces: page/root data attribute or class controlling optional enhancement level.
 
