@@ -175,7 +175,11 @@
     {
       "id": "screenshot-mandatory-floor",
       "question": "C2 DIRECTION APPROVED 2026-09-13. Public-product screenshot floor is approved in principle, but execution remains evidence-gated: supply or verify a real /products/... screenshot and real product facts before flipping the public publication contract. Never fabricate a product or screenshot to unblock C2.",
-      "blocks": ["product-publication-contract", "c2-full-flagship-theatre", "c3-c-living-product-full-outcome"]
+      "blocks": [
+        "product-publication-contract",
+        "c2-full-flagship-theatre",
+        "c3-c-living-product-full-outcome"
+      ]
     },
     {
       "id": "human-review-governance",
