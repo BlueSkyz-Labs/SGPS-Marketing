@@ -26,11 +26,13 @@
 ### Task 1: Write and approve the Concierge Architecture / Privacy / Security ADR
 
 **Files:**
+
 - Create: `docs/decisions/<next>-verifiable-product-concierge.md`
 - Update: `docs/decisions/README.md`
 - Update architecture model/views only if the approved runtime adds a new deployed component
 
 **Interfaces:**
+
 - Produces: explicit decisions for model/provider, runtime, retrieval, source freshness, prompt-injection controls, citations, logging/retention, privacy, rate limits, abuse controls, cost ceiling, outage fallback, and deployment ownership.
 
 - [ ] **Step 1: inventory constraints and providers without committing code**
@@ -46,10 +48,12 @@ If no decision exists, mark C3-E blocked and stop runtime implementation.
 ### Task 2: Build deterministic public concierge corpus adapter
 
 **Files:**
+
 - Create: `src/lib/concierge-corpus.ts`
 - Create: `tests/architecture/c3-concierge-corpus.test.mjs`
 
 **Interfaces:**
+
 - Consumes: canonical public product, claim/evidence, support/security/privacy, release and route selectors.
 - Produces: bounded public corpus records `{id, kind, title, text, publicUrl, freshness?, sourceIds[]}`.
 
@@ -64,10 +68,12 @@ Reject unpublished products, internal repo paths, workflow names, private eviden
 ### Task 3: Define retrieval and citation policy
 
 **Files:**
+
 - Create: `src/lib/concierge-policy.ts`
 - Create: `tests/architecture/c3-concierge-policy.test.mjs`
 
 **Interfaces:**
+
 - Produces policy functions for corpus allowlist, minimum source support, answerable/out-of-scope classification, and citation requirements.
 
 - [ ] **Step 1: write tests for supported, ambiguous, unknown, adversarial, and prompt-injection queries**
@@ -79,10 +85,12 @@ Reject unpublished products, internal repo paths, workflow names, private eviden
 ### Task 4: Implement runtime adapter behind approved ADR
 
 **Files:**
+
 - Determined by approved ADR; keep provider code isolated from public presentation components
 - Create provider contract tests and failure-path tests
 
 **Interfaces:**
+
 - Consumes: sanitized visitor question + bounded retrieved public corpus context.
 - Produces structured answer `{answer, citations[], confidenceState}` where confidenceState is descriptive support state, not a quality score.
 
@@ -97,11 +105,13 @@ Reject unpublished products, internal repo paths, workflow names, private eviden
 ### Task 5: Build accessible concierge UI
 
 **Files:**
+
 - Create: `src/components/concierge/ProductConcierge.astro`
 - Create minimal client module only if required
 - Create: `tests/e2e/c3-concierge.spec.ts`
 
 **Interfaces:**
+
 - Consumes: concierge API/adapter; falls back to deterministic search/navigation.
 - Produces: accessible question input, source-linked answer, unknown/outage states.
 
@@ -116,6 +126,7 @@ Reject unpublished products, internal repo paths, workflow names, private eviden
 ### Task 6: Red-team prompt injection and data leakage
 
 **Files:**
+
 - Create dedicated security test fixtures/evidence ledger
 
 - [ ] **Step 1: submit instructions requesting system prompt/private repository facts**
