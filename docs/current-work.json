@@ -1,12 +1,14 @@
 {
   "schemaVersion": "1.0",
   "updatedAt": "2026-09-13",
-  "program": "God-tier v3 trust foundation + C2 Cinematic Product House",
-  "status": "c2-planned-pending-product-truth",
+  "program": "God-tier v3 trust foundation + C2 Cinematic Product House + C3 Living Verifiable Product Experience",
+  "status": "c2-planned-c3-successor-planned",
   "authorities": {
     "experienceContract": "docs/superpowers/specs/2026-09-03-blueskyz-web-v1-c1-1-design.md",
     "c2Design": "docs/superpowers/specs/2026-09-13-c2-cinematic-product-house-design.md",
     "c2Plan": "docs/superpowers/plans/2026-09-13-c2-cinematic-product-house-implementation.md",
+    "c3Design": "docs/superpowers/specs/2026-09-13-c3-living-verifiable-product-experience-design.md",
+    "c3MasterPlan": "docs/superpowers/plans/2026-09-13-c3-living-verifiable-product-experience-master.md",
     "v3Plan": "docs/superpowers/plans/2026-09-12-god-tier-v3-trust-experience-implementation.md",
     "agentGuide": "AGENTS.md",
     "architectureModel": "architecture/sgps-model.json"
@@ -119,13 +121,65 @@
       "name": "C2 Cinematic Product House — P0 Product Truth through P6 Elite QA",
       "status": "PLANNED",
       "evidence": "docs/superpowers/plans/2026-09-13-c2-cinematic-product-house-implementation.md"
+    },
+    {
+      "id": "c3-master-plan",
+      "name": "C3 Living Verifiable Product Experience — post-C2 successor program",
+      "status": "PLANNED",
+      "evidence": "docs/superpowers/plans/2026-09-13-c3-living-verifiable-product-experience-master.md"
+    },
+    {
+      "id": "c3-a-craft",
+      "name": "C3-A Experience Craft Foundation",
+      "status": "PLANNED",
+      "evidence": "docs/superpowers/plans/2026-09-13-c3-a-experience-craft-foundation.md"
+    },
+    {
+      "id": "c3-b-trust",
+      "name": "C3-B Trust Continuum",
+      "status": "PLANNED",
+      "evidence": "docs/superpowers/plans/2026-09-13-c3-b-trust-continuum.md"
+    },
+    {
+      "id": "c3-c-product",
+      "name": "C3-C Living Product System",
+      "status": "PLANNED",
+      "evidence": "docs/superpowers/plans/2026-09-13-c3-c-living-product-system.md"
+    },
+    {
+      "id": "c3-d-adaptive",
+      "name": "C3-D Adaptive Experience",
+      "status": "PLANNED",
+      "evidence": "docs/superpowers/plans/2026-09-13-c3-d-adaptive-experience.md"
+    },
+    {
+      "id": "c3-e-concierge",
+      "name": "C3-E Verifiable Product Concierge",
+      "status": "PLANNED",
+      "evidence": "docs/superpowers/plans/2026-09-13-c3-e-verifiable-concierge.md"
+    },
+    {
+      "id": "c3-f-release",
+      "name": "C3-F Living Release Publication",
+      "status": "PLANNED",
+      "evidence": "docs/superpowers/plans/2026-09-13-c3-f-living-release-publication.md"
+    },
+    {
+      "id": "c3-g-spatial",
+      "name": "C3-G Spatial Product House Halo Experiment",
+      "status": "PLANNED",
+      "evidence": "docs/superpowers/plans/2026-09-13-c3-g-spatial-halo-experiment.md"
     }
   ],
   "openOwnerDecisions": [
     {
       "id": "screenshot-mandatory-floor",
       "question": "C2 DIRECTION APPROVED 2026-09-13. Public-product screenshot floor is approved in principle, but execution remains evidence-gated: supply or verify a real /products/... screenshot and real product facts before flipping the public publication contract. Never fabricate a product or screenshot to unblock C2.",
-      "blocks": ["product-publication-contract", "c2-full-flagship-theatre"]
+      "blocks": [
+        "product-publication-contract",
+        "c2-full-flagship-theatre",
+        "c3-c-living-product-full-outcome"
+      ]
     },
     {
       "id": "human-review-governance",
@@ -136,6 +190,16 @@
       "id": "rum-provider",
       "question": "NOT DONE (owner noted 2026-09-13): no analytics/RUM provider chosen; transmission stays OFF. No agent action until privacy decision exists.",
       "blocks": []
+    },
+    {
+      "id": "c3-concierge-runtime-privacy-provider",
+      "question": "C3 direction is approved, but concierge runtime/model provider, retrieval runtime, log-retention/privacy policy, abuse controls and cost ceiling require a dedicated ADR and owner approval before remote AI implementation.",
+      "blocks": ["c3-e-concierge-runtime"]
+    },
+    {
+      "id": "c3-spatial-webgl-go-gate",
+      "question": "C3 spatial concept is approved as an experiment. WebGL/3D dependency remains conditional on native 2.5D evidence, measured user value, performance/accessibility budget and a separate ADR/owner GO decision.",
+      "blocks": ["c3-g-webgl-runtime"]
     }
   ],
   "residualExternal": [
@@ -144,6 +208,7 @@
     "Trademark/legal clearance and specialty print (brand kit caveats)"
   ],
   "nextActionable": [
-    "Agent: refresh live main, read C2 design + plan, then execute P0 product-truth inventory and P1 homepage composition in separate gated PRs; if real product screenshot/facts are unavailable, record the blocker and continue only the honest empty-registry C2 shell."
+    "Agent: execute C2 first. Refresh live main, read C2 design + plan, then execute P0 product-truth inventory and P1 homepage composition in separate gated PRs; if real product screenshot/facts are unavailable, record the blocker and continue only the honest empty-registry C2 shell.",
+    "Post-C2: activate only one C3 child plan after verifying its C2 dependencies. Default first C3 wave is C3-A Experience Craft Foundation; C3-E Concierge and C3-G WebGL remain separately gated."
   ]
 }
