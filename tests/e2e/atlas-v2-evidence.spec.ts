@@ -1,10 +1,12 @@
+// C2: discovery surfaces (Intent Lens, Atlas) moved off the homepage to the
+// product index (design §8) — assertions retargeted, coverage preserved.
 import { expect, test } from "@playwright/test";
 
 test.describe("atlas v2 evidence constellation", () => {
   test("EN atlas shows claim and evidence nodes, zero product nodes", async ({
     page,
   }) => {
-    await page.goto("/en/");
+    await page.goto("/en/products/");
     const atlas = page.locator("[data-atlas]");
     await expect(atlas).toBeVisible();
 
@@ -27,7 +29,7 @@ test.describe("atlas v2 evidence constellation", () => {
   test("claim and evidence nodes link only to live public surfaces", async ({
     page,
   }) => {
-    await page.goto("/en/");
+    await page.goto("/en/products/");
     const atlas = page.locator("[data-atlas]");
     const claims = atlas.locator('[data-atlas-kind="claim"] a');
     expect(await claims.count()).toBe(2);
@@ -48,7 +50,7 @@ test.describe("atlas v2 evidence constellation", () => {
   test("semantic node list is authoritative and the SVG mirrors it", async ({
     page,
   }) => {
-    await page.goto("/en/");
+    await page.goto("/en/products/");
     const atlas = page.locator("[data-atlas]");
     const listCount = await atlas.locator("[data-atlas-node]").count();
     const desktopCircles = await atlas
@@ -68,7 +70,7 @@ test.describe("atlas v2 evidence constellation", () => {
   test("SVG stays decorative and hidden from assistive technology", async ({
     page,
   }) => {
-    await page.goto("/en/");
+    await page.goto("/en/products/");
     const svgs = page.locator("[data-atlas] svg");
     expect(await svgs.count()).toBe(2);
     for (const svg of await svgs.all()) {
@@ -78,7 +80,7 @@ test.describe("atlas v2 evidence constellation", () => {
   });
 
   test("VI atlas localizes the new node kinds", async ({ page }) => {
-    await page.goto("/vi/");
+    await page.goto("/vi/products/");
     const atlas = page.locator("[data-atlas]");
     await expect(atlas.getByText("Tuyên bố").first()).toBeVisible();
     await expect(atlas.getByText("Bằng chứng").first()).toBeVisible();
@@ -88,7 +90,7 @@ test.describe("atlas v2 evidence constellation", () => {
   test("no-JS atlas is complete", async ({ browser }) => {
     const context = await browser.newContext({ javaScriptEnabled: false });
     const page = await context.newPage();
-    await page.goto("/en/");
+    await page.goto("/en/products/");
     const atlas = page.locator("[data-atlas]");
     await expect(atlas).toBeVisible();
     expect(await atlas.locator("[data-atlas-node]").count()).toBeGreaterThan(5);
@@ -99,7 +101,7 @@ test.describe("atlas v2 evidence constellation", () => {
   test("no animation on atlas nodes (reduced-motion safe)", async ({
     page,
   }) => {
-    await page.goto("/en/");
+    await page.goto("/en/products/");
     const name = await page
       .locator("[data-atlas-node]")
       .first()
@@ -112,7 +114,7 @@ test.describe("atlas v2 evidence constellation", () => {
       page,
     }) => {
       await page.setViewportSize({ width, height: 900 });
-      await page.goto("/en/");
+      await page.goto("/en/products/");
       const overflow = await page.evaluate(
         () =>
           document.documentElement.scrollWidth -

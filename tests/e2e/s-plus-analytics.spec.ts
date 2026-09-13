@@ -1,3 +1,5 @@
+// C2: discovery surfaces (Intent Lens, Atlas) moved off the homepage to the
+// product index (design §8) — assertions retargeted, coverage preserved.
 import { expect, test, type Page } from "@playwright/test";
 
 const instrument = async (page: Page) => {
@@ -32,7 +34,7 @@ const telemetry = (page: Page) =>
 test("intent selection emits a validated intent_selected event", async ({
   page,
 }) => {
-  await page.goto("/en/");
+  await page.goto("/en/products/");
   await page.locator("[data-intent-lens]").waitFor();
   await instrument(page);
   await page
@@ -52,7 +54,7 @@ test("intent selection emits a validated intent_selected event", async ({
 test("command navigator open and result activation emit typed events", async ({
   page,
 }) => {
-  await page.goto("/en/");
+  await page.goto("/en/products/");
   await instrument(page);
   await page.keyboard.press("Control+k");
   await expect
@@ -76,6 +78,8 @@ test("command navigator open and result activation emit typed events", async ({
 test("trust, journey, and atlas activations emit surface events", async ({
   page,
 }) => {
+  // Trust Ledger lives in the homepage trust act (C2 keeps compact trust
+  // there); Atlas is the exploration tool on the product index.
   await page.goto("/en/");
   await instrument(page);
   await page
@@ -85,20 +89,25 @@ test("trust, journey, and atlas activations emit surface events", async ({
       (el as HTMLDetailsElement).open = true;
     });
   await page.locator("[data-trust-ledger] a").first().click();
-  await page.locator("[data-atlas-node] a").first().click();
   await expect
     .poll(async () => JSON.stringify(await telemetry(page)))
     .toContain('"trust_route_opened"');
-  const events = await telemetry(page);
+  const trustEvents = await telemetry(page);
   expect(
-    events.some(
+    trustEvents.some(
       (event) =>
         event.name === "trust_route_opened" &&
         (event as { properties?: { surface?: string } }).properties?.surface ===
           "privacy",
     ),
   ).toBe(true);
-  expect(events.some((event) => event.name === "atlas_node_opened")).toBe(true);
+
+  await page.goto("/en/products/");
+  await instrument(page);
+  await page.locator("[data-atlas-node] a").first().click();
+  await expect
+    .poll(async () => JSON.stringify(await telemetry(page)))
+    .toContain('"atlas_node_opened"');
 });
 
 test("journey activations emit journey_action_opened with destination", async ({
@@ -121,7 +130,7 @@ test("journey activations emit journey_action_opened with destination", async ({
 });
 
 test("free-text search input never enters telemetry", async ({ page }) => {
-  await page.goto("/en/");
+  await page.goto("/en/products/");
   await instrument(page);
   await page.keyboard.press("Control+k");
   await page.locator("[data-command-input]").fill("supersecret-value");
@@ -131,7 +140,7 @@ test("free-text search input never enters telemetry", async ({ page }) => {
 });
 
 test("duplicate events inside the dedupe window collapse", async ({ page }) => {
-  await page.goto("/en/");
+  await page.goto("/en/products/");
   await page.locator("[data-intent-lens]").waitFor();
   await instrument(page);
   // Three rapid toggles (press, unpress, press) executed in a single task so
@@ -155,6 +164,7 @@ test("duplicate events inside the dedupe window collapse", async ({ page }) => {
 test("navigation succeeds even when a telemetry listener throws", async ({
   page,
 }) => {
+  // The Trust Ledger's public routes live in the homepage trust act.
   await page.goto("/en/");
   await page.evaluate(() => {
     document.addEventListener("blueskyz:telemetry", () => {

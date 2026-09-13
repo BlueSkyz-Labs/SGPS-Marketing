@@ -33,6 +33,10 @@ const JOURNEY: Record<string, JourneyStep[]> = {
     { segment: "security", label: { en: "Security", vi: "Bảo mật" } },
   ],
   products: [
+    {
+      segment: "decision-room",
+      label: { en: "Decision Room", vi: "Phòng Quyết định" },
+    },
     { segment: "about", label: { en: "About BlueSkyz", vi: "Về BlueSkyz" } },
     { segment: "contact", label: { en: "Contact", vi: "Liên hệ" } },
   ],
