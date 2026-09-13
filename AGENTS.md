@@ -5,8 +5,10 @@ Trusted current source of truth only:
 - **Experience contract:** `docs/superpowers/specs/2026-09-03-blueskyz-web-v1-c1-1-design.md` — substantive design remains authoritative; its pre-implementation status text is historical.
 - **Active C2 experience design:** `docs/superpowers/specs/2026-09-13-c2-cinematic-product-house-design.md` — supersedes conflicting homepage/public-composition guidance from older S+ specs.
 - **Active C2 implementation plan:** `docs/superpowers/plans/2026-09-13-c2-cinematic-product-house-implementation.md` — execute P0–P6 as separate gated waves/PRs.
+- **Approved post-C2 C3 design:** `docs/superpowers/specs/2026-09-13-c3-living-verifiable-product-experience-design.md` — successor direction only after the relevant C2 dependencies are live.
+- **C3 master implementation plan:** `docs/superpowers/plans/2026-09-13-c3-living-verifiable-product-experience-master.md` — routes C3 into independent child plans; never execute C3 as one mega-PR.
 - **Historical implementation plan:** `docs/superpowers/plans/2026-09-04-blueskyz-web-v1-c1-1-implementation.md`.
-- **Active residual / owner-gated work:** `docs/current-work.json` — canonical current-work router, including product screenshot/owner facts, Human E4 and RUM privacy decision.
+- **Active residual / owner-gated work:** `docs/current-work.json` — canonical current-work router, including product screenshot/owner facts, Human E4, RUM privacy decision, C3 concierge/provider gate and spatial/WebGL gate.
 - **Framework decision:** `docs/decisions/0004-web-framework-selection.md` (`ASTRO_7`).
 - **Source assurance decision:** `docs/decisions/0005-dual-control-source-assurance.md`; historical pre-ruleset wording is superseded by provider read-back.
 - **Canonical domain decision:** `docs/decisions/0006-domain-migration-and-product-subdomains.md`.
@@ -15,7 +17,7 @@ Trusted current source of truth only:
 - **Derived architecture views:** `architecture/derived-views.json` — `VIEW_IS_DERIVED_NOT_ARCHITECTURE_TRUTH`.
 - **Decisions index:** `docs/decisions/README.md`.
 
-Before C2 runtime work, refresh live `main`, open PRs/issues, `docs/current-work.json`, and any newer ADR/spec/plan. The SHA recorded in a plan is a handoff baseline, never permission to ignore newer repository truth.
+Before any runtime work, refresh live `main`, open PRs/issues, `docs/current-work.json`, and any newer ADR/spec/plan. The SHA recorded in a plan is a handoff baseline, never permission to ignore newer repository truth.
 
 ## C2 execution doctrine
 
@@ -27,6 +29,18 @@ Before C2 runtime work, refresh live `main`, open PRs/issues, `docs/current-work
 - Prefer HTML/CSS/SVG/native View Transitions. No animation framework or WebGL dependency without a later approved architectural decision and evidence-backed GO gate.
 - Static/no-JS and reduced-motion states must independently meet the content/action contract.
 - Execute C2 as separate P0–P6 waves/PRs; do not create a mega-PR.
+
+## C3 successor doctrine
+
+- **Living product. Verifiable intelligence. Adaptive premium experience.**
+- C3 is post-C2. Do not start a C3 runtime subsystem until its required C2 surface/truth/performance foundation is objectively present and green.
+- C3 is decomposed into independent plans: Experience Craft, Trust Continuum, Living Product, Adaptive Experience, Verifiable Concierge, Living Release Publication, and optional Spatial Halo.
+- Presentation may reorder, reveal, animate, compare or summarize canonical truth; it may never create product/claim/evidence/release truth.
+- Visitor intent, reading mode and fidelity are presentation state only and must not mutate lifecycle, claim, evidence or assurance state.
+- The Verifiable Concierge is a separately gated application subsystem. No remote AI/model implementation before a dedicated architecture/privacy/security ADR and owner approval of provider/runtime/logging/abuse/cost decisions.
+- Spatial/WebGL is an optional hypothesis-driven halo experiment. Native HTML/CSS/SVG comes first; NO-GO is a valid successful outcome.
+- Agent-readable public manifests are derived views only and must not leak unpublished products, private evidence, internal paths, secrets or unsupported assurance claims.
+- C3-A is the default first post-C2 runtime wave. C3-E Concierge and C3-G WebGL must never block lower-risk C3 completion.
 
 ## Hard rules
 
