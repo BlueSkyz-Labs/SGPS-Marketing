@@ -24,9 +24,11 @@
 ### Task 1: Write the experiment hypothesis and GO metrics
 
 **Files:**
+
 - Create: `docs/evidence/<date>-c3-spatial-halo-hypothesis.md`
 
 **Interfaces:**
+
 - Produces: measurable hypothesis and rejection criteria before prototype code.
 
 - [ ] **Step 1: state the user problem**
@@ -52,11 +54,13 @@ NO-GO if product comprehension/navigation worsens, mobile becomes compromised, a
 ### Task 2: Build native 2.5D prototype first
 
 **Files:**
+
 - Create isolated experimental component under `src/components/experimental/`
 - Create focused experimental stylesheet
 - Create: `tests/e2e/c3-spatial-native.spec.ts`
 
 **Interfaces:**
+
 - Consumes: canonical public products and ProductVisual primitive.
 - Produces: removable spatial composition over semantic product links.
 
@@ -85,9 +89,11 @@ If native 2.5D provides sufficient value, stop. Do not escalate to WebGL just be
 ### Task 4: WebGL architecture gate — optional only
 
 **Files:**
+
 - Create ADR only if native evidence supports further experimentation
 
 **Interfaces:**
+
 - Produces: explicit dependency/runtime/fallback/budget decision, not implementation permission by implication.
 
 - [ ] **Step 1: justify why native CSS/SVG is insufficient**
@@ -101,6 +107,7 @@ If native 2.5D provides sufficient value, stop. Do not escalate to WebGL just be
 ### Task 5: If approved, build isolated WebGL prototype
 
 **Files:**
+
 - Determined by approved ADR
 - Must remain isolated and removable
 
