@@ -7,7 +7,7 @@ Status: **BLOCKED_OWNER_FACT** for product activation; router + honest record de
 ## Task 1 — live refresh and C2 execution router
 
 - Live `main` at execution start: `386aaac` (`docs(c2): approve Cinematic Product
-  House design + execution plan (#157)`) — the planning PR, merged only after
+House design + execution plan (#157)`) — the planning PR, merged only after
   exact-head `Quality Gates` + `Browser Assurance` were both SUCCESS and the PR
   was conflict-free (`mergeable_state: clean`). No ruleset bypass.
 - `docs/current-work.json` now carries the C2 program: exactly one active wave
@@ -21,12 +21,12 @@ Status: **BLOCKED_OWNER_FACT** for product activation; router + honest record de
 
 Facts inspected, not assumed:
 
-| Fact source | Observed state |
-| --- | --- |
-| `src/content/products/` | Only `README.md` — **zero product entries** |
-| `public/products/` | **Directory does not exist** — no real screenshot asset anywhere in the repo |
-| `src/lib/product-schema.ts` | `proof.screenshot` optional; public path requires 2–3 capabilities; local `/products/...` path enforced by regex |
-| Owner-approved product facts | None available in this session |
+| Fact source                  | Observed state                                                                                                   |
+| ---------------------------- | ---------------------------------------------------------------------------------------------------------------- |
+| `src/content/products/`      | Only `README.md` — **zero product entries**                                                                      |
+| `public/products/`           | **Directory does not exist** — no real screenshot asset anywhere in the repo                                     |
+| `src/lib/product-schema.ts`  | `proof.screenshot` optional; public path requires 2–3 capabilities; local `/products/...` path enforced by regex |
+| Owner-approved product facts | None available in this session                                                                                   |
 
 **Determination: `BLOCKED_OWNER_FACT`.** No candidate has the minimum truth a
 public listing requires — owner-approved identity/outcome, lifecycle,
