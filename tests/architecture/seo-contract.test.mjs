@@ -46,6 +46,7 @@ test("robots and sitemap endpoints exist and reference public routes only", () =
   assert.match(robots, /Disallow: \//);
   assert.match(sitemap, /getPublicProducts/);
   assert.match(sitemap, /PUBLIC_STATIC_PATHS/);
+  assert.match(sitemap, /getEvidencePassportIds/);
   assert.doesNotMatch(sitemap, /portfolio\.tonydemo\.com/);
 });
 

@@ -24,6 +24,7 @@ export function initCommandNavigator(root: ParentNode = document): void {
   dialog.setAttribute("data-command-ready", "");
 
   const input = dialog.querySelector("[data-command-input]");
+  const live = dialog.querySelector("[data-command-live]");
   const empty = dialog.querySelector("[data-command-empty]");
   const items = Array.from(dialog.querySelectorAll("[data-command-item]"));
   if (!(input instanceof HTMLInputElement) || items.length === 0) {
@@ -47,6 +48,14 @@ export function initCommandNavigator(root: ParentNode = document): void {
     }
     if (empty instanceof HTMLElement) {
       empty.hidden = visibleCount > 0;
+    }
+    if (live instanceof HTMLElement) {
+      const none = live.getAttribute("data-live-none") ?? "";
+      const template = live.getAttribute("data-live-template") ?? "%n";
+      live.textContent =
+        visibleCount === 0
+          ? none
+          : template.replace("%n", String(visibleCount));
     }
   };
 
@@ -133,13 +142,24 @@ export function initCommandNavigator(root: ParentNode = document): void {
   // included); falls back to the first visible trigger.
   dialog.addEventListener("close", () => {
     const fallback = root.querySelector("[data-command-trigger]");
-    const target =
-      invoker && invoker.isConnected
-        ? invoker
-        : fallback instanceof HTMLElement
-          ? fallback
-          : null;
-    target?.focus();
+    const compactSummary = root.querySelector("header details summary");
+    // Focus must land on something visible: the invoking control when it is
+    // still rendered, otherwise the compact menu summary (mobile close).
+    const candidates: Array<unknown> = [invoker, fallback, compactSummary];
+    const target = candidates.find(
+      (candidate): candidate is HTMLElement =>
+        candidate instanceof HTMLElement &&
+        candidate.isConnected &&
+        // checkVisibility() understands content-visibility:hidden (closed
+        // <details>), where offsetParent still reports a box.
+        candidate.checkVisibility(),
+    );
     invoker = null;
+    // The native dialog close restores focus to the previously focused
+    // element first (which may be hidden inside a closed menu); apply our
+    // visible-candidate focus on the next task so it wins deterministically.
+    setTimeout(() => {
+      target?.focus();
+    }, 0);
   });
 }

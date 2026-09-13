@@ -17,8 +17,8 @@ const COPY = {
     vi: "Công bố cần bằng chứng",
   },
   body: {
-    en: "A product appears in this registry only after its public evidence — a working build, a real screenshot, and a live destination — is ready to verify. Until then this registry stays quiet by design.",
-    vi: "Sản phẩm chỉ xuất hiện trong danh mục này khi bằng chứng công khai của nó — bản chạy thật, ảnh chụp thật và một đích đến đang hoạt động — sẵn sàng để xác minh. Trước đó, danh mục giữ im lặng có chủ đích.",
+    en: "A product appears in this registry only after its public evidence — at least one verifiable artifact such as a working build, a real screenshot, or a live destination — is ready to verify. Until then this registry stays quiet by design.",
+    vi: "Sản phẩm chỉ xuất hiện trong danh mục này khi bằng chứng công khai của nó — ít nhất một hiện vật có thể xác minh như bản chạy thật, ảnh chụp thật hoặc một đích đến đang hoạt động — sẵn sàng để xác minh. Trước đó, danh mục giữ im lặng có chủ đích.",
   },
 } as const;
 ---
@@ -28,7 +28,9 @@ const COPY = {
   data-proof-first-empty-state
 >
   <h2 class="text-lg font-semibold tracking-tight">{COPY.heading[lang]}</h2>
-  <p class="mt-3 text-[var(--text-secondary)]">{COPY.body[lang]}</p>
+  <p class="mt-3 leading-[1.65] text-[var(--text-secondary)]">
+    {COPY.body[lang]}
+  </p>
   <div class="mt-6 flex flex-wrap gap-3">
     <ButtonLink href={primary.href}>{primary.label}</ButtonLink>
     <ButtonLink href={secondary.href} variant="secondary">

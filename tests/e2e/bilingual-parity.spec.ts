@@ -41,7 +41,7 @@ test.describe("bilingual parity — live routes (empty registry)", () => {
     page,
   }) => {
     await page.goto("/vi/");
-    const viCta = page.locator('header nav[aria-label="Primary"] a').last();
+    const viCta = page.locator('header nav[aria-label="Chính"] a').last();
     await expect(viCta).toHaveAttribute("href", /^\/vi\//);
 
     await page.goto("/en/");
@@ -152,6 +152,12 @@ test.describe("bilingual parity — product-present fixture", () => {
       "href",
       "/en/products/fixture-product/",
     );
+    await page
+      .locator(".evidence-details__more")
+      .first()
+      .evaluate((el) => {
+        (el as HTMLDetailsElement).open = true;
+      });
     await expect(
       page.getByText("Verified public artifact — not a concept mock.").first(),
     ).toBeVisible();
@@ -169,6 +175,12 @@ test.describe("bilingual parity — product-present fixture", () => {
       "href",
       "/vi/products/fixture-product/",
     );
+    await page
+      .locator(".evidence-details__more")
+      .first()
+      .evaluate((el) => {
+        (el as HTMLDetailsElement).open = true;
+      });
     await expect(
       page
         .getByText(

@@ -1,0 +1,60 @@
+---
+import { getClaimTrace, type ClaimTraceStep } from "@/lib/claims";
+import type { Language } from "@/data/site";
+
+interface Props {
+  claimId: string;
+  lang: Language;
+  products: { slug: string; name: string }[];
+}
+
+const { claimId, lang, products } = Astro.props;
+const trace = getClaimTrace(claimId, products);
+
+const ROLE_LABELS: Record<ClaimTraceStep["kind"], Record<Language, string>> = {
+  claim: { en: "Claim", vi: "Tuyên bố" },
+  evidence: { en: "Evidence", vi: "Bằng chứng" },
+  boundary: { en: "Boundary", vi: "Ranh giới" },
+  surface: { en: "Surface", vi: "Bề mặt" },
+};
+
+const HEADING: Record<Language, string> = {
+  en: "Source to surface",
+  vi: "Từ nguồn đến bề mặt",
+};
+---
+
+{
+  trace ? (
+    <div class="source-trace" data-source-trace={claimId}>
+      <h3 class="source-trace__title">{HEADING[lang]}</h3>
+      <ol class="source-trace__list">
+        {trace.map((step) => (
+          <li
+            class="source-trace__step"
+            data-trace-step={step.kind}
+            id={step.kind === "evidence" ? `evidence-${step.id}` : undefined}
+          >
+            <span class="source-trace__role">
+              {ROLE_LABELS[step.kind][lang]}
+            </span>
+            {step.href ? (
+              <a
+                href={step.href[lang]}
+                rel={
+                  /^https?:\/\//i.test(step.href[lang])
+                    ? "noopener noreferrer"
+                    : undefined
+                }
+              >
+                {step.label[lang]}
+              </a>
+            ) : (
+              <span>{step.label[lang]}</span>
+            )}
+          </li>
+        ))}
+      </ol>
+    </div>
+  ) : null
+}

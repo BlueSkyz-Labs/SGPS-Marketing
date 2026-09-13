@@ -16,13 +16,26 @@ const kindLabels: Record<AtlasNodeKind, string> = {
   brand: isVi ? "Thương hiệu" : "Brand",
   principle: isVi ? "Nguyên tắc" : "Principle",
   trust: isVi ? "Tin cậy" : "Trust",
+  claim: isVi ? "Tuyên bố" : "Claim",
+  evidence: isVi ? "Bằng chứng" : "Evidence",
   product: isVi ? "Sản phẩm" : "Product",
+};
+
+// Decorative SVG labels are truncated; the semantic node list below is the
+// authoritative source of full labels.
+const truncate = (text: string, max: number): string => {
+  if (text.length <= max) return text;
+  const cut = text.slice(0, max - 1);
+  const lastSpace = cut.lastIndexOf(" ");
+  const body =
+    lastSpace >= Math.floor(max * 0.55) ? cut.slice(0, lastSpace) : cut;
+  return `${body}…`;
 };
 
 const heading = "BlueSkyz Atlas";
 const lede = isVi
-  ? "Sơ đồ hóa từ chính những nguồn trang này công bố: thương hiệu mẹ, các nguyên tắc và những bề mặt tin cậy có thể xác minh. Nút sản phẩm chỉ xuất hiện khi sản phẩm thật được công bố."
-  : "Mapped from the same sources this site publishes: the masterbrand, its principles, and verifiable trust surfaces. Product nodes appear only when real products are public.";
+  ? "Sơ đồ hóa từ chính những nguồn trang này công bố: thương hiệu mẹ, các nguyên tắc, những bề mặt tin cậy có thể xác minh, và các tuyên bố công khai cùng bằng chứng mà chúng dẫn chiếu. Nút sản phẩm chỉ xuất hiện khi sản phẩm thật được công bố."
+  : "Mapped from the same sources this site publishes: the masterbrand, its principles, verifiable trust surfaces, and the public claims with the evidence they cite. Product nodes appear only when real products are public.";
 
 const emptyLabel = isVi
   ? "Chưa có sản phẩm công khai nào được công bố."
@@ -43,6 +56,16 @@ nodes
     desktopPositions.set(node.id, { x: 130 + index * 190, y: 276 });
   });
 nodes
+  .filter((node) => node.kind === "claim")
+  .forEach((node, index) => {
+    desktopPositions.set(node.id, { x: 560, y: 120 + index * 90 });
+  });
+nodes
+  .filter((node) => node.kind === "evidence")
+  .forEach((node, index) => {
+    desktopPositions.set(node.id, { x: 440 + index * 70, y: 250 });
+  });
+nodes
   .filter((node) => node.kind === "product")
   .forEach((node, index) => {
     desktopPositions.set(node.id, { x: 600, y: 96 + index * 44 });
@@ -61,6 +84,16 @@ nodes
   .filter((node) => node.kind === "trust")
   .forEach((node, index) => {
     mobilePositions.set(node.id, { x: 60 + index * 120, y: 392 });
+  });
+nodes
+  .filter((node) => node.kind === "claim")
+  .forEach((node, index) => {
+    mobilePositions.set(node.id, { x: 290, y: 226 + index * 74 });
+  });
+nodes
+  .filter((node) => node.kind === "evidence")
+  .forEach((node, index) => {
+    mobilePositions.set(node.id, { x: 96 + index * 62, y: 330 });
   });
 nodes
   .filter((node) => node.kind === "product")
@@ -101,8 +134,8 @@ nodes
               y1={from.y}
               x2={to.x}
               y2={to.y}
-              stroke="color-mix(in srgb, var(--brand-cobalt) 35%, transparent)"
-              stroke-width="1"
+              stroke="color-mix(in srgb, var(--brand-cobalt) 45%, transparent)"
+              stroke-width="1.25"
             />
           );
         })
@@ -117,26 +150,30 @@ nodes
               <circle
                 cx={point.x}
                 cy={point.y}
-                r={isBrand ? 10 : 6}
+                r={isBrand ? 10 : node.kind === "claim" ? 8 : 6}
                 fill={
                   isBrand
                     ? "var(--brand-cobalt)"
-                    : node.kind === "trust"
+                    : node.kind === "trust" || node.kind === "evidence"
                       ? "var(--brand-porcelain)"
                       : "color-mix(in srgb, var(--brand-cobalt) 55%, white)"
                 }
-                stroke="color-mix(in srgb, var(--brand-cobalt) 45%, transparent)"
-                stroke-width="1"
+                stroke="color-mix(in srgb, var(--brand-cobalt) 55%, transparent)"
+                stroke-width="1.25"
               />
-              <text
-                x={point.x}
-                y={point.y - 18}
-                text-anchor="middle"
-                font-size="12"
-                fill="var(--text-muted)"
-              >
-                {node.label}
-              </text>
+              {node.kind !== "evidence" ? (
+                <text
+                  x={point.x}
+                  y={point.y - 18}
+                  text-anchor="middle"
+                  font-size="13"
+                  fill="var(--text-secondary)"
+                >
+                  {node.kind === "claim"
+                    ? truncate(node.label, 16)
+                    : node.label}
+                </text>
+              ) : null}
             </g>
           );
         })
@@ -160,8 +197,8 @@ nodes
               y1={from.y}
               x2={to.x}
               y2={to.y}
-              stroke="color-mix(in srgb, var(--brand-cobalt) 35%, transparent)"
-              stroke-width="1"
+              stroke="color-mix(in srgb, var(--brand-cobalt) 45%, transparent)"
+              stroke-width="1.25"
             />
           );
         })
@@ -176,26 +213,30 @@ nodes
               <circle
                 cx={point.x}
                 cy={point.y}
-                r={isBrand ? 11 : 6}
+                r={isBrand ? 11 : node.kind === "claim" ? 8 : 6}
                 fill={
                   isBrand
                     ? "var(--brand-cobalt)"
-                    : node.kind === "trust"
+                    : node.kind === "trust" || node.kind === "evidence"
                       ? "var(--brand-porcelain)"
                       : "color-mix(in srgb, var(--brand-cobalt) 55%, white)"
                 }
-                stroke="color-mix(in srgb, var(--brand-cobalt) 45%, transparent)"
-                stroke-width="1"
+                stroke="color-mix(in srgb, var(--brand-cobalt) 55%, transparent)"
+                stroke-width="1.25"
               />
-              <text
-                x={point.x}
-                y={point.y - 18}
-                text-anchor="middle"
-                font-size="14"
-                fill="var(--text-muted)"
-              >
-                {node.label}
-              </text>
+              {node.kind !== "evidence" ? (
+                <text
+                  x={point.x}
+                  y={point.y - 18}
+                  text-anchor="middle"
+                  font-size="14"
+                  fill="var(--text-muted)"
+                >
+                  {node.kind === "claim"
+                    ? truncate(node.label, 18)
+                    : node.label}
+                </text>
+              ) : null}
             </g>
           );
         })
@@ -203,7 +244,7 @@ nodes
     </svg>
 
     <ul
-      class="mt-8 divide-y divide-[var(--border-subtle)] rounded-lg border border-[var(--border-subtle)] bg-white"
+      class="atlas-list mt-8 divide-y divide-[var(--border-subtle)] rounded-lg border border-[var(--border-subtle)] bg-white"
     >
       {
         nodes.map((node) => (

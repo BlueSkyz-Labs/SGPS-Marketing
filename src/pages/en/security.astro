@@ -4,14 +4,16 @@ import Container from "@/components/layout/Container.astro";
 import PageHeader from "@/components/layout/PageHeader.astro";
 import SafeAction from "@/components/integrity/SafeAction.astro";
 import BoundaryCard from "@/components/integrity/BoundaryCard.astro";
+import BilingualMirror from "@/components/integrity/BilingualMirror.astro";
 import { SECURITY_BOUNDARY } from "@/data/integrity";
 import { SITE, SECURITY_ADVISORY_URL } from "@/data/site";
 ---
 
 <BaseLayout
   title="Security"
-  description="Security contact and reporting for BlueSkyz Labs."
+  description="Report vulnerabilities privately to BlueSkyz Labs via GitHub Security Advisories, with published evidence and boundaries you can verify yourself."
   path="/en/security/"
+  surface="security"
 >
   <section class="py-16 lg:py-24">
     <Container>
@@ -49,6 +51,9 @@ import { SITE, SECURITY_ADVISORY_URL } from "@/data/site";
         No bug-bounty, SLA, or certification badges are published without
         verified evidence.
       </p>
+      <div class="mt-12 max-w-3xl">
+        <BilingualMirror lang="en" />
+      </div>
     </Container>
   </section>
 </BaseLayout>

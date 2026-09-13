@@ -35,3 +35,12 @@ test("footer exposes trust routes", async ({ page }) => {
   await expect(footer.getByRole("link", { name: "Privacy" })).toBeVisible();
   await expect(footer.getByRole("link", { name: "Security" })).toBeVisible();
 });
+
+test("VI shell exposes a localized skip link", async ({ page }) => {
+  await page.goto("/vi/");
+  await expect(
+    page.getByRole("link", { name: "Chuyển đến nội dung chính" }),
+  ).toBeAttached();
+  // CSS locator: the primary nav is display-hidden at mobile widths.
+  await expect(page.locator('header nav[aria-label="Chính"]')).toBeAttached();
+});

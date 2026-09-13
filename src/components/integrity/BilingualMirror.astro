@@ -1,0 +1,60 @@
+---
+import { MIRROR_PAIRS } from "@/data/integrity";
+import type { Language } from "@/data/site";
+
+interface Props {
+  lang: Language;
+}
+
+const { lang } = Astro.props;
+
+const LABELS = {
+  en: {
+    heading: "Bilingual evidence mirror",
+    note: "The localized route remains the primary reading path; these authored pairs let you compare the exact wording.",
+    enTag: "English",
+    viTag: "Tiếng Việt",
+  },
+  vi: {
+    heading: "Đối chiếu bằng chứng song ngữ",
+    note: "Trang theo ngôn ngữ vẫn là đường đọc chính; các cặp được biên soạn dưới đây giúp bạn đối chiếu nguyên văn.",
+    enTag: "English",
+    viTag: "Tiếng Việt",
+  },
+} as const;
+
+const labels = LABELS[lang];
+---
+
+{
+  MIRROR_PAIRS.length > 0 ? (
+    <section
+      class="bilingual-mirror"
+      data-bilingual-mirror
+      aria-labelledby="bilingual-mirror-title"
+    >
+      <h2 id="bilingual-mirror-title" class="bilingual-mirror__title">
+        {labels.heading}
+      </h2>
+      <p class="bilingual-mirror__note">{labels.note}</p>
+      <div class="bilingual-mirror__pairs">
+        {MIRROR_PAIRS.map((pair) => (
+          <div class="bilingual-mirror__pair" data-mirror-pair={pair.id}>
+            <div lang="en" class="bilingual-mirror__cell">
+              <span class="bilingual-mirror__tag" aria-hidden="true">
+                {labels.enTag}
+              </span>
+              <p>{pair.en}</p>
+            </div>
+            <div lang="vi" class="bilingual-mirror__cell">
+              <span class="bilingual-mirror__tag" aria-hidden="true">
+                {labels.viTag}
+              </span>
+              <p>{pair.vi}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+  ) : null
+}

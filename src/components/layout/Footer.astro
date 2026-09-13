@@ -28,43 +28,48 @@ const motto = isVi
       <BrandLockup size="footer" />
       <LanguageSwitcher variant="dark" />
     </div>
-    <nav aria-label="Footer">
-      <ul class="flex flex-wrap gap-x-7 gap-y-1">
-        {
-          FOOTER_LINKS.map((item) => (
-            <li>
-              <a
-                href={item.href}
-                class="inline-flex min-h-11 items-center text-sm text-[color-mix(in_srgb,var(--brand-porcelain)_82%,white)] no-underline transition-colors hover:text-white"
-              >
-                {item.label}
-              </a>
-            </li>
-          ))
-        }
-      </ul>
-    </nav>
-    <div class="flex flex-col gap-3 border-t border-white/10 pt-6">
-      <p
-        class="max-w-2xl text-sm text-[color-mix(in_srgb,var(--brand-porcelain)_72%,white)]"
-      >
-        <span class="font-medium text-[var(--brand-porcelain)]"
-          >{taglineLead}{" "}
-          <span class="text-[color-mix(in_srgb,var(--brand-cobalt)_70%,white)]"
-            >{taglineAccent}</span
-          ></span
+    <div class="grid gap-8 sm:grid-cols-[minmax(0,1fr)_minmax(0,1.25fr)]">
+      <nav aria-label={isVi ? "Chân trang" : "Footer"}>
+        <ul
+          class="flex flex-wrap gap-x-7 gap-y-1 sm:grid sm:grid-cols-2 sm:gap-x-6 sm:gap-y-1"
         >
-      </p>
-      <p
-        class="max-w-2xl text-sm text-[color-mix(in_srgb,var(--brand-porcelain)_72%,white)]"
-      >
-        {proposition}
-      </p>
-      <p
-        class="text-xs tracking-[0.12em] text-[color-mix(in_srgb,var(--brand-porcelain)_58%,white)] uppercase"
-      >
-        {motto}
-      </p>
+          {
+            FOOTER_LINKS.map((item) => (
+              <li>
+                <a
+                  href={item.href}
+                  class="inline-flex min-h-11 items-center text-[0.9375rem] text-[color-mix(in_srgb,var(--brand-porcelain)_86%,white)] no-underline transition-colors hover:text-white"
+                >
+                  {item.label}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
+      <div class="flex flex-col gap-3.5 sm:border-l sm:border-white/10 sm:pl-8">
+        <p
+          class="max-w-2xl text-sm text-[color-mix(in_srgb,var(--brand-porcelain)_72%,white)]"
+        >
+          <span class="font-medium text-[var(--brand-porcelain)]"
+            >{taglineLead}{" "}
+            <span
+              class="text-[color-mix(in_srgb,var(--brand-cobalt)_70%,white)]"
+              >{taglineAccent}</span
+            ></span
+          >
+        </p>
+        <p
+          class="max-w-2xl text-sm text-[color-mix(in_srgb,var(--brand-porcelain)_72%,white)]"
+        >
+          {proposition}
+        </p>
+        <p
+          class="text-xs tracking-[0.12em] text-[color-mix(in_srgb,var(--brand-porcelain)_58%,white)] uppercase"
+        >
+          {motto}
+        </p>
+      </div>
     </div>
   </Container>
 </footer>

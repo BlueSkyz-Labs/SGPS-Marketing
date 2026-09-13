@@ -21,10 +21,10 @@ test.describe("boundary cards on trust routes", () => {
       const card = page.locator("[data-boundary-card]");
       await expect(card).toBeVisible();
       await expect(
-        card.getByRole("heading", { level: 3, name: labels.establishes }),
+        card.getByRole("heading", { level: 2, name: labels.establishes }),
       ).toBeVisible();
       await expect(
-        card.getByRole("heading", { level: 3, name: labels.notEstablishes }),
+        card.getByRole("heading", { level: 2, name: labels.notEstablishes }),
       ).toBeVisible();
     });
   }
@@ -34,7 +34,7 @@ test.describe("boundary cards on trust routes", () => {
   }) => {
     await page.goto("/en/security/");
     const headings = await page
-      .locator("[data-boundary-card] h3")
+      .locator("[data-boundary-card] h2")
       .allTextContents();
     expect(headings[0]).toBe(EN.establishes);
     expect(headings[1]).toBe(EN.notEstablishes);
@@ -69,7 +69,7 @@ test.describe("boundary cards without JavaScript", () => {
   test("privacy boundary renders statically", async ({ page }) => {
     await page.goto("/en/privacy/");
     await expect(
-      page.getByRole("heading", { level: 3, name: EN.notEstablishes }),
+      page.getByRole("heading", { level: 2, name: EN.notEstablishes }),
     ).toBeVisible();
   });
 });

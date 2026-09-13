@@ -119,17 +119,81 @@ check("robots.txt allows crawling and links the sitemap", async () => {
   assert(text.includes(`${site}/sitemap.xml`), "sitemap link missing");
 });
 
-check("sitemap lists only the 14 canonical localized routes", async () => {
+check("sitemap lists only canonical localized routes", async () => {
   const response = await get("/sitemap.xml");
   const xml = await response.text();
   const locs = [...xml.matchAll(/<loc>([^<]+)<\/loc>/g)].map(
     (match) => match[1],
   );
-  assert(locs.length === 14, `expected 14 URLs, got ${locs.length}`);
+  assert(
+    locs.length >= 14,
+    `expected at least the 14 canonical URLs, got ${locs.length}`,
+  );
   assert(
     locs.every((loc) => /\/(en|vi)\//.test(loc)),
     "sitemap must only list localized canonical routes",
   );
+});
+
+check("decision room responds with its workspace", async () => {
+  const response = await get("/en/decision-room/");
+  assert(response.status === 200, `expected 200, got ${response.status}`);
+  const html = await response.text();
+  assert(
+    html.includes("data-decision-room"),
+    "missing decision-room workspace",
+  );
+});
+
+check("evidence passport for the security claim is public", async () => {
+  const response = await get("/en/evidence/security-reporting-is-private/");
+  assert(response.status === 200, `expected 200, got ${response.status}`);
+  const html = await response.text();
+  assert(
+    html.includes("data-evidence-passport"),
+    "missing evidence passport markup",
+  );
+});
+
+check("public SGPS manifest is served", async () => {
+  const response = await get("/.well-known/sgps.json");
+  assert(response.status === 200, `expected 200, got ${response.status}`);
+  const body = await response.text();
+  assert(
+    body.includes('"schemaVersion": "1.0"'),
+    "manifest must declare schema version 1.0",
+  );
+});
+
+check("machine-readable security policy is served", async () => {
+  const response = await get("/.well-known/security.txt");
+  assert(response.status === 200, `expected 200, got ${response.status}`);
+  const body = await response.text();
+  assert(body.includes("Contact:"), "security.txt must declare Contact");
+  assert(body.includes("Expires:"), "security.txt must declare Expires");
+});
+
+check("branded 404 is served on unknown paths", async () => {
+  for (const path of [
+    "/en/no-such-page/",
+    "/vi/khong-ton-tai/",
+    "/no-such-root/",
+  ]) {
+    const response = await get(path);
+    assert(
+      response.status === 404,
+      `${path}: expected 404, got ${response.status}`,
+    );
+    const html = await response.text();
+    assert(
+      html.includes("Page not found") || html.includes("không tìm thấy"),
+      `${path}: branded 404 content missing`,
+    );
+    assert(
+      html.length > 5000,
+      `${path}: 404 page looks like a blank stub (${html.length} bytes)`,
+    );
+  }
 });
 
 check("critical navigation links are present on the EN home", async () => {

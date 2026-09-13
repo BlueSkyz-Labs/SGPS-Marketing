@@ -1,0 +1,85 @@
+---
+import type { BoundaryStatement, ReviewMetadata } from "@/data/integrity";
+import type { Language } from "@/data/site";
+
+export interface EvidenceItem {
+  label: string;
+  href: string;
+}
+
+interface Props {
+  /** Executive summary — always visible, never hidden behind the toggle. */
+  summary: string;
+  evidence: EvidenceItem[];
+  evidenceLabel?: string | undefined;
+  boundary?: BoundaryStatement | undefined;
+  review?: ReviewMetadata | undefined;
+  lang: Language;
+}
+
+const { summary, evidence, evidenceLabel, boundary, review, lang } =
+  Astro.props;
+
+const LABELS = {
+  en: {
+    more: evidenceLabel ?? "See the evidence",
+    reviewed: "Reviewed",
+    sources: {
+      "content-review": "content review",
+      "evidence-update": "evidence update",
+    },
+  },
+  vi: {
+    more: evidenceLabel ?? "Xem bằng chứng",
+    reviewed: "Đã xem xét",
+    sources: {
+      "content-review": "rà soát nội dung",
+      "evidence-update": "cập nhật bằng chứng",
+    },
+  },
+} as const;
+
+const labels = LABELS[lang];
+---
+
+<div class="evidence-details" data-evidence-details>
+  <p class="evidence-details__summary">{summary}</p>
+  <details class="evidence-details__more">
+    <summary>{labels.more}</summary>
+    <ul class="evidence-details__list">
+      {
+        evidence.map((item) => (
+          <li>
+            <a
+              href={item.href}
+              rel={
+                /^https?:\/\//i.test(item.href)
+                  ? "noopener noreferrer"
+                  : undefined
+              }
+              class="inline-flex min-h-11 items-center text-sm font-semibold text-[var(--action-primary)] no-underline hover:underline"
+            >
+              {item.label}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+    {
+      review ? (
+        <p class="evidence-details__review" data-evidence-review>
+          {labels.reviewed}:{" "}
+          <time datetime={review.reviewedOn}>{review.reviewedOn}</time> —{" "}
+          {labels.sources[review.source]}
+        </p>
+      ) : null
+    }
+    {
+      boundary ? (
+        <p class="evidence-details__boundary" data-evidence-boundary>
+          {boundary.doesNotImply[lang]}
+        </p>
+      ) : null
+    }
+  </details>
+</div>

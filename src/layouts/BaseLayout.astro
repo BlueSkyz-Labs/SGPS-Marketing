@@ -3,6 +3,7 @@ import Header from "@/components/layout/Header.astro";
 import Footer from "@/components/layout/Footer.astro";
 import CommandNavigator from "@/components/experience/CommandNavigator.astro";
 import JourneyBar from "@/components/experience/JourneyBar.astro";
+import IntegrityLens from "@/components/integrity/IntegrityLens.astro";
 import { SITE } from "@/data/site";
 import {
   absoluteUrl,
@@ -14,6 +15,7 @@ import {
   websiteJsonLd,
 } from "@/lib/seo";
 import { getAlternatePath, getLanguageFromPath } from "@/lib/i18n";
+import { breadcrumbJsonLd } from "@/lib/breadcrumbs";
 import { isNonProductionSiteUrl } from "@/lib/truth";
 import "@/styles/global.css";
 
@@ -23,6 +25,8 @@ interface Props {
   path?: string;
   ogImage?: string;
   noindex?: boolean;
+  /** Stable integrity surface id; the lens renders only for modeled surfaces. */
+  surface?: string;
 }
 
 const {
@@ -31,13 +35,19 @@ const {
   path = Astro.url.pathname,
   ogImage = defaultOgImagePath(),
   noindex = false,
+  surface,
 } = Astro.props;
 
 const fullTitle = title.includes(SITE.name) ? title : `${title} · ${SITE.name}`;
 const currentLang = getLanguageFromPath(path);
 const canonical = canonicalForPath(path, SITE.url);
 const ogImageUrl = absoluteUrl(SITE.url, ogImage);
-const structuredData = [organizationJsonLd(SITE.url), websiteJsonLd(SITE.url)];
+const structuredData: Record<string, unknown>[] = [
+  organizationJsonLd(SITE.url),
+  websiteJsonLd(SITE.url),
+];
+const breadcrumb = breadcrumbJsonLd(currentLang, path, SITE.url);
+if (breadcrumb) structuredData.push(breadcrumb);
 const robotsNoindex = noindex || isNonProductionSiteUrl(SITE.url);
 ---
 
@@ -68,6 +78,14 @@ const robotsNoindex = noindex || isNonProductionSiteUrl(SITE.url);
     />
     {robotsNoindex ? <meta name="robots" content="noindex, nofollow" /> : null}
     <meta property="og:type" content="website" />
+    <meta
+      property="og:locale"
+      content={currentLang === "vi" ? "vi_VN" : "en_US"}
+    />
+    <meta
+      property="og:locale:alternate"
+      content={currentLang === "vi" ? "en_US" : "vi_VN"}
+    />
     <meta property="og:site_name" content={SITE.name} />
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={description} />
@@ -88,7 +106,13 @@ const robotsNoindex = noindex || isNonProductionSiteUrl(SITE.url);
     }
   </head>
   <body class="flex min-h-screen flex-col">
-    <a class="skip-link" href="#main-content">Skip to main content</a>
+    <a class="skip-link" href="#main-content">
+      {
+        currentLang === "vi"
+          ? "Chuyển đến nội dung chính"
+          : "Skip to main content"
+      }
+    </a>
     <Header />
     <CommandNavigator />
     <script>
@@ -98,6 +122,7 @@ const robotsNoindex = noindex || isNonProductionSiteUrl(SITE.url);
     </script>
     <main id="main-content" class="flex-1" tabindex="-1">
       <slot />
+      {surface ? <IntegrityLens surface={surface} lang={currentLang} /> : null}
       <JourneyBar />
     </main>
     <Footer />

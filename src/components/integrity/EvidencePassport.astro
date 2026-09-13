@@ -1,0 +1,84 @@
+---
+import { getEvidencePassport, getClaimAnchor } from "@/lib/claims";
+import TruthState from "./TruthState.astro";
+import BoundaryCard from "./BoundaryCard.astro";
+import type { Language } from "@/data/site";
+
+interface Props {
+  id: string;
+  lang: Language;
+  products: { slug: string; name: string }[];
+}
+
+const { id, lang, products } = Astro.props;
+const passport = getEvidencePassport(id, products);
+
+const LABELS = {
+  en: {
+    kind: "Evidence passport",
+    sources: "Public sources",
+    reviewed: "Reviewed",
+    context: "View in context",
+  },
+  vi: {
+    kind: "Hộ chiếu bằng chứng",
+    sources: "Nguồn công khai",
+    reviewed: "Đã xem xét",
+    context: "Xem trong ngữ cảnh",
+  },
+} as const;
+
+const labels = LABELS[lang];
+---
+
+{
+  passport ? (
+    <article class="evidence-passport" data-evidence-passport={passport.id}>
+      <h2 id={getClaimAnchor(passport.id)} class="evidence-passport__claim">
+        {passport.claim[lang]}
+      </h2>
+      <p class="evidence-passport__meta">
+        <TruthState state={passport.state} lang={lang} />
+        {passport.reviewedOn ? (
+          <span class="evidence-passport__review" data-passport-review>
+            {labels.reviewed}:{" "}
+            <time datetime={passport.reviewedOn}>{passport.reviewedOn}</time>
+          </span>
+        ) : null}
+      </p>
+      <div class="evidence-passport__sources">
+        <h3 class="evidence-passport__sources-title">{labels.sources}</h3>
+        <ul>
+          {passport.evidence.map((ref) => (
+            <li id={`evidence-${ref.id}`}>
+              <a
+                href={ref.href[lang]}
+                rel={
+                  /^https?:\/\//i.test(ref.href[lang])
+                    ? "noopener noreferrer"
+                    : undefined
+                }
+                class="inline-flex min-h-11 items-center text-sm font-semibold text-[var(--action-primary)] no-underline hover:underline"
+              >
+                {ref.label[lang]}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+      {passport.boundary ? (
+        <div class="evidence-passport__boundary">
+          <BoundaryCard boundary={passport.boundary} lang={lang} />
+        </div>
+      ) : null}
+      <p class="evidence-passport__context">
+        <a
+          href={passport.contextHref[lang]}
+          class="inline-flex min-h-11 items-center text-sm font-semibold text-[var(--action-primary)] no-underline hover:underline"
+        >
+          {labels.context} →
+        </a>
+      </p>
+    </article>
+  ) : null
+}

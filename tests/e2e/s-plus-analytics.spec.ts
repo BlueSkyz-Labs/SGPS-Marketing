@@ -78,6 +78,12 @@ test("trust, journey, and atlas activations emit surface events", async ({
 }) => {
   await page.goto("/en/");
   await instrument(page);
+  await page
+    .locator("[data-trust-ledger] details")
+    .first()
+    .evaluate((el) => {
+      (el as HTMLDetailsElement).open = true;
+    });
   await page.locator("[data-trust-ledger] a").first().click();
   await page.locator("[data-atlas-node] a").first().click();
   await expect
@@ -155,6 +161,12 @@ test("navigation succeeds even when a telemetry listener throws", async ({
       throw new Error("analytics unavailable");
     });
   });
+  await page
+    .locator("[data-trust-ledger] details")
+    .first()
+    .evaluate((el) => {
+      (el as HTMLDetailsElement).open = true;
+    });
   await page.locator("[data-trust-ledger] a").first().click();
   await page.waitForURL("**/en/privacy/");
 });
