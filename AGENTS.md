@@ -5,8 +5,10 @@ Trusted current source of truth only:
 | Role                               | Path                                                                                                                                                            |
 | ---------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Experience contract                | `docs/superpowers/specs/2026-09-03-blueskyz-web-v1-c1-1-design.md` — substantive design remains authoritative; its pre-implementation status text is historical |
+| Active C2 experience design        | `docs/superpowers/specs/2026-09-13-c2-cinematic-product-house-design.md` — supersedes conflicting homepage/public-composition guidance from older S+ specs       |
+| Active C2 implementation plan      | `docs/superpowers/plans/2026-09-13-c2-cinematic-product-house-implementation.md` — execute P0–P6 as separate gated waves/PRs                                   |
 | Historical implementation plan     | `docs/superpowers/plans/2026-09-04-blueskyz-web-v1-c1-1-implementation.md`                                                                                      |
-| Active residual / owner-gated work | `docs/superpowers/plans/2026-09-03-remaining-convergence.md`                                                                                                    |
+| Active residual / owner-gated work | `docs/current-work.json` — canonical current-work router, including product screenshot/owner facts, Human E4 and RUM privacy decision                           |
 | Framework decision                 | `docs/decisions/0004-web-framework-selection.md` (`ASTRO_7`)                                                                                                    |
 | Source assurance decision          | `docs/decisions/0005-dual-control-source-assurance.md`; historical pre-ruleset wording is superseded by provider read-back                                      |
 | Canonical domain decision          | `docs/decisions/0006-domain-migration-and-product-subdomains.md`                                                                                                |
@@ -15,7 +17,18 @@ Trusted current source of truth only:
 | Derived architecture views         | `architecture/derived-views.json` — `VIEW_IS_DERIVED_NOT_ARCHITECTURE_TRUTH`                                                                                    |
 | Decisions index                    | `docs/decisions/README.md`                                                                                                                                      |
 
-Latest immutable post-merge assurance / E4 truth evidence: `docs/evidence/2026-09-09-pr79-post-merge-and-e4-human-gap.md`.
+Before C2 runtime work, refresh live `main`, open PRs/issues, `docs/current-work.json`, and any newer ADR/spec/plan. The SHA recorded in a plan is a handoff baseline, never permission to ignore newer repository truth.
+
+## C2 execution doctrine
+
+- **Static-first. Product-led. Cinematic at the moments that matter. Evidence-rich underneath.**
+- Product truth is a prerequisite for product spectacle. If a real screenshot/product fact is absent, record the blocker; never fabricate it.
+- C2 changes public composition and disclosure depth, not the authority of SGPS truth/security/provenance systems.
+- `ExperienceSpine`, `IntentLens`, and `Atlas` are no longer required prominent homepage surfaces under C2; do not delete their capabilities merely because the homepage stops rendering them.
+- Cinematic code may consume product/claim truth but may never become a second registry or invent stronger assurance semantics.
+- Prefer HTML/CSS/SVG/native View Transitions. No animation framework or WebGL dependency without a later approved architectural decision and evidence-backed GO gate.
+- Static/no-JS and reduced-motion states must independently meet the content/action contract.
+- Execute C2 as separate P0–P6 waves/PRs; do not create a mega-PR.
 
 ## Hard rules
 
