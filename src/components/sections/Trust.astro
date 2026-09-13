@@ -1,5 +1,6 @@
 ---
 import TrustLedger from "@/components/experience/TrustLedger.astro";
+import EvidenceTeaser from "@/components/integrity/EvidenceTeaser.astro";
 
 interface Props {
   lang?: "en" | "vi";
@@ -26,4 +27,5 @@ const isVi = lang === "vi";
     }
   </p>
   <TrustLedger lang={lang} />
+  <EvidenceTeaser lang={lang} />
 </section>
