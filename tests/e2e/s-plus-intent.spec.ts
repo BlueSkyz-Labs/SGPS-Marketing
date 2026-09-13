@@ -87,6 +87,32 @@ test("selecting an intent emphasizes without hiding facts", async ({
     )
     .toEqual(expectedMarked);
 
+  // Emphasis must be observable, not just an attribute: the marked step's link
+  // is styled differently from an unmarked one.
+  const styles = await bar.evaluate((element) => {
+    const links = Array.from(
+      element.querySelectorAll<HTMLAnchorElement>("li[data-step-key] a"),
+    );
+    return links.map((link) => {
+      const computed = getComputedStyle(link);
+      return {
+        marked:
+          link.closest("li")?.getAttribute("data-evidence-first") === "true",
+        style: `${computed.borderTopColor}|${computed.boxShadow}`,
+      };
+    });
+  });
+  const markedStyles = new Set(
+    styles.filter((entry) => entry.marked).map((entry) => entry.style),
+  );
+  const plainStyles = new Set(
+    styles.filter((entry) => !entry.marked).map((entry) => entry.style),
+  );
+  expect(markedStyles.size).toBeGreaterThan(0);
+  for (const style of markedStyles) {
+    expect(plainStyles.has(style)).toBe(false);
+  }
+
   // Facts stay available: no step is hidden, every link keeps its target.
   await expect(steps).toHaveCount(stepsBefore);
   const links = page.locator("[data-journey-bar] li[data-step-key] a");

@@ -184,6 +184,29 @@ test.describe("mission paths", () => {
     expect(order).toBeTruthy();
   });
 
+  test("the page declares exactly the authored mission contract", async ({
+    page,
+  }) => {
+    // Pinned from src/data/experience.ts MISSIONS (deliberate update point):
+    // if the authored missions change, this must be updated by hand.
+    const AUTHORED_ORDERS: Record<string, string[]> = {
+      "evaluate-product": ["decision-room", "products", "about", "contact"],
+      "understand-blueskyz": ["about", "products", "support", "contact"],
+      "verify-trust": ["security", "privacy", "decision-room", "support"],
+      "work-with-us": ["contact", "support", "about", "security"],
+    };
+    const AUTHORED_EVIDENCE: Record<string, string[]> = {
+      "evaluate-product": ["decision-room", "products"],
+      "verify-trust": ["security", "privacy", "decision-room"],
+      "work-with-us": ["security"],
+    };
+
+    await page.goto("/en/products/");
+    const contract = await readContract(page);
+    expect(contract.orders).toEqual(AUTHORED_ORDERS);
+    expect(contract.evidence).toEqual(AUTHORED_EVIDENCE);
+  });
+
   test("mission step definitions all resolve to live routes", async ({
     page,
   }) => {

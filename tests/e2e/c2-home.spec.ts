@@ -69,11 +69,21 @@ for (const viewport of VIEWPORTS) {
   });
 }
 
-test("the demoted power-user surfaces still work on their own routes", async ({
+test("the demoted discovery surfaces are re-homed, not deleted", async ({
   page,
 }) => {
-  // Demotion, not deletion: the command navigator still exposes them.
+  // Product discovery/comparison still works: the lens and the exploration
+  // tool render on the product index, wired to the site-wide journey bar.
+  await page.goto("/en/products/");
+  await expect(page.locator("[data-intent-lens]")).toBeVisible();
+  await expect(page.locator("[data-atlas]")).toBeVisible();
+  await expect(page.locator("[data-journey-bar]")).toBeVisible();
+  // …and they are absent from the homepage narrative.
   await page.goto("/en/");
+  await expect(page.locator("[data-intent-lens]")).toHaveCount(0);
+  await expect(page.locator("[data-atlas]")).toHaveCount(0);
+
+  // The command navigator (power-user entry point) still works.
   await page.keyboard.press("Control+k");
   await expect(page.locator("[data-command-navigator]")).toBeVisible();
 });
