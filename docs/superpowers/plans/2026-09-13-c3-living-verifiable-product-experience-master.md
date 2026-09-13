@@ -49,6 +49,7 @@ C3 is intentionally split into seven implementation plans because the approved i
 ### Task 1: Confirm C2 dependency readiness
 
 **Files:**
+
 - Read: `AGENTS.md`
 - Read: `docs/current-work.json`
 - Read: C2 design and implementation plan
@@ -56,6 +57,7 @@ C3 is intentionally split into seven implementation plans because the approved i
 - Modify only when status changes are real: `docs/current-work.json`
 
 **Interfaces:**
+
 - Consumes: live repository/provider evidence.
 - Produces: explicit GO/BLOCKED state for one C3 subsystem; never a blanket fabricated C3 PASS.
 
@@ -111,12 +113,14 @@ B and C may swap if product truth/artifacts are ready sooner than the trust-cont
 ### Task 2: Add C3 boundary contracts before broad runtime work
 
 **Files:**
+
 - Create: `tests/architecture/c3-program-boundary.test.mjs`
 - Read: `package.json`
 - Read: canonical product/claim/evidence/release selectors
 - Read: C3 runtime modules created by child plans
 
 **Interfaces:**
+
 - Produces: repository-level guard against second truth registries, critical-path AI/3D dependencies, and hidden telemetry.
 
 - [ ] **Step 1: write a failing program contract when first C3 runtime module lands**
@@ -213,6 +217,7 @@ Subjective review scores are design evidence, not machine truth.
 ### Task 3: Run final C3 convergence audit
 
 **Files:**
+
 - Create: `docs/evidence/<date>-c3-final-convergence.md`
 - Modify: `docs/current-work.json`
 - Runtime files only if a reproduced defect is found.
