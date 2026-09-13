@@ -1,10 +1,12 @@
 {
   "schemaVersion": "1.0",
   "updatedAt": "2026-09-13",
-  "program": "God-tier v3 trust experience + hardening waves",
-  "status": "converged-pending-owner-decisions",
+  "program": "God-tier v3 trust foundation + C2 Cinematic Product House",
+  "status": "c2-planned-pending-product-truth",
   "authorities": {
     "experienceContract": "docs/superpowers/specs/2026-09-03-blueskyz-web-v1-c1-1-design.md",
+    "c2Design": "docs/superpowers/specs/2026-09-13-c2-cinematic-product-house-design.md",
+    "c2Plan": "docs/superpowers/plans/2026-09-13-c2-cinematic-product-house-implementation.md",
     "v3Plan": "docs/superpowers/plans/2026-09-12-god-tier-v3-trust-experience-implementation.md",
     "agentGuide": "AGENTS.md",
     "architectureModel": "architecture/sgps-model.json"
@@ -111,13 +113,19 @@
       "name": "Text-spacing (1.4.12) + forced-colors guards",
       "status": "MERGED",
       "evidence": "docs/evidence/2026-09-13-wave-h13-spacing-contrast.md"
+    },
+    {
+      "id": "c2-master-plan",
+      "name": "C2 Cinematic Product House — P0 Product Truth through P6 Elite QA",
+      "status": "PLANNED",
+      "evidence": "docs/superpowers/plans/2026-09-13-c2-cinematic-product-house-implementation.md"
     }
   ],
   "openOwnerDecisions": [
     {
       "id": "screenshot-mandatory-floor",
-      "question": "SCAFFOLDED 2026-09-13 (product-screenshot-floor.test.mjs + OPEN DECISION marker in product-schema.ts). Owner supplies real /products/... assets and flips `productScreenshot.optional()` to required. Frame ready, mandate not flipped.",
-      "blocks": ["product-publication-contract"]
+      "question": "C2 DIRECTION APPROVED 2026-09-13. Public-product screenshot floor is approved in principle, but execution remains evidence-gated: supply or verify a real /products/... screenshot and real product facts before flipping the public publication contract. Never fabricate a product or screenshot to unblock C2.",
+      "blocks": ["product-publication-contract", "c2-full-flagship-theatre"]
     },
     {
       "id": "human-review-governance",
@@ -136,6 +144,6 @@
     "Trademark/legal clearance and specialty print (brand kit caveats)"
   ],
   "nextActionable": [
-    "Owner: screenshot assets + mandate flip; Human E4 self-test; VI cross-check audit"
+    "Agent: refresh live main, read C2 design + plan, then execute P0 product-truth inventory and P1 homepage composition in separate gated PRs; if real product screenshot/facts are unavailable, record the blocker and continue only the honest empty-registry C2 shell."
   ]
 }
