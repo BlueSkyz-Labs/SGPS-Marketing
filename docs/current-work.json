@@ -1,7 +1,7 @@
 {
   "schemaVersion": "1.0",
   "updatedAt": "2026-09-13",
-  "program": "God-tier v3 trust foundation + C2 Cinematic Product House",
+  "program": "C2 Cinematic Product House (SGPS trust infrastructure retained)",
   "status": "c2-planned-pending-product-truth",
   "authorities": {
     "experienceContract": "docs/superpowers/specs/2026-09-03-blueskyz-web-v1-c1-1-design.md",
@@ -109,14 +109,56 @@
       "evidence": "docs/evidence/2026-09-13-wave-h12-text-zoom.md"
     },
     {
+      "id": "c2-master-plan",
+      "name": "C2 Cinematic Product House — P0 Product Truth through P6 Elite QA",
+      "status": "PLANNED",
+      "evidence": "docs/superpowers/plans/2026-09-13-c2-cinematic-product-house-implementation.md"
+    },
+    {
       "id": "hardening-h13",
       "name": "Text-spacing (1.4.12) + forced-colors guards",
       "status": "MERGED",
       "evidence": "docs/evidence/2026-09-13-wave-h13-spacing-contrast.md"
     },
     {
-      "id": "c2-master-plan",
-      "name": "C2 Cinematic Product House — P0 Product Truth through P6 Elite QA",
+      "id": "c2-p0",
+      "name": "P0 Product truth activation (screenshot floor + router)",
+      "status": "IN_PROGRESS",
+      "evidence": "docs/superpowers/plans/2026-09-13-c2-cinematic-product-house-implementation.md"
+    },
+    {
+      "id": "c2-p1",
+      "name": "P1 Experience recomposition (six-act homepage)",
+      "status": "PLANNED",
+      "evidence": "docs/superpowers/plans/2026-09-13-c2-cinematic-product-house-implementation.md"
+    },
+    {
+      "id": "c2-p2",
+      "name": "P2 Art direction foundation (Horizon Arrival, act rhythm)",
+      "status": "PLANNED",
+      "evidence": "docs/superpowers/plans/2026-09-13-c2-cinematic-product-house-implementation.md"
+    },
+    {
+      "id": "c2-p3",
+      "name": "P3 Product storytelling (Flagship Theatre, Product House)",
+      "status": "PLANNED",
+      "evidence": "docs/superpowers/plans/2026-09-13-c2-cinematic-product-house-implementation.md"
+    },
+    {
+      "id": "c2-p4",
+      "name": "P4 Meaning + trust progressive disclosure",
+      "status": "PLANNED",
+      "evidence": "docs/superpowers/plans/2026-09-13-c2-cinematic-product-house-implementation.md"
+    },
+    {
+      "id": "c2-p5",
+      "name": "P5 Human layer, closing signature, secondary surfaces",
+      "status": "PLANNED",
+      "evidence": "docs/superpowers/plans/2026-09-13-c2-cinematic-product-house-implementation.md"
+    },
+    {
+      "id": "c2-p6",
+      "name": "P6 Elite QA, red team, promotion, production read-back",
       "status": "PLANNED",
       "evidence": "docs/superpowers/plans/2026-09-13-c2-cinematic-product-house-implementation.md"
     }
@@ -124,7 +166,7 @@
   "openOwnerDecisions": [
     {
       "id": "screenshot-mandatory-floor",
-      "question": "C2 DIRECTION APPROVED 2026-09-13. Public-product screenshot floor is approved in principle, but execution remains evidence-gated: supply or verify a real /products/... screenshot and real product facts before flipping the public publication contract. Never fabricate a product or screenshot to unblock C2.",
+      "question": "C2 Task 2 / #125 C1c: public products require a real screenshot; no candidate has owner-approved identity + real screenshot + proof, so P0 product activation is BLOCKED_OWNER_FACT. Scaffold ready (product-screenshot-floor.test.mjs); C2 structural shell proceeds against the honest empty registry. Owner supplies assets -> one-line flip.",
       "blocks": ["product-publication-contract", "c2-full-flagship-theatre"]
     },
     {
@@ -144,6 +186,7 @@
     "Trademark/legal clearance and specialty print (brand kit caveats)"
   ],
   "nextActionable": [
-    "Agent: refresh live main, read C2 design + plan, then execute P0 product-truth inventory and P1 homepage composition in separate gated PRs; if real product screenshot/facts are unavailable, record the blocker and continue only the honest empty-registry C2 shell."
+    "C2 P0: record screenshot-floor owner-fact blocker (no product may be invented)",
+    "C2 P1: lock six-act homepage contract (RED) then recompose EN/VI home"
   ]
 }
