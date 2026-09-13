@@ -30,12 +30,14 @@ test("320px homepage has no horizontal overflow", async ({ page }) => {
   ).toBe(false);
 });
 
-test("homepage keeps the C1.1 customer order landmarks", async ({ page }) => {
+test("homepage keeps the C2 act landmarks", async ({ page }) => {
   await page.goto("/en/");
-  // Featured shelf is omitted while the public registry is empty.
+  // The product act is present and honest while the public registry is empty:
+  // the heading explains the act, no product card is invented.
   await expect(
     page.getByRole("heading", { name: "Featured products" }),
-  ).toHaveCount(0);
+  ).toBeVisible();
+  await expect(page.locator("[data-product-card]")).toHaveCount(0);
   await expect(
     page.getByRole("heading", { level: 2, name: "One house" }),
   ).toBeVisible();

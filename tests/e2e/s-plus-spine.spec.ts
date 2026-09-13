@@ -1,80 +1,63 @@
+// C2: the Experience Spine is no longer a prominent homepage surface (design
+// §8, plan Task 4). Its capability is retained, not deleted — so this spec now
+// guards the demotion itself plus the anchor integrity that any future mount
+// depends on: every narrative stage must still bind to a real heading id on the
+// homepage, in both locales.
 import { expect, test } from "@playwright/test";
 
-const EN_STAGES = ["Intelligence.", "Elevation.", "Trust.", "Impact."];
-const VI_STAGES = ["Trí tuệ.", "Nâng tầm.", "Tin cậy.", "Tác động."];
+const EN_ANCHORS = [
+  "#hero-title",
+  "#house-title",
+  "#trust-title",
+  "#about-title",
+];
+const VI_ANCHORS = EN_ANCHORS;
 
-const escaped = (label: string) => label.replace(".", "\\.");
+const SPINE_NAV = /Homepage story|trang chủ/i;
 
-test("static story spine renders four stages in document order on /en/", async ({
-  page,
-}) => {
-  await page.goto("/en/");
-  const spine = page.getByRole("navigation", { name: /Homepage story/i });
-  await expect(spine).toBeVisible();
-  const links = spine.getByRole("link");
-  await expect(links).toHaveCount(4);
-  for (const [index, label] of EN_STAGES.entries()) {
-    await expect(links.nth(index)).toHaveText(new RegExp(escaped(label), "i"));
-  }
-});
-
-test("every spine stage links to an existing homepage section id", async ({
-  page,
-}) => {
-  await page.goto("/en/");
-  const hrefs = await page
-    .getByRole("navigation", { name: /Homepage story/i })
-    .getByRole("link")
-    .evaluateAll((elements) =>
-      elements.map((element) => element.getAttribute("href")),
+test("homepage no longer promotes the experience spine", async ({ page }) => {
+  for (const path of ["/en/", "/vi/"]) {
+    await page.goto(path);
+    await expect(page.getByRole("navigation", { name: SPINE_NAV })).toHaveCount(
+      0,
     );
-  expect(hrefs).toEqual([
-    "#hero-title",
-    "#house-title",
-    "#trust-title",
-    "#about-title",
-  ]);
-  for (const href of hrefs) {
-    await expect(page.locator(href as string)).toHaveCount(1);
+    await expect(page.locator("[data-experience-spine]")).toHaveCount(0);
   }
 });
 
-test("spine links navigate to their stage with mouse and keyboard", async ({
+test("every narrative stage still binds to a real homepage heading id", async ({
+  page,
+}) => {
+  for (const [path, anchors] of [
+    ["/en/", EN_ANCHORS],
+    ["/vi/", VI_ANCHORS],
+  ] as const) {
+    await page.goto(path);
+    for (const anchor of anchors) {
+      await expect(page.locator(anchor)).toHaveCount(1);
+      await expect(page.locator(anchor)).toBeVisible();
+    }
+  }
+});
+
+test("the demoted story stages are reachable in document order", async ({
   page,
 }) => {
   await page.goto("/en/");
-  const spine = page.getByRole("navigation", { name: /Homepage story/i });
-  const trust = spine.getByRole("link", { name: /Trust\./ });
-  await trust.click();
-  await expect(page).toHaveURL(/#trust-title$/);
-  await expect(page.locator("#trust-title")).toBeVisible();
-
-  const impact = spine.getByRole("link", { name: /Impact\./ });
-  await impact.focus();
-  await expect(impact).toBeFocused();
-  await impact.press("Enter");
-  await expect(page).toHaveURL(/#about-title$/);
+  const positions = await page.evaluate((selectors) => {
+    return selectors.map((selector) => {
+      const element = document.querySelector(selector);
+      return element ? element.getBoundingClientRect().top : null;
+    });
+  }, EN_ANCHORS);
+  expect(positions.every((top) => typeof top === "number")).toBe(true);
+  const sorted = [...(positions as number[])].sort((a, b) => a - b);
+  expect(positions).toEqual(sorted);
 });
 
-test("spine renders localized stages on /vi/", async ({ page }) => {
-  await page.goto("/vi/");
-  const spine = page.getByRole("navigation", { name: /trang chủ/i });
-  await expect(spine).toBeVisible();
-  const links = spine.getByRole("link");
-  await expect(links).toHaveCount(4);
-  for (const [index, label] of VI_STAGES.entries()) {
-    await expect(links.nth(index)).toHaveText(new RegExp(escaped(label), "i"));
-  }
-});
-
-test("320px homepage keeps no horizontal overflow with the spine", async ({
-  page,
-}) => {
+test("320px homepage keeps no horizontal overflow", async ({ page }) => {
   await page.setViewportSize({ width: 320, height: 720 });
   await page.goto("/en/");
-  await expect(
-    page.getByRole("navigation", { name: /Homepage story/i }),
-  ).toBeVisible();
   expect(
     await page.evaluate(
       () =>
@@ -84,13 +67,13 @@ test("320px homepage keeps no horizontal overflow with the spine", async ({
   ).toBe(false);
 });
 
-test("reduced motion keeps the spine static and complete", async ({
-  browser,
-}) => {
+test("reduced motion keeps the homepage complete", async ({ browser }) => {
   const context = await browser.newContext({ reducedMotion: "reduce" });
   const page = await context.newPage();
   await page.goto("/en/");
-  const spine = page.getByRole("navigation", { name: /Homepage story/i });
-  await expect(spine.getByRole("link")).toHaveCount(4);
+  await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
+  for (const anchor of EN_ANCHORS) {
+    await expect(page.locator(anchor)).toHaveCount(1);
+  }
   await context.close();
 });

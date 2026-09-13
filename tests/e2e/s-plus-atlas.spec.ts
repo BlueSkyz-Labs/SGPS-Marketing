@@ -1,9 +1,11 @@
+// C2: discovery surfaces (Intent Lens, Atlas) moved off the homepage to the
+// product index (design §8) — assertions retargeted, coverage preserved.
 import { expect, test } from "@playwright/test";
 
 test("atlas renders truth-derived nodes with decorative SVG hidden from AT", async ({
   page,
 }) => {
-  await page.goto("/en/");
+  await page.goto("/en/products/");
   const atlas = page.locator("[data-atlas]");
   await expect(atlas).toBeVisible();
 
@@ -36,7 +38,7 @@ test("atlas renders truth-derived nodes with decorative SVG hidden from AT", asy
 test("zero public products means zero product nodes (honest empty state)", async ({
   page,
 }) => {
-  await page.goto("/en/");
+  await page.goto("/en/products/");
   const atlas = page.locator("[data-atlas]");
   await expect(
     atlas.locator("[data-atlas-node][data-atlas-kind='product']"),
@@ -47,7 +49,7 @@ test("zero public products means zero product nodes (honest empty state)", async
 });
 
 test("atlas node links resolve to real destinations", async ({ page }) => {
-  await page.goto("/en/");
+  await page.goto("/en/products/");
   const atlas = page.locator("[data-atlas]");
   const links = atlas.locator("[data-atlas-node] a");
   const hrefs = await links.evaluateAll((elements) =>
@@ -71,8 +73,8 @@ test("atlas node links resolve to real destinations", async ({ page }) => {
   ).toHaveCount(1);
 });
 
-test("atlas is localized on /vi/", async ({ page }) => {
-  await page.goto("/vi/");
+test("atlas is localized on /vi/products/", async ({ page }) => {
+  await page.goto("/vi/products/");
   const atlas = page.locator("[data-atlas]");
   await expect(atlas).toBeVisible();
   await expect(
@@ -82,11 +84,11 @@ test("atlas is localized on /vi/", async ({ page }) => {
   ).toHaveCount(1);
 });
 
-test("320px homepage keeps no horizontal overflow with atlas", async ({
+test("320px product index keeps no horizontal overflow with atlas", async ({
   page,
 }) => {
   await page.setViewportSize({ width: 320, height: 720 });
-  await page.goto("/en/");
+  await page.goto("/en/products/");
   await expect(page.locator("[data-atlas]")).toBeVisible();
   expect(
     await page.evaluate(
@@ -100,7 +102,7 @@ test("320px homepage keeps no horizontal overflow with atlas", async ({
 test("atlas renders without JavaScript", async ({ browser }) => {
   const context = await browser.newContext({ javaScriptEnabled: false });
   const page = await context.newPage();
-  await page.goto("/en/");
+  await page.goto("/en/products/");
   const atlas = page.locator("[data-atlas]");
   await expect(atlas).toBeVisible();
   expect(

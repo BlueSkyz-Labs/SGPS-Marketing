@@ -5,6 +5,8 @@ import PageHeader from "@/components/layout/PageHeader.astro";
 import ProductCard from "@/components/product/ProductCard.astro";
 import ProofFirstEmptyState from "@/components/product/ProofFirstEmptyState.astro";
 import { getPublicProducts } from "@/lib/products";
+import IntentLens from "@/components/experience/IntentLens.astro";
+import Atlas from "@/components/experience/Atlas.astro";
 
 const products = await getPublicProducts();
 const emptyDescription = products.length
@@ -37,6 +39,16 @@ const emptyDescription = products.length
           </div>
         )
       }
+    </Container>
+  </section>
+  {
+    /* C2: discovery surfaces re-homed from the homepage (design §8) — Intent Lens sits
+      with product evaluation; Atlas remains the deliberate exploration tool. */
+  }
+  <section class="border-t border-[var(--border-subtle)] py-16 lg:py-20">
+    <Container>
+      <IntentLens lang="en" />
+      <Atlas lang="en" />
     </Container>
   </section>
 </BaseLayout>
