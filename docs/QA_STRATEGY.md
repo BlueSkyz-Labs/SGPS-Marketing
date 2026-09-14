@@ -46,6 +46,14 @@ Full Playwright matrix and Lighthouse are promotion/preview evidence, not every-
 
 The checkout uses `fetch-depth: 0` so `verify:git-evidence` can resolve every cited revision to a real commit object and prove it is reachable from the candidate (no SHA-shaped strings, no squash-orphaned revisions). `check:promotion-state` reports `source`, `deployment` and `public-truth` with `PASS | FAIL | BLOCKED_OWNER_FACT`: an absent owner fact (contact/security email) is blocked, never a failure and never a pass. `check:deployment-evidence` validates the newest post-merge read-back ledger (declared revision + smoke `PASS` + host mention). `check:product-provenance` fails closed if a listed product cites a `sourceRevision` that does not resolve; an empty registry reports `IDLE`, not a silent pass.
 
+#### C2 contract suites (inside `test:architecture`)
+
+The C2 program adds source contracts that must stay green independently of the browser matrix:
+
+- `c2-home-composition.test.mjs` — the six-act homepage order, demotion (not deletion) of the power-user surfaces, and the product act's honest fallback.
+- `c2-truth-boundary.test.mjs` / `c2-performance-contract.test.mjs` — the cinematic layer may consume truth but never define it; no runtime framework or WebGL library may enter C2 surfaces; the client-JS ceiling stays pinned at `CLIENT_JS_HARD_BUDGET_BYTES` (only an Owner decision may raise it).
+- `product-route-contract.test.mjs` — the moment a product is public, the locale profile routes must exist and render a real profile (a redirect stub is rejected); legacy root paths must stay redirect stubs without dead templates.
+
 The workflow is intentionally secretless and read-only (`contents: read`), checks out the exact PR head or `main` push SHA with `persist-credentials: false`, and pins external actions to full commit SHAs. It is a source-control assurance layer, not a deployment pipeline. The machine-readable security surface (`/.well-known/security.txt`, `_headers` CSP set) is guarded by `tests/architecture/security-surface.test.mjs` and read back at deploy time by `scripts/smoke-production.mjs`.
 
 Active ruleset `main-promotion-governance` (`22500299`) protects `main`: a pull request is required; strict `Quality Gates` and `Browser Assurance` must pass; review conversations must be resolved; non-fast-forward updates and deletion are blocked; and no bypass actors are configured. Issue #8 is resolved/closed. Direct-to-`main` is not a fallback.
