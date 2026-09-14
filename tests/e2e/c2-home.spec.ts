@@ -66,9 +66,7 @@ for (const viewport of VIEWPORTS) {
 
         const oneHouse = page.locator("[data-one-house-editorial]");
         await expect(oneHouse).toBeVisible();
-        await expect(
-          oneHouse.locator("[data-one-house-concept]"),
-        ).toHaveCount(4);
+        await expect(oneHouse.locator("[data-one-house-concept]")).toHaveCount(4);
 
         for (const label of ONE_HOUSE_CONCEPTS[locale.lang]) {
           await expect(
