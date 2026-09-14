@@ -13,7 +13,12 @@ const LOCALES = [
 ] as const;
 
 const ONE_HOUSE_CONCEPTS = {
-  en: ["Clarity", "Human agency", "Purposeful intelligence", "Trust by design"],
+  en: [
+    "Clarity",
+    "Human agency",
+    "Purposeful intelligence",
+    "Trust by design",
+  ],
   vi: [
     "Rõ ràng",
     "Con người giữ quyền chủ động",
@@ -61,10 +66,14 @@ for (const viewport of VIEWPORTS) {
 
         const oneHouse = page.locator("[data-one-house-editorial]");
         await expect(oneHouse).toBeVisible();
-        await expect(oneHouse.locator("[data-one-house-concept]")).toHaveCount(4);
+        await expect(
+          oneHouse.locator("[data-one-house-concept]"),
+        ).toHaveCount(4);
 
         for (const label of ONE_HOUSE_CONCEPTS[locale.lang]) {
-          await expect(oneHouse.getByRole("heading", { level: 3, name: label })).toBeVisible();
+          await expect(
+            oneHouse.getByRole("heading", { level: 3, name: label }),
+          ).toBeVisible();
         }
 
         // C2 replaces the equal framework matrix on the homepage with an
