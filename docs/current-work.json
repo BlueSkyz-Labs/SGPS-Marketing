@@ -1,8 +1,8 @@
 {
   "schemaVersion": "1.0",
-  "updatedAt": "2026-09-13",
+  "updatedAt": "2026-09-14",
   "program": "C2 Cinematic Product House (SGPS trust infrastructure retained)",
-  "status": "c2-planned-pending-product-truth",
+  "status": "c2-p3-in-progress-pending-merge",
   "authorities": {
     "experienceContract": "docs/superpowers/specs/2026-09-03-blueskyz-web-v1-c1-1-design.md",
     "c2Design": "docs/superpowers/specs/2026-09-13-c2-cinematic-product-house-design.md",
@@ -123,8 +123,8 @@
     {
       "id": "c2-p0",
       "name": "P0 Product truth activation (screenshot floor + router)",
-      "status": "IN_PROGRESS",
-      "evidence": "docs/superpowers/plans/2026-09-13-c2-cinematic-product-house-implementation.md"
+      "status": "BLOCKED",
+      "evidence": "docs/evidence/2026-09-13-c2-p0-product-truth.md"
     },
     {
       "id": "c2-p1",
@@ -135,20 +135,20 @@
     {
       "id": "c2-p2",
       "name": "P2 Art direction foundation (Horizon Arrival, act rhythm)",
-      "status": "PLANNED",
-      "evidence": "docs/superpowers/plans/2026-09-13-c2-cinematic-product-house-implementation.md"
+      "status": "MERGED",
+      "evidence": "docs/evidence/2026-09-13-c2-p2-art-direction.md"
     },
     {
       "id": "c2-p3",
       "name": "P3 Product storytelling (Flagship Theatre, Product House)",
-      "status": "PLANNED",
-      "evidence": "docs/superpowers/plans/2026-09-13-c2-cinematic-product-house-implementation.md"
+      "status": "IN_PROGRESS",
+      "evidence": "docs/evidence/2026-09-14-c2-p3-product-storytelling.md"
     },
     {
       "id": "c2-p4",
       "name": "P4 Meaning + trust progressive disclosure",
-      "status": "PLANNED",
-      "evidence": "docs/superpowers/plans/2026-09-13-c2-cinematic-product-house-implementation.md"
+      "status": "MERGED",
+      "evidence": "docs/evidence/2026-09-13-c2-p4-evidence-teaser.md"
     },
     {
       "id": "c2-p5",
@@ -184,11 +184,12 @@
     "Human E4: OWNER SELF-TESTS (owner directive 2026-09-13, NON-BLOCKER). Agent-side max complete: protocol (docs/evidence/2026-09-12-v3-human-e4.md), session template + red-team template (docs/evidence/templates/). Automated substitutes already in CI (axe matrix, Lighthouse). Real-participant sessions are owner-executed.",
     "VI copy review: OWNER CROSS-CHECKS WITH ANOTHER AGENT (owner directive 2026-09-13, NON-BLOCKER). Agent fixed the 3 weakest spots + EN/VI parity guards; remainder awaits the cross-check audit.",
     "Trademark/legal clearance and specialty print (brand kit caveats)",
-    "Product profile locale routes: OWNER-GATED (product publication). Before the first public product ships, src/pages/{en,vi}/products/[slug].astro must render the real profile (VI copy owner-reviewed). Enforced fail-closed by tests/architecture/product-route-contract.test.mjs; evidence: docs/evidence/2026-09-13-c2-route-hygiene.md. No fact/copy invented to close it."
+    "Localized product profile route: /<lang>/products/<slug>/ is emitted only by the legacy non-localized stub /products/[slug]/ (which redirects to /en/products/). Closing it is product-truth work gated behind the screenshot floor; recorded here as a finding, not silently fixed.",
+    "Router staleness recorded, not silently rewritten: c2-p1 (six-act homepage, PR #160 merged) still reads PLANNED because no P1 evidence document exists on disk and the router contract requires an existing file for a MERGED wave. The runtime contract it shipped is covered by tests/e2e/c2-home.spec.ts and tests/architecture/c2-home-composition.test.mjs."
   ],
   "nextActionable": [
-    "C2 P0: record screenshot-floor owner-fact blocker (no product may be invented)",
-    "C2 P1: lock six-act homepage contract (RED) then recompose EN/VI home",
-    "Agent: keep the honest empty-registry shell; C2 P2 (art direction), P4 (evidence teaser) and the C2 contract suites are in PRs; continue P3 (flagship storytelling, product-gated) and P5 (secondary surfaces) as separate gated PRs."
+    "C2 P3: merge the product-storytelling PR (owner-gated) once Source Assurance + Browser Assurance are green on the exact SHA",
+    "C2 P5: refine About, final action and the closing Horizon signature, then converge secondary surfaces",
+    "C2 P0 (owner): supply real screenshot + product facts, then flip the mandatory screenshot floor in one line"
   ]
 }

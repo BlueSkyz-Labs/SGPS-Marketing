@@ -292,3 +292,44 @@
     opacity: 0.7 !important;
   }
 }
+
+/* -------------------------------------------------
+   C2 P3 — Flagship Theatre spatial layer
+   Desktop-only, transform-only progressive enhancement. Adds no layout
+   change and never animates the product screenshot's opacity (it is the
+   act's visual protagonist and stays at opacity 1).
+   ------------------------------------------------- */
+
+.c2-flagship-theatre__frame img {
+  opacity: 1;
+  transform: none;
+}
+
+@media (min-width: 1024px) and (prefers-reduced-motion: no-preference) {
+  .c2-flagship-theatre__frame {
+    perspective: 1200px;
+    transform-style: preserve-3d;
+  }
+
+  .c2-flagship-theatre__frame img {
+    /* Bounded rotational tilt only — no opacity or scale shift. */
+    transform: rotateY(-1.5deg) rotateX(0.5deg) translateZ(4px);
+    transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .c2-flagship-theatre:hover .c2-flagship-theatre__frame img {
+    /* The frame settles flat on hover; still no opacity change. */
+    transform: rotateY(0deg) rotateX(0deg) translateZ(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .c2-flagship-theatre__frame,
+  .c2-flagship-theatre__frame img {
+    animation: none !important;
+    transition: none !important;
+    transform: none !important;
+    perspective: none !important;
+    transform-style: flat !important;
+  }
+}

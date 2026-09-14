@@ -56,6 +56,9 @@ for (const viewport of VIEWPORTS) {
         await expect(page.locator("[data-product-house]")).toContainText(
           /proof|bằng chứng/i,
         );
+        // With an empty registry, no product cards exist and no hierarchy tier is emitted.
+        await expect(page.locator("[data-product-card]")).toHaveCount(0);
+        await expect(page.locator('[data-product-tier="hero"]')).toHaveCount(0);
       });
 
       test(`${locale.path} does not scroll sideways`, async ({ page }) => {

@@ -1,0 +1,17 @@
+---
+// @ts-nocheck — synthetic fixture data; never shipped, never typechecked.
+import FlagshipTheatre from "@/components/product/FlagshipTheatre.astro";
+import ProductHouse from "@/components/product/ProductHouse.astro";
+import { FIXTURE_FLAGSHIP, FIXTURE_PRODUCTS } from "../data/fixture-products";
+---
+
+<!doctype html>
+<html lang="vi">
+  <head><meta charset="utf-8" /><title>Product acts fixture (VI)</title></head>
+  <body>
+    <main>
+      <FlagshipTheatre product={FIXTURE_FLAGSHIP} lang="vi" />
+      <ProductHouse products={FIXTURE_PRODUCTS} lang="vi" />
+    </main>
+  </body>
+</html>

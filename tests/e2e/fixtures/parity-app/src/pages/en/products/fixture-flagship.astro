@@ -1,0 +1,39 @@
+---
+// @ts-nocheck — synthetic fixture data; never shipped, never typechecked.
+// Mimics the canonical localized product profile destination so the
+// cross-document continuity contract (C2 P3, Task 9) can be asserted without
+// publishing a real product. The two names below are the destination side of
+// the convention declared in src/lib/product-transition.ts.
+import {
+  productTransitionStyle,
+  type ProductTransitionKind,
+} from "@/lib/product-transition";
+import { FIXTURE_FLAGSHIP } from "../../../data/fixture-products";
+
+const { data } = FIXTURE_FLAGSHIP;
+const cardName = productTransitionStyle(
+  "card" as ProductTransitionKind,
+  data.slug,
+);
+const mediaName = productTransitionStyle(
+  "media" as ProductTransitionKind,
+  data.slug,
+);
+---
+
+<!doctype html>
+<html lang="en">
+  <head><meta charset="utf-8" /><title>{data.name}</title></head>
+  <body>
+    <main>
+      <h1 style={cardName} data-product-profile-title>{data.name}</h1>
+      <img
+        src={data.proof.screenshot.src}
+        alt={data.proof.screenshot.alt}
+        width={data.proof.screenshot.width}
+        height={data.proof.screenshot.height}
+        style={mediaName}
+      />
+    </main>
+  </body>
+</html>

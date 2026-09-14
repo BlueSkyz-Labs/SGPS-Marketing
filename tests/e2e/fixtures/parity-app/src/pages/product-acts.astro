@@ -1,0 +1,20 @@
+---
+// @ts-nocheck — synthetic fixture data; this app never ships and is never
+// typechecked by repo gates. It renders the real C2 product surfaces with
+// fixture records so product-present behaviour is testable while the
+// production registry stays empty.
+import FlagshipTheatre from "@/components/product/FlagshipTheatre.astro";
+import ProductHouse from "@/components/product/ProductHouse.astro";
+import { FIXTURE_FLAGSHIP, FIXTURE_PRODUCTS } from "../data/fixture-products";
+---
+
+<!doctype html>
+<html lang="en">
+  <head><meta charset="utf-8" /><title>Product acts fixture (EN)</title></head>
+  <body>
+    <main>
+      <FlagshipTheatre product={FIXTURE_FLAGSHIP} lang="en" />
+      <ProductHouse products={FIXTURE_PRODUCTS} lang="en" />
+    </main>
+  </body>
+</html>
