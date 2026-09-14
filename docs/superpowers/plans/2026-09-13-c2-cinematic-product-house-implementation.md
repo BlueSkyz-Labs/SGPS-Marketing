@@ -360,27 +360,27 @@ git commit -m "test(c2): lock cinematic performance and truth boundaries"
 
 **Interface:** consume the single real flagship chosen by `getFlagshipProduct()`; produce a product-led visual with screenshot, status, outcome, capabilities, and canonical action/profile route. No authored facts live inside the component.
 
-- [ ] **Step 1: add fixture-backed product-path tests.**
+- [x] **Step 1: add fixture-backed product-path tests.**
 
 Use the existing product parity fixture to prove name, status, screenshot, capability, and action rendering without pretending fixture data is production publication truth.
 
-- [ ] **Step 2: make the screenshot the visual protagonist.**
+- [x] **Step 2: make the screenshot the visual protagonist.**
 
 Use intrinsic screenshot dimensions and meaningful alt text. Measure before choosing eager/lazy loading because the theatre sits immediately after hero and may affect LCP.
 
-- [ ] **Step 3: keep status and capabilities subordinate.**
+- [x] **Step 3: keep status and capabilities subordinate.**
 
 Show one factual status family and two or three capabilities directly from product data. Do not write new marketing capability claims in the component.
 
-- [ ] **Step 4: add restrained desktop-only spatial enhancement.**
+- [x] **Step 4: add restrained desktop-only spatial enhancement.**
 
 Small perspective/rotation/settling is allowed only when motion is welcome and viewport/context support it. Mobile gets a direct frontal editorial layout.
 
-- [ ] **Step 5: verify empty-registry honesty.**
+- [x] **Step 5: verify empty-registry honesty.**
 
 No real public product means no invented product art, fake screenshot, placeholder app shell, or fake product CTA.
 
-- [ ] **Step 6: run product and evidence gates.**
+- [x] **Step 6: run product and evidence gates.**
 
 ```bash
 pnpm build
@@ -389,7 +389,7 @@ pnpm check:product-provenance
 npx playwright test tests/e2e/c2-home.spec.ts tests/e2e/evidence-depth.spec.ts tests/e2e/empty-and-404.spec.ts --project=chromium --project=mobile-chromium
 ```
 
-- [ ] **Step 7: commit.**
+- [x] **Step 7: commit.**
 
 ```bash
 git add src/components/product/FlagshipTheatre.astro src/components/sections/FlagshipProof.astro tests/e2e/c2-home.spec.ts
@@ -407,25 +407,25 @@ git commit -m "feat(product): add truth-driven flagship theatre"
 
 **Interface:** consume the public product list; produce semantic product links with flagship, secondary, and ecosystem hierarchy. Mobile is a vertical editorial stack; desktop may use a native scroll/rail treatment only as enhancement.
 
-- [ ] **Step 1: prove hierarchy against fixture products.**
+- [x] **Step 1: prove hierarchy against fixture products.**
 
 `featuredTier=hero` must be distinguished without hiding secondary/ecosystem products or giving every product equal visual weight.
 
-- [ ] **Step 2: implement no-JS semantic layout first.**
+- [x] **Step 2: implement no-JS semantic layout first.**
 
 Use normal DOM order and normal links. If desktop uses native horizontal overflow/scroll snap, every product remains reachable by keyboard and ordinary scrolling, and mobile does not inherit a cramped rail.
 
-- [ ] **Step 3: preserve literal action semantics.**
+- [x] **Step 3: preserve literal action semantics.**
 
 Reuse existing action labels and product route helpers. Do not replace truthful actions with cinematic copy such as “Enter the future”.
 
-- [ ] **Step 4: verify mobile and 200% text.**
+- [x] **Step 4: verify mobile and 200% text.**
 
 ```bash
 npx playwright test tests/e2e/c2-home.spec.ts tests/e2e/mobile-overflow.spec.ts tests/e2e/text-zoom.spec.ts --project=chromium --project=mobile-chromium
 ```
 
-- [ ] **Step 5: commit.**
+- [x] **Step 5: commit.**
 
 ```bash
 git add src/components/product/ProductHouse.astro src/components/product/ProductCard.astro src/components/sections/FeaturedProducts.astro tests/e2e/c2-home.spec.ts
@@ -442,25 +442,25 @@ git commit -m "feat(product): add editorial Product House hierarchy"
 
 **Interface:** consume canonical product slug/profile helpers; produce optional cross-document visual continuity without click interception or SPA routing.
 
-- [ ] **Step 1: write the normal-navigation baseline first.**
+- [x] **Step 1: write the normal-navigation baseline first.**
 
 With decorative motion effectively disabled, clicking a product link must load the canonical localized product profile URL and heading.
 
-- [ ] **Step 2: add stable native transition names from the already-constrained product slug.**
+- [x] **Step 2: add stable native transition names from the already-constrained product slug.**
 
 Ensure only one source and one destination element per document use a matching transition name; duplicate names must never break navigation.
 
-- [ ] **Step 3: capability-detect only.**
+- [x] **Step 3: capability-detect only.**
 
 Use native View Transition support where available. Do not intercept clicks or add a client router.
 
-- [ ] **Step 4: verify reduced motion and browser fallbacks.**
+- [x] **Step 4: verify reduced motion and browser fallbacks.**
 
 ```bash
 npx playwright test tests/e2e/c2-product-continuity.spec.ts --project=chromium --project=firefox --project=webkit
 ```
 
-- [ ] **Step 5: commit.**
+- [x] **Step 5: commit.**
 
 ```bash
 git add tests/e2e/c2-product-continuity.spec.ts src/components/product src/styles/cinematic-product-house.css
