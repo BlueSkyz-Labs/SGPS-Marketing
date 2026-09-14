@@ -1,32 +1,6 @@
 ---
-import BaseLayout from "@/layouts/BaseLayout.astro";
-import Container from "@/components/layout/Container.astro";
-import Hero from "@/components/sections/Hero.astro";
-import FeaturedProducts from "@/components/sections/FeaturedProducts.astro";
-import FlagshipProof from "@/components/sections/FlagshipProof.astro";
-import OneHouse from "@/components/sections/OneHouse.astro";
-import Trust from "@/components/sections/Trust.astro";
-import AboutBlueSkyz from "@/components/sections/AboutBlueSkyz.astro";
-import NextStep from "@/components/sections/NextStep.astro";
-import { getFlagshipProduct, getPublicProducts } from "@/lib/products";
-import { SITE } from "@/data/site";
-
-const products = await getPublicProducts();
-const flagship = await getFlagshipProduct();
+// Legacy/root path kept as a redirect stub so old links never 404 the visitor.
+// The locale-prefixed routes (/en/..., /vi/...) are the canonical ones: see
+// docs/decisions/0006-domain-migration-and-product-subdomains.md.
 return Astro.redirect("/en/");
 ---
-
-<BaseLayout
-  title={SITE.name}
-  description={`${SITE.taglineLead} ${SITE.taglineAccent} ${SITE.proposition}`}
->
-  <Hero />
-  <Container>
-    <FeaturedProducts products={products} lang="en" />
-    <OneHouse />
-    {flagship ? <FlagshipProof product={flagship} lang="en" /> : null}
-    <Trust />
-    <AboutBlueSkyz />
-    <NextStep />
-  </Container>
-</BaseLayout>
