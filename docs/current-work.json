@@ -167,17 +167,12 @@
     {
       "id": "screenshot-mandatory-floor",
       "question": "C2 Task 2 / #125 C1c: public products require a real screenshot; no candidate has owner-approved identity + real screenshot + proof, so P0 product activation is BLOCKED_OWNER_FACT. Scaffold ready (product-screenshot-floor.test.mjs); C2 structural shell proceeds against the honest empty registry. Owner supplies assets -> one-line flip.",
-      "blocks": [
-        "product-publication-contract",
-        "c2-full-flagship-theatre"
-      ]
+      "blocks": ["product-publication-contract", "c2-full-flagship-theatre"]
     },
     {
       "id": "human-review-governance",
       "question": "Enable stronger human review rules only if a real independent reviewer path exists (otherwise record HUMAN_REVIEW_UNAVAILABLE).",
-      "blocks": [
-        "branch-protection"
-      ]
+      "blocks": ["branch-protection"]
     },
     {
       "id": "rum-provider",
