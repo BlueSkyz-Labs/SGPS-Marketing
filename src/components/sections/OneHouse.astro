@@ -1,29 +1,51 @@
 ---
-import OneHouseMatrix from "@/components/experience/OneHouseMatrix.astro";
-
 interface Props {
   lang?: "en" | "vi";
 }
+
 const { lang = "en" } = Astro.props;
 const isVi = lang === "vi";
+const concepts = isVi
+  ? [
+      "Rõ ràng",
+      "Con người giữ quyền chủ động",
+      "Trí tuệ có mục đích",
+      "Tin cậy ngay từ thiết kế",
+    ]
+  : ["Clarity", "Human agency", "Purposeful intelligence", "Trust by design"];
 ---
 
 <section
-  class="border-b border-[var(--border-subtle)] py-16 lg:py-20"
+  class="c2-one-house border-b border-[var(--border-subtle)] py-16 lg:py-20"
   aria-labelledby="house-title"
+  data-one-house-editorial
 >
-  <h2
-    id="house-title"
-    class="text-3xl font-semibold tracking-tight text-balance sm:text-4xl"
-  >
-    {isVi ? "Một nhà — một cách suy nghĩ" : "One house — a way of thinking"}
-  </h2>
-  <p class="mt-4 max-w-2xl text-lg text-[var(--text-secondary)] text-pretty">
+  <div class="c2-one-house__intro">
+    <h2
+      id="house-title"
+      class="text-3xl font-semibold tracking-tight text-balance sm:text-4xl"
+    >
+      {isVi ? "Một nhà — một cách suy nghĩ" : "One house — a way of thinking"}
+    </h2>
+    <p class="mt-4 max-w-2xl text-lg text-[var(--text-secondary)] text-pretty">
+      {
+        isVi
+          ? "Chúng tôi không xây dựng xung quanh một danh mục. Chúng tôi xây dựng xung quanh một cách suy nghĩ."
+          : "We don’t build around one category. We build around a way of thinking."
+      }
+    </p>
+  </div>
+
+  <ol class="c2-one-house__concepts">
     {
-      isVi
-        ? "Chúng tôi không xây dựng xung quanh một danh mục. Chúng tôi xây dựng xung quanh một cách suy nghĩ."
-        : "We don’t build around one category. We build around a way of thinking."
+      concepts.map((concept, index) => (
+        <li class="c2-one-house__concept" data-one-house-concept>
+          <span class="c2-one-house__index" aria-hidden="true">
+            {String(index + 1).padStart(2, "0")}
+          </span>
+          <h3 class="c2-one-house__concept-title">{concept}</h3>
+        </li>
+      ))
     }
-  </p>
-  <OneHouseMatrix lang={lang} />
+  </ol>
 </section>

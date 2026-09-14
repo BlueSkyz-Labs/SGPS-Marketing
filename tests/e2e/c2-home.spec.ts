@@ -12,6 +12,16 @@ const LOCALES = [
   { path: "/vi/", lang: "vi" },
 ] as const;
 
+const ONE_HOUSE_CONCEPTS = {
+  en: ["Clarity", "Human agency", "Purposeful intelligence", "Trust by design"],
+  vi: [
+    "Rõ ràng",
+    "Con người giữ quyền chủ động",
+    "Trí tuệ có mục đích",
+    "Tin cậy ngay từ thiết kế",
+  ],
+} as const;
+
 const VIEWPORTS = [
   { name: "desktop", width: 1280, height: 900 },
   { name: "mobile", width: 390, height: 844 },
@@ -42,6 +52,31 @@ for (const viewport of VIEWPORTS) {
         // Anchors remain the authority: at least one real link per act region.
         const links = await page.locator("main a[href^='/']").count();
         expect(links).toBeGreaterThan(2);
+      });
+
+      test(`${locale.path} presents One House as plain-language editorial philosophy`, async ({
+        page,
+      }) => {
+        await page.goto(locale.path);
+
+        const oneHouse = page.locator("[data-one-house-editorial]");
+        await expect(oneHouse).toBeVisible();
+        await expect(oneHouse.locator("[data-one-house-concept]")).toHaveCount(
+          4,
+        );
+
+        for (const label of ONE_HOUSE_CONCEPTS[locale.lang]) {
+          await expect(
+            oneHouse.getByRole("heading", { level: 3, name: label }),
+          ).toBeVisible();
+        }
+
+        // C2 replaces the equal framework matrix on the homepage with an
+        // editorial interlude. The matrix may continue to exist elsewhere.
+        await expect(page.locator("[data-principle-matrix]")).toHaveCount(0);
+
+        const text = await oneHouse.textContent();
+        expect(text ?? "").not.toMatch(/every product.*AI|mọi sản phẩm.*AI/i);
       });
 
       test(`${locale.path} does not fabricate a product when the registry is empty`, async ({
