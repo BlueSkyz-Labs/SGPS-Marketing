@@ -27,9 +27,10 @@ test("v4 hero uses the supplied website artwork and flat lockup", () => {
   );
 });
 
-test("v4 principle icons are rendered without publishing product claims", () => {
-  // S+ Task 5: principle icons render inside the OneHouseMatrix component;
-  // the assertions follow the rendered icons and keep the section wiring.
+test("v4 principle icons remain available while C2 home uses the editorial interlude", () => {
+  // The reusable S+ matrix remains intact for any surface that still needs the
+  // operating-model detail, but C2 Task 10 deliberately removes the homepage
+  // dependency on that equal-card treatment in favor of an editorial interlude.
   const matrix = readFileSync(
     "src/components/experience/OneHouseMatrix.astro",
     "utf8",
@@ -42,8 +43,11 @@ test("v4 principle icons are rendered without publishing product claims", () => 
     );
     assert.match(assets, new RegExp(name + ":"));
   }
+
   const house = readFileSync("src/components/sections/OneHouse.astro", "utf8");
-  assert.match(house, /OneHouseMatrix/);
+  assert.doesNotMatch(house, /OneHouseMatrix/);
+  assert.match(house, /data-one-house-editorial/);
+  assert.match(house, /data-one-house-concept/);
 });
 
 test("v4 copy library description is the public brand proposition", () => {
