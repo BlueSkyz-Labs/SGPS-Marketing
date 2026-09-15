@@ -1,8 +1,8 @@
 {
   "schemaVersion": "1.0",
-  "updatedAt": "2026-09-14",
+  "updatedAt": "2026-09-15",
   "program": "C2 Cinematic Product House (SGPS trust infrastructure retained)",
-  "status": "c2-p4-in-progress",
+  "status": "c2-p6-in-progress",
   "authorities": {
     "experienceContract": "docs/superpowers/specs/2026-09-03-blueskyz-web-v1-c1-1-design.md",
     "c2Design": "docs/superpowers/specs/2026-09-13-c2-cinematic-product-house-design.md",
@@ -147,19 +147,19 @@
     {
       "id": "c2-p4",
       "name": "P4 Meaning + trust progressive disclosure",
-      "status": "IN_PROGRESS",
+      "status": "MERGED",
       "evidence": "docs/evidence/2026-09-14-c2-p4-meaning-trust.md"
     },
     {
       "id": "c2-p5",
       "name": "P5 Human layer, closing signature, secondary surfaces",
-      "status": "PLANNED",
-      "evidence": "docs/superpowers/plans/2026-09-13-c2-cinematic-product-house-implementation.md"
+      "status": "MERGED",
+      "evidence": "docs/evidence/2026-09-15-c2-p5-human-layer.md"
     },
     {
       "id": "c2-p6",
       "name": "P6 Elite QA, red team, promotion, production read-back",
-      "status": "PLANNED",
+      "status": "IN_PROGRESS",
       "evidence": "docs/superpowers/plans/2026-09-13-c2-cinematic-product-house-implementation.md"
     }
   ],
@@ -187,9 +187,8 @@
     "Localized product profile route: /<lang>/products/<slug>/ is emitted only by the legacy non-localized stub /products/[slug]/ (which redirects to /en/products/). Closing it is product-truth work gated behind the screenshot floor; recorded here as a finding, not silently fixed."
   ],
   "nextActionable": [
-    "C2 P4 Task 10: reframe One House as a plain-language editorial interlude with EN/VI parity; verify by exact-head source and browser assurance",
-    "C2 P5: refine About, final action and closing Horizon signature, then audit and converge only real secondary-surface defects",
-    "C2 P6: run full cross-surface QA/red-team, reconcile evidence/router, and verify production provider read-back for merged runtime waves",
+    "C2 P6: run full cross-surface QA/red-team suite, verify visual hierarchy & contrast, and audit client deltas",
+    "C2 P6: verify production provider read-back (Cloudflare deployment and live headers/markers) for all merged C2 waves",
     "C2 P0 (owner): supply real screenshot + product facts before the public product/flagship activation contract can be completed"
   ]
 }
