@@ -1,12 +1,17 @@
 ---
-interface Props {
+interface Props extends Record<string, unknown> {
   class?: string;
 }
 
-const { class: className = "" } = Astro.props;
+const { class: className = "", ...rest } = Astro.props;
 ---
 
-<div class:list={["horizon-field", className]} data-horizon aria-hidden="true">
+<div
+  class:list={["horizon-field", className]}
+  data-horizon
+  aria-hidden="true"
+  {...rest}
+>
   <span class="horizon-field__halo"></span>
   <span class="horizon-field__line"></span>
   <span class="horizon-field__depth"></span>
