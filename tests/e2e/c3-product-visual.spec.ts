@@ -51,13 +51,20 @@ test.describe("C3 ProductVisual — fixture-backed screenshot truth", () => {
       await expect(image).toHaveAttribute("decoding", "async");
 
       const imageBox = await image.boundingBox();
-      expect(imageBox, "product screenshot must be rendered and measurable").not.toBeNull();
+      expect(
+        imageBox,
+        "product screenshot must be rendered and measurable",
+      ).not.toBeNull();
       expect(imageBox!.width).toBeGreaterThanOrEqual(viewport.readableFloor);
       expect(imageBox!.x).toBeGreaterThanOrEqual(0);
-      expect(imageBox!.x + imageBox!.width).toBeLessThanOrEqual(viewport.width + 1);
+      expect(imageBox!.x + imageBox!.width).toBeLessThanOrEqual(
+        viewport.width + 1,
+      );
 
       const horizontalOverflow = await page.evaluate(
-        () => document.documentElement.scrollWidth > document.documentElement.clientWidth,
+        () =>
+          document.documentElement.scrollWidth >
+          document.documentElement.clientWidth,
       );
       expect(horizontalOverflow).toBe(false);
     });
@@ -69,5 +76,7 @@ test("real site fabricates no product visual while screenshot truth is unavailab
 }) => {
   await page.goto("/en/");
   await expect(page.locator(VISUAL)).toHaveCount(0);
-  await expect(page.locator('[data-product-continuity="media"]')).toHaveCount(0);
+  await expect(page.locator('[data-product-continuity="media"]')).toHaveCount(
+    0,
+  );
 });
