@@ -21,14 +21,20 @@ test("product-present fixture pages load the runtime style entry in authoritativ
   const runtimeCraft = runtime.indexOf(CRAFT_STYLE);
 
   assert.ok(runtimeGlobal >= 0, "BaseLayout must load global.css");
-  assert.ok(runtimeCraft > runtimeGlobal, "BaseLayout must load c3-craft.css after global.css");
+  assert.ok(
+    runtimeCraft > runtimeGlobal,
+    "BaseLayout must load c3-craft.css after global.css",
+  );
 
   for (const path of FIXTURE_PAGES) {
     const fixture = source(path);
     const fixtureGlobal = fixture.indexOf(GLOBAL_STYLE);
     const fixtureCraft = fixture.indexOf(CRAFT_STYLE);
 
-    assert.ok(fixtureGlobal >= 0, `${path} must load the production global style entry`);
+    assert.ok(
+      fixtureGlobal >= 0,
+      `${path} must load the production global style entry`,
+    );
     assert.ok(
       fixtureCraft > fixtureGlobal,
       `${path} must load c3-craft.css after global.css like BaseLayout`,
