@@ -1,37 +1,35 @@
-@layer c3-base {
-  .c3-product-visual {
-    contain: layout style;
-    min-width: 0 !important;
-    overflow: hidden !important;
-    width: 100% !important;
-    max-width: 100% !important;
-    display: block !important;
-    box-sizing: border-box !important;
-  }
-
-  .c2-flagship-theatre__frame {
-    contain: layout style;
-    width: 100% !important;
-    min-width: 0 !important;
-    overflow: hidden !important;
-    max-width: 100% !important;
-    display: block !important;
-    box-sizing: border-box !important;
-  }
-
-  .c3-product-visual__image {
-    contain: layout style;
-    display: block !important;
-    box-sizing: border-box !important;
-    width: 100% !important;
-    max-width: 100% !important;
-    height: auto !important;
-    min-width: 0 !important;
-    border: 1px solid var(--c3-image-surface-border);
-    border-radius: var(--c3-image-surface-radius);
-    background: var(--c3-image-surface-background);
-  }
+/* C3 product visual styles — kept outside @layer so Tailwind v4 doesn't parse them */
+.c3-product-visual {
+  contain: layout style;
+  min-width: 0 !important;
+  overflow: hidden !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  display: block !important;
+  box-sizing: border-box !important;
 }
+
+.c2-flagship-theatre__frame {
+  contain: layout style;
+  width: 100% !important;
+  min-width: 0 !important;
+  overflow: hidden !important;
+  max-width: 100% !important;
+  display: block !important;
+  box-sizing: border-box !important;
+}
+
+.c3-product-visual__image {
+  contain: layout style;
+  display: block !important;
+  box-sizing: border-box !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  height: auto !important;
+  min-width: 0 !important;
+  border: 1px solid var(--c3-image-surface-border);
+  border-radius: var(--c3-image-surface-radius);
+  background: var(--c3-image-surface-background);
 }
 
 @media (prefers-reduced-motion: reduce) {
