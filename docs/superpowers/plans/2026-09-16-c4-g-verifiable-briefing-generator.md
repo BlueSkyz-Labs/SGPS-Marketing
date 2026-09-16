@@ -26,11 +26,13 @@
 ### Task 1: Define deterministic briefing compiler
 
 **Files:**
+
 - Create: `src/lib/briefing.ts`
 - Reuse when available: `src/lib/dossier.ts`, `src/lib/provenance-lens.ts`, public architecture/release/product selectors
 - Create: `tests/architecture/c4-briefing-contract.test.mjs`
 
 **Interfaces:**
+
 - Produces `compilePublicBriefing(input, lang)` from allowlisted public IDs plus a bounded briefing purpose such as `executive`, `technical`, `trust`, or `release`.
 - Returns structured sections with source refs, boundaries, authored freshness where available, and unknown/missing items.
 
@@ -55,6 +57,7 @@ Assert each factual section includes the exact public provenance/source identiti
 ### Task 2: Build deterministic Briefing UI and print/export view
 
 **Files:**
+
 - Create: `src/components/briefing/BriefingComposer.astro`
 - Create: `src/components/briefing/BriefingDocument.astro`
 - Create: `src/scripts/briefing-composer.ts` only if local interaction is required
@@ -63,6 +66,7 @@ Assert each factual section includes the exact public provenance/source identiti
 - Create: `tests/e2e/c4-briefing.spec.ts`
 
 **Interfaces:**
+
 - Consumes deterministic compiler output.
 - Produces readable/printable briefing with sources, limitations, unknowns, and clear purpose label.
 
@@ -79,11 +83,13 @@ Source pages remain authoritative; interaction only selects public IDs/purpose.
 ### Task 3: Write Model-Assisted Briefing ADR before any remote synthesis
 
 **Files:**
+
 - Create: `docs/decisions/0010-c4-model-assisted-briefing.md`
 - Create: `docs/security/2026-09-16-c4-briefing-threat-model.md`; record actual review timestamps/revisions inside the document
 - Create: `docs/evidence/2026-09-16-c4-briefing-model-go-gate.md`; record exact approved/rejected revision and observed timestamp
 
 **Interfaces:**
+
 - Produces approved model/provider/runtime, allowed corpus, retrieval model, prompt policy, source freshness, output schema, citation enforcement, refusal semantics, logging/retention, rate limits, abuse controls, cost ceiling, outage fallback, and kill switch.
 
 - [ ] **Step 1: reuse C3-E decisions where applicable**
@@ -101,10 +107,12 @@ No remote runtime code until ADR 0010 is approved.
 ### Task 4: Build model-output policy validator after GO
 
 **Files:**
+
 - Create provider-independent module such as `src/lib/briefing-output-policy.ts` or the server-runtime equivalent defined by ADR 0010
 - Create: `tests/security/c4-briefing-output-policy.test.mjs` or the repository-conformant security-test path defined by ADR 0010
 
 **Interfaces:**
+
 - Consumes structured model response plus allowed source IDs.
 - Produces accepted structured briefing sections or fail-closed rejection/fallback.
 
@@ -123,10 +131,12 @@ Any model/policy failure returns the Phase 1 deterministic briefing, not a parti
 ### Task 5: Implement minimum-data model request after GO
 
 **Files:**
+
 - Runtime/provider adapter path defined by ADR 0010 before this task begins
 - Provider adapter tests colocated with the approved runtime boundary
 
 **Interfaces:**
+
 - Sends only explicit user purpose/request plus minimum approved public source excerpts/IDs required for the request.
 
 - [ ] **Step 1: test request minimization**
@@ -140,6 +150,7 @@ No cookies, identity/profile history, unrelated page behavior, private evidence,
 ### Task 6: Red-team source-bound synthesis
 
 **Files:**
+
 - Create: `docs/evidence/2026-09-16-c4-briefing-red-team.md`; record actual execution timestamp and exact candidate revision
 - Extend adversarial test suites
 
@@ -158,6 +169,7 @@ Deterministic generator remains available and public site stays healthy.
 ### Task 7: Promotion and production read-back
 
 **Files:**
+
 - Create: `docs/evidence/2026-09-16-c4-briefing-production-readback.md`; record exact deployed revision and observed timestamp
 
 - [ ] **Step 1: require exact-head source/browser/security gates**
