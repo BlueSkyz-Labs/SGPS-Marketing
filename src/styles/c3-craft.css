@@ -1,0 +1,19 @@
+/* C3-A Task 1 — Experience Craft Foundation shared role contract.
+ *
+ * This file intentionally defines semantic aliases only. Later C3-A tasks
+ * consume these roles for product imagery, route continuity, typography,
+ * header states, mobile composition, and microinteractions. Existing Brand v4
+ * and C2 tokens remain authoritative; no second palette, animation system, or
+ * transition identity convention is introduced here.
+ */
+
+:root {
+  --c3-image-surface-radius: var(--radius-card);
+  --c3-image-surface-border: var(--border-subtle);
+  --c3-image-surface-background: var(--surface-primary);
+  --c3-route-transition-duration: var(--motion-continuity-duration);
+  --c3-route-transition-ease: var(--motion-ease-standard);
+  --c3-interaction-duration: var(--motion-confirmation-duration);
+  --c3-interaction-ease: var(--motion-ease-standard);
+  --c3-interaction-distance: var(--motion-distance-sm);
+}
