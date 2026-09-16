@@ -28,11 +28,13 @@
 ### Task 1: Write Private Evaluation architecture/privacy/security ADR
 
 **Files:**
+
 - Create: `docs/decisions/0009-c4-private-evaluation-room.md`
 - Create: `docs/security/2026-09-16-c4-private-evaluation-threat-model.md`; record actual threat-model review timestamps/revisions inside the document
 - Create: `docs/evidence/2026-09-16-c4-private-evaluation-go-gate.md`; record the exact approved/rejected revision and observed timestamp
 
 **Interfaces:**
+
 - Produces approved decisions for: identity provider, session model, runtime, storage, encryption, tenant/prospect isolation, RBAC roles, invite lifecycle, expiry, revocation, audit events, retention/deletion, backups, recovery, incident response, domain, rate limits, abuse controls, operational ownership, and cost ceiling.
 
 - [ ] **Step 1: inventory data classes and actors**
@@ -54,10 +56,12 @@ No code until provider/runtime, threat mitigations, data retention, recovery, an
 ### Task 2: Add repository isolation guard before implementation
 
 **Files:**
+
 - Create: `tests/architecture/c4-private-evaluation-boundary.test.mjs`
 - Modify build/dependency guards only if the approved architecture adds a separate package/app boundary
 
 **Interfaces:**
+
 - Produces fail-closed checks that private-room code/data is absent from public critical imports/static output and that public code has no hard dependency on the private runtime.
 
 - [ ] **Step 1: write RED guard against hypothetical leakage**
@@ -71,10 +75,12 @@ Prefer a distinct application/package/deployment boundary if that best preserves
 ### Task 3: Implement identity/session foundation after GO
 
 **Files:**
+
 - Runtime/provider paths are defined in `docs/decisions/0009-c4-private-evaluation-room.md` before this task starts; amend this plan in a dedicated docs PR if those exact paths differ from the approved application boundary.
 - Create dedicated authn/authz contract tests and integration tests in the application boundary defined by ADR 0009.
 
 **Interfaces:**
+
 - Produces authenticated principal/session with immutable subject identity and server-validated entitlement context.
 
 - [ ] **Step 1: write auth/session negative tests first**
@@ -90,10 +96,12 @@ Require secure transport, appropriate Secure/HttpOnly/SameSite or equivalent tok
 ### Task 4: Implement deny-by-default authorization
 
 **Files:**
+
 - Create dedicated policy module according to ADR 0009
 - Create authorization unit/integration tests in the same isolated application boundary
 
 **Interfaces:**
+
 - Produces `authorize(principal, action, resource)` or equivalent policy decision with explicit deny default.
 
 - [ ] **Step 1: build a permission matrix test suite**
@@ -109,11 +117,13 @@ Manipulated IDs/URLs/body fields must never cross access boundaries.
 ### Task 5: Implement private artifact lifecycle
 
 **Files:**
+
 - Storage/data modules defined by ADR 0009
 - Upload/download metadata validation tests if uploads are approved
 - Retention/deletion tests
 
 **Interfaces:**
+
 - Produces bounded artifact records with classification, owner/scope, created/expiry/retention metadata, and auditable lifecycle.
 
 - [ ] **Step 1: write content/metadata validation tests**
@@ -131,11 +141,13 @@ Deletion semantics must account for backups/log retention honestly; do not promi
 ### Task 6: Implement audit, revocation, incident and recovery controls
 
 **Files:**
+
 - Audit event schema/module defined by ADR 0009
 - Create: `docs/operations/c4-private-evaluation-runbook.md`
 - Create recovery/incident integration tests where automatable
 
 **Interfaces:**
+
 - Produces privacy-safe audit events for high-risk security/entitlement actions and operational procedures for disable/revoke/recover.
 
 - [ ] **Step 1: define audited events**
@@ -153,6 +165,7 @@ Document break-glass path, backup identity/admin path, restoration order, and ev
 ### Task 7: Production-grade security red team and promotion gate
 
 **Files:**
+
 - Create: `docs/evidence/2026-09-16-c4-private-evaluation-security-red-team.md`; record actual execution timestamp and exact candidate SHA
 - Create: `docs/evidence/2026-09-16-c4-private-evaluation-production-readback.md`; record exact deployed revision and observed timestamp
 
