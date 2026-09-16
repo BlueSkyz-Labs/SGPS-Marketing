@@ -24,12 +24,14 @@
 ### Task 1: Define public-safe architecture adapter
 
 **Files:**
+
 - Create: `src/lib/public-architecture.ts`
 - Read: `architecture/sgps-model.json`
 - Read existing generated/public architecture views and evidence contracts
 - Create: `tests/architecture/c4-public-architecture.test.mjs`
 
 **Interfaces:**
+
 - Produces `getPublicArchitectureView(lens)` for allowlisted lenses: `system`, `data`, `trust`, `recovery`, `evidence`.
 - Returns stable public node/edge records with public labels/descriptions only.
 
@@ -54,6 +56,7 @@ Synthetic internal-path/private-host records must be excluded/fail according to 
 ### Task 2: Build Architecture Salon
 
 **Files:**
+
 - Create: `src/components/architecture/ArchitectureSalon.astro`
 - Create: `src/components/architecture/ArchitectureLens.astro`
 - Modify localized architecture route(s) discovered on live main
@@ -61,6 +64,7 @@ Synthetic internal-path/private-host records must be excluded/fail according to 
 - Create: `tests/e2e/c4-architecture-salon.spec.ts`
 
 **Interfaces:**
+
 - Consumes public-safe architecture view only.
 - Produces text-first lens navigation plus optional SVG relationships.
 
@@ -77,11 +81,13 @@ Prefer semantic lists/sections and small SVG connectors. Do not introduce WebGL,
 ### Task 3: Define site-wide provenance adapter
 
 **Files:**
+
 - Create: `src/lib/provenance-lens.ts`
 - Read canonical product/claim/evidence/release/public architecture selectors
 - Create: `tests/architecture/c4-provenance-lens.test.mjs`
 
 **Interfaces:**
+
 - Produces `getPublicProvenance(subject)` with `statement`, `sourceRefs`, `boundary`, optional authored freshness, and explicit `unknown` semantics.
 - Subject identifiers are stable allowlisted public IDs only.
 
@@ -100,12 +106,14 @@ EN/VI presentation can differ in copy but must resolve the same underlying publi
 ### Task 4: Build Provenance Lens component
 
 **Files:**
+
 - Create: `src/components/provenance/ProvenanceLens.astro`
 - Modify selected product/trust/architecture/release surfaces after live inventory
 - Modify: `src/styles/c4-quiet-authority.css`
 - Create: `tests/e2e/c4-provenance-lens.spec.ts`
 
 **Interfaces:**
+
 - Consumes validated provenance view model.
 - Produces progressive disclosure from statement to source/boundary/freshness without hiding main content.
 
@@ -122,11 +130,13 @@ Prefer `<details>`/semantic links before custom JS. Desktop enhancements must no
 ### Task 5: Add provenance-to-dossier integration contract
 
 **Files:**
+
 - Extend: `src/lib/dossier.ts` only after C4-C exists
 - Extend: `tests/architecture/c4-dossier-contract.test.mjs`
 - Extend C4-D tests
 
 **Interfaces:**
+
 - Dossier consumes provenance adapter; it must not duplicate provenance truth.
 
 - [ ] **Step 1: write integration test**
