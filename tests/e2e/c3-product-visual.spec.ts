@@ -36,25 +36,6 @@ test.describe("C3 ProductVisual — fixture-backed screenshot truth", () => {
       const visual = page.locator(`${THEATRE} ${VISUAL}`);
       await expect(visual).toHaveCount(1);
 
-      const domDiagnostic = await visual.evaluate((element) => ({
-        outerHTML: element.outerHTML,
-        directChildren: Array.from(element.children).map(
-          (child) => child.outerHTML,
-        ),
-        imageDescendants: Array.from(element.querySelectorAll("img")).map(
-          (image) => ({
-            src: image.getAttribute("src"),
-            alt: image.getAttribute("alt"),
-            parent: image.parentElement?.tagName ?? null,
-          }),
-        ),
-        figureOuterHTML: element.closest("figure")?.outerHTML ?? null,
-      }));
-      console.log(
-        "C3_PRODUCT_VISUAL_DOM_DIAGNOSTIC",
-        JSON.stringify(domDiagnostic),
-      );
-
       const image = visual.locator("img");
       await expect(image).toHaveAttribute(
         "src",
