@@ -48,51 +48,45 @@ function craftSource() {
   return existsSync(CRAFT_CSS) ? readFileSync(CRAFT_CSS, "utf8") : "";
 }
 
-test(
-  "C3 craft has one focused stylesheet imported by the runtime layout entry",
-  () => {
-    assert.ok(
-      existsSync(CRAFT_CSS),
-      `${CRAFT_CSS} must exist before C3 runtime craft work begins`,
-    );
-    const runtimeEntry = readFileSync(RUNTIME_ENTRY, "utf8");
-    assert.equal(
-      (runtimeEntry.match(CRAFT_IMPORT) ?? []).length,
-      1,
-      "BaseLayout.astro must import the focused C3 craft layer exactly once",
-    );
-  },
-);
+test("C3 craft has one focused stylesheet imported by the runtime layout entry", () => {
+  assert.ok(
+    existsSync(CRAFT_CSS),
+    `${CRAFT_CSS} must exist before C3 runtime craft work begins`,
+  );
+  const runtimeEntry = readFileSync(RUNTIME_ENTRY, "utf8");
+  assert.equal(
+    (runtimeEntry.match(CRAFT_IMPORT) ?? []).length,
+    1,
+    "BaseLayout.astro must import the focused C3 craft layer exactly once",
+  );
+});
 
-test(
-  "image, route-transition, and interaction roles alias existing semantic tokens",
-  () => {
-    const css = craftSource();
-    for (const [role, value] of ROLE_CONTRACTS) {
-      assert.match(
-        css,
-        new RegExp(`${escapeRegExp(role)}:\\s*${escapeRegExp(value)}`),
-        `${role} must alias ${value}`,
-      );
-    }
+test("image, route-transition, and interaction roles alias existing semantic tokens", () => {
+  const css = craftSource();
+  for (const [role, value] of ROLE_CONTRACTS) {
+    assert.match(
+      css,
+      new RegExp(`${escapeRegExp(role)}:\\s*${escapeRegExp(value)}`),
+      `${role} must alias ${value}`,
+    );
+  }
 
-    assert.doesNotMatch(
-      css,
-      /#[0-9a-f]{3,8}\b/i,
-      "C3 craft must consume semantic color tokens instead of authoring a second palette",
-    );
-    assert.doesNotMatch(
-      css,
-      /@keyframes\b/,
-      "Task 1 establishes grammar only; route animation keyframes do not belong here",
-    );
-    assert.doesNotMatch(
-      css,
-      /view-transition-name\s*:/,
-      "view-transition identity remains owned by the existing product-transition convention",
-    );
-  },
-);
+  assert.doesNotMatch(
+    css,
+    /#[0-9a-f]{3,8}\b/i,
+    "C3 craft must consume semantic color tokens instead of authoring a second palette",
+  );
+  assert.doesNotMatch(
+    css,
+    /@keyframes\b/,
+    "Task 1 establishes grammar only; route animation keyframes do not belong here",
+  );
+  assert.doesNotMatch(
+    css,
+    /view-transition-name\s*:/,
+    "view-transition identity remains owned by the existing product-transition convention",
+  );
+});
 
 test("each C3 craft role has exactly one declaration across src/styles", () => {
   const styleSources = collectFiles("src/styles", ".css").map((path) => [
@@ -102,7 +96,9 @@ test("each C3 craft role has exactly one declaration across src/styles", () => {
 
   for (const [role] of ROLE_CONTRACTS) {
     const declaration = new RegExp(`${escapeRegExp(role)}:`);
-    const owners = styleSources.filter(([, source]) => declaration.test(source));
+    const owners = styleSources.filter(([, source]) =>
+      declaration.test(source),
+    );
     assert.equal(
       owners.length,
       1,
@@ -111,20 +107,17 @@ test("each C3 craft role has exactly one declaration across src/styles", () => {
   }
 });
 
-test(
-  "route-local Astro surfaces do not define duplicate keyframe grammars",
-  () => {
-    const astroFiles = [
-      ...collectFiles("src/pages", ".astro"),
-      ...collectFiles("src/components", ".astro"),
-    ];
-    const offenders = astroFiles.filter((path) =>
-      /@keyframes\b/.test(readFileSync(path, "utf8")),
-    );
-    assert.deepEqual(
-      offenders,
-      [],
-      `route-local keyframes duplicate the shared craft grammar: ${offenders.join(", ")}`,
-    );
-  },
-);
+test("route-local Astro surfaces do not define duplicate keyframe grammars", () => {
+  const astroFiles = [
+    ...collectFiles("src/pages", ".astro"),
+    ...collectFiles("src/components", ".astro"),
+  ];
+  const offenders = astroFiles.filter((path) =>
+    /@keyframes\b/.test(readFileSync(path, "utf8")),
+  );
+  assert.deepEqual(
+    offenders,
+    [],
+    `route-local keyframes duplicate the shared craft grammar: ${offenders.join(", ")}`,
+  );
+});
