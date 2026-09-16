@@ -25,11 +25,13 @@
 ### Task 1: Define Maison information architecture adapter
 
 **Files:**
+
 - Create: `src/lib/maison.ts`
 - Create: `tests/architecture/c4-maison-contract.test.mjs`
 - Read: existing public route helpers, product, trust, architecture, support, release routes
 
 **Interfaces:**
+
 - Produces `getMaisonSections(lang)` returning ordered public section descriptors for Products, Proof, Architecture, Journal, Studio.
 - Each descriptor references existing localized route helpers/known public routes rather than hard-coded duplicate navigation truth.
 
@@ -57,12 +59,14 @@ pnpm check:static-links
 ### Task 2: Add Maison orientation surface
 
 **Files:**
+
 - Create: `src/components/maison/MaisonIndex.astro`
 - Modify selected home/about navigation surface after live design review
 - Modify: `src/styles/c4-quiet-authority.css`
 - Create: `tests/e2e/c4-maison.spec.ts`
 
 **Interfaces:**
+
 - Consumes `getMaisonSections(lang)`.
 - Produces a calm editorial orientation layer; ordinary links remain authoritative.
 
@@ -79,11 +83,13 @@ Use editorial hierarchy and whitespace rather than dashboard cards. Do not make 
 ### Task 3: Define source-backed edition schema
 
 **Files:**
+
 - Create: `src/lib/editions.ts`
 - Create: `src/content/editions/` only if the live content architecture supports authored curation without duplicating truth
 - Create: `tests/architecture/c4-edition-contract.test.mjs`
 
 **Interfaces:**
+
 - Produces edition records containing `id`, localized title/deck, ordered source references, optional editorial note, and authored publication metadata.
 - Source references resolve to canonical public release/product/architecture/evidence/craft items.
 
@@ -102,6 +108,7 @@ Synthetic unknown/private references must fail.
 ### Task 4: Publish Collected Edition routes
 
 **Files:**
+
 - Create localized journal/edition page templates following the repository’s existing localized page pattern at execution time
 - Create: `src/components/editorial/EditionIndex.astro`
 - Create: `src/components/editorial/EditionStory.astro`
@@ -109,6 +116,7 @@ Synthetic unknown/private references must fail.
 - Create: `tests/e2e/c4-editions.spec.ts`
 
 **Interfaces:**
+
 - Consumes resolved edition records only.
 - Produces static public editorial pages with source/provenance links and authored publication dates.
 
@@ -125,10 +133,12 @@ Use C4 folio/type/material roles. Avoid infinite feed, engagement counters, soci
 ### Task 5: Define Craft Provenance Story contract
 
 **Files:**
+
 - Create: `src/lib/craft-stories.ts`
 - Create: `tests/architecture/c4-craft-story-contract.test.mjs`
 
 **Interfaces:**
+
 - Produces source-backed story sections: `problem`, `designChoice`, `constraint`, `implementation`, `evidenceRefs`, `limitations`.
 - Every substantive section maps to authored canonical/public source evidence or is explicitly omitted.
 
@@ -143,11 +153,13 @@ Do not copy evidence text into story truth. Render human-readable narrative from
 ### Task 6: Render Craft Provenance Stories
 
 **Files:**
+
 - Create: `src/components/editorial/CraftStory.astro`
 - Integrate only where a real product/system has enough source truth
 - Create: `tests/e2e/c4-craft-story.spec.ts`
 
 **Interfaces:**
+
 - Consumes only validated craft-story view models.
 - Produces a static narrative with evidence and limitation paths.
 
