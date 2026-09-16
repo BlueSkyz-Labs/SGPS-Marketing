@@ -3,6 +3,7 @@ import type { CollectionEntry } from "astro:content";
 import { SHARED_LABELS, labelFor, type Language } from "@/data/site";
 import { getProductProfilePath } from "@/lib/product-routes";
 import ProductStatus from "@/components/product/ProductStatus.astro";
+import ProductVisual from "@/components/product/ProductVisual.astro";
 import { productTransitionStyle } from "@/lib/product-transition";
 
 /**
@@ -83,16 +84,10 @@ const viewProfileLabel = labelFor(SHARED_LABELS.viewProfile, lang);
     {
       screenshot ? (
         <figure class="c2-flagship-theatre__frame m-0">
-          <img
-            src={screenshot.src}
-            alt={screenshot.alt}
-            width={screenshot.width}
-            height={screenshot.height}
-            class="h-auto w-full rounded-[var(--radius-card)] border border-[var(--border-subtle)]"
-            loading="lazy"
-            decoding="async"
-            style={productTransitionStyle("media", data.slug)}
-            data-product-continuity="media"
+          <ProductVisual
+            screenshot={screenshot}
+            transitionStyle={productTransitionStyle("media", data.slug)}
+            continuity="media"
           />
           <figcaption class="mt-3 text-sm text-[var(--text-muted)]">
             {labelFor(SHARED_LABELS.proofCaption, lang)}

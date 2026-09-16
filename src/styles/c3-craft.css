@@ -17,3 +17,31 @@
   --c3-interaction-ease: var(--motion-ease-standard);
   --c3-interaction-distance: var(--motion-distance-sm);
 }
+
+/* C3-A Task 2 — one intrinsic, truth-driven product screenshot surface.
+ * Perspective remains an outer-scene concern; this primitive never hides
+ * content behind motion and never invents crop/focal metadata.
+ */
+.c3-product-visual {
+  min-width: 0;
+  width: 100%;
+}
+
+.c3-product-visual__image {
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  border: 1px solid var(--c3-image-surface-border);
+  border-radius: var(--c3-image-surface-radius);
+  background: var(--c3-image-surface-background);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .c3-product-visual,
+  .c3-product-visual__image {
+    animation: none !important;
+    transition: none !important;
+  }
+}

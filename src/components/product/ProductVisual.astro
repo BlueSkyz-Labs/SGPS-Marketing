@@ -1,0 +1,38 @@
+---
+import type { CollectionEntry } from "astro:content";
+
+type ProductScreenshot = NonNullable<
+  CollectionEntry<"products">["data"]["proof"]["screenshot"]
+>;
+
+interface Props {
+  screenshot: ProductScreenshot;
+  loading?: "eager" | "lazy";
+  transitionStyle?: string;
+  continuity?: "media";
+}
+
+const {
+  screenshot,
+  loading = "lazy",
+  transitionStyle,
+  continuity,
+} = Astro.props;
+---
+
+<div
+  class="c3-product-visual"
+  data-product-visual
+  data-product-continuity={continuity}
+  style={transitionStyle}
+>
+  <img
+    src={screenshot.src}
+    alt={screenshot.alt}
+    width={screenshot.width}
+    height={screenshot.height}
+    class="c3-product-visual__image"
+    loading={loading}
+    decoding="async"
+  />
+</div>
