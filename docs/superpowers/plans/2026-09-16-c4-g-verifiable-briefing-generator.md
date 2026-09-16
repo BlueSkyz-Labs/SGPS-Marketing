@@ -14,6 +14,7 @@
 
 - Implements G10 only.
 - Deterministic template generation is the required baseline and must remain functional if model runtime is absent/down/disabled.
+- ADR number `0010` is reserved by this approved C4 plan; execution must refresh `docs/decisions/` first and resolve any numbering conflict through repository authority rather than overwriting an unrelated decision.
 - Remote/model synthesis inherits or strengthens C3 Verifiable Concierge controls: allowed public corpus, source citation, explicit unknown/refusal, prompt-injection defenses, output validation, privacy/log retention, rate limits, abuse controls, outage fallback, cost ceiling.
 - No visitor text is repurposed for profiling/marketing by default.
 - No unsupported pricing, certification, availability, customer outcome, security state, architecture fact, or release claim may be added by generated prose.
@@ -78,16 +79,16 @@ Source pages remain authoritative; interaction only selects public IDs/purpose.
 ### Task 3: Write Model-Assisted Briefing ADR before any remote synthesis
 
 **Files:**
-- Create: `docs/decisions/<next>-c4-model-assisted-briefing.md`
-- Create: `docs/security/<date>-c4-briefing-threat-model.md`
-- Create: `docs/evidence/<date>-c4-briefing-model-go-gate.md`
+- Create: `docs/decisions/0010-c4-model-assisted-briefing.md`
+- Create: `docs/security/2026-09-16-c4-briefing-threat-model.md`; record actual review timestamps/revisions inside the document
+- Create: `docs/evidence/2026-09-16-c4-briefing-model-go-gate.md`; record exact approved/rejected revision and observed timestamp
 
 **Interfaces:**
 - Produces approved model/provider/runtime, allowed corpus, retrieval model, prompt policy, source freshness, output schema, citation enforcement, refusal semantics, logging/retention, rate limits, abuse controls, cost ceiling, outage fallback, and kill switch.
 
 - [ ] **Step 1: reuse C3-E decisions where applicable**
 
-Do not create a second model/provider governance regime if C3-E already has approved contracts. Record inheritance and any C4-specific delta.
+Do not create a second model/provider governance regime if C3-E already has approved contracts. Record inheritance and any C4-specific delta in ADR 0010.
 
 - [ ] **Step 2: threat model prompt/source abuse**
 
@@ -95,13 +96,13 @@ Cover prompt injection, poisoned source content, citation spoofing, source omiss
 
 - [ ] **Step 3: explicit GO/NO-GO**
 
-No remote runtime code until decision is approved.
+No remote runtime code until ADR 0010 is approved.
 
 ### Task 4: Build model-output policy validator after GO
 
 **Files:**
-- Create provider-independent module such as `src/lib/briefing-output-policy.ts` or server-runtime equivalent defined by ADR
-- Create: `tests/security/c4-briefing-output-policy.test.mjs` or repository-conformant security test path
+- Create provider-independent module such as `src/lib/briefing-output-policy.ts` or the server-runtime equivalent defined by ADR 0010
+- Create: `tests/security/c4-briefing-output-policy.test.mjs` or the repository-conformant security-test path defined by ADR 0010
 
 **Interfaces:**
 - Consumes structured model response plus allowed source IDs.
@@ -122,8 +123,8 @@ Any model/policy failure returns the Phase 1 deterministic briefing, not a parti
 ### Task 5: Implement minimum-data model request after GO
 
 **Files:**
-- Runtime/provider adapter determined by approved ADR
-- Provider adapter tests with mocked boundary
+- Runtime/provider adapter path defined by ADR 0010 before this task begins
+- Provider adapter tests colocated with the approved runtime boundary
 
 **Interfaces:**
 - Sends only explicit user purpose/request plus minimum approved public source excerpts/IDs required for the request.
@@ -134,12 +135,12 @@ No cookies, identity/profile history, unrelated page behavior, private evidence,
 
 - [ ] **Step 2: implement provider boundary with timeout/rate/cost guards**
 
-- [ ] **Step 3: verify logs/retention behavior matches ADR**
+- [ ] **Step 3: verify logs/retention behavior matches ADR 0010**
 
 ### Task 6: Red-team source-bound synthesis
 
 **Files:**
-- Create: `docs/evidence/<date>-c4-briefing-red-team.md`
+- Create: `docs/evidence/2026-09-16-c4-briefing-red-team.md`; record actual execution timestamp and exact candidate revision
 - Extend adversarial test suites
 
 - [ ] **Step 1: attack with conflicting/malicious corpus text**
@@ -157,7 +158,7 @@ Deterministic generator remains available and public site stays healthy.
 ### Task 7: Promotion and production read-back
 
 **Files:**
-- Create: `docs/evidence/<date>-c4-briefing-production-readback.md`
+- Create: `docs/evidence/2026-09-16-c4-briefing-production-readback.md`; record exact deployed revision and observed timestamp
 
 - [ ] **Step 1: require exact-head source/browser/security gates**
 
@@ -173,7 +174,7 @@ C4-G deterministic baseline may converge independently when it is source-bound, 
 
 Model-assisted C4-G may be marked complete only when:
 
-- the dedicated/inherited ADR and threat model are approved;
+- ADR 0010/inherited C3-E controls and the threat model are approved;
 - input corpus is public/allowlisted and minimum-data;
 - output citations are enforced against real allowed source IDs;
 - unsupported questions fail closed;
