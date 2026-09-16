@@ -56,7 +56,10 @@ test("product surfaces reference product-transition instead of hardcoding", () =
 test("ProductVisual may forward continuity but never owns transition identity", () => {
   assert.match(productVisual, /transitionStyle/);
   assert.match(productVisual, /data-product-continuity=\{continuity\}/);
-  assert.doesNotMatch(productVisual, /productTransitionStyle|product-transition/);
+  assert.doesNotMatch(
+    productVisual,
+    /productTransitionStyle|product-transition/,
+  );
   assert.doesNotMatch(productVisual, /view-transition-name/);
 });
 
