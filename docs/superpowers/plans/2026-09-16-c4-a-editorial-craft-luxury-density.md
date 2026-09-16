@@ -25,11 +25,13 @@
 ### Task 1: Establish Quiet Authority craft contract
 
 **Files:**
+
 - Create: `src/styles/c4-quiet-authority.css`
 - Modify: `src/styles/global.css`
 - Create: `tests/architecture/c4-quiet-authority-contract.test.mjs`
 
 **Interfaces:**
+
 - Produces semantic aliases for editorial grid, reading measure, material surfaces, folio, colophon, gallery mount, and motion-scarcity roles.
 - Consumes existing Brand v4 and C3 semantic tokens only.
 
@@ -59,11 +61,13 @@ pnpm test:architecture
 ### Task 2: Editorial Grid System v3
 
 **Files:**
+
 - Modify: `src/styles/c4-quiet-authority.css`
 - Modify representative authority surfaces: `src/components/sections/Hero.astro`, `src/components/sections/OneHouse.astro`, `src/components/sections/AboutBlueSkyz.astro`
 - Create: `tests/e2e/c4-editorial-grid.spec.ts`
 
 **Interfaces:**
+
 - Produces `c4-editorial-grid`, `c4-reading-column`, and `c4-focal-span` composition roles.
 
 - [ ] **Step 1: write RED layout assertions**
@@ -87,6 +91,7 @@ Run editorial grid test plus existing mobile-overflow/text-zoom/text-spacing/bil
 ### Task 3: Optical Typography Calibration
 
 **Files:**
+
 - Modify: `src/styles/c4-quiet-authority.css`
 - Modify: `src/components/sections/Hero.astro`
 - Modify shared page heading/prose surfaces identified on live main at execution
@@ -94,6 +99,7 @@ Run editorial grid test plus existing mobile-overflow/text-zoom/text-spacing/bil
 - Create: `tests/e2e/c4-optical-type.spec.ts`
 
 **Interfaces:**
+
 - Produces semantic roles for display, section, product, evidence, meta, caption, and long-form reading without changing the font family.
 
 - [ ] **Step 1: write source contract**
@@ -118,11 +124,13 @@ npx playwright test tests/e2e/c4-optical-type.spec.ts tests/e2e/text-zoom.spec.t
 ### Task 4: Material Surface Grammar
 
 **Files:**
+
 - Modify: `src/styles/c4-quiet-authority.css`
 - Modify only affected shared surface components after live inventory
 - Create: `tests/architecture/c4-material-grammar.test.mjs`
 
 **Interfaces:**
+
 - Produces four semantic materials: Ink, Porcelain, Quiet Paper, Cobalt Accent; consumes existing brand tokens.
 
 - [ ] **Step 1: write RED guard**
@@ -140,11 +148,13 @@ Run architecture tests, axe matrix, and forced-colors E2E on affected routes.
 ### Task 5: Luxury Density Budget
 
 **Files:**
+
 - Modify: `tests/architecture/experience-density.test.mjs`
 - Create: `src/lib/quiet-density.ts`
 - Create: `tests/architecture/c4-density-budget.test.mjs`
 
 **Interfaces:**
+
 - Produces deterministic counters/ceilings for simultaneous primary actions, chips/status objects, focal media, card groups, and active motion hooks.
 - Never produces a “luxury score”.
 
@@ -169,12 +179,14 @@ Run architecture suite and record baseline/after values in C4-A evidence.
 ### Task 6: Editorial Folio System
 
 **Files:**
+
 - Create: `src/components/editorial/Folio.astro`
 - Modify: `src/styles/c4-quiet-authority.css`
 - Apply only to long multi-act/long-form surfaces after live route inventory
 - Create: `tests/e2e/c4-folio.spec.ts`
 
 **Interfaces:**
+
 - Consumes authored section identity/labels; produces decorative chapter/running-context affordance with text remaining authoritative.
 
 - [ ] **Step 1: write keyboard/screen-reader/zoom-safe assertions**
@@ -192,6 +204,7 @@ Run folio test plus print-surface and zoom suites.
 ### Task 7: Signature Colophon
 
 **Files:**
+
 - Modify: `src/components/layout/Footer.astro`
 - Modify: `src/styles/c4-quiet-authority.css`
 - Read: public truth/security/architecture route helpers
@@ -199,6 +212,7 @@ Run folio test plus print-surface and zoom suites.
 - Create: `tests/e2e/c4-colophon.spec.ts`
 
 **Interfaces:**
+
 - Produces a restrained footer colophon with identity, language, public trust/security/architecture links, and only approved public freshness context.
 
 - [ ] **Step 1: write fail-closed contract**
@@ -216,12 +230,14 @@ Run architecture/static-link/browser suites.
 ### Task 8: BlueSkyz Line Icon Grammar
 
 **Files:**
+
 - Create: `src/components/icon/BlueSkyzIcon.astro`
 - Create: `src/lib/icon-registry.ts`
 - Create: `tests/architecture/c4-icon-grammar.test.mjs`
 - Modify only controls where an icon materially improves comprehension
 
 **Interfaces:**
+
 - Produces a bounded allowlisted icon set with one geometry/stroke grammar.
 
 - [ ] **Step 1: write RED allowlist tests**
@@ -239,11 +255,13 @@ Icons cannot replace required control labels unless a tested accessible name exi
 ### Task 9: Quiet Motion Budget
 
 **Files:**
+
 - Modify: `src/styles/c4-quiet-authority.css`
 - Extend: existing reduced-motion architecture/E2E tests
 - Create: `tests/architecture/c4-motion-scarcity.test.mjs`
 
 **Interfaces:**
+
 - Produces scarcity rules over existing purpose-motion tokens; no new animation engine.
 
 - [ ] **Step 1: write negative tests for perpetual/multi-focal motion**
@@ -261,12 +279,14 @@ Run architecture + affected browser suites.
 ### Task 10: Gallery Mount ProductVisual
 
 **Files:**
+
 - Modify after C3-A ownership stabilizes: `src/components/product/ProductVisual.astro`
 - Modify: `src/styles/c4-quiet-authority.css`
 - Extend: `tests/e2e/c3-product-visual.spec.ts`
 - Create: `tests/e2e/c4-gallery-mount.spec.ts`
 
 **Interfaces:**
+
 - Consumes only real/source-authorized screenshot truth and optional canonical caption/provenance.
 - Produces an exhibition-style mount with no fake device chrome or invented product UI.
 
@@ -283,11 +303,13 @@ Use fine edge, tonal backing, deliberate caption spacing, and responsive image s
 ### Task 11: Microcopy Decrescendo
 
 **Files:**
+
 - Modify only approved public copy sources discovered on live main; prefer `src/data/site.ts` and centralized locale sources over component literals
 - Create: `tests/architecture/c4-copy-restraint.test.mjs`
 - Extend bilingual parity tests
 
 **Interfaces:**
+
 - Produces calmer, shorter action language without changing factual meaning or hiding boundaries.
 
 - [ ] **Step 1: inventory adjective/CTA repetition and hard-coded copy**
