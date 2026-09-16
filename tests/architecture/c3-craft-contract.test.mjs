@@ -45,6 +45,10 @@ function collectFiles(root, extension) {
   return files;
 }
 
+function escapeRegExp(value) {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
 function craftSource() {
   return existsSync(CRAFT_CSS) ? readFileSync(CRAFT_CSS, "utf8") : "";
 }
@@ -67,7 +71,7 @@ test("image, route-transition, and interaction roles alias existing semantic tok
   for (const [role, value] of ROLE_CONTRACTS) {
     assert.match(
       css,
-      new RegExp(`${role.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}:\\s*${value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}`),
+      new RegExp(`${escapeRegExp(role)}:\\s*${escapeRegExp(value)}`),
       `${role} must alias ${value}`,
     );
   }
@@ -96,10 +100,7 @@ test("each C3 craft role has exactly one declaration across src/styles", () => {
   ]);
 
   for (const [role] of ROLE_CONTRACTS) {
-    const declaration = new RegExp(
-      `${role.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}:`,
-      "g",
-    );
+    const declaration = new RegExp(`${escapeRegExp(role)}:`);
     const owners = styleSources.filter(([, source]) => declaration.test(source));
     assert.equal(
       owners.length,
