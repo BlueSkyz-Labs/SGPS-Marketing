@@ -1,4 +1,16 @@
 /* C3 product visual styles — kept outside @layer so Tailwind v4 doesn't parse them */
+
+:root {
+  --c3-image-surface-radius: var(--radius-card);
+  --c3-image-surface-border: var(--border-subtle);
+  --c3-image-surface-background: var(--surface-primary);
+  --c3-route-transition-duration: var(--motion-continuity-duration);
+  --c3-route-transition-ease: var(--motion-ease-standard);
+  --c3-interaction-duration: var(--motion-confirmation-duration);
+  --c3-interaction-ease: var(--motion-ease-standard);
+  --c3-interaction-distance: var(--motion-distance-sm);
+}
+
 .c3-product-visual {
   contain: layout style;
   min-width: 0 !important;
