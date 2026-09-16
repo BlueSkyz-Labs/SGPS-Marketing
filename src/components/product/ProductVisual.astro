@@ -24,15 +24,14 @@ const {
   class="c3-product-visual"
   data-product-visual
   data-product-continuity={continuity}
-  style={transitionStyle}
+  style="min-width: 0; max-width: 100%; overflow: hidden; width: 100%;"
 >
   <img
     src={screenshot.src}
     alt={screenshot.alt}
-    width={screenshot.width}
-    height={screenshot.height}
     class="c3-product-visual__image"
     loading={loading}
     decoding="async"
+    style="display: block; box-sizing: border-box; width: 100% !important; max-width: 100% !important; height: auto !important;"
   />
 </div>

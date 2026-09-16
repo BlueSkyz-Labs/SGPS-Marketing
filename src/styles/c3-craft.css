@@ -1,3 +1,8 @@
+.min-w-0 {
+  min-width: 0;
+  overflow: hidden;
+}
+
 /* C3-A Task 1 — Experience Craft Foundation shared role contract.
  *
  * This file intentionally defines semantic aliases only. Later C3-A tasks
@@ -24,13 +29,16 @@
  */
 .c3-product-visual {
   min-width: 0;
+  overflow: hidden;
   width: 100%;
   max-width: 100%;
   overflow: hidden;
 }
 
 .c2-flagship-theatre__frame {
+  width: 100%;
   min-width: 0;
+  overflow: hidden;
   max-width: 100%;
   overflow: hidden;
 }

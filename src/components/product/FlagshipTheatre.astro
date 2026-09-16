@@ -6,13 +6,6 @@ import ProductStatus from "@/components/product/ProductStatus.astro";
 import ProductVisual from "@/components/product/ProductVisual.astro";
 import { productTransitionStyle } from "@/lib/product-transition";
 
-/**
- * C2 Act II — Flagship Theatre.
- * Consumes exactly one real public product entry. This component defines no
- * product truth of its own: every visible fact comes from the record. With
- * `product === null` it renders nothing — the homepage falls back honestly
- * rather than fabricating a product moment.
- */
 interface Props {
   product: CollectionEntry<"products"> | null;
   lang: Language;
@@ -29,13 +22,6 @@ const screenshot = data.proof.screenshot;
 const capabilities = data.capabilities ?? [];
 const profileHref = getProductProfilePath(lang, data.slug);
 const viewProfileLabel = labelFor(SHARED_LABELS.viewProfile, lang);
-
-/**
- * Loading decision (recorded, not guessed): the theatre sits immediately after
- * the hero, so eager above-the-fold media would compete with the hero LCP.
- * The screenshot therefore stays lazy with intrinsic width/height (no CLS) and
- * opacity 1 — it is the act's visual protagonist, never faded in.
- */
 ---
 
 <section
@@ -45,6 +31,7 @@ const viewProfileLabel = labelFor(SHARED_LABELS.viewProfile, lang);
 >
   <div
     class="grid gap-10 min-w-0 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:items-center"
+    style="min-width: 0; max-width: 100%; overflow: hidden;"
   >
     <div class="c2-flagship-theatre__copy">
       <ProductStatus label={data.publicLabel} />
@@ -83,7 +70,8 @@ const viewProfileLabel = labelFor(SHARED_LABELS.viewProfile, lang);
     </div>
     {
       screenshot ? (
-        <figure class="c2-flagship-theatre__frame m-0 min-w-0">
+        <div style="min-width: 0; max-width: 100%; overflow: hidden; width: 100%;">
+        <figure class="c2-flagship-theatre__frame m-0" style="min-width: 0; max-width: 100%; overflow: hidden; width: 100%;">
           <ProductVisual
             screenshot={screenshot}
             transitionStyle={productTransitionStyle("media", data.slug)}
@@ -93,6 +81,7 @@ const viewProfileLabel = labelFor(SHARED_LABELS.viewProfile, lang);
             {labelFor(SHARED_LABELS.proofCaption, lang)}
           </figcaption>
         </figure>
+        </div>
       ) : null
     }
   </div>
