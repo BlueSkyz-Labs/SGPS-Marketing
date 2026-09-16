@@ -14,6 +14,7 @@
 
 - Implements G8 only.
 - **NO RUNTIME IMPLEMENTATION before the dedicated ADR is approved.**
+- ADR number `0009` is reserved by this approved C4 plan; execution must refresh `docs/decisions/` first and resolve any numbering conflict through repository authority rather than overwriting an unrelated decision.
 - Security by default: deny-by-default authorization, least privilege, short-lived access, explicit revocation, no security-through-obscurity URLs.
 - Authentication success never implies authorization.
 - Tenant/prospect boundaries must be enforced server-side on every object/action; never trust client-supplied ownership.
@@ -27,9 +28,9 @@
 ### Task 1: Write Private Evaluation architecture/privacy/security ADR
 
 **Files:**
-- Create: `docs/decisions/<next>-c4-private-evaluation-room.md`
-- Create: `docs/security/<date>-c4-private-evaluation-threat-model.md`
-- Create: `docs/evidence/<date>-c4-private-evaluation-go-gate.md`
+- Create: `docs/decisions/0009-c4-private-evaluation-room.md`
+- Create: `docs/security/2026-09-16-c4-private-evaluation-threat-model.md`; record actual threat-model review timestamps/revisions inside the document
+- Create: `docs/evidence/2026-09-16-c4-private-evaluation-go-gate.md`; record the exact approved/rejected revision and observed timestamp
 
 **Interfaces:**
 - Produces approved decisions for: identity provider, session model, runtime, storage, encryption, tenant/prospect isolation, RBAC roles, invite lifecycle, expiry, revocation, audit events, retention/deletion, backups, recovery, incident response, domain, rate limits, abuse controls, operational ownership, and cost ceiling.
@@ -70,8 +71,8 @@ Prefer a distinct application/package/deployment boundary if that best preserves
 ### Task 3: Implement identity/session foundation after GO
 
 **Files:**
-- Exact runtime files are determined by the approved ADR; record them in the ADR and update this plan before execution if provider-specific paths differ.
-- Create dedicated authn/authz contract tests and integration tests.
+- Runtime/provider paths are defined in `docs/decisions/0009-c4-private-evaluation-room.md` before this task starts; amend this plan in a dedicated docs PR if those exact paths differ from the approved application boundary.
+- Create dedicated authn/authz contract tests and integration tests in the application boundary defined by ADR 0009.
 
 **Interfaces:**
 - Produces authenticated principal/session with immutable subject identity and server-validated entitlement context.
@@ -89,8 +90,8 @@ Require secure transport, appropriate Secure/HttpOnly/SameSite or equivalent tok
 ### Task 4: Implement deny-by-default authorization
 
 **Files:**
-- Create dedicated policy module according to ADR
-- Create authorization unit/integration tests
+- Create dedicated policy module according to ADR 0009
+- Create authorization unit/integration tests in the same isolated application boundary
 
 **Interfaces:**
 - Produces `authorize(principal, action, resource)` or equivalent policy decision with explicit deny default.
@@ -108,7 +109,7 @@ Manipulated IDs/URLs/body fields must never cross access boundaries.
 ### Task 5: Implement private artifact lifecycle
 
 **Files:**
-- Storage/data modules per approved ADR
+- Storage/data modules defined by ADR 0009
 - Upload/download metadata validation tests if uploads are approved
 - Retention/deletion tests
 
@@ -130,7 +131,7 @@ Deletion semantics must account for backups/log retention honestly; do not promi
 ### Task 6: Implement audit, revocation, incident and recovery controls
 
 **Files:**
-- Audit event schema/module per ADR
+- Audit event schema/module defined by ADR 0009
 - Create: `docs/operations/c4-private-evaluation-runbook.md`
 - Create recovery/incident integration tests where automatable
 
@@ -149,11 +150,11 @@ Owner must be able to revoke a principal/prospect/session and disable the subsys
 
 Document break-glass path, backup identity/admin path, restoration order, and evidence required before reopening service.
 
-### Task 7: Paid/production-grade security red team and promotion gate
+### Task 7: Production-grade security red team and promotion gate
 
 **Files:**
-- Create: `docs/evidence/<date>-c4-private-evaluation-security-red-team.md`
-- Create: `docs/evidence/<date>-c4-private-evaluation-production-readback.md`
+- Create: `docs/evidence/2026-09-16-c4-private-evaluation-security-red-team.md`; record actual execution timestamp and exact candidate SHA
+- Create: `docs/evidence/2026-09-16-c4-private-evaluation-production-readback.md`; record exact deployed revision and observed timestamp
 
 - [ ] **Step 1: run SAST/dependency/supply-chain gates plus provider-specific security tests**
 
@@ -171,7 +172,7 @@ No bypass and no merge/deploy on red.
 
 C4-F can be marked complete only when:
 
-- the dedicated ADR/threat model is approved and implemented exactly;
+- ADR 0009/threat model is approved and implemented exactly;
 - authentication and authorization are independently tested;
 - object/tenant boundaries resist IDOR/BOLA and stale entitlement;
 - data classification, retention/deletion, logging, encryption, revocation, incident response and recovery are operational;
