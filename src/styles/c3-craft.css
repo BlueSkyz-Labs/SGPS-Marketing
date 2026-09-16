@@ -25,6 +25,14 @@
 .c3-product-visual {
   min-width: 0;
   width: 100%;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+.c2-flagship-theatre__frame {
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
 }
 
 .c3-product-visual__image {
