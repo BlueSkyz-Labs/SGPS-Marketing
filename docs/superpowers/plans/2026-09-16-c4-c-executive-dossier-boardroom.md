@@ -25,11 +25,13 @@
 ### Task 1: Define Dossier view model and compiler
 
 **Files:**
+
 - Create: `src/lib/dossier.ts`
 - Create: `tests/architecture/c4-dossier-contract.test.mjs`
 - Read: canonical product/claim/evidence/architecture/release selectors
 
 **Interfaces:**
+
 - Produces `compilePublicDossier(input, lang)` where input is an allowlisted set of public IDs and sections.
 - Returns deterministic sections with source references, truth/boundary state, authored freshness where available, and explicit unknown/missing states.
 
@@ -54,6 +56,7 @@ Synthetic script/URL-like IDs and internal path fragments must not be reflected 
 ### Task 2: Build public Dossier Composer shell
 
 **Files:**
+
 - Create: `src/components/dossier/DossierComposer.astro`
 - Create: `src/components/dossier/DossierPreview.astro`
 - Create: `src/scripts/dossier-composer.ts`
@@ -62,6 +65,7 @@ Synthetic script/URL-like IDs and internal path fragments must not be reflected 
 - Create: `tests/e2e/c4-dossier-composer.spec.ts`
 
 **Interfaces:**
+
 - Consumes a build-time list of public allowlisted items and `compilePublicDossier`.
 - Local client state may contain only selected public IDs and presentation preferences; nothing transmits or persists.
 
@@ -84,11 +88,13 @@ No-JS must still expose source pages and a useful explanation that interactive c
 ### Task 3: Define print-ready dossier document
 
 **Files:**
+
 - Create: `src/components/dossier/DossierDocument.astro`
 - Modify print CSS in the focused C4 stylesheet or existing print layer according to live ownership
 - Create: `tests/e2e/c4-dossier-print.spec.ts`
 
 **Interfaces:**
+
 - Consumes compiled public dossier only.
 - Produces a printable derived document with identity, section headings, sources, boundaries, and “generated from public source truth” context.
 
@@ -107,12 +113,14 @@ Use Playwright print media checks; never assert a PDF certification status.
 ### Task 4: Build Boardroom Presentation Mode
 
 **Files:**
+
 - Create: `src/components/dossier/BoardroomDeck.astro`
 - Create: `src/scripts/boardroom-mode.ts`
 - Create: `tests/e2e/c4-boardroom-mode.spec.ts`
 - Modify: `src/styles/c4-quiet-authority.css`
 
 **Interfaces:**
+
 - Consumes compiled dossier sections.
 - Produces one-dominant-idea-per-screen presentation view with keyboard/touch controls and direct source access.
 
@@ -131,11 +139,13 @@ Transition absence must not reduce comprehension. Test 1440, 1024, 390, and 320p
 ### Task 5: Add Dossier provenance and freshness footer
 
 **Files:**
+
 - Create or reuse: `src/components/dossier/DossierSources.astro`
 - Extend: `tests/architecture/c4-dossier-contract.test.mjs`
 - Extend browser/print tests
 
 **Interfaces:**
+
 - Produces grouped public source references and per-item freshness only when authored canonical metadata exists.
 
 - [ ] **Step 1: fail closed on missing/unknown sources**
