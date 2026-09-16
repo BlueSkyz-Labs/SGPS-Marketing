@@ -16,9 +16,9 @@ import {
 import { extname, join } from "node:path";
 import { test } from "node:test";
 
-const GLOBAL_CSS = "src/styles/global.css";
+const RUNTIME_ENTRY = "src/layouts/BaseLayout.astro";
 const CRAFT_CSS = "src/styles/c3-craft.css";
-const CRAFT_IMPORT = /@import\s+"@\/styles\/c3-craft\.css";/g;
+const CRAFT_IMPORT = /import\s+"@\/styles\/c3-craft\.css";/g;
 
 const ROLE_CONTRACTS = [
   ["--c3-image-surface-radius", "var(--radius-card)"],
@@ -53,16 +53,16 @@ function craftSource() {
   return existsSync(CRAFT_CSS) ? readFileSync(CRAFT_CSS, "utf8") : "";
 }
 
-test("C3 craft has one focused stylesheet imported by the global entry", () => {
+test("C3 craft has one focused stylesheet imported by the runtime layout entry", () => {
   assert.ok(
     existsSync(CRAFT_CSS),
     `${CRAFT_CSS} must exist before C3 runtime craft work begins`,
   );
-  const globalCss = readFileSync(GLOBAL_CSS, "utf8");
+  const runtimeEntry = readFileSync(RUNTIME_ENTRY, "utf8");
   assert.equal(
-    (globalCss.match(CRAFT_IMPORT) ?? []).length,
+    (runtimeEntry.match(CRAFT_IMPORT) ?? []).length,
     1,
-    "global.css must import the focused C3 craft layer exactly once",
+    "BaseLayout.astro must import the focused C3 craft layer exactly once",
   );
 });
 
