@@ -47,6 +47,7 @@
 ### Task 1: Prove C3 convergence before activating C4
 
 **Files:**
+
 - Read: `AGENTS.md`
 - Read: `docs/current-work.json`
 - Read: C3 design/master/active child plans and latest evidence
@@ -54,6 +55,7 @@
 - Modify only when evidence is real: `docs/current-work.json`
 
 **Interfaces:**
+
 - Consumes: live repository/provider evidence and C3 convergence evidence.
 - Produces: one explicit `IN_PROGRESS` C4 child wave or an explicit blocked/PLANNED state.
 
@@ -93,10 +95,12 @@ Expected: PASS; no owner decision auto-resolved.
 ### Task 2: Make agent handoff state explicit and machine-readable
 
 **Files:**
+
 - Modify: `docs/current-work.json`
 - Modify or create: the architecture test that owns current-work schema/router validation after live inventory
 
 **Interfaces:**
+
 - Produces optional execution metadata: `activeProgram`, `activeWave`, `activeTask`, `activePr`, `activeBranch`, `headSha`, `executionStatus`, `lastVerifiedState`, `nextAction`, `lastVerifiedAt`.
 - Durable plan/spec authority remains separate from live execution truth.
 
@@ -138,17 +142,20 @@ C4-F and remote/model C4-G are optional for lower-risk C4 convergence and must n
 ### Task 3: Add C4 architecture guard before first runtime wave
 
 **Files:**
+
 - Create: `tests/architecture/c4-program-boundary.test.mjs`
 - Read: canonical product/claim/evidence/architecture/release selectors
 - Read: `architecture/sgps-model.json`
 - Read: C4 runtime modules as they land
 
 **Interfaces:**
+
 - Produces: fail-closed guard against second truth registries, public/private boundary leaks, unapproved remote runtimes, and duplicate decision systems.
 
 - [ ] **Step 1: write RED assertions**
 
 Require:
+
 - C4 product/briefing/dossier modules consume canonical public selectors;
 - architecture views consume one public-safe architecture adapter;
 - Decision Atelier extends existing Decision Room contracts;
@@ -175,11 +182,13 @@ Expected: guard stays green through later PRs.
 ### Task 4: Establish measurable luxury-craft contracts
 
 **Files:**
+
 - Extend: `tests/architecture/experience-density.test.mjs`
 - Create or extend targeted C4 architecture tests from C4-A
 - Create: `docs/evidence/2026-09-16-c4-quiet-authority-baseline.md` during C4 activation; include actual observation timestamp/SHA inside the file
 
 **Interfaces:**
+
 - Produces: objective baseline for CTA density, status/chip density, focal media competition, client bytes, typography measures, motion scarcity, and key responsive routes.
 
 - [ ] **Step 1: capture pre-C4 baseline**
@@ -244,6 +253,7 @@ Before each child wave promotion, explicitly review:
 ### Task 5: Run cross-system elite QA and production read-back
 
 **Files:**
+
 - Create: `docs/evidence/2026-09-16-c4-final-red-team.md`; record the actual convergence execution timestamp/SHA inside the file
 - Create: `docs/evidence/2026-09-16-c4-production-readback.md`; record the actual deployed revision/timestamp inside the file
 - Modify: `docs/current-work.json` only after objective evidence
