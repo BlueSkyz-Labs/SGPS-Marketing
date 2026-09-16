@@ -25,6 +25,7 @@
 ### Task 1: Inventory and freeze existing Decision Room invariants
 
 **Files:**
+
 - Read: `src/lib/decision-room.ts`
 - Read: `src/components/experience/DecisionRoom.astro`
 - Read: `src/scripts/decision-room.ts`
@@ -33,6 +34,7 @@
 - Create: `tests/architecture/c4-decision-atelier-contract.test.mjs`
 
 **Interfaces:**
+
 - Produces an explicit C4 extension contract without changing existing no-storage/no-network/no-grading invariants.
 
 - [ ] **Step 1: write contract assertions**
@@ -48,10 +50,12 @@ node --test tests/architecture/c4-decision-atelier-contract.test.mjs
 ### Task 2: Define explicit goal/constraint model
 
 **Files:**
+
 - Create: `src/lib/decision-atelier.ts`
 - Extend: `tests/architecture/c4-decision-atelier-contract.test.mjs`
 
 **Interfaces:**
+
 - Produces `arrangeDecisionItems(items, selection)` where selection contains allowlisted goal/constraint IDs.
 - Output preserves source item identity and returns grouped/filtered relevance reasons, not scores or ordering-by-quality.
 
@@ -70,6 +74,7 @@ Synthetic attempts to add `score`, `rank`, `weight`, `winner`, or sort-by-qualit
 ### Task 3: Build Atelier controls over existing Decision Room
 
 **Files:**
+
 - Modify: `src/components/experience/DecisionRoom.astro`
 - Modify: `src/scripts/decision-room.ts`
 - Modify: `src/styles/c4-quiet-authority.css`
@@ -77,6 +82,7 @@ Synthetic attempts to add `score`, `rank`, `weight`, `winner`, or sort-by-qualit
 - Create: `tests/e2e/c4-decision-atelier.spec.ts`
 
 **Interfaces:**
+
 - Consumes explicit allowlisted goal/constraint options and `arrangeDecisionItems`.
 - Produces visitor-controlled grouping with clear reset and source visibility.
 
@@ -95,11 +101,13 @@ Do not increase simultaneous chips/status UI beyond existing measured ceiling me
 ### Task 4: Add sourced “why this is shown” explanations
 
 **Files:**
+
 - Modify: `src/lib/decision-atelier.ts`
 - Modify: `src/components/experience/DecisionRoom.astro`
 - Extend architecture/E2E tests
 
 **Interfaces:**
+
 - Each grouped item may expose a deterministic reason tied to the visitor’s explicit selection and public item metadata.
 
 - [ ] **Step 1: write truth-bound reason tests**
@@ -113,11 +121,13 @@ Templates explain the matching dimension only, e.g. that an item carries archite
 ### Task 5: Integrate Dossier handoff
 
 **Files:**
+
 - Modify: Decision Room/Atelier UI only after C4-C exists
 - Reuse: dossier selection interface
 - Create/extend: `tests/e2e/c4-decision-to-dossier.spec.ts`
 
 **Interfaces:**
+
 - Produces explicit user-selected public IDs for dossier composition; does not auto-select hidden items.
 
 - [ ] **Step 1: write user-agency tests**
