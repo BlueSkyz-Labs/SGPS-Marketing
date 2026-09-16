@@ -1,195 +1,71 @@
 {
   "schemaVersion": "1.0",
-  "updatedAt": "2026-09-15",
-  "program": "C2 Cinematic Product House (SGPS trust infrastructure retained)",
-  "status": "c2-completed",
+  "updatedAt": "2026-09-16",
+  "program": "C2 Cinematic Product House completed foundation + C3 Living Verifiable Product Experience successor",
+  "status": "c2-completed-c3-planned",
   "authorities": {
     "experienceContract": "docs/superpowers/specs/2026-09-03-blueskyz-web-v1-c1-1-design.md",
     "c2Design": "docs/superpowers/specs/2026-09-13-c2-cinematic-product-house-design.md",
     "c2Plan": "docs/superpowers/plans/2026-09-13-c2-cinematic-product-house-implementation.md",
+    "c3Design": "docs/superpowers/specs/2026-09-13-c3-living-verifiable-product-experience-design.md",
+    "c3MasterPlan": "docs/superpowers/plans/2026-09-13-c3-living-verifiable-product-experience-master.md",
+    "c3SgpsDelta": "docs/evidence/2026-09-16-c3-sgps-delta-reconciliation.md",
     "v3Plan": "docs/superpowers/plans/2026-09-12-god-tier-v3-trust-experience-implementation.md",
     "agentGuide": "AGENTS.md",
     "architectureModel": "architecture/sgps-model.json"
   },
   "waves": [
-    {
-      "id": "v3-w1-w8",
-      "name": "God-tier v3 (Tasks 1-23)",
-      "status": "MERGED",
-      "evidence": "docs/evidence/2026-09-12-v3-final-red-team.md"
-    },
-    {
-      "id": "brand-v4",
-      "name": "Brand Kit v4 Production adoption + guard",
-      "status": "MERGED",
-      "evidence": "docs/evidence/2026-09-12-brand-kit-v4-fidelity.md"
-    },
-    {
-      "id": "ui-premium-1-3",
-      "name": "Premium UI waves 1-3 + full-surface audit",
-      "status": "MERGED",
-      "evidence": "docs/evidence/2026-09-12-ui-qa-qc-redteam-audit.md"
-    },
-    {
-      "id": "hardening-h1",
-      "name": "Fail-closed CI/deploy gates + contract syncs",
-      "status": "MERGED",
-      "evidence": "docs/evidence/2026-09-12-v3-post-merge-readback.md"
-    },
-    {
-      "id": "hardening-h2",
-      "name": "Git-evidence verifier, promotion state, deployment evidence, public-state semantics, density guard",
-      "status": "MERGED",
-      "evidence": "docs/evidence/2026-09-12-wave-h2-hardening.md"
-    },
-    {
-      "id": "hardening-h2b",
-      "name": "Deployment contract, public assurance language scanner, verifiable Trust copy",
-      "status": "MERGED",
-      "evidence": "docs/evidence/2026-09-12-wave-h2b-hardening.md"
-    },
-    {
-      "id": "hardening-h3",
-      "name": "Breadcrumb structured data, reduced-motion contract, product provenance guard",
-      "status": "MERGED",
-      "evidence": "docs/evidence/2026-09-12-wave-h3-hardening.md"
-    },
-    {
-      "id": "hardening-h4",
-      "name": "Machine-readable security policy + edge header contract",
-      "status": "MERGED",
-      "evidence": "docs/evidence/2026-09-12-wave-h4-security.md"
-    },
-    {
-      "id": "hardening-h5",
-      "name": "Documented gate surface (drift guard) + runtime re-probe",
-      "status": "MERGED",
-      "evidence": "docs/evidence/2026-09-12-wave-h5-doc-drift.md"
-    },
-    {
-      "id": "hardening-h6",
-      "name": "Print surface for evidence passports",
-      "status": "MERGED",
-      "evidence": "docs/evidence/2026-09-12-wave-h6-print.md"
-    },
-    {
-      "id": "hardening-h7",
-      "name": "Markup baseline: passport document h1 + one-h1 contract",
-      "status": "MERGED",
-      "evidence": "docs/evidence/2026-09-12-wave-h7-markup.md"
-    },
-    {
-      "id": "hardening-h8",
-      "name": "Mobile overflow sweep, heading hierarchy fix, passport polish",
-      "status": "MERGED",
-      "evidence": "docs/evidence/2026-09-12-wave-h8-mobile.md"
-    },
-    {
-      "id": "hardening-h9",
-      "name": "Assistive-tech announcement for the command navigator",
-      "status": "MERGED",
-      "evidence": "docs/evidence/2026-09-12-wave-h9-at-announcements.md"
-    },
-    {
-      "id": "hardening-h10",
-      "name": "Production smoke/observability/rollback contract + live 404 check",
-      "status": "MERGED",
-      "evidence": "docs/evidence/2026-09-12-wave-h10-ops.md"
-    },
-    {
-      "id": "hardening-h11",
-      "name": "Recovery paths + redirect chain contract",
-      "status": "MERGED",
-      "evidence": "docs/evidence/2026-09-12-wave-h11-recovery.md"
-    },
-    {
-      "id": "hardening-h12",
-      "name": "Text-zoom safety (WCAG 1.4.4): shrinkable grid items, breakable headings, wrapping atlas rows",
-      "status": "MERGED",
-      "evidence": "docs/evidence/2026-09-13-wave-h12-text-zoom.md"
-    },
-    {
-      "id": "c2-master-plan",
-      "name": "C2 Cinematic Product House — P0 Product Truth through P6 Elite QA",
-      "status": "PLANNED",
-      "evidence": "docs/superpowers/plans/2026-09-13-c2-cinematic-product-house-implementation.md"
-    },
-    {
-      "id": "hardening-h13",
-      "name": "Text-spacing (1.4.12) + forced-colors guards",
-      "status": "MERGED",
-      "evidence": "docs/evidence/2026-09-13-wave-h13-spacing-contrast.md"
-    },
-    {
-      "id": "c2-p0",
-      "name": "P0 Product truth activation (screenshot floor + router)",
-      "status": "BLOCKED",
-      "evidence": "docs/evidence/2026-09-13-c2-p0-product-truth.md"
-    },
-    {
-      "id": "c2-p1",
-      "name": "P1 Experience recomposition (six-act homepage)",
-      "status": "MERGED",
-      "evidence": "docs/evidence/2026-09-14-c2-p1-home-recomposition.md"
-    },
-    {
-      "id": "c2-p2",
-      "name": "P2 Art direction foundation (Horizon Arrival, act rhythm)",
-      "status": "MERGED",
-      "evidence": "docs/evidence/2026-09-13-c2-p2-art-direction.md"
-    },
-    {
-      "id": "c2-p3",
-      "name": "P3 Product storytelling (Flagship Theatre, Product House)",
-      "status": "MERGED",
-      "evidence": "docs/evidence/2026-09-14-c2-p3-product-storytelling.md"
-    },
-    {
-      "id": "c2-p4",
-      "name": "P4 Meaning + trust progressive disclosure",
-      "status": "MERGED",
-      "evidence": "docs/evidence/2026-09-14-c2-p4-meaning-trust.md"
-    },
-    {
-      "id": "c2-p5",
-      "name": "P5 Human layer, closing signature, secondary surfaces",
-      "status": "MERGED",
-      "evidence": "docs/evidence/2026-09-15-c2-p5-human-layer.md"
-    },
-    {
-      "id": "c2-p6",
-      "name": "P6 Elite QA, red team, promotion, production read-back",
-      "status": "MERGED",
-      "evidence": "docs/evidence/2026-09-15-c2-p6-elite-qa.md"
-    }
+    {"id":"v3-w1-w8","name":"God-tier v3 (Tasks 1-23)","status":"MERGED","evidence":"docs/evidence/2026-09-12-v3-final-red-team.md"},
+    {"id":"brand-v4","name":"Brand Kit v4 Production adoption + guard","status":"MERGED","evidence":"docs/evidence/2026-09-12-brand-kit-v4-fidelity.md"},
+    {"id":"ui-premium-1-3","name":"Premium UI waves 1-3 + full-surface audit","status":"MERGED","evidence":"docs/evidence/2026-09-12-ui-qa-qc-redteam-audit.md"},
+    {"id":"hardening-h1","name":"Fail-closed CI/deploy gates + contract syncs","status":"MERGED","evidence":"docs/evidence/2026-09-12-v3-post-merge-readback.md"},
+    {"id":"hardening-h2","name":"Git-evidence verifier, promotion state, deployment evidence, public-state semantics, density guard","status":"MERGED","evidence":"docs/evidence/2026-09-12-wave-h2-hardening.md"},
+    {"id":"hardening-h2b","name":"Deployment contract, public assurance language scanner, verifiable Trust copy","status":"MERGED","evidence":"docs/evidence/2026-09-12-wave-h2b-hardening.md"},
+    {"id":"hardening-h3","name":"Breadcrumb structured data, reduced-motion contract, product provenance guard","status":"MERGED","evidence":"docs/evidence/2026-09-12-wave-h3-hardening.md"},
+    {"id":"hardening-h4","name":"Machine-readable security policy + edge header contract","status":"MERGED","evidence":"docs/evidence/2026-09-12-wave-h4-security.md"},
+    {"id":"hardening-h5","name":"Documented gate surface (drift guard) + runtime re-probe","status":"MERGED","evidence":"docs/evidence/2026-09-12-wave-h5-doc-drift.md"},
+    {"id":"hardening-h6","name":"Print surface for evidence passports","status":"MERGED","evidence":"docs/evidence/2026-09-12-wave-h6-print.md"},
+    {"id":"hardening-h7","name":"Markup baseline: passport document h1 + one-h1 contract","status":"MERGED","evidence":"docs/evidence/2026-09-12-wave-h7-markup.md"},
+    {"id":"hardening-h8","name":"Mobile overflow sweep, heading hierarchy fix, passport polish","status":"MERGED","evidence":"docs/evidence/2026-09-12-wave-h8-mobile.md"},
+    {"id":"hardening-h9","name":"Assistive-tech announcement for the command navigator","status":"MERGED","evidence":"docs/evidence/2026-09-12-wave-h9-at-announcements.md"},
+    {"id":"hardening-h10","name":"Production smoke/observability/rollback contract + live 404 check","status":"MERGED","evidence":"docs/evidence/2026-09-12-wave-h10-ops.md"},
+    {"id":"hardening-h11","name":"Recovery paths + redirect chain contract","status":"MERGED","evidence":"docs/evidence/2026-09-12-wave-h11-recovery.md"},
+    {"id":"hardening-h12","name":"Text-zoom safety (WCAG 1.4.4): shrinkable grid items, breakable headings, wrapping atlas rows","status":"MERGED","evidence":"docs/evidence/2026-09-13-wave-h12-text-zoom.md"},
+    {"id":"c2-master-plan","name":"C2 Cinematic Product House — P0 Product Truth through P6 Elite QA","status":"BLOCKED","evidence":"docs/superpowers/plans/2026-09-13-c2-cinematic-product-house-implementation.md"},
+    {"id":"hardening-h13","name":"Text-spacing (1.4.12) + forced-colors guards","status":"MERGED","evidence":"docs/evidence/2026-09-13-wave-h13-spacing-contrast.md"},
+    {"id":"c2-p0","name":"P0 Product truth activation (screenshot floor + router)","status":"BLOCKED","evidence":"docs/evidence/2026-09-13-c2-p0-product-truth.md"},
+    {"id":"c2-p1","name":"P1 Experience recomposition (six-act homepage)","status":"MERGED","evidence":"docs/evidence/2026-09-14-c2-p1-home-recomposition.md"},
+    {"id":"c2-p2","name":"P2 Art direction foundation (Horizon Arrival, act rhythm)","status":"MERGED","evidence":"docs/evidence/2026-09-13-c2-p2-art-direction.md"},
+    {"id":"c2-p3","name":"P3 Product storytelling (Flagship Theatre, Product House)","status":"MERGED","evidence":"docs/evidence/2026-09-14-c2-p3-product-storytelling.md"},
+    {"id":"c2-p4","name":"P4 Meaning + trust progressive disclosure","status":"MERGED","evidence":"docs/evidence/2026-09-14-c2-p4-meaning-trust.md"},
+    {"id":"c2-p5","name":"P5 Human layer, closing signature, secondary surfaces","status":"MERGED","evidence":"docs/evidence/2026-09-15-c2-p5-human-layer.md"},
+    {"id":"c2-p6","name":"P6 Elite QA, red team, promotion, production read-back","status":"MERGED","evidence":"docs/evidence/2026-09-15-c2-p6-elite-qa.md"},
+    {"id":"c3-master-plan","name":"C3 Living Verifiable Product Experience — post-C2 successor program","status":"PLANNED","evidence":"docs/superpowers/plans/2026-09-13-c3-living-verifiable-product-experience-master.md"},
+    {"id":"c3-a-craft","name":"C3-A Experience Craft Foundation","status":"PLANNED","evidence":"docs/superpowers/plans/2026-09-13-c3-a-experience-craft-foundation.md"},
+    {"id":"c3-b-trust","name":"C3-B Trust Continuum","status":"PLANNED","evidence":"docs/superpowers/plans/2026-09-13-c3-b-trust-continuum.md"},
+    {"id":"c3-c-product","name":"C3-C Living Product System","status":"PLANNED","evidence":"docs/superpowers/plans/2026-09-13-c3-c-living-product-system.md"},
+    {"id":"c3-d-adaptive","name":"C3-D Adaptive Experience","status":"PLANNED","evidence":"docs/superpowers/plans/2026-09-13-c3-d-adaptive-experience.md"},
+    {"id":"c3-e-concierge","name":"C3-E Verifiable Product Concierge","status":"PLANNED","evidence":"docs/superpowers/plans/2026-09-13-c3-e-verifiable-concierge.md"},
+    {"id":"c3-f-release","name":"C3-F Living Release Publication","status":"PLANNED","evidence":"docs/superpowers/plans/2026-09-13-c3-f-living-release-publication.md"},
+    {"id":"c3-g-spatial","name":"C3-G Spatial Product House Halo Experiment","status":"PLANNED","evidence":"docs/superpowers/plans/2026-09-13-c3-g-spatial-halo-experiment.md"}
   ],
   "openOwnerDecisions": [
-    {
-      "id": "screenshot-mandatory-floor",
-      "question": "C2 Task 2 / #125 C1c: public products require a real screenshot; no candidate has owner-approved identity + real screenshot + proof, so P0 product activation is BLOCKED_OWNER_FACT. Scaffold ready (product-screenshot-floor.test.mjs); C2 structural shell proceeds against the honest empty registry. Owner supplies assets -> one-line flip.",
-      "blocks": ["product-publication-contract", "c2-full-flagship-theatre"]
-    },
-    {
-      "id": "human-review-governance",
-      "question": "Enable stronger human review rules only if a real independent reviewer path exists (otherwise record HUMAN_REVIEW_UNAVAILABLE).",
-      "blocks": ["branch-protection"]
-    },
-    {
-      "id": "rum-provider",
-      "question": "NOT DONE (owner noted 2026-09-13): no analytics/RUM provider chosen; transmission stays OFF. No agent action until privacy decision exists.",
-      "blocks": []
-    }
+    {"id":"screenshot-mandatory-floor","question":"C2 P0 remains BLOCKED_OWNER_FACT: public products require a real screenshot plus owner-approved product facts/proof. Structural C2/C3 work may proceed against the honest empty registry; never fabricate product identity or media.","blocks":["product-publication-contract","c2-full-flagship-theatre","c3-c-living-product-full-outcome"]},
+    {"id":"human-review-governance","question":"Enable stronger human review rules only if a real independent reviewer path exists; otherwise retain HUMAN_REVIEW_UNAVAILABLE semantics.","blocks":["branch-protection-independent-review"]},
+    {"id":"rum-provider","question":"No analytics/RUM provider is approved. Transmission stays OFF until an explicit privacy/provider decision exists.","blocks":[]},
+    {"id":"c3-concierge-runtime-privacy-provider","question":"C3 direction is approved, but remote Concierge/model provider, retrieval runtime, log retention/privacy, abuse controls and cost ceiling require a dedicated architecture/privacy/security decision plus owner approval before implementation.","blocks":["c3-e-concierge-runtime"]},
+    {"id":"c3-spatial-webgl-go-gate","question":"C3 spatial concept is approved as an experiment. WebGL/3D remains conditional on native 2.5D evidence, measured value, performance/accessibility budget and a separate owner GO decision.","blocks":["c3-g-webgl-runtime"]}
   ],
   "residualExternal": [
     "Human E4: OWNER SELF-TESTS (owner directive 2026-09-13, NON-BLOCKER). Agent-side max complete: protocol (docs/evidence/2026-09-12-v3-human-e4.md), session template + red-team template (docs/evidence/templates/). Automated substitutes already in CI (axe matrix, Lighthouse). Real-participant sessions are owner-executed.",
     "VI copy review: OWNER CROSS-CHECKS WITH ANOTHER AGENT (owner directive 2026-09-13, NON-BLOCKER). Agent fixed the 3 weakest spots + EN/VI parity guards; remainder awaits the cross-check audit.",
-    "Trademark/legal clearance and specialty print (brand kit caveats)",
-    "Localized product profile route: /<lang>/products/<slug>/ is emitted only by the legacy non-localized stub /products/[slug]/ (which redirects to /en/products/). Closing it is product-truth work gated behind the screenshot floor; recorded here as a finding, not silently fixed."
+    "Trademark/legal clearance and specialty print (brand kit caveats).",
+    "Localized product profile route remains product-truth gated until a real public product can exercise the route contract."
   ],
   "nextActionable": [
-    "C2 program agent-side execution is complete: all waves (P1-P6) merged, verified, and active on production at https://blueskyzlabs.com",
-    "C2 P0 (owner): supply real screenshot + product facts before the public product/flagship activation contract can be completed",
-    "Human E4 (owner): execute real-participant session protocol when scheduled",
-    "RUM provider (owner): decide analytics/RUM provider before activating client telemetry"
+    "Agent: reconcile and merge the approved C3 planning/governance package onto the live post-C2 main without reintroducing stale C2 state.",
+    "After planning promotion: activate exactly one child wave, C3-A Experience Craft Foundation, after refreshing main and exact-head provider gates.",
+    "C3-A may proceed on the honest empty public product registry; any real product imagery/publication remains gated by owner-approved product truth.",
+    "C3-E remote AI and C3-G WebGL remain separately gated and must not block lower-risk C3 work."
   ]
 }
