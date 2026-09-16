@@ -94,8 +94,7 @@ Expected: PASS; no owner decision auto-resolved.
 
 **Files:**
 - Modify: `docs/current-work.json`
-- Modify or create: architecture test that owns current-work schema/router validation
-- Create: `docs/superpowers/specs/<date>-live-execution-ledger-design.md` only if the live router contract requires a schema-level design decision at execution time
+- Modify or create: the architecture test that owns current-work schema/router validation after live inventory
 
 **Interfaces:**
 - Produces optional execution metadata: `activeProgram`, `activeWave`, `activeTask`, `activePr`, `activeBranch`, `headSha`, `executionStatus`, `lastVerifiedState`, `nextAction`, `lastVerifiedAt`.
@@ -178,7 +177,7 @@ Expected: guard stays green through later PRs.
 **Files:**
 - Extend: `tests/architecture/experience-density.test.mjs`
 - Create or extend targeted C4 architecture tests from C4-A
-- Create: `docs/evidence/<date>-c4-quiet-authority-baseline.md` during activation
+- Create: `docs/evidence/2026-09-16-c4-quiet-authority-baseline.md` during C4 activation; include actual observation timestamp/SHA inside the file
 
 **Interfaces:**
 - Produces: objective baseline for CTA density, status/chip density, focal media competition, client bytes, typography measures, motion scarcity, and key responsive routes.
@@ -245,8 +244,8 @@ Before each child wave promotion, explicitly review:
 ### Task 5: Run cross-system elite QA and production read-back
 
 **Files:**
-- Create: `docs/evidence/<date>-c4-final-red-team.md`
-- Create: `docs/evidence/<date>-c4-production-readback.md`
+- Create: `docs/evidence/2026-09-16-c4-final-red-team.md`; record the actual convergence execution timestamp/SHA inside the file
+- Create: `docs/evidence/2026-09-16-c4-production-readback.md`; record the actual deployed revision/timestamp inside the file
 - Modify: `docs/current-work.json` only after objective evidence
 
 - [ ] **Step 1: refresh all child-wave evidence**
