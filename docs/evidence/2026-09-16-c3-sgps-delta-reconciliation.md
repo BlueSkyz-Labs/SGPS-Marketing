@@ -42,14 +42,20 @@ Current `sgps-core` truth at this refresh:
 
 This project therefore classifies current overlays explicitly rather than treating moving `sgps-core/main` as automatic project authority.
 
-## Strategic delta / applicability matrix
+## Strategic delta / applicability
 
-| Decision | Domain | Project classification | C3 consequence |
-| --- | --- | --- | --- |
-| `SGPS-DEC-2026-012` | Experience 1.4 — Brand Operationalization, Public Truth & Touchpoint Integrity | **APPLICABLE** | C3 must preserve public-truth fail-closed behavior, distinguish design/mockup/runtime/evidence, avoid invented public facts, and keep brand/product attribution truthful. Existing Brand v4/public-truth/provenance controls remain authoritative project evidence; this reconciliation does not claim new real-user convergence. |
-| `SGPS-DEC-2026-013` | Architecture Authority & Customer-Platform Integrity | **NOT APPLICABLE to C3-A**; **CONDITIONALLY APPLICABLE to C3-E** | Experience Craft introduces no identity/payment/customer-platform authority. If remote Concierge/AI is later approved, authority separation and customer-platform review must be addressed in its dedicated architecture/privacy/security decision before runtime implementation. |
-| `SGPS-DEC-2026-014` | RCR 1.0 — Risk, Control & Resilience | **APPLICABLE AS RISK/CONTROL LENS** | C3-A remains low blast-radius and operates under existing source assurance, rollback, accessibility/performance and production evidence controls. C3-E remote AI and C3-G WebGL require scoped risk/control/recovery treatment and evidence before GO. No autonomous R4/root-risk acceptance is authorized. |
-| `SGPS-DEC-2026-015` | Decision Architecture / Solution Decision Contract | **NOT MANDATORY / CANDIDATE ONLY** | Current source explicitly forbids global mandatory routing before dual-pilot promotion. C3 may reuse its business-first reasoning principles, but this repository does not declare Decision Architecture adopted or require SDC artifacts by implication. |
+- **`SGPS-DEC-2026-012` — Experience 1.4 / Brand Operationalization, Public Truth & Touchpoint Integrity**
+  - Classification: **APPLICABLE**.
+  - C3 consequence: preserve public-truth fail-closed behavior, distinguish design/mockup/runtime/evidence, avoid invented public facts, and keep brand/product attribution truthful. Existing Brand v4/public-truth/provenance controls remain authoritative project evidence; this reconciliation does not claim new real-user convergence.
+- **`SGPS-DEC-2026-013` — Architecture Authority & Customer-Platform Integrity**
+  - Classification: **NOT APPLICABLE to C3-A**; **CONDITIONALLY APPLICABLE to C3-E**.
+  - C3 consequence: Experience Craft introduces no identity/payment/customer-platform authority. If remote Concierge/AI is later approved, authority separation and customer-platform review must be addressed in its dedicated architecture/privacy/security decision before runtime implementation.
+- **`SGPS-DEC-2026-014` — RCR 1.0 / Risk, Control & Resilience**
+  - Classification: **APPLICABLE AS RISK/CONTROL LENS**.
+  - C3 consequence: C3-A remains low blast-radius and operates under existing source assurance, rollback, accessibility/performance and production evidence controls. C3-E remote AI and C3-G WebGL require scoped risk/control/recovery treatment and evidence before GO. No autonomous R4/root-risk acceptance is authorized.
+- **`SGPS-DEC-2026-015` — Decision Architecture / Solution Decision Contract**
+  - Classification: **NOT MANDATORY / CANDIDATE ONLY**.
+  - C3 consequence: current source explicitly forbids global mandatory routing before dual-pilot promotion. C3 may reuse its business-first reasoning principles, but this repository does not declare Decision Architecture adopted or require SDC artifacts by implication.
 
 ### Adoption-state honesty
 
