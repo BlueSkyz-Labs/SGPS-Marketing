@@ -1,64 +1,43 @@
-.min-w-0 {
-  min-width: 0;
-  overflow: hidden;
+@layer c3-base {
+  .c3-product-visual {
+    contain: layout style;
+    min-width: 0 !important;
+    overflow: hidden !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    display: block !important;
+    box-sizing: border-box !important;
+  }
+
+  .c2-flagship-theatre__frame {
+    contain: layout style;
+    width: 100% !important;
+    min-width: 0 !important;
+    overflow: hidden !important;
+    max-width: 100% !important;
+    display: block !important;
+    box-sizing: border-box !important;
+  }
+
+  .c3-product-visual__image {
+    contain: layout style;
+    display: block !important;
+    box-sizing: border-box !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    height: auto !important;
+    min-width: 0 !important;
+    border: 1px solid var(--c3-image-surface-border);
+    border-radius: var(--c3-image-surface-radius);
+    background: var(--c3-image-surface-background);
+  }
 }
-
-/* C3-A Task 1 — Experience Craft Foundation shared role contract.
- *
- * This file intentionally defines semantic aliases only. Later C3-A tasks
- * consume these roles for product imagery, route continuity, typography,
- * header states, mobile composition, and microinteractions. Existing Brand v4
- * and C2 tokens remain authoritative; no second palette, animation system, or
- * transition identity convention is introduced here.
- */
-
-:root {
-  --c3-image-surface-radius: var(--radius-card);
-  --c3-image-surface-border: var(--border-subtle);
-  --c3-image-surface-background: var(--surface-primary);
-  --c3-route-transition-duration: var(--motion-continuity-duration);
-  --c3-route-transition-ease: var(--motion-ease-standard);
-  --c3-interaction-duration: var(--motion-confirmation-duration);
-  --c3-interaction-ease: var(--motion-ease-standard);
-  --c3-interaction-distance: var(--motion-distance-sm);
-}
-
-/* C3-A Task 2 — one intrinsic, truth-driven product screenshot surface.
- * Perspective remains an outer-scene concern; this primitive never hides
- * content behind motion and never invents crop/focal metadata.
- */
-.c3-product-visual {
-  min-width: 0;
-  overflow: hidden;
-  width: 100%;
-  max-width: 100%;
-  overflow: hidden;
-}
-
-.c2-flagship-theatre__frame {
-  width: 100%;
-  min-width: 0;
-  overflow: hidden;
-  max-width: 100%;
-  overflow: hidden;
-}
-
-.c3-product-visual__image {
-  max-width: 100%;
-  display: block;
-  box-sizing: border-box;
-  width: 100%;
-  max-width: 100%;
-  height: auto;
-  border: 1px solid var(--c3-image-surface-border);
-  border-radius: var(--c3-image-surface-radius);
-  background: var(--c3-image-surface-background);
 }
 
 @media (prefers-reduced-motion: reduce) {
   .c3-product-visual,
   .c3-product-visual__image {
-  max-width: 100%;
+    max-width: 100% !important;
     animation: none !important;
     transition: none !important;
   }
