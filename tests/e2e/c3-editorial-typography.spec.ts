@@ -63,13 +63,16 @@ test.describe("C3-A Editorial Typography — display hierarchy", () => {
     await page.goto("/en/");
     await expect(page.locator("h1").first()).toBeVisible();
 
-    const h1Styles = await page.locator("h1").first().evaluate((el) => {
-      const computed = getComputedStyle(el);
-      return {
-        fontWeight: Number(computed.fontWeight),
-        fontSize: Number.parseFloat(computed.fontSize),
-      };
-    });
+    const h1Styles = await page
+      .locator("h1")
+      .first()
+      .evaluate((el) => {
+        const computed = getComputedStyle(el);
+        return {
+          fontWeight: Number(computed.fontWeight),
+          fontSize: Number.parseFloat(computed.fontSize),
+        };
+      });
     expect(h1Styles.fontWeight).toBeGreaterThanOrEqual(500);
     expect(h1Styles.fontSize).toBeGreaterThanOrEqual(24);
   });
