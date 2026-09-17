@@ -104,7 +104,13 @@ html {
 
 body {
   margin: 0;
-  min-width: 320px;
+  /* A narrow-width floor must never be wider than the viewport it is drawing
+     into: a hard 320px floor forces a horizontal scrollbar whenever the
+     layout viewport is narrower than 320px (classic desktop scrollbars take
+     12-16px, so a 320px window leaves ~305px). Bounding the floor by 100%
+     keeps the intent - do not collapse the layout below 320px when there is
+     room - without ever manufacturing sideways scroll at 200% text zoom. */
+  min-width: min(320px, 100%);
   background: transparent;
 }
 
@@ -715,6 +721,14 @@ summary {
 .integrity-lens__entries article {
   display: grid;
   gap: 0.5rem;
+}
+/* Reflow at 200% text: the evidence block is a grid item, so `min-width: auto`
+   let its min-content widen the track, and the min-content was the longest
+   unbreakable word (~172px at 200%). Allow the item to shrink and its text to
+   break, so the summary reflows instead of pushing the document sideways. */
+.evidence-details {
+  min-width: 0;
+  overflow-wrap: anywhere;
 }
 .evidence-details__summary {
   color: var(--text-secondary);

@@ -22,51 +22,72 @@ const VIEWPORTS = [
   { name: "small", width: 320, height: 720 },
 ] as const;
 
-async function settledOverflow(
-  page: Page,
-): Promise<{ overflow: number; offender: string | null }> {
+async function settledOverflow(page: Page): Promise<{
+  overflow: number;
+  metrics: string;
+  offenders: string[];
+}> {
   return page.evaluate(async () => {
     await document.fonts.ready;
     await new Promise((resolve) =>
       requestAnimationFrame(() => requestAnimationFrame(() => resolve(null))),
     );
     const doc = document.documentElement;
-    const overflow = doc.scrollWidth - window.innerWidth;
-    let offender: string | null = null;
-    if (overflow > 1) {
-      // Decorative bleed inside an overflow-hidden ancestor cannot create
-      // document scroll; report the widest element that is NOT clipped.
-      const isClipped = (el: Element): boolean => {
-        let node = el.parentElement;
-        while (node && node !== document.documentElement) {
-          const cs = getComputedStyle(node);
-          if (/(hidden|clip|auto|scroll)/.test(cs.overflowX)) return true;
-          node = node.parentElement;
-        }
-        return false;
-      };
-      const widest = [...document.querySelectorAll<HTMLElement>("body *")]
-        .map((el) => ({ el, right: el.getBoundingClientRect().right }))
-        .filter((entry) => entry.right > window.innerWidth + 1)
-        .sort((a, b) => b.right - a.right)
-        .find((entry) => !isClipped(entry.el));
-      if (widest) {
-        offender = `${widest.el.tagName.toLowerCase()}.${[
-          ...widest.el.classList,
-        ]
-          .slice(0, 3)
-          .join(".")} (right ${Math.round(widest.right)}px)`;
+    // Engine-independent question: "would this document need horizontal
+    // scrolling?" scrollWidth vs clientWidth both describe the layout viewport,
+    // whereas window.innerWidth includes the scrollbar on some engines and not
+    // others - measuring against it hid a real 4px reflow overflow.
+    const overflow = doc.scrollWidth - doc.clientWidth;
+    const metrics =
+      `inner=${window.innerWidth} client=${doc.clientWidth} ` +
+      `scroll=${doc.scrollWidth} bodyClient=${document.body.clientWidth} ` +
+      `scrollbar=${window.innerWidth - doc.clientWidth}`;
+    // Decorative bleed inside an overflow-hidden ancestor cannot create
+    // document scroll; report the widest elements that are NOT clipped, with
+    // the properties that decide whether they can reflow.
+    const isClipped = (el: Element): boolean => {
+      let node = el.parentElement;
+      while (node && node !== document.documentElement) {
+        const cs = getComputedStyle(node);
+        if (/(hidden|clip|auto|scroll)/.test(cs.overflowX)) return true;
+        node = node.parentElement;
       }
-    }
-    return { overflow, offender };
+      return false;
+    };
+    const offenders =
+      overflow > 1
+        ? [...document.querySelectorAll<HTMLElement>("body *")]
+            .map((el) => ({ el, right: el.getBoundingClientRect().right }))
+            .filter((entry) => entry.right > doc.clientWidth + 1)
+            .filter((entry) => !isClipped(entry.el))
+            .sort((a, b) => b.right - a.right)
+            .slice(0, 3)
+            .map((entry) => {
+              const cs = getComputedStyle(entry.el);
+              const rect = entry.el.getBoundingClientRect();
+              return (
+                `${entry.el.tagName.toLowerCase()}.${[...entry.el.classList]
+                  .slice(0, 3)
+                  .join(".")} right=${Math.round(entry.right)}` +
+                ` w=${Math.round(rect.width)} x=${Math.round(rect.x)}` +
+                ` min-w=${cs.minWidth} ws=${cs.whiteSpace}` +
+                ` wrap=${cs.overflowWrap}/${cs.wordBreak}` +
+                ` text="${(entry.el.textContent ?? "").trim().slice(0, 40)}"`
+              );
+            })
+        : [];
+    return { overflow, metrics, offenders };
   });
 }
 
 function describe(
   prefix: string,
-  result: { overflow: number; offender: string | null },
+  result: { overflow: number; metrics: string; offenders: string[] },
 ) {
-  return `${prefix} ${result.overflow}px${result.offender ? ` — widest: ${result.offender}` : ""}`;
+  const detail = result.offenders.length
+    ? ` — ${result.offenders.join(" | ")}`
+    : "";
+  return `${prefix} ${result.overflow}px [${result.metrics}]${detail}`;
 }
 
 test.describe("C3-A Editorial Typography — EN/VI wrapping", () => {
