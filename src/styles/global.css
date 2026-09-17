@@ -722,17 +722,26 @@ summary {
   display: grid;
   gap: 0.5rem;
 }
-/* Reflow at 200% text (WCAG 1.4.4) for the product-act intro row: the copy block
-   is a flex item, so `min-width: auto` pinned its min-content - at 200% text the
-   longest word of the display heading is wider than a 320px viewport's content
-   box, which pushed the whole document sideways. The copy must shrink and its
-   words must be able to break. */
-.product-act-intro__copy {
+/* Reflow safety (WCAG 1.4.4 resize text / 1.4.10 reflow).
+ *
+ * Two structural causes kept pushing documents sideways at 200% text:
+ *   1. grid/flex children default to `min-width: auto`, so their min-content
+ *      widens the track instead of reflowing (evidence details, bilingual
+ *      mirror pairs, boundary cards, product-act intro rows);
+ *   2. an unbreakable word (a 200%-scaled display heading, a long label) then
+ *      defines that min-content.
+ * Shrinking is the safe default for laid-out content, and long words may break
+ * when there is genuinely no room. Explicit `min-width` declarations still win,
+ * so intentional floors survive, and `overflow-wrap: anywhere` only applies
+ * when a word cannot fit its line. Applies to the whole page: the same class of
+ * defect appeared in the footer language switcher as well as in `main`.
+ */
+:where(body)
+  :where(div, section, article, aside, ul, ol, li, figure, form, details, a) {
   min-width: 0;
 }
 
-.product-act-intro__title {
-  min-width: 0;
+:where(body) :where(p, li, h1, h2, h3, h4, summary, figcaption, time) {
   overflow-wrap: anywhere;
 }
 

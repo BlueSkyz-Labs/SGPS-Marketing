@@ -140,11 +140,19 @@ test.describe("C3-A Editorial Typography — 200% text zoom", () => {
     });
   }
 
-  test("320px: the product routes reflow at 200% text", async ({ page }) => {
-    // Same defect class as the homepage (a wrapping row whose copy block pins
-    // its min-content), so the guard covers the product surfaces directly.
+  test("320px: the key routes reflow at 200% text", async ({ page }) => {
+    // Same structural defect class as the homepage: a grid/flex child that pins
+    // its min-content (product-act intro row, bilingual mirror pair, boundary
+    // card, contact block). The guard measures each surface directly.
     await page.setViewportSize({ width: 320, height: 720 });
-    for (const route of ["/en/products/", "/vi/products/"]) {
+    for (const route of [
+      "/en/products/",
+      "/vi/products/",
+      "/en/contact/",
+      "/en/security/",
+      "/vi/security/",
+      "/en/evidence/security-reporting-is-private/",
+    ]) {
       await page.goto(route);
       await page.evaluate(() => {
         document.documentElement.style.fontSize = "200%";
