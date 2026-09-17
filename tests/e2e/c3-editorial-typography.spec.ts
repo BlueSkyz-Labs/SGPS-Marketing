@@ -1,6 +1,6 @@
 // C3-A Task 3 — Editorial Typography v2 contract (RED first).
 // Asserts EN/VI wrapping + 200% zoom + text-spacing at 1440/390/320px.
-import { expect, test, type Page } from "@playwright/test";
+import { expect, test } from "@playwright/test";
 
 const VIEWPORTS = [
   { name: "desktop", width: 1440, height: 900 },
@@ -8,19 +8,6 @@ const VIEWPORTS = [
   { name: "mobile", width: 390, height: 844 },
   { name: "small", width: 320, height: 720 },
 ] as const;
-
-async function longestLine(page: Page): Promise<number> {
-  return page.evaluate(() => {
-    const body = document.body;
-    const elements = body.querySelectorAll("h1, h2, h3, p");
-    let max = 0;
-    for (const el of elements) {
-      const rect = el.getBoundingClientRect();
-      if (rect.width > max) max = rect.width;
-    }
-    return max;
-  });
-}
 
 test.describe("C3-A Editorial Typography — EN/VI wrapping", () => {
   for (const viewport of VIEWPORTS) {
