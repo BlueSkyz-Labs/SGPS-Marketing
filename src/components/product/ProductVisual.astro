@@ -1,0 +1,46 @@
+---
+import type { CollectionEntry } from "astro:content";
+
+type ProductScreenshot = NonNullable<
+  CollectionEntry<"products">["data"]["proof"]["screenshot"]
+>;
+
+/**
+ * C3-A Task 2 — the single shared product-visual primitive.
+ *
+ * It owns presentation only: intrinsic size, alt text and the optional
+ * continuity hook all come from the caller. It never derives product facts,
+ * and it forwards — never authors — the continuity identity produced by the
+ * shared naming convention in `src/lib`.
+ */
+interface Props {
+  screenshot: ProductScreenshot;
+  loading?: "eager" | "lazy";
+  transitionStyle?: string;
+  continuity?: "media";
+}
+
+const {
+  screenshot,
+  loading = "lazy",
+  transitionStyle,
+  continuity,
+} = Astro.props;
+---
+
+<div
+  class="c3-product-visual"
+  data-product-visual
+  data-product-continuity={continuity}
+  style={transitionStyle}
+>
+  <img
+    src={screenshot.src}
+    alt={screenshot.alt}
+    width={screenshot.width}
+    height={screenshot.height}
+    class="c3-product-visual__image"
+    loading={loading}
+    decoding="async"
+  />
+</div>

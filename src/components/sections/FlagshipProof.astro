@@ -1,6 +1,7 @@
 ---
 import type { CollectionEntry } from "astro:content";
 import ProductStatus from "@/components/product/ProductStatus.astro";
+import ProductVisual from "@/components/product/ProductVisual.astro";
 import ButtonLink from "@/components/ui/ButtonLink.astro";
 import EvidenceDetails from "@/components/integrity/EvidenceDetails.astro";
 import { SHARED_LABELS, labelFor, type Language } from "@/data/site";
@@ -64,15 +65,7 @@ const captionLabel = labelFor(SHARED_LABELS.proofCaption, lang);
           </div>
         </div>
         <figure class="m-0">
-          <img
-            src={screenshot.src}
-            alt={screenshot.alt}
-            width={screenshot.width}
-            height={screenshot.height}
-            class="h-auto w-full rounded-[var(--radius-card)] border border-[var(--border-subtle)]"
-            loading="lazy"
-            decoding="async"
-          />
+          <ProductVisual screenshot={screenshot} />
         </figure>
       </div>
     </section>

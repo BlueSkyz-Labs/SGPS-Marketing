@@ -300,6 +300,12 @@
    act's visual protagonist and stays at opacity 1).
    ------------------------------------------------- */
 
+.c2-flagship-theatre__frame {
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+}
+
 .c2-flagship-theatre__frame img {
   opacity: 1;
   transform: none;

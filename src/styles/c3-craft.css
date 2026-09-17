@@ -1,10 +1,9 @@
-/* C3-A Task 1 — Experience Craft Foundation shared role contract.
+/* C3-A Experience Craft Foundation — shared craft layer.
  *
- * This file intentionally defines semantic aliases only. Later C3-A tasks
- * consume these roles for product imagery, route continuity, typography,
- * header states, mobile composition, and microinteractions. Existing Brand v4
- * and C2 tokens remain authoritative; no second palette, animation system, or
- * transition identity convention is introduced here.
+ * Task 1 established the semantic role aliases; Task 2 adds the shared product
+ * visual primitive. Brand v4 / C2 tokens stay authoritative: this file authors
+ * no palette, no keyframes and no transition identity, and route-local
+ * decoration must extend it rather than duplicate it.
  */
 
 :root {
@@ -16,4 +15,35 @@
   --c3-interaction-duration: var(--motion-confirmation-duration);
   --c3-interaction-ease: var(--motion-ease-standard);
   --c3-interaction-distance: var(--motion-distance-sm);
+}
+
+/* Task 2 — Cinematic Screenshot Art Direction.
+ *
+ * One responsive, intrinsic-size visual for every product surface. The frame
+ * is a shrinkable grid/flex child (min-width: 0) so a real screenshot can
+ * never widen its track, and the image is bounded by the frame instead of its
+ * intrinsic pixel size. Declared outside @layer so it wins over Tailwind's
+ * layered preflight in the parity fixture app as well as in the runtime build.
+ */
+.c3-product-visual {
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+.c3-product-visual__image {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  border: 1px solid var(--c3-image-surface-border);
+  border-radius: var(--c3-image-surface-radius);
+  background-color: var(--c3-image-surface-background);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .c3-product-visual__image {
+    animation: none;
+    transition: none;
+  }
 }
