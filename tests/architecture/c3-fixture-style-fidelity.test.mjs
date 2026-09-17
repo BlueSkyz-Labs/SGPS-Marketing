@@ -3,6 +3,7 @@ import { readFileSync } from "node:fs";
 import test from "node:test";
 
 const RUNTIME_LAYOUT = "src/layouts/BaseLayout.astro";
+const HARNESS = "tests/e2e/helpers/parity-fixture.ts";
 const FIXTURE_PAGES = [
   "tests/e2e/fixtures/parity-app/src/pages/product-acts.astro",
   "tests/e2e/fixtures/parity-app/src/pages/product-acts-vi.astro",
@@ -40,4 +41,22 @@ test("product-present fixture pages load the runtime style entry in authoritativ
       `${path} must load c3-craft.css after global.css like BaseLayout`,
     );
   }
+});
+
+test("the fixture harness serves the real build with truthful content types", () => {
+  // A parity app that links hashed stylesheets but receives them under a
+  // generic content type renders unstyled: the browser refuses the sheet under
+  // strict MIME checking, and every layout assertion then measures the wrong
+  // page without failing loudly. Guard the harness's own fidelity.
+  const harness = source(HARNESS);
+  assert.match(
+    harness,
+    /"\.css":\s*"text\/css; charset=utf-8"/,
+    "the fixture harness must serve .css as text/css",
+  );
+  assert.match(
+    harness,
+    /CONTENT_TYPES\[extname\(filePath\)\]/,
+    "the fixture harness must resolve the content type from the file extension",
+  );
 });
