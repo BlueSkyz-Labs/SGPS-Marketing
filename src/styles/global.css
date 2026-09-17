@@ -722,6 +722,20 @@ summary {
   display: grid;
   gap: 0.5rem;
 }
+/* Reflow at 200% text (WCAG 1.4.4) for the product-act intro row: the copy block
+   is a flex item, so `min-width: auto` pinned its min-content - at 200% text the
+   longest word of the display heading is wider than a 320px viewport's content
+   box, which pushed the whole document sideways. The copy must shrink and its
+   words must be able to break. */
+.product-act-intro__copy {
+  min-width: 0;
+}
+
+.product-act-intro__title {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
 /* Reflow at 200% text: the evidence block is a grid item, so `min-width: auto`
    let its min-content widen the track, and the min-content was the longest
    unbreakable word (~172px at 200%). Allow the item to shrink and its text to

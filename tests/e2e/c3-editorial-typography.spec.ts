@@ -140,6 +140,23 @@ test.describe("C3-A Editorial Typography — 200% text zoom", () => {
     });
   }
 
+  test("320px: the product routes reflow at 200% text", async ({ page }) => {
+    // Same defect class as the homepage (a wrapping row whose copy block pins
+    // its min-content), so the guard covers the product surfaces directly.
+    await page.setViewportSize({ width: 320, height: 720 });
+    for (const route of ["/en/products/", "/vi/products/"]) {
+      await page.goto(route);
+      await page.evaluate(() => {
+        document.documentElement.style.fontSize = "200%";
+      });
+      const result = await settledOverflow(page);
+      expect(
+        result.overflow,
+        describe(`${route} 200% zoom overflow`, result),
+      ).toBeLessThanOrEqual(1);
+    }
+  });
+
   test("text-spacing override is respected", async ({ page }) => {
     await page.setViewportSize({ width: 390, height: 844 });
     await page.goto("/en/");
