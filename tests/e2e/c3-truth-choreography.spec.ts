@@ -20,9 +20,8 @@ test.describe("C3-B truth-state choreography", () => {
     await page.goto(origin + "/trust-continuum/");
 
     const state = page.locator("[data-truth-state]").first();
-    await expect(state.locator(".truth-state__label")).toHaveText(
-      "Source-linked",
-    );
+    const label = state.locator(".truth-state__label");
+    await expect(label).toHaveText("Source-linked");
     await expect(state).toHaveAttribute("data-truth-presentation", "source");
   });
 
@@ -34,8 +33,9 @@ test.describe("C3-B truth-state choreography", () => {
     const duration = await state.evaluate(
       (element) => getComputedStyle(element).transitionDuration,
     );
-    expect(
-      duration.split(",").every((value) => parseFloat(value) === 0),
-    ).toBe(true);
+    const hasMotion = duration
+      .split(",")
+      .some((value) => parseFloat(value) > 0);
+    expect(hasMotion).toBe(false);
   });
 });
