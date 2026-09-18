@@ -30,13 +30,11 @@ test.describe("C3-B Evidence Peek", () => {
     await page.keyboard.press("Enter");
     await expect(details).toHaveAttribute("open", /.*/);
 
-    await expect(details.locator("[data-evidence-peek-source]")).toHaveAttribute(
-      "href",
-      "/en/products/",
-    );
-    await expect(details.locator("[data-evidence-boundary]")).toContainText(
-      "does not establish",
-    );
+    const source = details.locator("[data-evidence-peek-source]");
+    await expect(source).toHaveAttribute("href", "/en/products/");
+
+    const boundary = details.locator("[data-evidence-boundary]");
+    await expect(boundary).toContainText("does not establish");
     await context.close();
   });
 });
