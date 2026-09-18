@@ -6,6 +6,8 @@ import ButtonLink from "@/components/ui/ButtonLink.astro";
 import EvidenceDetails from "@/components/integrity/EvidenceDetails.astro";
 import { SHARED_LABELS, labelFor, type Language } from "@/data/site";
 import { getProductProfilePath } from "@/lib/product-routes";
+import { getProductProofLinks } from "@/lib/product-proof";
+import ProductProofLink from "@/components/integrity/ProductProofLink.astro";
 
 interface Props {
   product: CollectionEntry<"products">;
@@ -19,6 +21,7 @@ const capabilities = data.capabilities ?? [];
 const profileHref = getProductProfilePath(lang, data.slug);
 const profileLabel = labelFor(SHARED_LABELS.viewProfile, lang);
 const captionLabel = labelFor(SHARED_LABELS.proofCaption, lang);
+const publicProductRef = [{ slug: data.slug, name: data.name }];
 ---
 
 {
@@ -42,7 +45,17 @@ const captionLabel = labelFor(SHARED_LABELS.proofCaption, lang);
           </p>
           <ul class="mt-6 list-disc space-y-2 pl-5 text-[var(--text-secondary)]">
             {capabilities.slice(0, 3).map((capability: string) => (
-              <li>{capability}</li>
+              <li>
+                <span>{capability}</span>
+                <ProductProofLink
+                  links={getProductProofLinks(
+                    data.slug,
+                    capability,
+                    publicProductRef,
+                  )}
+                  lang={lang}
+                />
+              </li>
             ))}
           </ul>
           <div class="mt-6" data-flagship-evidence>
