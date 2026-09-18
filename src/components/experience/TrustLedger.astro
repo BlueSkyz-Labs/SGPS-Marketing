@@ -61,7 +61,7 @@ const COMPARE_LABEL: Record<Language, string> = {
             />
             <a
               href={`/${lang}/decision-room/#room-item-trust-${entry.id}`}
-              class="text-sm font-medium text-[var(--action-primary)] underline-offset-2 hover:underline"
+              class="inline-flex min-h-11 items-center text-sm font-medium text-[var(--action-primary)] underline-offset-2 hover:underline"
               data-decision-hook={`trust:${entry.id}`}
             >
               {COMPARE_LABEL[lang]} →
