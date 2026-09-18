@@ -5,6 +5,7 @@ import "@/styles/c3-craft.css";
 import FlagshipTheatre from "@/components/product/FlagshipTheatre.astro";
 import ProductHouse from "@/components/product/ProductHouse.astro";
 import { FIXTURE_FLAGSHIP, FIXTURE_PRODUCTS } from "../data/fixture-products";
+import { FIXTURE_CLAIMS, FIXTURE_PRODUCT_REFS } from "../data/fixture-claims";
 ---
 
 <!doctype html>
@@ -16,7 +17,12 @@ import { FIXTURE_FLAGSHIP, FIXTURE_PRODUCTS } from "../data/fixture-products";
   </head>
   <body>
     <main>
-      <FlagshipTheatre product={FIXTURE_FLAGSHIP} lang="vi" />
+      <FlagshipTheatre
+        product={FIXTURE_FLAGSHIP}
+        products={FIXTURE_PRODUCT_REFS}
+        claims={FIXTURE_CLAIMS}
+        lang="vi"
+      />
       <ProductHouse products={FIXTURE_PRODUCTS} lang="vi" />
     </main>
   </body>

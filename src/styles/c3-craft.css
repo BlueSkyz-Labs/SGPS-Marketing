@@ -113,3 +113,62 @@ main details > summary:active {
     transform: none;
   }
 }
+
+/* Task 2 — contextual product-to-proof affordance (design G4).
+ *
+ * The disclosure stays quiet next to the capability text it belongs to: tokens
+ * only, no new palette, and the summary/link keep the touch height the rest of
+ * the system uses. Nothing here animates perpetually, and the whole block is
+ * complete without JavaScript because it is a native <details>.
+ */
+.c3-product-proof {
+  margin-top: 0.5rem;
+}
+
+.c3-product-proof__summary {
+  display: inline-flex;
+  min-height: 2.75rem;
+  align-items: center;
+  color: var(--action-primary);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.c3-product-proof__list {
+  display: grid;
+  gap: 0.25rem;
+  margin: 0.25rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.c3-product-proof__item {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 0;
+}
+
+.c3-product-proof__link {
+  display: inline-flex;
+  min-height: 2.75rem;
+  min-width: 0;
+  align-items: center;
+  overflow-wrap: anywhere;
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-underline-offset: 2px;
+}
+
+.c3-product-proof__link:hover {
+  color: var(--text-primary);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .c3-product-proof {
+    transition: none;
+  }
+}

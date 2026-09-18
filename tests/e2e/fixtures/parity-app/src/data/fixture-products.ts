@@ -34,6 +34,7 @@ interface FixtureProduct {
 export const FIXTURE_FLAGSHIP: FixtureProduct = {
   data: {
     slug: FIXTURE_FLAGSHIP_SLUG,
+    public: true,
     name: "Fixture Flagship",
     publicLabel: "In development",
     shortDescription: "Fixture description for the flagship act.",
@@ -60,6 +61,7 @@ export const FIXTURE_FLAGSHIP: FixtureProduct = {
 export const FIXTURE_SECONDARY: FixtureProduct = {
   data: {
     slug: "fixture-secondary",
+    public: true,
     name: "Fixture Secondary",
     publicLabel: "Preview",
     shortDescription: "Fixture description for a secondary product.",
@@ -82,6 +84,7 @@ export const FIXTURE_SECONDARY: FixtureProduct = {
 export const FIXTURE_ECOSYSTEM: FixtureProduct = {
   data: {
     slug: "fixture-ecosystem",
+    public: true,
     name: "Fixture Ecosystem",
     publicLabel: "Preview",
     shortDescription: "Fixture description for an ecosystem product.",

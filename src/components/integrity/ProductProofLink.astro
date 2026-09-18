@@ -1,0 +1,99 @@
+---
+/**
+ * C3-B Task 2 (G4) — contextual, capability-bound product-to-proof affordance.
+ *
+ * The capability is the context: this component renders an affordance only for
+ * the capability it is given, and only when the canonical selector resolves
+ * public proof for that exact (product, capability) binding. With no proof it
+ * renders nothing, so a surface can never grow trust chrome for something the
+ * product has not published — and it can never borrow another capability's or
+ * another product's evidence.
+ *
+ * Text carries the meaning: the item label says what will open, the canonical
+ * truth state says how it is published, the boundary says what it does not
+ * imply, and the destination was already vetted by the selector. The disclosure
+ * is a native <details>, so it is keyboard-operable and complete without
+ * JavaScript; no client script is loaded for it.
+ */
+import TruthState from "@/components/integrity/TruthState.astro";
+import { labelFor, type Language } from "@/data/site";
+import type { PublicProductRef, ResolvedClaim } from "@/lib/claims";
+import { getProductProofLinks } from "@/lib/product-proof";
+
+interface Props {
+  /** Canonical public product slug the affordance belongs to. */
+  slug: string;
+  /** The authored capability this affordance is bound to. */
+  capability: string;
+  /** Canonical public registry refs; the selector fails closed without them. */
+  products: readonly PublicProductRef[];
+  /** Already-resolved public claims; never re-resolved here. */
+  claims: readonly ResolvedClaim[];
+  lang: Language;
+}
+
+const { slug, capability, products, claims, lang } = Astro.props;
+
+const links = getProductProofLinks(slug, capability, products, claims);
+
+const SUMMARY: Record<Language, (count: number) => string> = {
+  en: (count) =>
+    count === 1 ? "See the public proof" : `See ${count} public proof items`,
+  vi: (count) =>
+    count === 1
+      ? "Xem bằng chứng công khai"
+      : `Xem ${count} bằng chứng công khai`,
+};
+
+const PASSPORT: Record<Language, string> = {
+  en: "Open the evidence passport",
+  vi: "Mở hồ sơ bằng chứng",
+};
+
+const isExternal = (href: string): boolean => /^https?:\/\//i.test(href);
+---
+
+{
+  links.length > 0 ? (
+    <details
+      class="c3-product-proof"
+      data-product-proof={slug}
+      data-product-proof-capability={capability}
+    >
+      <summary class="c3-product-proof__summary">
+        {SUMMARY[lang](links.length)}
+      </summary>
+      <ul class="c3-product-proof__list">
+        {links.map((link) => {
+          const href = link.href[lang];
+          return (
+            <li class="c3-product-proof__item">
+              <a
+                class="c3-product-proof__link"
+                href={href}
+                rel={isExternal(href) ? "noreferrer" : undefined}
+                target={isExternal(href) ? "_blank" : undefined}
+              >
+                {labelFor(link.label, lang)}
+              </a>
+              <TruthState state={link.truthState} lang={lang} />
+              {link.boundary ? (
+                <p class="c3-product-proof__boundary">
+                  {labelFor(link.boundary.doesNotImply, lang)}
+                </p>
+              ) : null}
+            </li>
+          );
+        })}
+      </ul>
+      {links[0] ? (
+        <a
+          class="c3-product-proof__passport"
+          href={links[0].passportHref[lang]}
+        >
+          {PASSPORT[lang]}
+        </a>
+      ) : null}
+    </details>
+  ) : null
+}
