@@ -21,11 +21,11 @@ import {
 export interface ProductProofLink {
   claimId: string;
   evidenceId: string;
-  href: { en: string; vi: string };
+  href: LocalizedText;
   label: LocalizedText;
   truthState: TruthState;
   boundary?: BoundaryStatement | undefined;
-  passportHref: { en: string; vi: string };
+  passportHref: LocalizedText;
 }
 
 function isPublicProofReference(reference: EvidenceReference): boolean {
@@ -66,6 +66,7 @@ export function getProductProofLinks(
         passportHref: {
           en: getEvidencePassportPath("en", resolved.claim.id),
           vi: getEvidencePassportPath("vi", resolved.claim.id),
+          zh: getEvidencePassportPath("zh", resolved.claim.id),
         },
       });
     }
