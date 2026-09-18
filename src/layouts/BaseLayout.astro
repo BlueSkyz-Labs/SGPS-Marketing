@@ -17,6 +17,7 @@ import {
 import { getAlternatePath, getLanguageFromPath } from "@/lib/i18n";
 import { breadcrumbJsonLd } from "@/lib/breadcrumbs";
 import { isNonProductionSiteUrl } from "@/lib/truth";
+import { DEFAULT_SCENE, type Scene } from "@/lib/scene";
 import "@/styles/global.css";
 import "@/styles/c3-craft.css";
 
@@ -28,6 +29,8 @@ interface Props {
   noindex?: boolean;
   /** Stable integrity surface id; the lens renders only for modeled surfaces. */
   surface?: string;
+  /** Authored scene marker consumed by the global header (C3-A Task 4). */
+  scene?: Scene;
 }
 
 const {
@@ -37,6 +40,7 @@ const {
   ogImage = defaultOgImagePath(),
   noindex = false,
   surface,
+  scene = DEFAULT_SCENE,
 } = Astro.props;
 
 const fullTitle = title.includes(SITE.name) ? title : `${title} · ${SITE.name}`;
@@ -106,7 +110,7 @@ const robotsNoindex = noindex || isNonProductionSiteUrl(SITE.url);
       ))
     }
   </head>
-  <body class="flex min-h-screen flex-col">
+  <body class="flex min-h-screen flex-col" data-scene={scene}>
     <a class="skip-link" href="#main-content">
       {
         currentLang === "vi"
@@ -114,7 +118,7 @@ const robotsNoindex = noindex || isNonProductionSiteUrl(SITE.url);
           : "Skip to main content"
       }
     </a>
-    <Header />
+    <Header scene={scene} />
     <CommandNavigator />
     <script>
       import { initAnalyticsBridge } from "@/scripts/analytics-bridge";

@@ -7,6 +7,14 @@ import { SITE, SHARED_LABELS, labelFor, getNav } from "@/data/site";
 import { emptyRegistryPrimaryCta } from "@/lib/act";
 import { getPublicProducts } from "@/lib/products";
 import { getLanguageFromPath } from "@/lib/i18n";
+import { DEFAULT_SCENE, lockupSurface, type Scene } from "@/lib/scene";
+
+interface Props {
+  /** Authored scene marker (C3-A Task 4 / design S4). */
+  scene?: Scene;
+}
+
+const { scene = DEFAULT_SCENE } = Astro.props;
 
 const currentPath = Astro.url.pathname;
 const lang = getLanguageFromPath(currentPath);
@@ -30,12 +38,13 @@ const primaryCta = hasPublicProducts
 ---
 
 <header
-  class="border-b border-[var(--border-subtle)] bg-[var(--surface-primary)]"
+  data-scene={scene}
+  class="border-b border-[var(--border-subtle)] bg-[var(--surface-primary)] text-[var(--text-primary)]"
 >
   <Container
-    class="flex min-h-16 flex-wrap items-center justify-between gap-x-4 gap-y-1 py-3"
+    class="header-bar flex min-h-16 flex-wrap items-center justify-between gap-x-4 gap-y-1 py-3"
   >
-    <BrandLockup href={`/${lang}/`} />
+    <BrandLockup href={`/${lang}/`} surface={lockupSurface(scene)} />
 
     <nav
       aria-label={lang === "vi" ? "Chính" : "Primary"}
@@ -76,7 +85,7 @@ const primaryCta = hasPublicProducts
         >{labelFor(SHARED_LABELS.menu, lang)}</summary
       >
       <div
-        class="absolute right-0 z-20 mt-2 w-56 rounded-lg border border-[var(--border-subtle)] bg-white p-3 shadow-sm"
+        class="absolute right-0 z-20 mt-2 w-56 rounded-lg border border-[var(--border-subtle)] bg-[var(--surface-primary)] p-3 shadow-sm"
       >
         <nav
           aria-label={lang === "vi" ? "Di động" : "Mobile"}
