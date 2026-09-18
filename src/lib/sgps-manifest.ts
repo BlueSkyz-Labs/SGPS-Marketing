@@ -4,7 +4,7 @@ import {
   type PublicProductRef,
   type ResolvedClaim,
 } from "./claims.ts";
-import { EVIDENCE_INDEX, INTEGRITY_ENTRY_INDEX } from "../data/claims.ts";
+import { INTEGRITY_ENTRY_INDEX } from "../data/claims.ts";
 import type { TruthState } from "../data/integrity.ts";
 
 /**
