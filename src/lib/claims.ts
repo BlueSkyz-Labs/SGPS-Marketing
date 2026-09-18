@@ -94,7 +94,7 @@ export function resolvePublicClaim(
     if (claim.productBinding) {
       const { productSlug, capabilityId } = claim.productBinding;
       if (!productSlug || !capabilityId) return null;
-      if (!products.some((product) => product.slug === productSlug)) return null;
+      if (!products.some((product) => product.slug === productSlug))\n        return null;
       productSlugs = [productSlug];
     } else {
       // Generic product-publication claims may describe the registry, but they
