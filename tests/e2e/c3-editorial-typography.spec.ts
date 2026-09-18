@@ -26,6 +26,7 @@ type Overflow = {
   overflow: number;
   metrics: string;
   offenders: string[];
+  inner: string[];
   nodes?: string[];
 };
 
@@ -79,7 +80,30 @@ async function settledOverflow(page: Page): Promise<Overflow> {
               );
             })
         : [];
-    return { overflow, metrics, offenders };
+    // A box can stay inside the viewport while its own content leaves it (a text
+    // run wider than the block, a flex row that cannot wrap). Those containers
+    // are where an overflow is actually fixed, so name them too.
+    const inner =
+      overflow > 1
+        ? [...document.querySelectorAll<HTMLElement>("body *")]
+            .map((el) => ({ el, excess: el.scrollWidth - el.clientWidth }))
+            .filter((entry) => entry.excess > 1 && entry.el.clientWidth > 0)
+            .sort((a, b) => b.excess - a.excess)
+            .slice(0, 4)
+            .map((entry) => {
+              const cs = getComputedStyle(entry.el);
+              return (
+                `${entry.el.tagName.toLowerCase()}.${[...entry.el.classList]
+                  .slice(0, 3)
+                  .join(".")} excess=${entry.excess}` +
+                ` client=${entry.el.clientWidth} display=${cs.display}` +
+                ` wrap=${cs.overflowWrap} ws=${cs.whiteSpace}` +
+                ` min-w=${cs.minWidth} flex-wrap=${cs.flexWrap}` +
+                ` text="${(entry.el.textContent ?? "").trim().slice(0, 30)}"`
+              );
+            })
+        : [];
+    return { overflow, metrics, offenders, inner };
   });
 }
 
@@ -144,10 +168,13 @@ function describe(prefix: string, result: Overflow) {
   const detail = result.offenders.length
     ? ` — ${result.offenders.join(" | ")}`
     : "";
+  const inner = result.inner.length
+    ? ` | inner overflow: ${result.inner.join(" | ")}`
+    : "";
   const nodes = result.nodes?.length
     ? ` | layout nodes: ${result.nodes.join(" | ")}`
     : "";
-  return `${prefix} ${result.overflow}px [${result.metrics}]${detail}${nodes}`;
+  return `${prefix} ${result.overflow}px [${result.metrics}]${detail}${inner}${nodes}`;
 }
 
 test.describe("C3-A Editorial Typography — EN/VI wrapping", () => {

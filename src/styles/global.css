@@ -1200,10 +1200,23 @@ html[data-intent] [data-journey-bar] li[data-evidence-first="true"] a {
 /* Wave H12 — text-zoom safety: flex/grid items must shrink and wrap. */
 .source-trace__step {
   min-width: 0;
+  /* A source-trace row is a flex row: with the chip pinned (`flex: none`) the
+     value cannot always shrink, so the row's own content left its box (72px at
+     320px/200% locally, and 3px past the viewport in CI where the font metrics
+     are wider). Wrapping the chip above the value is the same remedy already
+     used for atlas rows below. */
+  flex-wrap: wrap;
 }
 .source-trace__step > * {
   min-width: 0;
   overflow-wrap: anywhere;
+}
+/* The role chip is pinned (`flex: none`) so it cannot shrink, and the value's
+   min-content still had to fit beside it: at 320px/200% the row's content left
+   its box by 28px even after wrapping. Let the chip shrink and its label wrap. */
+.source-trace__role {
+  flex-shrink: 1;
+  min-width: 0;
 }
 
 /* Wave H12 — WCAG 1.4.4: long words break rather than overflow at text zoom. */
@@ -1211,6 +1224,23 @@ h1,
 h2,
 h3 {
   overflow-wrap: break-word;
+}
+
+/* C3-A Task 3 — nested cards must not spend the viewport on padding at text
+   zoom. At 320px with 200% text the page container, the passport and the
+   boundary card stacked 288px of rem-based inline padding and left 32px for
+   prose: a 26px column, a line pushed 3px past the viewport, and a 72px content
+   overflow in the source-trace rows. Bounding the inline padding by the viewport
+   keeps the rhythm at normal text sizes (the cap only binds below ~350px) while
+   leaving the content room to reflow. */
+.evidence-passport {
+  padding-inline: min(1.75rem, 8vw);
+}
+.boundary-card {
+  padding-inline: min(1.5rem, 7vw);
+}
+.source-trace {
+  padding-inline: min(1.25rem, 6vw);
 }
 
 /* Wave H12 — text-zoom safety for atlas rows: the chip drops below the label
