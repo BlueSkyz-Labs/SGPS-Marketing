@@ -47,7 +47,9 @@ export interface ResolvedClaim {
   claim: PublicClaim;
   evidence: EvidenceReference[];
   boundaryId?: string | undefined;
+  boundary?: BoundaryStatement | undefined;
   reviewId?: string | undefined;
+  truthState: TruthState;
   productSlugs: string[];
 }
 
@@ -71,22 +73,45 @@ export function resolvePublicClaim(
     }
   }
 
-  if (claim.boundaryId && !BOUNDARY_INDEX.has(claim.boundaryId)) return null;
-  if (claim.reviewId && !INTEGRITY_ENTRY_INDEX.has(claim.reviewId)) return null;
+  const boundary = claim.boundaryId
+    ? BOUNDARY_INDEX.get(claim.boundaryId)
+    : undefined;
+  if (claim.boundaryId && !boundary) return null;
+
+  const reviewEntry = claim.reviewId
+    ? INTEGRITY_ENTRY_INDEX.get(claim.reviewId)
+    : undefined;
+  if (claim.reviewId && !reviewEntry) return null;
+
+  if (claim.productBinding && claim.kind !== "product") return null;
 
   let productSlugs: string[] = [];
   if (claim.kind === "product") {
     // Product claims must resolve the live public registry; an empty
     // registry fails closed instead of publishing an empty promise.
     if (products.length === 0) return null;
-    productSlugs = products.map((product) => product.slug);
+
+    if (claim.productBinding) {
+      const { productSlug, capabilityId } = claim.productBinding;
+      if (!productSlug || !capabilityId) return null;
+      if (!products.some((product) => product.slug === productSlug))
+        return null;
+      productSlugs = [productSlug];
+    } else {
+      // Generic product-publication claims may describe the registry, but they
+      // carry no capability authority. C3-B filters them out for capability
+      // proof rather than inferring a stronger relationship.
+      productSlugs = products.map((product) => product.slug);
+    }
   }
 
   return {
     claim,
     evidence,
     boundaryId: claim.boundaryId,
+    boundary,
     reviewId: claim.reviewId,
+    truthState: reviewEntry?.state ?? "source-linked",
     productSlugs,
   };
 }
@@ -272,12 +297,10 @@ export function getEvidencePassport(
   return {
     id: resolved.claim.id,
     claim: resolved.claim.statement,
-    state: entry?.state ?? "source-linked",
+    state: resolved.truthState,
     evidence: resolved.evidence,
     boundaryId: resolved.boundaryId,
-    boundary: resolved.boundaryId
-      ? BOUNDARY_INDEX.get(resolved.boundaryId)
-      : undefined,
+    boundary: resolved.boundary,
     reviewedOn: entry?.review?.reviewedOn,
     contextHref: contextRoute.href,
   };

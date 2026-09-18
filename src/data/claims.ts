@@ -20,6 +20,13 @@ export interface LocalizedStatement {
   vi: string;
 }
 
+export interface ProductClaimBinding {
+  /** Public product slug this claim is explicitly about. */
+  productSlug: string;
+  /** Stable authored capability identifier; never inferred from display copy. */
+  capabilityId: string;
+}
+
 export interface PublicClaim {
   id: string;
   kind: ClaimKind;
@@ -28,6 +35,12 @@ export interface PublicClaim {
   evidenceIds: string[];
   boundaryId?: string | undefined;
   reviewId?: string | undefined;
+  /**
+   * Optional capability-level binding for product claims.
+   * Generic product-publication claims deliberately omit this field and must
+   * never be borrowed as proof for an individual capability.
+   */
+  productBinding?: ProductClaimBinding | undefined;
 }
 
 /** Stable index of public evidence references already declared in integrity data. */
