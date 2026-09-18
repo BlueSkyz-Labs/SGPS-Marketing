@@ -44,7 +44,12 @@ function productClaim({
   };
 }
 
-function proofLinks(selector, capabilityId, claims, productSlug = "fixture-product") {
+function proofLinks(
+  selector,
+  capabilityId,
+  claims,
+  productSlug = "fixture-product",
+) {
   return selector(productSlug, capabilityId, PRODUCTS, claims);
 }
 
@@ -59,11 +64,7 @@ test("resolvable proof requires explicit capability binding", async () => {
   );
   assert.ok(resolved);
 
-  const links = proofLinks(
-    getProductProofLinks,
-    "secure-export",
-    [resolved],
-  );
+  const links = proofLinks(getProductProofLinks, "secure-export", [resolved]);
   assert.equal(links.length, 1);
 
   const [link] = links;
@@ -88,10 +89,7 @@ test("missing evidence fails closed", async () => {
     PRODUCTS,
   );
   assert.equal(unresolved, null);
-  assert.deepEqual(
-    proofLinks(getProductProofLinks, "secure-export", []),
-    [],
-  );
+  assert.deepEqual(proofLinks(getProductProofLinks, "secure-export", []), []);
 });
 
 test("private-reporting evidence is not capability proof", async () => {
@@ -167,15 +165,7 @@ test("selector output is deterministic", async () => {
   const resolved = resolvePublicClaim(productClaim(), PRODUCTS);
   assert.ok(resolved);
 
-  const first = proofLinks(
-    getProductProofLinks,
-    "secure-export",
-    [resolved],
-  );
-  const second = proofLinks(
-    getProductProofLinks,
-    "secure-export",
-    [resolved],
-  );
+  const first = proofLinks(getProductProofLinks, "secure-export", [resolved]);
+  const second = proofLinks(getProductProofLinks, "secure-export", [resolved]);
   assert.deepEqual(second, first);
 });
