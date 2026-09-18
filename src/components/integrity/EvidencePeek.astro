@@ -1,0 +1,70 @@
+---
+import TruthState from "@/components/integrity/TruthState.astro";
+import type { Language } from "@/data/site";
+import type { ProductProofLink as ProductProofItem } from "@/lib/product-proof";
+
+interface Props {
+  links: readonly ProductProofItem[];
+  lang: Language;
+}
+
+const { links, lang } = Astro.props;
+
+if (links.length === 0) {
+  return null;
+}
+
+const copy =
+  lang === "vi"
+    ? {
+        summary: "Xem bằng chứng",
+        source: "Mở nguồn",
+        boundary: "Giới hạn của bằng chứng",
+      }
+    : {
+        summary: "Inspect evidence",
+        source: "Open source",
+        boundary: "Evidence boundary",
+      };
+---
+
+<details
+  class="c3-evidence-peek mt-2 text-sm text-[var(--text-secondary)]"
+  data-evidence-peek
+>
+  <summary
+    class="inline-flex min-h-11 cursor-pointer items-center font-medium text-[var(--text-secondary)]"
+  >
+    {copy.summary}
+  </summary>
+  <div class="c3-evidence-peek__body mt-2 space-y-3">
+    {
+      links.map((link) => (
+        <div class="c3-evidence-peek__item">
+          <TruthState state={link.truthState} lang={lang} />
+          <a
+            class="mt-2 inline-flex min-h-11 items-center font-semibold text-[var(--action-primary)] no-underline hover:underline"
+            href={link.href[lang]}
+            rel={
+              /^https?:\/\//i.test(link.href[lang])
+                ? "noopener noreferrer"
+                : undefined
+            }
+            data-evidence-peek-source
+          >
+            {link.label[lang]} · {copy.source}
+          </a>
+          {link.boundary ? (
+            <p
+              class="mt-2 max-w-2xl text-[var(--text-muted)]"
+              data-evidence-boundary
+            >
+              <strong>{copy.boundary}:</strong>{" "}
+              {link.boundary.doesNotImply[lang]}
+            </p>
+          ) : null}
+        </div>
+      ))
+    }
+  </div>
+</details>
