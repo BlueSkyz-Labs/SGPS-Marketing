@@ -160,8 +160,8 @@ check("public SGPS manifest is served", async () => {
   assert(response.status === 200, `expected 200, got ${response.status}`);
   const body = await response.text();
   assert(
-    body.includes('"schemaVersion": "1.0"'),
-    "manifest must declare schema version 1.0",
+    body.includes('"schemaVersion": "1.1"'),
+    "manifest must declare schema version 1.1",
   );
 });
 
