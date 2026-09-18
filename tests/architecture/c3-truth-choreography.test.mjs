@@ -24,7 +24,6 @@ test("visible text remains the semantic authority", () => {
   assert.match(component, /aria-label/);
 });
 
-
 test("non-essential truth transitions are neutralized for reduced motion", () => {
   assert.match(css, /prefers-reduced-motion:\s*reduce/);
   assert.match(css, /\.truth-state/);
