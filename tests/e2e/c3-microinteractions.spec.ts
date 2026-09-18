@@ -38,6 +38,16 @@ test.describe("C3-A Microinteractions — pointer states", () => {
     await page.setViewportSize({ width: 1280, height: 900 });
     await page.goto("/en/");
     await settle(page);
+    // Tailwind v4 gates `hover:` behind `@media (hover: hover)`, and a touch
+    // project honestly reports `hover: none` — there, pressed feedback is the
+    // measurable state and the assertion below covers it.
+    const hoverCapable = await page.evaluate(
+      () => matchMedia("(hover: hover)").matches,
+    );
+    test.skip(
+      !hoverCapable,
+      "project emulates a pointer without hover support",
+    );
     // A header link has no 3D transform, so the pointer actually lands on it;
     // the hero's action is covered by the pressed-state assertion below.
     const link = await firstVisible(page, "header nav a");
