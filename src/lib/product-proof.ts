@@ -5,8 +5,18 @@
  * authors product, claim, evidence, boundary, or truth-state data.
  */
 
-import type { BoundaryStatement, EvidenceReference, LocalizedText, TruthState } from "../data/integrity.ts";
-import { getEvidencePassportPath, getPublicClaims, type PublicProductRef, type ResolvedClaim } from "./claims.ts";
+import type {
+  BoundaryStatement,
+  EvidenceReference,
+  LocalizedText,
+  TruthState,
+} from "../data/integrity.ts";
+import {
+  getEvidencePassportPath,
+  getPublicClaims,
+  type PublicProductRef,
+  type ResolvedClaim,
+} from "./claims.ts";
 
 export interface ProductProofLink {
   claimId: string;
