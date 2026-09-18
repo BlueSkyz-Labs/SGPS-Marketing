@@ -71,10 +71,7 @@ test("machine passport leaks no authored claim prose or internal provenance", ()
 });
 
 test("product-proof records have stable order", () => {
-  const one = resolvePublicClaim(
-    { ...boundClaim(), id: "z-proof" },
-    PRODUCTS,
-  );
+  const one = resolvePublicClaim({ ...boundClaim(), id: "z-proof" }, PRODUCTS);
   const two = resolvePublicClaim(
     {
       ...boundClaim(),
