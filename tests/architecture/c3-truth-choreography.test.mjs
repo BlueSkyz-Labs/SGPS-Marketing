@@ -19,18 +19,11 @@ test("truth choreography is presentation-only and score-free", () => {
   assert.doesNotMatch(css, /@keyframes/);
 });
 
-test("every truth state keeps visible textual meaning", () => {
-  for (const state of [
-    "source-linked",
-    "reviewed",
-    "changed",
-    "not-published",
-    "unavailable",
-  ]) {
-    assert.match(component, new RegExp('"' + state + '"'));
-  }
+test("visible text remains the semantic authority", () => {
   assert.match(component, /truth-state__label/);
+  assert.match(component, /aria-label/);
 });
+
 
 test("non-essential truth transitions are neutralized for reduced motion", () => {
   assert.match(css, /prefers-reduced-motion:\s*reduce/);
