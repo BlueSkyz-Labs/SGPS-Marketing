@@ -14,13 +14,14 @@ export type TruthState =
 export interface LocalizedText {
   en: string;
   vi: string;
+  zh: string;
 }
 
 export interface EvidenceReference {
   /** Stable public evidence id referenced by the claim fabric. */
   id: string;
   kind: "route" | "artifact" | "private-reporting";
-  href: { en: string; vi: string };
+  href: LocalizedText;
   label: LocalizedText;
 }
 

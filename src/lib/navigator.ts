@@ -15,17 +15,32 @@ const ROUTE_ALIASES: Record<string, Record<Language, string[]>> = {
   products: {
     en: ["products", "public registry", "product status"],
     vi: ["sản phẩm", "trạng thái sản phẩm"],
+    zh: ["产品", "公开目录", "产品状态"],
   },
   about: {
     en: ["about", "company", "founder"],
     vi: ["về blueskyz", "công ty"],
+    zh: ["关于", "公司", "创始人"],
   },
-  contact: { en: ["contact", "reach out"], vi: ["liên hệ"] },
-  support: { en: ["support", "help", "recourse"], vi: ["hỗ trợ", "giúp đỡ"] },
-  privacy: { en: ["privacy", "data"], vi: ["quyền riêng tư", "dữ liệu"] },
+  contact: {
+    en: ["contact", "reach out"],
+    vi: ["liên hệ"],
+    zh: ["联系", "联系我们"],
+  },
+  support: {
+    en: ["support", "help", "recourse"],
+    vi: ["hỗ trợ", "giúp đỡ"],
+    zh: ["支持", "帮助", "补救"],
+  },
+  privacy: {
+    en: ["privacy", "data"],
+    vi: ["quyền riêng tư", "dữ liệu"],
+    zh: ["隐私", "数据"],
+  },
   security: {
     en: ["security", "vulnerability", "report an issue"],
     vi: ["bảo mật", "lỗ hổng"],
+    zh: ["安全", "漏洞", "报告问题"],
   },
 };
 
@@ -107,7 +122,7 @@ export function buildNavigatorIndex(
       href: getProductProfilePath(lang, product.data.slug),
       label: product.data.name,
       kind: "product",
-      aliases: [product.data.slug, "product", "sản phẩm"],
+      aliases: [product.data.slug, "product", "sản phẩm", "产品"],
     });
   }
 
