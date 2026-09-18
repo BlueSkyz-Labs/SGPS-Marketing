@@ -5,6 +5,8 @@ import { getProductProfilePath } from "@/lib/product-routes";
 import ProductStatus from "@/components/product/ProductStatus.astro";
 import ProductVisual from "@/components/product/ProductVisual.astro";
 import { productTransitionStyle } from "@/lib/product-transition";
+import { getProductProofLinks } from "@/lib/product-proof";
+import ProductProofLink from "@/components/integrity/ProductProofLink.astro";
 
 /**
  * C2 Act II — Flagship Theatre.
@@ -29,6 +31,7 @@ const screenshot = data.proof.screenshot;
 const capabilities = data.capabilities ?? [];
 const profileHref = getProductProfilePath(lang, data.slug);
 const viewProfileLabel = labelFor(SHARED_LABELS.viewProfile, lang);
+const publicProductRef = [{ slug: data.slug, name: data.name }];
 
 /**
  * Loading decision (recorded, not guessed): the theatre sits immediately after
@@ -61,7 +64,17 @@ const viewProfileLabel = labelFor(SHARED_LABELS.viewProfile, lang);
         capabilities.length > 0 ? (
           <ul class="mt-6 space-y-2 text-[var(--text-secondary)]">
             {capabilities.slice(0, 3).map((capability: string) => (
-              <li class="c2-flagship-theatre__capability">{capability}</li>
+              <li class="c2-flagship-theatre__capability">
+                <span>{capability}</span>
+                <ProductProofLink
+                  links={getProductProofLinks(
+                    data.slug,
+                    capability,
+                    publicProductRef,
+                  )}
+                  lang={lang}
+                />
+              </li>
             ))}
           </ul>
         ) : null
