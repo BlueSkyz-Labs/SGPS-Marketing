@@ -18,9 +18,9 @@
  *     cross-document View Transition support ignores it. Nothing here gates
  *     navigation: the transition is decoration, never a precondition.
  */
-export type TransitionLanguage = "en" | "vi";
+export type TransitionLanguage = "en" | "vi" | "zh";
 
-const SUPPORTED_LANGUAGES: readonly TransitionLanguage[] = ["en", "vi"];
+const SUPPORTED_LANGUAGES: readonly TransitionLanguage[] = ["en", "vi", "zh"];
 
 /**
  * Stable name for one locale entry of the language switcher. The same two names
