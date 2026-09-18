@@ -1,0 +1,24 @@
+lang: zh
+slug: about
+title: 关于 BlueSkyz
+description: BlueSkyz Labs 打造智能化产品，赋能个人并提升工作方式。
+sections:
+  hero:
+    heading: 关于 BlueSkyz
+  content:
+    heading: 我们的使命
+    intro: 我们打造智能化产品，赋能个人并提升工作方式。更高的视角，成就更明亮的明天。
+    founder_name: Tony Nguyen
+    founder_title: 创始人兼首席执行官
+  principles:
+    heading: 同一团队
+    intro: 我们不围绕单一品类，而是围绕一种思维方式。
+    items:
+      - name: 智能
+        summary: 深度思考。智能解决方案。
+      - name: 提升
+        summary: 更佳视角。更大影响。
+      - name: 信任
+        summary: 公开声明。可验证证据。
+      - name: 影响
+        summary: 真实价值。真实改变。

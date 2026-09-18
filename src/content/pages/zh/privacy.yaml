@@ -1,0 +1,17 @@
+lang: zh
+slug: privacy
+title: 隐私
+description: BlueSkyz Labs 企业网站数据处理隐私政策。
+sections:
+  hero:
+    heading: 隐私
+  intro: 本页面说明 BlueSkyz Labs 企业网站的数据处理实践。
+  collection:
+    heading: 我们收集的内容
+    content: 我们仅收集运营本网站及改善访客体验所需的最少数据。我们不会向第三方出售个人数据。
+  usage:
+    heading: 我们如何使用数据
+    content: 数据仅用于网站运营、安全及汇总分析。我们采用注重隐私的第一方分析。
+  contact:
+    heading: 联系我们
+    content: 如有隐私咨询，请通过安全报告通道与我们联系。
