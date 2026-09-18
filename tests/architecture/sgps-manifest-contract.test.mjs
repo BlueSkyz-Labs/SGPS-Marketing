@@ -26,7 +26,7 @@ test("manifest claim ids equal the public Claim Fabric ids", () => {
 
 test("schema version, source marker, and determinism", () => {
   const manifest = buildPublicSgpsManifest([]);
-  assert.equal(manifest.schemaVersion, "1.0");
+  assert.equal(manifest.schemaVersion, "1.1");
   assert.equal(manifest.generatedFrom, "public-runtime-data");
   assert.equal(
     serializePublicSgpsManifest([]),
@@ -73,6 +73,11 @@ test("urls are locale-safe public evidence-passport paths", () => {
     assert.match(claim.urls.en, /^\/en\/evidence\/[a-z0-9-]+\/$/);
     assert.match(claim.urls.vi, /^\/vi\/evidence\/[a-z0-9-]+\/$/);
   }
+});
+
+test("private-reporting evidence ids are excluded from machine output", () => {
+  const raw = serializePublicSgpsManifest([]);
+  assert.doesNotMatch(raw, /ev-security-advisory/);
 });
 
 test("evidence ids are safe stable ids", () => {
