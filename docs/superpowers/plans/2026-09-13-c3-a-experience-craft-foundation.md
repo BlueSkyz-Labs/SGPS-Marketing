@@ -1,6 +1,6 @@
 # C3-A — Experience Craft Foundation Implementation Plan
 
-> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
+> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [x]`) syntax for tracking.
 
 **Goal:** Raise C2's public surfaces to a consistent elite interaction and art-direction system through product imagery, typography, header behavior, route transitions, mobile composition, and microinteractions.
 
@@ -35,11 +35,11 @@
 
 - Produces: source-level guard for one image grammar, one transition grammar, and one interaction grammar.
 
-- [ ] **Step 1: write failing assertions for C3 craft boundaries**
+- [x] **Step 1: write failing assertions for C3 craft boundaries**
 
 Require a focused C3 craft stylesheet/module and reject route-local duplicate transition keyframes or a second hard-coded brand palette.
 
-- [ ] **Step 2: prove RED**
+- [x] **Step 2: prove RED**
 
 ```bash
 node --test tests/architecture/c3-craft-contract.test.mjs
@@ -47,14 +47,14 @@ node --test tests/architecture/c3-craft-contract.test.mjs
 
 Expected: FAIL before the shared primitives exist.
 
-- [ ] **Step 3: create focused shared boundaries**
+- [x] **Step 3: create focused shared boundaries**
 
 Prefer files such as:
 
 - `src/styles/c3-craft.css` — shared editorial type, scene/header states, route transition and interaction tokens;
 - `src/lib/experience-fidelity.ts` only if required for capability-independent class selection; do not implement C3-D here.
 
-- [ ] **Step 4: prove GREEN and commit**
+- [x] **Step 4: prove GREEN and commit**
 
 ```bash
 node --test tests/architecture/c3-craft-contract.test.mjs
@@ -74,21 +74,21 @@ node --test tests/architecture/c3-craft-contract.test.mjs
 - Consumes: real screenshot `{src, alt, width, height}` and optional authored focal metadata already approved by product truth.
 - Produces: one responsive, intrinsic-size, accessible product visual primitive.
 
-- [ ] **Step 1: write fixture-backed E2E assertions**
+- [x] **Step 1: write fixture-backed E2E assertions**
 
 Assert intrinsic dimensions, meaningful alt, no layout overflow, readable image size at 1440/390px, and no fabricated image when screenshot truth is absent.
 
-- [ ] **Step 2: prove RED on the existing inconsistent visual treatment**
+- [x] **Step 2: prove RED on the existing inconsistent visual treatment**
 
 ```bash
 npx playwright test tests/e2e/c3-product-visual.spec.ts --project=chromium --project=mobile-chromium
 ```
 
-- [ ] **Step 3: implement the single visual primitive**
+- [x] **Step 3: implement the single visual primitive**
 
 Support restrained crop/focal/perspective classes without embedding product facts in the component.
 
-- [ ] **Step 4: verify reduced motion and image loading policy**
+- [x] **Step 4: verify reduced motion and image loading policy**
 
 Perspective/settle effects are decorative only; image visibility never depends on them.
 
@@ -104,13 +104,13 @@ Perspective/settle effects are decorative only; image visibility never depends o
 
 - Produces: shared type roles for display, section, product, evidence, meta, and long-form reading.
 
-- [ ] **Step 1: define semantic type roles using existing font family/tokens**
+- [x] **Step 1: define semantic type roles using existing font family/tokens**
 
 Do not introduce a new display font unless separately approved and measured.
 
-- [ ] **Step 2: test EN/VI wrapping at 1440, 390, and 320px**
+- [x] **Step 2: test EN/VI wrapping at 1440, 390, and 320px**
 
-- [ ] **Step 3: test 200% zoom and text-spacing overrides**
+- [x] **Step 3: test 200% zoom and text-spacing overrides**
 
 ```bash
 npx playwright test tests/e2e/text-zoom.spec.ts tests/e2e/text-spacing.spec.ts tests/e2e/bilingual-parity.spec.ts --project=chromium --project=mobile-chromium
@@ -129,13 +129,13 @@ npx playwright test tests/e2e/text-zoom.spec.ts tests/e2e/text-spacing.spec.ts t
 - Consumes: authored page/section surface markers only.
 - Produces: stable header with contrast/density variants; navigation labels/order remain unchanged.
 
-- [ ] **Step 1: write tests for Ink, Porcelain, product, keyboard, and mobile states**
+- [x] **Step 1: write tests for Ink, Porcelain, product, keyboard, and mobile states**
 
-- [ ] **Step 2: implement CSS-first scene variants**
+- [x] **Step 2: implement CSS-first scene variants**
 
 Use explicit page/section classes or a minimal observer only if CSS cannot preserve required behavior. Avoid scroll-event loops.
 
-- [ ] **Step 3: verify focus visibility and forced colors**
+- [x] **Step 3: verify focus visibility and forced colors**
 
 ### Task 5: Formalize Route Transition Grammar (S5)
 
@@ -149,13 +149,13 @@ Use explicit page/section classes or a minimal observer only if CSS cannot prese
 
 - Produces: named native transition roles for Home→Product, Product→Evidence, Product→Product, EN↔VI.
 
-- [ ] **Step 1: test ordinary navigation with transition support absent**
+- [x] **Step 1: test ordinary navigation with transition support absent**
 
-- [ ] **Step 2: add stable unique `view-transition-name` values only to paired elements**
+- [x] **Step 2: add stable unique `view-transition-name` values only to paired elements**
 
-- [ ] **Step 3: verify reduced-motion navigation remains immediate and complete**
+- [x] **Step 3: verify reduced-motion navigation remains immediate and complete**
 
-- [ ] **Step 4: cross-browser test**
+- [x] **Step 4: cross-browser test**
 
 ```bash
 npx playwright test tests/e2e/c3-route-transitions.spec.ts --project=chromium --project=firefox --project=webkit
@@ -174,11 +174,11 @@ npx playwright test tests/e2e/c3-route-transitions.spec.ts --project=chromium --
 
 - Produces: deliberate vertical mobile composition, not compressed desktop spatial layout.
 
-- [ ] **Step 1: capture baseline at 390 and 320px**
+- [x] **Step 1: capture baseline at 390 and 320px**
 
-- [ ] **Step 2: fix image scale, action reachability, overlay collisions, and vertical rhythm using shared rules**
+- [x] **Step 2: fix image scale, action reachability, overlay collisions, and vertical rhythm using shared rules**
 
-- [ ] **Step 3: verify no horizontal overflow and readable product UI**
+- [x] **Step 3: verify no horizontal overflow and readable product UI**
 
 ### Task 7: Complete Microinteraction Quality Pass (S10)
 
@@ -192,11 +192,11 @@ npx playwright test tests/e2e/c3-route-transitions.spec.ts --project=chromium --
 
 - Produces: purpose-based states for hover, focus, active/pressed, disclosure, selection, image focus, and loading feedback.
 
-- [ ] **Step 1: write keyboard/pointer state tests**
+- [x] **Step 1: write keyboard/pointer state tests**
 
-- [ ] **Step 2: implement state grammar with existing tokens**
+- [x] **Step 2: implement state grammar with existing tokens**
 
-- [ ] **Step 3: verify no perpetual animation and forced-color compatibility**
+- [x] **Step 3: verify no perpetual animation and forced-color compatibility**
 
 ## Verification
 
