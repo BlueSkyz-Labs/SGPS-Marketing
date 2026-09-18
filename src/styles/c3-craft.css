@@ -78,3 +78,38 @@ header[data-scene="product"] {
 header .header-bar {
   padding-block: var(--c3-header-block-padding, 0.75rem);
 }
+
+/* Task 7 — Microinteraction Quality Pass (design S10).
+ *
+ * One purpose-based grammar for hover, focus, active/pressed, disclosure and
+ * selection. Only the states that were missing or inconsistent are added here:
+ * the shared button already owns hover/focus/active, so this layer must not
+ * restate it. Tokens only — no new palette, no perpetual animation.
+ */
+
+/* Selection: a document-wide affordance that was previously unstyled (the
+   browser default), expressed with the brand accent over the surface. */
+::selection {
+  background-color: color-mix(in srgb, var(--brand-cobalt) 24%, transparent);
+  color: var(--text-primary);
+}
+
+/* Pressed feedback for the compact menu disclosure, which had hover and focus
+   states but no tactile response on press. */
+header details > summary:active {
+  background-color: var(--surface-subtle);
+  transform: translateY(var(--c3-interaction-distance));
+}
+
+/* Pressed feedback for disclosure controls in page content (evidence "more",
+   decision-room rows) so the grammar is not header-only. */
+main details > summary:active {
+  transform: translateY(var(--c3-interaction-distance));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  header details > summary:active,
+  main details > summary:active {
+    transform: none;
+  }
+}
