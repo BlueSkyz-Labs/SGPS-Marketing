@@ -47,3 +47,34 @@
     transition: none;
   }
 }
+
+/* Task 4 — Scene-Aware Global Header (design S4).
+ *
+ * The header consumes an authored scene marker and adapts contrast and density.
+ * It re-points the existing semantic tokens locally instead of authoring a
+ * second palette, so every descendant keeps using the same token names and the
+ * navigation labels, order, semantics and focus ring stay scene-invariant.
+ */
+header[data-scene="ink"] {
+  --surface-primary: var(--brand-ink);
+  --surface-subtle: color-mix(in srgb, var(--brand-porcelain) 14%, transparent);
+  --border-subtle: color-mix(in srgb, var(--brand-porcelain) 24%, transparent);
+  --text-primary: var(--brand-porcelain);
+  --text-secondary: color-mix(in srgb, var(--brand-porcelain) 82%, transparent);
+  /* Density variant: the ink scene runs tighter than porcelain. */
+  --c3-header-block-padding: 0.5rem;
+}
+
+header[data-scene="product"] {
+  /* Product scenes keep the porcelain surface and mark the boundary with the
+     brand accent rather than a second surface colour. */
+  border-bottom-color: color-mix(
+    in srgb,
+    var(--brand-cobalt) 34%,
+    var(--border-subtle)
+  );
+}
+
+header .header-bar {
+  padding-block: var(--c3-header-block-padding, 0.75rem);
+}

@@ -16,19 +16,32 @@ const SCENES = [
   { scene: "porcelain", route: "/en/about/" },
 ] as const;
 
+/** The site header only: page-level `PageHeader` also renders a <header>. */
+const SITE_HEADER = "header[data-scene]";
+
+/**
+ * Minimum contrast between the header surface and every element inside it that
+ * actually renders text. Sampling a single element would measure the logo link
+ * (an image with an inherited colour) instead of the copy a reader must read.
+ */
 async function headerContrast(page: Page): Promise<number> {
-  return page.evaluate(() => {
-    const header = document.querySelector("header");
+  return page.evaluate((selector) => {
+    const header = document.querySelector(selector);
     if (!header) return 0;
-    const parse = (value: string): [number, number, number] | null => {
+    const parse = (
+      value: string,
+    ): { rgb: [number, number, number]; alpha: number } | null => {
       const match = value.match(/rgba?\(([^)]+)\)/);
       if (!match) return null;
       const parts = match[1]
         .split(/[,/\s]+/)
         .filter(Boolean)
         .map(Number);
-      if (parts.length < 3 || parts.some((n) => Number.isNaN(n))) return null;
-      return [parts[0], parts[1], parts[2]];
+      if (parts.length < 3 || parts.slice(0, 3).some((n) => Number.isNaN(n))) {
+        return null;
+      }
+      const alpha = parts.length > 3 && !Number.isNaN(parts[3]) ? parts[3] : 1;
+      return { rgb: [parts[0], parts[1], parts[2]], alpha };
     };
     const luminance = ([r, g, b]: [number, number, number]): number => {
       const channel = (c: number): number => {
@@ -37,19 +50,49 @@ async function headerContrast(page: Page): Promise<number> {
       };
       return 0.2126 * channel(r) + 0.7152 * channel(g) + 0.0722 * channel(b);
     };
-    const background = parse(getComputedStyle(header).backgroundColor);
-    const text = header.querySelector("a, button, span, summary");
-    const foreground = text ? parse(getComputedStyle(text).color) : null;
-    if (!background || !foreground) return 0;
-    const [light, dark] = [luminance(background), luminance(foreground)].sort(
-      (a, b) => b - a,
-    );
-    return (light + 0.05) / (dark + 0.05);
-  });
+    /** Nearest painted background behind an element (its own, else an ancestor). */
+    const effectiveBackground = (
+      el: Element,
+    ): [number, number, number] | null => {
+      let node: Element | null = el;
+      while (node) {
+        const bg = parse(getComputedStyle(node).backgroundColor);
+        if (bg && bg.alpha > 0.5) return bg.rgb;
+        node = node.parentElement;
+      }
+      return null;
+    };
+    const headerBackground = parse(getComputedStyle(header).backgroundColor);
+    if (!headerBackground) return 0;
+
+    const ratios: number[] = [];
+    for (const el of [header, ...header.querySelectorAll("*")]) {
+      const text = [...el.childNodes]
+        .filter((node) => node.nodeType === Node.TEXT_NODE)
+        .map((node) => (node.textContent ?? "").trim())
+        .join("");
+      if (!text) continue;
+      const style = getComputedStyle(el);
+      if (style.visibility === "hidden" || style.display === "none") continue;
+      const rect = el.getBoundingClientRect();
+      if (rect.width === 0 || rect.height === 0) continue;
+      const foreground = parse(style.color);
+      if (!foreground) continue;
+      // A control may paint its own surface (the primary action is white on
+      // cobalt), so contrast is measured against the surface the text sits on,
+      // not against the header shell.
+      const behind = effectiveBackground(el) ?? headerBackground.rgb;
+      const [light, dark] = [luminance(behind), luminance(foreground.rgb)].sort(
+        (a, b) => b - a,
+      );
+      ratios.push((light + 0.05) / (dark + 0.05));
+    }
+    return ratios.length ? Math.min(...ratios) : 0;
+  }, SITE_HEADER);
 }
 
 async function navLabels(page: Page): Promise<string[]> {
-  const labels = await page.locator("header nav a").allTextContents();
+  const labels = await page.locator(`${SITE_HEADER} nav a`).allTextContents();
   return labels.map((label) => label.trim()).filter(Boolean);
 }
 
@@ -59,7 +102,7 @@ test.describe("C3-A Scene-Aware Global Header", () => {
       page,
     }) => {
       await page.goto(route);
-      const header = page.locator("header");
+      const header = page.locator(SITE_HEADER);
       await expect(header).toBeVisible();
       await expect(header).toHaveAttribute("data-scene", scene);
 
@@ -125,7 +168,7 @@ test.describe("C3-A Scene-Aware Global Header", () => {
     for (const width of [390, 320]) {
       await page.setViewportSize({ width, height: 800 });
       await page.goto("/en/");
-      const header = page.locator("header");
+      const header = page.locator(SITE_HEADER);
       await expect(header).toBeVisible();
       const box = await header.boundingBox();
       expect(box, `header must render at ${width}px`).not.toBeNull();
@@ -133,15 +176,17 @@ test.describe("C3-A Scene-Aware Global Header", () => {
         Math.round(box!.x + box!.width),
         `header must not overflow at ${width}px`,
       ).toBeLessThanOrEqual(width + 1);
-      const reachable = await page.evaluate(() => {
+      const reachable = await page.evaluate((selector) => {
         const candidates = [
-          ...document.querySelectorAll("header nav a, header details summary"),
+          ...document.querySelectorAll(
+            `${selector} nav a, ${selector} details summary`,
+          ),
         ];
         return candidates.some((el) => {
           const rect = el.getBoundingClientRect();
           return rect.width > 0 && rect.height > 0;
         });
-      });
+      }, SITE_HEADER);
       expect(
         reachable,
         `at ${width}px at least one navigation affordance must be visible (desktop nav or compact disclosure)`,
@@ -153,7 +198,7 @@ test.describe("C3-A Scene-Aware Global Header", () => {
     const context = await browser.newContext({ reducedMotion: "reduce" });
     const page = await context.newPage();
     await page.goto("/en/");
-    const styles = await page.locator("header").evaluate((el) => {
+    const styles = await page.locator(SITE_HEADER).evaluate((el) => {
       const cs = getComputedStyle(el);
       return {
         transitionDuration: cs.transitionDuration,
