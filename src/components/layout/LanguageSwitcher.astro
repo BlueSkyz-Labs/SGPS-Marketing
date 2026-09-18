@@ -5,6 +5,7 @@ import {
   getAlternatePath,
   getLanguageFromPath,
 } from "@/lib/i18n";
+import { languageTransitionStyle } from "@/lib/route-transition";
 
 interface Props {
   variant?: "light" | "dark";
@@ -36,6 +37,7 @@ const currentLang = getLanguageFromPath(currentPath);
           href={getAlternatePath(currentPath, lang)}
           hreflang={LANGUAGES[lang].hreflang}
           aria-current={isActive ? "page" : undefined}
+          style={languageTransitionStyle(lang)}
           class:list={[
             "inline-flex min-h-11 min-w-0 items-center px-3 text-sm font-medium no-underline rounded-md transition-colors",
             isActive ? activeClasses : idleClasses,
