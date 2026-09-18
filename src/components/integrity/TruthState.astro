@@ -25,12 +25,22 @@ const STATE_COPY: Record<
   unavailable: { en: "Unavailable", vi: "Không khả dụng", glyph: "–" },
 };
 
+const PRESENTATION = {
+  "source-linked": "source",
+  reviewed: "reviewed",
+  changed: "changed",
+  "not-published": "unavailable",
+  unavailable: "unavailable",
+} as const satisfies Record<TruthStateValue, string>;
+
 const copy = STATE_COPY[state];
+const presentation = PRESENTATION[state];
 ---
 
 <span
   class="truth-state"
   data-truth-state={state}
+  data-truth-presentation={presentation}
   role="img"
   aria-label={copy[lang]}
 >
