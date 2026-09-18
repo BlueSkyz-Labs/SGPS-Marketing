@@ -22,11 +22,14 @@ const VIEWPORTS = [
   { name: "small", width: 320, height: 720 },
 ] as const;
 
-async function settledOverflow(page: Page): Promise<{
+type Overflow = {
   overflow: number;
   metrics: string;
   offenders: string[];
-}> {
+  nodes?: string[];
+};
+
+async function settledOverflow(page: Page): Promise<Overflow> {
   return page.evaluate(async () => {
     await document.fonts.ready;
     await new Promise((resolve) =>
@@ -80,14 +83,71 @@ async function settledOverflow(page: Page): Promise<{
   });
 }
 
-function describe(
-  prefix: string,
-  result: { overflow: number; metrics: string; offenders: string[] },
-) {
+/**
+ * A document can need horizontal scrolling with no element whose border box
+ * leaves the viewport: an inline text run wider than its block, or a
+ * pseudo-element, widens the scrollable area and belongs to no element rect.
+ * When that happens, ask the browser for its layout tree - the same snapshot
+ * DevTools renders - and name the node that actually overflows.
+ */
+async function overflowNodes(page: Page): Promise<string[]> {
+  const session = await page.context().newCDPSession(page);
+  try {
+    const clientWidth = await page.evaluate(
+      () => document.documentElement.clientWidth,
+    );
+    const snapshot = (await session.send("DOMSnapshot.captureSnapshot", {
+      computedStyles: [],
+      includeDOMRects: true,
+      includePaintOrder: true,
+    })) as unknown as {
+      strings: string[];
+      documents: {
+        nodes: { nodeName: number[]; nodeValue?: number[] };
+        layout: { nodeIndex: number[]; bounds: number[][] };
+      }[];
+    };
+    const doc = snapshot.documents?.[0];
+    if (!doc?.layout) return [];
+    const rows: string[] = [];
+    for (let i = 0; i < doc.layout.nodeIndex.length; i += 1) {
+      const bounds = doc.layout.bounds[i];
+      if (!bounds || bounds.length < 4) continue;
+      const [x, , width] = bounds;
+      if (width <= 0) continue;
+      const right = x + width;
+      if (right <= clientWidth + 0.5) continue;
+      const nodeIndex = doc.layout.nodeIndex[i];
+      const name = snapshot.strings[doc.nodes.nodeName[nodeIndex]];
+      const valueIndex = doc.nodes.nodeValue?.[nodeIndex] ?? -1;
+      const value = valueIndex >= 0 ? snapshot.strings[valueIndex] : "";
+      rows.push(
+        `${name} right=${right.toFixed(1)} w=${width.toFixed(1)}` +
+          (value ? ` text="${value.trim().slice(0, 40)}"` : ""),
+      );
+    }
+    return rows.sort().slice(0, 6);
+  } finally {
+    await session.detach().catch(() => undefined);
+  }
+}
+
+/** Only pay for the layout-tree dump when the document actually overflows. */
+async function withNodes(page: Page, result: Overflow): Promise<Overflow> {
+  if (result.overflow > 1) {
+    result.nodes = await overflowNodes(page).catch(() => []);
+  }
+  return result;
+}
+
+function describe(prefix: string, result: Overflow) {
   const detail = result.offenders.length
     ? ` — ${result.offenders.join(" | ")}`
     : "";
-  return `${prefix} ${result.overflow}px [${result.metrics}]${detail}`;
+  const nodes = result.nodes?.length
+    ? ` | layout nodes: ${result.nodes.join(" | ")}`
+    : "";
+  return `${prefix} ${result.overflow}px [${result.metrics}]${detail}${nodes}`;
 }
 
 test.describe("C3-A Editorial Typography — EN/VI wrapping", () => {
@@ -100,7 +160,7 @@ test.describe("C3-A Editorial Typography — EN/VI wrapping", () => {
         height: viewport.height,
       });
       await page.goto("/en/");
-      const result = await settledOverflow(page);
+      const result = await withNodes(page, await settledOverflow(page));
       expect(
         result.overflow,
         describe("wrap overflow", result),
@@ -111,7 +171,7 @@ test.describe("C3-A Editorial Typography — EN/VI wrapping", () => {
   test("VI copy wraps within the same ladder", async ({ page }) => {
     await page.setViewportSize({ width: 320, height: 720 });
     await page.goto("/vi/");
-    const result = await settledOverflow(page);
+    const result = await withNodes(page, await settledOverflow(page));
     expect(
       result.overflow,
       describe("VI wrap overflow", result),
@@ -132,7 +192,7 @@ test.describe("C3-A Editorial Typography — 200% text zoom", () => {
       await page.evaluate(() => {
         document.documentElement.style.fontSize = "200%";
       });
-      const result = await settledOverflow(page);
+      const result = await withNodes(page, await settledOverflow(page));
       expect(
         result.overflow,
         describe("200% zoom overflow", result),
@@ -157,7 +217,7 @@ test.describe("C3-A Editorial Typography — 200% text zoom", () => {
       await page.evaluate(() => {
         document.documentElement.style.fontSize = "200%";
       });
-      const result = await settledOverflow(page);
+      const result = await withNodes(page, await settledOverflow(page));
       expect(
         result.overflow,
         describe(`${route} 200% zoom overflow`, result),
@@ -177,7 +237,7 @@ test.describe("C3-A Editorial Typography — 200% text zoom", () => {
         }
       `,
     });
-    const result = await settledOverflow(page);
+    const result = await withNodes(page, await settledOverflow(page));
     expect(
       result.overflow,
       describe("text-spacing overflow", result),
