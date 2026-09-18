@@ -23,10 +23,7 @@ test.describe("C3-B truth-state choreography", () => {
     await expect(state.locator(".truth-state__label")).toHaveText(
       "Source-linked",
     );
-    await expect(state).toHaveAttribute(
-      "data-truth-presentation",
-      "source",
-    );
+    await expect(state).toHaveAttribute("data-truth-presentation", "source");
   });
 
   test("reduced motion removes truth-state transitions", async ({ page }) => {
@@ -37,8 +34,8 @@ test.describe("C3-B truth-state choreography", () => {
     const duration = await state.evaluate(
       (element) => getComputedStyle(element).transitionDuration,
     );
-    expect(duration.split(",").every((value) => parseFloat(value) === 0)).toBe(
-      true,
-    );
+    expect(
+      duration.split(",").every((value) => parseFloat(value) === 0),
+    ).toBe(true);
   });
 });
