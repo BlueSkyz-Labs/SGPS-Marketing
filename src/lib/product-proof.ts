@@ -1,1 +1,69 @@
-/**\n * C3-B Task 1 (G4) — capability-bound product-to-proof selector.\n *\n * This adapter is a derived view over the canonical Claim Fabric. It never\n * authors product, claim, evidence, boundary, or truth-state data.\n */\n\nimport type { BoundaryStatement, EvidenceReference, LocalizedText, TruthState } from "../data/integrity.ts";\nimport { getEvidencePassportPath, getPublicClaims, type PublicProductRef, type ResolvedClaim } from "./claims.ts";\n\nexport interface ProductProofLink {\n  claimId: string;\n  evidenceId: string;\n  href: { en: string; vi: string };\n  label: LocalizedText;\n  truthState: TruthState;\n  boundary?: BoundaryStatement | undefined;\n  passportHref: { en: string; vi: string };\n}\n\nfunction isPublicProofReference(reference: EvidenceReference): boolean {\n  return reference.kind !== "private-reporting";\n}\n\nexport function getProductProofLinks(\n  productSlug: string,\n  capabilityId: string,\n  products: readonly PublicProductRef[],\n  claims: readonly ResolvedClaim[] = getPublicClaims([...products]),\n): ProductProofLink[] {\n  if (!productSlug || !capabilityId) return [];\n  if (!products.some((product) => product.slug === productSlug)) return [];\n\n  const links: ProductProofLink[] = [];\n\n  for (const resolved of claims) {\n    const binding = resolved.claim.productBinding;\n    if (resolved.claim.kind !== "product" || !binding) continue;\n    if (\n      binding.productSlug !== productSlug ||\n      binding.capabilityId !== capabilityId\n    ) {\n      continue;\n    }\n    if (!resolved.productSlugs.includes(productSlug)) continue;\n\n    for (const reference of resolved.evidence) {\n      if (!isPublicProofReference(reference)) continue;\n      links.push({\n        claimId: resolved.claim.id,\n        evidenceId: reference.id,\n        href: reference.href,\n        label: reference.label,\n        truthState: resolved.truthState,\n        boundary: resolved.boundary,\n        passportHref: {\n          en: getEvidencePassportPath("en", resolved.claim.id),\n          vi: getEvidencePassportPath("vi", resolved.claim.id),\n        },\n      });\n    }\n  }\n\n  return links.sort(\n    (a, b) =>\n      a.claimId.localeCompare(b.claimId) ||\n      a.evidenceId.localeCompare(b.evidenceId),\n  );\n}\n
+/**
+ * C3-B Task 1 (G4) — capability-bound product-to-proof selector.
+ *
+ * This adapter is a derived view over the canonical Claim Fabric. It never
+ * authors product, claim, evidence, boundary, or truth-state data.
+ */
+
+import type { BoundaryStatement, EvidenceReference, LocalizedText, TruthState } from "../data/integrity.ts";
+import { getEvidencePassportPath, getPublicClaims, type PublicProductRef, type ResolvedClaim } from "./claims.ts";
+
+export interface ProductProofLink {
+  claimId: string;
+  evidenceId: string;
+  href: { en: string; vi: string };
+  label: LocalizedText;
+  truthState: TruthState;
+  boundary?: BoundaryStatement | undefined;
+  passportHref: { en: string; vi: string };
+}
+
+function isPublicProofReference(reference: EvidenceReference): boolean {
+  return reference.kind !== "private-reporting";
+}
+
+export function getProductProofLinks(
+  productSlug: string,
+  capabilityId: string,
+  products: readonly PublicProductRef[],
+  claims: readonly ResolvedClaim[] = getPublicClaims([...products]),
+): ProductProofLink[] {
+  if (!productSlug || !capabilityId) return [];
+  if (!products.some((product) => product.slug === productSlug)) return [];
+
+  const links: ProductProofLink[] = [];
+
+  for (const resolved of claims) {
+    const binding = resolved.claim.productBinding;
+    if (resolved.claim.kind !== "product" || !binding) continue;
+    if (
+      binding.productSlug !== productSlug ||
+      binding.capabilityId !== capabilityId
+    ) {
+      continue;
+    }
+    if (!resolved.productSlugs.includes(productSlug)) continue;
+
+    for (const reference of resolved.evidence) {
+      if (!isPublicProofReference(reference)) continue;
+      links.push({
+        claimId: resolved.claim.id,
+        evidenceId: reference.id,
+        href: reference.href,
+        label: reference.label,
+        truthState: resolved.truthState,
+        boundary: resolved.boundary,
+        passportHref: {
+          en: getEvidencePassportPath("en", resolved.claim.id),
+          vi: getEvidencePassportPath("vi", resolved.claim.id),
+        },
+      });
+    }
+  }
+
+  return links.sort(
+    (a, b) =>
+      a.claimId.localeCompare(b.claimId) ||
+      a.evidenceId.localeCompare(b.evidenceId),
+  );
+}
