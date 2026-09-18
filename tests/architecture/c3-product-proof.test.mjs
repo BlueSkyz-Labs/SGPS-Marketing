@@ -53,7 +53,10 @@ test("resolvable proof requires an explicit product + capability binding", async
     }),
     PRODUCTS,
   );
-  assert.ok(\n    resolved,\n    "fixture claim must resolve through the canonical fabric",\n  );
+  assert.ok(
+    resolved,
+    "fixture claim must resolve through the canonical fabric",
+  );
 
   const links = getProductProofLinks(
     "fixture-product",
@@ -118,33 +121,41 @@ test("private-reporting evidence is never capability proof", async () => {
   );
 });
 
-test(\n  "unknown product and unknown capability cannot borrow generic product proof",\n  async () => {
-  const { getProductProofLinks } = await loadProofModule();
+test(
+  "unknown product and unknown capability cannot borrow generic product proof",
+  async () => {
+    const { getProductProofLinks } = await loadProofModule();
 
-  const wrongProduct = resolvePublicClaim(
-    productClaim({ productSlug: "ghost-product" }),
-    PRODUCTS,
-  );
-  assert.equal(
-    wrongProduct,
-    null,
-    "a bound product claim must fail when its product is not public",
-  );
+    const wrongProduct = resolvePublicClaim(
+      productClaim({ productSlug: "ghost-product" }),
+      PRODUCTS,
+    );
+    assert.equal(
+      wrongProduct,
+      null,
+      "a bound product claim must fail when its product is not public",
+    );
 
-  const resolved = resolvePublicClaim(productClaim(), PRODUCTS);
-  assert.ok(resolved);
+    const resolved = resolvePublicClaim(productClaim(), PRODUCTS);
+    assert.ok(resolved);
 
-  assert.deepEqual(
-    getProductProofLinks("fixture-product", "different-capability", PRODUCTS, [
-      resolved,
-    ]),
-    [],
-  );
-  assert.deepEqual(
-    getProductProofLinks("ghost-product", "secure-export", PRODUCTS, [resolved]),
-    [],
-  );
-});
+    assert.deepEqual(
+      getProductProofLinks(
+        "fixture-product",
+        "different-capability",
+        PRODUCTS,
+        [resolved],
+      ),
+      [],
+    );
+    assert.deepEqual(
+      getProductProofLinks("ghost-product", "secure-export", PRODUCTS, [
+        resolved,
+      ]),
+      [],
+    );
+  },
+);
 
 test("unbound generic product claims never become capability proof", async () => {
   const { getProductProofLinks } = await loadProofModule();
@@ -164,7 +175,9 @@ test("unbound generic product claims never become capability proof", async () =>
   assert.ok(generic);
 
   assert.deepEqual(
-    getProductProofLinks("fixture-product", "secure-export", PRODUCTS, [generic]),
+    getProductProofLinks("fixture-product", "secure-export", PRODUCTS, [
+      generic,
+    ]),
     [],
   );
 });
