@@ -741,29 +741,11 @@ summary {
   min-width: 0;
 }
 
-:where(body)
-  :where(
-    p,
-    li,
-    h1,
-    h2,
-    h3,
-    h4,
-    h5,
-    h6,
-    summary,
-    figcaption,
-    time,
-    a,
-    span,
-    strong,
-    em,
-    code,
-    dt,
-    dd,
-    blockquote,
-    label
-  ) {
+/* Declared on the root of the page, not per element type: `overflow-wrap` is
+   inherited, so every descendant - including a bare text node inside a block
+   whose border box is narrower than its text, which no element-level scan can
+   attribute - may break a long token instead of widening the document. */
+:where(body) {
   overflow-wrap: anywhere;
 }
 
