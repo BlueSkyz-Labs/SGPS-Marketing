@@ -36,6 +36,11 @@
   inset: 0;
   z-index: 1;
   overflow: hidden;
+  /* Decorative layer only: without this it covers the hero plane and becomes
+     the topmost element at every point inside it, so the hero's action links
+     could not be hovered or clicked (a pointer-target obstruction, not a
+     styling detail). Its children are decorative too, so the rule inherits. */
+  pointer-events: none;
 }
 
 /* Horizon signature field — reinforces house identity */
