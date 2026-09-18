@@ -16,7 +16,7 @@ const currentLang = getLanguageFromPath(currentPath);
 ---
 
 <div
-  class="flex items-center gap-1"
+  class="flex min-w-0 flex-wrap items-center gap-1"
   role="navigation"
   aria-label={currentLang === "vi" ? "Ngôn ngữ" : "Language"}
 >
@@ -37,7 +37,7 @@ const currentLang = getLanguageFromPath(currentPath);
           hreflang={LANGUAGES[lang].hreflang}
           aria-current={isActive ? "page" : undefined}
           class:list={[
-            "inline-flex min-h-11 items-center px-3 text-sm font-medium no-underline rounded-md transition-colors",
+            "inline-flex min-h-11 min-w-0 items-center px-3 text-sm font-medium no-underline rounded-md transition-colors",
             isActive ? activeClasses : idleClasses,
           ]}
         >

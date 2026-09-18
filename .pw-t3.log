@@ -1,0 +1,66 @@
+[WebServer] [WARN] Unsupported engine: wanted: {"node":">=24.20.0"} (current: {"node":"v24.17.0","pnpm":"11.25.0"})
+
+[WebServer] $ node scripts/run-preview.mjs
+
+[WebServer] (node:21328) [DEP0190] DeprecationWarning: Passing args to a child process with shell option true can lead to security vulnerabilities, as the arguments are not escaped, only concatenated.
+[WebServer] (Use `node --trace-deprecation ...` to show where the warning was created)
+
+[WebServer]  astro  v7.3.2 ready in 124 ms
+[WebServer] ┃ Local    http://127.0.0.1:3000/
+
+
+Running 52 tests using 1 worker
+
+[1/52] [chromium] › tests\e2e\c3-editorial-typography.spec.ts:182:5 › C3-A Editorial Typography — EN/VI wrapping › desktop (1440px): no horizontal overflow
+[2/52] [chromium] › tests\e2e\c3-editorial-typography.spec.ts:182:5 › C3-A Editorial Typography — EN/VI wrapping › tablet (768px): no horizontal overflow
+[3/52] [chromium] › tests\e2e\c3-editorial-typography.spec.ts:182:5 › C3-A Editorial Typography — EN/VI wrapping › mobile (390px): no horizontal overflow
+[4/52] [chromium] › tests\e2e\c3-editorial-typography.spec.ts:182:5 › C3-A Editorial Typography — EN/VI wrapping › small (320px): no horizontal overflow
+[5/52] [chromium] › tests\e2e\c3-editorial-typography.spec.ts:198:3 › C3-A Editorial Typography — EN/VI wrapping › VI copy wraps within the same ladder
+[6/52] [chromium] › tests\e2e\c3-editorial-typography.spec.ts:211:5 › C3-A Editorial Typography — 200% text zoom › desktop (1440px): 200% text zoom does not scroll sideways
+[7/52] [chromium] › tests\e2e\c3-editorial-typography.spec.ts:211:5 › C3-A Editorial Typography — 200% text zoom › tablet (768px): 200% text zoom does not scroll sideways
+[8/52] [chromium] › tests\e2e\c3-editorial-typography.spec.ts:211:5 › C3-A Editorial Typography — 200% text zoom › mobile (390px): 200% text zoom does not scroll sideways
+[9/52] [chromium] › tests\e2e\c3-editorial-typography.spec.ts:211:5 › C3-A Editorial Typography — 200% text zoom › small (320px): 200% text zoom does not scroll sideways
+[10/52] [chromium] › tests\e2e\c3-editorial-typography.spec.ts:230:3 › C3-A Editorial Typography — 200% text zoom › 320px: the key routes reflow at 200% text
+[11/52] [chromium] › tests\e2e\c3-editorial-typography.spec.ts:255:3 › C3-A Editorial Typography — 200% text zoom › text-spacing override is respected
+[12/52] [chromium] › tests\e2e\c3-editorial-typography.spec.ts:276:3 › C3-A Editorial Typography — display hierarchy › headings render with display weight and section hierarchy
+[13/52] [chromium] › tests\e2e\mobile-overflow.spec.ts:39:7 › 320px sweep › /en/ does not scroll sideways
+[14/52] [chromium] › tests\e2e\mobile-overflow.spec.ts:39:7 › 320px sweep › /vi/ does not scroll sideways
+[15/52] [chromium] › tests\e2e\mobile-overflow.spec.ts:39:7 › 320px sweep › /en/about/ does not scroll sideways
+[16/52] [chromium] › tests\e2e\mobile-overflow.spec.ts:39:7 › 320px sweep › /vi/about/ does not scroll sideways
+[17/52] [chromium] › tests\e2e\mobile-overflow.spec.ts:39:7 › 320px sweep › /en/products/ does not scroll sideways
+[18/52] [chromium] › tests\e2e\mobile-overflow.spec.ts:39:7 › 320px sweep › /vi/products/ does not scroll sideways
+[19/52] [chromium] › tests\e2e\mobile-overflow.spec.ts:39:7 › 320px sweep › /en/contact/ does not scroll sideways
+[20/52] [chromium] › tests\e2e\mobile-overflow.spec.ts:39:7 › 320px sweep › /vi/contact/ does not scroll sideways
+[21/52] [chromium] › tests\e2e\mobile-overflow.spec.ts:39:7 › 320px sweep › /en/support/ does not scroll sideways
+[22/52] [chromium] › tests\e2e\mobile-overflow.spec.ts:39:7 › 320px sweep › /vi/support/ does not scroll sideways
+[23/52] [chromium] › tests\e2e\mobile-overflow.spec.ts:39:7 › 320px sweep › /en/privacy/ does not scroll sideways
+[24/52] [chromium] › tests\e2e\mobile-overflow.spec.ts:39:7 › 320px sweep › /vi/privacy/ does not scroll sideways
+[25/52] [chromium] › tests\e2e\mobile-overflow.spec.ts:39:7 › 320px sweep › /en/security/ does not scroll sideways
+[26/52] [chromium] › tests\e2e\mobile-overflow.spec.ts:39:7 › 320px sweep › /vi/security/ does not scroll sideways
+[27/52] [chromium] › tests\e2e\mobile-overflow.spec.ts:39:7 › 320px sweep › /en/decision-room/ does not scroll sideways
+[28/52] [chromium] › tests\e2e\mobile-overflow.spec.ts:39:7 › 320px sweep › /vi/decision-room/ does not scroll sideways
+[29/52] [chromium] › tests\e2e\mobile-overflow.spec.ts:39:7 › 320px sweep › /en/evidence/security-reporting-is-private/ does not scroll sideways
+[30/52] [chromium] › tests\e2e\mobile-overflow.spec.ts:39:7 › 320px sweep › /vi/evidence/security-reporting-is-private/ does not scroll sideways
+[31/52] [chromium] › tests\e2e\mobile-overflow.spec.ts:39:7 › 320px sweep › /en/404/ does not scroll sideways
+[32/52] [chromium] › tests\e2e\mobile-overflow.spec.ts:39:7 › 320px sweep › /vi/404/ does not scroll sideways
+[33/52] [chromium] › tests\e2e\mobile-overflow.spec.ts:39:7 › 390px sweep › /en/ does not scroll sideways
+[34/52] [chromium] › tests\e2e\mobile-overflow.spec.ts:39:7 › 390px sweep › /vi/ does not scroll sideways
+[35/52] [chromium] › tests\e2e\mobile-overflow.spec.ts:39:7 › 390px sweep › /en/about/ does not scroll sideways
+[36/52] [chromium] › tests\e2e\mobile-overflow.spec.ts:39:7 › 390px sweep › /vi/about/ does not scroll sideways
+[37/52] [chromium] › tests\e2e\mobile-overflow.spec.ts:39:7 › 390px sweep › /en/products/ does not scroll sideways
+[38/52] [chromium] › tests\e2e\mobile-overflow.spec.ts:39:7 › 390px sweep › /vi/products/ does not scroll sideways
+[39/52] [chromium] › tests\e2e\mobile-overflow.spec.ts:39:7 › 390px sweep › /en/contact/ does not scroll sideways
+[40/52] [chromium] › tests\e2e\mobile-overflow.spec.ts:39:7 › 390px sweep › /vi/contact/ does not scroll sideways
+[41/52] [chromium] › tests\e2e\mobile-overflow.spec.ts:39:7 › 390px sweep › /en/support/ does not scroll sideways
+[42/52] [chromium] › tests\e2e\mobile-overflow.spec.ts:39:7 › 390px sweep › /vi/support/ does not scroll sideways
+[43/52] [chromium] › tests\e2e\mobile-overflow.spec.ts:39:7 › 390px sweep › /en/privacy/ does not scroll sideways
+[44/52] [chromium] › tests\e2e\mobile-overflow.spec.ts:39:7 › 390px sweep › /vi/privacy/ does not scroll sideways
+[45/52] [chromium] › tests\e2e\mobile-overflow.spec.ts:39:7 › 390px sweep › /en/security/ does not scroll sideways
+[46/52] [chromium] › tests\e2e\mobile-overflow.spec.ts:39:7 › 390px sweep › /vi/security/ does not scroll sideways
+[47/52] [chromium] › tests\e2e\mobile-overflow.spec.ts:39:7 › 390px sweep › /en/decision-room/ does not scroll sideways
+[48/52] [chromium] › tests\e2e\mobile-overflow.spec.ts:39:7 › 390px sweep › /vi/decision-room/ does not scroll sideways
+[49/52] [chromium] › tests\e2e\mobile-overflow.spec.ts:39:7 › 390px sweep › /en/evidence/security-reporting-is-private/ does not scroll sideways
+[50/52] [chromium] › tests\e2e\mobile-overflow.spec.ts:39:7 › 390px sweep › /vi/evidence/security-reporting-is-private/ does not scroll sideways
+[51/52] [chromium] › tests\e2e\mobile-overflow.spec.ts:39:7 › 390px sweep › /en/404/ does not scroll sideways
+[52/52] [chromium] › tests\e2e\mobile-overflow.spec.ts:39:7 › 390px sweep › /vi/404/ does not scroll sideways
+  52 passed (1.1m)
