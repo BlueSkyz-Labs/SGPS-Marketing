@@ -59,9 +59,8 @@ async function settledOverflow(page: Page): Promise<{
         ? [...document.querySelectorAll<HTMLElement>("body *")]
             .map((el) => ({ el, right: el.getBoundingClientRect().right }))
             .filter((entry) => entry.right > doc.clientWidth + 1)
-            .filter((entry) => !isClipped(entry.el))
             .sort((a, b) => b.right - a.right)
-            .slice(0, 3)
+            .slice(0, 4)
             .map((entry) => {
               const cs = getComputedStyle(entry.el);
               const rect = entry.el.getBoundingClientRect();
@@ -72,6 +71,7 @@ async function settledOverflow(page: Page): Promise<{
                 ` w=${Math.round(rect.width)} x=${Math.round(rect.x)}` +
                 ` min-w=${cs.minWidth} ws=${cs.whiteSpace}` +
                 ` wrap=${cs.overflowWrap}/${cs.wordBreak}` +
+                ` clipped=${isClipped(entry.el) ? "yes" : "no"}` +
                 ` text="${(entry.el.textContent ?? "").trim().slice(0, 40)}"`
               );
             })

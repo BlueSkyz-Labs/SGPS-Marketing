@@ -741,7 +741,29 @@ summary {
   min-width: 0;
 }
 
-:where(body) :where(p, li, h1, h2, h3, h4, summary, figcaption, time) {
+:where(body)
+  :where(
+    p,
+    li,
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6,
+    summary,
+    figcaption,
+    time,
+    a,
+    span,
+    strong,
+    em,
+    code,
+    dt,
+    dd,
+    blockquote,
+    label
+  ) {
   overflow-wrap: anywhere;
 }
 
