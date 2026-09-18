@@ -53,7 +53,7 @@ test("resolvable proof requires an explicit product + capability binding", async
     }),
     PRODUCTS,
   );
-  assert.ok(resolved, "fixture claim must resolve through the canonical fabric");
+  assert.ok(\n    resolved,\n    "fixture claim must resolve through the canonical fabric",\n  );
 
   const links = getProductProofLinks(
     "fixture-product",
@@ -118,7 +118,7 @@ test("private-reporting evidence is never capability proof", async () => {
   );
 });
 
-test("unknown product and unknown capability cannot borrow generic product proof", async () => {
+test(\n  "unknown product and unknown capability cannot borrow generic product proof",\n  async () => {
   const { getProductProofLinks } = await loadProofModule();
 
   const wrongProduct = resolvePublicClaim(
