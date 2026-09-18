@@ -33,18 +33,6 @@ async function firstVisible(page: Page, selector: string) {
   return locator;
 }
 
-async function computed(page: Page, selector: string, props: string[]) {
-  return page
-    .locator(selector)
-    .first()
-    .evaluate((el, keys) => {
-      const cs = getComputedStyle(el);
-      const out: Record<string, string> = {};
-      for (const key of keys) out[key] = cs.getPropertyValue(key);
-      return out;
-    }, props);
-}
-
 test.describe("C3-A Microinteractions — pointer states", () => {
   test("hover changes a navigation link's appearance", async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 900 });
