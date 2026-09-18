@@ -1,0 +1,51 @@
+---
+// @ts-nocheck — synthetic C3-B fixture; never deployed as product truth.
+import "@/styles/global.css";
+import "@/styles/c3-craft.css";
+import ProductProofLink from "@/components/integrity/ProductProofLink.astro";
+
+const proof = [
+  {
+    claimId: "fixture-capability-proof",
+    evidenceId: "ev-products-route",
+    href: { en: "/en/products/", vi: "/vi/products/" },
+    label: { en: "Products route", vi: "Trang Sản phẩm" },
+    truthState: "source-linked",
+    boundary: {
+      id: "fixture-boundary",
+      claim: {
+        en: "Fixture proof is source-linked.",
+        vi: "Bằng chứng kiểm thử đã gắn nguồn.",
+      },
+      doesNotImply: {
+        en: "This fixture does not establish a real product capability.",
+        vi: "Fixture này không xác lập năng lực sản phẩm thực.",
+      },
+    },
+    passportHref: {
+      en: "/en/evidence/fixture-capability-proof/",
+      vi: "/vi/evidence/fixture-capability-proof/",
+    },
+  },
+];
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>C3-B Trust Continuum fixture</title>
+  </head>
+  <body>
+    <main class="p-8">
+      <section data-empty-proof-host>
+        <ProductProofLink links={[]} lang="en" />
+      </section>
+      <section aria-label="Fixture capability">
+        <h1>Fixture capability</h1>
+        <ProductProofLink links={proof} lang="en" />
+      </section>
+    </main>
+  </body>
+</html>
