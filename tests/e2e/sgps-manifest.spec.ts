@@ -15,10 +15,12 @@ test.describe("public SGPS manifest", () => {
       schemaVersion: string;
       generatedFrom: string;
       claims: { id: string; urls: { en: string; vi: string } }[];
+      productProof: unknown[];
     };
-    expect(parsed.schemaVersion).toBe("1.0");
+    expect(parsed.schemaVersion).toBe("1.1");
     expect(parsed.generatedFrom).toBe("public-runtime-data");
     expect(parsed.claims.length).toBe(2);
+    expect(parsed.productProof).toEqual([]);
     const ids = parsed.claims.map((claim) => claim.id);
     expect([...ids].sort()).toEqual(ids);
 
@@ -58,7 +60,7 @@ test.describe("public SGPS manifest", () => {
     const response = await page.goto(MANIFEST);
     expect(response?.status()).toBe(200);
     const body = await response?.text();
-    expect(body).toContain('"schemaVersion": "1.0"');
+    expect(body).toContain('"schemaVersion": "1.1"');
     await context.close();
   });
 });
