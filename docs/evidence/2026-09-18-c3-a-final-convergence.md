@@ -1,8 +1,11 @@
 # C3-A Experience Craft Foundation — Final Convergence
 
-**Date:** 2026-09-18  
-**Program:** C3 Living Verifiable Product Experience  
-**Wave:** C3-A Experience Craft Foundation  
+**Date:** 2026-09-18
+
+**Program:** C3 Living Verifiable Product Experience
+
+**Wave:** C3-A Experience Craft Foundation
+
 **Disposition:** source-converged; C3-B may activate after this reconciliation PR passes exact-head assurance.
 
 ## Objective contract
@@ -11,15 +14,13 @@ C3-A raises the public experience through one coherent craft system for product 
 
 ## Delivered work on main
 
-| Task | Pull request | Main commit | Exact-head Source Assurance |
-| --- | --- | --- | --- |
-| 1 — shared craft contract | #175 | `5aa98a4e` | run `35046712247`: Quality Gates PASS; Browser Assurance PASS |
-| 2 — shared ProductVisual | #176 | `dde7dbf0` | run `35183574245`: Quality Gates PASS; Browser Assurance PASS |
-| 3 — Editorial Typography v2 | #181 | `a2c0ebc5` | run `35324138705`: Quality Gates PASS; Browser Assurance PASS |
-| 4 — scene-aware global header | #183 | `f1258f38` | run `35321589093`: Quality Gates PASS; Browser Assurance PASS |
-| 5 — route transition grammar | #185 | `b91c96dc` | run `35327782023`: Quality Gates PASS; Browser Assurance PASS |
-| 6 — mobile cinematic composition | #186 | `c47c39a9` | run `35329699792`: Quality Gates PASS; Browser Assurance PASS |
-| 7 — microinteraction quality pass | #184 | `b24f2751` | run `35326052687`: Quality Gates PASS; Browser Assurance PASS |
+- Task 1 — shared craft contract: PR #175, main `5aa98a4e`, Source Assurance run `35046712247`; Quality Gates PASS and Browser Assurance PASS.
+- Task 2 — shared ProductVisual: PR #176, main `dde7dbf0`, Source Assurance run `35183574245`; Quality Gates PASS and Browser Assurance PASS.
+- Task 3 — Editorial Typography v2: PR #181, main `a2c0ebc5`, Source Assurance run `35324138705`; Quality Gates PASS and Browser Assurance PASS.
+- Task 4 — scene-aware global header: PR #183, main `f1258f38`, Source Assurance run `35321589093`; Quality Gates PASS and Browser Assurance PASS.
+- Task 5 — route transition grammar: PR #185, main `b91c96dc`, Source Assurance run `35327782023`; Quality Gates PASS and Browser Assurance PASS.
+- Task 6 — mobile cinematic composition: PR #186, main `c47c39a9`, Source Assurance run `35329699792`; Quality Gates PASS and Browser Assurance PASS.
+- Task 7 — microinteraction quality pass: PR #184, main `b24f2751`, Source Assurance run `35326052687`; Quality Gates PASS and Browser Assurance PASS.
 
 Every listed workflow run completed successfully on the exact pull-request head before merge. The repository protection contract therefore judged both deterministic source gates and browser/accessibility assurance green for every C3-A task.
 
@@ -32,7 +33,7 @@ Every listed workflow run completed successfully on the exact pull-request head 
 - **Route continuity is progressive:** Task 5 uses native view-transition naming while ordinary links remain authoritative when the API is absent.
 - **Mobile is authored, not compressed:** Task 6 adds mobile composition guards and fixes undersized trust/source action targets without introducing a parallel mobile component tree.
 - **Interaction remains purposeful:** Task 7 standardizes pointer/keyboard/pressed/selection states and fixed a real decorative-layer pointer obstruction.
-- **Accessibility invariants remain hard gates:** reduced motion, forced colors, keyboard behavior, mobile Chromium and cross-browser Browser Assurance remain part of the promotion envelope.
+- **Accessibility invariants remain hard gates:** reduced motion, forced colors, keyboard behavior, mobile Chromium, and cross-browser Browser Assurance remain part of the promotion envelope.
 
 ## Residuals intentionally not promoted
 
