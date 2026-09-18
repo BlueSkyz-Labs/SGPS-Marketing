@@ -113,3 +113,43 @@ main details > summary:active {
     transform: none;
   }
 }
+
+
+/* C3-B Task 4 — Evidence-aware truth choreography.
+ *
+ * Presentation follows disclosure state, never a quality score. The authored
+ * textual truth state remains the semantic authority; these attributes only
+ * provide a stable visual hook for evidence contexts.
+ */
+.truth-state[data-truth-presentation] {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+}
+
+.c3-evidence-peek .truth-state__glyph {
+  transform: translateY(var(--c3-interaction-distance));
+  transition: transform var(--c3-interaction-duration)
+    var(--c3-interaction-ease);
+}
+
+.c3-evidence-peek[open] .truth-state__glyph {
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .truth-state,
+  .truth-state__glyph {
+    transition: none;
+  }
+
+  .c3-evidence-peek .truth-state__glyph {
+    transform: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .truth-state[data-truth-presentation] {
+    color: CanvasText;
+  }
+}
