@@ -58,7 +58,7 @@ async function settledOverflow(page: Page): Promise<{
       overflow > 1
         ? [...document.querySelectorAll<HTMLElement>("body *")]
             .map((el) => ({ el, right: el.getBoundingClientRect().right }))
-            .filter((entry) => entry.right > doc.clientWidth + 1)
+            .filter((entry) => entry.right > doc.clientWidth + 0.5)
             .sort((a, b) => b.right - a.right)
             .slice(0, 4)
             .map((entry) => {
@@ -67,7 +67,7 @@ async function settledOverflow(page: Page): Promise<{
               return (
                 `${entry.el.tagName.toLowerCase()}.${[...entry.el.classList]
                   .slice(0, 3)
-                  .join(".")} right=${Math.round(entry.right)}` +
+                  .join(".")} right=${entry.right.toFixed(1)}` +
                 ` w=${Math.round(rect.width)} x=${Math.round(rect.x)}` +
                 ` min-w=${cs.minWidth} ws=${cs.whiteSpace}` +
                 ` wrap=${cs.overflowWrap}/${cs.wordBreak}` +

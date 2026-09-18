@@ -824,9 +824,15 @@ summary {
 }
 @media (min-width: 768px) {
   .bilingual-mirror__pair {
-    grid-template-columns: 1fr 1fr;
+    /* minmax(0, 1fr): a bare `1fr` track refuses to shrink below its content's
+       min-content, so a long tag or word widened the pair and pushed the
+       document sideways at 200% text. */
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     gap: 1.25rem;
   }
+}
+.bilingual-mirror__cell {
+  min-width: 0;
 }
 .bilingual-mirror__tag {
   display: inline-block;
@@ -835,6 +841,9 @@ summary {
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--text-muted);
+  /* The tag is an inline-block label; at 200% text it can be wider than a
+     narrow cell, so it must be allowed to break rather than overflow. */
+  overflow-wrap: anywhere;
 }
 .bilingual-mirror__cell p {
   margin-top: 0.375rem;
