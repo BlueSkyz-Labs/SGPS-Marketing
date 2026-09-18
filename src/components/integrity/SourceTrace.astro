@@ -41,6 +41,7 @@ const HEADING: Record<Language, string> = {
             {step.href ? (
               <a
                 href={step.href[lang]}
+                class="inline-flex min-h-11 items-center text-sm font-semibold text-[var(--action-primary)] underline-offset-2 hover:underline"
                 rel={
                   /^https?:\/\//i.test(step.href[lang])
                     ? "noopener noreferrer"
