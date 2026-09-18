@@ -16,6 +16,11 @@ import { SITE } from "@/data/site";
 // Trust → About → Next Step. Power-user surfaces (ExperienceSpine, IntentLens,
 // Atlas) keep their routes/components but no longer lead the homepage.
 const products = await getPublicProducts();
+/** Public refs the proof selector binds against (slug + name only). */
+const productRefs = products.map((product) => ({
+  slug: product.data.slug,
+  name: product.data.name,
+}));
 const flagship = await getFlagshipProduct();
 ---
 
@@ -27,7 +32,7 @@ const flagship = await getFlagshipProduct();
 >
   <Hero lang="en" />
   <Container>
-    <FlagshipTheatre product={flagship} lang="en" />
+    <FlagshipTheatre product={flagship} products={productRefs} lang="en" />
     <ProductHouse products={products} lang="en" />
     <OneHouse lang="en" />
     <Trust lang="en" />
