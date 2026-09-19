@@ -61,3 +61,18 @@ Discover live SGPS Experience decisions (core pulled 2026-09-18 at `68707d4`: DE
 ## Definition of done per wave
 
 Green exact-head gates (architecture, typecheck, lint, format, build, client budget, static links, cross-browser/axe, Lighthouse) → merged PR → router/`docs/current-work.json` updated → worktree/branch cleaned up.
+
+## Owner directives added 2026-09-18/19 (in force, folded into the program)
+
+- **Continue all waves until converged — do not stop to report while actionable work remains** (long-run factory contract).
+- **W6 — SEO best practices, GLOBAL top tier.** hreflang reciprocity + `x-default` across all three locales, canonical + OG/Twitter meta per locale, sitemap completeness, robots, structured data (BreadcrumbList, Organization, WebSite), `lang`/`dir` correctness, CLS/LCP hygiene, meta descriptions that don't invent claims, and a `tests/architecture/seo-contract.test.mjs` guard (no duplicate hreflang, no bare-URL leaks, structured data present on every published page).
+- **W7 — Design & frontend best practices, SGPS adoption.** Apply top design-system and frontend engineering practice surfaced by the W4 critique: consistent spacing/radius/type scale, focus-visible everywhere, reduced-motion, no layout shift, semantic landmarks, native interactive elements. **SGPS:Experience FULL** adoption traced per decision (DEC-004/-006/-008/-012, GUX master, bilingual→trilingual profile) through adoption → operational → verified → guarded → converged with a gap matrix; **SGPS:Architecture** only where the canonical model demands (no fabricating topology). Every adopted decision gets its own classification + evidence — never a blanket "SGPS adopted".
+- **W8 — Audit round + Quiet Luxury uplift.** Run an independent UI/UX/accessibility audit over the finished surface; then lift the interface to the **Quiet Luxury** register defined by ADR 0001 (restraint, negative space, precise type, muted-but-expensive surfaces, no decorative costume, motion only at meaningful moments) using the brand kit v4 — measured by the existing contrast/assurance/budget gates staying green.
+
+**Ordering note:** W1 (zh /zh/ routes + section-level i18n completion) is the immediate next executable unit; W2–W8 then run in sequence after it.
+
+## Status snapshot (2026-09-19)
+
+- Frontier merged: #190 (C3-B Tasks 2+5) + #191 (test hardening); `main = e27b6d1`.
+- W1 foundation committed on this branch: `Language=en|vi|zh` across every localized type + data, ~170 business-Chinese strings, 6 zh content YAMLs, content schema + `zh`, zh-aware homepage sections (Hero/OneHouse/Trust/AboutBlueSkyz), committed at `fd450a7 → 2f8e6b1 → 5d2388c → 2f03f7c → bcfc4a1`. typecheck green; build `Static export verified`.
+- Remaining W1: widen/converge the last locale-branched components (Atlas/IntentLens + content-page routes), re-create `/zh/` routes with translated inline copy, sitemap/hreflang 3-way, trilingual parity spec.
