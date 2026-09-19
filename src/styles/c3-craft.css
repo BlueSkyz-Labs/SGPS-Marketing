@@ -178,12 +178,12 @@ main details > summary:active {
  * scores or a stronger assurance status. Visible localized truth text remains
  * authoritative; pattern makes a changed/absent state distinct without color.
  */
-:where(.truth-state[data-truth-state="changed"]) {
+.truth-state[data-truth-state="changed"] {
   border-style: dashed;
 }
 
-:where(.truth-state[data-truth-state="not-published"]),
-:where(.truth-state[data-truth-state="unavailable"]) {
+.truth-state[data-truth-state="not-published"],
+.truth-state[data-truth-state="unavailable"] {
   border-style: dotted;
 }
 
