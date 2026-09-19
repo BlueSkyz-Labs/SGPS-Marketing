@@ -7,11 +7,15 @@ test("theme storage is opt-in and the chosen mode survives navigation", async ({
   const theme = page.getByRole("group", { name: "Theme" });
   const system = theme.getByRole("button", { name: "System" });
   await expect(system).toHaveAttribute("aria-pressed", "true");
-  expect(await page.evaluate(() => localStorage.getItem("blueskyz-theme"))).toBeNull();
+  expect(
+    await page.evaluate(() => localStorage.getItem("blueskyz-theme")),
+  ).toBeNull();
 
   await theme.getByRole("button", { name: "Dark" }).click();
   await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
-  expect(await page.evaluate(() => localStorage.getItem("blueskyz-theme"))).toBe("dark");
+  expect(
+    await page.evaluate(() => localStorage.getItem("blueskyz-theme")),
+  ).toBe("dark");
 
   await page.goto("/vi/");
   await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
@@ -22,7 +26,7 @@ test("theme storage is opt-in and the chosen mode survives navigation", async ({
   ).toHaveAttribute("aria-pressed", "true");
 });
 
-test("mobile visitors can change theme using 44px controls", async ({ page }) => {
+test("mobile theme controls meet the 44px touch floor", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto("/vi/");
   await page.locator("header details > summary").click();
