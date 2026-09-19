@@ -13,9 +13,7 @@ test.describe("C3-B truth choreography", () => {
     await closeServer();
   });
 
-  test("state patterns preserve textual meaning without scoring", async ({
-    page,
-  }) => {
+  test("state patterns preserve meaning", async ({ page }) => {
     await page.goto(`${origin}/truth-choreography/`);
     for (const [state, style] of [
       ["changed", "dashed"],
@@ -25,18 +23,16 @@ test.describe("C3-B truth choreography", () => {
       const item = page.locator(`[data-truth-state="${state}"]`);
       await expect(item).toBeVisible();
       await expect(item.locator(".truth-state__label")).not.toBeEmpty();
-      expect(
-        await item.evaluate((el) => getComputedStyle(el).borderTopStyle),
-      ).toBe(style);
+      const border = await item.evaluate(
+        (el) => getComputedStyle(el).borderTopStyle,
+      );
+      expect(border).toBe(style);
     }
     const labels = await page.locator("[data-truth-choreography]").innerText();
     expect(labels).not.toMatch(/score|certified|verified|%/i);
   });
 
-  test("no JavaScript and reduced motion retain state meaning", async ({
-    browser,
-    page,
-  }) => {
+  test("no-JS and reduced motion preserve meaning", async ({ browser, page }) => {
     const context = await browser.newContext({
       javaScriptEnabled: false,
       reducedMotion: "reduce",
@@ -48,12 +44,11 @@ test.describe("C3-B truth choreography", () => {
       await expect(
         noJs.locator('[data-truth-state="not-published"]'),
       ).toHaveAccessibleName("Not published");
-      const result = await noJs
-        .locator('[data-truth-state="changed"]')
-        .evaluate((el) => ({
+      const changed = noJs.locator('[data-truth-state="changed"]');
+      const result = await changed.evaluate((el) => ({
         animation: getComputedStyle(el).animationName,
         transition: getComputedStyle(el).transitionDuration,
-        }));
+      }));
       expect(result.animation).toBe("none");
       expect(result.transition).toBe("0s");
     } finally {
@@ -61,12 +56,11 @@ test.describe("C3-B truth choreography", () => {
     }
     await page.goto(`${origin}/truth-choreography/`);
     await page.setViewportSize({ width: 320, height: 720 });
-    expect(
-      await page.evaluate(
-        () =>
-          document.documentElement.scrollWidth -
-          document.documentElement.clientWidth,
-      ),
-    ).toBeLessThanOrEqual(1);
+    const overflow = await page.evaluate(
+      () =>
+        document.documentElement.scrollWidth -
+        document.documentElement.clientWidth,
+    );
+    expect(overflow).toBeLessThanOrEqual(1);
   });
 });
