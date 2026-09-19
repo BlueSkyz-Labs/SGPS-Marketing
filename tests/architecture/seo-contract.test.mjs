@@ -69,10 +69,12 @@ test("HSTS preload remains deferred in live contract evidence", () => {
   assert.doesNotMatch(earlyRedeploy, /includeSubDomains; preload/);
 });
 
-
-test("social cards and skip links describe each published locale, not just en/vi", () => {
+test("social locale and skip link reflect the published language", () => {
   const layout = readFileSync("src/layouts/BaseLayout.astro", "utf8");
-  assert.match(layout, /OG_LOCALES\s*=\s*\{\s*en:\s*"en_US",\s*vi:\s*"vi_VN",\s*zh:\s*"zh_CN"/);
+  assert.match(
+    layout,
+    /OG_LOCALES\s*=\s*\{\s*en:\s*"en_US",\s*vi:\s*"vi_VN",\s*zh:\s*"zh_CN"/,
+  );
   assert.match(layout, /ogAlternates\.map/);
   assert.match(layout, /locale !== ogLocale/);
   assert.doesNotMatch(layout, /currentLang === "vi" \? "vi_VN" : "en_US"/);
