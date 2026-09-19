@@ -33,7 +33,6 @@ test("x-default points to en", async ({ page }) => {
   await expect(xDefault).toHaveAttribute("href", /\/en\//);
 });
 
-
 test("root gateway respects the returning user's explicit saved language", async ({
   page,
 }) => {
