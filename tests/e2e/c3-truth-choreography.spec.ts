@@ -29,9 +29,8 @@ test.describe("C3-B truth choreography", () => {
         await item.evaluate((el) => getComputedStyle(el).borderTopStyle),
       ).toBe(style);
     }
-    expect(await page.locator("[data-truth-choreography]").innerText()).not.toMatch(
-      /score|certified|verified|%/i,
-    );
+    const labels = await page.locator("[data-truth-choreography]").innerText();
+    expect(labels).not.toMatch(/score|certified|verified|%/i);
   });
 
   test("no JavaScript and reduced motion retain state meaning", async ({
