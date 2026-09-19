@@ -14,9 +14,7 @@ test.describe("C3-B evidence peek", () => {
     await closeServer();
   });
 
-  test("native preview retains evidence, boundary and passport without JavaScript", async ({
-    browser,
-  }) => {
+  test("native proof preview works without JavaScript", async ({ browser }) => {
     const context = await browser.newContext({ javaScriptEnabled: false });
     try {
       const page = await context.newPage();
@@ -45,9 +43,7 @@ test.describe("C3-B evidence peek", () => {
     }
   });
 
-  test("keyboard and 320px mobile preserve native disclosure and 44px summary", async ({
-    page,
-  }) => {
+  test("mobile keyboard proof keeps 44px target", async ({ page }) => {
     await page.setViewportSize({ width: 320, height: 720 });
     await page.goto(`${origin}/product-acts-vi/`);
     const peek = page.locator(
