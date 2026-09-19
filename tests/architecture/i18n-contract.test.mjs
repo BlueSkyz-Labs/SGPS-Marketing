@@ -12,27 +12,32 @@ const {
   resolveInitialLanguage,
 } = await import("../../src/lib/i18n.ts");
 
-test("getLanguageFromPath defaults to en", () => {
+test("getLanguageFromPath defaults to en and resolves every locale", () => {
   assert.equal(getLanguageFromPath("/about/"), "en");
   assert.equal(getLanguageFromPath("/en/about/"), "en");
   assert.equal(getLanguageFromPath("/vi/about/"), "vi");
+  assert.equal(getLanguageFromPath("/zh/about/"), "zh");
 });
 
-test("getAlternatePath produces correct alternates", () => {
+test("getAlternatePath produces correct alternates across all locales", () => {
   assert.equal(getAlternatePath("/en/about/", "vi"), "/vi/about/");
   assert.equal(getAlternatePath("/vi/about/", "en"), "/en/about/");
-  assert.equal(getAlternatePath("/about/", "vi"), "/vi/about/");
+  assert.equal(getAlternatePath("/en/about/", "zh"), "/zh/about/");
+  assert.equal(getAlternatePath("/zh/about/", "en"), "/en/about/");
+  assert.equal(getAlternatePath("/about/", "zh"), "/zh/about/");
 });
 
 test("stripLanguagePrefix removes prefix", () => {
   assert.equal(stripLanguagePrefix("/en/about/"), "/about/");
   assert.equal(stripLanguagePrefix("/vi/about/"), "/about/");
+  assert.equal(stripLanguagePrefix("/zh/about/"), "/about/");
 });
 
 test("SUPPORTED_LANGUAGES and LANGUAGES are consistent", () => {
-  assert.deepEqual(SUPPORTED_LANGUAGES, ["en", "vi"]);
+  assert.deepEqual(SUPPORTED_LANGUAGES, ["en", "vi", "zh"]);
   assert.equal(LANGUAGES.en.hreflang, "en");
   assert.equal(LANGUAGES.vi.hreflang, "vi");
+  assert.equal(LANGUAGES.zh.hreflang, "zh-Hans");
 });
 
 test("DEC-019 registers Chinese targets without false runtime activation", () => {
