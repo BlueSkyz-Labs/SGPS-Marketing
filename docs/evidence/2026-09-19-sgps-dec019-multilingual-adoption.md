@@ -8,12 +8,10 @@
 
 ## Locale readiness — do not conflate source shipment with full SGPS verification
 
-| Locale | Source/routing state | Evidence boundary |
-| --- | --- | --- |
-| `en` | Published first-class source | Existing production locale. |
-| `vi` | Published first-class source | Existing production locale. |
-| `zh-Hans` (runtime `zh`) | **PUBLISHED SOURCE + ROUTES; FULL SGPS VERIFICATION PENDING** | PR #192 introduced `/zh/` routes, authored business-register Chinese catalogs, three-way hreflang and trilingual guards; exact-main Quality Gates/Browser Assurance were green at reconciliation start. Native linguistic/domain review of sensitive claims, complete CJK/IME and all real-user evidence is not established by this record. |
-| `zh-Hant` | ARCHITECTURE_READY | No separate published Traditional Chinese route/catalog and no permission to substitute Simplified Chinese. |
+- `en`: Published first-class source; existing production locale.
+- `vi`: Published first-class source; existing production locale.
+- `zh-Hans` (runtime `zh`): **PUBLISHED SOURCE + ROUTES; FULL SGPS VERIFICATION PENDING**. PR #192 introduced `/zh/` routes, authored business-register Chinese catalogs, three-way hreflang and trilingual guards. At reconciliation start, exact-main Quality Gates and Browser Assurance were green. Native linguistic/domain review of sensitive claims, complete CJK/IME and all real-user evidence is not established by this record.
+- `zh-Hant`: **ARCHITECTURE_READY**. No separate published Traditional Chinese route/catalog and no permission to substitute Simplified Chinese.
 
 The original 2026-09-19 snapshot said both Chinese locales were architecture-ready and all Chinese routes were blocked. That is historical pre-#192 evidence, **not** the current source state. Conversely, shipping `zh` routes does not by itself prove `CANONICAL_EQUIVALENT` translation or full first-class runtime readiness under the canonical SGPS decision.
 
