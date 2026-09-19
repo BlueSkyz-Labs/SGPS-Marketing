@@ -28,16 +28,14 @@ test.describe("C3-B evidence peek", () => {
       await expect(peek).toHaveAttribute("open", "");
       await expect(peek.locator(".c3-product-proof__item")).toHaveCount(2);
       await expect(peek.locator("[data-truth-state]")).toHaveCount(2);
-      await expect(peek.locator(".c3-product-proof__passport")).toHaveAttribute(
-        "href",
-        /\/en\/evidence\//,
+      const passport = peek.locator(".c3-product-proof__passport");
+      await expect(passport).toHaveAttribute("href", /\/en\/evidence\//);
+      const boundary = peek.locator(".c3-product-proof__boundary").first();
+      await expect(boundary).toBeVisible();
+      const missing = page.locator(
+        '[data-product-proof-capability="Fixture capability three"]',
       );
-      await expect(
-        peek.locator(".c3-product-proof__boundary").first(),
-      ).toBeVisible();
-      await expect(
-        page.locator('[data-product-proof-capability="Fixture capability three"]'),
-      ).toHaveCount(0);
+      await expect(missing).toHaveCount(0);
     } finally {
       await context.close();
     }
@@ -52,13 +50,12 @@ test.describe("C3-B evidence peek", () => {
     const summary = peek.locator("summary");
     const bounds = await summary.boundingBox();
     expect(bounds?.height ?? 0).toBeGreaterThanOrEqual(44);
-    expect(
-      await page.evaluate(
-        () =>
-          document.documentElement.scrollWidth -
-          document.documentElement.clientWidth,
-      ),
-    ).toBeLessThanOrEqual(1);
+    const overflow = await page.evaluate(
+      () =>
+        document.documentElement.scrollWidth -
+        document.documentElement.clientWidth,
+    );
+    expect(overflow).toBeLessThanOrEqual(1);
     await summary.focus();
     await page.keyboard.press("Enter");
     await expect(peek).toHaveAttribute("open", "");
