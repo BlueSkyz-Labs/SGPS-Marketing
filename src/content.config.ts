@@ -23,7 +23,7 @@ const pages = defineCollection({
     },
   }),
   schema: z.object({
-    lang: z.enum(["en", "vi"]),
+    lang: z.enum(["en", "vi", "zh"]),
     title: z.string().min(1),
     description: z.string().min(1).max(200),
     slug: z.string().min(1),
