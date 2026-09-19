@@ -115,7 +115,10 @@ test("saved theme bootstrap is blocking and read-only", () => {
     "theme bootstrap must execute before the body is parsed",
   );
   assert.match(bootstrap, /localStorage\.getItem\("blueskyz-theme"\)/);
-  assert.doesNotMatch(bootstrap, /localStorage\.setItem|fetch\(|XMLHttpRequest/);
+  assert.doesNotMatch(
+    bootstrap,
+    /localStorage\.setItem|fetch\(|XMLHttpRequest/,
+  );
   assert.match(theme, /applyTheme\(mode, false\)/);
   assert.match(theme, /if \(persist\) \{/);
 });
