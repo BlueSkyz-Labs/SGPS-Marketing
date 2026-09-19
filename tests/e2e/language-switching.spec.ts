@@ -6,7 +6,9 @@ test("language switcher navigates between en and vi", async ({ page }) => {
   await page.getByRole("link", { name: "Tiếng Việt" }).first().click();
   await expect(page).toHaveURL(/\/vi\//);
   await expect
-    .poll(() => page.evaluate(() => localStorage.getItem("blueskyz.ui.language")))
+    .poll(() =>
+      page.evaluate(() => localStorage.getItem("blueskyz.ui.language")),
+    )
     .toBe("vi");
   await expect(page.locator("html")).toHaveAttribute("lang", "vi");
 });
