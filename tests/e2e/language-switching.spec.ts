@@ -54,7 +54,9 @@ test("localized URLs stay stable instead of geo/browser redirecting", async ({
 });
 
 
-test("language choices retain the 44px touch floor on desktop and mobile", async ({ page }) => {
+test("language choices retain the 44px touch floor on desktop and mobile", async ({
+  page,
+}) => {
   for (const width of [1280, 390]) {
     await page.setViewportSize({ width, height: 900 });
     await page.goto("/en/");
