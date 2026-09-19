@@ -40,7 +40,9 @@ test.describe("C3-C trilingual parity", () => {
       // every nav surface (desktop, mobile menu, footer), so the zh current
       // entry appears once per surface — assert presence, not a global count of 1.
       expect(
-        (await page.locator(`a[hreflang="zh-Hans"][aria-current="page"]`).count()) > 0,
+        (await page
+          .locator(`a[hreflang="zh-Hans"][aria-current="page"]`)
+          .count()) > 0,
         `${route} must mark the zh switcher entry as current`,
       ).toBe(true);
     });
@@ -55,7 +57,9 @@ test.describe("C3-C trilingual parity", () => {
     ] as const) {
       await page.goto(route);
       expect(
-        (await page.locator(`a[hreflang="${hl}"][aria-current="page"]`).count()) > 0,
+        (await page
+          .locator(`a[hreflang="${hl}"][aria-current="page"]`)
+          .count()) > 0,
         `${route} must mark the ${hl} switcher entry as current`,
       ).toBe(true);
     }
