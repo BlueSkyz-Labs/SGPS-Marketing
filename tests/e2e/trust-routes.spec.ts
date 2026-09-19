@@ -9,9 +9,9 @@ const TRUST_ROUTES = [
   "/en/security/",
 ] as const;
 
-// Legacy root routes must keep working via redirect, not duplicate content.
+// Legacy non-root routes must keep working via redirect, not duplicate content.
+// "/" is the bounded DEC-019 language gateway.
 const LEGACY_REDIRECTS: Array<[string, string]> = [
-  ["/", "/en/"],
   ["/about/", "/en/about/"],
   ["/contact/", "/en/contact/"],
   ["/privacy/", "/en/privacy/"],
@@ -95,4 +95,24 @@ test("homepage omits flagship proof without verified screenshot", async ({
 }) => {
   await page.goto("/en/");
   await expect(page.locator("[data-flagship-proof]")).toHaveCount(0);
+});
+
+
+test("/ is a bounded noindex language gateway, not duplicate localized content", async ({
+  page,
+}) => {
+  const response = await page.goto("/", { waitUntil: "domcontentloaded" });
+  expect(response).not.toBeNull();
+  expect(response!.status()).toBeLessThan(400);
+  // Client resolution may navigate immediately; if the gateway document remains
+  // observable, it must expose explicit language choices. The dedicated
+  // language-switching suite verifies persisted-choice navigation end-to-end.
+  if (new URL(page.url()).pathname === "/") {
+    await expect(page.locator('meta[name="robots"]')).toHaveAttribute(
+      "content",
+      /noindex/i,
+    );
+    await expect(page.getByRole("link", { name: "Tiếng Việt" })).toBeAttached();
+    await expect(page.getByRole("link", { name: "English" })).toBeAttached();
+  }
 });
