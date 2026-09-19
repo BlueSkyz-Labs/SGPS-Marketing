@@ -20,7 +20,13 @@ const isZh = lang === "zh";
     id="trust-title"
     class="text-3xl font-semibold tracking-tight text-balance sm:text-4xl"
   >
-    {isVi ? "Tin cậy bạn có thể xác minh" : isZh ? "您可以核实的信任" : "Trust you can verify"}
+    {
+      isVi
+        ? "Tin cậy bạn có thể xác minh"
+        : isZh
+          ? "您可以核实的信任"
+          : "Trust you can verify"
+    }
   </h2>
   <p class="mt-4 max-w-2xl text-lg text-[var(--text-secondary)] text-pretty">
     {

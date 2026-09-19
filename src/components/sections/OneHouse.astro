@@ -30,7 +30,13 @@ const concepts = isVi
       id="house-title"
       class="text-3xl font-semibold tracking-tight text-balance sm:text-4xl"
     >
-      {isVi ? "Một nhà — một cách suy nghĩ" : isZh ? "一个团队 — 一种思维方式" : "One house — a way of thinking"}
+      {
+        isVi
+          ? "Một nhà — một cách suy nghĩ"
+          : isZh
+            ? "一个团队 — 一种思维方式"
+            : "One house — a way of thinking"
+      }
     </h2>
     <p class="mt-4 max-w-2xl text-lg text-[var(--text-secondary)] text-pretty">
       {

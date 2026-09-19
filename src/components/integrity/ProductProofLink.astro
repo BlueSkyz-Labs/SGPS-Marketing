@@ -43,8 +43,7 @@ const SUMMARY: Record<Language, (count: number) => string> = {
     count === 1
       ? "Xem bằng chứng công khai"
       : `Xem ${count} bằng chứng công khai`,
-  zh: (count) =>
-    count === 1 ? "查看公开证据" : `查看 ${count} 项公开证据`,
+  zh: (count) => (count === 1 ? "查看公开证据" : `查看 ${count} 项公开证据`),
 };
 
 const PASSPORT: Record<Language, string> = {

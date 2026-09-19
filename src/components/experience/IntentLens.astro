@@ -18,16 +18,31 @@ const kicker = isVi
 const intents = [
   {
     id: "evaluate-product",
-    label: isVi ? "Đánh giá sản phẩm" : isZh ? "评估产品" : "Evaluate a product",
+    label: isVi
+      ? "Đánh giá sản phẩm"
+      : isZh
+        ? "评估产品"
+        : "Evaluate a product",
   },
   {
     id: "understand-blueskyz",
-    label: isVi ? "Tìm hiểu BlueSkyz" : isZh ? "了解 BlueSkyz" : "Understand BlueSkyz",
+    label: isVi
+      ? "Tìm hiểu BlueSkyz"
+      : isZh
+        ? "了解 BlueSkyz"
+        : "Understand BlueSkyz",
   },
-  { id: "verify-trust", label: isVi ? "Kiểm chứng tin cậy" : isZh ? "核验信任" : "Verify trust" },
+  {
+    id: "verify-trust",
+    label: isVi ? "Kiểm chứng tin cậy" : isZh ? "核验信任" : "Verify trust",
+  },
   {
     id: "work-with-us",
-    label: isVi ? "Làm việc cùng chúng tôi" : isZh ? "与我们合作" : "Work with us",
+    label: isVi
+      ? "Làm việc cùng chúng tôi"
+      : isZh
+        ? "与我们合作"
+        : "Work with us",
   },
 ] as const;
 ---
