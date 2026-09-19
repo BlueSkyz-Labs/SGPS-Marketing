@@ -2,6 +2,7 @@
 import BrandLockup from "@/components/brand/BrandLockup.astro";
 import Container from "@/components/layout/Container.astro";
 import LanguageSwitcher from "@/components/layout/LanguageSwitcher.astro";
+import ThemeToggle from "@/components/layout/ThemeToggle.astro";
 import ButtonLink from "@/components/ui/ButtonLink.astro";
 import { SITE, SHARED_LABELS, labelFor, getNav } from "@/data/site";
 import { emptyRegistryPrimaryCta } from "@/lib/act";
@@ -74,6 +75,7 @@ const primaryCta = hasPublicProducts
         ))
       }
       <LanguageSwitcher />
+      <ThemeToggle lang={lang} />
       <ButtonLink href={primaryCta.href} variant="primary"
         >{primaryCta.label}</ButtonLink
       >
