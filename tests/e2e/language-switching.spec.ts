@@ -53,7 +53,6 @@ test("localized URLs stay stable instead of geo/browser redirecting", async ({
   await expect(page).toHaveURL(/\/vi\/about\/$/);
 });
 
-
 test("language choices retain the 44px touch floor on desktop and mobile", async ({
   page,
 }) => {
