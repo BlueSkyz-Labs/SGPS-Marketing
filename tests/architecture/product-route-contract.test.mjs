@@ -21,7 +21,7 @@ const PROFILE_ROUTES = LOCALES.map(
 const INDEX_ROUTES = LOCALES.map(
   (lang) => `src/pages/${lang}/products/index.astro`,
 );
-const ROOT_STUBS = ["src/pages/index.astro", "src/pages/products/index.astro"];
+const ROOT_REDIRECT_STUBS = ["src/pages/products/index.astro"];
 
 /** Public products declared by the content registry (README excluded). */
 function publicProductCount(dir = PRODUCT_ENTRIES_DIR) {
@@ -78,8 +78,8 @@ test("the profile path helper stays locale-prefixed", () => {
   }
 });
 
-test("legacy root paths stay redirect stubs, never dead ends", () => {
-  for (const stub of ROOT_STUBS) {
+test("legacy non-root paths stay redirect stubs, never dead ends", () => {
+  for (const stub of ROOT_REDIRECT_STUBS) {
     const source = readFileSync(stub, "utf8");
     assert.match(
       source,
@@ -97,6 +97,15 @@ test("legacy root paths stay redirect stubs, never dead ends", () => {
   const legacyProfile = readFileSync("src/pages/products/[slug].astro", "utf8");
   assert.match(legacyProfile, /export async function getStaticPaths\(\)/);
   assert.match(legacyProfile, /Astro\.redirect\("\/en\/products\/"\)/);
+});
+
+test("root is the bounded DEC-019 language gateway, not a locale content duplicate", () => {
+  const root = readFileSync("src/pages/index.astro", "utf8");
+  assert.doesNotMatch(root, /Astro\.redirect\(/);
+  assert.match(root, /resolveInitialLanguage/);
+  assert.match(root, /LANGUAGE_STORAGE_KEY/);
+  assert.match(root, /window\.location\.replace/);
+  assert.match(root, /noindex, follow/);
 });
 
 test("public products without locale profile routes are caught (non-vacuity)", () => {

@@ -19,7 +19,7 @@ const rules = source
 
 test("the redirect table is non-empty and all destinations are localized", () => {
   assert.ok(
-    rules.length >= 8,
+    rules.length >= 7,
     `expected the legacy table, found ${rules.length}`,
   );
   for (const rule of rules) {
@@ -35,7 +35,6 @@ test("the redirect table is non-empty and all destinations are localized", () =>
     );
   }
 });
-
 test("no redirect destination is itself a redirect source (no chains)", () => {
   const sources = new Set(rules.map((rule) => rule.from));
   const chains = rules.filter((rule) => sources.has(rule.to));
@@ -46,9 +45,12 @@ test("no redirect destination is itself a redirect source (no chains)", () => {
   );
 });
 
-test("every legacy root route has a rule", () => {
+test("every legacy non-root route has a rule while / remains the language gateway", () => {
+  assert.ok(
+    !rules.some((rule) => rule.from === "/"),
+    "root must not bypass the DEC-019 language gateway",
+  );
   for (const from of [
-    "/",
     "/about/",
     "/contact/",
     "/privacy/",

@@ -35,6 +35,7 @@ const currentLang = getLanguageFromPath(currentPath);
       return (
         <a
           href={getAlternatePath(currentPath, lang)}
+          data-language-choice={lang}
           hreflang={LANGUAGES[lang].hreflang}
           aria-current={isActive ? "page" : undefined}
           style={languageTransitionStyle(lang)}
@@ -49,3 +50,20 @@ const currentLang = getLanguageFromPath(currentPath);
     })
   }
 </div>
+
+<script>
+  import { LANGUAGE_STORAGE_KEY, isActiveLanguage } from "@/lib/i18n";
+
+  document.addEventListener("click", (event) => {
+    const target = event.target;
+    if (!(target instanceof Element)) return;
+    const link = target.closest<HTMLAnchorElement>("[data-language-choice]");
+    const language = link?.dataset.languageChoice;
+    if (!isActiveLanguage(language)) return;
+    try {
+      window.localStorage.setItem(LANGUAGE_STORAGE_KEY, language);
+    } catch {
+      // Preference persistence is best-effort; navigation remains functional.
+    }
+  });
+</script>

@@ -1,6 +1,47 @@
 ---
-// Legacy/root path kept as a redirect stub so old links never 404 the visitor.
-// The locale-prefixed routes (/en/..., /vi/...) are the canonical ones: see
-// docs/decisions/0006-domain-migration-and-product-subdomains.md.
-return Astro.redirect("/en/");
+const title = "BlueSkyz Labs";
 ---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="robots" content="noindex, follow" />
+    <title>{title}</title>
+  </head>
+  <body>
+    <main>
+      <p>Choose your language / Chọn ngôn ngữ</p>
+      <nav aria-label="Language">
+        <a href="/vi/" data-language-choice="vi">Tiếng Việt</a>
+        <a href="/en/" data-language-choice="en">English</a>
+      </nav>
+      <noscript>
+        <p><a href="/en/">Continue in English</a></p>
+      </noscript>
+    </main>
+    <script>
+      import { LANGUAGE_STORAGE_KEY, resolveInitialLanguage } from "@/lib/i18n";
+
+      let stored: string | null = null;
+      try {
+        stored = window.localStorage.getItem(LANGUAGE_STORAGE_KEY);
+      } catch {
+        // First visit can still resolve from browser preference.
+      }
+
+      const browserLanguages = navigator.languages?.length
+        ? navigator.languages
+        : [navigator.language];
+      const countryHint = document.documentElement.dataset.country ?? null;
+      const language = resolveInitialLanguage(
+        stored,
+        browserLanguages,
+        countryHint,
+      );
+
+      window.location.replace(`/${language}/`);
+    </script>
+  </body>
+</html>

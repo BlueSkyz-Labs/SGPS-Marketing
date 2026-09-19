@@ -7,6 +7,9 @@ const {
   stripLanguagePrefix,
   SUPPORTED_LANGUAGES,
   LANGUAGES,
+  PORTFOLIO_LANGUAGE_TARGETS,
+  LANGUAGE_READINESS,
+  resolveInitialLanguage,
 } = await import("../../src/lib/i18n.ts");
 
 test("getLanguageFromPath defaults to en", () => {
@@ -30,4 +33,32 @@ test("SUPPORTED_LANGUAGES and LANGUAGES are consistent", () => {
   assert.deepEqual(SUPPORTED_LANGUAGES, ["en", "vi"]);
   assert.equal(LANGUAGES.en.hreflang, "en");
   assert.equal(LANGUAGES.vi.hreflang, "vi");
+});
+
+test("DEC-019 registers Chinese targets without false runtime activation", () => {
+  assert.deepEqual(PORTFOLIO_LANGUAGE_TARGETS, [
+    "en",
+    "vi",
+    "zh-Hans",
+    "zh-Hant",
+  ]);
+  assert.equal(LANGUAGE_READINESS["zh-Hans"], "ARCHITECTURE_READY");
+  assert.equal(LANGUAGE_READINESS["zh-Hant"], "ARCHITECTURE_READY");
+  assert.deepEqual(SUPPORTED_LANGUAGES, ["en", "vi"]);
+});
+
+test("explicit saved choice outranks browser and country hints", () => {
+  assert.equal(resolveInitialLanguage("en", ["vi-VN"], "VN"), "en");
+  assert.equal(resolveInitialLanguage("vi", ["en-US"], "US"), "vi");
+});
+
+test("supported browser preference outranks coarse country hint", () => {
+  assert.equal(resolveInitialLanguage(null, ["en-US"], "VN"), "en");
+  assert.equal(resolveInitialLanguage(null, ["vi-VN"], "US"), "vi");
+});
+
+test("coarse country hint fills only the unresolved first-visit gap", () => {
+  assert.equal(resolveInitialLanguage(null, ["fr-FR"], "VN"), "vi");
+  assert.equal(resolveInitialLanguage(null, ["fr-FR"], "FR"), "en");
+  assert.equal(resolveInitialLanguage(null, ["zh-Hant-TW"]), "en");
 });
