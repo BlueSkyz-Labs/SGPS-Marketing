@@ -40,16 +40,19 @@ test("SUPPORTED_LANGUAGES and LANGUAGES are consistent", () => {
   assert.equal(LANGUAGES.zh.hreflang, "zh-Hans");
 });
 
-test("DEC-019 registers Chinese targets without false runtime activation", () => {
+test("DEC-019 + C3-C W1: simplified Chinese is activated first-class; zh-Hant stays unactivated", () => {
+  // ADR 0009 / C3-C W1 (approved) activates the runtime `zh` locale, so the
+  // zh-Hans target is FIRST_CLASS. The fall-back zh-Hant target must remain
+  // ARCHITECTURE_READY — no false runtime activation.
   assert.deepEqual(PORTFOLIO_LANGUAGE_TARGETS, [
     "en",
     "vi",
     "zh-Hans",
     "zh-Hant",
   ]);
-  assert.equal(LANGUAGE_READINESS["zh-Hans"], "ARCHITECTURE_READY");
+  assert.equal(LANGUAGE_READINESS["zh-Hans"], "FIRST_CLASS");
   assert.equal(LANGUAGE_READINESS["zh-Hant"], "ARCHITECTURE_READY");
-  assert.deepEqual(SUPPORTED_LANGUAGES, ["en", "vi"]);
+  assert.deepEqual(SUPPORTED_LANGUAGES, ["en", "vi", "zh"]);
 });
 
 test("explicit saved choice outranks browser and country hints", () => {
