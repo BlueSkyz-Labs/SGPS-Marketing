@@ -52,7 +52,7 @@ The C2 program adds source contracts that must stay green independently of the b
 
 - `c2-home-composition.test.mjs` — the six-act homepage order, demotion (not deletion) of the power-user surfaces, and the product act's honest fallback.
 - `c2-truth-boundary.test.mjs` / `c2-performance-contract.test.mjs` — the cinematic layer may consume truth but never define it; no runtime framework or WebGL library may enter C2 surfaces; the client-JS ceiling stays pinned at `CLIENT_JS_HARD_BUDGET_BYTES` (only an Owner decision may raise it).
-- `product-route-contract.test.mjs` — the moment a product is public, the locale profile routes must exist and render a real profile (a redirect stub is rejected); legacy root paths must stay redirect stubs without dead templates.
+- `product-route-contract.test.mjs` — the moment a product is public, the locale profile routes must exist and render a real profile (a redirect stub is rejected); legacy non-root paths must stay redirect stubs without dead templates; `/` is the bounded noindex DEC-019 language gateway and must not become duplicate localized content.
 
 The workflow is intentionally secretless and read-only (`contents: read`), checks out the exact PR head or `main` push SHA with `persist-credentials: false`, and pins external actions to full commit SHAs. It is a source-control assurance layer, not a deployment pipeline. The machine-readable security surface (`/.well-known/security.txt`, `_headers` CSP set) is guarded by `tests/architecture/security-surface.test.mjs` and read back at deploy time by `scripts/smoke-production.mjs`.
 
