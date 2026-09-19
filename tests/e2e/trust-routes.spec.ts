@@ -97,7 +97,6 @@ test("homepage omits flagship proof without verified screenshot", async ({
   await expect(page.locator("[data-flagship-proof]")).toHaveCount(0);
 });
 
-
 test("/ is a bounded noindex language gateway, not duplicate localized content", async ({
   page,
 }) => {
