@@ -23,7 +23,9 @@ test.describe("C3-B truth choreography", () => {
       const item = page.locator(`[data-truth-state="${state}"]`);
       await expect(item).toBeVisible();
       await expect(item.locator(".truth-state__label")).not.toBeEmpty();
-      const border = await item.evaluate((el) => getComputedStyle(el).borderTopStyle);
+      const border = await item.evaluate(
+        (el) => getComputedStyle(el).borderTopStyle,
+      );
       expect(border).toBe(style);
     }
     const labels = await page.locator("[data-truth-choreography]").innerText();
