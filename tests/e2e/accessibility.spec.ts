@@ -1,8 +1,8 @@
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test } from "@playwright/test";
 
-// Canonical EN + VI routes (legacy root routes now 301/refresh to /en/*;
-// their redirect contract is asserted in trust-routes.spec.ts).
+// Canonical EN + VI routes. Legacy non-root routes redirect to /en/*; `/` is
+// the noindex DEC-019 language gateway. Those contracts live in trust-routes.
 const ROUTES = [
   "/en/",
   "/en/products/",
