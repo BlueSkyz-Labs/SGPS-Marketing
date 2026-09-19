@@ -15,8 +15,8 @@
  * is a native <details>, so it is keyboard-operable and complete without
  * JavaScript; no client script is loaded for it.
  */
-import TruthState from "@/components/integrity/TruthState.astro";
-import { labelFor, type Language } from "@/data/site";
+import EvidencePeek from "@/components/integrity/EvidencePeek.astro";
+import type { Language } from "@/data/site";
 import type { PublicProductRef, ResolvedClaim } from "@/lib/claims";
 import { getProductProofLinks } from "@/lib/product-proof";
 
@@ -36,66 +36,6 @@ const { slug, capability, products, claims, lang } = Astro.props;
 
 const links = getProductProofLinks(slug, capability, products, claims);
 
-const SUMMARY: Record<Language, (count: number) => string> = {
-  en: (count) =>
-    count === 1 ? "See the public proof" : `See ${count} public proof items`,
-  vi: (count) =>
-    count === 1
-      ? "Xem bằng chứng công khai"
-      : `Xem ${count} bằng chứng công khai`,
-  zh: (count) => (count === 1 ? "查看公开证据" : `查看 ${count} 项公开证据`),
-};
-
-const PASSPORT: Record<Language, string> = {
-  en: "Open the evidence passport",
-  vi: "Mở hồ sơ bằng chứng",
-  zh: "打开证据档案",
-};
-
-const isExternal = (href: string): boolean => /^https?:\/\//i.test(href);
 ---
 
-{
-  links.length > 0 ? (
-    <details
-      class="c3-product-proof"
-      data-product-proof={slug}
-      data-product-proof-capability={capability}
-    >
-      <summary class="c3-product-proof__summary">
-        {SUMMARY[lang](links.length)}
-      </summary>
-      <ul class="c3-product-proof__list">
-        {links.map((link) => {
-          const href = link.href[lang];
-          return (
-            <li class="c3-product-proof__item">
-              <a
-                class="c3-product-proof__link"
-                href={href}
-                rel={isExternal(href) ? "noreferrer" : undefined}
-                target={isExternal(href) ? "_blank" : undefined}
-              >
-                {labelFor(link.label, lang)}
-              </a>
-              <TruthState state={link.truthState} lang={lang} />
-              {link.boundary ? (
-                <p class="c3-product-proof__boundary">
-                  {labelFor(link.boundary.doesNotImply, lang)}
-                </p>
-              ) : null}
-            </li>
-          );
-        })}
-      </ul>
-      {links[0] ? (
-        <a
-          class="c3-product-proof__passport"
-          href={links[0].passportHref[lang]}
-        >
-          {PASSPORT[lang]}
-        </a>
-      ) : null}
-    </details>
-  ) : null
-}
+<EvidencePeek links={links} slug={slug} capability={capability} lang={lang} />
