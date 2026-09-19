@@ -34,8 +34,9 @@ const title = "BlueSkyz Labs";
         // First visit can still resolve from browser preference.
       }
 
-      const browserLanguages =
-        navigator.languages?.length ? navigator.languages : [navigator.language];
+      const browserLanguages = navigator.languages?.length
+        ? navigator.languages
+        : [navigator.language];
       const countryHint = document.documentElement.dataset.country ?? null;
       const language = resolveInitialLanguage(
         stored,
