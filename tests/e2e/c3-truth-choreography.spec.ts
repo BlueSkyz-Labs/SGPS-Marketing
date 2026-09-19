@@ -23,16 +23,14 @@ test.describe("C3-B truth choreography", () => {
       const item = page.locator(`[data-truth-state="${state}"]`);
       await expect(item).toBeVisible();
       await expect(item.locator(".truth-state__label")).not.toBeEmpty();
-      const border = await item.evaluate(
-        (el) => getComputedStyle(el).borderTopStyle,
-      );
+      const border = await item.evaluate((el) => getComputedStyle(el).borderTopStyle);
       expect(border).toBe(style);
     }
     const labels = await page.locator("[data-truth-choreography]").innerText();
     expect(labels).not.toMatch(/score|certified|verified|%/i);
   });
 
-  test("no-JS and reduced motion preserve meaning", async ({ browser, page }) => {
+  test("no-JS and motion-safe states", async ({ browser, page }) => {
     const context = await browser.newContext({
       javaScriptEnabled: false,
       reducedMotion: "reduce",
@@ -41,9 +39,8 @@ test.describe("C3-B truth choreography", () => {
       const noJs = await context.newPage();
       await noJs.goto(`${origin}/truth-choreography/`);
       await expect(noJs.locator("[data-truth-state]")).toHaveCount(5);
-      await expect(
-        noJs.locator('[data-truth-state="not-published"]'),
-      ).toHaveAccessibleName("Not published");
+      const unpublished = noJs.locator('[data-truth-state="not-published"]');
+      await expect(unpublished).toHaveAccessibleName("Not published");
       const changed = noJs.locator('[data-truth-state="changed"]');
       const result = await changed.evaluate((el) => ({
         animation: getComputedStyle(el).animationName,
