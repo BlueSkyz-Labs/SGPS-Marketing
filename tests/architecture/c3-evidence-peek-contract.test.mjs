@@ -2,13 +2,16 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 
-const peek = readFileSync("src/components/integrity/EvidencePeek.astro", "utf8");
+const peek = readFileSync(
+  "src/components/integrity/EvidencePeek.astro",
+  "utf8",
+);
 const proof = readFileSync(
   "src/components/integrity/ProductProofLink.astro",
   "utf8",
 );
 
-test("Evidence Peek consumes canonical, capability-scoped proof; never owns truth", () => {
+test("Evidence Peek uses canonical capability proof", () => {
   assert.match(
     proof,
     /getProductProofLinks\(slug, capability, products, claims\)/,
@@ -35,7 +38,7 @@ test("Evidence Peek consumes canonical, capability-scoped proof; never owns trut
   }
 });
 
-test("Evidence Peek preserves stable public affordance selectors and explicit state", () => {
+test("Evidence Peek preserves public DOM and truth state", () => {
   for (const snippet of [
     "data-product-proof={slug}",
     "data-product-proof-capability={capability}",
