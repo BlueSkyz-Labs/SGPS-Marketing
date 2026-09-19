@@ -36,10 +36,13 @@ test.describe("C3-C trilingual parity", () => {
           nodes.some((n) => /[\u4e00-\u9fff]/.test(n.textContent ?? "")),
         );
       expect(cjk, `${route} must carry Chinese headings`).toBe(true);
-      // The active language switcher entry is zh.
-      await expect(
-        page.locator(`a[hreflang="zh-Hans"][aria-current="page"]`),
-      ).toHaveCount(1);
+      // The active language switcher entry is zh. The switcher is rendered on
+      // every nav surface (desktop, mobile menu, footer), so the zh current
+      // entry appears once per surface — assert presence, not a global count of 1.
+      expect(
+        (await page.locator(`a[hreflang="zh-Hans"][aria-current="page"]`).count()) > 0,
+        `${route} must mark the zh switcher entry as current`,
+      ).toBe(true);
     });
   }
 
@@ -51,9 +54,10 @@ test.describe("C3-C trilingual parity", () => {
       ["/vi/", "vi"],
     ] as const) {
       await page.goto(route);
-      await expect(
-        page.locator(`a[hreflang="${hl}"][aria-current="page"]`),
-      ).toHaveCount(1);
+      expect(
+        (await page.locator(`a[hreflang="${hl}"][aria-current="page"]`).count()) > 0,
+        `${route} must mark the ${hl} switcher entry as current`,
+      ).toBe(true);
     }
   });
 });
