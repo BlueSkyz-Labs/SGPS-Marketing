@@ -22,5 +22,5 @@ test("visual distinctions are non-color-only, reduced-motion-safe and forced-col
   assert.match(grammar, /@media\s*\(prefers-reduced-motion:\s*reduce\)/);
   assert.match(grammar, /@media\s*\(forced-colors:\s*active\)/);
   assert.match(grammar, /border-color:\s*CanvasText/);
-  assert.doesNotMatch(grammar, /@keyframes|infinite|animation:\s*[^n]/);
+  assert.doesNotMatch(grammar, /@keyframes|infinite|animation:\s*(?!none\b)[a-z-]+/);
 });
