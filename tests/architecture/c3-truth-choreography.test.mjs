@@ -15,7 +15,7 @@ test("choreography uses existing text-bearing truth states", () => {
   assert.match(truth, /truth-state__label/);
   assert.match(truth, /aria-hidden="true"/);
   const grammar = css.slice(css.indexOf("C3-B Task 4"));
-  const forbidden = /trust-score|maturity-score|confidence|certified|verified-badge/i;
+  const forbidden = /trust-score|maturity-score|confidence|certified|badge/i;
   assert.doesNotMatch(grammar, forbidden);
 });
 
