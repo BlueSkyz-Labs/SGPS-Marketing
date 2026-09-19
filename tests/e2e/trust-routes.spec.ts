@@ -97,21 +97,17 @@ test("homepage omits flagship proof without verified screenshot", async ({
   await expect(page.locator("[data-flagship-proof]")).toHaveCount(0);
 });
 
-test("/ is a bounded noindex language gateway, not duplicate localized content", async ({
+test("/ resolves through the bounded language gateway instead of duplicating localized content", async ({
   page,
 }) => {
   const response = await page.goto("/", { waitUntil: "domcontentloaded" });
   expect(response).not.toBeNull();
   expect(response!.status()).toBeLessThan(400);
-  // Client resolution may navigate immediately; if the gateway document remains
-  // observable, it must expose explicit language choices. The dedicated
-  // language-switching suite verifies persisted-choice navigation end-to-end.
-  if (new URL(page.url()).pathname === "/") {
-    await expect(page.locator('meta[name="robots"]')).toHaveAttribute(
-      "content",
-      /noindex/i,
-    );
-    await expect(page.getByRole("link", { name: "Tiếng Việt" })).toBeAttached();
-    await expect(page.getByRole("link", { name: "English" })).toBeAttached();
-  }
+
+  // The gateway intentionally resolves on the client immediately. Assert the
+  // stable post-resolution contract instead of racing the transient root DOM:
+  // an explicit localized URL wins and the browser never remains on duplicate
+  // unprefixed content.
+  await expect(page).toHaveURL(/\/(en|vi)\/$/);
+  await expect(page.locator("html")).toHaveAttribute("lang", /^(en|vi)$/);
 });
