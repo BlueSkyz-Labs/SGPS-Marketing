@@ -1,0 +1,90 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Container from "@/components/layout/Container.astro";
+import PageHeader from "@/components/layout/PageHeader.astro";
+import BoundaryCard from "@/components/integrity/BoundaryCard.astro";
+import { PRIVACY_BOUNDARY } from "@/data/integrity";
+import { SITE } from "@/data/site";
+
+const hasBusinessEmail = Boolean(SITE.contactEmail);
+---
+
+<BaseLayout
+  title="隐私"
+  description="How BlueSkyz Labs handles data on this site: no cookies, no client storage, no tracking or profiling — with the commitments you can verify."
+  path="/zh/privacy/"
+  surface="privacy"
+>
+  <section class="py-16 lg:py-24">
+    <Container>
+      <PageHeader
+        eyebrow="隐私"
+        title="清晰的数据边界"
+        lede="本企业站点为静态营销内容。完整的法律隐私文案将在 BlueSkyz 批准后发布。"
+      />
+      <dl class="mt-12 max-w-2xl space-y-8">
+        <div
+          class="rounded-xl border border-[var(--border-subtle)] bg-white p-6"
+        >
+          <dt class="text-sm font-semibold tracking-tight">收集内容</dt>
+          <dd class="mt-2 text-sm leading-relaxed text-[var(--text-secondary)]">
+            本站基本浏览无需账户、表单或跟踪 Cookie。标准 Web 服务器与 CDN
+            请求日志可能记录技术连接数据，例如 IP 地址、用户代理与请求 URL。
+          </dd>
+        </div>
+        <div
+          class="rounded-xl border border-[var(--border-subtle)] bg-white p-6"
+        >
+          <dt class="text-sm font-semibold tracking-tight">原因</dt>
+          <dd class="mt-2 text-sm leading-relaxed text-[var(--text-secondary)]">
+            请求日志用于安全、滥用防护与静态资源的可靠交付 — 而非广告画像。
+          </dd>
+        </div>
+        <div
+          class="rounded-xl border border-[var(--border-subtle)] bg-white p-6"
+        >
+          <dt class="text-sm font-semibold tracking-tight">使用方式</dt>
+          <dd class="mt-2 text-sm leading-relaxed text-[var(--text-secondary)]">
+            日志由托管平台运营方用于运维目的。本基础架构不加载任何第三方广告像素或会话录制脚本。
+          </dd>
+        </div>
+        <div
+          class="rounded-xl border border-[var(--border-subtle)] bg-white p-6"
+        >
+          <dt class="text-sm font-semibold tracking-tight">删除与产品隐私</dt>
+          <dd class="mt-2 text-sm leading-relaxed text-[var(--text-secondary)]">
+            本企业站点没有可供导出或删除的客户账户。产品相关的隐私实践将在该产品发布后于对应页面说明。
+          </dd>
+        </div>
+      </dl>
+      <div class="mt-12 max-w-2xl">
+        <BoundaryCard boundary={PRIVACY_BOUNDARY} lang="zh" />
+      </div>
+      <div class="mt-12 flex flex-wrap gap-3">
+        <a
+          href="/en/security/"
+          class="inline-flex min-h-11 items-center rounded-lg border border-[var(--border-subtle)] bg-white px-5 text-sm font-semibold text-[var(--text-primary)] no-underline transition-colors hover:border-[var(--action-primary)]"
+        >
+          安全报告
+        </a>
+        {
+          hasBusinessEmail ? (
+            <a
+              href="/en/contact/"
+              class="inline-flex min-h-11 items-center rounded-lg border border-[var(--border-subtle)] bg-white px-5 text-sm font-semibold text-[var(--text-primary)] no-underline transition-colors hover:border-[var(--action-primary)]"
+            >
+              联系 BlueSkyz
+            </a>
+          ) : (
+            <a
+              href="/en/about/"
+              class="inline-flex min-h-11 items-center rounded-lg border border-[var(--border-subtle)] bg-white px-5 text-sm font-semibold text-[var(--text-primary)] no-underline transition-colors hover:border-[var(--action-primary)]"
+            >
+              关于 BlueSkyz
+            </a>
+          )
+        }
+      </div>
+    </Container>
+  </section>
+</BaseLayout>

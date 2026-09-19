@@ -7,7 +7,11 @@ import { BRAND_PRINCIPLES, type Language as LocaleLanguage } from "@/data/site";
  * is typed with that canonical set so the third locale is authored, never
  * inherited from another locale.
  */
-export type Language = "en" | "vi";
+import type { Language as SiteLanguage } from "./site.ts";
+
+/** Canonical locale set (en|vi|zh). Maps below are typed with it; Atlas and
+ * friends consume this same type so a zh surface compiles. */
+export type Language = SiteLanguage;
 
 /** Authored copy for every shipped locale (en / vi / zh). */
 type LocalizedText = Record<LocaleLanguage, string>;

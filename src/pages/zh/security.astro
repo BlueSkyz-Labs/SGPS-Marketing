@@ -1,0 +1,58 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Container from "@/components/layout/Container.astro";
+import PageHeader from "@/components/layout/PageHeader.astro";
+import SafeAction from "@/components/integrity/SafeAction.astro";
+import BoundaryCard from "@/components/integrity/BoundaryCard.astro";
+import BilingualMirror from "@/components/integrity/BilingualMirror.astro";
+import { SECURITY_BOUNDARY } from "@/data/integrity";
+import { SITE, SECURITY_ADVISORY_URL } from "@/data/site";
+---
+
+<BaseLayout
+  title="安全"
+  description="通过 GitHub Security Advisories 私下向 BlueSkyz Labs 报告漏洞，并附上您可自行核验的已发布证据与边界说明。"
+  path="/zh/security/"
+  surface="security"
+>
+  <section class="py-16 lg:py-24">
+    <Container>
+      <PageHeader
+        eyebrow="安全"
+        title="私密、负责任地报告"
+        lede="请通过私有渠道报告安全问题。请勿就漏洞报告在 GitHub 上公开开 issue。"
+      />
+      {
+        SITE.securityEmail ? (
+          <p class="mt-8 max-w-2xl text-[var(--text-secondary)]">
+            Email{" "}
+            <a
+              href={`mailto:${SITE.securityEmail}`}
+              class="inline-flex min-h-11 items-center font-semibold text-[var(--action-primary)] no-underline hover:underline"
+            >
+              {SITE.securityEmail}
+            </a>
+            .
+          </p>
+        ) : null
+      }
+      <div class="mt-10">
+        <SafeAction
+          href={SECURITY_ADVISORY_URL}
+          label="打开私有漏洞报告"
+          boundary="private-reporting"
+          lang="zh"
+        />
+      </div>
+      <div class="mt-10 max-w-2xl">
+        <BoundaryCard boundary={SECURITY_BOUNDARY} lang="zh" />
+      </div>
+      <p class="mt-6 max-w-2xl text-sm text-[var(--text-muted)]">
+        未经核验证据，不会发布任何漏洞赏金、服务等级协议或认证徽章。
+      </p>
+      <div class="mt-12 max-w-3xl">
+        <BilingualMirror lang="zh" />
+      </div>
+    </Container>
+  </section>
+</BaseLayout>

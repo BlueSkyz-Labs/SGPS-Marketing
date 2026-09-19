@@ -1,8 +1,7 @@
 ---
 import { TRUST_LEDGER, type TrustState } from "@/data/trust-ledger";
 import EvidenceDetails from "@/components/integrity/EvidenceDetails.astro";
-
-type Language = "en" | "vi";
+import type { Language } from "@/data/site";
 
 interface Props {
   lang?: Language;
@@ -11,8 +10,12 @@ interface Props {
 const { lang = "en" } = Astro.props;
 
 const STATUS_LABELS: Record<TrustState, Record<Language, string>> = {
-  available: { en: "Available", vi: "Có sẵn" },
-  "not-published": { en: "Not published yet", vi: "Chưa công bố" },
+  available: { en: "Available", vi: "Có sẵn", zh: "可用" },
+  "not-published": {
+    en: "Not published yet",
+    vi: "Chưa công bố",
+    zh: "尚未公布",
+  },
 };
 
 const STATUS_CLASSES: Record<TrustState, string> = {
@@ -22,11 +25,16 @@ const STATUS_CLASSES: Record<TrustState, string> = {
     "border-[var(--border-subtle)] bg-[var(--surface-subtle)] text-[var(--text-muted)]",
 };
 
-const OPEN_LABEL: Record<Language, string> = { en: "Open", vi: "Mở" };
+const OPEN_LABEL: Record<Language, string> = {
+  en: "Open",
+  vi: "Mở",
+  zh: "打开",
+};
 
 const COMPARE_LABEL: Record<Language, string> = {
   en: "Compare in the Decision Room",
   vi: "So sánh trong Phòng Quyết định",
+  zh: "在决策室中比较",
 };
 ---
 
