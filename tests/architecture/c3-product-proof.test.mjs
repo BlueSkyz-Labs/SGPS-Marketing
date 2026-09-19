@@ -73,12 +73,14 @@ test("resolvable proof requires explicit capability binding", async () => {
   assert.deepEqual(link.href, {
     en: "/en/products/",
     vi: "/vi/products/",
+    zh: "/zh/products/",
   });
   assert.equal(link.truthState, "source-linked");
   assert.equal(link.boundary?.id, "bnd-privacy-collection");
   assert.deepEqual(link.passportHref, {
     en: "/en/evidence/fixture-capability-proof/",
     vi: "/vi/evidence/fixture-capability-proof/",
+    zh: "/zh/evidence/fixture-capability-proof/",
   });
 });
 
