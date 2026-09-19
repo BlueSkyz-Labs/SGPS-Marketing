@@ -13,7 +13,7 @@ test("Evidence Peek consumes canonical, capability-scoped proof; never owns trut
   assert.match(peek, /<details/);
   assert.match(peek, /<TruthState state=\{link\.truthState\}/);
   assert.match(peek, /link\.boundary/);
-  assert.match(peek, /link\.passportHref\[lang\]/);
+  assert.match(peek, /links\[0\]\.passportHref\[lang\]/);
   for (const source of [peek, proof]) {
     assert.doesNotMatch(source, /\b(fetch|sendBeacon|XMLHttpRequest)\s*\(|localStorage|sessionStorage|<script\b/);
     assert.doesNotMatch(source, /\b(export\s+)?const\s+(CLAIMS|EVIDENCE|PRODUCTS|RELEASES)\b/);
