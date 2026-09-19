@@ -31,22 +31,24 @@ export function storedTheme(): ThemeMode | null {
 }
 
 /** Apply a mode to the document and persist it. System removes the attribute. */
-export function applyTheme(mode: ThemeMode): void {
+export function applyTheme(mode: ThemeMode, persist = true): void {
   if (typeof document === "undefined") return;
   const root = document.documentElement;
   if (mode === "dark") root.setAttribute("data-theme", "dark");
   else if (mode === "light") root.setAttribute("data-theme", "light");
   else root.removeAttribute("data-theme");
-  try {
-    localStorage.setItem(STORAGE_KEY, mode);
-  } catch {
-    /* storage unavailable (private mode): the session still applies */
+  if (persist) {
+    try {
+      localStorage.setItem(STORAGE_KEY, mode);
+    } catch {
+      /* storage unavailable (private mode): the session still applies */
+    }
   }
 }
 
 /** Resolve the initial mode from storage (default System) and apply it. */
 export function initTheme(): ThemeMode {
   const mode = storedTheme() ?? "system";
-  applyTheme(mode);
+  applyTheme(mode, false);
   return mode;
 }
