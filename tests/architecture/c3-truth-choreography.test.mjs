@@ -7,12 +7,18 @@ const truth = readFileSync("src/components/integrity/TruthState.astro", "utf8");
 
 test("choreography is limited to canonical text-bearing truth states", () => {
   for (const state of ["changed", "not-published", "unavailable"]) {
-    assert.ok(css.includes(`data-truth-state="${state}"`), `missing patterned state: ${state}`);
+    assert.ok(
+      css.includes(`data-truth-state="${state}"`),
+      `missing patterned state: ${state}`,
+    );
   }
   assert.match(truth, /data-truth-state=\{state\}/);
   assert.match(truth, /truth-state__label/);
   assert.match(truth, /aria-hidden="true"/);
-  assert.doesNotMatch(css.slice(css.indexOf("C3-B Task 4")), /trust-score|maturity-score|confidence|certified|verified-badge/i);
+  assert.doesNotMatch(
+    css.slice(css.indexOf("C3-B Task 4")),
+    /trust-score|maturity-score|confidence|certified|verified-badge/i,
+  );
 });
 
 test("visual distinctions are non-color-only, reduced-motion-safe and forced-colors-safe", () => {
