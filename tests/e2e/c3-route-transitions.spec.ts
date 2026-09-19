@@ -13,7 +13,7 @@ import { expect, test, type Page } from "@playwright/test";
  *     the transition can never be a precondition for reaching a page.
  */
 const NAME =
-  /^(?:root|product-(?:card|media)-[a-z0-9]+(?:-[a-z0-9]+)*|language-(?:en|vi))$/;
+  /^(?:root|product-(?:card|media)-[a-z0-9]+(?:-[a-z0-9]+)*|language-(?:en|vi|zh))$/;
 
 const ROUTES = ["/en/", "/vi/", "/en/products/", "/vi/products/", "/en/about/"];
 
