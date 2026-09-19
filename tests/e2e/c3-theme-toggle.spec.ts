@@ -46,3 +46,42 @@ test("mobile theme controls meet the 44px touch floor", async ({ page }) => {
   await theme.getByRole("button", { name: "Tối" }).click();
   await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
 });
+
+
+test("explicit Light overrides OS-dark, System restores it without tracking", async ({ browser }) => {
+  const context = await browser.newContext({ colorScheme: "dark", viewport: { width: 1280, height: 900 } });
+  try {
+    const page = await context.newPage();
+    await page.goto("/en/");
+    const theme = page.getByRole("group", { name: "Theme" });
+    await expect(page.locator("html")).not.toHaveAttribute("data-theme", /light|dark/);
+    expect(await page.evaluate(() => getComputedStyle(document.documentElement).colorScheme)).toBe("dark");
+    expect(await page.evaluate(() => localStorage.getItem("blueskyz-theme"))).toBeNull();
+
+    await theme.getByRole("button", { name: "Light" }).click();
+    await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
+    expect(await page.evaluate(() => getComputedStyle(document.documentElement).colorScheme)).toBe("light");
+    await page.goto("/en/about/");
+    await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
+    expect(await page.evaluate(() => localStorage.getItem("blueskyz-theme"))).toBe("light");
+
+    await page.getByRole("group", { name: "Theme" }).getByRole("button", { name: "System" }).click();
+    await expect(page.locator("html")).not.toHaveAttribute("data-theme", /light|dark/);
+    expect(await page.evaluate(() => getComputedStyle(document.documentElement).colorScheme)).toBe("dark");
+    expect(await page.evaluate(() => localStorage.getItem("blueskyz-theme"))).toBe("system");
+  } finally {
+    await context.close();
+  }
+});
+
+test("without JavaScript System still follows OS preference", async ({ browser }) => {
+  const context = await browser.newContext({ colorScheme: "dark", javaScriptEnabled: false });
+  try {
+    const page = await context.newPage();
+    await page.goto("/en/");
+    expect(await page.evaluate(() => getComputedStyle(document.documentElement).colorScheme)).toBe("dark");
+    await expect(page.getByRole("link", { name: "Tiếng Việt" }).first()).toBeAttached();
+  } finally {
+    await context.close();
+  }
+});
