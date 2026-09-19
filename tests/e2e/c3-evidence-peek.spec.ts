@@ -12,7 +12,7 @@ test.describe("C3-B evidence peek", () => {
   });
   test.afterAll(async () => closeServer());
 
-  test("native preview retains evidence, boundary and passport without JavaScript", async ({ browser }) => {
+        await expect(peek.locator(".c3-product-proof__passport")).toHaveAttribute("href", /\/en\/evidence\//);
     const context = await browser.newContext({ javaScriptEnabled: false });
     try {
       const page = await context.newPage();
