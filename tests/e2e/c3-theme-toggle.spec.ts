@@ -47,7 +47,6 @@ test("mobile theme controls meet the 44px touch floor", async ({ page }) => {
   await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
 });
 
-
 test("explicit Light overrides OS-dark, System restores it without tracking", async ({
   browser,
 }) => {
