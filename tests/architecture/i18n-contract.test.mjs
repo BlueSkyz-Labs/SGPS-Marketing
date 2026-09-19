@@ -35,7 +35,6 @@ test("SUPPORTED_LANGUAGES and LANGUAGES are consistent", () => {
   assert.equal(LANGUAGES.vi.hreflang, "vi");
 });
 
-
 test("DEC-019 registers Chinese targets without false runtime activation", () => {
   assert.deepEqual(PORTFOLIO_LANGUAGE_TARGETS, [
     "en",
