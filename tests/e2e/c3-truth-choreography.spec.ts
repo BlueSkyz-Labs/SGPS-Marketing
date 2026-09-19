@@ -49,7 +49,9 @@ test.describe("C3-B truth choreography", () => {
         transition: getComputedStyle(el).transitionDuration,
       }));
       expect(result.animation).toBe("none");
-      expect(result.transition).toBe("0s");
+      // The repository-wide reduced-motion contract enforces 0.01ms !important,
+      // which browsers serialize as 1e-05s or 0.00001s. Assert duration, not formatting.
+      expect(Number.parseFloat(result.transition)).toBeLessThanOrEqual(0.00001);
     } finally {
       await context.close();
     }
