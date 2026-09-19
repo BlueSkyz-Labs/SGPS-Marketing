@@ -86,7 +86,6 @@ check(
 );
 
 const LEGACY_REDIRECTS = [
-  ["/", "/en/"],
   ["/about/", "/en/about/"],
   ["/contact/", "/en/contact/"],
   ["/privacy/", "/en/privacy/"],
@@ -111,6 +110,21 @@ for (const [from, to] of LEGACY_REDIRECTS) {
     assert(html.includes(`url=${to}`), `meta-refresh stub must target ${to}`);
   });
 }
+
+check("root serves the bounded language gateway", async () => {
+  const response = await get("/");
+  assert(response.status === 200, `status ${response.status}`);
+  const html = await response.text();
+  assert(
+    /<meta\s+name="robots"\s+content="noindex, follow"/i.test(html),
+    "root gateway must stay out of the canonical search index",
+  );
+  assert(
+    html.includes('data-language-choice="vi"') &&
+      html.includes('data-language-choice="en"'),
+    "root gateway must expose explicit VI/EN choices",
+  );
+});
 
 check("robots.txt allows crawling and links the sitemap", async () => {
   const response = await get("/robots.txt");
