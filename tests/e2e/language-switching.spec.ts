@@ -52,3 +52,26 @@ test("localized URLs stay stable instead of geo/browser redirecting", async ({
   await page.goto("/vi/about/");
   await expect(page).toHaveURL(/\/vi\/about\/$/);
 });
+
+test("language choices retain the 44px touch floor on desktop and mobile", async ({
+  page,
+}) => {
+  for (const width of [1280, 390]) {
+    await page.setViewportSize({ width, height: 900 });
+    await page.goto("/en/");
+    if (width < 768) {
+      await page.locator("header details > summary").click();
+    }
+
+    const choices = page.locator("[data-language-choice]:visible");
+    const count = await choices.count();
+    expect(count).toBeGreaterThan(0);
+
+    for (let index = 0; index < count; index++) {
+      const rect = await choices.nth(index).boundingBox();
+      expect(rect, "visible language choice has a bounding box").not.toBeNull();
+      expect(rect!.width, "language touch width").toBeGreaterThanOrEqual(44);
+      expect(rect!.height, "language touch height").toBeGreaterThanOrEqual(44);
+    }
+  }
+});
