@@ -98,8 +98,7 @@ const contrast = (a, b) => {
   return (Math.max(L1, L2) + 0.05) / (Math.min(L1, L2) + 0.05);
 };
 
-
-test("saved theme bootstrap is same-origin, blocking, and read-only before first paint", () => {
+test("saved theme bootstrap is blocking and read-only", () => {
   const layout = readFileSync(
     join(root, "src", "layouts", "BaseLayout.astro"),
     "utf8",
@@ -107,7 +106,10 @@ test("saved theme bootstrap is same-origin, blocking, and read-only before first
   const bootstrap = readFileSync(join(root, "public", "theme-init.js"), "utf8");
   const theme = readFileSync(join(root, "src", "lib", "theme.ts"), "utf8");
   const headScript = '<script is:inline src="/theme-init.js"></script>';
-  assert.ok(layout.includes(headScript), "blocking same-origin bootstrap must be in head");
+  assert.ok(
+    layout.includes(headScript),
+    "blocking same-origin bootstrap must be in head",
+  );
   assert.ok(
     layout.indexOf(headScript) < layout.indexOf("</head>"),
     "theme bootstrap must execute before the body is parsed",
