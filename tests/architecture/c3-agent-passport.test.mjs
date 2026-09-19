@@ -204,3 +204,36 @@ test("assurance vocabulary is rejected by the same model as the copy scanner", (
     );
   }
 });
+
+test("private-reporting evidence stays out even when its URL is publicly reachable", () => {
+  const input = {
+    ...INPUT,
+    claims: [
+      {
+        ...INPUT.claims[0],
+        evidence: [
+          ...INPUT.claims[0].evidence,
+          {
+            id: "private-reporting-reference",
+            kind: "private-reporting",
+            href: {
+              en: "https://github.com/BlueSkyz-Labs/SGPS-Marketing/security/advisories/new",
+              vi: "https://github.com/BlueSkyz-Labs/SGPS-Marketing/security/advisories/new",
+            },
+            label: { en: "Private report", vi: "Báo cáo riêng tư" },
+          },
+        ],
+      },
+    ],
+  };
+  const document = buildAgentPassport(input);
+  const fixture = document.products.find((item) => item.slug === "fixture-product");
+  assert.deepEqual(
+    fixture?.claims[0]?.evidence.map((item) => item.id),
+    ["fixture-evidence"],
+  );
+  assert.doesNotMatch(
+    serializeAgentPassport(document),
+    /private-reporting-reference|security\\/advisories\\/new/,
+  );
+});
