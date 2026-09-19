@@ -1,0 +1,55 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Container from "@/components/layout/Container.astro";
+import PageHeader from "@/components/layout/PageHeader.astro";
+import ProductCard from "@/components/product/ProductCard.astro";
+import ProofFirstEmptyState from "@/components/product/ProofFirstEmptyState.astro";
+import { getPublicProducts } from "@/lib/products";
+import IntentLens from "@/components/experience/IntentLens.astro";
+import Atlas from "@/components/experience/Atlas.astro";
+
+const products = await getPublicProducts();
+const emptyDescription = products.length
+  ? "以真实状态与证据探索 BlueSkyz Labs 产品。"
+  : "产品仅在具备可核验的公开证据时发布。";
+---
+
+<BaseLayout
+  title="产品"
+  description={emptyDescription}
+  path="/zh/products/"
+  surface="products"
+  scene="product"
+>
+  <section class="py-16 lg:py-20">
+    <Container>
+      <PageHeader
+        title="可供核验的产品"
+        lede="产品将在可评估时展示于此。我们只发布您可以核验的内容。"
+      />
+      {
+        products.length === 0 ? (
+          <div class="mt-12">
+            <ProofFirstEmptyState lang="zh" />
+          </div>
+        ) : (
+          <div class="mt-12 grid gap-4 md:grid-cols-2">
+            {products.map((product) => (
+              <ProductCard product={product} lang="zh" />
+            ))}
+          </div>
+        )
+      }
+    </Container>
+  </section>
+  {
+    /* C2: discovery surfaces re-homed from the homepage (design §8) — Intent Lens sits
+      with product evaluation; Atlas remains the deliberate exploration tool. */
+  }
+  <section class="border-t border-[var(--border-subtle)] py-16 lg:py-20">
+    <Container>
+      <IntentLens lang="zh" />
+      <Atlas lang="zh" />
+    </Container>
+  </section>
+</BaseLayout>

@@ -16,13 +16,28 @@ const { state, lang } = Astro.props;
  */
 const STATE_COPY: Record<
   TruthStateValue,
-  { en: string; vi: string; glyph: string }
+  { en: string; vi: string; zh: string; glyph: string }
 > = {
-  "source-linked": { en: "Source-linked", vi: "Đã gắn nguồn", glyph: "◈" },
-  reviewed: { en: "Reviewed", vi: "Đã xem xét", glyph: "◇" },
-  changed: { en: "Changed", vi: "Đã thay đổi", glyph: "△" },
-  "not-published": { en: "Not published", vi: "Chưa công bố", glyph: "○" },
-  unavailable: { en: "Unavailable", vi: "Không khả dụng", glyph: "–" },
+  "source-linked": {
+    en: "Source-linked",
+    vi: "Đã gắn nguồn",
+    zh: "已关联来源",
+    glyph: "◈",
+  },
+  reviewed: { en: "Reviewed", vi: "Đã xem xét", zh: "已审阅", glyph: "◇" },
+  changed: { en: "Changed", vi: "Đã thay đổi", zh: "已变更", glyph: "△" },
+  "not-published": {
+    en: "Not published",
+    vi: "Chưa công bố",
+    zh: "尚未公布",
+    glyph: "○",
+  },
+  unavailable: {
+    en: "Unavailable",
+    vi: "Không khả dụng",
+    zh: "暂不可用",
+    glyph: "–",
+  },
 };
 
 const copy = STATE_COPY[state];

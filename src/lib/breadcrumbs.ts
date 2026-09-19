@@ -10,6 +10,7 @@ export interface Crumb {
 const HOME_LABELS: Record<Language, string> = {
   en: "Home",
   vi: "Trang chủ",
+  zh: "首页",
 };
 
 /**
@@ -18,8 +19,16 @@ const HOME_LABELS: Record<Language, string> = {
  * component already renders.
  */
 const DECLARED_ROUTE_LABELS: Record<string, Record<Language, string>> = {
-  "decision-room": { en: "Decision Room", vi: "Phòng Quyết định" },
-  evidence: { en: "Evidence passport", vi: "Hộ chiếu bằng chứng" },
+  "decision-room": {
+    en: "Decision Room",
+    vi: "Phòng Quyết định",
+    zh: "决策室",
+  },
+  evidence: {
+    en: "Evidence passport",
+    vi: "Hộ chiếu bằng chứng",
+    zh: "证据档案",
+  },
 };
 
 const normalize = (path: string): string => {
@@ -53,7 +62,7 @@ export function getBreadcrumbTrail(lang: Language, pathname: string): Crumb[] {
 
   if (!name) {
     // Evidence passports carry the claim's own declared label.
-    const evidence = /^\/(en|vi)\/evidence\/([a-z0-9-]+)$/.exec(target);
+    const evidence = /^\/(en|vi|zh)\/evidence\/([a-z0-9-]+)$/.exec(target);
     if (evidence) name = DECLARED_ROUTE_LABELS.evidence?.[lang];
   }
   if (!name) return [];

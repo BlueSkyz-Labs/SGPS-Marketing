@@ -1,0 +1,9 @@
+lang: zh
+slug: support
+title: 支持
+description: 获取 BlueSkyz Labs 产品与服务的帮助。
+sections:
+  hero:
+    heading: 支持
+  intro: 各产品页提供针对该产品的支持链接。
+  corporate_note: 如需企业支持咨询，请使用联系表单。

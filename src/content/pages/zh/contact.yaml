@@ -1,0 +1,9 @@
+lang: zh
+slug: contact
+title: 联系我们
+description: 就商务合作、安全问题或一般咨询联系我们。
+sections:
+  hero:
+    heading: 联系我们
+  intro: 商务合作、安全报告或一般咨询，请与我们联系。
+  email_note: 目前暂未提供邮件联系方式。如需紧急事项，请使用安全报告通道。

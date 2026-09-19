@@ -7,30 +7,52 @@ export const PORTFOLIO_LANGUAGE_TARGETS = [
 export type PortfolioLanguageTarget =
   (typeof PORTFOLIO_LANGUAGE_TARGETS)[number];
 
+// [[resolution]] C3-C W1 promotes the simplified-Chinese runtime locale (zh)
+// to first-class; zh-Hant stays architecture-ready for a future targeting step.
 export const LANGUAGE_READINESS = {
   en: "FIRST_CLASS",
   vi: "FIRST_CLASS",
-  "zh-Hans": "ARCHITECTURE_READY",
+  "zh-Hans": "FIRST_CLASS",
   "zh-Hant": "ARCHITECTURE_READY",
 } as const satisfies Record<
   PortfolioLanguageTarget,
   "FIRST_CLASS" | "ARCHITECTURE_READY"
 >;
 
-export const SUPPORTED_LANGUAGES = ["en", "vi"] as const;
+export const SUPPORTED_LANGUAGES = ["en", "vi", "zh"] as const;
 export type Language = (typeof SUPPORTED_LANGUAGES)[number];
 export const DEFAULT_LANGUAGE: Language = "en";
 export const LANGUAGE_STORAGE_KEY = "blueskyz.ui.language";
 
 export interface LanguageConfig {
   code: Language;
+  /** Endonym shown in the switcher (a visitor reads their own language first). */
   label: string;
+  /** BCP-47 tag emitted as hreflang; `zh` is Simplified Chinese. */
   hreflang: string;
+  /** English name for assistive technology and non-visual consumers. */
+  englishLabel: string;
 }
 
 export const LANGUAGES: Record<Language, LanguageConfig> = {
-  en: { code: "en", label: "English", hreflang: "en" },
-  vi: { code: "vi", label: "Tiếng Việt", hreflang: "vi" },
+  en: {
+    code: "en",
+    label: "English",
+    hreflang: "en",
+    englishLabel: "English",
+  },
+  vi: {
+    code: "vi",
+    label: "Tiếng Việt",
+    hreflang: "vi",
+    englishLabel: "Vietnamese",
+  },
+  zh: {
+    code: "zh",
+    label: "中文",
+    hreflang: "zh-Hans",
+    englishLabel: "Simplified Chinese",
+  },
 };
 
 export function isActiveLanguage(value: unknown): value is Language {
@@ -78,6 +100,7 @@ export function resolveInitialLanguage(
 export function getLanguageFromPath(pathname: string): Language {
   const segment = pathname.split("/").filter(Boolean)[0];
   if (segment === "vi") return "vi";
+  if (segment === "zh") return "zh";
   return "en";
 }
 
@@ -85,10 +108,10 @@ export function getAlternatePath(
   pathname: string,
   targetLang: Language,
 ): string {
-  const rest = pathname.replace(/^\/(en|vi)/, "") || "/";
+  const rest = pathname.replace(/^\/(en|vi|zh)/, "") || "/";
   return `/${targetLang}${rest}`;
 }
 
 export function stripLanguagePrefix(pathname: string): string {
-  return pathname.replace(/^\/(en|vi)/, "") || "/";
+  return pathname.replace(/^\/(en|vi|zh)/, "") || "/";
 }

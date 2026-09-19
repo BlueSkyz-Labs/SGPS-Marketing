@@ -39,12 +39,24 @@ const COPY = {
     count: "Đang so sánh {n}/{max}",
     full: "So sánh tối đa {max} mục.",
   },
+  zh: {
+    heading: "决策室",
+    lede: "将最多四项公开事实并列对照 — 有来源的声明、信任路径，以及确保其严谨的边界说明。不作结论，不提建议。",
+    add: "对比",
+    remove: "移除",
+    reset: "清空对比",
+    boardTitle: "对比栏",
+    empty: "尚未选择任何项目。请在下方选择最多四项。",
+    source: "查看来源",
+    count: "已对比 {n}/{max} 项",
+    full: "对比栏最多容纳 {max} 项。",
+  },
 } as const;
 
 const KIND_LABELS = {
-  claim: { en: "Claim", vi: "Tuyên bố" },
-  trust: { en: "Trust", vi: "Tin cậy" },
-  product: { en: "Product", vi: "Sản phẩm" },
+  claim: { en: "Claim", vi: "Tuyên bố", zh: "声明" },
+  trust: { en: "Trust", vi: "Tin cậy", zh: "信任" },
+  product: { en: "Product", vi: "Sản phẩm", zh: "产品" },
 } as const;
 
 const copy = COPY[lang];

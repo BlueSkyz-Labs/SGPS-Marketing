@@ -1,0 +1,68 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Container from "@/components/layout/Container.astro";
+import PageHeader from "@/components/layout/PageHeader.astro";
+import { SITE } from "@/data/site";
+
+const hasBusinessEmail = Boolean(SITE.contactEmail);
+---
+
+<BaseLayout
+  title="支持"
+  description="BlueSkyz Labs 的支持途径与可操作求助：当前可用的、尚未公布的内容，以及如何联系我们。"
+  path="/zh/support/"
+>
+  <section class="py-16 lg:py-24">
+    <Container>
+      <PageHeader
+        eyebrow="支持"
+        title="诚实坦诚的帮助"
+        lede="经验证的产品支持入口将在各产品页发布。在此之前，请使用下方可用通道。"
+      />
+      {
+        hasBusinessEmail ? (
+          <p class="mt-8 max-w-2xl text-[var(--text-secondary)]">
+            Email{" "}
+            <a
+              href={`mailto:${SITE.contactEmail}`}
+              class="inline-flex min-h-11 items-center font-semibold text-[var(--action-primary)] no-underline hover:underline"
+            >
+              {SITE.contactEmail}
+            </a>{" "}
+            可提供一般产品支持，直至发布针对产品的支持通道。
+          </p>
+        ) : (
+          <p class="mt-8 max-w-2xl text-[var(--text-secondary)]">
+            A corporate support email will appear here when BlueSkyz publishes
+            one. Until then, 安全报告 is the actionable trust channel.
+          </p>
+        )
+      }
+      <div class="mt-10 flex flex-wrap gap-3">
+        <a
+          href="/en/security/"
+          class="inline-flex min-h-11 items-center rounded-lg border border-[var(--border-subtle)] bg-white px-5 text-sm font-semibold text-[var(--text-primary)] no-underline transition-colors hover:border-[var(--action-primary)]"
+        >
+          安全报告
+        </a>
+        {
+          hasBusinessEmail ? (
+            <a
+              href="/en/contact/"
+              class="inline-flex min-h-11 items-center rounded-lg border border-[var(--border-subtle)] bg-white px-5 text-sm font-semibold text-[var(--text-primary)] no-underline transition-colors hover:border-[var(--action-primary)]"
+            >
+              联系 BlueSkyz
+            </a>
+          ) : (
+            <a
+              href="/en/about/"
+              class="inline-flex min-h-11 items-center rounded-lg border border-[var(--border-subtle)] bg-white px-5 text-sm font-semibold text-[var(--text-primary)] no-underline transition-colors hover:border-[var(--action-primary)]"
+            >
+              关于 BlueSkyz
+            </a>
+          )
+        }
+      </div>
+    </Container>
+  </section>
+</BaseLayout>
