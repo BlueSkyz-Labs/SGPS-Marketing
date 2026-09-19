@@ -35,7 +35,6 @@ interface Props {
 const { slug, capability, products, claims, lang } = Astro.props;
 
 const links = getProductProofLinks(slug, capability, products, claims);
-
 ---
 
 <EvidencePeek links={links} slug={slug} capability={capability} lang={lang} />
