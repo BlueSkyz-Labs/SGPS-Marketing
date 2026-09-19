@@ -74,4 +74,5 @@ Canonical source-assurance path:
 Architecture-affecting changes must regenerate/check derived views with `pnpm architecture:views:check`. GitHub Source Assurance repeats deterministic source gates and runs the repository E4 Playwright/axe matrix across Chromium, Firefox, WebKit/Safari-class and mobile Chromium, followed by Lighthouse evidence for PR/main candidates. See `README.md` and `docs/QA_STRATEGY.md` for full commands and promotion flow.
 
 ## LONG-RUNNING — LUẬT TOÀN HERMES (Owner chốt 2026-09-19, BẮT BUỘC mọi dự án/mọi agent)
+
 Còn wave/plan/task ACTIONABLE → chạy end-to-end, KHÔNG dừng hỏi/báo cáo; hết wave tự mở wave mới, tự merge an toàn (branch→PR→exact-head gate→merge). Chỉ dừng khi EXTERNAL/MANUAL/BLOCKED-SAFETY hoặc Owner lệnh dừng. Precedence: Safety/Policy/Provider > Mandatory SGPS > Product Truth > ADR/Spec mới > active Plan > repo contracts > impl > conventions. SGPS = discover-everything / ACTIVATE-applicable, exact-identity.
