@@ -17,12 +17,14 @@ for (const [lang, og, alternate, skip] of [
     );
     const alternates = await page
       .locator('meta[property="og:locale:alternate"]')
-      .evaluateAll((nodes) => nodes.map((node) => node.getAttribute("content")));
+      .evaluateAll((nodes) =>
+        nodes.map((node) => node.getAttribute("content")),
+      );
     expect(alternates).toEqual(alternate);
     await expect(page.locator(".skip-link")).toHaveText(skip);
     await expect(page.locator('link[hreflang="zh-Hans"]')).toHaveAttribute(
       "href",
-      /\\/zh\\/about\\//,
+      /\/zh\/about\//,
     );
   });
 }
