@@ -12,7 +12,7 @@ test.describe("C3-B evidence peek", () => {
   });
   test.afterAll(async () => closeServer());
 
-        await expect(peek.locator(".c3-product-proof__passport")).toHaveAttribute("href", /\/en\/evidence\//);
+  test("native preview retains evidence, boundary and passport without JavaScript", async ({ browser }) => {
     const context = await browser.newContext({ javaScriptEnabled: false });
     try {
       const page = await context.newPage();
@@ -24,7 +24,7 @@ test.describe("C3-B evidence peek", () => {
       await expect(peek).toHaveAttribute("open", "");
       await expect(peek.locator(".c3-product-proof__item")).toHaveCount(2);
       await expect(peek.locator("[data-truth-state]")).toHaveCount(2);
-      await expect(peek.locator(".c3-product-proof__passport")).toHaveAttribute("href", /\\/en\\/evidence\\//);
+      await expect(peek.locator(".c3-product-proof__passport")).toHaveAttribute("href", /\/en\/evidence\//);
       await expect(peek.locator(".c3-product-proof__boundary").first()).toBeVisible();
       await expect(page.locator('[data-product-proof-capability="Fixture capability three"]')).toHaveCount(0);
     } finally {
