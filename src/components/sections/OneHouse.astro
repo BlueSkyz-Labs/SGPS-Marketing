@@ -1,10 +1,13 @@
 ---
+import type { Language } from "@/data/site";
+
 interface Props {
-  lang?: "en" | "vi";
+  lang?: Language;
 }
 
 const { lang = "en" } = Astro.props;
 const isVi = lang === "vi";
+const isZh = lang === "zh";
 const concepts = isVi
   ? [
       "Rõ ràng",
@@ -12,7 +15,9 @@ const concepts = isVi
       "Trí tuệ có mục đích",
       "Tin cậy ngay từ thiết kế",
     ]
-  : ["Clarity", "Human agency", "Purposeful intelligence", "Trust by design"];
+  : isZh
+    ? ["清晰", "人为主导", "有目的的智能", "设计即信任"]
+    : ["Clarity", "Human agency", "Purposeful intelligence", "Trust by design"];
 ---
 
 <section
@@ -25,13 +30,15 @@ const concepts = isVi
       id="house-title"
       class="text-3xl font-semibold tracking-tight text-balance sm:text-4xl"
     >
-      {isVi ? "Một nhà — một cách suy nghĩ" : "One house — a way of thinking"}
+      {isVi ? "Một nhà — một cách suy nghĩ" : isZh ? "一个团队 — 一种思维方式" : "One house — a way of thinking"}
     </h2>
     <p class="mt-4 max-w-2xl text-lg text-[var(--text-secondary)] text-pretty">
       {
         isVi
           ? "Chúng tôi không xây dựng xung quanh một danh mục. Chúng tôi xây dựng xung quanh một cách suy nghĩ."
-          : "We don’t build around one category. We build around a way of thinking."
+          : isZh
+            ? "我们不围绕单一品类构建。我们围绕一种思维方式构建。"
+            : "We don’t build around one category. We build around a way of thinking."
       }
     </p>
   </div>

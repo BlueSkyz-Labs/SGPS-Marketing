@@ -2,11 +2,14 @@
 import TrustLedger from "@/components/experience/TrustLedger.astro";
 import EvidenceTeaser from "@/components/integrity/EvidenceTeaser.astro";
 
+import type { Language } from "@/data/site";
+
 interface Props {
-  lang?: "en" | "vi";
+  lang?: Language;
 }
 const { lang = "en" } = Astro.props;
 const isVi = lang === "vi";
+const isZh = lang === "zh";
 ---
 
 <section
@@ -17,13 +20,15 @@ const isVi = lang === "vi";
     id="trust-title"
     class="text-3xl font-semibold tracking-tight text-balance sm:text-4xl"
   >
-    {isVi ? "Tin cậy bạn có thể xác minh" : "Trust you can verify"}
+    {isVi ? "Tin cậy bạn có thể xác minh" : isZh ? "您可以核实的信任" : "Trust you can verify"}
   </h2>
   <p class="mt-4 max-w-2xl text-lg text-[var(--text-secondary)] text-pretty">
     {
       isVi
         ? "Đường dẫn đến quyền riêng tư, bảo mật và hỗ trợ là những tuyến đường hạng nhất — không phải khẩu hiệu."
-        : "Privacy, security, and support paths are first-class routes — not slogans."
+        : isZh
+          ? "隐私、安全与支持均为正式通道 — 而非口号。"
+          : "Privacy, security, and support paths are first-class routes — not slogans."
     }
   </p>
   <TrustLedger lang={lang} />
