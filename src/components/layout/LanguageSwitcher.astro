@@ -14,20 +14,29 @@ interface Props {
 const { variant = "light" } = Astro.props;
 const currentPath = Astro.url.pathname;
 const currentLang = getLanguageFromPath(currentPath);
+
+const NATIVE_NAMES = { en: "English", vi: "Tiếng Việt", zh: "中文" } as const;
+const GROUP_LABEL: Record<string, string> = {
+  en: "Language",
+  vi: "Ngôn ngữ",
+  zh: "语言",
+};
+const aria = GROUP_LABEL[currentLang] ?? GROUP_LABEL.en;
+const CODE: Record<string, string> = { en: "EN", vi: "VI", zh: "中文" };
 ---
 
 <div
-  class="flex min-w-0 flex-wrap items-center gap-1"
   role="navigation"
-  aria-label={currentLang === "vi" ? "Ngôn ngữ" : "Language"}
+  aria-label={aria}
+  class="inline-flex min-w-0 flex-wrap items-center gap-0.5 rounded-lg border border-[var(--border-subtle)] bg-[var(--surface-primary)] p-0.5"
 >
   {
     SUPPORTED_LANGUAGES.map((lang) => {
       const isActive = currentLang === lang;
       const activeClasses =
         variant === "dark"
-          ? "text-[var(--brand-porcelain)] bg-white/10"
-          : "text-[var(--text-primary)] bg-[var(--surface-subtle)]";
+          ? "text-[var(--brand-porcelain)] bg-white/10 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.15)]"
+          : "text-[var(--text-primary)] bg-[var(--surface-subtle)] shadow-[inset_0_0_0_1px_var(--border-subtle)]";
       const idleClasses =
         variant === "dark"
           ? "text-[color-mix(in_srgb,var(--brand-porcelain)_82%,white)] hover:text-white"
@@ -38,13 +47,15 @@ const currentLang = getLanguageFromPath(currentPath);
           data-language-choice={lang}
           hreflang={LANGUAGES[lang].hreflang}
           aria-current={isActive ? "page" : undefined}
-          style={languageTransitionStyle(lang)}
+          aria-label={NATIVE_NAMES[lang as keyof typeof NATIVE_NAMES]}
+          title={NATIVE_NAMES[lang as keyof typeof NATIVE_NAMES]}
+          style={`${languageTransitionStyle(lang)}; min-width: 44px; min-height: 44px`}
           class:list={[
-            "inline-flex min-h-11 min-w-0 items-center px-3 text-sm font-medium no-underline rounded-md transition-colors",
+            "inline-flex min-h-11 min-w-11 items-center justify-center px-2 text-sm font-semibold no-underline rounded-md transition-colors",
             isActive ? activeClasses : idleClasses,
           ]}
         >
-          {LANGUAGES[lang].label}
+          {CODE[lang] ?? LANGUAGES[lang].label}
         </a>
       );
     })
