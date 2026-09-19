@@ -56,7 +56,7 @@ The following v2 capabilities were planned but are not yet runtime-complete. The
 - Critical content, evidence, navigation, and conversion actions work with JavaScript disabled.
 - No React/Vue/Svelte runtime is introduced.
 - No LLM, vector database, remote semantic-search service, or generated answer is required for public verification.
-- No account, login, user profile, fingerprinting, cookie-based personalization, or localStorage persistence is introduced for v3 experience state.
+- No account, login, user profile, fingerprinting, cookie-based personalization, or general localStorage experience state is introduced. ADR 0009 narrowly permits the explicit `blueskyz.ui.language` preference key; Decision Room/intent/trust state remains ephemeral.
 - No external analytics transmission until separately approved by privacy/provider decision.
 - No WebGL/3D unless a later evidence-backed GO decision supersedes the current NO-GO.
 - No fabricated products, customers, partners, certifications, scores, testimonials, evidence, review dates, maturity levels, guarantees, or publication states.
