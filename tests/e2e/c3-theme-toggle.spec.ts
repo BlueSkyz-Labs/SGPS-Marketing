@@ -4,6 +4,9 @@ test("theme storage is opt-in and the chosen mode survives navigation", async ({
   page,
 }) => {
   await page.goto("/en/");
+  // A compact viewport exposes the control inside the native mobile disclosure.
+  const mobileMenu = page.locator("header details > summary");
+  if (await mobileMenu.isVisible()) await mobileMenu.click();
   const theme = page.getByRole("group", { name: "Theme" });
   const system = theme.getByRole("button", { name: "System" });
   await expect(system).toHaveAttribute("aria-pressed", "true");
@@ -18,6 +21,7 @@ test("theme storage is opt-in and the chosen mode survives navigation", async ({
   ).toBe("dark");
 
   await page.goto("/vi/");
+  if (await mobileMenu.isVisible()) await mobileMenu.click();
   await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
   await expect(
     page.getByRole("group", { name: "Giao diện" }).getByRole("button", {
