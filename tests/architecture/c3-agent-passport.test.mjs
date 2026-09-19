@@ -205,7 +205,9 @@ test("assurance vocabulary is rejected by the same model as the copy scanner", (
   }
 });
 
-test("private-reporting evidence stays out even when its URL is publicly reachable", () => {
+test("machine passport drops private-reporting references", () => {
+  const advisory =
+    "https://github.com/BlueSkyz-Labs/SGPS-Marketing/security/advisories/new";
   const input = {
     ...INPUT,
     claims: [
@@ -216,10 +218,7 @@ test("private-reporting evidence stays out even when its URL is publicly reachab
           {
             id: "private-reporting-reference",
             kind: "private-reporting",
-            href: {
-              en: "https://github.com/BlueSkyz-Labs/SGPS-Marketing/security/advisories/new",
-              vi: "https://github.com/BlueSkyz-Labs/SGPS-Marketing/security/advisories/new",
-            },
+            href: { en: advisory, vi: advisory },
             label: { en: "Private report", vi: "Báo cáo riêng tư" },
           },
         ],
@@ -227,13 +226,14 @@ test("private-reporting evidence stays out even when its URL is publicly reachab
     ],
   };
   const document = buildAgentPassport(input);
-  const fixture = document.products.find((item) => item.slug === "fixture-product");
+  const fixture = document.products.find(
+    (item) => item.slug === "fixture-product",
+  );
   assert.deepEqual(
     fixture?.claims[0]?.evidence.map((item) => item.id),
     ["fixture-evidence"],
   );
-  assert.doesNotMatch(
-    serializeAgentPassport(document),
-    /private-reporting-reference|security\\/advisories\\/new/,
-  );
+  const serialized = serializeAgentPassport(document);
+  assert.ok(!serialized.includes("private-reporting-reference"));
+  assert.ok(!serialized.includes(advisory));
 });
