@@ -1,0 +1,27 @@
+---
+// @ts-nocheck — synthetic styling fixture, not a public product claim.
+import "@/styles/global.css";
+import "@/styles/c3-craft.css";
+import TruthState from "@/components/integrity/TruthState.astro";
+const states = [
+  "source-linked",
+  "reviewed",
+  "changed",
+  "not-published",
+  "unavailable",
+];
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Truth choreography fixture</title>
+  </head>
+  <body>
+    <main data-truth-choreography>
+      {states.map((state) => <TruthState state={state} lang="en" />)}
+    </main>
+  </body>
+</html>
