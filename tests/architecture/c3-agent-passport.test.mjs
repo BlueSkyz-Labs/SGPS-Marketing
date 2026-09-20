@@ -204,3 +204,36 @@ test("assurance vocabulary is rejected by the same model as the copy scanner", (
     );
   }
 });
+
+test("machine passport drops private-reporting references", () => {
+  const advisory =
+    "https://github.com/BlueSkyz-Labs/SGPS-Marketing/security/advisories/new";
+  const input = {
+    ...INPUT,
+    claims: [
+      {
+        ...INPUT.claims[0],
+        evidence: [
+          ...INPUT.claims[0].evidence,
+          {
+            id: "private-reporting-reference",
+            kind: "private-reporting",
+            href: { en: advisory, vi: advisory },
+            label: { en: "Private report", vi: "Báo cáo riêng tư" },
+          },
+        ],
+      },
+    ],
+  };
+  const document = buildAgentPassport(input);
+  const fixture = document.products.find(
+    (item) => item.slug === "fixture-product",
+  );
+  assert.deepEqual(
+    fixture?.claims[0]?.evidence.map((item) => item.id),
+    ["fixture-evidence"],
+  );
+  const serialized = serializeAgentPassport(document);
+  assert.ok(!serialized.includes("private-reporting-reference"));
+  assert.ok(!serialized.includes(advisory));
+});

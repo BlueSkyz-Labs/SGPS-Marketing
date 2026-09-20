@@ -125,6 +125,7 @@ export function buildAgentPassport(
         evidence: sortBy(resolved.evidence, (reference) => reference.id)
           .filter(
             (reference) =>
+              reference.kind !== "private-reporting" &&
               isPublicReference(reference.href.en) &&
               isPublicReference(reference.href.vi),
           )
