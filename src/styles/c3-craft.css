@@ -172,3 +172,32 @@ main details > summary:active {
     transition: none;
   }
 }
+
+/* C3-B Task 4 / G8 — evidence-aware choreography.
+ * These are disclosure styles for the five existing publication states, NOT
+ * scores or a stronger assurance status. Visible localized truth text remains
+ * authoritative; pattern makes a changed/absent state distinct without color.
+ */
+.truth-state[data-truth-state="changed"] {
+  border-style: dashed;
+}
+
+.truth-state[data-truth-state="not-published"],
+.truth-state[data-truth-state="unavailable"] {
+  border-style: dotted;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .truth-state {
+    animation: none;
+    transition: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .truth-state {
+    color: CanvasText;
+    background: Canvas;
+    border-color: CanvasText;
+  }
+}
