@@ -1,0 +1,127 @@
+---
+interface Props {
+  lang?: "en" | "vi" | "zh";
+  /** Extra classes for the wrapper (e.g. vertical spacing inside the mobile menu). */
+  class?: string;
+}
+
+const { lang = "en", class: className = "" } = Astro.props;
+
+const L = {
+  en: { label: "Theme", system: "System", light: "Light", dark: "Dark" },
+  vi: { label: "Giao diện", system: "Tự động", light: "Sáng", dark: "Tối" },
+  zh: { label: "主题", system: "跟随系统", light: "浅色", dark: "深色" },
+}[lang];
+
+const base =
+  "inline-flex min-h-11 min-w-11 items-center justify-center rounded-md px-2 text-xs font-medium";
+const idle = "text-[var(--text-secondary)] hover:text-[var(--text-primary)]";
+---
+
+<div
+  role="group"
+  aria-label={L.label}
+  class:list={[
+    "flex items-center gap-0.5 rounded-lg border border-[var(--border-subtle)] bg-[var(--surface-primary)] p-0.5",
+    className,
+  ]}
+>
+  <button
+    type="button"
+    data-theme-mode="system"
+    data-theme-toggle
+    aria-pressed="false"
+    aria-label={L.system}
+    class:list={[base, idle]}
+    title={L.system}
+  >
+    <svg
+      viewBox="0 0 20 20"
+      class="h-4 w-4"
+      aria-hidden="true"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1.5"
+    >
+      <rect x="2.5" y="3.5" width="15" height="13" rx="2"></rect>
+      <path d="M2.5 7.5h15M7 16.5V8.5"></path>
+    </svg>
+  </button>
+  <button
+    type="button"
+    data-theme-mode="light"
+    data-theme-toggle
+    aria-pressed="false"
+    aria-label={L.light}
+    class:list={[base, idle]}
+    title={L.light}
+  >
+    <svg
+      viewBox="0 0 20 20"
+      class="h-4 w-4"
+      aria-hidden="true"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1.5"
+    >
+      <circle cx="10" cy="10" r="3.25"></circle>
+      <path
+        d="M10 2v1.5M10 16.5V18M2 10h1.5M16.5 10H18M4.3 4.3l1.05 1.05M14.65 14.65l1.05 1.05M15.7 4.3l-1.05 1.05M5.35 14.65l-1.05 1.05"
+      ></path>
+    </svg>
+  </button>
+  <button
+    type="button"
+    data-theme-mode="dark"
+    data-theme-toggle
+    aria-pressed="false"
+    aria-label={L.dark}
+    class:list={[base, idle]}
+    title={L.dark}
+  >
+    <svg
+      viewBox="0 0 20 20"
+      class="h-4 w-4"
+      aria-hidden="true"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1.5"
+    >
+      <path d="M15.5 12.5A5.5 5.5 0 1 1 7.5 4.5a4.5 4.5 0 0 0 8 8Z"></path>
+    </svg>
+  </button>
+</div>
+
+<script>
+  import { applyTheme, initTheme, type ThemeMode } from "@/lib/theme";
+
+  const MODES: ThemeMode[] = ["system", "light", "dark"];
+  const ACTIVE =
+    "text-[var(--text-primary)] bg-[var(--surface-subtle)] shadow-[inset_0_0_0_1px_var(--border-subtle)]";
+  let mode: ThemeMode = initTheme();
+  const buttons = [
+    ...document.querySelectorAll<HTMLButtonElement>("[data-theme-toggle]"),
+  ];
+
+  function paint(): void {
+    for (const button of buttons) {
+      const active = button.getAttribute("data-theme-mode") === mode;
+      button.setAttribute("aria-pressed", String(active));
+      if (active) button.classList.add(...ACTIVE.split(" "));
+      else button.classList.remove(...ACTIVE.split(" "));
+    }
+  }
+
+  for (const button of buttons) {
+    button.addEventListener("click", () => {
+      const next = button.getAttribute("data-theme-mode") as ThemeMode | null;
+      if (next && MODES.includes(next)) {
+        mode = next;
+        applyTheme(mode);
+        paint();
+      }
+    });
+  }
+
+  paint();
+</script>

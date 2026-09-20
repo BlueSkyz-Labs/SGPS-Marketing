@@ -11,7 +11,7 @@ sections:
     content: We collect minimal data necessary to operate this website and improve visitor experience. We do not sell personal data to third parties.
   usage:
     heading: How we use data
-    content: Data is used solely for website operation, security, and aggregate analytics. We use privacy-conscious first-party analytics.
+    content: Request metadata supports site delivery and security. Visitor analytics transmission is not enabled; an explicitly chosen language or theme preference stays in this browser.
   contact:
     heading: Contact
     content: For privacy inquiries, please contact us through the security reporting path.
