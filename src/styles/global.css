@@ -26,7 +26,8 @@
   --border-subtle: #cbd5e1;
   --action-primary: #1d4ed8;
   --focus-ring: #1d4ed8;
-  --radius-card: 0.625rem;
+  /* Kit v4 radius-md (12px); keeps cards on the canonical radius scale. */
+  --radius-card: 0.75rem;
   --font-sans: Inter, ui-sans-serif, system-ui, sans-serif;
   /* Brand Kit v4 aliases (parity with 07_DESIGN_TOKENS/tokens.css). */
   --brand-slate-650: #475569;
