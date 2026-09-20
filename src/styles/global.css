@@ -69,12 +69,41 @@
   color-scheme: light;
 }
 
-/* Brand Kit v4 dark semantics — dormant until a dark theme ships. */
+/* Brand Kit v4 dark semantics — active via data-theme="dark" (Light/Dark/System). */
 [data-theme="dark"] {
+  color-scheme: dark;
+  --surface-primary: var(--brand-ink);
+  --surface-subtle: #0f172a;
+  --surface-inverse: var(--brand-porcelain);
   --text-primary: #ffffff;
   --text-secondary: #cbd5e1;
-  --surface-primary: var(--brand-ink);
+  --text-muted: #94a3b8;
   --border-subtle: #334155;
+  --action-primary: #3b82f6;
+  --focus-ring: #3b82f6;
+  --brand-text-disabled: #64748b;
+}
+
+[data-theme="light"] {
+  color-scheme: light;
+}
+
+/* No-JS / first-paint auto theme: follow OS dark, unless the visitor pinned
+   Light. Keeps the page coherent without any inline script (CSP 'self'). */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --surface-primary: var(--brand-ink);
+    --surface-subtle: #0f172a;
+    --surface-inverse: var(--brand-porcelain);
+    --text-primary: #ffffff;
+    --text-secondary: #cbd5e1;
+    --text-muted: #94a3b8;
+    --border-subtle: #334155;
+    --action-primary: #3b82f6;
+    --focus-ring: #3b82f6;
+    --brand-text-disabled: #64748b;
+  }
 }
 
 html {
