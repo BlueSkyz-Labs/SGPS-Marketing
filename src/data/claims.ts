@@ -87,9 +87,9 @@ export const CLAIMS: readonly PublicClaim[] = [
     kind: "policy",
     surface: "privacy",
     statement: {
-      en: "This site sets no cookies, uses no client storage, and performs no tracking or profiling.",
-      vi: "Trang này không đặt cookie, không dùng lưu trữ phía trình duyệt, và không theo dõi hay lập hồ sơ.",
-      zh: "本站点不设置 Cookie，不使用客户端存储，不进行任何跟踪或行为画像。",
+      en: "This site sets no cookies. It stores explicitly selected language and theme preferences in this browser, without tracking or profiling.",
+      vi: "Trang này không đặt cookie. Trang chỉ lưu lựa chọn ngôn ngữ và giao diện do khách truy cập chủ động chọn trong trình duyệt, không theo dõi hay lập hồ sơ.",
+      zh: "本站不设置 Cookie；仅在访客明确选择语言或主题时于浏览器本地保存偏好，不进行跟踪或行为画像。",
     },
     evidenceIds: ["ev-privacy-route", "ev-security-route"],
     boundaryId: "bnd-privacy-collection",
