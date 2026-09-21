@@ -3,6 +3,7 @@ import { SITE } from "@/data/site";
 import { getPublicProducts } from "@/lib/products";
 import { absoluteUrl, PUBLIC_STATIC_PATHS } from "@/lib/seo";
 import { getEvidencePassportIds } from "@/lib/claims";
+import { SUPPORTED_LANGUAGES } from "@/lib/i18n";
 import { isNonProductionSiteUrl } from "@/lib/truth";
 
 export const prerender = true;
@@ -16,15 +17,13 @@ export const GET: APIRoute = async () => {
     slug: product.data.slug,
     name: product.data.name,
   }));
+  const evidenceIds = getEvidencePassportIds(products);
   const locs = isNonProductionSiteUrl(SITE.url)
     ? []
     : [
         ...PUBLIC_STATIC_PATHS.map((path) => absoluteUrl(SITE.url, path)),
-        ...(await getPublicProducts()).map((product) =>
-          absoluteUrl(SITE.url, `/products/${product.data.slug}/`),
-        ),
-        ...(["en", "vi"] as const).flatMap((lang) =>
-          getEvidencePassportIds(products).map((id) =>
+        ...SUPPORTED_LANGUAGES.flatMap((lang) =>
+          evidenceIds.map((id) =>
             absoluteUrl(SITE.url, `/${lang}/evidence/${id}/`),
           ),
         ),
