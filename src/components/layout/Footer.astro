@@ -18,6 +18,15 @@ const proposition = isVi
 const motto = isVi
   ? "Xây dựng với sự rõ ràng. Mở rộng với sự tự tin."
   : SITE.motto;
+
+// C4-A S6 — colophon: identity + language only. Every public trust/security
+// route already exists exactly once in the footer navigation; repeating them
+// here would create duplicate targets for the same public destination.
+const languageName = isVi
+  ? "Tiếng Việt"
+  : lang === "zh"
+    ? "简体中文"
+    : "English";
 ---
 
 <footer
@@ -70,6 +79,11 @@ const motto = isVi
           {motto}
         </p>
       </div>
+    </div>
+    <div class="c4-colophon" data-c4-colophon>
+      <span class="c4-colophon__identity">{SITE.name}</span>
+      <span class="c4-colophon__rule" aria-hidden="true"></span>
+      <span class="c4-colophon__language">{languageName}</span>
     </div>
   </Container>
 </footer>

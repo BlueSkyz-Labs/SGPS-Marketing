@@ -1,0 +1,39 @@
+---
+/**
+ * C4-A S5 — Editorial Folio.
+ *
+ * A decorative running-context affordance for long, multi-act surfaces. The
+ * ordinal is redundant ornament (`aria-hidden`); the label and any running
+ * context stay REAL text, so nothing meaningful lives only in decoration.
+ * It is never a progress score and never a heading.
+ */
+interface Props {
+  /** Authored chapter label. Real text. */
+  label: string;
+  /** Decorative ordinal, e.g. "01". Redundant by construction. */
+  ordinal?: string;
+  /** Running context, e.g. the surface name. Real text. */
+  context?: string;
+}
+
+const { label, ordinal, context } = Astro.props;
+---
+
+<p class="c4-folio" data-c4-folio>
+  {
+    ordinal ? (
+      <span class="c4-folio__ordinal" aria-hidden="true">
+        {ordinal}
+      </span>
+    ) : null
+  }
+  <span class="c4-folio__label">{label}</span>
+  {
+    context ? (
+      <>
+        <span class="c4-folio__rule" aria-hidden="true" />
+        <span class="c4-folio__context">{context}</span>
+      </>
+    ) : null
+  }
+</p>

@@ -1,0 +1,167 @@
+/* C4-A Quiet Authority — semantic role layer.
+ *
+ * Aliases only. Every value resolves to an existing Brand Kit v4 / C3 token, or is a
+ * measured length derived from the editorial craft spec. This file authors NO new brand
+ * truth: no palette, no font family, no motion grammar, no runtime dependency.
+ *
+ * Consumed by C4 editorial surfaces (grid, typography, material, folio, motion scarcity).
+ */
+:root {
+  /* Reading + display measures: optical line length, not container width. */
+  --c4-reading-measure: 62ch;
+  --c4-display-measure: 24ch;
+
+  /* Material surfaces: quiet authority resolves to the canonical ink/paper pair. */
+  --c4-material-ink: var(--surface-inverse);
+  --c4-material-paper: var(--surface-primary);
+  /* C4-A S3 — four semantic materials: Ink, Porcelain, Quiet Paper, Cobalt Accent.
+   * Tonal separation + hairline, never glass/blur or a route-local material. */
+  --c4-material-quiet-paper: var(--surface-subtle);
+  --c4-material-cobalt-accent: var(--brand-cobalt);
+
+  /* Hairline rule: the existing subtle border token, never a new weight. */
+  --c4-hairline: var(--border-subtle);
+
+  /* Folio rhythm: one canonical vertical step. */
+  --c4-folio-gap: var(--space-8);
+
+  /* Motion scarcity: a single slow curve; C4 adds no second motion grammar. */
+  --c4-motion-scarcity-duration: var(--motion-slow);
+  --c4-motion-scarcity-ease: var(--brand-ease-standard);
+
+  /* C4-A S2 — Optical typography roles: fluid clamp ranges over ONE family.
+   * No new font family, no route-local scale; hierarchy stays semantic. */
+  --c4-type-display: clamp(2.5rem, 1.75rem + 2.6vw, 4rem);
+  --c4-type-section: clamp(1.75rem, 1.35rem + 1.4vw, 2.5rem);
+  --c4-type-product: clamp(1.25rem, 1.1rem + 0.6vw, 1.6rem);
+  --c4-type-evidence: clamp(1.05rem, 1rem + 0.3vw, 1.25rem);
+  --c4-type-reading: clamp(1rem, 0.95rem + 0.25vw, 1.125rem);
+  --c4-type-meta: 0.8125rem;
+  --c4-type-caption: 0.75rem;
+}
+
+/* C4-A S1 — Editorial grid roles.
+ *
+ * Desktop composition is deliberately asymmetric (a focal column beside a wider
+ * supporting column); the phone composition is authored as a single column in
+ * source order, so DOM reading order never depends on visual placement.
+ */
+.c4-editorial-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--c4-folio-gap);
+}
+
+.c4-reading-column {
+  max-width: var(--c4-reading-measure);
+}
+
+/* C4-A S2 — calibrated type role utilities (semantic element keeps its level). */
+.c4-type-section {
+  font-size: var(--c4-type-section);
+}
+
+.c4-type-reading {
+  font-size: var(--c4-type-reading);
+}
+
+/* C4-A S5 — Editorial folio: running context as real text, ordinal as ornament. */
+.c4-folio {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-3);
+  margin: 0;
+  font-size: var(--c4-type-meta);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.c4-folio__ordinal {
+  font-variant-numeric: tabular-nums;
+}
+
+.c4-folio__rule {
+  align-self: center;
+  width: var(--space-8);
+  height: 1px;
+  background: var(--c4-hairline);
+}
+
+/* C4-A S6 — signature colophon: identity, language, approved public routes. */
+.c4-colophon {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3);
+  padding-top: var(--space-6);
+  border-top: 1px solid
+    color-mix(in srgb, var(--brand-porcelain) 22%, transparent);
+  font-size: var(--c4-type-meta);
+  color: color-mix(in srgb, var(--brand-porcelain) 62%, white);
+}
+
+.c4-colophon__identity {
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+
+.c4-colophon__rule {
+  width: var(--space-8);
+  height: 1px;
+  background: var(--c4-hairline);
+}
+
+/* C4-A S8 — Quiet motion budget.
+ *
+ * One focal entrance moment per scene is the ceiling. The only animation the
+ * quiet-authority layer is allowed to declare is this single, short rise; it is
+ * fully neutralised under reduced motion. No perpetual decoration, no second
+ * entrance hook, no new animation engine.
+ */
+.c4-motion-focal {
+  animation: c4-focal-rise var(--c4-motion-scarcity-duration)
+    var(--c4-motion-scarcity-ease) both;
+}
+
+@keyframes c4-focal-rise {
+  from {
+    opacity: 0;
+    transform: translateY(0.5rem);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .c4-motion-focal {
+    animation: none;
+  }
+}
+
+/* Print runs no animation, so a `both` fill would freeze the element at its
+ * hidden start state. Print must show the content, not the entrance. */
+@media print {
+  .c4-motion-focal {
+    animation: none;
+  }
+}
+
+@media (min-width: 64rem) {
+  .c4-editorial-grid {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.618fr);
+  }
+
+  .c4-focal-span {
+    grid-column: 2 / -1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .c4-editorial-grid {
+    gap: var(--c4-folio-gap);
+  }
+}

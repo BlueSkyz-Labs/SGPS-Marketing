@@ -1,5 +1,6 @@
 ---
 import type { Language } from "@/data/site";
+import Folio from "@/components/editorial/Folio.astro";
 
 interface Props {
   lang?: Language;
@@ -21,14 +22,19 @@ const concepts = isVi
 ---
 
 <section
-  class="c2-one-house border-b border-[var(--border-subtle)] py-16 lg:py-20"
+  class="c2-one-house c4-editorial-grid c4-motion-focal border-b border-[var(--border-subtle)] py-16 lg:py-20"
   aria-labelledby="house-title"
   data-one-house-editorial
 >
   <div class="c2-one-house__intro">
+    <Folio
+      ordinal="01"
+      label={isVi ? "Chương" : isZh ? "章节" : "Chapter"}
+      context={isVi ? "Một nhà" : isZh ? "一个团队" : "One house"}
+    />
     <h2
       id="house-title"
-      class="text-3xl font-semibold tracking-tight text-balance sm:text-4xl"
+      class="c4-type-section font-semibold tracking-tight text-balance"
     >
       {
         isVi
@@ -38,7 +44,9 @@ const concepts = isVi
             : "One house — a way of thinking"
       }
     </h2>
-    <p class="mt-4 max-w-2xl text-lg text-[var(--text-secondary)] text-pretty">
+    <p
+      class="c4-type-reading mt-4 max-w-2xl text-[var(--text-secondary)] text-pretty"
+    >
       {
         isVi
           ? "Chúng tôi không xây dựng xung quanh một danh mục. Chúng tôi xây dựng xung quanh một cách suy nghĩ."
@@ -49,7 +57,7 @@ const concepts = isVi
     </p>
   </div>
 
-  <ol class="c2-one-house__concepts">
+  <ol class="c2-one-house__concepts c4-focal-span">
     {
       concepts.map((concept, index) => (
         <li class="c2-one-house__concept" data-one-house-concept>

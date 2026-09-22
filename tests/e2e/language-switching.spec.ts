@@ -71,7 +71,12 @@ test("language choices retain the 44px touch floor on desktop and mobile", async
       const rect = await choices.nth(index).boundingBox();
       expect(rect, "visible language choice has a bounding box").not.toBeNull();
       expect(rect!.width, "language touch width").toBeGreaterThanOrEqual(44);
-      expect(rect!.height, "language touch height").toBeGreaterThanOrEqual(44);
+      // Firefox on Linux reports a 44px min-height box as 43.9998: sub-pixel
+      // float rounding, not a smaller target. The 44px floor is still enforced.
+      expect(
+        rect!.height,
+        `language touch height (got ${rect!.height})`,
+      ).toBeGreaterThanOrEqual(44 - 0.001);
     }
   }
 });
