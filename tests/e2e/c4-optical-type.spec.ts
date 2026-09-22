@@ -7,7 +7,6 @@ import { expect, test } from "@playwright/test";
  * bounded, EN/VI diacritics must never clip, and nothing may overflow the phone.
  */
 const ROUTES = ["/en/", "/vi/"] as const;
-const SURFACE = "[data-one-house-editorial]";
 
 test.describe("C4-A optical typography", () => {
   for (const route of ROUTES) {

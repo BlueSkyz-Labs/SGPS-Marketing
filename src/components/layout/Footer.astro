@@ -18,6 +18,16 @@ const proposition = isVi
 const motto = isVi
   ? "Xây dựng với sự rõ ràng. Mở rộng với sự tự tin."
   : SITE.motto;
+
+// C4-A S6 — colophon: identity + language + approved public routes only.
+const languageName = isVi
+  ? "Tiếng Việt"
+  : lang === "zh"
+    ? "简体中文"
+    : "English";
+const COLOPHON_LINKS = FOOTER_LINKS.filter((item) =>
+  /privacy|security|architecture/i.test(item.href),
+).slice(0, 3);
 ---
 
 <footer
@@ -70,6 +80,20 @@ const motto = isVi
           {motto}
         </p>
       </div>
+    </div>
+    <div class="c4-colophon" data-c4-colophon>
+      <span class="c4-colophon__identity">{SITE.name}</span>
+      <span class="c4-colophon__rule" aria-hidden="true"></span>
+      <span class="c4-colophon__language">{languageName}</span>
+      <ul class="c4-colophon__links">
+        {
+          COLOPHON_LINKS.map((item) => (
+            <li>
+              <a href={item.href}>{item.label}</a>
+            </li>
+          ))
+        }
+      </ul>
     </div>
   </Container>
 </footer>

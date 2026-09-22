@@ -88,6 +88,49 @@
   background: var(--c4-hairline);
 }
 
+/* C4-A S6 — signature colophon: identity, language, approved public routes. */
+.c4-colophon {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3);
+  padding-top: var(--space-6);
+  border-top: 1px solid
+    color-mix(in srgb, var(--brand-porcelain) 22%, transparent);
+  font-size: var(--c4-type-meta);
+  color: color-mix(in srgb, var(--brand-porcelain) 62%, white);
+}
+
+.c4-colophon__identity {
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+
+.c4-colophon__rule {
+  width: var(--space-8);
+  height: 1px;
+  background: var(--c4-hairline);
+}
+
+.c4-colophon__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.c4-colophon__links a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.c4-colophon__links a:hover,
+.c4-colophon__links a:focus-visible {
+  text-decoration: underline;
+}
+
 @media (min-width: 64rem) {
   .c4-editorial-grid {
     grid-template-columns: minmax(0, 1fr) minmax(0, 1.618fr);
