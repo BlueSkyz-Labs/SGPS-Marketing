@@ -1,0 +1,29 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Container from "@/components/layout/Container.astro";
+import EditionStory from "@/components/editorial/EditionStory.astro";
+import { EDITIONS } from "@/data/editions";
+import { resolveEdition } from "@/lib/editions";
+
+export function getStaticPaths() {
+  return EDITIONS.map((edition) => ({
+    params: { id: edition.id },
+    props: { edition },
+  }));
+}
+
+const { edition } = Astro.props;
+const view = resolveEdition(edition, "vi");
+---
+
+<BaseLayout
+  title={view.title}
+  description={view.deck}
+  path={`/vi/editions/${view.id}/`}
+>
+  <section class="py-16 lg:py-24">
+    <Container>
+      <EditionStory edition={edition} lang="vi" />
+    </Container>
+  </section>
+</BaseLayout>

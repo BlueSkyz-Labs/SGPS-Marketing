@@ -1,0 +1,45 @@
+---
+import { EDITIONS } from "@/data/editions";
+import { resolveEdition } from "@/lib/editions";
+import type { Language } from "@/lib/i18n";
+
+/**
+ * C4-B G6 — Collected edition index.
+ *
+ * Lists only editions that still resolve publicly for this language: an edition
+ * whose sources no longer resolve is omitted rather than advertised.
+ */
+interface Props {
+  lang?: Language;
+}
+
+const { lang = "en" } = Astro.props;
+
+const entries = EDITIONS.map((edition) => resolveEdition(edition, lang)).filter(
+  (edition) => edition.sources.length > 0,
+);
+
+const label = lang === "vi" ? "Tuyển tập" : lang === "zh" ? "选集" : "Editions";
+---
+
+{
+  entries.length > 0 && (
+    <nav class="c4-editions" aria-label={label} data-edition-index>
+      <ol class="c4-editions__list">
+        {entries.map((edition, index) => (
+          <li class="c4-editions__item" data-edition={edition.id}>
+            <span class="c4-editions__ordinal" aria-hidden="true">
+              {String(index + 1).padStart(2, "0")}
+            </span>
+            <a
+              class="c4-editions__link"
+              href={`/${lang}/editions/${edition.id}/`}
+            >
+              {edition.title}
+            </a>
+          </li>
+        ))}
+      </ol>
+    </nav>
+  )
+}
