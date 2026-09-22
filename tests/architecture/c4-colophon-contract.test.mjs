@@ -53,11 +53,14 @@ test("C4 colophon: is marked and styled from the C4 role layer", () => {
   );
 });
 
-test("C4 colophon: reuses approved route helpers instead of duplicating labels", () => {
-  assert.match(
-    footer,
-    /getFooterLinks/,
-    "colophon must consume the approved footer link helper",
+test("C4 colophon: never duplicates a public destination already in the footer nav", () => {
+  const colophon =
+    footer.match(/<div class="c4-colophon"[\s\S]*?\n {4}<\/div>/)?.[0] ?? "";
+  assert.ok(colophon.length > 0, "colophon block must exist");
+  assert.doesNotMatch(
+    colophon,
+    /<a\b/,
+    "colophon must not add a second link target for a route the footer nav already owns",
   );
   assert.doesNotMatch(
     footer,

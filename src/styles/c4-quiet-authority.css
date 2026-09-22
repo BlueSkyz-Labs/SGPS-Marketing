@@ -112,25 +112,6 @@
   background: var(--c4-hairline);
 }
 
-.c4-colophon__links {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-4);
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.c4-colophon__links a {
-  color: inherit;
-  text-decoration: none;
-}
-
-.c4-colophon__links a:hover,
-.c4-colophon__links a:focus-visible {
-  text-decoration: underline;
-}
-
 /* C4-A S8 — Quiet motion budget.
  *
  * One focal entrance moment per scene is the ceiling. The only animation the
