@@ -222,3 +222,57 @@
     display: none;
   }
 }
+
+/* ---- C4-B G9 — Craft provenance story ---- */
+
+.c4-craft {
+  margin-block-start: var(--space-10);
+  padding-block-start: var(--space-8);
+  border-top: 1px solid
+    color-mix(in srgb, var(--brand-porcelain) 16%, transparent);
+  max-width: 62ch;
+}
+
+.c4-craft__sections {
+  display: grid;
+  gap: var(--space-8);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.c4-craft__heading {
+  margin: 0 0 var(--space-2);
+  font-size: var(--c4-type-section);
+}
+
+.c4-craft__text {
+  font-size: var(--c4-type-reading);
+  color: color-mix(in srgb, var(--brand-porcelain) 82%, transparent);
+}
+
+.c4-craft__evidence {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.c4-craft__evidence-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  color: inherit;
+  text-decoration: none;
+}
+
+.c4-craft__evidence-link:hover {
+  text-decoration: underline;
+  text-underline-offset: 0.25em;
+}
+
+@media print {
+  .c4-craft__evidence-link {
+    min-height: 0;
+    text-decoration: underline;
+  }
+}

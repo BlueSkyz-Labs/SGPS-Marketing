@@ -7,6 +7,9 @@ import BoundaryCard from "@/components/integrity/BoundaryCard.astro";
 import BilingualMirror from "@/components/integrity/BilingualMirror.astro";
 import { SECURITY_BOUNDARY } from "@/data/integrity";
 import { SITE, SECURITY_ADVISORY_URL } from "@/data/site";
+import CraftStory from "@/components/editorial/CraftStory.astro";
+import { getCraftStory } from "@/data/craft-stories";
+const craftStory = getCraftStory("private-security-reporting");
 ---
 
 <BaseLayout
@@ -53,6 +56,9 @@ import { SITE, SECURITY_ADVISORY_URL } from "@/data/site";
       </p>
       <div class="mt-12 max-w-3xl">
         <BilingualMirror lang="en" />
+      </div>
+      <div class="mt-12 max-w-3xl">
+        {craftStory && <CraftStory story={craftStory} lang="en" />}
       </div>
     </Container>
   </section>
