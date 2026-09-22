@@ -1,0 +1,85 @@
+---
+import { renderCraftStory, type CraftStoryDraft } from "@/lib/craft-stories";
+import type { Language } from "@/lib/i18n";
+
+/**
+ * C4-B G9 — Craft provenance story.
+ *
+ * Renders only the validated view model. An invalid story (unknown evidence,
+ * hidden limitations, invented outcome, unsupported assurance) produces no
+ * markup at all, so the surface fails closed instead of narrating something
+ * that is not source-backed.
+ */
+interface Props {
+  story: CraftStoryDraft;
+  lang?: Language;
+}
+
+const { story, lang = "en" } = Astro.props;
+const view = renderCraftStory(story, lang);
+
+const LABELS: Record<
+  Language,
+  { sections: Record<string, string>; evidence: string }
+> = {
+  en: {
+    sections: {
+      problem: "The problem",
+      designChoice: "The design choice",
+      constraint: "The constraint",
+      implementation: "How it is implemented",
+      limitations: "Limitations",
+    },
+    evidence: "Evidence",
+  },
+  vi: {
+    sections: {
+      problem: "Vấn đề",
+      designChoice: "Lựa chọn thiết kế",
+      constraint: "Ràng buộc",
+      implementation: "Cách triển khai",
+      limitations: "Giới hạn",
+    },
+    evidence: "Bằng chứng",
+  },
+  zh: {
+    sections: {
+      problem: "问题",
+      designChoice: "设计取舍",
+      constraint: "约束",
+      implementation: "实现方式",
+      limitations: "局限",
+    },
+    evidence: "证据",
+  },
+};
+
+const labels = LABELS[lang];
+---
+
+{
+  view && (
+    <article class="c4-craft" data-craft-story={view.id}>
+      <ol class="c4-craft__sections">
+        {view.sections.map((section) => (
+          <li class="c4-craft__section" data-craft-section={section.section}>
+            <h2 class="c4-craft__heading">
+              {labels.sections[section.section]}
+            </h2>
+            <p class="c4-craft__text">{section.text}</p>
+          </li>
+        ))}
+      </ol>
+      <h2 class="c4-craft__heading">{labels.evidence}</h2>
+      <ul class="c4-craft__evidence">
+        {view.evidence.map((entry) => (
+          <li class="c4-craft__evidence-item" data-craft-evidence={entry.id}>
+            <a class="c4-craft__evidence-link" href={entry.href}>
+              {entry.label}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </article>
+  )
+}
