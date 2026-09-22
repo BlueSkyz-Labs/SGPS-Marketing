@@ -9,6 +9,7 @@ import Trust from "@/components/sections/Trust.astro";
 import AboutBlueSkyz from "@/components/sections/AboutBlueSkyz.astro";
 import NextStep from "@/components/sections/NextStep.astro";
 import HorizonField from "@/components/experience/HorizonField.astro";
+import MaisonIndex from "@/components/maison/MaisonIndex.astro";
 import { getFlagshipProduct, getPublicProducts } from "@/lib/products";
 import { SITE } from "@/data/site";
 
@@ -38,6 +39,7 @@ const flagship = await getFlagshipProduct();
     <Trust lang="en" />
     <AboutBlueSkyz lang="en" />
     <NextStep lang="en" />
+    <MaisonIndex lang="en" />
   </Container>
   <HorizonField
     class="c2-closing-signature"
