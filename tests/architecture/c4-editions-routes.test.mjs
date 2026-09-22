@@ -32,7 +32,10 @@ test("C4-B edition routes: the public path list includes every editions index", 
 
 test("C4-B edition routes: the sitemap enumerates editions from authored data", () => {
   const sitemap = readFileSync(SITEMAP, "utf8");
-  assert.ok(sitemap.includes("EDITIONS"), "sitemap must read the authored editions");
+  assert.ok(
+    sitemap.includes("EDITIONS"),
+    "sitemap must read the authored editions",
+  );
   assert.match(
     sitemap,
     /\$\{lang\}\/editions\/\$\{edition\.id\}\//,
@@ -49,8 +52,14 @@ test("C4-B edition routes: the sitemap enumerates editions from authored data", 
 test("C4-B edition routes: story routes are generated from the authored editions", () => {
   for (const lang of LANGS) {
     const story = readFileSync(`src/pages/${lang}/editions/[id].astro`, "utf8");
-    assert.ok(story.includes("getStaticPaths"), `${lang} story route needs getStaticPaths`);
-    assert.ok(story.includes("EDITIONS"), `${lang} story route must enumerate EDITIONS`);
+    assert.ok(
+      story.includes("getStaticPaths"),
+      `${lang} story route needs getStaticPaths`,
+    );
+    assert.ok(
+      story.includes("EDITIONS"),
+      `${lang} story route must enumerate EDITIONS`,
+    );
     assert.ok(
       story.includes(`resolveEdition(edition, "${lang}")`),
       `${lang} story route must resolve for its own language`,
@@ -61,12 +70,24 @@ test("C4-B edition routes: story routes are generated from the authored editions
 test("C4-B edition routes: index pages are localized, not copies", () => {
   const seen = new Set();
   for (const lang of LANGS) {
-    const index = readFileSync(`src/pages/${lang}/editions/index.astro`, "utf8");
-    assert.ok(index.includes(`lang="${lang}"`), `${lang} index must pass its own lang`);
-    assert.ok(index.includes(`path="/${lang}/editions/"`), `${lang} index must set its path`);
+    const index = readFileSync(
+      `src/pages/${lang}/editions/index.astro`,
+      "utf8",
+    );
+    assert.ok(
+      index.includes(`lang="${lang}"`),
+      `${lang} index must pass its own lang`,
+    );
+    assert.ok(
+      index.includes(`path="/${lang}/editions/"`),
+      `${lang} index must set its path`,
+    );
     const heading = index.match(/title="([^"]+)"/)?.[1] ?? "";
     assert.ok(heading.length > 0, `${lang} index needs a heading`);
-    assert.ok(!seen.has(heading), `${lang} heading must be authored, not copied`);
+    assert.ok(
+      !seen.has(heading),
+      `${lang} heading must be authored, not copied`,
+    );
     seen.add(heading);
   }
 });
