@@ -116,6 +116,56 @@
 }
 
 /* -------------------------------------------------
+   Hero brand mark — canonical R4d material expression
+   -------------------------------------------------
+   The mockup's hero centerpiece: a large metallic mark on a soft cobalt
+   glow. Purely decorative (aria-hidden, pointer-events: none so it can never
+   obstruct the hero actions). Desktop-only to keep the mobile hero lean. */
+
+.hero-visual {
+  position: relative;
+  display: none;
+  place-items: center;
+  gap: 2rem;
+  pointer-events: none;
+}
+
+@media (min-width: 1024px) {
+  .hero-visual {
+    display: grid;
+  }
+}
+
+.hero-visual-glow {
+  position: absolute;
+  inset: 6% 10%;
+  border-radius: 50%;
+  background: radial-gradient(
+    closest-side,
+    color-mix(in srgb, var(--brand-cobalt) 46%, transparent),
+    transparent 72%
+  );
+  filter: blur(30px);
+  opacity: 0.9;
+}
+
+.hero-mark {
+  position: relative;
+  width: min(100%, 30rem);
+  height: auto;
+  filter: drop-shadow(
+    0 28px 64px color-mix(in srgb, var(--brand-cobalt) 32%, transparent)
+  );
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-mark,
+  .hero-visual-glow {
+    filter: none;
+  }
+}
+
+/* -------------------------------------------------
    Closing signature (second horizon use)
    ------------------------------------------------- */
 
