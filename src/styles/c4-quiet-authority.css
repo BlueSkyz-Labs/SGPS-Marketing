@@ -25,3 +25,35 @@
   --c4-motion-scarcity-duration: var(--motion-slow);
   --c4-motion-scarcity-ease: var(--brand-ease-standard);
 }
+
+/* C4-A S1 — Editorial grid roles.
+ *
+ * Desktop composition is deliberately asymmetric (a focal column beside a wider
+ * supporting column); the phone composition is authored as a single column in
+ * source order, so DOM reading order never depends on visual placement.
+ */
+.c4-editorial-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--c4-folio-gap);
+}
+
+.c4-reading-column {
+  max-width: var(--c4-reading-measure);
+}
+
+@media (min-width: 64rem) {
+  .c4-editorial-grid {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.618fr);
+  }
+
+  .c4-focal-span {
+    grid-column: 2 / -1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .c4-editorial-grid {
+    gap: var(--c4-folio-gap);
+  }
+}
