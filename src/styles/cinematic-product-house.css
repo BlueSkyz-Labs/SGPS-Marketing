@@ -147,6 +147,19 @@
   );
   filter: blur(30px);
   opacity: 0.9;
+  animation: hero-glow-pulse 7s var(--motion-ease-standard) infinite;
+}
+
+/* Ambient breath for the hero glow (mockup: dynamic mark). Perpetual by design;
+   the e2e settle treats infinite-iteration animations as non-blocking. */
+@keyframes hero-glow-pulse {
+  0%,
+  100% {
+    opacity: 0.72;
+  }
+  50% {
+    opacity: 1;
+  }
 }
 
 .hero-mark {
@@ -179,6 +192,10 @@
   .hero-mark,
   .hero-visual-glow {
     filter: none;
+  }
+  .hero-visual-glow {
+    animation: none;
+    opacity: 0.9;
   }
   .hero-visual-sheen {
     opacity: 0.4;
