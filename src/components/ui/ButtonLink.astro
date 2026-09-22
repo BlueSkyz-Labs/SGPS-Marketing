@@ -14,7 +14,7 @@ const isExternal = /^https?:\/\//i.test(href);
   class:list={[
     "inline-flex min-h-11 items-center justify-center rounded-lg px-5 py-2.5 text-sm font-semibold no-underline transition-[background-color,border-color,transform] duration-150 focus-visible:ring-2 focus-visible:ring-[var(--brand-cobalt)] focus-visible:ring-offset-2 focus-visible:outline-none active:scale-[0.98]",
     variant === "primary" &&
-      "bg-[var(--brand-cobalt)] text-[#ffffff] hover:bg-[#1d4ed8]",
+      "bg-[var(--brand-cobalt)] text-[#ffffff] hover:bg-[#1d4ed8] hover:shadow-[0_12px_30px_-10px_color-mix(in_srgb,var(--brand-cobalt)_60%,transparent)] motion-reduce:hover:shadow-none",
     variant === "secondary" &&
       "border border-[var(--border-subtle)] bg-[#ffffff] text-[var(--text-primary)] hover:bg-[var(--surface-subtle)]",
     variant === "on-ink" &&
