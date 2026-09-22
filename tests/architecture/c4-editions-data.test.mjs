@@ -4,8 +4,10 @@ import { EDITIONS, getEdition } from "../../src/data/editions.ts";
 import { resolveEdition } from "../../src/lib/editions.ts";
 
 const LANGS = ["en", "vi", "zh"];
-// Local calendar date: toISOString() is UTC, which is a day behind at UTC+7.
-const TODAY = new Date().toLocaleDateString("en-CA");
+// Authored dates are Asia/Ho_Chi_Minh dates. Compute the site's calendar day from a fixed
+// +07:00 offset so the check is identical on a UTC CI runner and on a UTC+7 workstation.
+const SITE_OFFSET_MS = 7 * 60 * 60 * 1000;
+const TODAY = new Date(Date.now() + SITE_OFFSET_MS).toISOString().slice(0, 10);
 
 test("C4-B editions data: every authored edition is publicly resolvable", () => {
   assert.ok(
