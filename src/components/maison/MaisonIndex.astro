@@ -1,0 +1,38 @@
+---
+import { getMaisonSections } from "@/lib/maison";
+import type { Language } from "@/data/site";
+
+/**
+ * C4-B G1 — Maison orientation surface.
+ *
+ * A calm index of the public house surfaces, built from the maison adapter.
+ * It is orientation, not navigation: one named landmark, real routes only, and
+ * no duplicated primary-nav semantics.
+ */
+interface Props {
+  lang?: Language;
+}
+
+const { lang = "en" } = Astro.props;
+const sections = getMaisonSections(lang);
+const heading = lang === "vi" ? "Mục lục ngôi nhà" : "House index";
+---
+
+{
+  sections.length > 0 && (
+    <nav class="c4-maison" aria-label={heading} data-maison-index>
+      <ol class="c4-maison__list">
+        {sections.map((section, index) => (
+          <li class="c4-maison__item" data-maison-section={section.id}>
+            <span class="c4-maison__ordinal" aria-hidden="true">
+              {String(index + 1).padStart(2, "0")}
+            </span>
+            <a class="c4-maison__link" href={section.href}>
+              {section.label}
+            </a>
+          </li>
+        ))}
+      </ol>
+    </nav>
+  )
+}
