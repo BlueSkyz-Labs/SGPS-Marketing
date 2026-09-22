@@ -1,8 +1,8 @@
 {
   "schemaVersion": "1.0",
   "updatedAt": "2026-09-22",
-  "program": "C3 Living Verifiable Product Experience — C3-A & C3-B converged; C3-C Brand Experience Upgrade active: W1 trilingual, W2 premium switcher, W3 Light/Dark, W6 zh social-preview, brand-unify + hardening merged; W5 SGPS:Experience FULL / W6 SEO remainder / W7 / W8 remain.",
-  "status": "c3-c-in-progress",
+  "program": "C3 Living Verifiable Product Experience — C3-C Brand Experience Upgrade converged across W1-W8: trilingual (W1), premium switcher (W2), Light/Dark (W3), brand-kit UI rounds + mockup wow (W4), SGPS:Experience FULL adoption (W5), trilingual SEO contract (W6), design/frontend best-practice + adoption (W7), audit + Quiet Luxury (W8).",
+  "status": "c3-c-converged",
   "authorities": {
     "experienceContract": "docs/superpowers/specs/2026-09-03-blueskyz-web-v1-c1-1-design.md",
     "c2Design": "docs/superpowers/specs/2026-09-13-c2-cinematic-product-house-design.md",
@@ -258,10 +258,10 @@
     "Localized product profile route remains product-truth gated until a real public product can exercise the route contract."
   ],
   "nextActionable": [
-    "C3-A source-converged (evidence docs/evidence/2026-09-18-c3-a-final-convergence.md); C3-B Tasks 1-6 merged (#188 #190 #197 #198 #199) incl native Evidence Peek, truth choreography, passport + private-evidence exclusion.",
-    "C3-C active: W1 trilingual (#192), W2 premium switcher (#195), W3 Light/Dark/System (#194), W6 zh social-preview (#200), brand-unify radius+conformance (#201) merged. W5 SGPS:Experience applicability/adoption matrix is recorded in docs/evidence/2026-09-22-sgps-experience-adoption.md; next executable slice is W6 SEO remainder (structured data/sitemap/canonical top-tier), then W7 design/frontend best-practice + SGPS adoption and W8 full audit + Quiet Luxury (ADR 0001).",
-    "Reconcile current-work against C3-C plan (docs/superpowers/plans/2026-09-18-c3-c-brand-experience-upgrade.md) after each wave merge.",
-    "Public site protected behind Cloudflare Access (blueskyzlabs.com + www) allowing the owner-approved account; production remains owner-account-gated before public launch.",
-    "Public product runtime stays honest-empty until owner-approved screenshot/product truth exists. C3-E remote AI, C3-G WebGL, analytics/RUM, and private/model C4 capabilities remain separately gated."
+    "C3-C converged: W1 trilingual (#192), W2 premium switcher (#195), W3 Light/Dark (#194), W4 brand-unify + mockup wow (#201 #208 #209 #210 #211), W6 trilingual SEO contract, W7 design/frontend best-practice (global focus-visible, reduced-motion, token consistency, semantic landmarks), W8 Quiet Luxury (hero brand-mark + sheen + ambient glow + interaction polish) — all merged or in final merge.",
+    "W5 SGPS:Experience FULL adoption recorded with per-decision classification + guards: docs/evidence/2026-09-22-sgps-experience-adoption.md (DEC-007/-008/-012 APPLICABLE; governance ADOPTED, experience VERIFIED/GUARDED).",
+    "Remaining items are PENDING_EXTERNAL / owner-gated: production RUM/analytics privacy+provider decision (transmission stays OFF), real-user E4 customer-task + brand-interpretation sessions, E5/E6 recognition evidence, and the C4 Quiet Authority program plan (PR #180 draft).",
+    "Public site remains protected behind Cloudflare Access (owner-only allow-list) until the owner authorises public launch.",
+    "Public product runtime stays honest-empty until owner-approved screenshot/product truth exists; C3-E remote AI, C3-G WebGL remain separately gated."
   ]
 }
