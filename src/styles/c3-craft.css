@@ -1,10 +1,9 @@
-/* C3-A Task 1 — Experience Craft Foundation shared role contract.
+/* C3-A Experience Craft Foundation — shared craft layer.
  *
- * This file intentionally defines semantic aliases only. Later C3-A tasks
- * consume these roles for product imagery, route continuity, typography,
- * header states, mobile composition, and microinteractions. Existing Brand v4
- * and C2 tokens remain authoritative; no second palette, animation system, or
- * transition identity convention is introduced here.
+ * Task 1 established the semantic role aliases; Task 2 adds the shared product
+ * visual primitive. Brand v4 / C2 tokens stay authoritative: this file authors
+ * no palette, no keyframes and no transition identity, and route-local
+ * decoration must extend it rather than duplicate it.
  */
 
 :root {
@@ -16,4 +15,189 @@
   --c3-interaction-duration: var(--motion-confirmation-duration);
   --c3-interaction-ease: var(--motion-ease-standard);
   --c3-interaction-distance: var(--motion-distance-sm);
+}
+
+/* Task 2 — Cinematic Screenshot Art Direction.
+ *
+ * One responsive, intrinsic-size visual for every product surface. The frame
+ * is a shrinkable grid/flex child (min-width: 0) so a real screenshot can
+ * never widen its track, and the image is bounded by the frame instead of its
+ * intrinsic pixel size. Declared outside @layer so it wins over Tailwind's
+ * layered preflight in the parity fixture app as well as in the runtime build.
+ */
+.c3-product-visual {
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+.c3-product-visual__image {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  border: 1px solid var(--c3-image-surface-border);
+  border-radius: var(--c3-image-surface-radius);
+  background-color: var(--c3-image-surface-background);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .c3-product-visual__image {
+    animation: none;
+    transition: none;
+  }
+}
+
+/* Task 4 — Scene-Aware Global Header (design S4).
+ *
+ * The header consumes an authored scene marker and adapts contrast and density.
+ * It re-points the existing semantic tokens locally instead of authoring a
+ * second palette, so every descendant keeps using the same token names and the
+ * navigation labels, order, semantics and focus ring stay scene-invariant.
+ */
+header[data-scene="ink"] {
+  --surface-primary: var(--brand-ink);
+  --surface-subtle: color-mix(in srgb, var(--brand-porcelain) 14%, transparent);
+  --border-subtle: color-mix(in srgb, var(--brand-porcelain) 24%, transparent);
+  --text-primary: var(--brand-porcelain);
+  --text-secondary: color-mix(in srgb, var(--brand-porcelain) 82%, transparent);
+  /* Density variant: the ink scene runs tighter than porcelain. */
+  --c3-header-block-padding: 0.5rem;
+}
+
+header[data-scene="product"] {
+  /* Product scenes keep the porcelain surface and mark the boundary with the
+     brand accent rather than a second surface colour. */
+  border-bottom-color: color-mix(
+    in srgb,
+    var(--brand-cobalt) 34%,
+    var(--border-subtle)
+  );
+}
+
+header .header-bar {
+  padding-block: var(--c3-header-block-padding, 0.75rem);
+}
+
+/* Task 7 — Microinteraction Quality Pass (design S10).
+ *
+ * One purpose-based grammar for hover, focus, active/pressed, disclosure and
+ * selection. Only the states that were missing or inconsistent are added here:
+ * the shared button already owns hover/focus/active, so this layer must not
+ * restate it. Tokens only — no new palette, no perpetual animation.
+ */
+
+/* Selection: a document-wide affordance that was previously unstyled (the
+   browser default), expressed with the brand accent over the surface. */
+::selection {
+  background-color: color-mix(in srgb, var(--brand-cobalt) 24%, transparent);
+  color: var(--text-primary);
+}
+
+/* Pressed feedback for the compact menu disclosure, which had hover and focus
+   states but no tactile response on press. */
+header details > summary:active {
+  background-color: var(--surface-subtle);
+  transform: translateY(var(--c3-interaction-distance));
+}
+
+/* Pressed feedback for disclosure controls in page content (evidence "more",
+   decision-room rows) so the grammar is not header-only. */
+main details > summary:active {
+  transform: translateY(var(--c3-interaction-distance));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  header details > summary:active,
+  main details > summary:active {
+    transform: none;
+  }
+}
+
+/* Task 2 — contextual product-to-proof affordance (design G4).
+ *
+ * The disclosure stays quiet next to the capability text it belongs to: tokens
+ * only, no new palette, and the summary/link keep the touch height the rest of
+ * the system uses. Nothing here animates perpetually, and the whole block is
+ * complete without JavaScript because it is a native <details>.
+ */
+.c3-product-proof {
+  margin-top: 0.5rem;
+}
+
+.c3-product-proof__summary {
+  display: inline-flex;
+  min-height: 2.75rem;
+  align-items: center;
+  color: var(--action-primary);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.c3-product-proof__list {
+  display: grid;
+  gap: 0.25rem;
+  margin: 0.25rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.c3-product-proof__item {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 0;
+}
+
+.c3-product-proof__link {
+  display: inline-flex;
+  min-height: 2.75rem;
+  min-width: 0;
+  align-items: center;
+  overflow-wrap: anywhere;
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-underline-offset: 2px;
+}
+
+.c3-product-proof__link:hover {
+  color: var(--text-primary);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .c3-product-proof {
+    transition: none;
+  }
+}
+
+/* C3-B Task 4 / G8 — evidence-aware choreography.
+ * These are disclosure styles for the five existing publication states, NOT
+ * scores or a stronger assurance status. Visible localized truth text remains
+ * authoritative; pattern makes a changed/absent state distinct without color.
+ */
+.truth-state[data-truth-state="changed"] {
+  border-style: dashed;
+}
+
+.truth-state[data-truth-state="not-published"],
+.truth-state[data-truth-state="unavailable"] {
+  border-style: dotted;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .truth-state {
+    animation: none;
+    transition: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .truth-state {
+    color: CanvasText;
+    background: Canvas;
+    border-color: CanvasText;
+  }
 }

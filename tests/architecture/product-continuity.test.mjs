@@ -8,6 +8,7 @@ const read = (path) =>
 // --- Source-level convention guard (single source of truth) ---
 
 const transitionSource = read("src/lib/product-transition.ts");
+const productVisual = read("src/components/product/ProductVisual.astro");
 
 test("naming convention has exactly one source in src/lib/product-transition.ts", () => {
   assert.match(
@@ -52,6 +53,16 @@ test("product surfaces reference product-transition instead of hardcoding", () =
   }
 });
 
+test("ProductVisual may forward continuity but never owns transition identity", () => {
+  assert.match(productVisual, /transitionStyle/);
+  assert.match(productVisual, /data-product-continuity=\{continuity\}/);
+  assert.doesNotMatch(
+    productVisual,
+    /productTransitionStyle|product-transition/,
+  );
+  assert.doesNotMatch(productVisual, /view-transition-name/);
+});
+
 // --- Static-first contract guard ---
 
 test("product surfaces contain no client hydration directives", () => {
@@ -60,6 +71,7 @@ test("product surfaces contain no client hydration directives", () => {
   for (const [name, source] of [
     ["FlagshipTheatre", flagship],
     ["ProductCard", card],
+    ["ProductVisual", productVisual],
   ]) {
     assert.doesNotMatch(
       source,
@@ -77,6 +89,7 @@ test("product surfaces contain no animation-framework or framework imports", () 
     ["FlagshipTheatre", flagship],
     ["ProductCard", card],
     ["ProductHouse", house],
+    ["ProductVisual", productVisual],
   ]) {
     assert.doesNotMatch(
       source,

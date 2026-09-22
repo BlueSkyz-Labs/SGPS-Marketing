@@ -12,15 +12,16 @@ const { claimId, lang, products } = Astro.props;
 const trace = getClaimTrace(claimId, products);
 
 const ROLE_LABELS: Record<ClaimTraceStep["kind"], Record<Language, string>> = {
-  claim: { en: "Claim", vi: "Tuyên bố" },
-  evidence: { en: "Evidence", vi: "Bằng chứng" },
-  boundary: { en: "Boundary", vi: "Ranh giới" },
-  surface: { en: "Surface", vi: "Bề mặt" },
+  claim: { en: "Claim", vi: "Tuyên bố", zh: "声明" },
+  evidence: { en: "Evidence", vi: "Bằng chứng", zh: "证据" },
+  boundary: { en: "Boundary", vi: "Ranh giới", zh: "边界" },
+  surface: { en: "Surface", vi: "Bề mặt", zh: "公开层面" },
 };
 
 const HEADING: Record<Language, string> = {
   en: "Source to surface",
   vi: "Từ nguồn đến bề mặt",
+  zh: "从来源到公开层面",
 };
 ---
 
@@ -41,6 +42,7 @@ const HEADING: Record<Language, string> = {
             {step.href ? (
               <a
                 href={step.href[lang]}
+                class="inline-flex min-h-11 items-center text-sm font-semibold text-[var(--action-primary)] underline-offset-2 hover:underline"
                 rel={
                   /^https?:\/\//i.test(step.href[lang])
                     ? "noopener noreferrer"

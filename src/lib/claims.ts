@@ -20,6 +20,7 @@ import {
 import type {
   BoundaryStatement,
   EvidenceReference,
+  LocalizedText,
   TruthState,
 } from "../data/integrity.ts";
 import type { Language } from "../data/site.ts";
@@ -47,7 +48,9 @@ export interface ResolvedClaim {
   claim: PublicClaim;
   evidence: EvidenceReference[];
   boundaryId?: string | undefined;
+  boundary?: BoundaryStatement | undefined;
   reviewId?: string | undefined;
+  truthState: TruthState;
   productSlugs: string[];
 }
 
@@ -71,22 +74,45 @@ export function resolvePublicClaim(
     }
   }
 
-  if (claim.boundaryId && !BOUNDARY_INDEX.has(claim.boundaryId)) return null;
-  if (claim.reviewId && !INTEGRITY_ENTRY_INDEX.has(claim.reviewId)) return null;
+  const boundary = claim.boundaryId
+    ? BOUNDARY_INDEX.get(claim.boundaryId)
+    : undefined;
+  if (claim.boundaryId && !boundary) return null;
+
+  const reviewEntry = claim.reviewId
+    ? INTEGRITY_ENTRY_INDEX.get(claim.reviewId)
+    : undefined;
+  if (claim.reviewId && !reviewEntry) return null;
+
+  if (claim.productBinding && claim.kind !== "product") return null;
 
   let productSlugs: string[] = [];
   if (claim.kind === "product") {
     // Product claims must resolve the live public registry; an empty
     // registry fails closed instead of publishing an empty promise.
     if (products.length === 0) return null;
-    productSlugs = products.map((product) => product.slug);
+
+    if (claim.productBinding) {
+      const { productSlug, capabilityId } = claim.productBinding;
+      if (!productSlug || !capabilityId) return null;
+      if (!products.some((product) => product.slug === productSlug))
+        return null;
+      productSlugs = [productSlug];
+    } else {
+      // Generic product-publication claims may describe the registry, but they
+      // carry no capability authority. C3-B filters them out for capability
+      // proof rather than inferring a stronger relationship.
+      productSlugs = products.map((product) => product.slug);
+    }
   }
 
   return {
     claim,
     evidence,
     boundaryId: claim.boundaryId,
+    boundary,
     reviewId: claim.reviewId,
+    truthState: reviewEntry?.state ?? "source-linked",
     productSlugs,
   };
 }
@@ -180,14 +206,18 @@ export function buildPublicClaimGraph(
 export interface ClaimTraceStep {
   kind: "claim" | "evidence" | "boundary" | "surface";
   id: string;
-  label: { en: string; vi: string };
-  href?: { en: string; vi: string } | undefined;
+  label: LocalizedText;
+  href?: LocalizedText | undefined;
 }
 
-const SURFACE_LABELS: Record<string, { en: string; vi: string }> = {
-  security: { en: "Security surface", vi: "Bề mặt Bảo mật" },
-  privacy: { en: "Privacy surface", vi: "Bề mặt Quyền riêng tư" },
-  products: { en: "Products surface", vi: "Bề mặt Sản phẩm" },
+const SURFACE_LABELS: Record<string, LocalizedText> = {
+  security: { en: "Security surface", vi: "Bề mặt Bảo mật", zh: "安全层面" },
+  privacy: {
+    en: "Privacy surface",
+    vi: "Bề mặt Quyền riêng tư",
+    zh: "隐私层面",
+  },
+  products: { en: "Products surface", vi: "Bề mặt Sản phẩm", zh: "产品层面" },
 };
 
 /**
@@ -236,6 +266,7 @@ export function getClaimTrace(
     label: SURFACE_LABELS[resolved.claim.surface] ?? {
       en: resolved.claim.surface,
       vi: resolved.claim.surface,
+      zh: resolved.claim.surface,
     },
     href: surfaceRoute?.href,
   });
@@ -246,13 +277,13 @@ export function getClaimTrace(
 /** Evidence passport model (v3 G3) — public, printable, shareable. */
 export interface EvidencePassportModel {
   id: string;
-  claim: { en: string; vi: string };
+  claim: LocalizedText;
   state: TruthState;
   evidence: EvidenceReference[];
   boundaryId?: string | undefined;
   boundary?: BoundaryStatement | undefined;
   reviewedOn?: string | undefined;
-  contextHref: { en: string; vi: string };
+  contextHref: LocalizedText;
 }
 
 export function getEvidencePassport(
@@ -272,12 +303,10 @@ export function getEvidencePassport(
   return {
     id: resolved.claim.id,
     claim: resolved.claim.statement,
-    state: entry?.state ?? "source-linked",
+    state: resolved.truthState,
     evidence: resolved.evidence,
     boundaryId: resolved.boundaryId,
-    boundary: resolved.boundaryId
-      ? BOUNDARY_INDEX.get(resolved.boundaryId)
-      : undefined,
+    boundary: resolved.boundary,
     reviewedOn: entry?.review?.reviewedOn,
     contextHref: contextRoute.href,
   };

@@ -17,6 +17,7 @@ import {
 import { getAlternatePath, getLanguageFromPath } from "@/lib/i18n";
 import { breadcrumbJsonLd } from "@/lib/breadcrumbs";
 import { isNonProductionSiteUrl } from "@/lib/truth";
+import { DEFAULT_SCENE, type Scene } from "@/lib/scene";
 import "@/styles/global.css";
 import "@/styles/c3-craft.css";
 
@@ -28,6 +29,8 @@ interface Props {
   noindex?: boolean;
   /** Stable integrity surface id; the lens renders only for modeled surfaces. */
   surface?: string;
+  /** Authored scene marker consumed by the global header (C3-A Task 4). */
+  scene?: Scene;
 }
 
 const {
@@ -37,10 +40,18 @@ const {
   ogImage = defaultOgImagePath(),
   noindex = false,
   surface,
+  scene = DEFAULT_SCENE,
 } = Astro.props;
 
 const fullTitle = title.includes(SITE.name) ? title : `${title} · ${SITE.name}`;
 const currentLang = getLanguageFromPath(path);
+/** Social-card locale format is language_TERRITORY; this is presentation
+ * metadata, never a market, residency or jurisdiction decision. */
+const OG_LOCALES = { en: "en_US", vi: "vi_VN", zh: "zh_CN" } as const;
+const ogLocale = OG_LOCALES[currentLang];
+const ogAlternates = Object.values(OG_LOCALES).filter(
+  (locale) => locale !== ogLocale,
+);
 const canonical = canonicalForPath(path, SITE.url);
 const ogImageUrl = absoluteUrl(SITE.url, ogImage);
 const structuredData: Record<string, unknown>[] = [
@@ -53,10 +64,11 @@ const robotsNoindex = noindex || isNonProductionSiteUrl(SITE.url);
 ---
 
 <!doctype html>
-<html lang={currentLang}>
+<html lang={currentLang} dir="ltr">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width" />
+    <script is:inline src="/theme-init.js"></script>
     <link rel="icon" href="/icons/favicon.svg" type="image/svg+xml" />
     <link rel="icon" href="/icons/favicon.ico" sizes="any" />
     <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
@@ -79,14 +91,12 @@ const robotsNoindex = noindex || isNonProductionSiteUrl(SITE.url);
     />
     {robotsNoindex ? <meta name="robots" content="noindex, nofollow" /> : null}
     <meta property="og:type" content="website" />
-    <meta
-      property="og:locale"
-      content={currentLang === "vi" ? "vi_VN" : "en_US"}
-    />
-    <meta
-      property="og:locale:alternate"
-      content={currentLang === "vi" ? "en_US" : "vi_VN"}
-    />
+    <meta property="og:locale" content={ogLocale} />
+    {
+      ogAlternates.map((locale) => (
+        <meta property="og:locale:alternate" content={locale} />
+      ))
+    }
     <meta property="og:site_name" content={SITE.name} />
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={description} />
@@ -106,15 +116,17 @@ const robotsNoindex = noindex || isNonProductionSiteUrl(SITE.url);
       ))
     }
   </head>
-  <body class="flex min-h-screen flex-col">
+  <body class="flex min-h-screen flex-col" data-scene={scene}>
     <a class="skip-link" href="#main-content">
       {
         currentLang === "vi"
           ? "Chuyển đến nội dung chính"
-          : "Skip to main content"
+          : currentLang === "zh"
+            ? "跳转到主要内容"
+            : "Skip to main content"
       }
     </a>
-    <Header />
+    <Header scene={scene} />
     <CommandNavigator />
     <script>
       import { initAnalyticsBridge } from "@/scripts/analytics-bridge";

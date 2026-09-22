@@ -8,6 +8,10 @@ const flagship = readFileSync(
   "src/components/sections/FlagshipProof.astro",
   "utf8",
 );
+const productVisual = readFileSync(
+  "src/components/product/ProductVisual.astro",
+  "utf8",
+);
 const profile = readFileSync("src/pages/products/[slug].astro", "utf8");
 
 test("product proof screenshot is a local sized artifact contract", () => {
@@ -42,13 +46,26 @@ test("public products require verified capabilities distinct from jobs", () => {
   assert.match(schema, /capabilities\.length/);
 });
 
-test("FlagshipProof renders capabilities and intrinsic screenshot sizing", () => {
+test("ProductVisual owns intrinsic screenshot rendering without owning product truth", () => {
+  assert.match(productVisual, /CollectionEntry<"products">/);
+  assert.match(productVisual, /data-product-visual/);
+  assert.match(productVisual, /screenshot\.src/);
+  assert.match(productVisual, /screenshot\.alt/);
+  assert.match(productVisual, /screenshot\.width/);
+  assert.match(productVisual, /screenshot\.height/);
+  assert.match(productVisual, /loading=\{loading\}/);
+  assert.match(productVisual, /decoding="async"/);
+  assert.doesNotMatch(
+    productVisual,
+    /data\.(?:name|shortDescription|capabilities|jobs|publicLabel)/,
+  );
+});
+
+test("FlagshipProof renders capabilities through the shared ProductVisual", () => {
   assert.match(flagship, /capabilities\.slice\(0,\s*3\)/);
   assert.doesNotMatch(flagship, /data\.jobs\.slice/);
-  assert.match(flagship, /screenshot\.src/);
-  assert.match(flagship, /screenshot\.alt/);
-  assert.match(flagship, /screenshot\.width/);
-  assert.match(flagship, /screenshot\.height/);
+  assert.match(flagship, /ProductVisual/);
+  assert.match(flagship, /screenshot=\{screenshot\}/);
 });
 
 test("product profile exposes public status without internal enums", () => {

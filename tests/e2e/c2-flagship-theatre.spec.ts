@@ -67,10 +67,11 @@ test.describe("C2 Flagship Theatre — fixture-backed (product present)", () => 
       await expect(page.locator(TITLE)).toHaveText("Fixture Flagship");
 
       // Status family (subordinate, via ProductStatus) carries the record label.
-      const statusLabel = await page
-        .locator("section[data-flagship-theatre] span")
-        .textContent();
-      expect(statusLabel?.trim()).toBe("In development");
+      // Scoped to the status element: the theatre legitimately carries other
+      // spans (truth-state chips, the proof affordance).
+      const status = page.locator(`${THEATRE} [data-product-status]`);
+      await expect(status).toHaveCount(1);
+      expect((await status.textContent())?.trim()).toBe("In development");
 
       // Short description present.
       await expect(page.locator(THEATRE)).toContainText(

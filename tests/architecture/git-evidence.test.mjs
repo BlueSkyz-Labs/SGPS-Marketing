@@ -183,25 +183,32 @@ test("an unverifiable model never yields a PASS verdict", () => {
 
 test("verifyAncestry rejects a real commit orphaned from HEAD", () => {
   const root = mkdtempSync(join(tmpdir(), "git-evidence-ancestry-"));
+  // The sandbox must be a fresh repository: a stale .git (leaked by an earlier
+  // interrupted run) would otherwise make `checkout -b side` fail on a branch
+  // that "already exists", corrupting the fixture.
+  rmSync(join(root, ".git"), { recursive: true, force: true });
   const git = (...args) =>
     execFileSync("git", ["-C", root, ...args], { encoding: "utf8" }).trim();
 
-  git("init", "-q");
-  git("config", "user.email", "assurance@example.invalid");
-  git("config", "user.name", "Source Assurance");
-  writeFileSync(join(root, "a.txt"), "a\n");
-  git("add", "-A");
-  git("commit", "-q", "-m", "base");
-  git("checkout", "-q", "-b", "side");
-  writeFileSync(join(root, "b.txt"), "b\n");
-  git("add", "-A");
-  git("commit", "-q", "-m", "side work");
-  const orphan = git("rev-parse", "HEAD");
-  git("checkout", "-q", "-");
-  const ancestry = verifyAncestry(orphan, root);
+  try {
+    git("init", "-q");
+    git("config", "user.email", "assurance@example.invalid");
+    git("config", "user.name", "Source Assurance");
+    writeFileSync(join(root, "a.txt"), "a\n");
+    git("add", "-A");
+    git("commit", "-q", "-m", "base");
+    git("checkout", "-q", "-b", "side");
+    writeFileSync(join(root, "b.txt"), "b\n");
+    git("add", "-A");
+    git("commit", "-q", "-m", "side work");
+    const orphan = git("rev-parse", "HEAD");
+    git("checkout", "-q", "-");
+    const ancestry = verifyAncestry(orphan, root);
 
-  assert.equal(ancestry.status, "FAIL");
-  assert.match(ancestry.detail, /not reachable/);
-  assert.notEqual(ancestry.status, "PASS");
-  rmSync(root, { recursive: true, force: true });
+    assert.equal(ancestry.status, "FAIL");
+    assert.match(ancestry.detail, /not reachable/);
+    assert.notEqual(ancestry.status, "PASS");
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
 });

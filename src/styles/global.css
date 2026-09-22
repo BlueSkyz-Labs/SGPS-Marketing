@@ -26,7 +26,8 @@
   --border-subtle: #cbd5e1;
   --action-primary: #1d4ed8;
   --focus-ring: #1d4ed8;
-  --radius-card: 0.625rem;
+  /* Kit v4 radius-md (12px); keeps cards on the canonical radius scale. */
+  --radius-card: 0.75rem;
   --font-sans: Inter, ui-sans-serif, system-ui, sans-serif;
   /* Brand Kit v4 aliases (parity with 07_DESIGN_TOKENS/tokens.css). */
   --brand-slate-650: #475569;
@@ -69,12 +70,41 @@
   color-scheme: light;
 }
 
-/* Brand Kit v4 dark semantics — dormant until a dark theme ships. */
+/* Brand Kit v4 dark semantics — active via data-theme="dark" (Light/Dark/System). */
 [data-theme="dark"] {
+  color-scheme: dark;
+  --surface-primary: var(--brand-ink);
+  --surface-subtle: #0f172a;
+  --surface-inverse: var(--brand-porcelain);
   --text-primary: #ffffff;
   --text-secondary: #cbd5e1;
-  --surface-primary: var(--brand-ink);
+  --text-muted: #94a3b8;
   --border-subtle: #334155;
+  --action-primary: #3b82f6;
+  --focus-ring: #3b82f6;
+  --brand-text-disabled: #64748b;
+}
+
+[data-theme="light"] {
+  color-scheme: light;
+}
+
+/* No-JS / first-paint auto theme: follow OS dark, unless the visitor pinned
+   Light. Keeps the page coherent without any inline script (CSP 'self'). */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --surface-primary: var(--brand-ink);
+    --surface-subtle: #0f172a;
+    --surface-inverse: var(--brand-porcelain);
+    --text-primary: #ffffff;
+    --text-secondary: #cbd5e1;
+    --text-muted: #94a3b8;
+    --border-subtle: #334155;
+    --action-primary: #3b82f6;
+    --focus-ring: #3b82f6;
+    --brand-text-disabled: #64748b;
+  }
 }
 
 html {
@@ -104,7 +134,13 @@ html {
 
 body {
   margin: 0;
-  min-width: 320px;
+  /* A narrow-width floor must never be wider than the viewport it is drawing
+     into: a hard 320px floor forces a horizontal scrollbar whenever the
+     layout viewport is narrower than 320px (classic desktop scrollbars take
+     12-16px, so a 320px window leaves ~305px). Bounding the floor by 100%
+     keeps the intent - do not collapse the layout below 320px when there is
+     room - without ever manufacturing sideways scroll at 200% text zoom. */
+  min-width: min(320px, 100%);
   background: transparent;
 }
 
@@ -716,6 +752,41 @@ summary {
   display: grid;
   gap: 0.5rem;
 }
+/* Reflow safety (WCAG 1.4.4 resize text / 1.4.10 reflow).
+ *
+ * Two structural causes kept pushing documents sideways at 200% text:
+ *   1. grid/flex children default to `min-width: auto`, so their min-content
+ *      widens the track instead of reflowing (evidence details, bilingual
+ *      mirror pairs, boundary cards, product-act intro rows);
+ *   2. an unbreakable word (a 200%-scaled display heading, a long label) then
+ *      defines that min-content.
+ * Shrinking is the safe default for laid-out content, and long words may break
+ * when there is genuinely no room. Explicit `min-width` declarations still win,
+ * so intentional floors survive, and `overflow-wrap: anywhere` only applies
+ * when a word cannot fit its line. Applies to the whole page: the same class of
+ * defect appeared in the footer language switcher as well as in `main`.
+ */
+:where(body)
+  :where(div, section, article, aside, ul, ol, li, figure, form, details, a) {
+  min-width: 0;
+}
+
+/* Declared on the root of the page, not per element type: `overflow-wrap` is
+   inherited, so every descendant - including a bare text node inside a block
+   whose border box is narrower than its text, which no element-level scan can
+   attribute - may break a long token instead of widening the document. */
+:where(body) {
+  overflow-wrap: anywhere;
+}
+
+/* Reflow at 200% text: the evidence block is a grid item, so `min-width: auto`
+   let its min-content widen the track, and the min-content was the longest
+   unbreakable word (~172px at 200%). Allow the item to shrink and its text to
+   break, so the summary reflows instead of pushing the document sideways. */
+.evidence-details {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
 .evidence-details__summary {
   color: var(--text-secondary);
   line-height: 1.6;
@@ -765,9 +836,15 @@ summary {
 }
 @media (min-width: 768px) {
   .bilingual-mirror__pair {
-    grid-template-columns: 1fr 1fr;
+    /* minmax(0, 1fr): a bare `1fr` track refuses to shrink below its content's
+       min-content, so a long tag or word widened the pair and pushed the
+       document sideways at 200% text. */
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     gap: 1.25rem;
   }
+}
+.bilingual-mirror__cell {
+  min-width: 0;
 }
 .bilingual-mirror__tag {
   display: inline-block;
@@ -776,6 +853,9 @@ summary {
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--text-muted);
+  /* The tag is an inline-block label; at 200% text it can be wider than a
+     narrow cell, so it must be allowed to break rather than overflow. */
+  overflow-wrap: anywhere;
 }
 .bilingual-mirror__cell p {
   margin-top: 0.375rem;
@@ -1150,10 +1230,23 @@ html[data-intent] [data-journey-bar] li[data-evidence-first="true"] a {
 /* Wave H12 — text-zoom safety: flex/grid items must shrink and wrap. */
 .source-trace__step {
   min-width: 0;
+  /* A source-trace row is a flex row: with the chip pinned (`flex: none`) the
+     value cannot always shrink, so the row's own content left its box (72px at
+     320px/200% locally, and 3px past the viewport in CI where the font metrics
+     are wider). Wrapping the chip above the value is the same remedy already
+     used for atlas rows below. */
+  flex-wrap: wrap;
 }
 .source-trace__step > * {
   min-width: 0;
   overflow-wrap: anywhere;
+}
+/* The role chip is pinned (`flex: none`) so it cannot shrink, and the value's
+   min-content still had to fit beside it: at 320px/200% the row's content left
+   its box by 28px even after wrapping. Let the chip shrink and its label wrap. */
+.source-trace__role {
+  flex-shrink: 1;
+  min-width: 0;
 }
 
 /* Wave H12 — WCAG 1.4.4: long words break rather than overflow at text zoom. */
@@ -1161,6 +1254,23 @@ h1,
 h2,
 h3 {
   overflow-wrap: break-word;
+}
+
+/* C3-A Task 3 — nested cards must not spend the viewport on padding at text
+   zoom. At 320px with 200% text the page container, the passport and the
+   boundary card stacked 288px of rem-based inline padding and left 32px for
+   prose: a 26px column, a line pushed 3px past the viewport, and a 72px content
+   overflow in the source-trace rows. Bounding the inline padding by the viewport
+   keeps the rhythm at normal text sizes (the cap only binds below ~350px) while
+   leaving the content room to reflow. */
+.evidence-passport {
+  padding-inline: min(1.75rem, 8vw);
+}
+.boundary-card {
+  padding-inline: min(1.5rem, 7vw);
+}
+.source-trace {
+  padding-inline: min(1.25rem, 6vw);
 }
 
 /* Wave H12 — text-zoom safety for atlas rows: the chip drops below the label

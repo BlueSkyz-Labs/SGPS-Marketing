@@ -1,4 +1,5 @@
 import { defineConfig } from "astro/config";
+import tailwindcss from "@tailwindcss/vite";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -11,6 +12,7 @@ const repoRoot = path.resolve(here, "../../../..");
 export default defineConfig({
   outDir: "./dist",
   vite: {
+    plugins: [tailwindcss()],
     resolve: {
       alias: { "@": path.join(repoRoot, "src") },
     },

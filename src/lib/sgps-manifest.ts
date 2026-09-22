@@ -1,6 +1,6 @@
 import { getPublicClaims, getEvidencePassportPath } from "./claims.ts";
 import { INTEGRITY_ENTRY_INDEX } from "../data/claims.ts";
-import type { TruthState } from "../data/integrity.ts";
+import type { LocalizedText, TruthState } from "../data/integrity.ts";
 import type { PublicProductRef } from "./claims.ts";
 
 /**
@@ -17,7 +17,7 @@ import type { PublicProductRef } from "./claims.ts";
 export interface PublicSgpsManifestClaim {
   id: string;
   kind: string;
-  urls: { en: string; vi: string };
+  urls: LocalizedText;
   truthState?: TruthState | undefined;
   evidenceIds: string[];
 }
@@ -42,6 +42,7 @@ export function buildPublicSgpsManifest(
         urls: {
           en: getEvidencePassportPath("en", claim.id),
           vi: getEvidencePassportPath("vi", claim.id),
+          zh: getEvidencePassportPath("zh", claim.id),
         },
         evidenceIds: [...claim.evidenceIds]
           .filter((id) => PUBLIC_MANIFEST_EVIDENCE_ID_PATTERN.test(id))

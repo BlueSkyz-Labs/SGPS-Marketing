@@ -2,23 +2,26 @@
 import { buildAtlasModel, type AtlasNodeKind } from "@/lib/atlas";
 import { getPublicProducts } from "@/lib/products";
 
+import type { Language } from "@/data/site";
+
 interface Props {
-  lang?: "en" | "vi";
+  lang?: Language;
 }
 
 const { lang = "en" } = Astro.props;
 const isVi = lang === "vi";
+const isZh = lang === "zh";
 
 const products = await getPublicProducts();
 const { nodes, edges } = buildAtlasModel(lang, products);
 
 const kindLabels: Record<AtlasNodeKind, string> = {
-  brand: isVi ? "Thương hiệu" : "Brand",
-  principle: isVi ? "Nguyên tắc" : "Principle",
-  trust: isVi ? "Tin cậy" : "Trust",
-  claim: isVi ? "Tuyên bố" : "Claim",
-  evidence: isVi ? "Bằng chứng" : "Evidence",
-  product: isVi ? "Sản phẩm" : "Product",
+  brand: isVi ? "Thương hiệu" : isZh ? "品牌" : "Brand",
+  principle: isVi ? "Nguyên tắc" : isZh ? "原则" : "Principle",
+  trust: isVi ? "Tin cậy" : isZh ? "信任" : "Trust",
+  claim: isVi ? "Tuyên bố" : isZh ? "声明" : "Claim",
+  evidence: isVi ? "Bằng chứng" : isZh ? "证据" : "Evidence",
+  product: isVi ? "Sản phẩm" : isZh ? "产品" : "Product",
 };
 
 // Decorative SVG labels are truncated; the semantic node list below is the
@@ -35,11 +38,15 @@ const truncate = (text: string, max: number): string => {
 const heading = "BlueSkyz Atlas";
 const lede = isVi
   ? "Sơ đồ hóa từ chính những nguồn trang này công bố: thương hiệu mẹ, các nguyên tắc, những bề mặt tin cậy có thể xác minh, và các tuyên bố công khai cùng bằng chứng mà chúng dẫn chiếu. Nút sản phẩm chỉ xuất hiện khi sản phẩm thật được công bố."
-  : "Mapped from the same sources this site publishes: the masterbrand, its principles, verifiable trust surfaces, and the public claims with the evidence they cite. Product nodes appear only when real products are public.";
+  : isZh
+    ? "依据本站发布的信息制图：主品牌、其原则、可验证的信任层面，以及公开声明与其引用的证据。产品节点仅在真实产品发布后出现。"
+    : "Mapped from the same sources this site publishes: the masterbrand, its principles, verifiable trust surfaces, and the public claims with the evidence they cite. Product nodes appear only when real products are public.";
 
 const emptyLabel = isVi
   ? "Chưa có sản phẩm công khai nào được công bố."
-  : "No public products are published yet.";
+  : isZh
+    ? "目前尚未发布任何公开产品。"
+    : "No public products are published yet.";
 
 // Deterministic constellation layouts (no randomness): a landscape plate for
 // desktop and a portrait plate for narrow screens so labels stay legible.

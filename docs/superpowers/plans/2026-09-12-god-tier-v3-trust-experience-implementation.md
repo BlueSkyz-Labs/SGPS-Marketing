@@ -51,7 +51,7 @@ Current verified source facts:
 - Public product existence is derived from `getPublicProducts()` only.
 - Do not create a second manually maintained route, product, or public-evidence truth registry.
 - Critical content, navigation, evidence, and actions work with JavaScript disabled.
-- Do not add a UI framework, LLM, vector database, remote semantic search, account system, fingerprinting, cookie personalization, or localStorage personalization.
+- Do not add a UI framework, LLM, vector database, remote semantic search, account system, fingerprinting, cookie personalization, or general localStorage personalization. ADR 0009 permits only the explicit `blueskyz.ui.language` preference.
 - Analytics transmission remains disabled unless separately approved.
 - WebGL/3D remains NO-GO unless a later evidence-backed decision supersedes it.
 - Do not invent customer, product, partner, certification, testimonial, evidence, review-date, trust-score, maturity-score, or guarantee content.
@@ -939,7 +939,7 @@ git commit -m "feat(sgps): add cross-system integrity regression firewall"
 - [ ] Require exact-head Quality Gates, Browser Assurance, and Cloudflare evidence applicable to the PR.
 - [ ] Merge only when objectively green; no unexplained red.
 - [ ] After merge, run production smoke.
-- [ ] Explicitly read back EN/VI homes, an Evidence Passport, `.well-known/sgps.json`, products truth behavior, Security and Privacy surfaces, and the seven legacy-root 301s.
+- [ ] Explicitly read back the noindex root language gateway, EN/VI homes, an Evidence Passport, `.well-known/sgps.json`, products truth behavior, Security and Privacy surfaces, and the six legacy non-root 301s.
 - [ ] Record deployed commit SHA and production read-back result in a post-merge evidence ledger.
 
 ---

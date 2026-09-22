@@ -16,6 +16,11 @@ import { SITE } from "@/data/site";
 // One House → Trust → About → Next Step. Power-user surfaces keep their
 // routes/components but no longer lead the homepage.
 const products = await getPublicProducts();
+/** Public refs the proof selector binds against (slug + name only). */
+const productRefs = products.map((product) => ({
+  slug: product.data.slug,
+  name: product.data.name,
+}));
 const flagship = await getFlagshipProduct();
 ---
 
@@ -23,10 +28,11 @@ const flagship = await getFlagshipProduct();
   title={SITE.name}
   description={`${SITE.taglineLead} ${SITE.taglineAccent} — Chúng tôi xây dựng những sản phẩm thông minh để trao quyền cho con người và nâng tầm cách công việc được thực hiện.`}
   path="/vi/"
+  scene="ink"
 >
   <Hero lang="vi" />
   <Container>
-    <FlagshipTheatre product={flagship} lang="vi" />
+    <FlagshipTheatre product={flagship} products={productRefs} lang="vi" />
     <ProductHouse products={products} lang="vi" />
     <OneHouse lang="vi" />
     <Trust lang="vi" />

@@ -20,6 +20,33 @@ const FIXTURE_ROOT = resolve("tests/e2e/fixtures/parity-app");
 const FIXTURE_DIST = join(FIXTURE_ROOT, "dist");
 const BUILD_LOCK = join(tmpdir(), "sgps-parity-fixture-build.lock");
 
+/**
+ * The parity app is a real static build: it links hashed stylesheets and
+ * scripts. Serving those with a generic content type makes the browser refuse
+ * them (strict MIME checking), which silently renders the fixture unstyled and
+ * turns every layout assertion into a measurement of an unstyled page. Map the
+ * extensions the fixture actually ships instead of guessing.
+ */
+const CONTENT_TYPES: Record<string, string> = {
+  ".html": "text/html; charset=utf-8",
+  ".css": "text/css; charset=utf-8",
+  ".js": "text/javascript; charset=utf-8",
+  ".mjs": "text/javascript; charset=utf-8",
+  ".json": "application/json; charset=utf-8",
+  ".svg": "image/svg+xml",
+  ".png": "image/png",
+  ".jpg": "image/jpeg",
+  ".jpeg": "image/jpeg",
+  ".webp": "image/webp",
+  ".avif": "image/avif",
+  ".ico": "image/x-icon",
+  ".woff": "font/woff",
+  ".woff2": "font/woff2",
+  ".txt": "text/plain; charset=utf-8",
+  ".xml": "application/xml; charset=utf-8",
+  ".webmanifest": "application/manifest+json",
+};
+
 export const distReady = () => {
   const entry = join(FIXTURE_DIST, "en", "index.html");
   if (!existsSync(entry)) return false;
@@ -68,8 +95,8 @@ export async function startFixtureServer(): Promise<{
       res.end("not found");
       return;
     }
-    const type = extname(filePath) === ".html" ? "text/html" : "text/plain";
-    res.setHeader("content-type", `${type}; charset=utf-8`);
+    const type = CONTENT_TYPES[extname(filePath)] ?? "application/octet-stream";
+    res.setHeader("content-type", type);
     res.end(readFileSync(filePath));
   });
   await new Promise<void>((ok) => server.listen(0, "127.0.0.1", ok));

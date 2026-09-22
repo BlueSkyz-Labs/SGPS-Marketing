@@ -36,6 +36,11 @@
   inset: 0;
   z-index: 1;
   overflow: hidden;
+  /* Decorative layer only: without this it covers the hero plane and becomes
+     the topmost element at every point inside it, so the hero's action links
+     could not be hovered or clicked (a pointer-target obstruction, not a
+     styling detail). Its children are decorative too, so the rule inherits. */
+  pointer-events: none;
 }
 
 /* Horizon signature field — reinforces house identity */
@@ -107,6 +112,93 @@
   }
   .hero-seam:hover {
     opacity: 1;
+  }
+}
+
+/* -------------------------------------------------
+   Hero brand mark — canonical R4d material expression
+   -------------------------------------------------
+   The mockup's hero centerpiece: a large metallic mark on a soft cobalt
+   glow. Purely decorative (aria-hidden, pointer-events: none so it can never
+   obstruct the hero actions). Desktop-only to keep the mobile hero lean. */
+
+.hero-visual {
+  position: relative;
+  display: none;
+  place-items: center;
+  gap: 2rem;
+  pointer-events: none;
+}
+
+@media (min-width: 1024px) {
+  .hero-visual {
+    display: grid;
+  }
+}
+
+.hero-visual-glow {
+  position: absolute;
+  inset: 6% 10%;
+  border-radius: 50%;
+  background: radial-gradient(
+    closest-side,
+    color-mix(in srgb, var(--brand-cobalt) 46%, transparent),
+    transparent 72%
+  );
+  filter: blur(30px);
+  opacity: 0.9;
+  animation: hero-glow-pulse 7s var(--motion-ease-standard) infinite;
+}
+
+/* Ambient breath for the hero glow (mockup: dynamic mark). Perpetual by design;
+   the e2e settle treats infinite-iteration animations as non-blocking. */
+@keyframes hero-glow-pulse {
+  0%,
+  100% {
+    opacity: 0.72;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+.hero-mark {
+  position: relative;
+  width: min(100%, 30rem);
+  height: auto;
+  filter: drop-shadow(
+    0 28px 64px color-mix(in srgb, var(--brand-cobalt) 32%, transparent)
+  );
+}
+
+/* Quiet Luxury sheen — a soft diagonal light pass across the mark (the
+   mockup's metallic/glassy finish). Decorative, pointer-inert. */
+.hero-visual-sheen {
+  position: absolute;
+  inset: 10% 14%;
+  border-radius: 50%;
+  background: linear-gradient(
+    135deg,
+    transparent 42%,
+    color-mix(in srgb, var(--brand-porcelain) 22%, transparent) 50%,
+    transparent 58%
+  );
+  mix-blend-mode: screen;
+  opacity: 0.55;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-mark,
+  .hero-visual-glow {
+    filter: none;
+  }
+  .hero-visual-glow {
+    animation: none;
+    opacity: 0.9;
+  }
+  .hero-visual-sheen {
+    opacity: 0.4;
   }
 }
 
@@ -299,6 +391,12 @@
    change and never animates the product screenshot's opacity (it is the
    act's visual protagonist and stays at opacity 1).
    ------------------------------------------------- */
+
+.c2-flagship-theatre__frame {
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+}
 
 .c2-flagship-theatre__frame img {
   opacity: 1;

@@ -4,8 +4,10 @@ import { SITE } from "@/data/site";
 import { emptyRegistryPrimaryCta, emptyRegistrySecondaryCta } from "@/lib/act";
 import { getPublicProducts } from "@/lib/products";
 
+import type { Language } from "@/data/site";
+
 interface Props {
-  lang?: "en" | "vi";
+  lang?: Language;
 }
 const { lang = "en" } = Astro.props;
 const isVi = lang === "vi";

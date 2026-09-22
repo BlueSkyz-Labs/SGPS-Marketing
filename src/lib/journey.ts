@@ -23,45 +23,80 @@ const JOURNEY: Record<string, JourneyStep[]> = {
       label: {
         en: "Check product status",
         vi: "Kiểm tra trạng thái sản phẩm",
+        zh: "查看产品状态",
       },
     },
     {
       segment: "decision-room",
-      label: { en: "Decision Room", vi: "Phòng Quyết định" },
+      label: { en: "Decision Room", vi: "Phòng Quyết định", zh: "决策室" },
     },
-    { segment: "about", label: { en: "About BlueSkyz", vi: "Về BlueSkyz" } },
-    { segment: "security", label: { en: "Security", vi: "Bảo mật" } },
+    {
+      segment: "about",
+      label: { en: "About BlueSkyz", vi: "Về BlueSkyz", zh: "关于 BlueSkyz" },
+    },
+    {
+      segment: "security",
+      label: { en: "Security", vi: "Bảo mật", zh: "安全" },
+    },
   ],
   products: [
     {
       segment: "decision-room",
-      label: { en: "Decision Room", vi: "Phòng Quyết định" },
+      label: { en: "Decision Room", vi: "Phòng Quyết định", zh: "决策室" },
     },
-    { segment: "about", label: { en: "About BlueSkyz", vi: "Về BlueSkyz" } },
-    { segment: "contact", label: { en: "Contact", vi: "Liên hệ" } },
+    {
+      segment: "about",
+      label: { en: "About BlueSkyz", vi: "Về BlueSkyz", zh: "关于 BlueSkyz" },
+    },
+    {
+      segment: "contact",
+      label: { en: "Contact", vi: "Liên hệ", zh: "联系我们" },
+    },
   ],
   about: [
     {
       segment: "products",
-      label: { en: "Product status", vi: "Trạng thái sản phẩm" },
+      label: {
+        en: "Product status",
+        vi: "Trạng thái sản phẩm",
+        zh: "产品状态",
+      },
     },
-    { segment: "contact", label: { en: "Contact", vi: "Liên hệ" } },
+    {
+      segment: "contact",
+      label: { en: "Contact", vi: "Liên hệ", zh: "联系我们" },
+    },
   ],
   contact: [
-    { segment: "support", label: { en: "Support", vi: "Hỗ trợ" } },
-    { segment: "security", label: { en: "Security", vi: "Bảo mật" } },
+    { segment: "support", label: { en: "Support", vi: "Hỗ trợ", zh: "支持" } },
+    {
+      segment: "security",
+      label: { en: "Security", vi: "Bảo mật", zh: "安全" },
+    },
   ],
   support: [
-    { segment: "contact", label: { en: "Contact", vi: "Liên hệ" } },
-    { segment: "security", label: { en: "Security", vi: "Bảo mật" } },
+    {
+      segment: "contact",
+      label: { en: "Contact", vi: "Liên hệ", zh: "联系我们" },
+    },
+    {
+      segment: "security",
+      label: { en: "Security", vi: "Bảo mật", zh: "安全" },
+    },
   ],
   privacy: [
-    { segment: "security", label: { en: "Security", vi: "Bảo mật" } },
-    { segment: "support", label: { en: "Support", vi: "Hỗ trợ" } },
+    {
+      segment: "security",
+      label: { en: "Security", vi: "Bảo mật", zh: "安全" },
+    },
+    { segment: "support", label: { en: "Support", vi: "Hỗ trợ", zh: "支持" } },
   ],
   security: [
-    { segment: "support", label: { en: "Support", vi: "Hỗ trợ" } },
-    { segment: "privacy", label: { en: "Privacy", vi: "Quyền riêng tư" } },
+    { segment: "support", label: { en: "Support", vi: "Hỗ trợ", zh: "支持" } },
+    {
+      segment: "privacy",
+      label: { en: "Privacy", vi: "Quyền riêng tư", zh: "隐私" },
+    },
   ],
 };
 
@@ -88,7 +123,9 @@ export function getJourneyActions(
 export function routeKeyFromPath(pathOrHref: string): string {
   const parts = pathOrHref.split("/").filter(Boolean);
   const withoutLang =
-    parts[0] === "en" || parts[0] === "vi" ? parts.slice(1) : parts;
+    parts[0] === "en" || parts[0] === "vi" || parts[0] === "zh"
+      ? parts.slice(1)
+      : parts;
   return withoutLang.join("/");
 }
 

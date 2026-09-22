@@ -8,6 +8,7 @@
  */
 
 import { getPublicClaims } from "./claims.ts";
+import type { LocalizedText } from "../data/integrity.ts";
 import { BOUNDARY_INDEX } from "../data/claims.ts";
 import { TRUST_LEDGER } from "../data/trust-ledger.ts";
 import { getProductProfilePath } from "./product-routes.ts";
@@ -17,10 +18,10 @@ export type DecisionKind = "claim" | "trust" | "product";
 export interface DecisionItem {
   id: string;
   kind: DecisionKind;
-  label: { en: string; vi: string };
-  summary?: { en: string; vi: string } | undefined;
-  boundaryText?: { en: string; vi: string } | undefined;
-  evidenceHref?: { en: string; vi: string } | undefined;
+  label: LocalizedText;
+  summary?: LocalizedText | undefined;
+  boundaryText?: LocalizedText | undefined;
+  evidenceHref?: LocalizedText | undefined;
 }
 
 /** Hard comparison cap — a bounded workspace, never an endless list. */
@@ -52,7 +53,11 @@ export function buildDecisionItems(
     }
     if (last && firstEvidence) {
       last.evidenceHref = firstEvidence.href;
-      last.summary = { en: firstEvidence.label.en, vi: firstEvidence.label.vi };
+      last.summary = {
+        en: firstEvidence.label.en,
+        vi: firstEvidence.label.vi,
+        zh: firstEvidence.label.zh,
+      };
     }
   }
 
@@ -70,10 +75,11 @@ export function buildDecisionItems(
     items.push({
       id: `product:${product.slug}`,
       kind: "product",
-      label: { en: product.name, vi: product.name },
+      label: { en: product.name, vi: product.name, zh: product.name },
       evidenceHref: {
         en: getProductProfilePath("en", product.slug),
         vi: getProductProfilePath("vi", product.slug),
+        zh: getProductProfilePath("zh", product.slug),
       },
     });
   }
@@ -81,9 +87,7 @@ export function buildDecisionItems(
   return items;
 }
 
-function firstBoundaryText(
-  boundaryId: string,
-): { en: string; vi: string } | undefined {
+function firstBoundaryText(boundaryId: string): LocalizedText | undefined {
   const boundary = BOUNDARY_INDEX.get(boundaryId);
   return boundary ? boundary.doesNotImply : undefined;
 }

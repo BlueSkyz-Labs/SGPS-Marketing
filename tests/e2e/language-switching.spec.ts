@@ -5,6 +5,11 @@ test("language switcher navigates between en and vi", async ({ page }) => {
   await expect(page.locator("html")).toHaveAttribute("lang", "en");
   await page.getByRole("link", { name: "Tiếng Việt" }).first().click();
   await expect(page).toHaveURL(/\/vi\//);
+  await expect
+    .poll(() =>
+      page.evaluate(() => localStorage.getItem("blueskyz.ui.language")),
+    )
+    .toBe("vi");
   await expect(page.locator("html")).toHaveAttribute("lang", "vi");
 });
 
@@ -28,4 +33,45 @@ test("x-default points to en", async ({ page }) => {
   await page.goto("/vi/about/");
   const xDefault = page.locator('link[hreflang="x-default"]');
   await expect(xDefault).toHaveAttribute("href", /\/en\//);
+});
+
+test("root gateway respects the returning user's explicit saved language", async ({
+  page,
+}) => {
+  await page.goto("/en/");
+  await page.evaluate(() => localStorage.setItem("blueskyz.ui.language", "vi"));
+  await page.goto("/");
+  await expect(page).toHaveURL(/\/vi\/$/);
+});
+
+test("localized URLs stay stable instead of geo/browser redirecting", async ({
+  page,
+}) => {
+  await page.goto("/en/about/");
+  await expect(page).toHaveURL(/\/en\/about\/$/);
+  await page.goto("/vi/about/");
+  await expect(page).toHaveURL(/\/vi\/about\/$/);
+});
+
+test("language choices retain the 44px touch floor on desktop and mobile", async ({
+  page,
+}) => {
+  for (const width of [1280, 390]) {
+    await page.setViewportSize({ width, height: 900 });
+    await page.goto("/en/");
+    if (width < 768) {
+      await page.locator("header details > summary").click();
+    }
+
+    const choices = page.locator("[data-language-choice]:visible");
+    const count = await choices.count();
+    expect(count).toBeGreaterThan(0);
+
+    for (let index = 0; index < count; index++) {
+      const rect = await choices.nth(index).boundingBox();
+      expect(rect, "visible language choice has a bounding box").not.toBeNull();
+      expect(rect!.width, "language touch width").toBeGreaterThanOrEqual(44);
+      expect(rect!.height, "language touch height").toBeGreaterThanOrEqual(44);
+    }
+  }
 });

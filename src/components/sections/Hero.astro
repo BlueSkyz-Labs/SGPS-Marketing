@@ -3,18 +3,43 @@ import BrandLockup from "@/components/brand/BrandLockup.astro";
 import HorizonField from "@/components/experience/HorizonField.astro";
 import ButtonLink from "@/components/ui/ButtonLink.astro";
 import Reveal from "@/components/ui/Reveal.astro";
-import { SITE } from "@/data/site";
+import { SITE, SHARED_LABELS, labelFor, type Language } from "@/data/site";
 import { emptyRegistryPrimaryCta, emptyRegistrySecondaryCta } from "@/lib/act";
 import { getPublicProducts } from "@/lib/products";
 
 interface Props {
-  lang?: "en" | "vi";
+  lang?: Language;
 }
 const { lang = "en" } = Astro.props;
-const isVi = lang === "vi";
 
-const taglineLead = isVi ? "Trí tuệ. Nâng tầm." : SITE.taglineLead;
-const taglineAccent = isVi ? "Tác động." : SITE.taglineAccent;
+const taglineLead = labelFor(
+  { en: SITE.taglineLead, vi: "Trí tuệ. Nâng tầm.", zh: "智能。提升。" },
+  lang,
+);
+const taglineAccent = labelFor(
+  { en: SITE.taglineAccent, vi: "Tác động.", zh: "影响。" },
+  lang,
+);
+const proposition = labelFor(
+  {
+    en: SITE.proposition,
+    vi: "Chúng tôi xây dựng những sản phẩm thông minh để trao quyền cho con người và nâng tầm cách công việc được thực hiện.",
+    zh: "我们打造智能化产品，赋能个人并提升工作方式。",
+  },
+  lang,
+);
+const supporting = labelFor(
+  {
+    en: SITE.supporting,
+    vi: "Một góc nhìn cao hơn kiến tạo một ngày mai rạng rỡ.",
+    zh: "更高的视角，成就更明亮的明天。",
+  },
+  lang,
+);
+const exploreProducts = labelFor(SHARED_LABELS.exploreProducts, lang);
+const aboutBlueSkyz = labelFor(SHARED_LABELS.aboutBlueSkyz, lang);
+const productsHref = `/${lang}/products/`;
+const aboutHref = `/${lang}/about/`;
 
 const products = await getPublicProducts();
 const hasPublicProducts = products.length > 0;
@@ -50,33 +75,20 @@ const emptySecondary = emptyRegistrySecondaryCta(SITE.contactEmail, lang);
       <p
         class="hero-tagline mt-5 max-w-xl text-lg leading-relaxed text-[color-mix(in_srgb,var(--brand-porcelain)_82%,transparent)]"
       >
-        {
-          isVi
-            ? "Chúng tôi xây dựng những sản phẩm thông minh để trao quyền cho con người và nâng tầm cách công việc được thực hiện."
-            : SITE.proposition
-        }
+        {proposition}
       </p>
       <p
         class="hero-supporting mt-3 max-w-xl text-sm leading-relaxed text-[color-mix(in_srgb,var(--brand-porcelain)_68%,transparent)]"
       >
-        {
-          isVi
-            ? "Một góc nhìn cao hơn kiến tạo một ngày mai rạng rỡ."
-            : SITE.supporting
-        }
+        {supporting}
       </p>
       <div class="hero-actions">
         {
           hasPublicProducts ? (
             <>
-              <ButtonLink href={isVi ? "/vi/products/" : "/en/products/"}>
-                {isVi ? "Khám phá sản phẩm" : "Explore Our Products"}
-              </ButtonLink>
-              <ButtonLink
-                href={isVi ? "/vi/about/" : "/en/about/"}
-                variant="on-ink"
-              >
-                {isVi ? "Về BlueSkyz" : "About BlueSkyz"}
+              <ButtonLink href={productsHref}>{exploreProducts}</ButtonLink>
+              <ButtonLink href={aboutHref} variant="on-ink">
+                {aboutBlueSkyz}
               </ButtonLink>
             </>
           ) : (
@@ -92,6 +104,18 @@ const emptySecondary = emptyRegistrySecondaryCta(SITE.contactEmail, lang);
         }
       </div>
     </div>
-    <div class="hero-seam"></div>
+    <div class="hero-visual" aria-hidden="true">
+      <span class="hero-visual-glow"></span>
+      <img
+        class="hero-mark"
+        src="/brand/blueskyz/r4d/symbol/symbol_material_expression.svg"
+        alt=""
+        width="520"
+        height="520"
+        decoding="async"
+      />
+      <span class="hero-visual-sheen"></span>
+      <span class="hero-seam"></span>
+    </div>
   </Reveal>
 </section>

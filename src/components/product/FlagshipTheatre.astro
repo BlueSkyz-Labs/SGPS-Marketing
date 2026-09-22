@@ -3,6 +3,13 @@ import type { CollectionEntry } from "astro:content";
 import { SHARED_LABELS, labelFor, type Language } from "@/data/site";
 import { getProductProfilePath } from "@/lib/product-routes";
 import ProductStatus from "@/components/product/ProductStatus.astro";
+import ProductVisual from "@/components/product/ProductVisual.astro";
+import ProductProofLink from "@/components/integrity/ProductProofLink.astro";
+import {
+  getPublicClaims,
+  type PublicProductRef,
+  type ResolvedClaim,
+} from "@/lib/claims";
 import { productTransitionStyle } from "@/lib/product-transition";
 
 /**
@@ -14,10 +21,22 @@ import { productTransitionStyle } from "@/lib/product-transition";
  */
 interface Props {
   product: CollectionEntry<"products"> | null;
+  /** Canonical public registry refs; the proof affordance binds through them. */
+  products: readonly PublicProductRef[];
+  /** Already-resolved public claims. Defaults to canonical resolution from the
+   * registry, which is what production always uses; a harness may pass its own
+   * resolved rows (the parity fixture does) so capability binding is testable
+   * while the production registry stays owner-gated and empty. */
+  claims?: readonly ResolvedClaim[] | undefined;
   lang: Language;
 }
 
-const { product, lang } = Astro.props;
+const {
+  product,
+  products,
+  claims = getPublicClaims([...products]),
+  lang,
+} = Astro.props;
 
 if (!product) {
   return null;
@@ -60,7 +79,16 @@ const viewProfileLabel = labelFor(SHARED_LABELS.viewProfile, lang);
         capabilities.length > 0 ? (
           <ul class="mt-6 space-y-2 text-[var(--text-secondary)]">
             {capabilities.slice(0, 3).map((capability: string) => (
-              <li class="c2-flagship-theatre__capability">{capability}</li>
+              <li class="c2-flagship-theatre__capability">
+                {capability}
+                <ProductProofLink
+                  slug={data.slug}
+                  capability={capability}
+                  products={products}
+                  claims={claims}
+                  lang={lang}
+                />
+              </li>
             ))}
           </ul>
         ) : null
@@ -83,16 +111,10 @@ const viewProfileLabel = labelFor(SHARED_LABELS.viewProfile, lang);
     {
       screenshot ? (
         <figure class="c2-flagship-theatre__frame m-0">
-          <img
-            src={screenshot.src}
-            alt={screenshot.alt}
-            width={screenshot.width}
-            height={screenshot.height}
-            class="h-auto w-full rounded-[var(--radius-card)] border border-[var(--border-subtle)]"
-            loading="lazy"
-            decoding="async"
-            style={productTransitionStyle("media", data.slug)}
-            data-product-continuity="media"
+          <ProductVisual
+            screenshot={screenshot}
+            transitionStyle={productTransitionStyle("media", data.slug)}
+            continuity="media"
           />
           <figcaption class="mt-3 text-sm text-[var(--text-muted)]">
             {labelFor(SHARED_LABELS.proofCaption, lang)}

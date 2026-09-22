@@ -320,7 +320,7 @@ All v3 parent constraints remain binding, including:
 - critical content, navigation, evidence, and actions work without JavaScript;
 - no UI framework runtime;
 - no LLM, vector, or remote semantic search for public verification;
-- no cookie, localStorage, fingerprinting, or account personalization;
+- no cookie, fingerprinting, account personalization, or general localStorage state; ADR 0009 permits only the explicit `blueskyz.ui.language` preference key;
 - analytics transmission remains disabled until separately approved;
 - no WebGL/3D without a later evidence-backed GO;
 - no fabricated products, evidence, customers, certifications, review dates, or assurance states;
@@ -328,7 +328,7 @@ All v3 parent constraints remain binding, including:
 - product registry remains the source of public product existence;
 - `src/lib/truth.ts` remains production public-truth authority;
 - truth state is not color-only;
-- EN/VI parity includes accessibility chrome;
+- EN/VI runtime parity includes accessibility chrome; `zh-Hans`/`zh-Hant` remain architecture-ready until their reviewed content/runtime gates pass;
 - automated checks never upgrade Human E4;
 - client JS ceiling remains 120,000 B site-wide and worst-page, with the current approximately 1,644 B baseline treated as the performance posture to preserve, not a budget to spend casually;
 - no direct-to-main runtime bypass; branch → PR → exact-head checks → deployment evidence → merge → post-merge read-back.

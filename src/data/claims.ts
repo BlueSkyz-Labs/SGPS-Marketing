@@ -18,6 +18,14 @@ export type ClaimKind =
 export interface LocalizedStatement {
   en: string;
   vi: string;
+  zh: string;
+}
+
+export interface ProductClaimBinding {
+  /** Public product slug this claim is explicitly about. */
+  productSlug: string;
+  /** Stable authored capability identifier; never inferred from display copy. */
+  capabilityId: string;
 }
 
 export interface PublicClaim {
@@ -28,6 +36,12 @@ export interface PublicClaim {
   evidenceIds: string[];
   boundaryId?: string | undefined;
   reviewId?: string | undefined;
+  /**
+   * Optional capability-level binding for product claims.
+   * Generic product-publication claims deliberately omit this field and must
+   * never be borrowed as proof for an individual capability.
+   */
+  productBinding?: ProductClaimBinding | undefined;
 }
 
 /** Stable index of public evidence references already declared in integrity data. */
@@ -62,6 +76,7 @@ export const CLAIMS: readonly PublicClaim[] = [
     statement: {
       en: "Security reports reach the maintainers through a private GitHub channel, never through a public issue.",
       vi: "Báo cáo bảo mật đến người bảo trì qua kênh GitHub riêng tư, không bao giờ qua issue công khai.",
+      zh: "安全报告通过 GitHub 私有渠道送达维护者，绝不会通过公开 issue 提出。",
     },
     evidenceIds: ["ev-security-advisory", "ev-security-route"],
     boundaryId: "bnd-security-reporting",
@@ -72,8 +87,9 @@ export const CLAIMS: readonly PublicClaim[] = [
     kind: "policy",
     surface: "privacy",
     statement: {
-      en: "This site sets no cookies, uses no client storage, and performs no tracking or profiling.",
-      vi: "Trang này không đặt cookie, không dùng lưu trữ phía trình duyệt, và không theo dõi hay lập hồ sơ.",
+      en: "This site sets no cookies. It stores explicitly selected language and theme preferences in this browser, without tracking or profiling.",
+      vi: "Trang này không đặt cookie. Trang chỉ lưu lựa chọn ngôn ngữ và giao diện do khách truy cập chủ động chọn trong trình duyệt, không theo dõi hay lập hồ sơ.",
+      zh: "本站不设置 Cookie；仅在访客明确选择语言或主题时于浏览器本地保存偏好，不进行跟踪或行为画像。",
     },
     evidenceIds: ["ev-privacy-route", "ev-security-route"],
     boundaryId: "bnd-privacy-collection",
@@ -86,6 +102,7 @@ export const CLAIMS: readonly PublicClaim[] = [
     statement: {
       en: "A product appears in the public registry only when its public evidence is ready to verify.",
       vi: "Sản phẩm chỉ xuất hiện trong danh mục công khai khi bằng chứng công khai của nó sẵn sàng để xác minh.",
+      zh: "产品仅在其公开证据可核验时才会出现在公开登记表中。",
     },
     evidenceIds: ["ev-products-route"],
   },
