@@ -44,8 +44,16 @@ export interface ResolvedEdition {
   unresolved: EditionSourceRef[];
 }
 
-function pick(text: Record<string, string>, lang: string): string {
-  return text[lang] ?? text.en ?? "";
+/** Shape shared by the canonical LocalizedText / LocalizedStatement records. */
+interface LocalizedLike {
+  en: string;
+  vi: string;
+  zh?: string;
+}
+
+function pick(text: LocalizedLike, lang: string): string {
+  const values = text as unknown as Record<string, string | undefined>;
+  return values[lang] ?? text.en ?? "";
 }
 
 /** Resolve one edition for one language; unresolvable sources are excluded. */
