@@ -131,6 +131,44 @@
   text-decoration: underline;
 }
 
+/* C4-A S8 — Quiet motion budget.
+ *
+ * One focal entrance moment per scene is the ceiling. The only animation the
+ * quiet-authority layer is allowed to declare is this single, short rise; it is
+ * fully neutralised under reduced motion. No perpetual decoration, no second
+ * entrance hook, no new animation engine.
+ */
+.c4-motion-focal {
+  animation: c4-focal-rise var(--c4-motion-scarcity-duration)
+    var(--c4-motion-scarcity-ease) both;
+}
+
+@keyframes c4-focal-rise {
+  from {
+    opacity: 0;
+    transform: translateY(0.5rem);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .c4-motion-focal {
+    animation: none;
+  }
+}
+
+/* Print runs no animation, so a `both` fill would freeze the element at its
+ * hidden start state. Print must show the content, not the entrance. */
+@media print {
+  .c4-motion-focal {
+    animation: none;
+  }
+}
+
 @media (min-width: 64rem) {
   .c4-editorial-grid {
     grid-template-columns: minmax(0, 1fr) minmax(0, 1.618fr);
