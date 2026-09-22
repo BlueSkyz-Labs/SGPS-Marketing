@@ -1,5 +1,6 @@
 ---
 import type { Language } from "@/data/site";
+import Folio from "@/components/editorial/Folio.astro";
 
 interface Props {
   lang?: Language;
@@ -26,6 +27,11 @@ const concepts = isVi
   data-one-house-editorial
 >
   <div class="c2-one-house__intro">
+    <Folio
+      ordinal="01"
+      label={isVi ? "Chương" : isZh ? "章节" : "Chapter"}
+      context={isVi ? "Một nhà" : isZh ? "一个团队" : "One house"}
+    />
     <h2
       id="house-title"
       class="c4-type-section font-semibold tracking-tight text-balance"

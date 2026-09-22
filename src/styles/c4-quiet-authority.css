@@ -65,6 +65,29 @@
   font-size: var(--c4-type-reading);
 }
 
+/* C4-A S5 — Editorial folio: running context as real text, ordinal as ornament. */
+.c4-folio {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-3);
+  margin: 0;
+  font-size: var(--c4-type-meta);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.c4-folio__ordinal {
+  font-variant-numeric: tabular-nums;
+}
+
+.c4-folio__rule {
+  align-self: center;
+  width: var(--space-8);
+  height: 1px;
+  background: var(--c4-hairline);
+}
+
 @media (min-width: 64rem) {
   .c4-editorial-grid {
     grid-template-columns: minmax(0, 1fr) minmax(0, 1.618fr);
