@@ -24,6 +24,16 @@
   /* Motion scarcity: a single slow curve; C4 adds no second motion grammar. */
   --c4-motion-scarcity-duration: var(--motion-slow);
   --c4-motion-scarcity-ease: var(--brand-ease-standard);
+
+  /* C4-A S2 — Optical typography roles: fluid clamp ranges over ONE family.
+   * No new font family, no route-local scale; hierarchy stays semantic. */
+  --c4-type-display: clamp(2.5rem, 1.75rem + 2.6vw, 4rem);
+  --c4-type-section: clamp(1.75rem, 1.35rem + 1.4vw, 2.5rem);
+  --c4-type-product: clamp(1.25rem, 1.1rem + 0.6vw, 1.6rem);
+  --c4-type-evidence: clamp(1.05rem, 1rem + 0.3vw, 1.25rem);
+  --c4-type-reading: clamp(1rem, 0.95rem + 0.25vw, 1.125rem);
+  --c4-type-meta: 0.8125rem;
+  --c4-type-caption: 0.75rem;
 }
 
 /* C4-A S1 — Editorial grid roles.
@@ -40,6 +50,15 @@
 
 .c4-reading-column {
   max-width: var(--c4-reading-measure);
+}
+
+/* C4-A S2 — calibrated type role utilities (semantic element keeps its level). */
+.c4-type-section {
+  font-size: var(--c4-type-section);
+}
+
+.c4-type-reading {
+  font-size: var(--c4-type-reading);
 }
 
 @media (min-width: 64rem) {
