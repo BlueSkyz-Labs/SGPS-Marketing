@@ -1,0 +1,47 @@
+---
+/**
+ * C4-A S7 — BlueSkyz line icon.
+ *
+ * Renders one icon from the allowlisted registry with the shared stroke
+ * grammar. An icon is either decorative (`aria-hidden`, when a visible text
+ * label already names the control) or it carries a real accessible name via
+ * `label`; it never replaces a required control label silently.
+ */
+import { getIcon, ICON_GRAMMAR } from "@/lib/icon-registry";
+
+interface Props {
+  /** Registry key. Unknown names fail loudly rather than rendering nothing. */
+  name: string;
+  /** Accessible name. Omit only when adjacent visible text names the control. */
+  label?: string;
+  class?: string;
+}
+
+const { name, label, class: className } = Astro.props;
+const icon = getIcon(name);
+
+if (!icon) {
+  throw new Error(
+    `BlueSkyzIcon: unknown icon "${name}" (not in the allowlisted registry)`,
+  );
+}
+
+const decorative = !label;
+---
+
+<svg
+  class={className}
+  viewBox={ICON_GRAMMAR.viewBox}
+  fill={ICON_GRAMMAR.fill}
+  stroke="currentColor"
+  stroke-width={ICON_GRAMMAR.strokeWidth}
+  stroke-linecap={ICON_GRAMMAR.strokeLinecap}
+  stroke-linejoin={ICON_GRAMMAR.strokeLinejoin}
+  role={decorative ? undefined : "img"}
+  aria-label={decorative ? undefined : label}
+  aria-hidden={decorative ? "true" : undefined}
+  focusable="false"
+>
+  {decorative ? null : <title>{label}</title>}
+  {icon.paths.map((d) => <path d={d} />)}
+</svg>
