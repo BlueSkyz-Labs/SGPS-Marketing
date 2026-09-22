@@ -3,6 +3,7 @@ import { SITE } from "@/data/site";
 import { getPublicProducts } from "@/lib/products";
 import { absoluteUrl, PUBLIC_STATIC_PATHS } from "@/lib/seo";
 import { getEvidencePassportIds } from "@/lib/claims";
+import { EDITIONS } from "@/data/editions";
 import { SUPPORTED_LANGUAGES } from "@/lib/i18n";
 import { isNonProductionSiteUrl } from "@/lib/truth";
 
@@ -25,6 +26,11 @@ export const GET: APIRoute = async () => {
         ...SUPPORTED_LANGUAGES.flatMap((lang) =>
           evidenceIds.map((id) =>
             absoluteUrl(SITE.url, `/${lang}/evidence/${id}/`),
+          ),
+        ),
+        ...SUPPORTED_LANGUAGES.flatMap((lang) =>
+          EDITIONS.map((edition) =>
+            absoluteUrl(SITE.url, `/${lang}/editions/${edition.id}/`),
           ),
         ),
       ];

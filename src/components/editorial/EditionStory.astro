@@ -1,0 +1,59 @@
+---
+import { resolveEdition, type EditionRecord } from "@/lib/editions";
+import type { Language } from "@/lib/i18n";
+
+/**
+ * C4-B G6 — One collected edition.
+ *
+ * Renders only the resolved view: authored title/deck/note, the authored
+ * publication date, and the canonical destinations of every source. It shows no
+ * engagement counter, no issue volume and no claim beyond the resolved sources.
+ */
+interface Props {
+  edition: EditionRecord;
+  lang?: Language;
+}
+
+const { edition, lang = "en" } = Astro.props;
+const view = resolveEdition(edition, lang);
+
+const LABELS: Record<
+  Language,
+  { sources: string; published: string; note: string }
+> = {
+  en: { sources: "Sources", published: "Published", note: "Editorial note" },
+  vi: { sources: "Nguồn", published: "Công bố", note: "Ghi chú biên tập" },
+  zh: { sources: "来源", published: "发布日期", note: "编辑说明" },
+};
+const labels = LABELS[lang];
+---
+
+<article class="c4-edition" data-edition-story={view.id}>
+  <h1 class="c4-edition__title">{view.title}</h1>
+  <p class="c4-edition__deck">{view.deck}</p>
+  <p class="c4-edition__published">
+    {labels.published}: <time datetime={view.published}>{view.published}</time>
+  </p>
+  {
+    view.note && (
+      <p class="c4-edition__note">
+        <span class="c4-edition__note-label">{labels.note}:</span> {view.note}
+      </p>
+    )
+  }
+  <h2 class="c4-edition__sources-title">{labels.sources}</h2>
+  <ul class="c4-edition__sources">
+    {
+      view.sources.map((source) => (
+        <li
+          class="c4-edition__source"
+          data-edition-source={`${source.kind}:${source.id}`}
+        >
+          <a class="c4-edition__source-link" href={source.href}>
+            {source.label}
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</article>
