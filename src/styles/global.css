@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import "@/styles/cinematic-product-house.css";
+@import "@/styles/c4-quiet-authority.css";
 
 @theme {
   --color-ink: #0b1020;

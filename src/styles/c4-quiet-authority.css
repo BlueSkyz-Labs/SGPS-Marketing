@@ -1,0 +1,27 @@
+/* C4-A Quiet Authority — semantic role layer.
+ *
+ * Aliases only. Every value resolves to an existing Brand Kit v4 / C3 token, or is a
+ * measured length derived from the editorial craft spec. This file authors NO new brand
+ * truth: no palette, no font family, no motion grammar, no runtime dependency.
+ *
+ * Consumed by C4 editorial surfaces (grid, typography, material, folio, motion scarcity).
+ */
+:root {
+  /* Reading + display measures: optical line length, not container width. */
+  --c4-reading-measure: 62ch;
+  --c4-display-measure: 24ch;
+
+  /* Material surfaces: quiet authority resolves to the canonical ink/paper pair. */
+  --c4-material-ink: var(--surface-inverse);
+  --c4-material-paper: var(--surface-primary);
+
+  /* Hairline rule: the existing subtle border token, never a new weight. */
+  --c4-hairline: var(--border-subtle);
+
+  /* Folio rhythm: one canonical vertical step. */
+  --c4-folio-gap: var(--space-8);
+
+  /* Motion scarcity: a single slow curve; C4 adds no second motion grammar. */
+  --c4-motion-scarcity-duration: var(--motion-slow);
+  --c4-motion-scarcity-ease: var(--brand-ease-standard);
+}
