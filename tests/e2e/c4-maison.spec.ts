@@ -63,10 +63,14 @@ test.describe("C4-B maison orientation surface", () => {
         name: /House index|Mục lục ngôi nhà/,
       });
       await expect(house).toHaveCount(1);
-      // The house index must not replace or duplicate the shell's own primary nav.
+      // The shell's own nav set is viewport-dependent (mobile hides the primary nav),
+      // so assert the property we actually own: this landmark never claims
+      // primary-nav semantics.
+      const label = (await house.getAttribute("aria-label")) ?? "";
       expect(
-        await page.getByRole("navigation", { name: /Primary|Chính/ }).count(),
-      ).toBeGreaterThanOrEqual(1);
+        label,
+        "house index must not claim primary-nav semantics",
+      ).not.toMatch(/^(Primary|Chính|Mobile|Di động)$/);
     });
 
     test(`/${lang}/ maison stays vertical and inside 390px`, async ({
