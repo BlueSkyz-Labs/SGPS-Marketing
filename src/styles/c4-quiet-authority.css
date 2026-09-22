@@ -14,6 +14,10 @@
   /* Material surfaces: quiet authority resolves to the canonical ink/paper pair. */
   --c4-material-ink: var(--surface-inverse);
   --c4-material-paper: var(--surface-primary);
+  /* C4-A S3 — four semantic materials: Ink, Porcelain, Quiet Paper, Cobalt Accent.
+   * Tonal separation + hairline, never glass/blur or a route-local material. */
+  --c4-material-quiet-paper: var(--surface-subtle);
+  --c4-material-cobalt-accent: var(--brand-cobalt);
 
   /* Hairline rule: the existing subtle border token, never a new weight. */
   --c4-hairline: var(--border-subtle);
