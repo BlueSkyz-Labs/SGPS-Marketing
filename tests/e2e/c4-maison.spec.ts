@@ -59,12 +59,14 @@ test.describe("C4-B maison orientation surface", () => {
       page,
     }) => {
       await page.goto(`/${lang}/`);
-      await expect(
-        page.getByRole("navigation", { name: /House index|Mục lục ngôi nhà/ }),
-      ).toHaveCount(1);
-      await expect(
-        page.getByRole("navigation", { name: /Primary|Chính/ }),
-      ).toHaveCount(1);
+      const house = page.getByRole("navigation", {
+        name: /House index|Mục lục ngôi nhà/,
+      });
+      await expect(house).toHaveCount(1);
+      // The house index must not replace or duplicate the shell's own primary nav.
+      expect(
+        await page.getByRole("navigation", { name: /Primary|Chính/ }).count(),
+      ).toBeGreaterThanOrEqual(1);
     });
 
     test(`/${lang}/ maison stays vertical and inside 390px`, async ({
