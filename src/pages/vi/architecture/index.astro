@@ -1,0 +1,21 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Container from "@/components/layout/Container.astro";
+import PageHeader from "@/components/layout/PageHeader.astro";
+import ArchitectureSalon from "@/components/architecture/ArchitectureSalon.astro";
+---
+
+<BaseLayout
+  title="Kiến trúc"
+  description="Trang này được dựng thế nào, qua năm góc nhìn tĩnh lặng dẫn xuất từ mô hình kiến trúc chuẩn."
+  path="/vi/architecture/"
+>
+  <section class="py-16 lg:py-24">
+    <Container>
+      <PageHeader title="Kiến trúc" lede="Trang này được dựng thế nào, qua năm góc nhìn tĩnh lặng dẫn xuất từ mô hình kiến trúc chuẩn." />
+      <div class="mt-12">
+        <ArchitectureSalon lang="vi" />
+      </div>
+    </Container>
+  </section>
+</BaseLayout>
