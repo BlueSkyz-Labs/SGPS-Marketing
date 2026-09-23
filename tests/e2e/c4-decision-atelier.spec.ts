@@ -173,3 +173,87 @@ test.describe("C4-E decision atelier", () => {
     expect(pressed).toBe(4);
   });
 });
+
+test.describe("C4-E atelier reasons", () => {
+  const BANNED = [
+    "best",
+    "score",
+    "rank",
+    "recommend",
+    "certified",
+    "audited",
+    "guaranteed",
+    "compliant",
+    "superior",
+  ];
+
+  test("every shown grouped item explains the dimension that matched", async ({
+    page,
+  }) => {
+    await page.goto("/en/decision-room/");
+    await page.locator("[data-atelier-goal]").selectOption("evaluate");
+
+    const shown = page.locator(
+      "[data-decision-items] [data-decision-item]:not([hidden])",
+    );
+    const reasons = page.locator(
+      "[data-decision-items] [data-decision-item]:not([hidden]) [data-atelier-reason-text]",
+    );
+    await expect(reasons.first()).toBeVisible();
+    // an item can match more than one group but still explains itself once
+    await expect(reasons).toHaveCount(await shown.count());
+
+    const texts = await reasons.evaluateAll((nodes) =>
+      nodes.map((node) => (node.textContent ?? "").trim()),
+    );
+    for (const text of texts) {
+      expect(text.length).toBeGreaterThan(0);
+      for (const word of BANNED) {
+        expect(
+          text.toLowerCase(),
+          `reason must not claim "${word}"`,
+        ).not.toContain(word);
+      }
+    }
+  });
+
+  test("reasons are localized and reset removes them", async ({ page }) => {
+    const texts: Record<string, string> = {};
+    for (const lang of ["en", "vi", "zh"]) {
+      await page.goto(`/${lang}/decision-room/`);
+      await page.locator("[data-atelier-goal]").selectOption("verify");
+      const first = page.locator("[data-atelier-reason-text]").first();
+      await expect(first).toBeVisible();
+      texts[lang] = (await first.textContent()) ?? "";
+      await page.locator("[data-atelier-reset]").click();
+      await expect(page.locator("[data-atelier-reason-text]")).toHaveCount(0);
+    }
+    expect(new Set(Object.values(texts)).size).toBe(3);
+  });
+
+  test("a reason states the matching dimension, not the item's merits", async ({
+    page,
+  }) => {
+    await page.goto("/en/decision-room/");
+    // the same goal always yields the same reason key, whatever the items are
+    await page.locator("[data-atelier-goal]").selectOption("architecture");
+    const keys = await page
+      .locator(
+        "[data-decision-items] [data-decision-item]:not([hidden]) [data-atelier-reason-text]",
+      )
+      .evaluateAll((nodes) =>
+        nodes.map((node) => node.getAttribute("data-atelier-reason-text")),
+      );
+    expect(new Set(keys).size).toBe(1);
+    expect(keys[0]).toBe("trust-surface");
+  });
+
+  test("reason templates are not published as page content", async ({
+    request,
+  }) => {
+    const html = await (await request.get("/en/decision-room/")).text();
+    expect(html).toContain("data-atelier-reason=");
+    // templates are inert until the visitor opts into a goal
+    expect(html).not.toMatch(/<p[^>]*data-atelier-reason-text/);
+  });
+});

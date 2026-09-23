@@ -29,10 +29,26 @@ export const ATELIER_CONSTRAINTS = [
 
 export type AtelierConstraint = (typeof ATELIER_CONSTRAINTS)[number];
 
-/** A declared group: an id, the kinds it accepts, and the facts it requires. */
+/**
+ * Why an item appears in a group. A closed vocabulary of keys, never prose:
+ * the arrangement cannot state a reason the product has not declared, and the
+ * component is the only place a sentence is formed.
+ */
+export const ATELIER_REASON_KEYS = [
+  "in-scope",
+  "carries-source",
+  "states-limits",
+  "trust-surface",
+  "product-fact",
+] as const;
+
+export type AtelierReasonKey = (typeof ATELIER_REASON_KEYS)[number];
+
+/** A declared group: an id, the kinds it accepts, the facts it requires, and why. */
 interface GroupRule {
   id: string;
   kinds: readonly DecisionKind[];
+  reason: AtelierReasonKey;
   requiresEvidence?: boolean;
   requiresBoundary?: boolean;
 }
@@ -40,10 +56,15 @@ interface GroupRule {
 /** Every goal's groups, in presentation order. Declared, never computed. */
 const GOAL_GROUPS: Record<AtelierGoal, readonly GroupRule[]> = {
   explore: [
-    { id: "starting-points", kinds: ["claim", "trust", "product"] },
+    {
+      id: "starting-points",
+      kinds: ["claim", "trust", "product"],
+      reason: "in-scope",
+    },
     {
       id: "open-questions",
       kinds: ["claim", "trust", "product"],
+      reason: "states-limits",
       requiresBoundary: true,
     },
   ],
@@ -51,11 +72,13 @@ const GOAL_GROUPS: Record<AtelierGoal, readonly GroupRule[]> = {
     {
       id: "sourced-facts",
       kinds: ["claim", "trust", "product"],
+      reason: "carries-source",
       requiresEvidence: true,
     },
     {
       id: "stated-limits",
       kinds: ["claim", "trust", "product"],
+      reason: "states-limits",
       requiresBoundary: true,
     },
   ],
@@ -63,11 +86,16 @@ const GOAL_GROUPS: Record<AtelierGoal, readonly GroupRule[]> = {
     {
       id: "evidence-backed",
       kinds: ["claim", "trust"],
+      reason: "carries-source",
       requiresEvidence: true,
     },
   ],
-  architecture: [{ id: "trust-signals", kinds: ["trust"] }],
-  "work-with-blueskyz": [{ id: "product-truth", kinds: ["product"] }],
+  architecture: [
+    { id: "trust-signals", kinds: ["trust"], reason: "trust-surface" },
+  ],
+  "work-with-blueskyz": [
+    { id: "product-truth", kinds: ["product"], reason: "product-fact" },
+  ],
 };
 
 /** What each constraint narrows to. Declared, never weighted. */
@@ -84,6 +112,8 @@ export interface AtelierSelection {
 
 export interface AtelierGroup {
   id: string;
+  /** The declared dimension that matched — a key, never a claim of quality. */
+  reason: AtelierReasonKey;
   items: DecisionItem[];
 }
 
@@ -152,7 +182,8 @@ export function arrangeDecisionItems(
         accepts(rule, item) &&
         (allowedKinds === null || allowedKinds.has(item.kind)),
     );
-    if (matched.length > 0) groups.push({ id: rule.id, items: matched });
+    if (matched.length > 0)
+      groups.push({ id: rule.id, reason: rule.reason, items: matched });
   }
 
   return {

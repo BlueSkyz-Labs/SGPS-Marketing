@@ -650,6 +650,7 @@
     content: "";
   }
 }
+<<<<<<< HEAD
 /* ---- C4-D G5 — provenance lens ---- */
 .c4-provenance {
   max-width: 78ch;
@@ -783,3 +784,18 @@
   display: inline-flex;
   align-items: center;
   min-block-size: 44px;
+=======
+
+.decision-room__group-reason {
+  display: block;
+  margin-block-end: var(--space-1);
+  font-size: var(--c4-type-reading);
+  color: color-mix(in srgb, var(--brand-porcelain) 78%, transparent);
+}
+
+@media print {
+  .decision-room__group-reason {
+    color: inherit;
+  }
+}
+>>>>>>> c143fcc (feat(c4-e): sourced why-this-is-shown reasons (Task 4))

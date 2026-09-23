@@ -195,6 +195,7 @@ export function initDecisionAtelier(room: HTMLElement): void {
     for (const element of items) {
       element.removeAttribute("data-atelier-group");
       element.querySelector("[data-atelier-group-label]")?.remove();
+      element.querySelector("[data-atelier-reason-text]")?.remove();
       element.hidden = false;
     }
   };
@@ -223,6 +224,11 @@ export function initDecisionAtelier(room: HTMLElement): void {
         `template[data-atelier-label="${group.id}"]`,
       );
       const label = (template?.content.textContent ?? "").trim() || group.id;
+      // The reason is the group's declared dimension, rendered from a template.
+      const reasonTemplate = room.querySelector<HTMLTemplateElement>(
+        `template[data-atelier-reason="${group.reason}"]`,
+      );
+      const reasonText = (reasonTemplate?.content.textContent ?? "").trim();
       for (const item of group.items) {
         const element = items.find(
           (candidate) =>
@@ -231,11 +237,25 @@ export function initDecisionAtelier(room: HTMLElement): void {
         if (!element) continue;
         element.setAttribute("data-atelier-group", group.id);
         list.appendChild(element);
-        const badge = document.createElement("span");
-        badge.className = "decision-room__group-label";
-        badge.setAttribute("data-atelier-group-label", group.id);
-        badge.textContent = label;
-        element.prepend(badge);
+        // An item can match more than one group; it still shows one label and one
+        // reason, so the first matching group states the dimension.
+        if (!element.querySelector("[data-atelier-group-label]")) {
+          const badge = document.createElement("span");
+          badge.className = "decision-room__group-label";
+          badge.setAttribute("data-atelier-group-label", group.id);
+          badge.textContent = label;
+          element.prepend(badge);
+        }
+        if (
+          reasonText &&
+          !element.querySelector("[data-atelier-reason-text]")
+        ) {
+          const reason = document.createElement("span");
+          reason.className = "decision-room__group-reason";
+          reason.setAttribute("data-atelier-reason-text", group.reason);
+          reason.textContent = reasonText;
+          element.prepend(reason);
+        }
         shown += 1;
       }
     }
