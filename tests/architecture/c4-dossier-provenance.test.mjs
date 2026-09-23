@@ -111,7 +111,7 @@ test("dossier source blocks stay deterministic across repeated compiles", () => 
   assert.deepEqual(first, second);
 });
 
-test("a still-registered claim becomes unpublishable if all its evidence disappears", () => {
+test("an existing claim refuses withdrawn evidence", () => {
   const claim = CLAIMS.find(
     (entry) => entry.id === "registry-publishes-only-proven-products",
   );
@@ -138,7 +138,11 @@ test("a still-registered claim becomes unpublishable if all its evidence disappe
       assert.equal(result.complete, false);
     }
   } finally {
-    claim.evidenceIds.splice(0, claim.evidenceIds.length, ...originalEvidenceIds);
+    claim.evidenceIds.splice(
+      0,
+      claim.evidenceIds.length,
+      ...originalEvidenceIds,
+    );
   }
 });
 
