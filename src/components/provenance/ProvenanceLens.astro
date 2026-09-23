@@ -73,7 +73,8 @@ const labels = LABELS[lang];
 
       {view.freshness && (
         <p class="c4-provenance__freshness">
-          {labels.freshness}: <time datetime={view.freshness}>{view.freshness}</time>
+          {labels.freshness}:{" "}
+          <time datetime={view.freshness}>{view.freshness}</time>
         </p>
       )}
 
@@ -107,7 +108,10 @@ const labels = LABELS[lang];
       )}
     </section>
   ) : (
-    <section class="c4-provenance c4-provenance--unknown" data-provenance-unknown>
+    <section
+      class="c4-provenance c4-provenance--unknown"
+      data-provenance-unknown
+    >
       <h2 class="c4-provenance__heading">{labels.heading}</h2>
       <p class="c4-provenance__statement">{labels.unknown}</p>
     </section>
