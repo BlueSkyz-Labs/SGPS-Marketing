@@ -17,19 +17,17 @@ Precedence: Safety/provider and SGPS controls > canonical product/public truth >
 
 ## 1. Evidence inventory and current situation
 
-| Surface | Observed at baseline | Consequence |
-| --- | --- | --- |
-| Main | bbc0600, merged PR #227, dossier provenance refactor | Existing C4 source authority must be preserved, not forked. |
-| Source/browser/deploy | Exact-head Quality Gates, Browser Assurance and Workers Builds success in GitHub checks | Healthy source baseline, not blanket launch certification. |
-| Ruleset | Active main-promotion-governance #22500299; PR + strict Quality Gates / Browser Assurance, conversations resolved, no bypass | All changes via PR; independent human review cannot be invented when unavailable. |
-| Open C4 PRs | #224 router reconciliation; #225 Architecture Salon; #228 arrangement; #229 controls; #230 reasons; #231 handoff; #232 deterministic briefing; #233–#235 dependencies | Avoid duplicate implementation and stale-head merges; reconcile dependencies per exact diff. |
-| PR #231 | Open with mergeable=false at observation; base older than main | Inspect compare/conflicts and rerun exact-head gates after rebase; no forced merge. |
-| Router | docs/current-work.json updated 2026-09-22, c3-c-converged; C4 runtime already merged, #224 open | Active-work record is stale; reconcile via #224 rather than parallel edits. Name collision: C3-C brand-experience W1–W8 vs C3-C Living Product System. |
-| Public truth | C2-P0 product screenshot/fact floor owner-gated; registry honest-empty, no invented product screenshot | Product showcases must stay honest while infrastructure/layout is improved. |
-| Contact | src/lib/act.ts soft-lands to About/Security until real contact email exists | Do not create dead-end contact conversion or fake lead funnel. |
-| Privacy | src/lib/analytics.ts uses local DOM events only; transmission disabled | No claim of measured conversion improvement or production RUM. |
-| Locale | en, vi, zh=zh-Hans first-class source routes; zh-Hant architecture-ready only | No false zh-Hant completion; preserve deliberate language preference. |
-| Dossier | src/lib/dossier.ts consumes getPublicProvenance; C4-D contract tests check missing ID and current subjects | Additional negative test needed for existing claim whose provenance becomes unknown; see H-01. |
+- **Main** — Observed at baseline: bbc0600, merged PR #227, dossier provenance refactor; Consequence: Existing C4 source authority must be preserved, not forked.
+- **Source/browser/deploy** — Observed at baseline: Exact-head Quality Gates, Browser Assurance and Workers Builds success in GitHub checks; Consequence: Healthy source baseline, not blanket launch certification.
+- **Ruleset** — Observed at baseline: Active main-promotion-governance #22500299; PR + strict Quality Gates / Browser Assurance, conversations resolved, no bypass; Consequence: All changes via PR; independent human review cannot be invented when unavailable.
+- **Open C4 PRs** — Observed at baseline: #224 router reconciliation; #225 Architecture Salon; #228 arrangement; #229 controls; #230 reasons; #231 handoff; #232 deterministic briefing; #233–#235 dependencies; Consequence: Avoid duplicate implementation and stale-head merges; reconcile dependencies per exact diff.
+- **PR #231** — Observed at baseline: Open with mergeable=false at observation; base older than main; Consequence: Inspect compare/conflicts and rerun exact-head gates after rebase; no forced merge.
+- **Router** — Observed at baseline: docs/current-work.json updated 2026-09-22, c3-c-converged; C4 runtime already merged, #224 open; Consequence: Active-work record is stale; reconcile via #224 rather than parallel edits. Name collision: C3-C brand-experience W1–W8 vs C3-C Living Product System.
+- **Public truth** — Observed at baseline: C2-P0 product screenshot/fact floor owner-gated; registry honest-empty, no invented product screenshot; Consequence: Product showcases must stay honest while infrastructure/layout is improved.
+- **Contact** — Observed at baseline: src/lib/act.ts soft-lands to About/Security until real contact email exists; Consequence: Do not create dead-end contact conversion or fake lead funnel.
+- **Privacy** — Observed at baseline: src/lib/analytics.ts uses local DOM events only; transmission disabled; Consequence: No claim of measured conversion improvement or production RUM.
+- **Locale** — Observed at baseline: en, vi, zh=zh-Hans first-class source routes; zh-Hant architecture-ready only; Consequence: No false zh-Hant completion; preserve deliberate language preference.
+- **Dossier** — Observed at baseline: src/lib/dossier.ts consumes getPublicProvenance; C4-D contract tests check missing ID and current subjects; Consequence: Additional negative test needed for existing claim whose provenance becomes unknown; see H-01.
 
 Source pointers: AGENTS.md; docs/QA_STRATEGY.md; docs/current-work.json; docs/evidence/2026-09-22-sgps-experience-adoption.md; C4 master/spec and child plans; repository PRs listed above. Provider state must be re-read; historical plan wording is not provider truth.
 
@@ -103,48 +101,42 @@ User journey: **Arrive -> Orient -> Inspect -> Understand -> Verify -> Compose -
 
 ### 10 God-tier proposals (candidate improvements, not claims of delivery)
 
-| ID | Concrete outcome / reuse | Proof of value |
-| --- | --- | --- |
-| GT01 | Cross-route journey continuity from MaisonIndex, nav, Decision Room and footer without a second registry | Real target routes, logical keyboard sequence, restart/exit pathways |
-| GT02 | Boardroom Dossier provenance gate hardening and caveat parity in print | Unknown existing claim never publishes; print carries sources and limitations |
-| GT03 | Architecture Salon public-safe five-lens narrative after #225 | Every fact readable without diagram/JS, no private topology |
-| GT04 | Decision Atelier transparent reasons after #228–#231 | Explicit reversible selection, no ranking/profiling, accurate handoff |
-| GT05 | Verifiable Briefing deterministic phase after #232 | Exact source lineage, unknown refusal, printable/no-JS fallback |
-| GT06 | Trust narrative across security/privacy/evidence with clear limitations | No invented assurance, coherent source/boundary/freshness |
-| GT07 | Product House evidence-gated reveal | Unapproved products stay hidden, empty state remains useful |
-| GT08 | Local-first multilingual route continuity | Locale-specific canonical, reachable switch, no zh-Hant false claim |
-| GT09 | Tasteful editorial content presentation for Editions/Craft | Source-backed and rights-cleared; static readable print |
-| GT10 | Human-friendly digital hospitality and recoverable actions | Every step supports no-JS, reduced-motion, accessibility and recovery |
+- **GT01** — Concrete outcome / reuse: Cross-route journey continuity from MaisonIndex, nav, Decision Room and footer without a second registry; Proof of value: Real target routes, logical keyboard sequence, restart/exit pathways
+- **GT02** — Concrete outcome / reuse: Boardroom Dossier provenance gate hardening and caveat parity in print; Proof of value: Unknown existing claim never publishes; print carries sources and limitations
+- **GT03** — Concrete outcome / reuse: Architecture Salon public-safe five-lens narrative after #225; Proof of value: Every fact readable without diagram/JS, no private topology
+- **GT04** — Concrete outcome / reuse: Decision Atelier transparent reasons after #228–#231; Proof of value: Explicit reversible selection, no ranking/profiling, accurate handoff
+- **GT05** — Concrete outcome / reuse: Verifiable Briefing deterministic phase after #232; Proof of value: Exact source lineage, unknown refusal, printable/no-JS fallback
+- **GT06** — Concrete outcome / reuse: Trust narrative across security/privacy/evidence with clear limitations; Proof of value: No invented assurance, coherent source/boundary/freshness
+- **GT07** — Concrete outcome / reuse: Product House evidence-gated reveal; Proof of value: Unapproved products stay hidden, empty state remains useful
+- **GT08** — Concrete outcome / reuse: Local-first multilingual route continuity; Proof of value: Locale-specific canonical, reachable switch, no zh-Hant false claim
+- **GT09** — Concrete outcome / reuse: Tasteful editorial content presentation for Editions/Craft; Proof of value: Source-backed and rights-cleared; static readable print
+- **GT10** — Concrete outcome / reuse: Human-friendly digital hospitality and recoverable actions; Proof of value: Every step supports no-JS, reduced-motion, accessibility and recovery
 
 ### 10 Tier S+ improvements
 
-| ID | Bounded improvement / guard |
-| --- | --- |
-| S01 | Typography scale/measure/CJK and line-break audit across long-form routes |
-| S02 | Semantic icon grammar and accessible named controls; no decorative icon overload |
-| S03 | Material/color/token unification in Light/Dark/forced-colors/print |
-| S04 | CTA hierarchy and honest contact fallback; no dead-end conversion |
-| S05 | Focus visibility, keyboard order, aria status and reset/empty/error feedback |
-| S06 | 320/390/768/1440 responsive and 200% zoom/content spacing fixtures |
-| S07 | Motion scarcity plus full reduced-motion equivalence |
-| S08 | Product/architecture/evidence images: genuine rights, useful alt and optimized loading |
-| S09 | Per-route performance/client bytes/CLS/image/font guard without budget inflation |
-| S10 | Public route/SEO/metadata/security-header/rollback regression checks |
+- **S01** — Bounded improvement / guard: Typography scale/measure/CJK and line-break audit across long-form routes
+- **S02** — Bounded improvement / guard: Semantic icon grammar and accessible named controls; no decorative icon overload
+- **S03** — Bounded improvement / guard: Material/color/token unification in Light/Dark/forced-colors/print
+- **S04** — Bounded improvement / guard: CTA hierarchy and honest contact fallback; no dead-end conversion
+- **S05** — Bounded improvement / guard: Focus visibility, keyboard order, aria status and reset/empty/error feedback
+- **S06** — Bounded improvement / guard: 320/390/768/1440 responsive and 200% zoom/content spacing fixtures
+- **S07** — Bounded improvement / guard: Motion scarcity plus full reduced-motion equivalence
+- **S08** — Bounded improvement / guard: Product/architecture/evidence images: genuine rights, useful alt and optimized loading
+- **S09** — Bounded improvement / guard: Per-route performance/client bytes/CLS/image/font guard without budget inflation
+- **S10** — Bounded improvement / guard: Public route/SEO/metadata/security-header/rollback regression checks
 
 Each selected idea MUST have a short implementation slice recording definition, real user scenario, user flow, current gap, business/trust/security/privacy value, files, tests, rollback and exact-head evidence. Not all ideas warrant new features: first reuse or refine existing components.
 
 ## 5. Execution sequence (small PRs; no mega PR)
 
-| Wave | Dependency | File targets / work | Done when |
-| --- | --- | --- | --- |
-| W0 — Rebase truth | Live main/PR/rules/provider read-back | Inspect #224/225/228–235, router, current C4 design and SGPS overlays; record exact SHA and execution ledger | No stale or ambiguous wave identity; open dependencies ordered |
-| W1 — Source correctness | W0 | tests/architecture/c4-dossier-provenance.test.mjs, src/lib/dossier.ts only as justified, localized/print e2e | RED->GREEN for existing claim/unknown provenance, no regression |
-| W2 — Integrate in-flight C4 | W0+W1 as relevant | Existing PR branches and current-work; avoid parallel replacement | #224/#225 and #228->#229->#230->#231; #232 merged only once dependencies and gates pass |
-| W3 — SGPS/experience inventory | W0 and stable C4 source | docs/evidence baseline/target/gap/decision mapping; component, route and token census | Two-axis state, precise target and owner/external residuals |
-| W4 — Experience craft | W2+W3 | src/components/layout, sections, experience, dossier, editorial; src/styles/c4-quiet-authority.css; e2e tests | Visual consistency, semantic/a11y/mobile/print proof without second design system |
-| W5 — Function/SEO/i18n hardening | W2+W3 | src/lib/seo.ts, i18n.ts, route surfaces, CTA/empty/truth tests | Full route and locale coverage, no fake product/contact |
-| W6 — Security/performance/ops | W1–W5 | public projection tests, client/SEO/ops contracts, deploy smoke evidence | Static privacy boundary, client/perf and recovery/rollout verified |
-| W7 — Final convergence | Waves complete or transparently gated | project-local final evidence + current-work, provider read-back | Only verified capabilities marked converged; Human E4/owner gates not auto-cleared |
+- **W0 — Rebase truth** — Dependency: Live main/PR/rules/provider read-back; File targets / work: Inspect #224/225/228–235, router, current C4 design and SGPS overlays; record exact SHA and execution ledger; Done when: No stale or ambiguous wave identity; open dependencies ordered
+- **W1 — Source correctness** — Dependency: W0; File targets / work: tests/architecture/c4-dossier-provenance.test.mjs, src/lib/dossier.ts only as justified, localized/print e2e; Done when: RED->GREEN for existing claim/unknown provenance, no regression
+- **W2 — Integrate in-flight C4** — Dependency: W0+W1 as relevant; File targets / work: Existing PR branches and current-work; avoid parallel replacement; Done when: #224/#225 and #228->#229->#230->#231; #232 merged only once dependencies and gates pass
+- **W3 — SGPS/experience inventory** — Dependency: W0 and stable C4 source; File targets / work: docs/evidence baseline/target/gap/decision mapping; component, route and token census; Done when: Two-axis state, precise target and owner/external residuals
+- **W4 — Experience craft** — Dependency: W2+W3; File targets / work: src/components/layout, sections, experience, dossier, editorial; src/styles/c4-quiet-authority.css; e2e tests; Done when: Visual consistency, semantic/a11y/mobile/print proof without second design system
+- **W5 — Function/SEO/i18n hardening** — Dependency: W2+W3; File targets / work: src/lib/seo.ts, i18n.ts, route surfaces, CTA/empty/truth tests; Done when: Full route and locale coverage, no fake product/contact
+- **W6 — Security/performance/ops** — Dependency: W1–W5; File targets / work: public projection tests, client/SEO/ops contracts, deploy smoke evidence; Done when: Static privacy boundary, client/perf and recovery/rollout verified
+- **W7 — Final convergence** — Dependency: Waves complete or transparently gated; File targets / work: project-local final evidence + current-work, provider read-back; Done when: Only verified capabilities marked converged; Human E4/owner gates not auto-cleared
 
 W2 dependency note: #231 has mergeable=false at observation; use compare/changed filenames/CI and repair against latest main with preservation of dossier print CSS. #233–#235 should each be checked separately for compatibility and regression, especially major formatter migration; do not batch into an unreviewable change.
 
