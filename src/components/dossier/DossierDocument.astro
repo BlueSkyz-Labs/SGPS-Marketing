@@ -1,6 +1,10 @@
 ---
 import { BOUNDARY_INDEX, CLAIMS, EVIDENCE_INDEX } from "@/data/claims";
-import { compilePublicDossier, type DossierEntry, type Language } from "@/lib/dossier";
+import {
+  compilePublicDossier,
+  type DossierEntry,
+  type Language,
+} from "@/lib/dossier";
 
 /**
  * C4-C Task 3 — printable dossier document.
@@ -72,7 +76,10 @@ const doc = compilePublicDossier({
 });
 
 const SECTION_ORDER = ["claims", "evidence", "boundaries"] as const;
-const SECTION_LABELS: Record<Language, Record<(typeof SECTION_ORDER)[number], string>> = {
+const SECTION_LABELS: Record<
+  Language,
+  Record<(typeof SECTION_ORDER)[number], string>
+> = {
   en: { claims: "Claims", evidence: "Evidence", boundaries: "Boundaries" },
   vi: { claims: "Tuyên bố", evidence: "Bằng chứng", boundaries: "Ranh giới" },
   zh: { claims: "声明", evidence: "证据", boundaries: "边界" },
@@ -98,13 +105,23 @@ const bySection = (section: (typeof SECTION_ORDER)[number]): DossierEntry[] =>
 
   {
     SECTION_ORDER.map((section) => (
-      <section class="c4-dossier-document__section" data-dossier-document-section={section}>
-        <h2 class="c4-dossier-document__heading">{SECTION_LABELS[lang][section]}</h2>
+      <section
+        class="c4-dossier-document__section"
+        data-dossier-document-section={section}
+      >
+        <h2 class="c4-dossier-document__heading">
+          {SECTION_LABELS[lang][section]}
+        </h2>
         <ul class="c4-dossier-document__list">
           {bySection(section).map((entry) => (
-            <li class="c4-dossier-document__item" data-dossier-document-item={entry.id}>
+            <li
+              class="c4-dossier-document__item"
+              data-dossier-document-item={entry.id}
+            >
               <p class="c4-dossier-document__label">{entry.label}</p>
-              {entry.detail && <p class="c4-dossier-document__detail">{entry.detail}</p>}
+              {entry.detail && (
+                <p class="c4-dossier-document__detail">{entry.detail}</p>
+              )}
               {entry.href && (
                 <a class="c4-dossier-document__link" href={entry.href}>
                   {entry.href}
@@ -112,7 +129,8 @@ const bySection = (section: (typeof SECTION_ORDER)[number]): DossierEntry[] =>
               )}
               {entry.freshness && (
                 <p class="c4-dossier-document__freshness">
-                  {labels.reviewed}: <time datetime={entry.freshness}>{entry.freshness}</time>
+                  {labels.reviewed}:{" "}
+                  <time datetime={entry.freshness}>{entry.freshness}</time>
                 </p>
               )}
             </li>
