@@ -98,6 +98,9 @@ function resolveSection(
     // One provenance authority: the dossier projects the adapter's result instead
     // of assembling its own source list, so a refused chain refuses here too.
     const provenance = getPublicProvenance(claim.id, lang);
+    // A registered claim is not publishable if its canonical source chain is
+    // withdrawn or self-only. Refuse the entire claim, not only its sources.
+    if (!provenance || provenance.unknown) return null;
     return {
       id: claim.id,
       section,
