@@ -88,6 +88,13 @@ const ATELIER_COPY = {
       trust: "Trust",
       availability: "Availability",
     },
+    handoff: {
+      select: "Include in a dossier",
+      empty:
+        "Nothing is selected. Tick the items you want and the dossier will carry only those.",
+      action: "Open the dossier with {n} selected",
+      report: "{n} selection(s) cannot be included in a dossier.",
+    },
     reasons: {
       "in-scope":
         "Listed because it is a published item in scope for this goal.",
@@ -128,6 +135,13 @@ const ATELIER_COPY = {
       trust: "Tin cậy",
       availability: "Sẵn sàng",
     },
+    handoff: {
+      select: "Đưa vào hồ sơ",
+      empty:
+        "Chưa chọn gì. Hãy tick đúng những mục bạn muốn — hồ sơ chỉ mang những mục đó.",
+      action: "Mở hồ sơ với {n} mục đã chọn",
+      report: "{n} lựa chọn không thể đưa vào hồ sơ.",
+    },
     reasons: {
       "in-scope":
         "Được liệt kê vì là mục đã công bố thuộc phạm vi mục tiêu này.",
@@ -167,6 +181,12 @@ const ATELIER_COPY = {
       technical: "技术",
       trust: "信任",
       availability: "可用性",
+    },
+    handoff: {
+      select: "加入档案",
+      empty: "尚未选择。请勾选你想要的条目，档案只会包含这些条目。",
+      action: "打开包含 {n} 个所选条目的档案",
+      report: "有 {n} 个选择无法加入档案。",
     },
     reasons: {
       "in-scope": "列出原因：它是符合该目标的已发布条目。",
@@ -286,6 +306,10 @@ const domId = (id: string): string =>
     ))
   }
 
+  <template data-atelier-handoff-report>{atelierCopy.handoff.report}</template>
+
+  <template data-atelier-handoff-action>{atelierCopy.handoff.action}</template>
+
   <div class="decision-room__items" data-decision-items>
     {
       items.map((item, index) => (
@@ -298,6 +322,12 @@ const domId = (id: string): string =>
           data-has-evidence={item.evidenceHref ? "" : undefined}
           data-has-boundary={item.boundaryText ? "" : undefined}
         >
+          {item.kind === "claim" ? (
+            <label class="decision-room__select">
+              <input type="checkbox" data-atelier-item-select value={item.id} />
+              <span>{atelierCopy.handoff.select}</span>
+            </label>
+          ) : null}
           <span class="decision-room__kind">
             {KIND_LABELS[item.kind][lang]}
           </span>
@@ -360,13 +390,27 @@ const domId = (id: string): string =>
     {copy.reset}
   </button>
 
+  <div class="decision-room__handoff" data-atelier-handoff>
+    <p class="decision-room__handoff-empty" data-atelier-handoff-empty>
+      {atelierCopy.handoff.empty}
+    </p>
+    <a
+      class="decision-room__handoff-link"
+      data-atelier-handoff-link
+      hidden
+      href="#"></a>
+    <p class="decision-room__handoff-report" data-atelier-handoff-report hidden>
+    </p>
+  </div>
+
   <p class="sr-only" role="status" aria-live="polite" data-decision-live></p>
 </section>
 
 <noscript>
   <style>
     [data-decision-add],
-    [data-decision-reset] {
+    [data-decision-reset],
+    [data-atelier-handoff-link] {
       display: none !important;
     }
   </style>
