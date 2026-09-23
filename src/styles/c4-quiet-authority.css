@@ -650,14 +650,59 @@
     content: "";
   }
 }
-.decision-room__group-reason {
-  display: block;
-  margin-block-end: var(--space-1);
+
+/* ---- C4-E G3 — decision atelier controls ---- */
+.decision-room__atelier {
+  display: grid;
+  gap: var(--space-3);
+  margin-block: var(--space-6);
+}
+.decision-room__atelier-title {
+  margin: 0;
+  font-size: var(--c4-type-reading);
+  font-weight: 600;
+}
+.decision-room__atelier-lede,
+.decision-room__atelier-status {
+  margin: 0;
   font-size: var(--c4-type-reading);
   color: color-mix(in srgb, var(--brand-porcelain) 78%, transparent);
 }
+.decision-room__atelier-field {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+.decision-room__atelier-label {
+  align-self: center;
+  font-weight: 600;
+}
+.decision-room__atelier-select,
+.decision-room__atelier-reset,
+.decision-room__atelier-check {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+}
+.decision-room__atelier-check {
+  gap: var(--space-2);
+}
+.decision-room__group-label {
+  display: inline-block;
+  margin-block-end: var(--space-1);
+  font-size: var(--c4-type-caption, 0.8125rem);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--brand-porcelain) 70%, transparent);
+}
 @media print {
-  .decision-room__group-reason {
+  .decision-room__atelier {
+    display: none;
+  }
+  .decision-room__group-label {
     color: inherit;
   }
 }
@@ -667,10 +712,4 @@
   margin-block-end: var(--space-1);
   font-size: var(--c4-type-reading);
   color: color-mix(in srgb, var(--brand-porcelain) 78%, transparent);
-}
-
-@media print {
-  .decision-room__group-reason {
-    color: inherit;
-  }
 }
