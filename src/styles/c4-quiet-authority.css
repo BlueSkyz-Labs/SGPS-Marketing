@@ -406,3 +406,108 @@
     text-decoration: underline;
   }
 }
+
+/* ---- C4-C G2/G3 — Public dossier composer ---- */
+
+.c4-dossier {
+  max-width: 72ch;
+}
+
+.c4-dossier__heading {
+  margin: 0 0 var(--space-2);
+  font-size: var(--c4-type-section);
+}
+
+.c4-dossier__lede {
+  font-size: var(--c4-type-reading);
+  color: color-mix(in srgb, var(--brand-porcelain) 82%, transparent);
+}
+
+.c4-dossier__form {
+  margin-block-start: var(--space-8);
+}
+
+.c4-dossier__fieldset {
+  margin: 0;
+  padding: var(--space-6);
+  border: 1px solid color-mix(in srgb, var(--brand-porcelain) 16%, transparent);
+}
+
+.c4-dossier__legend,
+.c4-dossier__group-heading,
+.c4-dossier__preview-heading,
+.c4-dossier__unknown-heading {
+  font-size: var(--c4-type-section);
+}
+
+.c4-dossier__group {
+  margin-block-start: var(--space-6);
+}
+
+.c4-dossier__items,
+.c4-dossier__preview-list,
+.c4-dossier__unknown-list {
+  display: grid;
+  gap: var(--space-3);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.c4-dossier__label {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-height: 44px;
+}
+
+.c4-dossier__source,
+.c4-dossier__entry-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  color: inherit;
+  text-decoration: none;
+}
+
+.c4-dossier__source:hover,
+.c4-dossier__entry-link:hover {
+  text-decoration: underline;
+  text-underline-offset: 0.25em;
+}
+
+.c4-dossier-preview {
+  margin-block-start: var(--space-10);
+  padding-block-start: var(--space-8);
+  border-top: 1px solid
+    color-mix(in srgb, var(--brand-porcelain) 16%, transparent);
+}
+
+.c4-dossier__counter {
+  margin-inline-start: var(--space-2);
+}
+
+.c4-dossier__note {
+  font-size: var(--c4-type-reading);
+  color: color-mix(in srgb, var(--brand-porcelain) 72%, transparent);
+}
+
+.c4-dossier__preview-list[data-empty] {
+  display: none;
+}
+
+.c4-dossier__preview-list:not([data-empty]) + .c4-dossier__empty {
+  display: none;
+}
+
+@media print {
+  .c4-dossier__form,
+  .c4-dossier__source {
+    display: none;
+  }
+
+  .c4-dossier__entry-link {
+    min-height: 0;
+    text-decoration: underline;
+  }
+}

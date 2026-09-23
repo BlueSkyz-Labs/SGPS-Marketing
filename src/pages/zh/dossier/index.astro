@@ -1,0 +1,21 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Container from "@/components/layout/Container.astro";
+import PageHeader from "@/components/layout/PageHeader.astro";
+import DossierComposer from "@/components/dossier/DossierComposer.astro";
+---
+
+<BaseLayout
+  title="公开档案"
+  description="用本站已发布的声明与证据组装会议视图。不传输任何数据，也不存储任何内容。"
+  path="/zh/dossier/"
+>
+  <section class="py-16 lg:py-24">
+    <Container>
+      <PageHeader title="公开档案" lede="用本站已发布的声明与证据组装会议视图。不传输任何数据，也不存储任何内容。" />
+      <div class="mt-12">
+        <DossierComposer lang="zh" />
+      </div>
+    </Container>
+  </section>
+</BaseLayout>

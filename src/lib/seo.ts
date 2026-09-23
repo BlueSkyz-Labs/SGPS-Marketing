@@ -64,6 +64,7 @@ export const PUBLIC_STATIC_PATHS = [
   "/en/privacy/",
   "/en/security/",
   "/en/editions/",
+  "/en/dossier/",
   "/vi/",
   "/vi/decision-room/",
   "/vi/products/",
@@ -73,6 +74,7 @@ export const PUBLIC_STATIC_PATHS = [
   "/vi/privacy/",
   "/vi/security/",
   "/vi/editions/",
+  "/vi/dossier/",
   "/zh/",
   "/zh/decision-room/",
   "/zh/products/",
@@ -82,4 +84,5 @@ export const PUBLIC_STATIC_PATHS = [
   "/zh/privacy/",
   "/zh/security/",
   "/zh/editions/",
+  "/zh/dossier/",
 ] as const;

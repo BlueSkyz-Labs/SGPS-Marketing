@@ -1,0 +1,21 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Container from "@/components/layout/Container.astro";
+import PageHeader from "@/components/layout/PageHeader.astro";
+import DossierComposer from "@/components/dossier/DossierComposer.astro";
+---
+
+<BaseLayout
+  title="Hồ sơ công khai"
+  description="Dựng bản trình bày cho phòng họp từ các tuyên bố và bằng chứng trang này đã công bố. Không truyền dữ liệu, không lưu trữ."
+  path="/vi/dossier/"
+>
+  <section class="py-16 lg:py-24">
+    <Container>
+      <PageHeader title="Hồ sơ công khai" lede="Dựng bản trình bày cho phòng họp từ các tuyên bố và bằng chứng trang này đã công bố. Không truyền dữ liệu, không lưu trữ." />
+      <div class="mt-12">
+        <DossierComposer lang="vi" />
+      </div>
+    </Container>
+  </section>
+</BaseLayout>

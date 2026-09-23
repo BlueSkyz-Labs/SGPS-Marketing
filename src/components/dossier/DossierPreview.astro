@@ -1,0 +1,56 @@
+---
+import type { Language } from "@/lib/dossier";
+
+/**
+ * C4-C Task 2 — dossier preview shell.
+ *
+ * The shell is server-rendered and empty by default: the client module fills it
+ * by cloning the composer's rendered entry templates, so the preview can never
+ * contain anything the server did not already publish.
+ */
+interface Props {
+  lang: Language;
+}
+
+const { lang } = Astro.props;
+
+const LABELS: Record<
+  Language,
+  { heading: string; empty: string; unknown: string; note: string }
+> = {
+  en: {
+    heading: "Preview",
+    empty: "Nothing selected yet. Choose published items above to assemble the view.",
+    unknown: "Requested items that are not published were ignored",
+    note: "Generated from public source truth. Presentation only — the items and their sources appear exactly as published.",
+  },
+  vi: {
+    heading: "Xem trước",
+    empty: "Chưa chọn mục nào. Hãy chọn các mục đã công bố ở trên để dựng bản xem trước.",
+    unknown: "Các mục được yêu cầu nhưng chưa công bố đã bị bỏ qua",
+    note: "Được tạo từ nguồn công khai đã công bố. Chỉ là cách trình bày — các mục và nguồn của chúng xuất hiện đúng như đã công bố.",
+  },
+  zh: {
+    heading: "预览",
+    empty: "尚未选择任何条目。请在上方选择已发布条目以组装视图。",
+    unknown: "请求但未发布的条目已被忽略",
+    note: "由公开来源生成。仅为呈现方式 — 条目及其来源与已发布内容完全一致。",
+  },
+};
+
+const labels = LABELS[lang];
+---
+
+<section class="c4-dossier-preview">
+  <h3 class="c4-dossier__preview-heading">
+    {labels.heading}
+    <span class="c4-dossier__counter" data-dossier-counter>0</span>
+  </h3>
+  <p class="c4-dossier__note">{labels.note}</p>
+  <ul class="c4-dossier__preview-list" data-dossier-preview data-empty></ul>
+  <p class="c4-dossier__empty">{labels.empty}</p>
+  <div class="c4-dossier__unknown-block">
+    <p class="c4-dossier__unknown-heading">{labels.unknown}</p>
+    <ul class="c4-dossier__unknown-list" data-dossier-unknown hidden></ul>
+  </div>
+</section>
