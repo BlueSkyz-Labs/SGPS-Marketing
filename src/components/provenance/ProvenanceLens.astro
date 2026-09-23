@@ -1,0 +1,119 @@
+---
+import { getPublicProvenance } from "@/lib/provenance-lens";
+import type { Language } from "@/lib/i18n";
+
+/**
+ * C4-D Task 4 — provenance lens.
+ *
+ * Progressive disclosure runs statement → sources → boundary → freshness.
+ * Everything is reachable without JavaScript and without hover: native
+ * <details> plus ordinary links. An unresolved subject is stated plainly
+ * rather than dressed up, so the component can never imply assurance it does
+ * not have.
+ */
+interface Props {
+  subject: string;
+  lang: Language;
+}
+
+const { subject, lang } = Astro.props;
+const view = getPublicProvenance(subject, lang);
+
+const LABELS: Record<
+  Language,
+  {
+    heading: string;
+    sources: string;
+    boundary: string;
+    boundaryMeans: string;
+    boundaryNot: string;
+    freshness: string;
+    unknown: string;
+  }
+> = {
+  en: {
+    heading: "Where this comes from",
+    sources: "Published sources",
+    boundary: "Boundary",
+    boundaryMeans: "This states",
+    boundaryNot: "It does not imply",
+    freshness: "Last reviewed",
+    unknown: "No provenance is published for this statement yet.",
+  },
+  vi: {
+    heading: "Nguồn gốc của điều này",
+    sources: "Nguồn đã công bố",
+    boundary: "Ranh giới",
+    boundaryMeans: "Điều này nói rằng",
+    boundaryNot: "Không hàm ý rằng",
+    freshness: "Rà soát gần nhất",
+    unknown: "Chưa công bố nguồn gốc cho phát biểu này.",
+  },
+  zh: {
+    heading: "这一说法的来源",
+    sources: "已发布来源",
+    boundary: "边界",
+    boundaryMeans: "这表示",
+    boundaryNot: "这不意味着",
+    freshness: "最近复核",
+    unknown: "尚未发布此说法的来源信息。",
+  },
+};
+
+const labels = LABELS[lang];
+---
+
+{
+  view && !view.unknown ? (
+    <section class="c4-provenance" data-provenance-lens={view.subject}>
+      <h2 class="c4-provenance__heading">{labels.heading}</h2>
+      <p class="c4-provenance__statement" data-provenance-statement>
+        {view.statement}
+      </p>
+
+      {view.freshness && (
+        <p class="c4-provenance__freshness">
+          {labels.freshness}:{" "}
+          <time datetime={view.freshness}>{view.freshness}</time>
+        </p>
+      )}
+
+      {view.sourceRefs.length > 0 && (
+        <details class="c4-provenance__disclosure" data-provenance-sources>
+          <summary class="c4-provenance__summary">
+            {labels.sources} ({view.sourceRefs.length})
+          </summary>
+          <ul class="c4-provenance__sources">
+            {view.sourceRefs.map((ref) => (
+              <li class="c4-provenance__source">
+                <a class="c4-provenance__source-link" href={ref.href}>
+                  {ref.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </details>
+      )}
+
+      {view.boundary && (
+        <details class="c4-provenance__disclosure" data-provenance-boundary>
+          <summary class="c4-provenance__summary">{labels.boundary}</summary>
+          <dl class="c4-provenance__boundary">
+            <dt>{labels.boundaryMeans}</dt>
+            <dd>{view.boundary.claim}</dd>
+            <dt>{labels.boundaryNot}</dt>
+            <dd>{view.boundary.doesNotImply}</dd>
+          </dl>
+        </details>
+      )}
+    </section>
+  ) : (
+    <section
+      class="c4-provenance c4-provenance--unknown"
+      data-provenance-unknown
+    >
+      <h2 class="c4-provenance__heading">{labels.heading}</h2>
+      <p class="c4-provenance__statement">{labels.unknown}</p>
+    </section>
+  )
+}

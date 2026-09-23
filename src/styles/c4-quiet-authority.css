@@ -589,3 +589,64 @@
     break-after: avoid;
   }
 }
+/* ---- C4-D G5 — provenance lens ---- */
+.c4-provenance {
+  max-width: 78ch;
+}
+.c4-provenance__heading {
+  margin: 0 0 var(--space-2);
+  font-size: var(--c4-type-section);
+}
+.c4-provenance__statement,
+.c4-provenance__freshness,
+.c4-provenance__source,
+.c4-provenance__boundary dd {
+  font-size: var(--c4-type-reading);
+  overflow-wrap: anywhere;
+}
+.c4-provenance__disclosure {
+  margin-block-start: var(--space-4);
+  border-top: 1px solid
+    color-mix(in srgb, var(--brand-porcelain) 16%, transparent);
+}
+.c4-provenance__summary {
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  cursor: pointer;
+  font-weight: 600;
+}
+.c4-provenance__sources,
+.c4-provenance__boundary {
+  display: grid;
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.c4-provenance__source-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  color: inherit;
+}
+.c4-provenance__boundary dt {
+  font-weight: 600;
+}
+.c4-provenance__boundary dd {
+  margin: 0;
+}
+.c4-provenance--unknown {
+  color: color-mix(in srgb, var(--brand-porcelain) 78%, transparent);
+}
+@media print {
+  .c4-provenance__disclosure {
+    border: 0;
+  }
+  .c4-provenance__disclosure > summary {
+    list-style: none;
+  }
+  .c4-provenance__disclosure > summary::marker {
+    content: "";
+  }
+}
