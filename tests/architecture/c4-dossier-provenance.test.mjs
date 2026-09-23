@@ -151,6 +151,7 @@ test("a self-only chain must not publish its existing claim", () => {
 
   try {
     for (const lang of LANGS) {
+      claim.surface = originalSurface;
       const existing = getPublicProvenance(claim.id, lang);
       assert.ok(existing?.sourceRefs.length === 1);
       claim.surface = existing.sourceRefs[0].href;
