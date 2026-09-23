@@ -511,6 +511,146 @@
     text-decoration: underline;
   }
 }
+
+/* ---- C4-C G3 — Printable dossier document ---- */
+
+.c4-dossier-document {
+  max-width: 78ch;
+}
+
+.c4-dossier-document__title {
+  margin: 0 0 var(--space-3);
+  font-size: var(--c4-type-section);
+}
+
+.c4-dossier-document__note,
+.c4-dossier-document__unknown,
+.c4-dossier-document__detail,
+.c4-dossier-document__freshness {
+  font-size: var(--c4-type-reading);
+  color: color-mix(in srgb, var(--brand-porcelain) 78%, transparent);
+}
+
+.c4-dossier-document__meta {
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr);
+  gap: var(--space-2) var(--space-4);
+  margin: 0 0 var(--space-8);
+}
+
+.c4-dossier-document__meta dt {
+  font-weight: 600;
+}
+
+.c4-dossier-document__section {
+  margin-block-start: var(--space-10);
+}
+
+.c4-dossier-document__heading {
+  font-size: var(--c4-type-section);
+}
+
+.c4-dossier-document__list {
+  display: grid;
+  gap: var(--space-6);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.c4-dossier-document__item {
+  break-inside: avoid;
+}
+
+.c4-dossier-document__link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  color: inherit;
+  overflow-wrap: anywhere;
+}
+
+.c4-dossier-document__link:hover {
+  text-decoration: underline;
+  text-underline-offset: 0.25em;
+}
+
+@media print {
+  .c4-dossier-document__link {
+    min-height: 0;
+    text-decoration: underline;
+  }
+
+  .c4-dossier-document__section {
+    break-before: auto;
+  }
+
+  .c4-dossier-document__heading {
+    break-after: avoid;
+  }
+}
+/* ---- C4-D G5 — provenance lens ---- */
+.c4-provenance {
+  max-width: 78ch;
+}
+.c4-provenance__heading {
+  margin: 0 0 var(--space-2);
+  font-size: var(--c4-type-section);
+}
+.c4-provenance__statement,
+.c4-provenance__freshness,
+.c4-provenance__source,
+.c4-provenance__boundary dd {
+  font-size: var(--c4-type-reading);
+  overflow-wrap: anywhere;
+}
+.c4-provenance__disclosure {
+  margin-block-start: var(--space-4);
+  border-top: 1px solid
+    color-mix(in srgb, var(--brand-porcelain) 16%, transparent);
+}
+.c4-provenance__summary {
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  cursor: pointer;
+  font-weight: 600;
+}
+.c4-provenance__sources,
+.c4-provenance__boundary {
+  display: grid;
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.c4-provenance__source-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  color: inherit;
+}
+.c4-provenance__boundary dt {
+  font-weight: 600;
+}
+.c4-provenance__boundary dd {
+  margin: 0;
+}
+.c4-provenance--unknown {
+  color: color-mix(in srgb, var(--brand-porcelain) 78%, transparent);
+}
+@media print {
+  .c4-provenance__disclosure {
+    border: 0;
+  }
+  .c4-provenance__disclosure > summary {
+    list-style: none;
+  }
+  .c4-provenance__disclosure > summary::marker {
+    content: "";
+  }
+}
+
 /* ---- C4-E G3 — decision atelier controls ---- */
 .decision-room__atelier {
   display: grid;
