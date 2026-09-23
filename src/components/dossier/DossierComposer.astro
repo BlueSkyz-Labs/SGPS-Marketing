@@ -1,6 +1,10 @@
 ---
 import { BOUNDARY_INDEX, CLAIMS, EVIDENCE_INDEX } from "@/data/claims";
-import { compilePublicDossier, type DossierEntry, type Language } from "@/lib/dossier";
+import {
+  compilePublicDossier,
+  type DossierEntry,
+  type Language,
+} from "@/lib/dossier";
 import DossierPreview from "@/components/dossier/DossierPreview.astro";
 
 /**
@@ -17,27 +21,39 @@ interface Props {
 
 const { lang } = Astro.props;
 
-const LABELS: Record<Language, { heading: string; lede: string; select: string; compose: string; noscript: string }> = {
+const LABELS: Record<
+  Language,
+  {
+    heading: string;
+    lede: string;
+    select: string;
+    compose: string;
+    noscript: string;
+  }
+> = {
   en: {
     heading: "Compose a public dossier",
     lede: "Select published items to assemble a boardroom-ready view. Nothing leaves this page and nothing is stored.",
     select: "Published items",
     compose: "Preview",
-    noscript: "Interactive composition needs JavaScript. Every published item and its source link is listed below and stays reachable without it.",
+    noscript:
+      "Interactive composition needs JavaScript. Every published item and its source link is listed below and stays reachable without it.",
   },
   vi: {
     heading: "Soạn hồ sơ công khai",
     lede: "Chọn các mục đã công bố để dựng bản trình bày cho phòng họp. Không dữ liệu nào rời khỏi trang và không có gì được lưu lại.",
     select: "Mục đã công bố",
     compose: "Xem trước",
-    noscript: "Soạn tương tác cần JavaScript. Mọi mục đã công bố và liên kết nguồn vẫn được liệt kê bên dưới và truy cập được khi không có JavaScript.",
+    noscript:
+      "Soạn tương tác cần JavaScript. Mọi mục đã công bố và liên kết nguồn vẫn được liệt kê bên dưới và truy cập được khi không có JavaScript.",
   },
   zh: {
     heading: "编写公开档案",
     lede: "选择已发布条目以组装会议视图。页面不发送任何数据，也不存储任何内容。",
     select: "已发布条目",
     compose: "预览",
-    noscript: "交互式编写需要 JavaScript。所有已发布条目及其来源链接仍列于下方，无 JavaScript 时依然可访问。",
+    noscript:
+      "交互式编写需要 JavaScript。所有已发布条目及其来源链接仍列于下方，无 JavaScript 时依然可访问。",
   },
 };
 
@@ -52,7 +68,10 @@ const catalog = compilePublicDossier({
 });
 
 const SECTIONS = ["claims", "evidence", "boundaries"] as const;
-const SECTION_LABELS: Record<Language, Record<(typeof SECTIONS)[number], string>> = {
+const SECTION_LABELS: Record<
+  Language,
+  Record<(typeof SECTIONS)[number], string>
+> = {
   en: { claims: "Claims", evidence: "Evidence", boundaries: "Boundaries" },
   vi: { claims: "Tuyên bố", evidence: "Bằng chứng", boundaries: "Ranh giới" },
   zh: { claims: "声明", evidence: "证据", boundaries: "边界" },
@@ -71,12 +90,19 @@ const bySection = (section: (typeof SECTIONS)[number]): DossierEntry[] =>
       {
         SECTIONS.map((section) => (
           <div class="c4-dossier__group">
-            <h3 class="c4-dossier__group-heading">{SECTION_LABELS[lang][section]}</h3>
+            <h3 class="c4-dossier__group-heading">
+              {SECTION_LABELS[lang][section]}
+            </h3>
             <ul class="c4-dossier__items">
               {bySection(section).map((entry) => (
                 <li class="c4-dossier__item">
                   <label class="c4-dossier__label">
-                    <input type="checkbox" data-dossier-item value={entry.id} name="item" />
+                    <input
+                      type="checkbox"
+                      data-dossier-item
+                      value={entry.id}
+                      name="item"
+                    />
                     <span class="c4-dossier__item-label">{entry.label}</span>
                   </label>
                   {entry.href && (
@@ -98,7 +124,9 @@ const bySection = (section: (typeof SECTIONS)[number]): DossierEntry[] =>
       <template data-dossier-entry={entry.id}>
         <li class="c4-dossier__entry" data-dossier-entry-item={entry.id}>
           <p class="c4-dossier__entry-label">{entry.label}</p>
-          {entry.detail && <p class="c4-dossier__entry-detail">{entry.detail}</p>}
+          {entry.detail && (
+            <p class="c4-dossier__entry-detail">{entry.detail}</p>
+          )}
           {entry.href && (
             <a class="c4-dossier__entry-link" href={entry.href}>
               {entry.href}
