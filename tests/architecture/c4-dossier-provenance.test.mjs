@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import { test } from "node:test";
 import { compilePublicDossier } from "../../src/lib/dossier.ts";
 import { getPublicProvenance } from "../../src/lib/provenance-lens.ts";
+import { CLAIMS } from "../../src/data/claims.ts";
 
 /**
  * C4-D Task 5 — dossier↔provenance integration contract.
@@ -108,4 +109,57 @@ test("dossier source blocks stay deterministic across repeated compiles", () => 
   const first = compilePublicDossier({ claimIds: SUBJECTS, lang: "en" });
   const second = compilePublicDossier({ claimIds: SUBJECTS, lang: "en" });
   assert.deepEqual(first, second);
+});
+
+test("a still-registered claim becomes unpublishable if all its evidence disappears", () => {
+  const claim = CLAIMS.find(
+    (entry) => entry.id === "registry-publishes-only-proven-products",
+  );
+  assert.ok(claim, "fixture must use a real canonical claim");
+  const originalEvidenceIds = [...claim.evidenceIds];
+  assert.ok(originalEvidenceIds.length > 0, "test must remove real evidence");
+
+  // Simulate source withdrawal without removing the registered claim. The
+  // canonical provenance adapter then refuses it; the dossier must also refuse.
+  try {
+    claim.evidenceIds.splice(
+      0,
+      claim.evidenceIds.length,
+      "ev-withdrawn-from-public-registry",
+    );
+    for (const lang of LANGS) {
+      const provenance = getPublicProvenance(claim.id, lang);
+      assert.ok(provenance?.unknown, `${lang}: adapter must refuse evidence`);
+      const result = compilePublicDossier({ claimIds: [claim.id], lang });
+      assert.deepEqual(result.entries, [], `${lang}: no unproven statement`);
+      assert.deepEqual(result.rejected, [
+        { id: claim.id, section: "claims", reason: "not-public" },
+      ]);
+      assert.equal(result.complete, false);
+    }
+  } finally {
+    claim.evidenceIds.splice(0, claim.evidenceIds.length, ...originalEvidenceIds);
+  }
+});
+
+test("a self-only chain must not publish its existing claim", () => {
+  const claim = CLAIMS.find(
+    (entry) => entry.id === "registry-publishes-only-proven-products",
+  );
+  assert.ok(claim);
+  const originalSurface = claim.surface;
+
+  try {
+    for (const lang of LANGS) {
+      const existing = getPublicProvenance(claim.id, lang);
+      assert.ok(existing?.sourceRefs.length === 1);
+      claim.surface = existing.sourceRefs[0].href;
+      assert.equal(getPublicProvenance(claim.id, lang)?.unknown, true);
+      const result = compilePublicDossier({ claimIds: [claim.id], lang });
+      assert.deepEqual(result.entries, []);
+      assert.equal(result.complete, false);
+    }
+  } finally {
+    claim.surface = originalSurface;
+  }
 });
