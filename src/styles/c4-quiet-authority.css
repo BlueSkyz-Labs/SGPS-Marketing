@@ -737,9 +737,3 @@
   font-size: var(--c4-type-reading);
   color: color-mix(in srgb, var(--brand-porcelain) 78%, transparent);
 }
-
-@media print {
-  .decision-room__group-reason {
-    color: inherit;
-  }
-}

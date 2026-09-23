@@ -273,13 +273,11 @@ const domId = (id: string): string =>
     </template>
   ))}
 
-  {
-    ATELIER_REASON_KEYS.map((reasonKey) => (
-      <template data-atelier-reason={reasonKey}>
-        {atelierCopy.reasons[reasonKey]}
-      </template>
-    ))
-  }
+  {ATELIER_REASON_KEYS.map((reasonKey) => (
+    <template data-atelier-reason={reasonKey}>
+      {atelierCopy.reasons[reasonKey]}
+    </template>
+  ))}
 
   <div class="decision-room__items" data-decision-items>
     {items.map((item, index) => (
