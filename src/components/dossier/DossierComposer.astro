@@ -1,0 +1,154 @@
+---
+import { BOUNDARY_INDEX, CLAIMS, EVIDENCE_INDEX } from "@/data/claims";
+import {
+  compilePublicDossier,
+  type DossierEntry,
+  type Language,
+} from "@/lib/dossier";
+import DossierPreview from "@/components/dossier/DossierPreview.astro";
+
+/**
+ * C4-C Task 2 — dossier composer.
+ *
+ * The catalog, every canonical destination and the no-JS explanation are
+ * server-rendered semantic HTML. Selection is ephemeral and local: the client
+ * module only toggles checkboxes and clones the rendered entry templates, so no
+ * claim, destination or caveat is ever produced by script.
+ */
+interface Props {
+  lang: Language;
+}
+
+const { lang } = Astro.props;
+
+const LABELS: Record<
+  Language,
+  {
+    heading: string;
+    lede: string;
+    select: string;
+    compose: string;
+    noscript: string;
+  }
+> = {
+  en: {
+    heading: "Compose a public dossier",
+    lede: "Select published items to assemble a boardroom-ready view. Nothing leaves this page and nothing is stored.",
+    select: "Published items",
+    compose: "Preview",
+    noscript:
+      "Interactive composition needs JavaScript. Every published item and its source link is listed below and stays reachable without it.",
+  },
+  vi: {
+    heading: "Soạn hồ sơ công khai",
+    lede: "Chọn các mục đã công bố để dựng bản trình bày cho phòng họp. Không dữ liệu nào rời khỏi trang và không có gì được lưu lại.",
+    select: "Mục đã công bố",
+    compose: "Xem trước",
+    noscript:
+      "Soạn tương tác cần JavaScript. Mọi mục đã công bố và liên kết nguồn vẫn được liệt kê bên dưới và truy cập được khi không có JavaScript.",
+  },
+  zh: {
+    heading: "编写公开档案",
+    lede: "选择已发布条目以组装会议视图。页面不发送任何数据，也不存储任何内容。",
+    select: "已发布条目",
+    compose: "预览",
+    noscript:
+      "交互式编写需要 JavaScript。所有已发布条目及其来源链接仍列于下方，无 JavaScript 时依然可访问。",
+  },
+};
+
+const labels = LABELS[lang];
+
+// The allowlist is the canonical public set, resolved fail-closed by the compiler.
+const catalog = compilePublicDossier({
+  lang,
+  claimIds: CLAIMS.map((claim) => claim.id),
+  evidenceIds: [...EVIDENCE_INDEX.keys()],
+  boundaryIds: [...BOUNDARY_INDEX.keys()],
+});
+
+const SECTIONS = ["claims", "evidence", "boundaries"] as const;
+const SECTION_LABELS: Record<
+  Language,
+  Record<(typeof SECTIONS)[number], string>
+> = {
+  en: { claims: "Claims", evidence: "Evidence", boundaries: "Boundaries" },
+  vi: { claims: "Tuyên bố", evidence: "Bằng chứng", boundaries: "Ranh giới" },
+  zh: { claims: "声明", evidence: "证据", boundaries: "边界" },
+};
+const bySection = (section: (typeof SECTIONS)[number]): DossierEntry[] =>
+  catalog.entries.filter((entry) => entry.section === section);
+---
+
+<section class="c4-dossier" data-dossier-composer data-dossier-lang={lang}>
+  <h2 class="c4-dossier__heading">{labels.heading}</h2>
+  <p class="c4-dossier__lede">{labels.lede}</p>
+
+  <form class="c4-dossier__form" data-dossier-form>
+    <fieldset class="c4-dossier__fieldset">
+      <legend class="c4-dossier__legend">{labels.select}</legend>
+      {
+        SECTIONS.map((section) => (
+          <div class="c4-dossier__group">
+            <h3 class="c4-dossier__group-heading">
+              {SECTION_LABELS[lang][section]}
+            </h3>
+            <ul class="c4-dossier__items">
+              {bySection(section).map((entry) => (
+                <li class="c4-dossier__item">
+                  <label class="c4-dossier__label">
+                    <input
+                      type="checkbox"
+                      data-dossier-item
+                      value={entry.id}
+                      name="item"
+                    />
+                    <span class="c4-dossier__item-label">{entry.label}</span>
+                  </label>
+                  {entry.href && (
+                    <a class="c4-dossier__source" href={entry.href}>
+                      {entry.label}
+                    </a>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))
+      }
+    </fieldset>
+  </form>
+
+  {
+    catalog.entries.map((entry) => (
+      <template data-dossier-entry={entry.id}>
+        <li class="c4-dossier__entry" data-dossier-entry-item={entry.id}>
+          <p class="c4-dossier__entry-label">{entry.label}</p>
+          {entry.detail && (
+            <p class="c4-dossier__entry-detail">{entry.detail}</p>
+          )}
+          {entry.href && (
+            <a class="c4-dossier__entry-link" href={entry.href}>
+              {entry.href}
+            </a>
+          )}
+          {entry.freshness && (
+            <p class="c4-dossier__entry-freshness" data-dossier-freshness>
+              {entry.freshness}
+            </p>
+          )}
+        </li>
+      </template>
+    ))
+  }
+
+  <DossierPreview lang={lang} />
+
+  <noscript>
+    <p class="c4-dossier__noscript">{labels.noscript}</p>
+  </noscript>
+</section>
+
+<script>
+  import "@/scripts/dossier-composer.ts";
+</script>
