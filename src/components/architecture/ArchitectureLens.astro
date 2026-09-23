@@ -54,7 +54,11 @@ const column = (index: number) => 24 + index * 44;
 const row = (index: number) => 18 + index * 22;
 ---
 
-<section class="c4-salon__lens" id={`lens-${lens}`} data-architecture-lens={lens}>
+<section
+  class="c4-salon__lens"
+  id={`lens-${lens}`}
+  data-architecture-lens={lens}
+>
   <h2 class="c4-salon__lens-heading">{lens}</h2>
 
   <h3 class="c4-salon__subheading">{labels.nodes}</h3>
@@ -82,9 +86,13 @@ const row = (index: number) => 18 + index * 22;
       <ul class="c4-salon__edges">
         {edges.map((edge) => (
           <li class="c4-salon__edge" data-architecture-edge={edge.id}>
-            <span class="c4-salon__edge-from">{labelOf.get(edge.from) ?? edge.from}</span>
+            <span class="c4-salon__edge-from">
+              {labelOf.get(edge.from) ?? edge.from}
+            </span>
             <span class="c4-salon__edge-type">{edge.type}</span>
-            <span class="c4-salon__edge-to">{labelOf.get(edge.to) ?? edge.to}</span>
+            <span class="c4-salon__edge-to">
+              {labelOf.get(edge.to) ?? edge.to}
+            </span>
           </li>
         ))}
       </ul>
@@ -117,7 +125,12 @@ const row = (index: number) => 18 + index * 22;
         </g>
         <g class="c4-salon__diagram-nodes">
           {nodes.map((node, index) => (
-            <circle cx={column(index)} cy={row(0)} r="4" class="c4-salon__diagram-dot" />
+            <circle
+              cx={column(index)}
+              cy={row(0)}
+              r="4"
+              class="c4-salon__diagram-dot"
+            />
           ))}
         </g>
       </svg>
