@@ -1,6 +1,10 @@
 ---
 import { buildDecisionItems, MAX_COMPARISON } from "@/lib/decision-room";
-import { ATELIER_CONSTRAINTS, ATELIER_GOALS } from "@/lib/decision-atelier";
+import {
+  ATELIER_CONSTRAINTS,
+  ATELIER_GOALS,
+  ATELIER_REASON_KEYS,
+} from "@/lib/decision-atelier";
 import { getPublicProducts } from "@/lib/products";
 import type { Language } from "@/data/site";
 
@@ -84,6 +88,14 @@ const ATELIER_COPY = {
       trust: "Trust",
       availability: "Availability",
     },
+    reasons: {
+      "in-scope":
+        "Listed because it is a published item in scope for this goal.",
+      "carries-source": "Listed because a published source is attached to it.",
+      "states-limits": "Listed because it states what it does not establish.",
+      "trust-surface": "Listed because it is published on a trust surface.",
+      "product-fact": "Listed because it is a published product fact.",
+    },
     groups: {
       "starting-points": "Starting points",
       "open-questions": "Open questions",
@@ -116,6 +128,14 @@ const ATELIER_COPY = {
       trust: "Tin cậy",
       availability: "Sẵn sàng",
     },
+    reasons: {
+      "in-scope":
+        "Được liệt kê vì là mục đã công bố thuộc phạm vi mục tiêu này.",
+      "carries-source": "Được liệt kê vì có nguồn đã công bố kèm theo.",
+      "states-limits": "Được liệt kê vì nêu rõ điều nó không xác lập.",
+      "trust-surface": "Được liệt kê vì được công bố trên bề mặt tin cậy.",
+      "product-fact": "Được liệt kê vì là dữ kiện sản phẩm đã công bố.",
+    },
     groups: {
       "starting-points": "Điểm bắt đầu",
       "open-questions": "Câu hỏi mở",
@@ -147,6 +167,13 @@ const ATELIER_COPY = {
       technical: "技术",
       trust: "信任",
       availability: "可用性",
+    },
+    reasons: {
+      "in-scope": "列出原因：它是符合该目标的已发布条目。",
+      "carries-source": "列出原因：它附有已发布的来源。",
+      "states-limits": "列出原因：它说明了自身未确立的内容。",
+      "trust-surface": "列出原因：它发布在信任界面上。",
+      "product-fact": "列出原因：它是已发布的产品事实。",
     },
     groups: {
       "starting-points": "起点",
@@ -247,6 +274,14 @@ const domId = (id: string): string =>
     GROUP_IDS.map((groupId) => (
       <template data-atelier-label={groupId}>
         {atelierCopy.groups[groupId]}
+      </template>
+    ))
+  }
+
+  {
+    ATELIER_REASON_KEYS.map((reasonKey) => (
+      <template data-atelier-reason={reasonKey}>
+        {atelierCopy.reasons[reasonKey]}
       </template>
     ))
   }
