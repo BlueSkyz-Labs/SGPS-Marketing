@@ -1,0 +1,17 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Container from "@/components/layout/Container.astro";
+import DossierDocument from "@/components/dossier/DossierDocument.astro";
+---
+
+<BaseLayout
+  title="公开档案 — 打印版"
+  description="本站已发布内容的打印视图，包含所有来源链接与边界说明。"
+  path="/zh/dossier/print/"
+>
+  <section class="py-16 lg:py-24">
+    <Container>
+      <DossierDocument lang="zh" />
+    </Container>
+  </section>
+</BaseLayout>

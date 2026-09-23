@@ -1,0 +1,128 @@
+---
+import { BOUNDARY_INDEX, CLAIMS, EVIDENCE_INDEX } from "@/data/claims";
+import { compilePublicDossier, type DossierEntry, type Language } from "@/lib/dossier";
+
+/**
+ * C4-C Task 3 — printable dossier document.
+ *
+ * Consumes the compiled public dossier only. Every destination, boundary and
+ * authored review date comes from the canonical source; the document adds
+ * identity and structure, never a fact. It carries no interactive controls, no
+ * internal metadata (no paths, no revision identifiers) and no assurance term
+ * the repository scanner forbids.
+ */
+interface Props {
+  lang: Language;
+}
+
+const { lang } = Astro.props;
+
+const LABELS: Record<
+  Language,
+  {
+    title: string;
+    note: string;
+    scope: string;
+    language: string;
+    reviewed: string;
+    unknown: string;
+    source: string;
+    sourceValue: string;
+  }
+> = {
+  en: {
+    title: "Public dossier",
+    note: "Generated from public source truth. Every item below is already published on this site and links to the source it comes from.",
+    scope: "Published items",
+    language: "Language",
+    reviewed: "Last authored review",
+    unknown: "Items that are not published are not implied here.",
+    source: "Source",
+    sourceValue: "Published surfaces of this site",
+  },
+  vi: {
+    title: "Hồ sơ công khai",
+    note: "Được tạo từ nguồn công khai đã công bố. Mọi mục dưới đây đều đã được công bố trên trang này và liên kết tới nguồn của nó.",
+    scope: "Mục đã công bố",
+    language: "Ngôn ngữ",
+    reviewed: "Lần rà soát đã ghi",
+    unknown: "Các mục chưa công bố không được ngụ ý ở đây.",
+    source: "Nguồn",
+    sourceValue: "Các bề mặt đã công bố của trang này",
+  },
+  zh: {
+    title: "公开档案",
+    note: "由公开来源生成。以下每条均已在本站发布，并链接至其来源。",
+    scope: "已发布条目",
+    language: "语言",
+    reviewed: "已记录的复核时间",
+    unknown: "未发布条目不在此处暗示。",
+    source: "来源",
+    sourceValue: "本站已发布的界面",
+  },
+};
+
+const labels = LABELS[lang];
+
+const doc = compilePublicDossier({
+  lang,
+  claimIds: CLAIMS.map((claim) => claim.id),
+  evidenceIds: [...EVIDENCE_INDEX.keys()],
+  boundaryIds: [...BOUNDARY_INDEX.keys()],
+});
+
+const SECTION_ORDER = ["claims", "evidence", "boundaries"] as const;
+const SECTION_LABELS: Record<Language, Record<(typeof SECTION_ORDER)[number], string>> = {
+  en: { claims: "Claims", evidence: "Evidence", boundaries: "Boundaries" },
+  vi: { claims: "Tuyên bố", evidence: "Bằng chứng", boundaries: "Ranh giới" },
+  zh: { claims: "声明", evidence: "证据", boundaries: "边界" },
+};
+
+const bySection = (section: (typeof SECTION_ORDER)[number]): DossierEntry[] =>
+  doc.entries.filter((entry) => entry.section === section);
+---
+
+<article class="c4-dossier-document" data-dossier-document>
+  <header class="c4-dossier-document__header">
+    <h1 class="c4-dossier-document__title">{labels.title}</h1>
+    <p class="c4-dossier-document__note">{labels.note}</p>
+    <dl class="c4-dossier-document__meta">
+      <dt>{labels.scope}</dt>
+      <dd data-dossier-document-count>{doc.entries.length}</dd>
+      <dt>{labels.language}</dt>
+      <dd>{lang}</dd>
+      <dt>{labels.source}</dt>
+      <dd>{labels.sourceValue}</dd>
+    </dl>
+  </header>
+
+  {
+    SECTION_ORDER.map((section) => (
+      <section class="c4-dossier-document__section" data-dossier-document-section={section}>
+        <h2 class="c4-dossier-document__heading">{SECTION_LABELS[lang][section]}</h2>
+        <ul class="c4-dossier-document__list">
+          {bySection(section).map((entry) => (
+            <li class="c4-dossier-document__item" data-dossier-document-item={entry.id}>
+              <p class="c4-dossier-document__label">{entry.label}</p>
+              {entry.detail && <p class="c4-dossier-document__detail">{entry.detail}</p>}
+              {entry.href && (
+                <a class="c4-dossier-document__link" href={entry.href}>
+                  {entry.href}
+                </a>
+              )}
+              {entry.freshness && (
+                <p class="c4-dossier-document__freshness">
+                  {labels.reviewed}: <time datetime={entry.freshness}>{entry.freshness}</time>
+                </p>
+              )}
+            </li>
+          ))}
+        </ul>
+      </section>
+    ))
+  }
+
+  <div class="c4-dossier-document__footer">
+    <p class="c4-dossier-document__unknown">{labels.unknown}</p>
+  </div>
+</article>
