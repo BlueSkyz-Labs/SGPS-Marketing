@@ -1,0 +1,21 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Container from "@/components/layout/Container.astro";
+import PageHeader from "@/components/layout/PageHeader.astro";
+import ArchitectureSalon from "@/components/architecture/ArchitectureSalon.astro";
+---
+
+<BaseLayout
+  title="架构"
+  description="本站如何构建：派生自规范架构模型的五个静态视角。"
+  path="/zh/architecture/"
+>
+  <section class="py-16 lg:py-24">
+    <Container>
+      <PageHeader title="架构" lede="本站如何构建：派生自规范架构模型的五个静态视角。" />
+      <div class="mt-12">
+        <ArchitectureSalon lang="zh" />
+      </div>
+    </Container>
+  </section>
+</BaseLayout>

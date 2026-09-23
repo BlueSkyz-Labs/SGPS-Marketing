@@ -14,7 +14,7 @@ test("C4-B maison: serves the live house sections in order", () => {
     const sections = getMaisonSections(lang);
     assert.deepEqual(
       sections.map((section) => section.id),
-      ["products", "proof", "studio"],
+      ["products", "proof", "architecture", "studio"],
       `${lang} section order`,
     );
   }
@@ -36,7 +36,7 @@ test("C4-B maison: every href is a resolvable public page", () => {
 });
 
 test("C4-B maison: sections without a public route fail closed", () => {
-  assert.deepEqual(getMaisonPendingSections(), ["architecture", "journal"]);
+  assert.deepEqual(getMaisonPendingSections(), ["journal"]);
   for (const lang of LANGS) {
     const ids = getMaisonSections(lang).map((section) => section.id);
     for (const pending of getMaisonPendingSections()) {

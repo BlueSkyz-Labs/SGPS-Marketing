@@ -92,6 +92,7 @@ interface NavLabels {
   support: string;
   privacy: string;
   security: string;
+  architecture: string;
 }
 
 const NAV_LABELS: Record<Language, NavLabels> = {
@@ -102,6 +103,7 @@ const NAV_LABELS: Record<Language, NavLabels> = {
     support: "Support",
     privacy: "Privacy",
     security: "Security",
+    architecture: "Architecture",
   },
   vi: {
     products: "Sản phẩm",
@@ -110,6 +112,7 @@ const NAV_LABELS: Record<Language, NavLabels> = {
     support: "Hỗ trợ",
     privacy: "Quyền riêng tư",
     security: "Bảo mật",
+    architecture: "Kiến trúc",
   },
   zh: {
     products: "产品",
@@ -118,6 +121,7 @@ const NAV_LABELS: Record<Language, NavLabels> = {
     support: "支持",
     privacy: "隐私",
     security: "安全",
+    architecture: "架构",
   },
 };
 
@@ -139,6 +143,7 @@ export function getFooterLinks(lang: Language): NavItem[] {
     { label: l.support, href: `/${lang}/support/` },
     { label: l.privacy, href: `/${lang}/privacy/` },
     { label: l.security, href: `/${lang}/security/` },
+    { label: l.architecture, href: `/${lang}/architecture/` },
   ];
 }
 
