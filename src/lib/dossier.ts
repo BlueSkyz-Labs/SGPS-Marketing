@@ -1,9 +1,5 @@
-import {
-  BOUNDARY_INDEX,
-  CLAIMS,
-  EVIDENCE_INDEX,
-  INTEGRITY_ENTRY_INDEX,
-} from "../data/claims.ts";
+import { BOUNDARY_INDEX, CLAIMS } from "../data/claims.ts";
+import { getPublicProvenance } from "./provenance-lens.ts";
 
 /**
  * C4-C G2 — Deterministic public dossier compiler.
@@ -99,28 +95,32 @@ function resolveSection(
   if (section === "claims") {
     const claim = CLAIMS.find((entry) => entry.id === id);
     if (!claim) return null;
-    const integrity = claim.reviewId
-      ? INTEGRITY_ENTRY_INDEX.get(claim.reviewId)
-      : undefined;
+    // One provenance authority: the dossier projects the adapter's result instead
+    // of assembling its own source list, so a refused chain refuses here too.
+    const provenance = getPublicProvenance(claim.id, lang);
     return {
       id: claim.id,
       section,
       label: pick(claim.statement, lang),
       detail: null,
       href: publicRoute(claim.surface),
-      freshness: integrity?.review?.reviewedOn ?? null,
-      evidenceIds: [...claim.evidenceIds],
+      freshness: provenance?.freshness ?? null,
+      evidenceIds:
+        provenance && !provenance.unknown
+          ? provenance.sourceRefs.map((reference) => reference.id)
+          : [],
     };
   }
   if (section === "evidence") {
-    const reference = EVIDENCE_INDEX.get(id);
-    if (!reference) return null;
+    const provenance = getPublicProvenance(id, lang);
+    const reference = provenance?.sourceRefs.find((source) => source.id === id);
+    if (!provenance || provenance.unknown || !reference) return null;
     return {
       id: reference.id,
       section,
-      label: pick(reference.label, lang),
+      label: reference.label,
       detail: null,
-      href: pick(reference.href, lang) || null,
+      href: reference.href,
       freshness: null,
       evidenceIds: [],
     };
