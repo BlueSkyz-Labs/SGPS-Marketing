@@ -30,7 +30,12 @@ export const STATUS = {
 export const DEFAULT_MODEL_PATH = "architecture/sgps-model.json";
 
 const GIT_ENV = { ...process.env };
-for (const key of ["GIT_DIR", "GIT_WORK_TREE", "GIT_INDEX_FILE", "GIT_COMMON_DIR"]) {
+for (const key of [
+  "GIT_DIR",
+  "GIT_WORK_TREE",
+  "GIT_INDEX_FILE",
+  "GIT_COMMON_DIR",
+]) {
   delete GIT_ENV[key];
 }
 Object.assign(GIT_ENV, {
