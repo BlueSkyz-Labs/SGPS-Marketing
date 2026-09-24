@@ -18,15 +18,15 @@ open PRs are merged or that owner-gated work is complete.
 The following merge commits were read back from GitHub and confirmed reachable from
 `origin/main` with `git merge-base --is-ancestor`:
 
-| Work | Merge commit | Verification |
-| --- | --- | --- |
-| #234 development-dependency group | `8b067e4` | reachable from `origin/main` |
-| #235 Prettier Astro plugin | `8aa3202` | reachable from `origin/main` |
-| #256 gate-surface baseline | `2d2b84c` | reachable from `origin/main` |
-| #257 convergence wave read-back | `82e6b5a` | reachable from `origin/main` |
-| #253 legacy deployment decommission | `cef3f19` | reachable from `origin/main` |
-| #258 provenance re-land (#248) | `f9c6165` | reachable from `origin/main`; dossier guard present in `src/lib/dossier.ts` |
-| #229 Decision Atelier Task 3 | `32c6a7c` | reachable from `origin/main` |
+| Work                                | Merge commit | Verification                                                                |
+| ----------------------------------- | ------------ | --------------------------------------------------------------------------- |
+| #234 development-dependency group   | `8b067e4`    | reachable from `origin/main`                                                |
+| #235 Prettier Astro plugin          | `8aa3202`    | reachable from `origin/main`                                                |
+| #256 gate-surface baseline          | `2d2b84c`    | reachable from `origin/main`                                                |
+| #257 convergence wave read-back     | `82e6b5a`    | reachable from `origin/main`                                                |
+| #253 legacy deployment decommission | `cef3f19`    | reachable from `origin/main`                                                |
+| #258 provenance re-land (#248)      | `f9c6165`    | reachable from `origin/main`; dossier guard present in `src/lib/dossier.ts` |
+| #229 Decision Atelier Task 3        | `32c6a7c`    | reachable from `origin/main`                                                |
 
 The convergence evidence file from #257 is present at
 `docs/evidence/2026-09-24-convergence-wave-readback.md`. This document is the
