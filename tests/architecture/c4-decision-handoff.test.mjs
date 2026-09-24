@@ -17,20 +17,22 @@ const SOURCE = readFileSync(
 
 /**
  * Claims the product really publishes. The compiler is request-driven — it never
- * returns a default set — so the test names ids from the canonical catalog and
- * first proves each one is actually composable.
+ * returns a default set — so the test probes the canonical catalog and keeps only
+ * claims whose provenance chain is actually composable. Self-only or withdrawn
+ * claims remain refused by the dossier's fail-closed provenance guard.
  */
 function publishedClaimIds(limit = 3) {
-  const ids = CLAIMS.map((claim) => claim.id).slice(0, limit);
-  for (const id of ids) {
+  const ids = [];
+  for (const claim of CLAIMS) {
+    if (ids.length >= limit) break;
+    const id = claim.id;
     const compiled = compilePublicDossier({ lang: "en", claimIds: [id] });
-    assert.equal(
-      compiled.entries.length,
-      1,
-      `${id} must be a composable public claim`,
-    );
-    assert.equal(compiled.entries[0].id, id);
+    if (compiled.entries.length !== 1 || compiled.entries[0].id !== id) {
+      continue;
+    }
+    ids.push(id);
   }
+  assert.ok(ids.length >= 2, "need at least two composable public claims");
   return ids;
 }
 

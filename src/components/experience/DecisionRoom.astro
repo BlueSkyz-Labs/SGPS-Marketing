@@ -235,7 +235,9 @@ const domId = (id: string): string =>
   data-msg-none={atelierCopy.noneMatch}
   aria-labelledby="decision-room-title"
 >
-  <h2 id="decision-room-title" class="decision-room__title">{copy.heading}</h2>
+  <h2 id="decision-room-title" class="decision-room__title">
+    {copy.heading}
+  </h2>
   <p class="decision-room__lede">{copy.lede}</p>
 
   <div class="decision-room__atelier" data-atelier-controls hidden>
@@ -251,29 +253,25 @@ const domId = (id: string): string =>
         data-atelier-goal
       >
         <option value="">{atelierCopy.none}</option>
-        {
-          ATELIER_GOALS.map((goal) => (
-            <option value={goal}>{atelierCopy.goals[goal]}</option>
-          ))
-        }
+        {ATELIER_GOALS.map((goal) => (
+          <option value={goal}>{atelierCopy.goals[goal]}</option>
+        ))}
       </select>
     </div>
     <fieldset class="decision-room__atelier-field">
-      <legend class="decision-room__atelier-label"
-        >{atelierCopy.constraints}</legend
-      >
-      {
-        ATELIER_CONSTRAINTS.map((constraint) => (
-          <label class="decision-room__atelier-check">
-            <input
-              type="checkbox"
-              value={constraint}
-              data-atelier-constraint={constraint}
-            />
-            <span>{atelierCopy.constraintsLabels[constraint]}</span>
-          </label>
-        ))
-      }
+      <legend class="decision-room__atelier-label">
+        {atelierCopy.constraints}
+      </legend>
+      {ATELIER_CONSTRAINTS.map((constraint) => (
+        <label class="decision-room__atelier-check">
+          <input
+            type="checkbox"
+            value={constraint}
+            data-atelier-constraint={constraint}
+          />
+          <span>{atelierCopy.constraintsLabels[constraint]}</span>
+        </label>
+      ))}
     </fieldset>
     <button
       type="button"
@@ -286,103 +284,94 @@ const domId = (id: string): string =>
       class="decision-room__atelier-status"
       data-atelier-status
       aria-live="polite"
-    >
-    </p>
+    ></p>
   </div>
 
-  {
-    GROUP_IDS.map((groupId) => (
-      <template data-atelier-label={groupId}>
-        {atelierCopy.groups[groupId]}
-      </template>
-    ))
-  }
+  {GROUP_IDS.map((groupId) => (
+    <template data-atelier-label={groupId}>
+      {atelierCopy.groups[groupId]}
+    </template>
+  ))}
 
-  {
-    ATELIER_REASON_KEYS.map((reasonKey) => (
-      <template data-atelier-reason={reasonKey}>
-        {atelierCopy.reasons[reasonKey]}
-      </template>
-    ))
-  }
+  {ATELIER_REASON_KEYS.map((reasonKey) => (
+    <template data-atelier-reason={reasonKey}>
+      {atelierCopy.reasons[reasonKey]}
+    </template>
+  ))}
 
   <template data-atelier-handoff-report>{atelierCopy.handoff.report}</template>
 
   <template data-atelier-handoff-action>{atelierCopy.handoff.action}</template>
 
   <div class="decision-room__items" data-decision-items>
-    {
-      items.map((item, index) => (
-        <article
-          id={domId(item.id)}
-          class="decision-room__item"
-          data-decision-item={item.id}
-          data-item-kind={item.kind}
-          data-source-index={index}
-          data-has-evidence={item.evidenceHref ? "" : undefined}
-          data-has-boundary={item.boundaryText ? "" : undefined}
-        >
-          {item.kind === "claim" ? (
-            <label class="decision-room__select">
-              <input type="checkbox" data-atelier-item-select value={item.id} />
-              <span>{atelierCopy.handoff.select}</span>
-            </label>
-          ) : null}
-          <span class="decision-room__kind">
-            {KIND_LABELS[item.kind][lang]}
-          </span>
-          <h3 class="decision-room__label">{item.label[lang]}</h3>
-          {item.summary ? (
-            <p class="decision-room__summary">{item.summary[lang]}</p>
-          ) : null}
-          {item.boundaryText ? (
-            <p class="decision-room__boundary">{item.boundaryText[lang]}</p>
-          ) : null}
-          {item.evidenceHref ? (
-            <a
-              href={item.evidenceHref[lang]}
-              rel={
-                /^https?:\/\//i.test(item.evidenceHref[lang])
-                  ? "noopener noreferrer"
-                  : undefined
-              }
-              class="decision-room__source"
-            >
-              {copy.source} →
-            </a>
-          ) : null}
-          <button
-            type="button"
-            class="decision-room__add"
-            data-decision-add={item.id}
-            aria-pressed="false"
+    {items.map((item, index) => (
+      <article
+        id={domId(item.id)}
+        class="decision-room__item"
+        data-decision-item={item.id}
+        data-item-kind={item.kind}
+        data-source-index={index}
+        data-has-evidence={item.evidenceHref ? "" : undefined}
+        data-has-boundary={item.boundaryText ? "" : undefined}
+      >
+        {item.kind === "claim" ? (
+          <label class="decision-room__select">
+            <input type="checkbox" data-atelier-item-select value={item.id} />
+            <span>{atelierCopy.handoff.select}</span>
+          </label>
+        ) : null}
+        <span class="decision-room__kind">{KIND_LABELS[item.kind][lang]}</span>
+        <h3 class="decision-room__label">{item.label[lang]}</h3>
+        {item.summary ? (
+          <p class="decision-room__summary">{item.summary[lang]}</p>
+        ) : null}
+        {item.boundaryText ? (
+          <p class="decision-room__boundary">{item.boundaryText[lang]}</p>
+        ) : null}
+        {item.evidenceHref ? (
+          <a
+            href={item.evidenceHref[lang]}
+            rel={
+              /^https?:\/\//i.test(item.evidenceHref[lang])
+                ? "noopener noreferrer"
+                : undefined
+            }
+            class="decision-room__source"
           >
-            {copy.add}
-          </button>
-        </article>
-      ))
-    }
+            {copy.source} →
+          </a>
+        ) : null}
+        <button
+          type="button"
+          class="decision-room__add"
+          data-decision-add={item.id}
+          aria-pressed="false"
+        >
+          {copy.add}
+        </button>
+      </article>
+    ))}
   </div>
 
-  <p class="decision-room__empty" data-decision-empty-state>{copy.empty}</p>
+  <p class="decision-room__empty" data-decision-empty-state>
+    {copy.empty}
+  </p>
 
   <div class="decision-room__board" data-decision-board hidden>
     <h3 class="decision-room__board-title">{copy.boardTitle}</h3>
     <ul class="decision-room__rows">
-      {
-        items.map((item) => (
-          <li data-decision-row={item.id} hidden>
-            <span class="decision-room__row-label">{item.label[lang]}</span>
-            <button
-              type="button"
-              class="decision-room__remove"
-              data-decision-remove={item.id}
-            >
-              {copy.remove}
-            </button>
-          </li>
-        ))
-      }
+      {items.map((item) => (
+        <li data-decision-row={item.id} hidden>
+          <span class="decision-room__row-label">{item.label[lang]}</span>
+          <button
+            type="button"
+            class="decision-room__remove"
+            data-decision-remove={item.id}
+          >
+            {copy.remove}
+          </button>
+        </li>
+      ))}
     </ul>
   </div>
 
@@ -398,9 +387,13 @@ const domId = (id: string): string =>
       class="decision-room__handoff-link"
       data-atelier-handoff-link
       hidden
-      href="#"></a>
-    <p class="decision-room__handoff-report" data-atelier-handoff-report hidden>
-    </p>
+      href="#"
+    ></a>
+    <p
+      class="decision-room__handoff-report"
+      data-atelier-handoff-report
+      hidden
+    ></p>
   </div>
 
   <p class="sr-only" role="status" aria-live="polite" data-decision-live></p>
