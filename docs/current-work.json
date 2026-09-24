@@ -1,8 +1,8 @@
 {
   "schemaVersion": "1.0",
-  "updatedAt": "2026-09-22",
-  "program": "C3 Living Verifiable Product Experience — C3-C Brand Experience Upgrade converged across W1-W8: trilingual (W1), premium switcher (W2), Light/Dark (W3), brand-kit UI rounds + mockup wow (W4), SGPS:Experience FULL adoption (W5), trilingual SEO contract (W6), design/frontend best-practice + adoption (W7), audit + Quiet Luxury (W8).",
-  "status": "c3-c-converged",
+  "updatedAt": "2026-09-23",
+  "program": "C4 Quiet Authority — Digital Maison, Collected Edition, Executive Dossier & Architecture Salon",
+  "status": "c4-in-progress",
   "authorities": {
     "experienceContract": "docs/superpowers/specs/2026-09-03-blueskyz-web-v1-c1-1-design.md",
     "c2Design": "docs/superpowers/specs/2026-09-13-c2-cinematic-product-house-design.md",
@@ -168,7 +168,7 @@
     {
       "id": "c3-master-plan",
       "name": "C3 Living Verifiable Product Experience — post-C2 successor program",
-      "status": "PLANNED",
+      "status": "MERGED",
       "evidence": "docs/superpowers/plans/2026-09-13-c3-living-verifiable-product-experience-master.md"
     },
     {
@@ -186,13 +186,13 @@
     {
       "id": "c3-b-trust",
       "name": "C3-B Trust Continuum",
-      "status": "IN_PROGRESS",
+      "status": "MERGED",
       "evidence": "docs/superpowers/plans/2026-09-13-c3-b-trust-continuum.md"
     },
     {
       "id": "c3-c-product",
       "name": "C3-C Living Product System",
-      "status": "PLANNED",
+      "status": "MERGED",
       "evidence": "docs/superpowers/plans/2026-09-13-c3-c-living-product-system.md"
     },
     {
@@ -218,6 +218,36 @@
       "name": "C3-G Spatial Product House Halo Experiment",
       "status": "PLANNED",
       "evidence": "docs/superpowers/plans/2026-09-13-c3-g-spatial-halo-experiment.md"
+    },
+    {
+      "id": "c4-master-plan",
+      "name": "C4 Quiet Authority & Digital Maison — program master",
+      "status": "MERGED",
+      "evidence": "docs/superpowers/plans/2026-09-16-c4-quiet-authority-digital-maison-master.md"
+    },
+    {
+      "id": "c4-a-editorial",
+      "name": "C4-A Editorial Craft & Luxury Density (Tasks 1-9)",
+      "status": "MERGED",
+      "evidence": "docs/superpowers/plans/2026-09-16-c4-a-editorial-craft-luxury-density.md"
+    },
+    {
+      "id": "c4-b-maison",
+      "name": "C4-B Digital Maison & Collected Edition (Tasks 1-6)",
+      "status": "MERGED",
+      "evidence": "docs/superpowers/plans/2026-09-16-c4-b-digital-maison-collected-edition.md"
+    },
+    {
+      "id": "c4-c-dossier",
+      "name": "C4-C Executive Dossier & Boardroom Mode (Tasks 1-3 delivered; Task 4 pending)",
+      "status": "IN_PROGRESS",
+      "evidence": "docs/superpowers/plans/2026-09-16-c4-c-executive-dossier-boardroom.md"
+    },
+    {
+      "id": "c4-d-salon",
+      "name": "C4-D Architecture Salon & Provenance Lens (adapters delivered; salon/lens surfaces pending)",
+      "status": "PLANNED",
+      "evidence": "docs/superpowers/plans/2026-09-16-c4-d-architecture-salon-provenance.md"
     }
   ],
   "openOwnerDecisions": [
@@ -258,10 +288,9 @@
     "Localized product profile route remains product-truth gated until a real public product can exercise the route contract."
   ],
   "nextActionable": [
-    "C3-C converged: W1 trilingual (#192), W2 premium switcher (#195), W3 Light/Dark (#194), W4 brand-unify + mockup wow (#201 #208 #209 #210 #211), W6 trilingual SEO contract, W7 design/frontend best-practice (global focus-visible, reduced-motion, token consistency, semantic landmarks), W8 Quiet Luxury (hero brand-mark + sheen + ambient glow + interaction polish) — all merged or in final merge.",
-    "W5 SGPS:Experience FULL adoption recorded with per-decision classification + guards: docs/evidence/2026-09-22-sgps-experience-adoption.md (DEC-007/-008/-012 APPLICABLE; governance ADOPTED, experience VERIFIED/GUARDED).",
-    "Remaining items are PENDING_EXTERNAL / owner-gated: production RUM/analytics privacy+provider decision (transmission stays OFF), real-user E4 customer-task + brand-interpretation sessions, E5/E6 recognition evidence, and the C4 Quiet Authority program plan (PR #180 draft).",
-    "Public site remains protected behind Cloudflare Access (owner-only allow-list) until the owner authorises public launch.",
-    "Public product runtime stays honest-empty until owner-approved screenshot/product truth exists; C3-E remote AI, C3-G WebGL remain separately gated."
+    "C4-A (Tasks 1-9), C4-B (Tasks 1-6) and C3 are merged; C4-C Task 1 (dossier compiler) is merged and C4-C Tasks 2-3 (composer, printable document) plus C4-D Tasks 1 and 3 (public-safe architecture adapter, provenance lens) are in review.",
+    "Next: merge the in-review C4-C/C4-D adapters and surfaces, then build C4-D Task 2 (Architecture Salon) and Task 4 (Provenance Lens component) on top of those adapters.",
+    "Public product runtime remains honest-empty until owner-approved screenshot/product truth exists. C4-A Task 10 (gallery mount) stays owner-fact gated; C4-E, C4-F and remote/model C4-G remain separately gated.",
+    "Human E4, VI copy cross-check, trademark/legal clearance and the RUM/privacy provider decision remain owner-executed."
   ]
 }
