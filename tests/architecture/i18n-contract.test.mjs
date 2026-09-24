@@ -82,7 +82,7 @@ test("supported browser preference outranks coarse country hint", () => {
   assert.equal(resolveInitialLanguage(null, ["vi-VN"], "US"), "vi");
 });
 
-test("first-visit simplified Chinese preference resolves without activating Traditional Chinese", () => {
+test("first-visit Simplified Chinese preference stays script-safe", () => {
   assert.equal(resolveInitialLanguage(null, ["zh-Hans-CN"], "VN"), "zh");
   assert.equal(resolveInitialLanguage(null, ["zh-CN"], "US"), "zh");
   assert.equal(resolveInitialLanguage(null, ["zh-SG"], "US"), "zh");
