@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.0",
-  "updatedAt": "2026-09-23",
+  "updatedAt": "2026-09-24",
   "program": "C4 Quiet Authority — Digital Maison, Collected Edition, Executive Dossier & Architecture Salon",
   "status": "c4-in-progress",
   "authorities": {
@@ -248,6 +248,48 @@
       "name": "C4-D Architecture Salon & Provenance Lens (adapters delivered; salon/lens surfaces pending)",
       "status": "PLANNED",
       "evidence": "docs/superpowers/plans/2026-09-16-c4-d-architecture-salon-provenance.md"
+    },
+    {
+      "id": "dev-deps-234",
+      "name": "Dev-deps bump — 5 updates (#234) 8b067e4",
+      "status": "MERGED",
+      "evidence": "docs/evidence/2026-09-24-convergence-readback.md (verified via #257)"
+    },
+    {
+      "id": "dev-prettier-235",
+      "name": "Prettier plugin astro 1.0.1 (#235) 8aa3202",
+      "status": "MERGED",
+      "evidence": "git log 8aa3202"
+    },
+    {
+      "id": "evidence-257",
+      "name": "2026-09-24 convergence wave read-back (#257) 82e6b5a",
+      "status": "MERGED",
+      "evidence": "docs/evidence/2026-09-24-convergence-readback.md"
+    },
+    {
+      "id": "evidence-256",
+      "name": "Gate surface / M01-M08 modernization baseline (#256) 2d2b84c",
+      "status": "MERGED",
+      "evidence": "docs/evidence/2026-09-24-convergence-readback.md"
+    },
+    {
+      "id": "tonydemo-decomm-253",
+      "name": "Tonydemo decommission evidence (#253) cef3f19",
+      "status": "MERGED",
+      "evidence": "docs/evidence/2026-09-24-tonydemo-decommission.md"
+    },
+    {
+      "id": "provenance-258",
+      "name": "Re-land provenance change + withdrawn guard (#258 / #248) f9c6165",
+      "status": "MERGED",
+      "evidence": "src/lib/dossier.ts (guard present)"
+    },
+    {
+      "id": "atelier-229",
+      "name": "C4-E Decision Atelier Task 3 (#229) 32c6a7c",
+      "status": "MERGED",
+      "evidence": "docs/evidence/2026-09-24-atelier-task3.md"
     }
   ],
   "openOwnerDecisions": [
@@ -285,12 +327,17 @@
     "Human E4: OWNER SELF-TESTS (owner directive 2026-09-13, NON-BLOCKER). Agent-side max complete: protocol (docs/evidence/2026-09-12-v3-human-e4.md), session template + red-team template (docs/evidence/templates/). Automated substitutes already in CI (axe matrix, Lighthouse). Real-participant sessions are owner-executed.",
     "VI copy review: OWNER CROSS-CHECKS WITH ANOTHER AGENT (owner directive 2026-09-13, NON-BLOCKER). Agent fixed the 3 weakest spots + EN/VI parity guards; remainder awaits the cross-check audit.",
     "Trademark/legal clearance and specialty print (brand kit caveats).",
-    "Localized product profile route remains product-truth gated until a real public product can exercise the route contract."
+    "Localized product profile route remains product-truth gated until a real public product can exercise the route contract.",
+    "Post-merge landing verification: #234, #235, #257, #256, #253, #258, #229 verified on main (2369ca4); remaining PR #259 (landing guard), #260 (.gitattributes binary), #254 (W4 matrix), #245 (ADR numbering), #230 (atelier mergeable at 012ed7e gates 0/534/0), #228, #225 (architecture salon c1e1b67, 531/531) must complete verification before close.",
+    "Evidence document: 2026-09-24 convergence read-back (#257) and tool guard evidence (lane-helper LOCAL-AHEAD skip) to be written to docs/evidence/.",
+    "Lane-helguard guard: helper now emits 'LOCAL-AHEAD skip' and exits 0 on local-ahead branches; reset incident documented (operational, not committed)."
   ],
   "nextActionable": [
     "C4-A (Tasks 1-9), C4-B (Tasks 1-6) and C3 are merged; C4-C Task 1 (dossier compiler) is merged and C4-C Tasks 2-3 (composer, printable document) plus C4-D Tasks 1 and 3 (public-safe architecture adapter, provenance lens) are in review.",
     "Next: merge the in-review C4-C/C4-D adapters and surfaces, then build C4-D Task 2 (Architecture Salon) and Task 4 (Provenance Lens component) on top of those adapters.",
     "Public product runtime remains honest-empty until owner-approved screenshot/product truth exists. C4-A Task 10 (gallery mount) stays owner-fact gated; C4-E, C4-F and remote/model C4-G remain separately gated.",
-    "Human E4, VI copy cross-check, trademark/legal clearance and the RUM/privacy provider decision remain owner-executed."
+    "Human E4, VI copy cross-check, trademark/legal clearance and the RUM/privacy provider decision remain owner-executed.",
+    "Verified merged 2026-09-24: #234, #235, #257, #256, #253, #258, #229 (heads 8b067e4/8aa3202/82e6b5a/2d2b84c/cef3f19/f9c6165/32c6a7c; ancestor of main 2369ca4).",
+    "Residual: post-merge landing verification (#259 #260 #254 #245 #230 #228 #225), evidence document, lane-helper guard documentation. Owner-gated (E4, RUM, Concierge, Spatial/WebGL, screenshot/owner facts) kept gated — NOT un-gated."
   ]
 }
