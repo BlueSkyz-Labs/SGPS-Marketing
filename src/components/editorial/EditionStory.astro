@@ -34,26 +34,22 @@ const labels = LABELS[lang];
   <p class="c4-edition__published">
     {labels.published}: <time datetime={view.published}>{view.published}</time>
   </p>
-  {
-    view.note && (
-      <p class="c4-edition__note">
-        <span class="c4-edition__note-label">{labels.note}:</span> {view.note}
-      </p>
-    )
-  }
+  {view.note && (
+    <p class="c4-edition__note">
+      <span class="c4-edition__note-label">{labels.note}:</span> {view.note}
+    </p>
+  )}
   <h2 class="c4-edition__sources-title">{labels.sources}</h2>
   <ul class="c4-edition__sources">
-    {
-      view.sources.map((source) => (
-        <li
-          class="c4-edition__source"
-          data-edition-source={`${source.kind}:${source.id}`}
-        >
-          <a class="c4-edition__source-link" href={source.href}>
-            {source.label}
-          </a>
-        </li>
-      ))
-    }
+    {view.sources.map((source) => (
+      <li
+        class="c4-edition__source"
+        data-edition-source={`${source.kind}:${source.id}`}
+      >
+        <a class="c4-edition__source-link" href={source.href}>
+          {source.label}
+        </a>
+      </li>
+    ))}
   </ul>
 </article>

@@ -79,11 +79,9 @@ const robotsNoindex = noindex || isNonProductionSiteUrl(SITE.url);
     <meta name="description" content={description} />
     <title>{fullTitle}</title>
     <link rel="canonical" href={canonical} />
-    {
-      hreflangLinks(path, SITE.url).map((link) => (
-        <link rel="alternate" hreflang={link.hreflang} href={link.href} />
-      ))
-    }
+    {hreflangLinks(path, SITE.url).map((link) => (
+      <link rel="alternate" hreflang={link.hreflang} href={link.href} />
+    ))}
     <link
       rel="alternate"
       hreflang="x-default"
@@ -92,11 +90,9 @@ const robotsNoindex = noindex || isNonProductionSiteUrl(SITE.url);
     {robotsNoindex ? <meta name="robots" content="noindex, nofollow" /> : null}
     <meta property="og:type" content="website" />
     <meta property="og:locale" content={ogLocale} />
-    {
-      ogAlternates.map((locale) => (
-        <meta property="og:locale:alternate" content={locale} />
-      ))
-    }
+    {ogAlternates.map((locale) => (
+      <meta property="og:locale:alternate" content={locale} />
+    ))}
     <meta property="og:site_name" content={SITE.name} />
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={description} />
@@ -106,25 +102,21 @@ const robotsNoindex = noindex || isNonProductionSiteUrl(SITE.url);
     <meta name="twitter:title" content={fullTitle} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImageUrl} />
-    {
-      structuredData.map((data) => (
-        <script
-          is:inline
-          type="application/ld+json"
-          set:html={safeJsonLd(data)}
-        />
-      ))
-    }
+    {structuredData.map((data) => (
+      <script
+        is:inline
+        type="application/ld+json"
+        set:html={safeJsonLd(data)}
+      ></script>
+    ))}
   </head>
   <body class="flex min-h-screen flex-col" data-scene={scene}>
     <a class="skip-link" href="#main-content">
-      {
-        currentLang === "vi"
-          ? "Chuyển đến nội dung chính"
-          : currentLang === "zh"
-            ? "跳转到主要内容"
-            : "Skip to main content"
-      }
+      {currentLang === "vi"
+        ? "Chuyển đến nội dung chính"
+        : currentLang === "zh"
+          ? "跳转到主要内容"
+          : "Skip to main content"}
     </a>
     <Header scene={scene} />
     <CommandNavigator />

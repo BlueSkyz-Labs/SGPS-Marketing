@@ -42,9 +42,7 @@ const primaryCta = hasPublicProducts
   data-scene={scene}
   class="border-b border-[var(--border-subtle)] bg-[var(--surface-primary)] text-[var(--text-primary)]"
 >
-  <Container
-    class="header-bar flex min-h-16 flex-wrap items-center justify-between gap-x-4 gap-y-1 py-3"
-  >
+  <Container class="header-bar flex min-h-16 flex-wrap items-center justify-between gap-x-4 gap-y-1 py-3">
     <BrandLockup href={`/${lang}/`} surface={lockupSurface(scene)} />
 
     <nav
@@ -58,37 +56,31 @@ const primaryCta = hasPublicProducts
         class="inline-flex min-h-11 items-center gap-2 rounded-lg border border-[var(--border-subtle)] px-3 text-sm font-medium text-[var(--text-secondary)] transition-colors hover:text-[var(--text-primary)]"
       >
         {labelFor(SHARED_LABELS.search, lang)}
-        <kbd
-          class="rounded border border-[var(--border-subtle)] bg-[var(--surface-subtle)] px-1.5 py-0.5 text-[0.65rem] font-medium"
-          >Ctrl / ⌘K</kbd
-        >
+        <kbd class="rounded border border-[var(--border-subtle)] bg-[var(--surface-subtle)] px-1.5 py-0.5 text-[0.65rem] font-medium">
+          Ctrl / ⌘K
+        </kbd>
       </button>
-      {
-        NAV.map((item) => (
-          <a
-            href={item.href}
-            aria-current={isActive(item.href) ? "page" : undefined}
-            class="inline-flex min-h-11 items-center px-3 text-sm font-medium text-[var(--text-secondary)] no-underline hover:text-[var(--text-primary)]"
-          >
-            {item.label}
-          </a>
-        ))
-      }
+      {NAV.map((item) => (
+        <a
+          href={item.href}
+          aria-current={isActive(item.href) ? "page" : undefined}
+          class="inline-flex min-h-11 items-center px-3 text-sm font-medium text-[var(--text-secondary)] no-underline hover:text-[var(--text-primary)]"
+        >
+          {item.label}
+        </a>
+      ))}
       <LanguageSwitcher />
       <ThemeToggle lang={lang} />
-      <ButtonLink href={primaryCta.href} variant="primary"
-        >{primaryCta.label}</ButtonLink
-      >
+      <ButtonLink href={primaryCta.href} variant="primary">
+        {primaryCta.label}
+      </ButtonLink>
     </nav>
 
     <details class="relative md:hidden">
-      <summary
-        class="inline-flex min-h-11 min-w-11 list-none items-center justify-center rounded-lg border border-[var(--border-subtle)] px-3 text-sm font-medium"
-        >{labelFor(SHARED_LABELS.menu, lang)}</summary
-      >
-      <div
-        class="absolute right-0 z-20 mt-2 w-56 rounded-lg border border-[var(--border-subtle)] bg-[var(--surface-primary)] p-3 shadow-sm"
-      >
+      <summary class="inline-flex min-h-11 min-w-11 list-none items-center justify-center rounded-lg border border-[var(--border-subtle)] px-3 text-sm font-medium">
+        {labelFor(SHARED_LABELS.menu, lang)}
+      </summary>
+      <div class="absolute right-0 z-20 mt-2 w-56 rounded-lg border border-[var(--border-subtle)] bg-[var(--surface-primary)] p-3 shadow-sm">
         <nav
           aria-label={lang === "vi" ? "Di động" : "Mobile"}
           class="flex flex-col gap-2"
@@ -101,22 +93,20 @@ const primaryCta = hasPublicProducts
           >
             {labelFor(SHARED_LABELS.searchPages, lang)}
           </button>
-          {
-            NAV.map((item) => (
-              <a
-                href={item.href}
-                aria-current={isActive(item.href) ? "page" : undefined}
-                class="min-h-11 rounded-md px-3 py-2 text-sm font-medium text-[var(--text-primary)] no-underline hover:bg-[var(--surface-subtle)]"
-              >
-                {item.label}
-              </a>
-            ))
-          }
+          {NAV.map((item) => (
+            <a
+              href={item.href}
+              aria-current={isActive(item.href) ? "page" : undefined}
+              class="min-h-11 rounded-md px-3 py-2 text-sm font-medium text-[var(--text-primary)] no-underline hover:bg-[var(--surface-subtle)]"
+            >
+              {item.label}
+            </a>
+          ))}
           <LanguageSwitcher />
           <ThemeToggle lang={lang} />
-          <ButtonLink href={primaryCta.href} class="w-full"
-            >{primaryCta.label}</ButtonLink
-          >
+          <ButtonLink href={primaryCta.href} class="w-full">
+            {primaryCta.label}
+          </ButtonLink>
         </nav>
       </div>
     </details>

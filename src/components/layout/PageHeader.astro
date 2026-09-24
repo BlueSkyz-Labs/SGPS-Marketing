@@ -9,13 +9,11 @@ const { eyebrow, title, lede } = Astro.props;
 ---
 
 <header class="max-w-3xl">
-  {
-    eyebrow ? (
-      <p class="text-xs font-semibold tracking-[0.18em] text-[var(--text-secondary)] uppercase">
-        {eyebrow}
-      </p>
-    ) : null
-  }
+  {eyebrow ? (
+    <p class="text-xs font-semibold tracking-[0.18em] text-[var(--text-secondary)] uppercase">
+      {eyebrow}
+    </p>
+  ) : null}
   <h1
     class:list={[
       "text-4xl font-semibold tracking-tight text-balance sm:text-5xl",
@@ -24,11 +22,7 @@ const { eyebrow, title, lede } = Astro.props;
   >
     {title}
   </h1>
-  {
-    lede ? (
-      <p class="mt-5 text-lg text-[var(--text-secondary)] text-pretty">
-        {lede}
-      </p>
-    ) : null
-  }
+  {lede ? (
+    <p class="mt-5 text-lg text-[var(--text-secondary)] text-pretty">{lede}</p>
+  ) : null}
 </header>

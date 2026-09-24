@@ -54,9 +54,11 @@ const profileLabel = labelFor(SHARED_LABELS.viewProfile, lang);
     </a>
     <a
       href={data.primaryAction.href}
-      rel={/^https?:\/\//i.test(data.primaryAction.href)
-        ? "noopener noreferrer"
-        : undefined}
+      rel={
+        /^https?:\/\//i.test(data.primaryAction.href)
+          ? "noopener noreferrer"
+          : undefined
+      }
       class="inline-flex min-h-11 items-center text-sm font-semibold text-[var(--text-secondary)] no-underline hover:text-[var(--text-primary)] hover:underline"
     >
       {data.primaryAction.label}

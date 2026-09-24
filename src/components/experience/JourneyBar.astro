@@ -14,35 +14,33 @@ const missionOrders = getMissionOrders();
 const missionEvidence = getMissionEvidenceKeys();
 ---
 
-{
-  actions.length > 0 && (
-    <nav
-      class="border-t border-[var(--border-subtle)] bg-[var(--surface-subtle)]"
-      aria-label={navLabel}
-      data-journey-bar
-      data-mission-orders={JSON.stringify(missionOrders)}
-      data-mission-evidence={JSON.stringify(missionEvidence)}
-    >
-      <Container class="flex flex-col gap-3 py-6 sm:flex-row sm:items-center sm:justify-between">
-        <p class="text-xs font-semibold tracking-[0.18em] text-[var(--text-muted)] uppercase">
-          {navLabel}
-        </p>
-        <ul class="flex flex-wrap gap-3">
-          {actions.map((action) => (
-            <li data-step-key={routeKeyFromPath(action.href)}>
-              <a
-                class="inline-flex min-h-11 items-center gap-1.5 rounded-lg border border-[var(--border-subtle)] bg-white px-4 text-sm font-semibold text-[var(--text-primary)] no-underline transition-[border-color,box-shadow] duration-150 hover:border-[var(--action-primary)] hover:shadow-sm"
-                href={action.href}
-              >
-                {action.label}
-                <span aria-hidden="true" class="text-[var(--action-primary)]">
-                  →
-                </span>
-              </a>
-            </li>
-          ))}
-        </ul>
-      </Container>
-    </nav>
-  )
-}
+{actions.length > 0 && (
+  <nav
+    class="border-t border-[var(--border-subtle)] bg-[var(--surface-subtle)]"
+    aria-label={navLabel}
+    data-journey-bar
+    data-mission-orders={JSON.stringify(missionOrders)}
+    data-mission-evidence={JSON.stringify(missionEvidence)}
+  >
+    <Container class="flex flex-col gap-3 py-6 sm:flex-row sm:items-center sm:justify-between">
+      <p class="text-xs font-semibold tracking-[0.18em] text-[var(--text-muted)] uppercase">
+        {navLabel}
+      </p>
+      <ul class="flex flex-wrap gap-3">
+        {actions.map((action) => (
+          <li data-step-key={routeKeyFromPath(action.href)}>
+            <a
+              class="inline-flex min-h-11 items-center gap-1.5 rounded-lg border border-[var(--border-subtle)] bg-white px-4 text-sm font-semibold text-[var(--text-primary)] no-underline transition-[border-color,box-shadow] duration-150 hover:border-[var(--action-primary)] hover:shadow-sm"
+              href={action.href}
+            >
+              {action.label}
+              <span aria-hidden="true" class="text-[var(--action-primary)]">
+                →
+              </span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </Container>
+  </nav>
+)}

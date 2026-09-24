@@ -16,20 +16,18 @@ return Astro.redirect("/en/security/");
         Report security issues through a private channel. Do not open a public
         GitHub issue for vulnerability reports.
       </p>
-      {
-        SITE.securityEmail ? (
-          <p class="mt-4 max-w-2xl text-[var(--text-secondary)]">
-            Email{" "}
-            <a
-              href={`mailto:${SITE.securityEmail}`}
-              class="inline-flex min-h-11 items-center font-semibold text-[var(--action-primary)] no-underline hover:underline"
-            >
-              {SITE.securityEmail}
-            </a>
-            .
-          </p>
-        ) : null
-      }
+      {SITE.securityEmail ? (
+        <p class="mt-4 max-w-2xl text-[var(--text-secondary)]">
+          Email{" "}
+          <a
+            href={`mailto:${SITE.securityEmail}`}
+            class="inline-flex min-h-11 items-center font-semibold text-[var(--action-primary)] no-underline hover:underline"
+          >
+            {SITE.securityEmail}
+          </a>
+          .
+        </p>
+      ) : null}
       <p class="mt-6">
         <a
           href={SECURITY_ADVISORY_URL}

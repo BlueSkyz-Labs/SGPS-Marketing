@@ -27,25 +27,21 @@ const emptyDescription = products.length
         title="可供核验的产品"
         lede="产品将在可评估时展示于此。我们只发布您可以核验的内容。"
       />
-      {
-        products.length === 0 ? (
-          <div class="mt-12">
-            <ProofFirstEmptyState lang="zh" />
-          </div>
-        ) : (
-          <div class="mt-12 grid gap-4 md:grid-cols-2">
-            {products.map((product) => (
-              <ProductCard product={product} lang="zh" />
-            ))}
-          </div>
-        )
-      }
+      {products.length === 0 ? (
+        <div class="mt-12">
+          <ProofFirstEmptyState lang="zh" />
+        </div>
+      ) : (
+        <div class="mt-12 grid gap-4 md:grid-cols-2">
+          {products.map((product) => (
+            <ProductCard product={product} lang="zh" />
+          ))}
+        </div>
+      )}
     </Container>
   </section>
-  {
-    /* C2: discovery surfaces re-homed from the homepage (design §8) — Intent Lens sits
-      with product evaluation; Atlas remains the deliberate exploration tool. */
-  }
+  {/* C2: discovery surfaces re-homed from the homepage (design §8) — Intent Lens sits
+      with product evaluation; Atlas remains the deliberate exploration tool. */}
   <section class="border-t border-[var(--border-subtle)] py-16 lg:py-20">
     <Container>
       <IntentLens lang="zh" />

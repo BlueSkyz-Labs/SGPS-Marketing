@@ -15,67 +15,59 @@ return Astro.redirect("/en/contact/");
         Reach BlueSkyz through the lane that matches your need. Email addresses
         appear here when BlueSkyz publishes them.
       </p>
-      <ul
-        class="mt-10 divide-y divide-[var(--border-subtle)] border-y border-[var(--border-subtle)]"
-      >
-        {
-          !hasBusinessEmail ? (
-            <li class="py-6">
-              <h2 class="text-lg font-semibold tracking-tight">Security</h2>
-              <p class="mt-2 max-w-2xl text-[var(--text-secondary)]">
-                Use GitHub private vulnerability reporting. A security email
-                will appear here when BlueSkyz publishes one.
-              </p>
-              <a
-                href={SECURITY_ADVISORY_URL}
-                rel="noopener noreferrer"
-                class="mt-4 inline-flex min-h-11 items-center text-sm font-semibold text-[var(--action-primary)] no-underline hover:underline"
-              >
-                Open private vulnerability reporting
-              </a>
-            </li>
-          ) : null
-        }
+      <ul class="mt-10 divide-y divide-[var(--border-subtle)] border-y border-[var(--border-subtle)]">
+        {!hasBusinessEmail ? (
+          <li class="py-6">
+            <h2 class="text-lg font-semibold tracking-tight">Security</h2>
+            <p class="mt-2 max-w-2xl text-[var(--text-secondary)]">
+              Use GitHub private vulnerability reporting. A security email will
+              appear here when BlueSkyz publishes one.
+            </p>
+            <a
+              href={SECURITY_ADVISORY_URL}
+              rel="noopener noreferrer"
+              class="mt-4 inline-flex min-h-11 items-center text-sm font-semibold text-[var(--action-primary)] no-underline hover:underline"
+            >
+              Open private vulnerability reporting
+            </a>
+          </li>
+        ) : null}
         <li class="py-6">
           <h2 class="text-lg font-semibold tracking-tight">
             Business / general
           </h2>
           <p class="mt-2 max-w-2xl text-[var(--text-secondary)]">
-            {
-              SITE.contactEmail ? (
-                <>
-                  Email{" "}
-                  <a
-                    href={`mailto:${SITE.contactEmail}`}
-                    class="inline-flex min-h-11 items-center font-semibold text-[var(--action-primary)] no-underline hover:underline"
-                  >
-                    {SITE.contactEmail}
-                  </a>{" "}
-                  for business inquiries.
-                </>
-              ) : (
-                "A business email will appear here when BlueSkyz publishes one. Until then, use About to learn who we are, or Security reporting for an actionable trust channel."
-              )
-            }
+            {SITE.contactEmail ? (
+              <>
+                Email{" "}
+                <a
+                  href={`mailto:${SITE.contactEmail}`}
+                  class="inline-flex min-h-11 items-center font-semibold text-[var(--action-primary)] no-underline hover:underline"
+                >
+                  {SITE.contactEmail}
+                </a>{" "}
+                for business inquiries.
+              </>
+            ) : (
+              "A business email will appear here when BlueSkyz publishes one. Until then, use About to learn who we are, or Security reporting for an actionable trust channel."
+            )}
           </p>
-          {
-            !hasBusinessEmail ? (
-              <div class="mt-4 flex flex-wrap gap-4">
-                <a
-                  href="/about/"
-                  class="inline-flex min-h-11 items-center text-sm font-semibold text-[var(--action-primary)] no-underline hover:underline"
-                >
-                  About BlueSkyz
-                </a>
-                <a
-                  href="/security/"
-                  class="inline-flex min-h-11 items-center text-sm font-semibold text-[var(--action-primary)] no-underline hover:underline"
-                >
-                  Security reporting
-                </a>
-              </div>
-            ) : null
-          }
+          {!hasBusinessEmail ? (
+            <div class="mt-4 flex flex-wrap gap-4">
+              <a
+                href="/about/"
+                class="inline-flex min-h-11 items-center text-sm font-semibold text-[var(--action-primary)] no-underline hover:underline"
+              >
+                About BlueSkyz
+              </a>
+              <a
+                href="/security/"
+                class="inline-flex min-h-11 items-center text-sm font-semibold text-[var(--action-primary)] no-underline hover:underline"
+              >
+                Security reporting
+              </a>
+            </div>
+          ) : null}
         </li>
         <li class="py-6">
           <h2 class="text-lg font-semibold tracking-tight">Product support</h2>
@@ -90,36 +82,34 @@ return Astro.redirect("/en/contact/");
             Open support
           </a>
         </li>
-        {
-          hasBusinessEmail ? (
-            <li class="py-6">
-              <h2 class="text-lg font-semibold tracking-tight">Security</h2>
-              <p class="mt-2 max-w-2xl text-[var(--text-secondary)]">
-                {SITE.securityEmail ? (
-                  <>
-                    Email{" "}
-                    <a
-                      href={`mailto:${SITE.securityEmail}`}
-                      class="inline-flex min-h-11 items-center font-semibold text-[var(--action-primary)] no-underline hover:underline"
-                    >
-                      {SITE.securityEmail}
-                    </a>
-                    , or use GitHub private vulnerability reporting.
-                  </>
-                ) : (
-                  "Use GitHub private vulnerability reporting. A security email will appear here when BlueSkyz publishes one."
-                )}
-              </p>
-              <a
-                href={SECURITY_ADVISORY_URL}
-                rel="noopener noreferrer"
-                class="mt-4 inline-flex min-h-11 items-center text-sm font-semibold text-[var(--action-primary)] no-underline hover:underline"
-              >
-                Open private vulnerability reporting
-              </a>
-            </li>
-          ) : null
-        }
+        {hasBusinessEmail ? (
+          <li class="py-6">
+            <h2 class="text-lg font-semibold tracking-tight">Security</h2>
+            <p class="mt-2 max-w-2xl text-[var(--text-secondary)]">
+              {SITE.securityEmail ? (
+                <>
+                  Email{" "}
+                  <a
+                    href={`mailto:${SITE.securityEmail}`}
+                    class="inline-flex min-h-11 items-center font-semibold text-[var(--action-primary)] no-underline hover:underline"
+                  >
+                    {SITE.securityEmail}
+                  </a>
+                  , or use GitHub private vulnerability reporting.
+                </>
+              ) : (
+                "Use GitHub private vulnerability reporting. A security email will appear here when BlueSkyz publishes one."
+              )}
+            </p>
+            <a
+              href={SECURITY_ADVISORY_URL}
+              rel="noopener noreferrer"
+              class="mt-4 inline-flex min-h-11 items-center text-sm font-semibold text-[var(--action-primary)] no-underline hover:underline"
+            >
+              Open private vulnerability reporting
+            </a>
+          </li>
+        ) : null}
       </ul>
     </Container>
   </section>
