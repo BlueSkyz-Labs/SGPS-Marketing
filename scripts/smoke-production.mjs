@@ -58,6 +58,11 @@ check("VI home responds 200 with the localized hero", async () => {
   assert(html.includes("Trí tuệ"), "localized tagline missing");
 });
 
+check("zh-Hans home responds 200", async () => {
+  const response = await get("/zh/");
+  assert(response.status === 200, `status ${response.status}`);
+});
+
 for (const path of [
   "/en/privacy/",
   "/en/security/",
@@ -65,6 +70,9 @@ for (const path of [
   "/vi/privacy/",
   "/vi/security/",
   "/vi/support/",
+  "/zh/privacy/",
+  "/zh/security/",
+  "/zh/support/",
 ]) {
   check(`${path} responds 200`, async () => {
     const response = await get(path);
@@ -121,8 +129,9 @@ check("root serves the bounded language gateway", async () => {
   );
   assert(
     html.includes('data-language-choice="vi"') &&
-      html.includes('data-language-choice="en"'),
-    "root gateway must expose explicit VI/EN choices",
+      html.includes('data-language-choice="en"') &&
+      html.includes('data-language-choice="zh"'),
+    "root gateway must expose explicit VI/EN/zh choices",
   );
 });
 
@@ -140,11 +149,11 @@ check("sitemap lists only canonical localized routes", async () => {
     (match) => match[1],
   );
   assert(
-    locs.length >= 14,
-    `expected at least the 14 canonical URLs, got ${locs.length}`,
+    locs.length >= 21,
+    `expected at least the 21 canonical URLs, got ${locs.length}`,
   );
   assert(
-    locs.every((loc) => /\/(en|vi)\//.test(loc)),
+    locs.every((loc) => /\/(en|vi|zh)\//.test(loc)),
     "sitemap must only list localized canonical routes",
   );
 });
