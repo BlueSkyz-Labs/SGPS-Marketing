@@ -651,6 +651,83 @@
   }
 }
 
+/* ---- C4-E G3 — decision atelier controls ---- */
+.decision-room__atelier {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  min-inline-size: 0;
+  gap: var(--space-3);
+  margin-block: var(--space-6);
+}
+.decision-room__atelier-title {
+  margin: 0;
+  font-size: var(--c4-type-reading);
+  font-weight: 600;
+}
+.decision-room__atelier-lede,
+.decision-room__atelier-status {
+  margin: 0;
+  font-size: var(--c4-type-reading);
+  color: color-mix(in srgb, var(--brand-porcelain) 78%, transparent);
+}
+.decision-room__atelier-field {
+  display: flex;
+  flex-wrap: wrap;
+  min-inline-size: 0;
+  max-inline-size: 100%;
+  gap: var(--space-3);
+  margin: 0;
+  padding: 0;
+  border: 0;
+  /* The native select lays out its option list at the longest option's width
+     and WebKit does not apply overflow to the control itself, so that list
+     paints past the box and the document inherits it as scroll width at 200%
+     text zoom. Clipping the row keeps the intrinsic option width inside the
+     field it belongs to; the popup renders in its own layer and is unaffected. */
+  overflow: hidden;
+}
+.decision-room__atelier-label {
+  align-self: center;
+  font-weight: 600;
+}
+.decision-room__atelier-select,
+.decision-room__atelier-reset,
+.decision-room__atelier-check {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+}
+/* Native select intrinsic option width must not dictate the page width at 200% zoom.
+   The box is already clamped to the field, but the control renders its text with
+   white-space: pre, so a long Vietnamese option still paints past the box in
+   WebKit and the page inherits that as scroll width. Clipping the control's own
+   box keeps the intrinsic option width out of the document scroll without
+   touching the native dropdown, which renders in its own layer. */
+.decision-room__atelier-select {
+  box-sizing: border-box;
+  inline-size: min(100%, 20rem);
+  min-inline-size: 0;
+  max-inline-size: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.decision-room__atelier-check {
+  gap: var(--space-2);
+}
+.decision-room__group-label {
+  display: inline-block;
+  margin-block-end: var(--space-1);
+  font-size: var(--c4-type-caption, 0.8125rem);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--brand-porcelain) 70%, transparent);
+}
+@media print {
+  .decision-room__atelier {
+    display: none;
+  }
+  .decision-room__group-label {
+    color: inherit;
 /* ---- C4-D G4 — Architecture salon ---- */
 .c4-salon {
   max-width: 78ch;
