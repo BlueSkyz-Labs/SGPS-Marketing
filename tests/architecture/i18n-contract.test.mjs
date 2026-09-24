@@ -82,6 +82,15 @@ test("supported browser preference outranks coarse country hint", () => {
   assert.equal(resolveInitialLanguage(null, ["vi-VN"], "US"), "vi");
 });
 
+test("first-visit simplified Chinese preference resolves without activating Traditional Chinese", () => {
+  assert.equal(resolveInitialLanguage(null, ["zh-Hans-CN"], "VN"), "zh");
+  assert.equal(resolveInitialLanguage(null, ["zh-CN"], "US"), "zh");
+  assert.equal(resolveInitialLanguage(null, ["zh-SG"], "US"), "zh");
+  assert.equal(resolveInitialLanguage("vi", ["zh-Hans-CN"], "CN"), "vi");
+  assert.equal(resolveInitialLanguage(null, ["zh-Hant-TW"]), "en");
+  assert.equal(resolveInitialLanguage(null, ["zh-HK"]), "en");
+});
+
 test("coarse country hint fills only the unresolved first-visit gap", () => {
   assert.equal(resolveInitialLanguage(null, ["fr-FR"], "VN"), "vi");
   assert.equal(resolveInitialLanguage(null, ["fr-FR"], "FR"), "en");
