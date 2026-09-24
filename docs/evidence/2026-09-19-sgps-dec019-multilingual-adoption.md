@@ -2,7 +2,7 @@
 
 **Original adoption authority:** `BlueSkyz-Labs/sgps-core@dda7c21`  
 **Canonical source discovery:** `BlueSkyz-Labs/sgps-core@a850e5cc7f277c4c04c446aee35e7516f798ba53` (2026-09-20 refresh; discovery is NOT an automatic project repin).  
-**Local decisions:** `docs/decisions/0009-multilingual-language-preference.md` and `docs/decisions/0009-third-locale-and-theme.md`.  
+**Local decisions:** `docs/decisions/0009-multilingual-language-preference.md` and `docs/decisions/0010-third-locale-and-theme.md`.  
 **Initial record:** 2026-09-19. **Reconciled against:** `main@3c4f846e17841b383b8579fcdf11ae18bb36092b` and merged PR #192.  
 **Stage:** production public site; this document describes source/routing evidence, not a release or native-linguistic certification.
 

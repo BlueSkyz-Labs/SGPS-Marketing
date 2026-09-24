@@ -1,4 +1,11 @@
-# ADR 0009 — Third locale (Simplified Chinese, business register) and first-class Light/Dark theming
+# ADR 0010 — Third locale (Simplified Chinese, business register) and first-class Light/Dark theming
+
+> **Numbering note.** This decision was originally filed as `0009-…` while another
+> `0009` had already been published in the index and referenced by name across
+> plans, the decisions README and an adoption evidence file. To resolve the
+> collision **without rewriting any published reference**, this unreferenced file
+> moved to the next free slot; the decision's own date (2026-09-18) and content
+> are unchanged. Numbers follow publication order here; dates stay authoritative.
 
 - **Status:** Accepted (owner directive 2026-09-18)
 - **Date:** 2026-09-18
