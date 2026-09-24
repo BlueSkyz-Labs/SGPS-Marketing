@@ -1,5 +1,6 @@
 ---
 import { buildDecisionItems, MAX_COMPARISON } from "@/lib/decision-room";
+import { ATELIER_CONSTRAINTS, ATELIER_GOALS } from "@/lib/decision-atelier";
 import { getPublicProducts } from "@/lib/products";
 import type { Language } from "@/data/site";
 
@@ -59,6 +60,118 @@ const KIND_LABELS = {
   product: { en: "Product", vi: "Sản phẩm", zh: "产品" },
 } as const;
 
+/** C4-E Task 3 — atelier controls copy. */
+const ATELIER_COPY = {
+  en: {
+    heading: "Arrange for a goal",
+    lede: "Group the published items for what you are actually doing. Items are listed, never ordered by quality.",
+    goal: "Goal",
+    none: "No goal — source order",
+    constraints: "Narrow to",
+    reset: "Reset arrangement",
+    grouped: "{n} items arranged",
+    cleared: "Source order restored.",
+    noneMatch: "No published item matches that selection.",
+    goals: {
+      explore: "Explore",
+      evaluate: "Evaluate",
+      verify: "Verify",
+      architecture: "Architecture",
+      "work-with-blueskyz": "Work with BlueSkyz",
+    },
+    constraintsLabels: {
+      technical: "Technical",
+      trust: "Trust",
+      availability: "Availability",
+    },
+    groups: {
+      "starting-points": "Starting points",
+      "open-questions": "Open questions",
+      "sourced-facts": "Sourced facts",
+      "stated-limits": "Stated limits",
+      "evidence-backed": "Evidence backed",
+      "trust-signals": "Trust signals",
+      "product-truth": "Product truth",
+    },
+  },
+  vi: {
+    heading: "Sắp xếp theo mục tiêu",
+    lede: "Nhóm các mục đã công bố theo đúng việc bạn đang làm. Các mục được liệt kê, không xếp theo chất lượng.",
+    goal: "Mục tiêu",
+    none: "Không chọn — theo thứ tự nguồn",
+    constraints: "Thu hẹp theo",
+    reset: "Đặt lại sắp xếp",
+    grouped: "Đã sắp xếp {n} mục",
+    cleared: "Đã trở về thứ tự nguồn.",
+    noneMatch: "Không có mục công khai nào khớp lựa chọn đó.",
+    goals: {
+      explore: "Khám phá",
+      evaluate: "Đánh giá",
+      verify: "Kiểm chứng",
+      architecture: "Kiến trúc",
+      "work-with-blueskyz": "Làm việc với BlueSkyz",
+    },
+    constraintsLabels: {
+      technical: "Kỹ thuật",
+      trust: "Tin cậy",
+      availability: "Sẵn sàng",
+    },
+    groups: {
+      "starting-points": "Điểm bắt đầu",
+      "open-questions": "Câu hỏi mở",
+      "sourced-facts": "Dữ kiện có nguồn",
+      "stated-limits": "Giới hạn đã nêu",
+      "evidence-backed": "Có bằng chứng",
+      "trust-signals": "Tín hiệu tin cậy",
+      "product-truth": "Sự thật sản phẩm",
+    },
+  },
+  zh: {
+    heading: "按目标排列",
+    lede: "按你正在做的事情对已发布条目分组。条目仅作列举，不按优劣排序。",
+    goal: "目标",
+    none: "不选择 — 按来源顺序",
+    constraints: "缩小范围",
+    reset: "重置排列",
+    grouped: "已排列 {n} 项",
+    cleared: "已恢复来源顺序。",
+    noneMatch: "没有已发布条目符合该选择。",
+    goals: {
+      explore: "探索",
+      evaluate: "评估",
+      verify: "核实",
+      architecture: "架构",
+      "work-with-blueskyz": "与 BlueSkyz 合作",
+    },
+    constraintsLabels: {
+      technical: "技术",
+      trust: "信任",
+      availability: "可用性",
+    },
+    groups: {
+      "starting-points": "起点",
+      "open-questions": "待解问题",
+      "sourced-facts": "有来源的事实",
+      "stated-limits": "已声明的限制",
+      "evidence-backed": "有证据支持",
+      "trust-signals": "信任信号",
+      "product-truth": "产品事实",
+    },
+  },
+} as const;
+
+const GROUP_IDS = [
+  "starting-points",
+  "open-questions",
+  "sourced-facts",
+  "stated-limits",
+  "evidence-backed",
+  "trust-signals",
+  "product-truth",
+] as const;
+
+const atelierCopy = ATELIER_COPY[lang];
+
 const copy = COPY[lang];
 const domId = (id: string): string =>
   `room-item-${id.replace(/[^a-z0-9-]+/gi, "-")}`;
@@ -70,6 +183,9 @@ const domId = (id: string): string =>
   data-max={MAX_COMPARISON}
   data-msg-count={copy.count}
   data-msg-full={copy.full}
+  data-msg-grouped={atelierCopy.grouped}
+  data-msg-cleared={atelierCopy.cleared}
+  data-msg-none={atelierCopy.noneMatch}
   aria-labelledby="decision-room-title"
 >
   <h2 id="decision-room-title" class="decision-room__title">
@@ -77,12 +193,69 @@ const domId = (id: string): string =>
   </h2>
   <p class="decision-room__lede">{copy.lede}</p>
 
-  <div class="decision-room__items">
-    {items.map((item) => (
+  <div class="decision-room__atelier" data-atelier-controls hidden>
+    <h3 class="decision-room__atelier-title">{atelierCopy.heading}</h3>
+    <p class="decision-room__atelier-lede">{atelierCopy.lede}</p>
+    <div class="decision-room__atelier-field">
+      <label class="decision-room__atelier-label" for="atelier-goal">
+        {atelierCopy.goal}
+      </label>
+      <select
+        class="decision-room__atelier-select"
+        id="atelier-goal"
+        data-atelier-goal
+      >
+        <option value="">{atelierCopy.none}</option>
+        {ATELIER_GOALS.map((goal) => (
+          <option value={goal}>{atelierCopy.goals[goal]}</option>
+        ))}
+      </select>
+    </div>
+    <fieldset class="decision-room__atelier-field">
+      <legend class="decision-room__atelier-label">
+        {atelierCopy.constraints}
+      </legend>
+      {ATELIER_CONSTRAINTS.map((constraint) => (
+        <label class="decision-room__atelier-check">
+          <input
+            type="checkbox"
+            value={constraint}
+            data-atelier-constraint={constraint}
+          />
+          <span>{atelierCopy.constraintsLabels[constraint]}</span>
+        </label>
+      ))}
+    </fieldset>
+    <button
+      type="button"
+      class="decision-room__atelier-reset"
+      data-atelier-reset
+    >
+      {atelierCopy.reset}
+    </button>
+    <p
+      class="decision-room__atelier-status"
+      data-atelier-status
+      aria-live="polite"
+    ></p>
+  </div>
+
+  {GROUP_IDS.map((groupId) => (
+    <template data-atelier-label={groupId}>
+      {atelierCopy.groups[groupId]}
+    </template>
+  ))}
+
+  <div class="decision-room__items" data-decision-items>
+    {items.map((item, index) => (
       <article
         id={domId(item.id)}
         class="decision-room__item"
         data-decision-item={item.id}
+        data-item-kind={item.kind}
+        data-source-index={index}
+        data-has-evidence={item.evidenceHref ? "" : undefined}
+        data-has-boundary={item.boundaryText ? "" : undefined}
       >
         <span class="decision-room__kind">{KIND_LABELS[item.kind][lang]}</span>
         <h3 class="decision-room__label">{item.label[lang]}</h3>
