@@ -20,10 +20,15 @@ const mediaName = productTransitionStyle(
 
 <!doctype html>
 <html lang="vi">
-  <head><meta charset="utf-8" /><title>{data.name}</title></head>
+  <head>
+    <meta charset="utf-8" />
+    <title>{data.name}</title>
+  </head>
   <body>
     <main>
-      <h1 style={cardName} data-product-profile-title>{data.name}</h1>
+      <h1 style={cardName} data-product-profile-title>
+        {data.name}
+      </h1>
       <img
         src={data.proof.screenshot.src}
         alt={data.proof.screenshot.alt}

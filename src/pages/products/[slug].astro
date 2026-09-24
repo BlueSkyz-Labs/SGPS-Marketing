@@ -64,8 +64,9 @@ return Astro.redirect("/en/products/");
         <a
           href="/products/"
           class="inline-flex min-h-11 items-center text-sm font-semibold text-[var(--action-primary)] no-underline hover:underline"
-          >Products</a
         >
+          Products
+        </a>
         <span aria-hidden="true"> / </span>
         <span>{data.name}</span>
       </p>
@@ -85,16 +86,14 @@ return Astro.redirect("/en/products/");
       </p>
 
       <div class="mt-8 flex flex-wrap gap-3">
-        <ButtonLink href={data.primaryAction.href}
-          >{data.primaryAction.label}</ButtonLink
-        >
-        {
-          data.secondaryAction ? (
-            <ButtonLink href={data.secondaryAction.href} variant="secondary">
-              {data.secondaryAction.label}
-            </ButtonLink>
-          ) : null
-        }
+        <ButtonLink href={data.primaryAction.href}>
+          {data.primaryAction.label}
+        </ButtonLink>
+        {data.secondaryAction ? (
+          <ButtonLink href={data.secondaryAction.href} variant="secondary">
+            {data.secondaryAction.label}
+          </ButtonLink>
+        ) : null}
       </div>
 
       <section class="mt-14" aria-labelledby="profile-status">
@@ -111,11 +110,9 @@ return Astro.redirect("/en/products/");
               Platforms
             </dt>
             <dd class="mt-1 text-[var(--text-primary)]">
-              {
-                data.platforms
-                  .map((p: string) => PLATFORM_LABELS[p] ?? p)
-                  .join(", ")
-              }
+              {data.platforms
+                .map((p: string) => PLATFORM_LABELS[p] ?? p)
+                .join(", ")}
             </dd>
           </div>
           <div>
@@ -123,11 +120,9 @@ return Astro.redirect("/en/products/");
               Audience
             </dt>
             <dd class="mt-1 text-[var(--text-primary)]">
-              {
-                data.audience
-                  .map((a: string) => AUDIENCE_LABELS[a] ?? a)
-                  .join(", ")
-              }
+              {data.audience
+                .map((a: string) => AUDIENCE_LABELS[a] ?? a)
+                .join(", ")}
             </dd>
           </div>
         </dl>
@@ -138,68 +133,64 @@ return Astro.redirect("/en/products/");
           What it’s for
         </h2>
         <ul class="mt-4 list-disc space-y-2 pl-5 text-[var(--text-secondary)]">
-          {data.jobs.map((job: string) => <li>{job}</li>)}
+          {data.jobs.map((job: string) => (
+            <li>{job}</li>
+          ))}
         </ul>
       </section>
 
-      {
-        capabilities.length > 0 ? (
-          <section class="mt-14" aria-labelledby="profile-capabilities">
-            <h2
-              id="profile-capabilities"
-              class="text-xl font-semibold tracking-tight"
-            >
-              Main capabilities
-            </h2>
-            <ul class="mt-4 list-disc space-y-2 pl-5 text-[var(--text-secondary)]">
-              {capabilities.map((capability: string) => (
-                <li>{capability}</li>
-              ))}
-            </ul>
-          </section>
-        ) : null
-      }
+      {capabilities.length > 0 ? (
+        <section class="mt-14" aria-labelledby="profile-capabilities">
+          <h2
+            id="profile-capabilities"
+            class="text-xl font-semibold tracking-tight"
+          >
+            Main capabilities
+          </h2>
+          <ul class="mt-4 list-disc space-y-2 pl-5 text-[var(--text-secondary)]">
+            {capabilities.map((capability: string) => (
+              <li>{capability}</li>
+            ))}
+          </ul>
+        </section>
+      ) : null}
 
-      {
-        screenshot ? (
-          <section class="mt-14" aria-labelledby="profile-proof">
-            <h2 id="profile-proof" class="text-xl font-semibold tracking-tight">
-              Evidence
-            </h2>
-            <img
-              class="mt-4 h-auto w-full max-w-3xl rounded-[var(--radius-card)] border border-[var(--border-subtle)]"
-              src={screenshot.src}
-              alt={screenshot.alt}
-              width={screenshot.width}
-              height={screenshot.height}
-              loading="lazy"
-              decoding="async"
-            />
-          </section>
-        ) : null
-      }
+      {screenshot ? (
+        <section class="mt-14" aria-labelledby="profile-proof">
+          <h2 id="profile-proof" class="text-xl font-semibold tracking-tight">
+            Evidence
+          </h2>
+          <img
+            class="mt-4 h-auto w-full max-w-3xl rounded-[var(--radius-card)] border border-[var(--border-subtle)]"
+            src={screenshot.src}
+            alt={screenshot.alt}
+            width={screenshot.width}
+            height={screenshot.height}
+            loading="lazy"
+            decoding="async"
+          />
+        </section>
+      ) : null}
 
-      {
-        proofLinks.length > 0 ? (
-          <section class="mt-14" aria-labelledby="profile-trust">
-            <h2 id="profile-trust" class="text-xl font-semibold tracking-tight">
-              Trust paths
-            </h2>
-            <ul class="mt-4 flex flex-wrap gap-4">
-              {proofLinks.map((link) => (
-                <li>
-                  <a
-                    href={link.href}
-                    class="inline-flex min-h-11 items-center text-sm font-semibold text-[var(--action-primary)] no-underline hover:underline"
-                  >
-                    {link.label}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </section>
-        ) : null
-      }
+      {proofLinks.length > 0 ? (
+        <section class="mt-14" aria-labelledby="profile-trust">
+          <h2 id="profile-trust" class="text-xl font-semibold tracking-tight">
+            Trust paths
+          </h2>
+          <ul class="mt-4 flex flex-wrap gap-4">
+            {proofLinks.map((link) => (
+              <li>
+                <a
+                  href={link.href}
+                  class="inline-flex min-h-11 items-center text-sm font-semibold text-[var(--action-primary)] no-underline hover:underline"
+                >
+                  {link.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ) : null}
     </Container>
   </article>
 </BaseLayout>

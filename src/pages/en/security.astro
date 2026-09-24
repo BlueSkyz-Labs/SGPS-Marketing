@@ -25,20 +25,18 @@ const craftStory = getCraftStory("private-security-reporting");
         title="Report privately, responsibly"
         lede="Report security issues through a private channel. Do not open a public GitHub issue for vulnerability reports."
       />
-      {
-        SITE.securityEmail ? (
-          <p class="mt-8 max-w-2xl text-[var(--text-secondary)]">
-            Email{" "}
-            <a
-              href={`mailto:${SITE.securityEmail}`}
-              class="inline-flex min-h-11 items-center font-semibold text-[var(--action-primary)] no-underline hover:underline"
-            >
-              {SITE.securityEmail}
-            </a>
-            .
-          </p>
-        ) : null
-      }
+      {SITE.securityEmail ? (
+        <p class="mt-8 max-w-2xl text-[var(--text-secondary)]">
+          Email{" "}
+          <a
+            href={`mailto:${SITE.securityEmail}`}
+            class="inline-flex min-h-11 items-center font-semibold text-[var(--action-primary)] no-underline hover:underline"
+          >
+            {SITE.securityEmail}
+          </a>
+          .
+        </p>
+      ) : null}
       <div class="mt-10">
         <SafeAction
           href={SECURITY_ADVISORY_URL}

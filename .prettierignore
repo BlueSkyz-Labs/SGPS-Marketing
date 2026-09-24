@@ -15,3 +15,8 @@ public/brand/blueskyz/r4d/brand_tokens.json
 # Production v4 source and token projections are checksum-sensitive.
 brand/blueskyz-production-v4/
 public/brand/blueskyz/v4/tokens/
+
+# Published web manifests must stay byte-identical to their source projection.
+public/icons/site.webmanifest
+public/site.webmanifest
+public/brand/blueskyz/r4d/web/site.webmanifest

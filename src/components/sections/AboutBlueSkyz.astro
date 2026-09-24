@@ -21,21 +21,17 @@ const isZh = lang === "zh";
     {isVi ? "Về BlueSkyz" : isZh ? "关于 BlueSkyz" : "About BlueSkyz"}
   </h2>
   <p class="mt-4 max-w-2xl text-lg text-[var(--text-secondary)] text-pretty">
-    {
-      isVi
-        ? "Chúng tôi xây dựng những sản phẩm thông minh để trao quyền cho con người và nâng tầm cách công việc được thực hiện. Một góc nhìn cao hơn xây dựng một ngày mai tươi sáng hơn."
-        : isZh
-          ? "我们打造智能化产品，赋能个人并提升工作方式。更高的视角，成就更明亮的明天。"
-          : `${SITE.proposition} ${SITE.supporting}`
-    }
+    {isVi
+      ? "Chúng tôi xây dựng những sản phẩm thông minh để trao quyền cho con người và nâng tầm cách công việc được thực hiện. Một góc nhìn cao hơn xây dựng một ngày mai tươi sáng hơn."
+      : isZh
+        ? "我们打造智能化产品，赋能个人并提升工作方式。更高的视角，成就更明亮的明天。"
+        : `${SITE.proposition} ${SITE.supporting}`}
   </p>
   <p class="mt-6 text-sm font-medium text-[var(--text-muted)]">
-    {
-      isVi
-        ? "Tony Nguyen — Nhà sáng lập & Giám đốc điều hành"
-        : isZh
-          ? "Tony Nguyen — 创始人兼首席执行官"
-          : "Tony Nguyen — Founder & CEO"
-    }
+    {isVi
+      ? "Tony Nguyen — Nhà sáng lập & Giám đốc điều hành"
+      : isZh
+        ? "Tony Nguyen — 创始人兼首席执行官"
+        : "Tony Nguyen — Founder & CEO"}
   </p>
 </section>
