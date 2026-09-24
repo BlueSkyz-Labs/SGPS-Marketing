@@ -74,8 +74,7 @@ export function isPublicDestination(value: unknown): value is string {
   if (/[\\\\\u0000-\u0020\u007f]/.test(value)) return false;
 
   if (value.startsWith("/") && !value.startsWith("//")) {
-    if (value.includes("..") || /%(?:2e|2f|5c|25)/i.test(value))
-      return false;
+    if (value.includes("..") || /%(?:2e|2f|5c|25)/i.test(value)) return false;
     try {
       const parsed = new URL(value, "https://public.invalid");
       return parsed.origin === "https://public.invalid";
