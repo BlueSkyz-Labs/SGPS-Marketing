@@ -23,7 +23,11 @@ test("public destinations reject URL parser ambiguities and unsafe schemes", () 
     "javascript:alert(1)",
   ];
   for (const href of refused) {
-    assert.equal(isPublicDestination(href), false, `refuse ${JSON.stringify(href)}`);
+    assert.equal(
+      isPublicDestination(href),
+      false,
+      `refuse ${JSON.stringify(href)}`,
+    );
   }
   for (const href of [
     "/en/security/",
