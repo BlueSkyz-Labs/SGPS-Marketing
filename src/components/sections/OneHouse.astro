@@ -36,37 +36,29 @@ const concepts = isVi
       id="house-title"
       class="c4-type-section font-semibold tracking-tight text-balance"
     >
-      {
-        isVi
-          ? "Một nhà — một cách suy nghĩ"
-          : isZh
-            ? "一个团队 — 一种思维方式"
-            : "One house — a way of thinking"
-      }
+      {isVi
+        ? "Một nhà — một cách suy nghĩ"
+        : isZh
+          ? "一个团队 — 一种思维方式"
+          : "One house — a way of thinking"}
     </h2>
-    <p
-      class="c4-type-reading mt-4 max-w-2xl text-[var(--text-secondary)] text-pretty"
-    >
-      {
-        isVi
-          ? "Chúng tôi không xây dựng xung quanh một danh mục. Chúng tôi xây dựng xung quanh một cách suy nghĩ."
-          : isZh
-            ? "我们不围绕单一品类构建。我们围绕一种思维方式构建。"
-            : "We don’t build around one category. We build around a way of thinking."
-      }
+    <p class="c4-type-reading mt-4 max-w-2xl text-[var(--text-secondary)] text-pretty">
+      {isVi
+        ? "Chúng tôi không xây dựng xung quanh một danh mục. Chúng tôi xây dựng xung quanh một cách suy nghĩ."
+        : isZh
+          ? "我们不围绕单一品类构建。我们围绕一种思维方式构建。"
+          : "We don’t build around one category. We build around a way of thinking."}
     </p>
   </div>
 
   <ol class="c2-one-house__concepts c4-focal-span">
-    {
-      concepts.map((concept, index) => (
-        <li class="c2-one-house__concept" data-one-house-concept>
-          <span class="c2-one-house__index" aria-hidden="true">
-            {String(index + 1).padStart(2, "0")}
-          </span>
-          <h3 class="c2-one-house__concept-title">{concept}</h3>
-        </li>
-      ))
-    }
+    {concepts.map((concept, index) => (
+      <li class="c2-one-house__concept" data-one-house-concept>
+        <span class="c2-one-house__index" aria-hidden="true">
+          {String(index + 1).padStart(2, "0")}
+        </span>
+        <h3 class="c2-one-house__concept-title">{concept}</h3>
+      </li>
+    ))}
   </ol>
 </section>

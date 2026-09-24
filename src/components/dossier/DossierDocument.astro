@@ -103,42 +103,40 @@ const bySection = (section: (typeof SECTION_ORDER)[number]): DossierEntry[] =>
     </dl>
   </header>
 
-  {
-    SECTION_ORDER.map((section) => (
-      <section
-        class="c4-dossier-document__section"
-        data-dossier-document-section={section}
-      >
-        <h2 class="c4-dossier-document__heading">
-          {SECTION_LABELS[lang][section]}
-        </h2>
-        <ul class="c4-dossier-document__list">
-          {bySection(section).map((entry) => (
-            <li
-              class="c4-dossier-document__item"
-              data-dossier-document-item={entry.id}
-            >
-              <p class="c4-dossier-document__label">{entry.label}</p>
-              {entry.detail && (
-                <p class="c4-dossier-document__detail">{entry.detail}</p>
-              )}
-              {entry.href && (
-                <a class="c4-dossier-document__link" href={entry.href}>
-                  {entry.href}
-                </a>
-              )}
-              {entry.freshness && (
-                <p class="c4-dossier-document__freshness">
-                  {labels.reviewed}:{" "}
-                  <time datetime={entry.freshness}>{entry.freshness}</time>
-                </p>
-              )}
-            </li>
-          ))}
-        </ul>
-      </section>
-    ))
-  }
+  {SECTION_ORDER.map((section) => (
+    <section
+      class="c4-dossier-document__section"
+      data-dossier-document-section={section}
+    >
+      <h2 class="c4-dossier-document__heading">
+        {SECTION_LABELS[lang][section]}
+      </h2>
+      <ul class="c4-dossier-document__list">
+        {bySection(section).map((entry) => (
+          <li
+            class="c4-dossier-document__item"
+            data-dossier-document-item={entry.id}
+          >
+            <p class="c4-dossier-document__label">{entry.label}</p>
+            {entry.detail && (
+              <p class="c4-dossier-document__detail">{entry.detail}</p>
+            )}
+            {entry.href && (
+              <a class="c4-dossier-document__link" href={entry.href}>
+                {entry.href}
+              </a>
+            )}
+            {entry.freshness && (
+              <p class="c4-dossier-document__freshness">
+                {labels.reviewed}:{" "}
+                <time datetime={entry.freshness}>{entry.freshness}</time>
+              </p>
+            )}
+          </li>
+        ))}
+      </ul>
+    </section>
+  ))}
 
   <div class="c4-dossier-document__footer">
     <p class="c4-dossier-document__unknown">{labels.unknown}</p>

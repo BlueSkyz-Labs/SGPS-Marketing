@@ -18,21 +18,19 @@ const sections = getMaisonSections(lang);
 const heading = lang === "vi" ? "Mục lục ngôi nhà" : "House index";
 ---
 
-{
-  sections.length > 0 && (
-    <nav class="c4-maison" aria-label={heading} data-maison-index>
-      <ol class="c4-maison__list">
-        {sections.map((section, index) => (
-          <li class="c4-maison__item" data-maison-section={section.id}>
-            <span class="c4-maison__ordinal" aria-hidden="true">
-              {String(index + 1).padStart(2, "0")}
-            </span>
-            <a class="c4-maison__link" href={section.href}>
-              {section.label}
-            </a>
-          </li>
-        ))}
-      </ol>
-    </nav>
-  )
-}
+{sections.length > 0 && (
+  <nav class="c4-maison" aria-label={heading} data-maison-index>
+    <ol class="c4-maison__list">
+      {sections.map((section, index) => (
+        <li class="c4-maison__item" data-maison-section={section.id}>
+          <span class="c4-maison__ordinal" aria-hidden="true">
+            {String(index + 1).padStart(2, "0")}
+          </span>
+          <a class="c4-maison__link" href={section.href}>
+            {section.label}
+          </a>
+        </li>
+      ))}
+    </ol>
+  </nav>
+)}

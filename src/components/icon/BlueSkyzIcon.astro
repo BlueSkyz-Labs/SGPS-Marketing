@@ -43,5 +43,7 @@ const decorative = !label;
   focusable="false"
 >
   {decorative ? null : <title>{label}</title>}
-  {icon.paths.map((d) => <path d={d} />)}
+  {icon.paths.map((d) => (
+    <path d={d} />
+  ))}
 </svg>
