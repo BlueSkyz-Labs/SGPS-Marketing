@@ -42,35 +42,35 @@
 962|const productSchema = z
 963| .object({
 964| slug: z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)_$/),
-965|    name: z.string().min(1),
-966|    shortDescription: z.string().min(1).max(180),
-967|    lifecycle,
-968|    availability,
-969|    publicLabel,
-970|    audience: z.array(audience).min(1),
-971|    jobs: z.array(z.string().min(1)).min(1),
-972|    platforms: z.array(platform).min(1),
-973|    primaryAction: action,
-974|    secondaryAction: action.optional(),
-975|    proof: z
-976|      .object({
-977|        screenshot: z.string().optional(),
-978|        publicUrl: httpsUrl.optional(),
-979|        repositoryUrl: httpsUrl.optional(),
-980|        documentationUrl: httpsUrl.optional(),
-981|        privacyUrl: httpsUrl.optional(),
-982|        securityUrl: httpsUrl.optional(),
-983|        supportUrl: httpsUrl.optional(),
-984|      })
-985|      .refine(
-986|        (v) => Object.values(v).some(Boolean),
-987|        "public product requires at least one proof artifact",
-988|      ),
-989|    endorsement: z.literal("A BlueSkyz Labs product"),
-990|    featuredTier: z.enum(["hero", "featured", "ecosystem", "hidden"]),
-991|    displayOrder: z.number().int().nonnegative(),
-992|    public: z.boolean(),
-993|    sourceRevision: z.string().regex(/^[0-9a-f]{7,40}$/),
+965| name: z.string().min(1),
+966| shortDescription: z.string().min(1).max(180),
+967| lifecycle,
+968| availability,
+969| publicLabel,
+970| audience: z.array(audience).min(1),
+971| jobs: z.array(z.string().min(1)).min(1),
+972| platforms: z.array(platform).min(1),
+973| primaryAction: action,
+974| secondaryAction: action.optional(),
+975| proof: z
+976| .object({
+977| screenshot: z.string().optional(),
+978| publicUrl: httpsUrl.optional(),
+979| repositoryUrl: httpsUrl.optional(),
+980| documentationUrl: httpsUrl.optional(),
+981| privacyUrl: httpsUrl.optional(),
+982| securityUrl: httpsUrl.optional(),
+983| supportUrl: httpsUrl.optional(),
+984| })
+985| .refine(
+986| (v) => Object.values(v).some(Boolean),
+987| "public product requires at least one proof artifact",
+988| ),
+989| endorsement: z.literal("A BlueSkyz Labs product"),
+990| featuredTier: z.enum(["hero", "featured", "ecosystem", "hidden"]),
+991| displayOrder: z.number().int().nonnegative(),
+992| public: z.boolean(),
+993| sourceRevision: z.string().regex(/^[0-9a-f]{7,40}$/),
 994| lastReviewedAt: z.coerce.date(),
 995| })
 996| .superRefine((v, ctx) => {
