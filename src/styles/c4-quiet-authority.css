@@ -654,6 +654,8 @@
 /* ---- C4-E G3 — decision atelier controls ---- */
 .decision-room__atelier {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  min-inline-size: 0;
   gap: var(--space-3);
   margin-block: var(--space-6);
 }
@@ -671,6 +673,8 @@
 .decision-room__atelier-field {
   display: flex;
   flex-wrap: wrap;
+  min-inline-size: 0;
+  max-inline-size: 100%;
   gap: var(--space-3);
   margin: 0;
   padding: 0;
@@ -686,6 +690,13 @@
   display: inline-flex;
   align-items: center;
   min-height: 44px;
+}
+/* Native select intrinsic option width must not dictate the page width at 200% zoom. */
+.decision-room__atelier-select {
+  box-sizing: border-box;
+  inline-size: min(100%, 20rem);
+  min-inline-size: 0;
+  max-inline-size: 100%;
 }
 .decision-room__atelier-check {
   gap: var(--space-2);
