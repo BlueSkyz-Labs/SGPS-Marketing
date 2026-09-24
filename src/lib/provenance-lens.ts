@@ -131,6 +131,44 @@ function resolveEvidence(
 }
 
 /**
+ * A safe, canonical same-site public path, or `null` when the destination is
+ * not one. Scheme-relative (`//host/...`), absolute (`https://...`) and
+ * traversal destinations are deliberately excluded: they are somebody else's
+ * URL or an unsafe one, and must never be read as this site's own surface.
+ */
+function normalizeOwnPath(href: string): string | null {
+  if (
+    typeof href !== "string" ||
+    !href.startsWith("/") ||
+    href.startsWith("//")
+  ) {
+    return null;
+  }
+  const path = href.split("#")[0]?.split("?")[0] ?? "";
+  if (!path.startsWith("/") || path.includes("..") || path.length === 0) {
+    return null;
+  }
+  return path;
+}
+
+/**
+ * The canonical served routes of a claim's own surface, derived from the
+ * existing route/evidence mapping (`ev-<surface>-route`) in every published
+ * locale. This is deliberately a lookup, not a new route registry: claims
+ * carry logical surface ids and never hrefs.
+ */
+function ownSurfaceRoutes(surface: string): Set<string> {
+  const routes = new Set<string>();
+  const evidence = EVIDENCE_INDEX.get(`ev-${surface}-route`);
+  if (!evidence) return routes;
+  for (const href of [evidence.href.en, evidence.href.vi, evidence.href.zh]) {
+    const path = normalizeOwnPath(href);
+    if (path) routes.add(path);
+  }
+  return routes;
+}
+
+/**
  * A chain is only credible when at least one source is not the subject itself.
  * Exported so the refusal rule is directly testable with synthetic inputs.
  */
@@ -140,7 +178,24 @@ export function isSelfOnlyChain(
 ): boolean {
   if (refs.length === 0) return false;
   if (typeof surface !== "string" || surface.length === 0) return false;
-  return refs.every((ref) => ref.href === surface);
+
+  // Every reference must first be a same-site path. One external or unsafe
+  // destination anywhere in the chain means the chain is not self-only —
+  // whether that destination later survives other validation is a different
+  // question this guard does not answer.
+  const paths: string[] = [];
+  for (const ref of refs) {
+    const path = normalizeOwnPath(ref.href);
+    if (path === null) return false;
+    paths.push(path);
+  }
+
+  const own = ownSurfaceRoutes(surface);
+  // Fail closed: when the surface has no route to compare against, a chain
+  // made entirely of this site's own paths cannot demonstrate independence.
+  if (own.size === 0) return true;
+
+  return paths.every((path) => own.has(path));
 }
 
 export function getPublicProvenance(
