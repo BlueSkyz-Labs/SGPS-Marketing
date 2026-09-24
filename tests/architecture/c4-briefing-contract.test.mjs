@@ -18,16 +18,21 @@ const SOURCE = readFileSync(
 
 /** A claim the product really publishes, proven composable before it is used. */
 function publishedClaimIds(limit = 3) {
-  const ids = CLAIMS.map((claim) => claim.id).slice(0, limit);
-  for (const id of ids) {
+  // Claims whose provenance the lens refuses (self-only chains) are not
+  // published claims, so they are not eligible fixtures here; the refusal
+  // itself is asserted separately below.
+  const ids = CLAIMS.map((claim) => claim.id).filter((id) => {
     const provenance = getPublicProvenance(id, "en");
-    assert.ok(
-      provenance !== null,
-      `${id} must resolve to published provenance`,
-    );
-    assert.equal(provenance.unknown, false);
-  }
-  return ids;
+    return provenance !== null && provenance.unknown === false;
+  });
+  // A floor, not a quota: the site must always have at least two published
+  // claims worth composing, while how many the fabric currently declares is a
+  // published-claims fact this helper reports rather than invents.
+  assert.ok(
+    ids.length >= 2,
+    `expected at least two published claims, found ${ids.length}`,
+  );
+  return ids.slice(0, Math.min(limit, ids.length));
 }
 
 test("an empty selection produces no sections and invents nothing", () => {
@@ -243,4 +248,42 @@ test("the briefing does not restate the dossier: it composes the shared authorit
     dossier.entries.map((entry) => entry.id),
     "the briefing follows the same canonical order as the dossier",
   );
+});
+
+test("#239 a claim the lens refuses never masquerades as proof downstream", () => {
+  const refused = CLAIMS.find(
+    (claim) => getPublicProvenance(claim.id, "en")?.unknown === true,
+  );
+  assert.ok(refused, "at least one self-only claim must be refused");
+
+  // Briefing: the refused claim produces no section and is reported, never dropped.
+  const briefing = compilePublicBriefing(
+    { purpose: "trust", claimIds: [refused.id] },
+    "en",
+  );
+  assert.equal(briefing.sections.length, 0, "a refused claim must not compose");
+  assert.equal(
+    briefing.complete,
+    false,
+    "the briefing must report incompleteness",
+  );
+  assert.ok(
+    briefing.missing.some(
+      (entry) => entry.id === refused.id && entry.reason === "not-public",
+    ),
+    "the refusal must be reported as missing, not silently dropped",
+  );
+
+  // Dossier: the statement may remain a bounded statement, but it carries no
+  // sources — turning this into a rejection would be a published-claims
+  // decision that belongs to the owner, not to this guard fix.
+  const dossier = compilePublicDossier({ lang: "en", claimIds: [refused.id] });
+  const entry = dossier.entries.find((item) => item.id === refused.id);
+  if (entry) {
+    assert.equal(
+      entry.evidenceIds.length,
+      0,
+      "a refused claim must publish no sources",
+    );
+  }
 });

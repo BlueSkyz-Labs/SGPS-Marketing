@@ -177,3 +177,115 @@ test("the lens is deterministic and rejects a malformed language", () => {
   const fallback = getPublicProvenance(CLAIM, "fr");
   assert.equal(fallback.statement, getPublicProvenance(CLAIM, "en").statement);
 });
+
+// ---------------------------------------------------------------------------
+// Issue #239 — the guard compared a logical surface id with a localized URL.
+// These fixtures keep the canonical surface id UNCHANGED and use the actual
+// per-language hrefs, so a pass means the identity mismatch is really closed.
+// ---------------------------------------------------------------------------
+
+const SELF_ONLY = "registry-publishes-only-proven-products";
+const ref = (href, id = "ev-products-route", kind = "route") => ({
+  id,
+  kind,
+  href,
+  label: { en: id, vi: id, zh: id },
+});
+
+test("#239 a claim whose only source is its own surface is refused in EN/VI/zh", () => {
+  const claim = CLAIMS.find((entry) => entry.id === SELF_ONLY);
+  assert.ok(claim, "the candidate claim must exist");
+  assert.equal(
+    claim.surface,
+    "products",
+    "the surface id stays a logical id — the test must not mutate it into a URL",
+  );
+  for (const lang of LANGS) {
+    const provenance = getPublicProvenance(SELF_ONLY, lang);
+    assert.ok(provenance, `${lang} must refuse deterministically`);
+    assert.equal(
+      provenance.unknown,
+      true,
+      `${lang} must mark the chain unknown`,
+    );
+    assert.equal(
+      provenance.sourceRefs.length,
+      0,
+      `${lang} must publish no source for a self-only chain`,
+    );
+  }
+});
+
+test("#239 locale mismatch: another locale of the same surface is still self", () => {
+  const claim = CLAIMS.find((entry) => entry.id === SELF_ONLY);
+  const canonical = EVIDENCE_INDEX.get("ev-products-route");
+  for (const lang of LANGS) {
+    const href = canonical.href[lang];
+    assert.ok(href?.startsWith("/"), `${lang} route evidence must resolve`);
+    assert.equal(
+      isSelfOnlyChain([ref(href)], claim.surface),
+      true,
+      `${lang} href ${href} must count as the claim's own surface`,
+    );
+  }
+  // an English claim citing the Vietnamese URL of its own surface
+  assert.equal(
+    isSelfOnlyChain([ref(canonical.href.vi)], claim.surface),
+    true,
+    "a locale sibling of the own surface is not independent",
+  );
+});
+
+test("#239 query and fragment are normalized away before comparing", () => {
+  const claim = CLAIMS.find((entry) => entry.id === SELF_ONLY);
+  for (const suffix of ["?utm=1", "#section", "?a=b#c"]) {
+    assert.equal(
+      isSelfOnlyChain([ref(`/en/products/${suffix}`)], claim.surface),
+      true,
+      `${suffix} must normalize back to the own surface`,
+    );
+  }
+});
+
+test("#239 external and unsafe destinations are never treated as self", () => {
+  const claim = CLAIMS.find((entry) => entry.id === SELF_ONLY);
+  for (const href of [
+    "https://independent.example/report",
+    "http://independent.example/report",
+    "//independent.example/report",
+    "/en/products/../../../etc/passwd",
+  ]) {
+    assert.equal(
+      isSelfOnlyChain([ref(href)], claim.surface),
+      false,
+      `${href} must not be mistaken for the own surface`,
+    );
+  }
+});
+
+test("#239 a missing route mapping fails closed instead of opening the guard", () => {
+  const refs = [ref("/en/nowhere/", "ev-nowhere-route")];
+  assert.equal(
+    isSelfOnlyChain(refs, "nowhere-surface"),
+    true,
+    "with no canonical route to compare against, route-only refs stay self",
+  );
+  assert.equal(
+    isSelfOnlyChain(refs, undefined),
+    false,
+    "an absent surface cannot claim self-identity",
+  );
+});
+
+test("#239 one genuinely independent source keeps the chain publishable", () => {
+  const claim = CLAIMS.find((entry) => entry.id === SELF_ONLY);
+  const chain = [
+    ref("/en/products/"),
+    ref("https://independent.example/report", "ev-independent", "artifact"),
+  ];
+  assert.equal(
+    isSelfOnlyChain(chain, claim.surface),
+    false,
+    "an independent artifact must break self-only",
+  );
+});
