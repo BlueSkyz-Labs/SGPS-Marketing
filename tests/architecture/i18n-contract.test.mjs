@@ -33,6 +33,17 @@ test("stripLanguagePrefix removes prefix", () => {
   assert.equal(stripLanguagePrefix("/zh/about/"), "/about/");
 });
 
+test("locale prefixes must end at a path-segment boundary", () => {
+  // A longer name or an unlaunched script must not be mistaken for a live locale.
+  for (const path of ["/english/", "/village/", "/zh-Hant/", "/zh-Hans/", "/enigma/"]) {
+    assert.equal(stripLanguagePrefix(path), path, path);
+    assert.equal(getLanguageFromPath(path), "en", path);
+    assert.equal(getAlternatePath(path, "vi"), `/vi${path}`, path);
+  }
+  assert.equal(stripLanguagePrefix("/en"), "/");
+  assert.equal(getAlternatePath("/en", "zh"), "/zh/");
+});
+
 test("SUPPORTED_LANGUAGES and LANGUAGES are consistent", () => {
   assert.deepEqual(SUPPORTED_LANGUAGES, ["en", "vi", "zh"]);
   assert.equal(LANGUAGES.en.hreflang, "en");
