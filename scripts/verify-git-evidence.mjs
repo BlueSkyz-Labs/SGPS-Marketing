@@ -29,12 +29,15 @@ export const STATUS = {
 
 export const DEFAULT_MODEL_PATH = "architecture/sgps-model.json";
 
-const GIT_ENV = {
-  ...process.env,
+const GIT_ENV = { ...process.env };
+for (const key of ["GIT_DIR", "GIT_WORK_TREE", "GIT_INDEX_FILE", "GIT_COMMON_DIR"]) {
+  delete GIT_ENV[key];
+}
+Object.assign(GIT_ENV, {
   GIT_TERMINAL_PROMPT: "0",
   GIT_OPTIONAL_LOCKS: "0",
   GIT_PAGER: "cat",
-};
+});
 
 /** Run git with an argv array. Returns { ok, stdout, status }. No shell. */
 function runGit(args, cwd) {
