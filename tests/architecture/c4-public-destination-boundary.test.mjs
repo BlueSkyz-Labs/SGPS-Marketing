@@ -49,7 +49,10 @@ test("a malformed canonical destination is not published as a source", () => {
     assert.equal(getPublicProvenance(reference.id, "en"), null);
     const chain = getPublicProvenance("security-reporting-is-private", "en");
     assert.ok(chain);
-    assert.equal(chain.sourceRefs.some((ref) => ref.href === malformed), false);
+    assert.equal(
+      chain.sourceRefs.some((ref) => ref.href === malformed),
+      false,
+    );
     assert.equal(
       chain.sourceRefs.some((ref) => ref.id === reference.id),
       false,
