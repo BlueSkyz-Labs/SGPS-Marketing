@@ -253,43 +253,43 @@
       "id": "dev-deps-234",
       "name": "Dev-deps bump — 5 updates (#234) 8b067e4",
       "status": "MERGED",
-      "evidence": "docs/evidence/2026-09-24-convergence-wave-readback.md (verified via #257)"
+      "evidence": "docs/evidence/2026-09-24-current-work-router-readback.md"
     },
     {
       "id": "dev-prettier-235",
       "name": "Prettier plugin astro 1.0.1 (#235) 8aa3202",
       "status": "MERGED",
-      "evidence": "git log 8aa3202"
+      "evidence": "docs/evidence/2026-09-24-current-work-router-readback.md"
     },
     {
       "id": "evidence-257",
       "name": "2026-09-24 convergence wave read-back (#257) 82e6b5a",
       "status": "MERGED",
-      "evidence": "docs/evidence/2026-09-24-convergence-wave-readback.md"
+      "evidence": "docs/evidence/2026-09-24-current-work-router-readback.md"
     },
     {
       "id": "evidence-256",
       "name": "Gate surface / M01-M08 modernization baseline (#256) 2d2b84c",
       "status": "MERGED",
-      "evidence": "docs/evidence/2026-09-24-convergence-wave-readback.md"
+      "evidence": "docs/evidence/2026-09-24-current-work-router-readback.md"
     },
     {
       "id": "tonydemo-decomm-253",
       "name": "Tonydemo decommission evidence (#253) cef3f19",
       "status": "MERGED",
-      "evidence": "docs/evidence/2026-09-24-tonydemo-decommission.md"
+      "evidence": "docs/evidence/2026-09-24-current-work-router-readback.md"
     },
     {
       "id": "provenance-258",
       "name": "Re-land provenance change + withdrawn guard (#258 / #248) f9c6165",
       "status": "MERGED",
-      "evidence": "src/lib/dossier.ts (guard present)"
+      "evidence": "docs/evidence/2026-09-24-current-work-router-readback.md"
     },
     {
       "id": "atelier-229",
       "name": "C4-E Decision Atelier Task 3 (#229) 32c6a7c",
       "status": "MERGED",
-      "evidence": "docs/evidence/2026-09-24-atelier-task3.md"
+      "evidence": "docs/evidence/2026-09-24-current-work-router-readback.md"
     }
   ],
   "openOwnerDecisions": [
