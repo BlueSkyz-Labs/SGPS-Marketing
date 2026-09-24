@@ -21,53 +21,51 @@ const profileLabel = labelFor(SHARED_LABELS.viewProfile, lang);
 const captionLabel = labelFor(SHARED_LABELS.proofCaption, lang);
 ---
 
-{
-  screenshot ? (
-    <section
-      class="border-b border-[var(--border-subtle)] py-16"
-      aria-labelledby="flagship-proof-title"
-      data-flagship-proof
-    >
-      <div class="grid gap-10 lg:grid-cols-2 lg:items-center">
-        <div>
-          <ProductStatus label={data.publicLabel} />
-          <h2
-            id="flagship-proof-title"
-            class="mt-4 text-3xl font-semibold tracking-tight"
-          >
-            {data.name}
-          </h2>
-          <p class="mt-4 text-lg text-[var(--text-secondary)]">
-            {data.shortDescription}
-          </p>
-          <ul class="mt-6 list-disc space-y-2 pl-5 text-[var(--text-secondary)]">
-            {capabilities.slice(0, 3).map((capability: string) => (
-              <li>{capability}</li>
-            ))}
-          </ul>
-          <div class="mt-6" data-flagship-evidence>
-            <EvidenceDetails
-              summary={data.endorsement}
-              evidence={[
-                { label: `${profileLabel} — ${data.name}`, href: profileHref },
-                { label: captionLabel, href: screenshot.src },
-              ]}
-              lang={lang}
-            />
-          </div>
-          <div class="mt-8 flex flex-wrap gap-3">
-            <ButtonLink href={data.primaryAction.href}>
-              {data.primaryAction.label}
-            </ButtonLink>
-            <ButtonLink href={profileHref} variant="secondary">
-              {profileLabel}
-            </ButtonLink>
-          </div>
+{screenshot ? (
+  <section
+    class="border-b border-[var(--border-subtle)] py-16"
+    aria-labelledby="flagship-proof-title"
+    data-flagship-proof
+  >
+    <div class="grid gap-10 lg:grid-cols-2 lg:items-center">
+      <div>
+        <ProductStatus label={data.publicLabel} />
+        <h2
+          id="flagship-proof-title"
+          class="mt-4 text-3xl font-semibold tracking-tight"
+        >
+          {data.name}
+        </h2>
+        <p class="mt-4 text-lg text-[var(--text-secondary)]">
+          {data.shortDescription}
+        </p>
+        <ul class="mt-6 list-disc space-y-2 pl-5 text-[var(--text-secondary)]">
+          {capabilities.slice(0, 3).map((capability: string) => (
+            <li>{capability}</li>
+          ))}
+        </ul>
+        <div class="mt-6" data-flagship-evidence>
+          <EvidenceDetails
+            summary={data.endorsement}
+            evidence={[
+              { label: `${profileLabel} — ${data.name}`, href: profileHref },
+              { label: captionLabel, href: screenshot.src },
+            ]}
+            lang={lang}
+          />
         </div>
-        <figure class="m-0">
-          <ProductVisual screenshot={screenshot} />
-        </figure>
+        <div class="mt-8 flex flex-wrap gap-3">
+          <ButtonLink href={data.primaryAction.href}>
+            {data.primaryAction.label}
+          </ButtonLink>
+          <ButtonLink href={profileHref} variant="secondary">
+            {profileLabel}
+          </ButtonLink>
+        </div>
       </div>
-    </section>
-  ) : null
-}
+      <figure class="m-0">
+        <ProductVisual screenshot={screenshot} />
+      </figure>
+    </div>
+  </section>
+) : null}

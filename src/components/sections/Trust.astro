@@ -20,22 +20,18 @@ const isZh = lang === "zh";
     id="trust-title"
     class="text-3xl font-semibold tracking-tight text-balance sm:text-4xl"
   >
-    {
-      isVi
-        ? "Tin cậy bạn có thể xác minh"
-        : isZh
-          ? "您可以核实的信任"
-          : "Trust you can verify"
-    }
+    {isVi
+      ? "Tin cậy bạn có thể xác minh"
+      : isZh
+        ? "您可以核实的信任"
+        : "Trust you can verify"}
   </h2>
   <p class="mt-4 max-w-2xl text-lg text-[var(--text-secondary)] text-pretty">
-    {
-      isVi
-        ? "Đường dẫn đến quyền riêng tư, bảo mật và hỗ trợ là những tuyến đường hạng nhất — không phải khẩu hiệu."
-        : isZh
-          ? "隐私、安全与支持均为正式通道 — 而非口号。"
-          : "Privacy, security, and support paths are first-class routes — not slogans."
-    }
+    {isVi
+      ? "Đường dẫn đến quyền riêng tư, bảo mật và hỗ trợ là những tuyến đường hạng nhất — không phải khẩu hiệu."
+      : isZh
+        ? "隐私、安全与支持均为正式通道 — 而非口号。"
+        : "Privacy, security, and support paths are first-class routes — not slogans."}
   </p>
   <TrustLedger lang={lang} />
   <EvidenceTeaser lang={lang} />

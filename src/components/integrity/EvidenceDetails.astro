@@ -55,39 +55,33 @@ const labels = LABELS[lang];
   <details class="evidence-details__more">
     <summary>{labels.more}</summary>
     <ul class="evidence-details__list">
-      {
-        evidence.map((item) => (
-          <li>
-            <a
-              href={item.href}
-              rel={
-                /^https?:\/\//i.test(item.href)
-                  ? "noopener noreferrer"
-                  : undefined
-              }
-              class="inline-flex min-h-11 items-center text-sm font-semibold text-[var(--action-primary)] no-underline hover:underline"
-            >
-              {item.label}
-            </a>
-          </li>
-        ))
-      }
+      {evidence.map((item) => (
+        <li>
+          <a
+            href={item.href}
+            rel={
+              /^https?:\/\//i.test(item.href)
+                ? "noopener noreferrer"
+                : undefined
+            }
+            class="inline-flex min-h-11 items-center text-sm font-semibold text-[var(--action-primary)] no-underline hover:underline"
+          >
+            {item.label}
+          </a>
+        </li>
+      ))}
     </ul>
-    {
-      review ? (
-        <p class="evidence-details__review" data-evidence-review>
-          {labels.reviewed}:{" "}
-          <time datetime={review.reviewedOn}>{review.reviewedOn}</time> —{" "}
-          {labels.sources[review.source]}
-        </p>
-      ) : null
-    }
-    {
-      boundary ? (
-        <p class="evidence-details__boundary" data-evidence-boundary>
-          {boundary.doesNotImply[lang]}
-        </p>
-      ) : null
-    }
+    {review ? (
+      <p class="evidence-details__review" data-evidence-review>
+        {labels.reviewed}:{" "}
+        <time datetime={review.reviewedOn}>{review.reviewedOn}</time> —{" "}
+        {labels.sources[review.source]}
+      </p>
+    ) : null}
+    {boundary ? (
+      <p class="evidence-details__boundary" data-evidence-boundary>
+        {boundary.doesNotImply[lang]}
+      </p>
+    ) : null}
   </details>
 </div>

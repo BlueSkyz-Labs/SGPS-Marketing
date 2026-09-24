@@ -38,12 +38,17 @@ const states = [
 
 <!doctype html>
 <html lang="en">
-  <head><meta charset="utf-8" /><title>Parity fixture EN</title></head>
+  <head>
+    <meta charset="utf-8" />
+    <title>Parity fixture EN</title>
+  </head>
   <body>
     <FeaturedProducts products={[product]} lang="en" />
     <FlagshipProof product={product} lang="en" />
     <section data-truth-states>
-      {states.map((state) => <TruthState state={state} lang="en" />)}
+      {states.map((state) => (
+        <TruthState state={state} lang="en" />
+      ))}
     </section>
   </body>
 </html>

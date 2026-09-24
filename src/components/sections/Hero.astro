@@ -68,40 +68,34 @@ const emptySecondary = emptyRegistrySecondaryCta(SITE.contactEmail, lang);
         class="hero-headline mt-8 max-w-[11ch] text-4xl font-semibold tracking-tight text-[var(--brand-porcelain)] sm:text-5xl lg:text-7xl"
       >
         <span class="block">{taglineLead}</span>
-        <span class="mt-1 block text-[var(--brand-cobalt)]"
-          >{taglineAccent}</span
-        >
+        <span class="mt-1 block text-[var(--brand-cobalt)]">
+          {taglineAccent}
+        </span>
       </h1>
-      <p
-        class="hero-tagline mt-5 max-w-xl text-lg leading-relaxed text-[color-mix(in_srgb,var(--brand-porcelain)_82%,transparent)]"
-      >
+      <p class="hero-tagline mt-5 max-w-xl text-lg leading-relaxed text-[color-mix(in_srgb,var(--brand-porcelain)_82%,transparent)]">
         {proposition}
       </p>
-      <p
-        class="hero-supporting mt-3 max-w-xl text-sm leading-relaxed text-[color-mix(in_srgb,var(--brand-porcelain)_68%,transparent)]"
-      >
+      <p class="hero-supporting mt-3 max-w-xl text-sm leading-relaxed text-[color-mix(in_srgb,var(--brand-porcelain)_68%,transparent)]">
         {supporting}
       </p>
       <div class="hero-actions">
-        {
-          hasPublicProducts ? (
-            <>
-              <ButtonLink href={productsHref}>{exploreProducts}</ButtonLink>
-              <ButtonLink href={aboutHref} variant="on-ink">
-                {aboutBlueSkyz}
-              </ButtonLink>
-            </>
-          ) : (
-            <>
-              <ButtonLink href={emptyPrimary.href}>
-                {emptyPrimary.label}
-              </ButtonLink>
-              <ButtonLink href={emptySecondary.href} variant="on-ink">
-                {emptySecondary.label}
-              </ButtonLink>
-            </>
-          )
-        }
+        {hasPublicProducts ? (
+          <>
+            <ButtonLink href={productsHref}>{exploreProducts}</ButtonLink>
+            <ButtonLink href={aboutHref} variant="on-ink">
+              {aboutBlueSkyz}
+            </ButtonLink>
+          </>
+        ) : (
+          <>
+            <ButtonLink href={emptyPrimary.href}>
+              {emptyPrimary.label}
+            </ButtonLink>
+            <ButtonLink href={emptySecondary.href} variant="on-ink">
+              {emptySecondary.label}
+            </ButtonLink>
+          </>
+        )}
       </div>
     </div>
     <div class="hero-visual" aria-hidden="true">

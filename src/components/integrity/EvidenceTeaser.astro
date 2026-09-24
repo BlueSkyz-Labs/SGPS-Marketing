@@ -63,67 +63,65 @@ const LABELS = {
 const labels = LABELS[lang];
 ---
 
-{
-  teasers.length > 0 ? (
-    <div class="evidence-teaser" data-evidence-teaser>
-      <ul class="evidence-teaser__list">
-        {teasers.map((passport) => (
-          <li
-            class="evidence-teaser__item"
-            data-evidence-teaser-item
-            data-claim-id={passport.id}
-          >
-            <h3 class="evidence-teaser__claim" id={getClaimAnchor(passport.id)}>
-              {passport.claim[lang]}
-            </h3>
-            <details class="evidence-teaser__more">
-              <summary class="evidence-teaser__summary">{labels.more}</summary>
-              <div class="evidence-teaser__reveal">
-                <p class="evidence-teaser__state">
-                  <TruthState state={passport.state} lang={lang} />
+{teasers.length > 0 ? (
+  <div class="evidence-teaser" data-evidence-teaser>
+    <ul class="evidence-teaser__list">
+      {teasers.map((passport) => (
+        <li
+          class="evidence-teaser__item"
+          data-evidence-teaser-item
+          data-claim-id={passport.id}
+        >
+          <h3 class="evidence-teaser__claim" id={getClaimAnchor(passport.id)}>
+            {passport.claim[lang]}
+          </h3>
+          <details class="evidence-teaser__more">
+            <summary class="evidence-teaser__summary">{labels.more}</summary>
+            <div class="evidence-teaser__reveal">
+              <p class="evidence-teaser__state">
+                <TruthState state={passport.state} lang={lang} />
+              </p>
+              {passport.boundary ? (
+                <p
+                  class="evidence-teaser__boundary"
+                  data-evidence-teaser-boundary
+                >
+                  {passport.boundary.doesNotImply[lang]}
                 </p>
-                {passport.boundary ? (
-                  <p
-                    class="evidence-teaser__boundary"
-                    data-evidence-teaser-boundary
-                  >
-                    {passport.boundary.doesNotImply[lang]}
-                  </p>
-                ) : null}
-                <ul class="evidence-teaser__sources">
-                  {passport.evidence.map((ref) => (
-                    <li>
-                      <a
-                        href={ref.href[lang]}
-                        rel={
-                          /^https?:\/\//i.test(ref.href[lang])
-                            ? "noopener noreferrer"
-                            : undefined
-                        }
-                        class="evidence-teaser__link"
-                      >
-                        {ref.label[lang]}
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-                <p class="evidence-teaser__deep">
-                  <a
-                    href={getEvidencePassportPath(lang, passport.id)}
-                    class="evidence-teaser__link"
-                    data-evidence-teaser-passport
-                  >
-                    {labels.passport}
-                  </a>
-                </p>
-              </div>
-            </details>
-          </li>
-        ))}
-      </ul>
-    </div>
-  ) : null
-}
+              ) : null}
+              <ul class="evidence-teaser__sources">
+                {passport.evidence.map((ref) => (
+                  <li>
+                    <a
+                      href={ref.href[lang]}
+                      rel={
+                        /^https?:\/\//i.test(ref.href[lang])
+                          ? "noopener noreferrer"
+                          : undefined
+                      }
+                      class="evidence-teaser__link"
+                    >
+                      {ref.label[lang]}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+              <p class="evidence-teaser__deep">
+                <a
+                  href={getEvidencePassportPath(lang, passport.id)}
+                  class="evidence-teaser__link"
+                  data-evidence-teaser-passport
+                >
+                  {labels.passport}
+                </a>
+              </p>
+            </div>
+          </details>
+        </li>
+      ))}
+    </ul>
+  </div>
+) : null}
 
 <style>
   .evidence-teaser__list {

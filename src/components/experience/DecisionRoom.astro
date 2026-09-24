@@ -72,72 +72,70 @@ const domId = (id: string): string =>
   data-msg-full={copy.full}
   aria-labelledby="decision-room-title"
 >
-  <h2 id="decision-room-title" class="decision-room__title">{copy.heading}</h2>
+  <h2 id="decision-room-title" class="decision-room__title">
+    {copy.heading}
+  </h2>
   <p class="decision-room__lede">{copy.lede}</p>
 
   <div class="decision-room__items">
-    {
-      items.map((item) => (
-        <article
-          id={domId(item.id)}
-          class="decision-room__item"
-          data-decision-item={item.id}
-        >
-          <span class="decision-room__kind">
-            {KIND_LABELS[item.kind][lang]}
-          </span>
-          <h3 class="decision-room__label">{item.label[lang]}</h3>
-          {item.summary ? (
-            <p class="decision-room__summary">{item.summary[lang]}</p>
-          ) : null}
-          {item.boundaryText ? (
-            <p class="decision-room__boundary">{item.boundaryText[lang]}</p>
-          ) : null}
-          {item.evidenceHref ? (
-            <a
-              href={item.evidenceHref[lang]}
-              rel={
-                /^https?:\/\//i.test(item.evidenceHref[lang])
-                  ? "noopener noreferrer"
-                  : undefined
-              }
-              class="decision-room__source"
-            >
-              {copy.source} →
-            </a>
-          ) : null}
-          <button
-            type="button"
-            class="decision-room__add"
-            data-decision-add={item.id}
-            aria-pressed="false"
+    {items.map((item) => (
+      <article
+        id={domId(item.id)}
+        class="decision-room__item"
+        data-decision-item={item.id}
+      >
+        <span class="decision-room__kind">{KIND_LABELS[item.kind][lang]}</span>
+        <h3 class="decision-room__label">{item.label[lang]}</h3>
+        {item.summary ? (
+          <p class="decision-room__summary">{item.summary[lang]}</p>
+        ) : null}
+        {item.boundaryText ? (
+          <p class="decision-room__boundary">{item.boundaryText[lang]}</p>
+        ) : null}
+        {item.evidenceHref ? (
+          <a
+            href={item.evidenceHref[lang]}
+            rel={
+              /^https?:\/\//i.test(item.evidenceHref[lang])
+                ? "noopener noreferrer"
+                : undefined
+            }
+            class="decision-room__source"
           >
-            {copy.add}
-          </button>
-        </article>
-      ))
-    }
+            {copy.source} →
+          </a>
+        ) : null}
+        <button
+          type="button"
+          class="decision-room__add"
+          data-decision-add={item.id}
+          aria-pressed="false"
+        >
+          {copy.add}
+        </button>
+      </article>
+    ))}
   </div>
 
-  <p class="decision-room__empty" data-decision-empty-state>{copy.empty}</p>
+  <p class="decision-room__empty" data-decision-empty-state>
+    {copy.empty}
+  </p>
 
   <div class="decision-room__board" data-decision-board hidden>
     <h3 class="decision-room__board-title">{copy.boardTitle}</h3>
     <ul class="decision-room__rows">
-      {
-        items.map((item) => (
-          <li data-decision-row={item.id} hidden>
-            <span class="decision-room__row-label">{item.label[lang]}</span>
-            <button
-              type="button"
-              class="decision-room__remove"
-              data-decision-remove={item.id}
-            >
-              {copy.remove}
-            </button>
-          </li>
-        ))
-      }
+      {items.map((item) => (
+        <li data-decision-row={item.id} hidden>
+          <span class="decision-room__row-label">{item.label[lang]}</span>
+          <button
+            type="button"
+            class="decision-room__remove"
+            data-decision-remove={item.id}
+          >
+            {copy.remove}
+          </button>
+        </li>
+      ))}
     </ul>
   </div>
 

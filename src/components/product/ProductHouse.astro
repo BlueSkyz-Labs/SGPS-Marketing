@@ -49,40 +49,36 @@ const indexPath = getProductIndexPath(lang);
       </h2>
       <p class="mt-3 max-w-2xl text-[var(--text-secondary)]">{bodyLabel}</p>
     </div>
-    {
-      products.length > 0 ? (
-        <a
-          href={indexPath}
-          class="inline-flex min-h-11 items-center rounded-[var(--radius-sm)] border border-[var(--border-subtle)] px-5 py-2.5 font-medium text-[var(--text-primary)] no-underline hover:bg-[var(--bg-subtle)]"
-        >
-          {ctaLabel}
-        </a>
-      ) : null
-    }
+    {products.length > 0 ? (
+      <a
+        href={indexPath}
+        class="inline-flex min-h-11 items-center rounded-[var(--radius-sm)] border border-[var(--border-subtle)] px-5 py-2.5 font-medium text-[var(--text-primary)] no-underline hover:bg-[var(--bg-subtle)]"
+      >
+        {ctaLabel}
+      </a>
+    ) : null}
   </div>
 
-  {
-    products.length === 0 ? (
-      <div class="mt-8">
-        <ProofFirstEmptyState lang={lang} />
-      </div>
-    ) : (
-      <div class="mt-10 grid gap-6">
-        {hero ? (
-          <div class="break-words min-w-0">
-            <ProductCard product={hero} lang={lang} emphasis="hero" />
-          </div>
-        ) : null}
-        {featured.length > 0 || ecosystem.length > 0 ? (
-          <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-            {[...featured, ...ecosystem].map((product) => (
-              <div class="break-words min-w-0">
-                <ProductCard product={product} lang={lang} />
-              </div>
-            ))}
-          </div>
-        ) : null}
-      </div>
-    )
-  }
+  {products.length === 0 ? (
+    <div class="mt-8">
+      <ProofFirstEmptyState lang={lang} />
+    </div>
+  ) : (
+    <div class="mt-10 grid gap-6">
+      {hero ? (
+        <div class="break-words min-w-0">
+          <ProductCard product={hero} lang={lang} emphasis="hero" />
+        </div>
+      ) : null}
+      {featured.length > 0 || ecosystem.length > 0 ? (
+        <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+          {[...featured, ...ecosystem].map((product) => (
+            <div class="break-words min-w-0">
+              <ProductCard product={product} lang={lang} />
+            </div>
+          ))}
+        </div>
+      ) : null}
+    </div>
+  )}
 </section>

@@ -22,24 +22,22 @@ const entries = EDITIONS.map((edition) => resolveEdition(edition, lang)).filter(
 const label = lang === "vi" ? "Tuyển tập" : lang === "zh" ? "选集" : "Editions";
 ---
 
-{
-  entries.length > 0 && (
-    <nav class="c4-editions" aria-label={label} data-edition-index>
-      <ol class="c4-editions__list">
-        {entries.map((edition, index) => (
-          <li class="c4-editions__item" data-edition={edition.id}>
-            <span class="c4-editions__ordinal" aria-hidden="true">
-              {String(index + 1).padStart(2, "0")}
-            </span>
-            <a
-              class="c4-editions__link"
-              href={`/${lang}/editions/${edition.id}/`}
-            >
-              {edition.title}
-            </a>
-          </li>
-        ))}
-      </ol>
-    </nav>
-  )
-}
+{entries.length > 0 && (
+  <nav class="c4-editions" aria-label={label} data-edition-index>
+    <ol class="c4-editions__list">
+      {entries.map((edition, index) => (
+        <li class="c4-editions__item" data-edition={edition.id}>
+          <span class="c4-editions__ordinal" aria-hidden="true">
+            {String(index + 1).padStart(2, "0")}
+          </span>
+          <a
+            class="c4-editions__link"
+            href={`/${lang}/editions/${edition.id}/`}
+          >
+            {edition.title}
+          </a>
+        </li>
+      ))}
+    </ol>
+  </nav>
+)}

@@ -62,18 +62,16 @@ const intents = [
     aria-labelledby="intent-lens-label"
     class="flex flex-wrap gap-2"
   >
-    {
-      intents.map((intent) => (
-        <button
-          type="button"
-          class="intent-chip"
-          data-intent={intent.id}
-          aria-pressed="false"
-        >
-          {intent.label}
-        </button>
-      ))
-    }
+    {intents.map((intent) => (
+      <button
+        type="button"
+        class="intent-chip"
+        data-intent={intent.id}
+        aria-pressed="false"
+      >
+        {intent.label}
+      </button>
+    ))}
   </div>
 </div>
 
