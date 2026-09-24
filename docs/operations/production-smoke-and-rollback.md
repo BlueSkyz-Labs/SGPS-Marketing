@@ -16,9 +16,9 @@ guessing.
 ## 2. Post-deploy verification (always, in this order)
 
 1. Confirm the deployed revision: `SMOKE_COMMIT_SHA=<sha> node scripts/smoke-production.mjs`.
-   The smoke suite checks, at minimum: EN/VI home 200, canonical pages,
+   The smoke suite checks, at minimum: EN/VI/zh-Hans home 200, canonical pages,
    legacy redirects, the branded 404 on every fallback path, the evidence
-   passport surface, `/.well-known/sgps.json` (schema 1.0) and
+   passport surface, published-locale sitemap and no-JS language gateway, `/.well-known/sgps.json` (schema 1.0) and
    `/.well-known/security.txt` (Contact + Expires).
 2. Spot-check the edge header set (`curl -sI https://blueskyzlabs.com/en/`):
    HSTS, CSP (`script-src 'self'`, `frame-ancestors 'none'`),
