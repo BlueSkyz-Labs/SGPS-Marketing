@@ -2,6 +2,10 @@ name: Source Assurance
 
 on:
   pull_request:
+    # `closed` is what makes the post-merge landing guard actually run:
+    # on opened/synchronize there is no merge commit yet (merge_commit_sha
+    # is null), so without this event type the guard would never execute.
+    types: [opened, synchronize, reopened, closed]
   push:
     branches:
       - main
@@ -64,6 +68,23 @@ jobs:
         run: pnpm check:deployment-evidence
       - name: Product provenance
         run: pnpm check:product-provenance
+      - name: Post-merge landing verification (fail-closed)
+        # Runs only once a pull request actually merged: on open PRs
+        # merge_commit_sha is null, so this step must not pretend to pass.
+        if: ${{ github.event_name == 'pull_request' && github.event.pull_request.merged == true }}
+        run: |
+          # Deterministic, no-network guard: verifies that the cited merge
+          # commit reaches origin/main (checkout uses fetch-depth: 0).
+          if [ -n "${POST_MERGE_MERGE_COMMIT:-}" ]; then
+            node scripts/verify-post-merge-landing.mjs \
+              --merge-commit "${POST_MERGE_MERGE_COMMIT:-}" \
+              --ref origin/main || exit 1
+          else
+            echo "Post-merge landing verification: SKIPPED (no merge commit provided — not a PASS by accident)"
+          fi
+        env:
+          POST_MERGE_PR_NUMBER: ${{ github.event.pull_request.number || '' }}
+          POST_MERGE_MERGE_COMMIT: ${{ github.event.pull_request.merge_commit_sha || '' }}
 
   browser-assurance:
     name: Browser Assurance

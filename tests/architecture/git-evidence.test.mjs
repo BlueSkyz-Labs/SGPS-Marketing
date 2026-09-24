@@ -21,8 +21,25 @@ const MODEL = "architecture/sgps-model.json";
 /** SHA-shaped but not a real object: 40 hex chars, matches the old regex. */
 const FAKE_REVISION = "0123456789abcdef0123456789abcdef01234567";
 
+// Nested Git fixtures must never inherit repository-routing variables from the
+// parent agent process. A leaked GIT_DIR/GIT_WORK_TREE can make `git init` and
+// branch creation mutate the real checkout instead of the temporary fixture.
+const CLEAN_GIT_ENV = { ...process.env };
+for (const key of [
+  "GIT_DIR",
+  "GIT_WORK_TREE",
+  "GIT_INDEX_FILE",
+  "GIT_COMMON_DIR",
+]) {
+  delete CLEAN_GIT_ENV[key];
+}
+
 function git(args) {
-  return execFileSync("git", args, { cwd: ROOT, encoding: "utf8" }).trim();
+  return execFileSync("git", args, {
+    cwd: ROOT,
+    encoding: "utf8",
+    env: CLEAN_GIT_ENV,
+  }).trim();
 }
 
 const HEAD = git(["rev-parse", "HEAD"]);
@@ -48,6 +65,7 @@ test("(b) a SHA-shaped but nonexistent revision is never PASS", () => {
     ["cat-file", "-e", `${FAKE_REVISION}^{commit}`],
     {
       cwd: ROOT,
+      env: CLEAN_GIT_ENV,
     },
   );
   assert.notEqual(probe.status, 0, "fixture revision must not exist locally");
@@ -76,6 +94,7 @@ test("(d) the CLI exits 0 and prints the PASS summary on the real repo", () => {
   const run = spawnSync(process.execPath, [SCRIPT], {
     cwd: ROOT,
     encoding: "utf8",
+    env: CLEAN_GIT_ENV,
   });
   assert.equal(run.status, 0, `stderr: ${run.stderr}`);
   assert.match(run.stdout, /Git evidence: PASS \(\d+ entries\)/);
@@ -172,6 +191,7 @@ test("an unverifiable model never yields a PASS verdict", () => {
     const run = spawnSync(process.execPath, [SCRIPT, "--model", modelPath], {
       cwd: ROOT,
       encoding: "utf8",
+      env: CLEAN_GIT_ENV,
     });
     assert.notEqual(run.status, 0, "an empty model must not exit 0");
     assert.doesNotMatch(run.stdout + run.stderr, /Git evidence: PASS/);
@@ -188,7 +208,10 @@ test("verifyAncestry rejects a real commit orphaned from HEAD", () => {
   // that "already exists", corrupting the fixture.
   rmSync(join(root, ".git"), { recursive: true, force: true });
   const git = (...args) =>
-    execFileSync("git", ["-C", root, ...args], { encoding: "utf8" }).trim();
+    execFileSync("git", ["-C", root, ...args], {
+      encoding: "utf8",
+      env: CLEAN_GIT_ENV,
+    }).trim();
 
   try {
     git("init", "-q");
