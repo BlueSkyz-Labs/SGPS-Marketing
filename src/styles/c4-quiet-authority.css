@@ -679,6 +679,12 @@
   margin: 0;
   padding: 0;
   border: 0;
+  /* The native select lays out its option list at the longest option's width
+     and WebKit does not apply overflow to the control itself, so that list
+     paints past the box and the document inherits it as scroll width at 200%
+     text zoom. Clipping the row keeps the intrinsic option width inside the
+     field it belongs to; the popup renders in its own layer and is unaffected. */
+  overflow: hidden;
 }
 .decision-room__atelier-label {
   align-self: center;
@@ -691,12 +697,19 @@
   align-items: center;
   min-height: 44px;
 }
-/* Native select intrinsic option width must not dictate the page width at 200% zoom. */
+/* Native select intrinsic option width must not dictate the page width at 200% zoom.
+   The box is already clamped to the field, but the control renders its text with
+   white-space: pre, so a long Vietnamese option still paints past the box in
+   WebKit and the page inherits that as scroll width. Clipping the control's own
+   box keeps the intrinsic option width out of the document scroll without
+   touching the native dropdown, which renders in its own layer. */
 .decision-room__atelier-select {
   box-sizing: border-box;
   inline-size: min(100%, 20rem);
   min-inline-size: 0;
   max-inline-size: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .decision-room__atelier-check {
   gap: var(--space-2);
