@@ -108,10 +108,10 @@ export function getAlternatePath(
   pathname: string,
   targetLang: Language,
 ): string {
-  const rest = pathname.replace(/^\/(en|vi|zh)/, "") || "/";
+  const rest = pathname.replace(/^\/(en|vi|zh)(?=\/|$)/, "") || "/";
   return `/${targetLang}${rest}`;
 }
 
 export function stripLanguagePrefix(pathname: string): string {
-  return pathname.replace(/^\/(en|vi|zh)/, "") || "/";
+  return pathname.replace(/^\/(en|vi|zh)(?=\/|$)/, "") || "/";
 }
