@@ -49,14 +49,21 @@ test("root no-JS gateway offers every live locale", async ({ browser }) => {
   try {
     const page = await context.newPage();
     await page.goto("/");
-    const vietnamese = page.getByRole("link", { name: "Tiếng Việt" });
-    const english = page.getByRole("link", { name: "English" });
-    const simplifiedChinese = page.getByRole("link", { name: "简体中文" });
-    const traditionalChinese = page.getByRole("link", { name: "繁體中文" });
+    // The gateway is the nav itself. Matching page-wide would also see the
+    // noscript fallback link "Continue in English", whose accessible name contains
+    // "English" — asserting inside the gateway is what the claim actually means.
+    const gateway = page.locator('nav[aria-label="Language"]');
+    await expect(gateway).toHaveCount(1);
+    const vietnamese = gateway.getByRole("link", { name: "Tiếng Việt" });
+    const english = gateway.getByRole("link", { name: "English", exact: true });
+    const simplifiedChinese = gateway.getByRole("link", { name: "简体中文" });
+    const traditionalChinese = gateway.getByRole("link", { name: "繁體中文" });
     await expect(vietnamese).toHaveAttribute("href", "/vi/");
     await expect(english).toHaveAttribute("href", "/en/");
     await expect(simplifiedChinese).toHaveAttribute("href", "/zh/");
     await expect(traditionalChinese).toHaveCount(0);
+    // the gateway must expose every live locale, not merely appear
+    await expect(gateway.getByRole("link")).toHaveCount(3);
   } finally {
     await context.close();
   }
