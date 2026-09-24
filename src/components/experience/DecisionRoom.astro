@@ -316,7 +316,12 @@ const domId = (id: string): string =>
       >
         {item.kind === "claim" ? (
           <label class="decision-room__select">
-            <input type="checkbox" data-atelier-item-select value={item.id} />
+            <input
+              type="checkbox"
+              autocomplete="off"
+              data-atelier-item-select
+              value={item.id}
+            />
             <span>{atelierCopy.handoff.select}</span>
           </label>
         ) : null}

@@ -370,9 +370,14 @@ export function initAtelierHandoff(room: HTMLElement): void {
     }
   };
 
-  for (const input of room.querySelectorAll<HTMLInputElement>(
-    "[data-atelier-item-select]",
-  )) {
+  const itemInputs = Array.from(
+    room.querySelectorAll<HTMLInputElement>("[data-atelier-item-select]"),
+  );
+  for (const input of itemInputs) {
+    // Firefox can restore native checkbox state across reloads. The handoff is
+    // intentionally ephemeral, so discard that browser-restored state before
+    // the first render rather than allowing it to become a hidden selection.
+    input.checked = false;
     input.addEventListener("change", render);
   }
   render();
