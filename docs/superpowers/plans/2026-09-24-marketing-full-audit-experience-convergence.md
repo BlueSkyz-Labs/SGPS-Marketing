@@ -323,3 +323,221 @@ Then W1 and the highest uncovered actionable risk. Execute small PRs through
 PLAN -> DO -> CHECK -> RED TEAM -> IMPROVE. Preserve independent rollback
 and exact-head assurance. Stop only for real external or safety gates; report
 the boundary rather than manufacturing proof.
+
+## 2026-09-24 modernization addendum — use modern technology only for proven utility
+
+This addendum extends, not supersedes, W0–W7. It distinguishes an existing
+implementation, a safe candidate and an owner-gated capability. Its audit
+baseline is main 578aa5fffe005d383982ee6f4591aa6c0c1dbf0b, immediately
+after the plan PR #236. Recheck main before executing.
+
+### Platform decisions and anti-rebuild rules
+
+- Preserve Astro 7 static output, strict TypeScript, Tailwind v4,
+  Cloudflare Workers Static Assets, native HTML/CSS/SVG and small
+  vanilla scripts. No site-wide SPA migration, new backend or design
+  runtime merely for appearance.
+- Preserve existing cross-document CSS View Transitions and
+  route-transition grammar. Do not add Astro ClientRouter by default:
+  it changes script initialization and history/navigation semantics.
+  Verify existing no-JS navigation, reduced motion, CSP and browser parity.
+- Keep Cloudflare Workers Builds as deploy authority and GitHub as
+  secretless exact-head source assurance. Verify the deployed Workers
+  version and static asset output independently from green CI.
+- Existing Brand Kit v4 and C4 role tokens own palette, type roles,
+  material and motion. No second styling library, brand registry,
+  font family, icon library or content/claim authority.
+- Use actual product/public evidence and owner-approved media. Image
+  optimization is not permission to fabricate a product image or
+  silently swap an authoritative screenshot for an AI composition.
+
+### M01 — Cross-document motion, native and measured
+
+Current code: src/lib/route-transition.ts and existing
+cross-document navigation CSS. Baseline this first. Inspect duplicate
+view-transition names, focus/scroll/URL behavior and
+prefers-reduced-motion. Prefer native cross-document transitions to
+an Astro ClientRouter opt-in. Do not route Dossier selection or
+sensitive/private future work through speculative navigation.
+
+Potential improvement: a single understated
+arrival/continuity pattern across approved public routes and
+no additional perpetual motion. The intended user value is
+orientation, not a higher animation count.
+
+Files: src/styles/global.css, src/lib/route-transition.ts,
+src/components/layout/Header.astro, existing route tests and
+tests/e2e/c2-product-continuity.spec.ts.
+
+Acceptance: equivalent content/action with JS disabled, reduced
+motion and unsupported browsers; working back/forward and focus;
+no double-named transition elements; no regression in CSP,
+CLS or JS ceiling. If native effect does not improve legibility or
+continuity, retain current behavior.
+
+Official technology reference:
+https://docs.astro.build/en/guides/view-transitions/
+
+### M02 — Intent-limited navigation prefetch experiment
+
+No global prefetch. If real navigation latency justifies it,
+trial opt-in prefetch for a tiny allowlist of approved public
+high-intent routes. Measure before and after under mobile
+throttling. Never prefetch arbitrary user input, private
+future evaluation URLs, cross-origin links or an unapproved
+product route. Respect data-saver or reduced-data signals where
+supported.
+
+Files: astro.config.mjs, existing shared navigation,
+tests/architecture/c2-performance-contract.test.mjs and
+targeted browser network fixtures. Do not add speculative
+prerender as an assumed best practice.
+
+Acceptance: no excessive extra network requests, no privacy
+transmission or private route discovery, no material client
+budget/INP regression, and an observed navigation benefit.
+Keep existing plain links if the experiment is inconclusive.
+
+Official technology reference:
+https://docs.astro.build/en/guides/prefetch/
+
+### M03 — Image and font critical-path optimization
+
+Inventory actual image/font assets, formats, intrinsic dimensions,
+priorities, CLS causes, hero LCP and CJK glyph fallback across
+en/vi/zh-Hans. Use responsive image sizing and modern codecs
+only when there are real approved assets and the exact source
+capture remains recognizable. Keep the hero's actual critical
+asset eager and avoid indiscriminate image or font preloads.
+Check any long-lived immutable cache rule only for content-hashed
+assets; keep HTML and public claims able to update/revalidate.
+
+Files: src/components/sections/Hero.astro,
+src/components/product/ProductVisual.astro, brand asset references,
+astro.config.mjs, public/_headers, performance/bundle contracts.
+
+Acceptance: actual artifact bytes and Lighthouse/LCP/CLS proxies
+recorded per critical route; no layout shift from missing
+dimensions, no unauthorized media, no CSS/font flash that blocks
+content and no stale public-claim HTML after deploy.
+
+Official platform reference:
+https://developers.cloudflare.com/workers/static-assets/headers/
+
+### M04 — Deploy-safe cache and recovery contract
+
+Cloudflare Static Assets and versioned deployments already exist.
+Check _headers behavior on static responses separately from
+Worker-generated responses; do not assume the same CSP or caching
+policy applies automatically to both. Verify host, actual version,
+canonical/robots, public manifests, real 404, locale, security
+headers and dossier/print after deployment. Preserve
+Cloudflare Access owner-only until authorized public launch.
+
+Files: public/_headers, docs/operations/production-smoke-and-rollback.md,
+scripts/smoke-production.mjs, tests/architecture/security-surface.test.mjs
+and deployment evidence. Reuse existing smoke scripts rather than
+adding a second provider controller.
+
+Acceptance: deployed revision and timestamp are read back;
+mismatched source/deploy state is BLOCKED, not PASS;
+rollback and post-rollback smoke are documented and tested.
+Storage state is not assumed rolled back merely because a Workers
+version was restored.
+
+Official platform references:
+https://developers.cloudflare.com/workers/versions-and-deployments/
+https://developers.cloudflare.com/workers/versions-and-deployments/rollbacks/
+
+### M05 — Route-derived SEO and multilingual publication
+
+When #225/#232 or later public routes land, make the actual
+served-route inventory the authority for canonical,
+hreflang, sitemap, global navigation and footer presence.
+Prevent published metadata or Dossier/Briefing links from
+advertising routes absent from the build. zh-Hans is the
+existing Chinese runtime profile; zh-Hant remains explicitly
+architecture-ready until localized content and review are real.
+
+Files: src/lib/seo.ts, src/lib/i18n.ts,
+src/pages/sitemap.xml.ts, src/components/layout/LanguageSwitcher.astro,
+src/lib/maison.ts and localized static routes.
+
+Acceptance: reciprocal EN/VI/zh-Hans routes and true
+publication state, correct language persistence, no broken
+localization path or accidental duplicate indexable root,
+safe CJK line breaks and IME where an input exists.
+
+### M06 — Frontend security and public-link resilience
+
+Run a negative-test census across
+src/lib/provenance-lens.ts, dossier, Briefing, Decision Room,
+public architecture and static JSON manifests. Examine
+protocol-relative URL tricks, encoded traversal, backslashes,
+unsafe schemes, forged evidence, unsupported IDs,
+overlong query values and unsafe external destinations.
+A source-only security-page link is not proof of certification.
+
+Do not add a general-purpose sanitizer to disguise missing
+canonical authority. Add a stricter shared destination
+validator only when a real negative test establishes an
+accepted unsafe path, and preserve existing valid links.
+
+Acceptance: no private evidence/internal path in dist, no
+false trust or freshness state, each refused request is
+observable as refused, no CSP weakening or client analytics
+transmission, and all current public destinations still work.
+
+### M07 — Dependency modernization by isolated evidence
+
+PR #233 updates Astro, #234 combines development dependencies
+including Wrangler, and #235 changes Astro's Prettier plugin
+major version. Evaluate separately against exact-head gates.
+The existing #234 failure was a locked Wrangler contract
+mismatch: actual 4.135.0 versus asserted 4.131.1. Update
+the deployment decision and pinned contract only when the
+new version is deliberately accepted and verified; never
+delete or relax the gate to make a PR green.
+
+Preserve frozen lockfile and supply-chain audit. For any major
+formatter upgrade, compare actual formatting diffs and
+avoid mixing them with runtime feature PRs. Do not adopt
+new runtimes purely because they are newer.
+
+### M08 — Accessibility incident, not a visual-polish backlog
+
+PR #229/#230 fail at 200% zoom in Firefox/WebKit because
+select.decision-room__atelier-select overflows the viewport.
+Repair control sizing and min-width/wrapping in its owning
+component/style, then assert EN/VI/zh and
+320/390/200%-zoom coverage. Do not apply global
+overflow-x:hidden, truncate the selected value or reduce
+font size as a workaround. Preserve keyboard, focus,
+visible label, native select semantics and reset order.
+
+PR #225 additionally contains unresolved conflict markers
+in its C4 CSS in the failing source-gate run. Resolve and
+format the actual merged content rather than bypassing
+Prettier. #224/#232/#235 have formatting failures and
+must complete their subsequently skipped gates after repair.
+
+### Sequencing, change ownership and evidence
+
+W0 precedes all work: inspect fresh main, #224–#235 and
+#237, actual CI step failures and newly merged files.
+W1 is #237's claim-provenance negative test and root fix,
+without fabricating source evidence. W2 is dependency-aware
+reconciliation of existing PRs; existing authors/branches
+own their overlapping files. W3 executes M01–M08 only
+where baselines show a material gap, in separate reversible
+PRs. W4 reruns security, source/browser assurance,
+visual comparisons and deployment read-back.
+
+Each implementation PR records the user scenario,
+current failure, code-owner/source authority,
+baseline and candidate SHA, changed paths,
+negative/red-team tests, EN/VI/zh and no-JS impact,
+client/visual metrics, rollback and external gates.
+Do not declare E4/E5/E6, production RUM, legal rights,
+remote-AI readiness, public launch or an SGPS FULL
+experience CONVERGED state without their own evidence.
