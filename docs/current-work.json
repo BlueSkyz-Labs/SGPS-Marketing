@@ -253,7 +253,7 @@
       "id": "dev-deps-234",
       "name": "Dev-deps bump — 5 updates (#234) 8b067e4",
       "status": "MERGED",
-      "evidence": "docs/evidence/2026-09-24-convergence-readback.md (verified via #257)"
+      "evidence": "docs/evidence/2026-09-24-convergence-wave-readback.md (verified via #257)"
     },
     {
       "id": "dev-prettier-235",
@@ -265,13 +265,13 @@
       "id": "evidence-257",
       "name": "2026-09-24 convergence wave read-back (#257) 82e6b5a",
       "status": "MERGED",
-      "evidence": "docs/evidence/2026-09-24-convergence-readback.md"
+      "evidence": "docs/evidence/2026-09-24-convergence-wave-readback.md"
     },
     {
       "id": "evidence-256",
       "name": "Gate surface / M01-M08 modernization baseline (#256) 2d2b84c",
       "status": "MERGED",
-      "evidence": "docs/evidence/2026-09-24-convergence-readback.md"
+      "evidence": "docs/evidence/2026-09-24-convergence-wave-readback.md"
     },
     {
       "id": "tonydemo-decomm-253",
