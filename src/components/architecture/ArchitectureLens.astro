@@ -63,77 +63,71 @@ const row = (index: number) => 18 + index * 22;
 
   <h3 class="c4-salon__subheading">{labels.nodes}</h3>
   <ul class="c4-salon__nodes">
-    {
-      nodes.map((node) => (
-        <li class="c4-salon__node" data-architecture-node={node.id}>
-          <span class="c4-salon__node-label">{node.label}</span>
-          <span class="c4-salon__node-kind">{node.kind}</span>
-          {node.boundary && (
-            <span class="c4-salon__node-boundary">
-              {labels.boundary}: {node.boundary}
-            </span>
-          )}
-        </li>
-      ))
-    }
+    {nodes.map((node) => (
+      <li class="c4-salon__node" data-architecture-node={node.id}>
+        <span class="c4-salon__node-label">{node.label}</span>
+        <span class="c4-salon__node-kind">{node.kind}</span>
+        {node.boundary && (
+          <span class="c4-salon__node-boundary">
+            {labels.boundary}: {node.boundary}
+          </span>
+        )}
+      </li>
+    ))}
   </ul>
 
   <h3 class="c4-salon__subheading">{labels.relationships}</h3>
-  {
-    edges.length === 0 ? (
-      <p class="c4-salon__none">{labels.none}</p>
-    ) : (
-      <ul class="c4-salon__edges">
-        {edges.map((edge) => (
-          <li class="c4-salon__edge" data-architecture-edge={edge.id}>
-            <span class="c4-salon__edge-from">
-              {labelOf.get(edge.from) ?? edge.from}
-            </span>
-            <span class="c4-salon__edge-type">{edge.type}</span>
-            <span class="c4-salon__edge-to">
-              {labelOf.get(edge.to) ?? edge.to}
-            </span>
-          </li>
-        ))}
-      </ul>
-    )
-  }
+  {edges.length === 0 ? (
+    <p class="c4-salon__none">{labels.none}</p>
+  ) : (
+    <ul class="c4-salon__edges">
+      {edges.map((edge) => (
+        <li class="c4-salon__edge" data-architecture-edge={edge.id}>
+          <span class="c4-salon__edge-from">
+            {labelOf.get(edge.from) ?? edge.from}
+          </span>
+          <span class="c4-salon__edge-type">{edge.type}</span>
+          <span class="c4-salon__edge-to">
+            {labelOf.get(edge.to) ?? edge.to}
+          </span>
+        </li>
+      ))}
+    </ul>
+  )}
 
-  {
-    edges.length > 0 && (
-      <svg
-        class="c4-salon__diagram"
-        aria-hidden="true"
-        focusable="false"
-        viewBox={`0 0 ${Math.max(120, column(nodes.length - 1) + 24)} ${Math.max(60, row(edges.length - 1) + 18)}`}
-        preserveAspectRatio="xMinYMin meet"
-      >
-        <g class="c4-salon__diagram-edges">
-          {edges.map((edge, index) => {
-            const from = nodes.findIndex((node) => node.id === edge.from);
-            const to = nodes.findIndex((node) => node.id === edge.to);
-            return (
-              <line
-                x1={column(from)}
-                y1={row(index)}
-                x2={column(to)}
-                y2={row(index)}
-                class="c4-salon__diagram-line"
-              />
-            );
-          })}
-        </g>
-        <g class="c4-salon__diagram-nodes">
-          {nodes.map((node, index) => (
-            <circle
-              cx={column(index)}
-              cy={row(0)}
-              r="4"
-              class="c4-salon__diagram-dot"
+  {edges.length > 0 && (
+    <svg
+      class="c4-salon__diagram"
+      aria-hidden="true"
+      focusable="false"
+      viewBox={`0 0 ${Math.max(120, column(nodes.length - 1) + 24)} ${Math.max(60, row(edges.length - 1) + 18)}`}
+      preserveAspectRatio="xMinYMin meet"
+    >
+      <g class="c4-salon__diagram-edges">
+        {edges.map((edge, index) => {
+          const from = nodes.findIndex((node) => node.id === edge.from);
+          const to = nodes.findIndex((node) => node.id === edge.to);
+          return (
+            <line
+              x1={column(from)}
+              y1={row(index)}
+              x2={column(to)}
+              y2={row(index)}
+              class="c4-salon__diagram-line"
             />
-          ))}
-        </g>
-      </svg>
-    )
-  }
+          );
+        })}
+      </g>
+      <g class="c4-salon__diagram-nodes">
+        {nodes.map((node, index) => (
+          <circle
+            cx={column(index)}
+            cy={row(0)}
+            r="4"
+            class="c4-salon__diagram-dot"
+          />
+        ))}
+      </g>
+    </svg>
+  )}
 </section>

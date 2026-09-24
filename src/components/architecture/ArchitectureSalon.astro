@@ -61,36 +61,30 @@ const lastVerified = views[0]?.view.lastVerified ?? null;
 
   <nav class="c4-salon__nav" aria-label={labels.nav}>
     <ul class="c4-salon__nav-list">
-      {
-        views.map(({ lens }) => (
-          <li class="c4-salon__nav-item">
-            <a class="c4-salon__nav-link" href={`#lens-${lens}`}>
-              {lens}
-            </a>
-          </li>
-        ))
-      }
+      {views.map(({ lens }) => (
+        <li class="c4-salon__nav-item">
+          <a class="c4-salon__nav-link" href={`#lens-${lens}`}>
+            {lens}
+          </a>
+        </li>
+      ))}
     </ul>
   </nav>
 
-  {
-    views.map(({ lens, view }) => (
-      <ArchitectureLens
-        lens={lens}
-        nodes={view.nodes}
-        edges={view.edges}
-        lang={lang}
-      />
-    ))
-  }
+  {views.map(({ lens, view }) => (
+    <ArchitectureLens
+      lens={lens}
+      nodes={view.nodes}
+      edges={view.edges}
+      lang={lang}
+    />
+  ))}
 
-  {
-    lastVerified && (
-      <p class="c4-salon__source">
-        {labels.source}: <time datetime={lastVerified}>{lastVerified}</time>
-      </p>
-    )
-  }
+  {lastVerified && (
+    <p class="c4-salon__source">
+      {labels.source}: <time datetime={lastVerified}>{lastVerified}</time>
+    </p>
+  )}
 </section>
 
 <script>
