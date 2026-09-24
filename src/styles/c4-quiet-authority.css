@@ -511,7 +511,6 @@
     text-decoration: underline;
   }
 }
-<<<<<<< HEAD
 
 /* ---- C4-C G3 — Printable dossier document ---- */
 
@@ -528,28 +527,10 @@
 .c4-dossier-document__unknown,
 .c4-dossier-document__detail,
 .c4-dossier-document__freshness {
-=======
-/* ---- C4-D G4 — Architecture salon ---- */
-
-.c4-salon {
-  max-width: 78ch;
-}
-
-.c4-salon__heading,
-.c4-salon__lens-heading {
-  margin: 0 0 var(--space-2);
-  font-size: var(--c4-type-section);
-}
-
-.c4-salon__lede,
-.c4-salon__none,
-.c4-salon__source {
->>>>>>> 396f5b4 (chore: formatting)
   font-size: var(--c4-type-reading);
   color: color-mix(in srgb, var(--brand-porcelain) 78%, transparent);
 }
 
-<<<<<<< HEAD
 .c4-dossier-document__meta {
   display: grid;
   grid-template-columns: max-content minmax(0, 1fr);
@@ -572,31 +553,20 @@
 .c4-dossier-document__list {
   display: grid;
   gap: var(--space-6);
-=======
-.c4-salon__nav-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-4);
->>>>>>> 396f5b4 (chore: formatting)
   margin: 0;
   padding: 0;
   list-style: none;
 }
 
-<<<<<<< HEAD
 .c4-dossier-document__item {
   break-inside: avoid;
 }
 
 .c4-dossier-document__link {
-=======
-.c4-salon__nav-link {
->>>>>>> 396f5b4 (chore: formatting)
   display: inline-flex;
   align-items: center;
   min-height: 44px;
   color: inherit;
-<<<<<<< HEAD
   overflow-wrap: anywhere;
 }
 
@@ -680,8 +650,7 @@
     content: "";
   }
 }
-<<<<<<< HEAD
-=======
+
 /* ---- C4-D G4 — Architecture salon ---- */
 .c4-salon {
   max-width: 78ch;
@@ -694,20 +663,23 @@
 .c4-salon__lede,
 .c4-salon__none,
 .c4-salon__source {
->>>>>>> 396f5b4 (chore: formatting)
-<<<<<<< HEAD
-=======
+  font-size: var(--c4-type-reading);
+  color: color-mix(in srgb, var(--brand-porcelain) 78%, transparent);
+}
 .c4-salon__nav-list {
   display: flex;
   flex-wrap: wrap;
   gap: var(--space-4);
->>>>>>> 396f5b4 (chore: formatting)
-<<<<<<< HEAD
-=======
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
 .c4-salon__nav-link {
->>>>>>> 396f5b4 (chore: formatting)
-<<<<<<< HEAD
-=======
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  color: inherit;
+  overflow-wrap: anywhere;
 }
 .c4-salon__nav-link:hover {
   text-decoration: underline;
@@ -770,90 +742,7 @@
   .c4-salon__diagram {
     display: none;
   }
-<<<<<<< HEAD
   .c4-salon__lens {
     break-inside: avoid;
->>>>>>> 396f5b4 (chore: formatting)
-=======
-=======
-}
-
-.c4-salon__nav-link:hover {
-  text-decoration: underline;
-  text-underline-offset: 0.25em;
-}
-
-.c4-salon__lens {
-  margin-block-start: var(--space-10);
-  padding-block-start: var(--space-8);
-  border-top: 1px solid
-    color-mix(in srgb, var(--brand-porcelain) 16%, transparent);
-}
-
-.c4-salon__subheading {
-  margin: var(--space-6) 0 var(--space-2);
-  font-size: var(--c4-type-reading);
-  font-weight: 600;
-}
-
-.c4-salon__nodes,
-.c4-salon__edges {
-  display: grid;
-  gap: var(--space-2);
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.c4-salon__node {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-3);
-  overflow-wrap: anywhere;
-}
-
-.c4-salon__node-kind,
-.c4-salon__node-boundary,
-.c4-salon__edge-type {
-  color: color-mix(in srgb, var(--brand-porcelain) 70%, transparent);
-}
-
-.c4-salon__edge {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-2);
-  overflow-wrap: anywhere;
-}
-
-.c4-salon__diagram {
-  display: block;
-  width: 100%;
-  max-width: 100%;
-  height: auto;
-  margin-block-start: var(--space-4);
-}
-
-.c4-salon__diagram-line {
-  stroke: color-mix(in srgb, var(--brand-porcelain) 45%, transparent);
-  stroke-width: 1;
-}
-
-.c4-salon__diagram-dot {
-  fill: color-mix(in srgb, var(--brand-porcelain) 70%, transparent);
-}
-
-@media print {
-  .c4-salon__nav {
-    display: none;
-  }
-
-  .c4-salon__diagram {
-    display: none;
-  }
-
-  .c4-salon__lens {
-    break-inside: avoid;
->>>>>>> 396f5b4 (chore: formatting)
   }
 }
->>>>>>> 7d03cab (chore: formatting)
