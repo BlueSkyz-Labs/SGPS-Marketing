@@ -63,13 +63,39 @@ function pick(localized: LocalizedLike, lang: Language): string {
   return localized[lang] ?? localized.en;
 }
 
-/** A public destination is an absolute https URL or a served site-relative route. */
-function isPublicDestination(value: unknown): value is string {
+/**
+ * Public source destinations are validated as URLs, not by string prefix alone.
+ * Browsers normalize backslashes and encoded traversal; fail closed on ambiguous
+ * authored input rather than letting a malformed source become a public link.
+ * This is a destination guard, not a second evidence or route authority.
+ */
+export function isPublicDestination(value: unknown): value is string {
   if (typeof value !== "string" || value.length === 0) return false;
-  if (value.startsWith("/") && !value.startsWith("//"))
-    return !value.includes("..");
-  if (value.startsWith("https://")) return true;
-  return false;
+  if (/[\\\\\u0000-\u0020\u007f]/.test(value)) return false;
+
+  if (value.startsWith("/") && !value.startsWith("//")) {
+    if (value.includes("..") || /%(?:2e|2f|5c|25)/i.test(value))
+      return false;
+    try {
+      const parsed = new URL(value, "https://public.invalid");
+      return parsed.origin === "https://public.invalid";
+    } catch {
+      return false;
+    }
+  }
+
+  try {
+    const parsed = new URL(value);
+    return (
+      parsed.protocol === "https:" &&
+      value.startsWith("https://") &&
+      parsed.hostname.length > 0 &&
+      parsed.username.length === 0 &&
+      parsed.password.length === 0
+    );
+  } catch {
+    return false;
+  }
 }
 
 function carriesAssurance(value: string): boolean {
