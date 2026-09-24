@@ -24,9 +24,7 @@ const hasBusinessEmail = Boolean(SITE.contactEmail);
         lede="Trang doanh nghiệp này là nội dung tiếp thị tĩnh. Văn bản pháp lý đầy đủ về quyền riêng tư sẽ được công bố khi BlueSkyz phê duyệt."
       />
       <dl class="mt-12 max-w-2xl space-y-8">
-        <div
-          class="rounded-xl border border-[var(--border-subtle)] bg-white p-6"
-        >
+        <div class="rounded-xl border border-[var(--border-subtle)] bg-white p-6">
           <dt class="text-sm font-semibold tracking-tight">
             Những gì được thu thập
           </dt>
@@ -37,9 +35,7 @@ const hasBusinessEmail = Boolean(SITE.contactEmail);
             agent và URL được yêu cầu.
           </dd>
         </div>
-        <div
-          class="rounded-xl border border-[var(--border-subtle)] bg-white p-6"
-        >
+        <div class="rounded-xl border border-[var(--border-subtle)] bg-white p-6">
           <dt class="text-sm font-semibold tracking-tight">Tại sao</dt>
           <dd class="mt-2 text-sm leading-relaxed text-[var(--text-secondary)]">
             Nhật ký yêu cầu tồn tại vì mục đích bảo mật, ngăn chặn lạm dụng và
@@ -47,9 +43,7 @@ const hasBusinessEmail = Boolean(SITE.contactEmail);
             cáo.
           </dd>
         </div>
-        <div
-          class="rounded-xl border border-[var(--border-subtle)] bg-white p-6"
-        >
+        <div class="rounded-xl border border-[var(--border-subtle)] bg-white p-6">
           <dt class="text-sm font-semibold tracking-tight">Cách sử dụng</dt>
           <dd class="mt-2 text-sm leading-relaxed text-[var(--text-secondary)]">
             Nhật ký vẫn thuộc về các nhà vận hành nền tảng lưu trữ cho mục đích
@@ -57,9 +51,7 @@ const hasBusinessEmail = Boolean(SITE.contactEmail);
             nào được triển khai trên nền tảng này.
           </dd>
         </div>
-        <div
-          class="rounded-xl border border-[var(--border-subtle)] bg-white p-6"
-        >
+        <div class="rounded-xl border border-[var(--border-subtle)] bg-white p-6">
           <dt class="text-sm font-semibold tracking-tight">
             Xóa và quyền riêng tư sản phẩm
           </dt>
@@ -80,23 +72,21 @@ const hasBusinessEmail = Boolean(SITE.contactEmail);
         >
           Báo cáo bảo mật
         </a>
-        {
-          hasBusinessEmail ? (
-            <a
-              href="/vi/contact/"
-              class="inline-flex min-h-11 items-center rounded-lg border border-[var(--border-subtle)] bg-white px-5 text-sm font-semibold text-[var(--text-primary)] no-underline transition-colors hover:border-[var(--action-primary)]"
-            >
-              Liên hệ BlueSkyz
-            </a>
-          ) : (
-            <a
-              href="/vi/about/"
-              class="inline-flex min-h-11 items-center rounded-lg border border-[var(--border-subtle)] bg-white px-5 text-sm font-semibold text-[var(--text-primary)] no-underline transition-colors hover:border-[var(--action-primary)]"
-            >
-              Về BlueSkyz
-            </a>
-          )
-        }
+        {hasBusinessEmail ? (
+          <a
+            href="/vi/contact/"
+            class="inline-flex min-h-11 items-center rounded-lg border border-[var(--border-subtle)] bg-white px-5 text-sm font-semibold text-[var(--text-primary)] no-underline transition-colors hover:border-[var(--action-primary)]"
+          >
+            Liên hệ BlueSkyz
+          </a>
+        ) : (
+          <a
+            href="/vi/about/"
+            class="inline-flex min-h-11 items-center rounded-lg border border-[var(--border-subtle)] bg-white px-5 text-sm font-semibold text-[var(--text-primary)] no-underline transition-colors hover:border-[var(--action-primary)]"
+          >
+            Về BlueSkyz
+          </a>
+        )}
       </div>
       <div class="mt-12">
         <ProvenanceLens subject="privacy-no-tracking-on-this-site" lang="vi" />

@@ -21,50 +21,42 @@ const hasBusinessEmail = Boolean(SITE.contactEmail);
         lede="Tiếp cận BlueSkyz qua kênh phù hợp với nhu cầu của bạn. Địa chỉ email sẽ xuất hiện khi BlueSkyz công bố chúng."
       />
       <ul class="mt-12 grid gap-4 sm:grid-cols-2">
-        {
-          !hasBusinessEmail ? (
-            <li class="flex min-w-0 flex-col rounded-xl border border-[var(--border-subtle)] bg-white p-6">
-              <h2 class="text-lg font-semibold tracking-tight">Bảo mật</h2>
-              <p class="mt-2 flex-1 text-sm leading-relaxed text-[var(--text-secondary)]">
-                Sử dụng báo cáo lỗ hổng riêng tư của GitHub. Email bảo mật sẽ
-                xuất hiện ở đây khi BlueSkyz công bố.
-              </p>
-              <div class="mt-5">
-                <SafeAction
-                  href={SECURITY_ADVISORY_URL}
-                  label="Mở báo cáo lỗ hổng riêng tư"
-                  boundary="private-reporting"
-                  lang="vi"
-                />
-              </div>
-            </li>
-          ) : null
-        }
-        <li
-          class="flex flex-col rounded-xl border border-[var(--border-subtle)] bg-white p-6"
-        >
+        {!hasBusinessEmail ? (
+          <li class="flex min-w-0 flex-col rounded-xl border border-[var(--border-subtle)] bg-white p-6">
+            <h2 class="text-lg font-semibold tracking-tight">Bảo mật</h2>
+            <p class="mt-2 flex-1 text-sm leading-relaxed text-[var(--text-secondary)]">
+              Sử dụng báo cáo lỗ hổng riêng tư của GitHub. Email bảo mật sẽ xuất
+              hiện ở đây khi BlueSkyz công bố.
+            </p>
+            <div class="mt-5">
+              <SafeAction
+                href={SECURITY_ADVISORY_URL}
+                label="Mở báo cáo lỗ hổng riêng tư"
+                boundary="private-reporting"
+                lang="vi"
+              />
+            </div>
+          </li>
+        ) : null}
+        <li class="flex flex-col rounded-xl border border-[var(--border-subtle)] bg-white p-6">
           <h2 class="text-lg font-semibold tracking-tight">
             Kinh doanh / chung
           </h2>
-          <p
-            class="mt-2 flex-1 text-sm leading-relaxed text-[var(--text-secondary)]"
-          >
-            {
-              hasBusinessEmail ? (
-                <>
-                  Email{" "}
-                  <a
-                    href={`mailto:${SITE.contactEmail}`}
-                    class="inline-flex min-h-11 items-center font-semibold text-[var(--action-primary)] no-underline hover:underline"
-                  >
-                    {SITE.contactEmail}
-                  </a>{" "}
-                  cho các yêu cầu kinh doanh.
-                </>
-              ) : (
-                "Địa chỉ email kinh doanh sẽ xuất hiện khi BlueSkyz công bố. Trong thời gian đó, hãy xem trang Về chúng tôi, hoặc sử dụng kênh báo cáo Bảo mật như một kênh tin cậy có thể hoạt động ngay."
-              )
-            }
+          <p class="mt-2 flex-1 text-sm leading-relaxed text-[var(--text-secondary)]">
+            {hasBusinessEmail ? (
+              <>
+                Email{" "}
+                <a
+                  href={`mailto:${SITE.contactEmail}`}
+                  class="inline-flex min-h-11 items-center font-semibold text-[var(--action-primary)] no-underline hover:underline"
+                >
+                  {SITE.contactEmail}
+                </a>{" "}
+                cho các yêu cầu kinh doanh.
+              </>
+            ) : (
+              "Địa chỉ email kinh doanh sẽ xuất hiện khi BlueSkyz công bố. Trong thời gian đó, hãy xem trang Về chúng tôi, hoặc sử dụng kênh báo cáo Bảo mật như một kênh tin cậy có thể hoạt động ngay."
+            )}
           </p>
         </li>
       </ul>

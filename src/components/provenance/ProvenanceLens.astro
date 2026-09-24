@@ -63,57 +63,52 @@ const LABELS: Record<
 const labels = LABELS[lang];
 ---
 
-{
-  view && !view.unknown ? (
-    <section class="c4-provenance" data-provenance-lens={view.subject}>
-      <h2 class="c4-provenance__heading">{labels.heading}</h2>
-      <p class="c4-provenance__statement" data-provenance-statement>
-        {view.statement}
+{view && !view.unknown ? (
+  <section class="c4-provenance" data-provenance-lens={view.subject}>
+    <h2 class="c4-provenance__heading">{labels.heading}</h2>
+    <p class="c4-provenance__statement" data-provenance-statement>
+      {view.statement}
+    </p>
+
+    {view.freshness && (
+      <p class="c4-provenance__freshness">
+        {labels.freshness}:{" "}
+        <time datetime={view.freshness}>{view.freshness}</time>
       </p>
+    )}
 
-      {view.freshness && (
-        <p class="c4-provenance__freshness">
-          {labels.freshness}:{" "}
-          <time datetime={view.freshness}>{view.freshness}</time>
-        </p>
-      )}
+    {view.sourceRefs.length > 0 && (
+      <details class="c4-provenance__disclosure" data-provenance-sources>
+        <summary class="c4-provenance__summary">
+          {labels.sources} ({view.sourceRefs.length})
+        </summary>
+        <ul class="c4-provenance__sources">
+          {view.sourceRefs.map((ref) => (
+            <li class="c4-provenance__source">
+              <a class="c4-provenance__source-link" href={ref.href}>
+                {ref.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </details>
+    )}
 
-      {view.sourceRefs.length > 0 && (
-        <details class="c4-provenance__disclosure" data-provenance-sources>
-          <summary class="c4-provenance__summary">
-            {labels.sources} ({view.sourceRefs.length})
-          </summary>
-          <ul class="c4-provenance__sources">
-            {view.sourceRefs.map((ref) => (
-              <li class="c4-provenance__source">
-                <a class="c4-provenance__source-link" href={ref.href}>
-                  {ref.label}
-                </a>
-              </li>
-            ))}
-          </ul>
-        </details>
-      )}
-
-      {view.boundary && (
-        <details class="c4-provenance__disclosure" data-provenance-boundary>
-          <summary class="c4-provenance__summary">{labels.boundary}</summary>
-          <dl class="c4-provenance__boundary">
-            <dt>{labels.boundaryMeans}</dt>
-            <dd>{view.boundary.claim}</dd>
-            <dt>{labels.boundaryNot}</dt>
-            <dd>{view.boundary.doesNotImply}</dd>
-          </dl>
-        </details>
-      )}
-    </section>
-  ) : (
-    <section
-      class="c4-provenance c4-provenance--unknown"
-      data-provenance-unknown
-    >
-      <h2 class="c4-provenance__heading">{labels.heading}</h2>
-      <p class="c4-provenance__statement">{labels.unknown}</p>
-    </section>
-  )
-}
+    {view.boundary && (
+      <details class="c4-provenance__disclosure" data-provenance-boundary>
+        <summary class="c4-provenance__summary">{labels.boundary}</summary>
+        <dl class="c4-provenance__boundary">
+          <dt>{labels.boundaryMeans}</dt>
+          <dd>{view.boundary.claim}</dd>
+          <dt>{labels.boundaryNot}</dt>
+          <dd>{view.boundary.doesNotImply}</dd>
+        </dl>
+      </details>
+    )}
+  </section>
+) : (
+  <section class="c4-provenance c4-provenance--unknown" data-provenance-unknown>
+    <h2 class="c4-provenance__heading">{labels.heading}</h2>
+    <p class="c4-provenance__statement">{labels.unknown}</p>
+  </section>
+)}

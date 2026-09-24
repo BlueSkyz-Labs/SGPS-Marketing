@@ -130,61 +130,55 @@ nodes
       aria-hidden="true"
       class="hidden w-full md:block"
     >
-      {
-        edges.map((edge) => {
-          const from = desktopPositions.get(edge.from);
-          const to = desktopPositions.get(edge.to);
-          if (!from || !to) return null;
-          return (
-            <line
-              x1={from.x}
-              y1={from.y}
-              x2={to.x}
-              y2={to.y}
-              stroke="color-mix(in srgb, var(--brand-cobalt) 45%, transparent)"
+      {edges.map((edge) => {
+        const from = desktopPositions.get(edge.from);
+        const to = desktopPositions.get(edge.to);
+        if (!from || !to) return null;
+        return (
+          <line
+            x1={from.x}
+            y1={from.y}
+            x2={to.x}
+            y2={to.y}
+            stroke="color-mix(in srgb, var(--brand-cobalt) 45%, transparent)"
+            stroke-width="1.25"
+          />
+        );
+      })}
+      {nodes.map((node) => {
+        const point = desktopPositions.get(node.id);
+        if (!point) return null;
+        const isBrand = node.kind === "brand";
+        return (
+          <g>
+            <circle
+              cx={point.x}
+              cy={point.y}
+              r={isBrand ? 10 : node.kind === "claim" ? 8 : 6}
+              fill={
+                isBrand
+                  ? "var(--brand-cobalt)"
+                  : node.kind === "trust" || node.kind === "evidence"
+                    ? "var(--brand-porcelain)"
+                    : "color-mix(in srgb, var(--brand-cobalt) 55%, white)"
+              }
+              stroke="color-mix(in srgb, var(--brand-cobalt) 55%, transparent)"
               stroke-width="1.25"
             />
-          );
-        })
-      }
-      {
-        nodes.map((node) => {
-          const point = desktopPositions.get(node.id);
-          if (!point) return null;
-          const isBrand = node.kind === "brand";
-          return (
-            <g>
-              <circle
-                cx={point.x}
-                cy={point.y}
-                r={isBrand ? 10 : node.kind === "claim" ? 8 : 6}
-                fill={
-                  isBrand
-                    ? "var(--brand-cobalt)"
-                    : node.kind === "trust" || node.kind === "evidence"
-                      ? "var(--brand-porcelain)"
-                      : "color-mix(in srgb, var(--brand-cobalt) 55%, white)"
-                }
-                stroke="color-mix(in srgb, var(--brand-cobalt) 55%, transparent)"
-                stroke-width="1.25"
-              />
-              {node.kind !== "evidence" ? (
-                <text
-                  x={point.x}
-                  y={point.y - 18}
-                  text-anchor="middle"
-                  font-size="13"
-                  fill="var(--text-secondary)"
-                >
-                  {node.kind === "claim"
-                    ? truncate(node.label, 16)
-                    : node.label}
-                </text>
-              ) : null}
-            </g>
-          );
-        })
-      }
+            {node.kind !== "evidence" ? (
+              <text
+                x={point.x}
+                y={point.y - 18}
+                text-anchor="middle"
+                font-size="13"
+                fill="var(--text-secondary)"
+              >
+                {node.kind === "claim" ? truncate(node.label, 16) : node.label}
+              </text>
+            ) : null}
+          </g>
+        );
+      })}
     </svg>
 
     <svg
@@ -193,91 +187,79 @@ nodes
       aria-hidden="true"
       class="w-full md:hidden"
     >
-      {
-        edges.map((edge) => {
-          const from = mobilePositions.get(edge.from);
-          const to = mobilePositions.get(edge.to);
-          if (!from || !to) return null;
-          return (
-            <line
-              x1={from.x}
-              y1={from.y}
-              x2={to.x}
-              y2={to.y}
-              stroke="color-mix(in srgb, var(--brand-cobalt) 45%, transparent)"
+      {edges.map((edge) => {
+        const from = mobilePositions.get(edge.from);
+        const to = mobilePositions.get(edge.to);
+        if (!from || !to) return null;
+        return (
+          <line
+            x1={from.x}
+            y1={from.y}
+            x2={to.x}
+            y2={to.y}
+            stroke="color-mix(in srgb, var(--brand-cobalt) 45%, transparent)"
+            stroke-width="1.25"
+          />
+        );
+      })}
+      {nodes.map((node) => {
+        const point = mobilePositions.get(node.id);
+        if (!point) return null;
+        const isBrand = node.kind === "brand";
+        return (
+          <g>
+            <circle
+              cx={point.x}
+              cy={point.y}
+              r={isBrand ? 11 : node.kind === "claim" ? 8 : 6}
+              fill={
+                isBrand
+                  ? "var(--brand-cobalt)"
+                  : node.kind === "trust" || node.kind === "evidence"
+                    ? "var(--brand-porcelain)"
+                    : "color-mix(in srgb, var(--brand-cobalt) 55%, white)"
+              }
+              stroke="color-mix(in srgb, var(--brand-cobalt) 55%, transparent)"
               stroke-width="1.25"
             />
-          );
-        })
-      }
-      {
-        nodes.map((node) => {
-          const point = mobilePositions.get(node.id);
-          if (!point) return null;
-          const isBrand = node.kind === "brand";
-          return (
-            <g>
-              <circle
-                cx={point.x}
-                cy={point.y}
-                r={isBrand ? 11 : node.kind === "claim" ? 8 : 6}
-                fill={
-                  isBrand
-                    ? "var(--brand-cobalt)"
-                    : node.kind === "trust" || node.kind === "evidence"
-                      ? "var(--brand-porcelain)"
-                      : "color-mix(in srgb, var(--brand-cobalt) 55%, white)"
-                }
-                stroke="color-mix(in srgb, var(--brand-cobalt) 55%, transparent)"
-                stroke-width="1.25"
-              />
-              {node.kind !== "evidence" ? (
-                <text
-                  x={point.x}
-                  y={point.y - 18}
-                  text-anchor="middle"
-                  font-size="14"
-                  fill="var(--text-muted)"
-                >
-                  {node.kind === "claim"
-                    ? truncate(node.label, 18)
-                    : node.label}
-                </text>
-              ) : null}
-            </g>
-          );
-        })
-      }
+            {node.kind !== "evidence" ? (
+              <text
+                x={point.x}
+                y={point.y - 18}
+                text-anchor="middle"
+                font-size="14"
+                fill="var(--text-muted)"
+              >
+                {node.kind === "claim" ? truncate(node.label, 18) : node.label}
+              </text>
+            ) : null}
+          </g>
+        );
+      })}
     </svg>
 
-    <ul
-      class="atlas-list mt-8 divide-y divide-[var(--border-subtle)] rounded-lg border border-[var(--border-subtle)] bg-white"
-    >
-      {
-        nodes.map((node) => (
-          <li
-            data-atlas-node
-            data-atlas-kind={node.kind}
-            class="flex items-center justify-between gap-4 px-4"
+    <ul class="atlas-list mt-8 divide-y divide-[var(--border-subtle)] rounded-lg border border-[var(--border-subtle)] bg-white">
+      {nodes.map((node) => (
+        <li
+          data-atlas-node
+          data-atlas-kind={node.kind}
+          class="flex items-center justify-between gap-4 px-4"
+        >
+          <a
+            href={node.href}
+            class="inline-flex min-h-11 items-center text-sm font-medium text-[var(--text-primary)] no-underline hover:text-[var(--action-primary)]"
           >
-            <a
-              href={node.href}
-              class="inline-flex min-h-11 items-center text-sm font-medium text-[var(--text-primary)] no-underline hover:text-[var(--action-primary)]"
-            >
-              {node.label}
-            </a>
-            <span class="text-[0.65rem] font-semibold tracking-[0.14em] text-[var(--text-muted)] uppercase">
-              {kindLabels[node.kind]}
-            </span>
-          </li>
-        ))
-      }
+            {node.label}
+          </a>
+          <span class="text-[0.65rem] font-semibold tracking-[0.14em] text-[var(--text-muted)] uppercase">
+            {kindLabels[node.kind]}
+          </span>
+        </li>
+      ))}
     </ul>
 
-    {
-      products.length === 0 && (
-        <p class="mt-4 text-sm text-[var(--text-muted)]">{emptyLabel}</p>
-      )
-    }
+    {products.length === 0 && (
+      <p class="mt-4 text-sm text-[var(--text-muted)]">{emptyLabel}</p>
+    )}
   </div>
 </section>

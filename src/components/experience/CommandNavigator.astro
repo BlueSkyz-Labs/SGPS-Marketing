@@ -25,7 +25,9 @@ const resultNone = isVi ? "Không có kết quả" : "No results";
 
 <dialog class="command-navigator" aria-label={navLabel} data-command-navigator>
   <div class="command-navigator__panel">
-    <label class="sr-only" for="command-navigator-input">{navLabel}</label>
+    <label class="sr-only" for="command-navigator-input">
+      {navLabel}
+    </label>
     <input
       id="command-navigator-input"
       type="search"
@@ -35,24 +37,22 @@ const resultNone = isVi ? "Không có kết quả" : "No results";
       data-command-input
     />
     <ul class="command-navigator__list" data-command-list>
-      {
-        items.map((item) => {
-          const searchText =
-            `${item.label} ${item.aliases.join(" ")}`.toLocaleLowerCase(lang);
-          return (
-            <li
-              data-command-item
-              data-command-kind={item.kind}
-              data-search={searchText}
-            >
-              <a href={item.href}>{item.label}</a>
-              <span class="command-navigator__kind">
-                {KIND_LABELS[item.kind] ?? item.kind}
-              </span>
-            </li>
-          );
-        })
-      }
+      {items.map((item) => {
+        const searchText =
+          `${item.label} ${item.aliases.join(" ")}`.toLocaleLowerCase(lang);
+        return (
+          <li
+            data-command-item
+            data-command-kind={item.kind}
+            data-search={searchText}
+          >
+            <a href={item.href}>{item.label}</a>
+            <span class="command-navigator__kind">
+              {KIND_LABELS[item.kind] ?? item.kind}
+            </span>
+          </li>
+        );
+      })}
     </ul>
     <p
       class="sr-only"
@@ -61,8 +61,7 @@ const resultNone = isVi ? "Không có kết quả" : "No results";
       data-command-live
       data-live-template={resultTemplate}
       data-live-none={resultNone}
-    >
-    </p>
+    ></p>
     <p class="command-navigator__empty" data-command-empty hidden>
       {emptyLabel}
     </p>

@@ -21,7 +21,9 @@ const states = [
   </head>
   <body>
     <main data-truth-choreography>
-      {states.map((state) => <TruthState state={state} lang="en" />)}
+      {states.map((state) => (
+        <TruthState state={state} lang="en" />
+      ))}
     </main>
   </body>
 </html>

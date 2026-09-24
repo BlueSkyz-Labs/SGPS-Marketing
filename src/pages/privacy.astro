@@ -63,23 +63,21 @@ return Astro.redirect("/en/privacy/");
         >
           Security reporting
         </a>
-        {
-          hasBusinessEmail ? (
-            <a
-              href="/contact/"
-              class="inline-flex min-h-11 items-center text-sm font-semibold text-[var(--action-primary)] no-underline hover:underline"
-            >
-              Contact BlueSkyz
-            </a>
-          ) : (
-            <a
-              href="/about/"
-              class="inline-flex min-h-11 items-center text-sm font-semibold text-[var(--action-primary)] no-underline hover:underline"
-            >
-              About BlueSkyz
-            </a>
-          )
-        }
+        {hasBusinessEmail ? (
+          <a
+            href="/contact/"
+            class="inline-flex min-h-11 items-center text-sm font-semibold text-[var(--action-primary)] no-underline hover:underline"
+          >
+            Contact BlueSkyz
+          </a>
+        ) : (
+          <a
+            href="/about/"
+            class="inline-flex min-h-11 items-center text-sm font-semibold text-[var(--action-primary)] no-underline hover:underline"
+          >
+            About BlueSkyz
+          </a>
+        )}
       </div>
     </Container>
   </section>
