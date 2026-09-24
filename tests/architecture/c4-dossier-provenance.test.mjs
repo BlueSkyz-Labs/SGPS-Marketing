@@ -16,8 +16,16 @@ const LANGS = ["en", "vi", "zh"];
 const SUBJECTS = [
   "security-reporting-is-private",
   "privacy-no-tracking-on-this-site",
-  "registry-publishes-only-proven-products",
 ];
+
+/**
+ * A claim whose canonical chain is withdrawn or self-only resolves as unknown,
+ * and the dossier must refuse it rather than publish it (issue #240 / H-01).
+ * It therefore cannot be a resolvable fixture for the projection contract
+ * above; its refusal is pinned by the dedicated negative test below instead of
+ * being asserted as publishable, which is the behaviour that defect described.
+ */
+const REFUSED_SUBJECT = "registry-publishes-only-proven-products";
 
 test("every dossier source block projects the provenance adapter for the same subject", () => {
   for (const lang of LANGS) {
@@ -146,25 +154,31 @@ test("an existing claim refuses withdrawn evidence", () => {
   }
 });
 
-test("a self-only chain must not publish its existing claim", () => {
-  const claim = CLAIMS.find(
-    (entry) => entry.id === "registry-publishes-only-proven-products",
-  );
-  assert.ok(claim);
-  const originalSurface = claim.surface;
+test("a claim whose chain has no genuine route publishes nothing", () => {
+  for (const lang of LANGS) {
+    const provenance = getPublicProvenance(REFUSED_SUBJECT, lang);
+    assert.ok(provenance, `${REFUSED_SUBJECT} must resolve for ${lang}`);
+    assert.equal(
+      provenance.unknown,
+      true,
+      `${REFUSED_SUBJECT} (${lang}) must resolve as unknown`,
+    );
+    assert.equal(
+      provenance.sourceRefs.length,
+      0,
+      `${REFUSED_SUBJECT} (${lang}) must expose no genuine source route`,
+    );
 
-  try {
-    for (const lang of LANGS) {
-      claim.surface = originalSurface;
-      const existing = getPublicProvenance(claim.id, lang);
-      assert.ok(existing?.sourceRefs.length === 1);
-      claim.surface = existing.sourceRefs[0].href;
-      assert.equal(getPublicProvenance(claim.id, lang)?.unknown, true);
-      const result = compilePublicDossier({ claimIds: [claim.id], lang });
-      assert.deepEqual(result.entries, []);
-      assert.equal(result.complete, false);
-    }
-  } finally {
-    claim.surface = originalSurface;
+    const result = compilePublicDossier({ claimIds: [REFUSED_SUBJECT], lang });
+    assert.deepEqual(
+      result.entries,
+      [],
+      `${REFUSED_SUBJECT} (${lang}) must not be published`,
+    );
+    assert.equal(
+      result.complete,
+      false,
+      `${REFUSED_SUBJECT} (${lang}) must not report a complete dossier`,
+    );
   }
 });

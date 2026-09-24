@@ -101,12 +101,19 @@ function resolveSection(
     // A registered claim is not publishable if its canonical source chain is
     // withdrawn or self-only. Refuse the entire claim, not only its sources.
     if (!provenance || provenance.unknown) return null;
+    // The surface's published destination comes from the same provenance the
+    // claim's sources do: asking the logical id for a path could only ever
+    // answer null, which is how every source link disappeared. When the chain
+    // exposes no genuine route, the link stays null rather than guessed.
+    const route = provenance.sourceRefs.find(
+      (source) => source.id === `ev-${claim.surface}-route`,
+    );
     return {
       id: claim.id,
       section,
       label: pick(claim.statement, lang),
       detail: null,
-      href: publicRoute(claim.surface),
+      href: publicRoute(route?.href),
       freshness: provenance?.freshness ?? null,
       evidenceIds:
         provenance && !provenance.unknown
