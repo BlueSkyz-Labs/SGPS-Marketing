@@ -49,19 +49,14 @@ test("root no-JS gateway offers every live locale", async ({ browser }) => {
   try {
     const page = await context.newPage();
     await page.goto("/");
-    await expect(page.getByRole("link", { name: "Tiếng Việt" })).toHaveAttribute(
-      "href",
-      "/vi/",
-    );
-    await expect(page.getByRole("link", { name: "English" })).toHaveAttribute(
-      "href",
-      "/en/",
-    );
-    await expect(page.getByRole("link", { name: "简体中文" })).toHaveAttribute(
-      "href",
-      "/zh/",
-    );
-    await expect(page.getByRole("link", { name: "繁體中文" })).toHaveCount(0);
+    const vietnamese = page.getByRole("link", { name: "Tiếng Việt" });
+    const english = page.getByRole("link", { name: "English" });
+    const simplifiedChinese = page.getByRole("link", { name: "简体中文" });
+    const traditionalChinese = page.getByRole("link", { name: "繁體中文" });
+    await expect(vietnamese).toHaveAttribute("href", "/vi/");
+    await expect(english).toHaveAttribute("href", "/en/");
+    await expect(simplifiedChinese).toHaveAttribute("href", "/zh/");
+    await expect(traditionalChinese).toHaveCount(0);
   } finally {
     await context.close();
   }
