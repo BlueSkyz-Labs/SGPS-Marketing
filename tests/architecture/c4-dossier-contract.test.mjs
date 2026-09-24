@@ -10,6 +10,7 @@ import {
   DOSSIER_SECTIONS,
   compilePublicDossier,
 } from "../../src/lib/dossier.ts";
+import { getPublicProvenance } from "../../src/lib/provenance-lens.ts";
 
 const CLAIM_ID = "security-reporting-is-private";
 const EVIDENCE_ID = "ev-security-advisory";
@@ -180,4 +181,61 @@ test("the compiler only reads canonical public selectors", () => {
   assert.ok(
     CLAIMS.length > 0 && BOUNDARY_INDEX.size > 0 && EVIDENCE_INDEX.size > 0,
   );
+});
+
+// ---------------------------------------------------------------------------
+// Issue #240 — a claim whose provenance resolves always lost its source link,
+// because the dossier asked a logical surface id for a path-shaped href and
+// got null. The contract below pins the destination to the canonical
+// provenance route instead of to a route the dossier would have to invent.
+// ---------------------------------------------------------------------------
+
+const LANGS = ["en", "vi", "zh"];
+
+test("#240 every published claim links to its canonical provenance route", () => {
+  for (const lang of LANGS) {
+    const dossier = compilePublicDossier({
+      lang,
+      claimIds: CLAIMS.map((claim) => claim.id),
+    });
+    const entries = dossier.entries.filter(
+      (entry) => entry.section === "claims",
+    );
+    for (const entry of entries) {
+      const claim = CLAIMS.find((item) => item.id === entry.id);
+      assert.ok(claim, `${entry.id} must exist in the claim fabric`);
+      const provenance = getPublicProvenance(entry.id, lang);
+      assert.ok(provenance, `${entry.id} must resolve provenance`);
+      const route = provenance.sourceRefs.find(
+        (source) => source.id === `ev-${claim.surface}-route`,
+      );
+      if (!route) {
+        // No genuine canonical route: the link stays absent rather than guessed.
+        assert.equal(
+          entry.href,
+          null,
+          `${entry.id} in ${lang} invents no href`,
+        );
+        continue;
+      }
+      assert.ok(
+        entry.href !== null,
+        `${entry.id} in ${lang} must publish a source link`,
+      );
+      assert.equal(
+        entry.href,
+        route.href,
+        `${entry.id} in ${lang} must link to its canonical provenance route`,
+      );
+      assert.equal(
+        entry.href,
+        EVIDENCE_INDEX.get(`ev-${claim.surface}-route`)?.href[lang],
+        `${entry.id} in ${lang} must equal the published route destination`,
+      );
+      assert.ok(
+        entry.href.startsWith("/") && !entry.href.includes("//"),
+        `destination must stay a safe same-site path: ${entry.href}`,
+      );
+    }
+  }
 });
