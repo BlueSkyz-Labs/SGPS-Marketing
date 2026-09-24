@@ -44,6 +44,31 @@ test("root gateway respects the returning user's explicit saved language", async
   await expect(page).toHaveURL(/\/vi\/$/);
 });
 
+test("root no-JS gateway offers every published locale including Simplified Chinese", async ({
+  browser,
+}) => {
+  const context = await browser.newContext({ javaScriptEnabled: false });
+  try {
+    const page = await context.newPage();
+    await page.goto("/");
+    await expect(page.getByRole("link", { name: "Tiếng Việt" })).toHaveAttribute(
+      "href",
+      "/vi/",
+    );
+    await expect(page.getByRole("link", { name: "English" })).toHaveAttribute(
+      "href",
+      "/en/",
+    );
+    await expect(page.getByRole("link", { name: "简体中文" })).toHaveAttribute(
+      "href",
+      "/zh/",
+    );
+    await expect(page.getByRole("link", { name: "繁體中文" })).toHaveCount(0);
+  } finally {
+    await context.close();
+  }
+});
+
 test("localized URLs stay stable instead of geo/browser redirecting", async ({
   page,
 }) => {
