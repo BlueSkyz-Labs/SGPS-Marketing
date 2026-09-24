@@ -6,7 +6,7 @@ import {
   isPublicDestination,
 } from "../../src/lib/provenance-lens.ts";
 
-test("public destinations reject URL parser ambiguities and unsafe schemes", () => {
+test("public destinations reject unsafe URLs", () => {
   const refused = [
     "/\\evil.example/path",
     "/%2e%2e/private/",
@@ -50,7 +50,10 @@ test("a malformed canonical destination is not published as a source", () => {
     const chain = getPublicProvenance("security-reporting-is-private", "en");
     assert.ok(chain);
     assert.equal(chain.sourceRefs.some((ref) => ref.href === malformed), false);
-    assert.equal(chain.sourceRefs.some((ref) => ref.id === reference.id), false);
+    assert.equal(
+      chain.sourceRefs.some((ref) => ref.id === reference.id),
+      false,
+    );
   } finally {
     reference.href.en = original;
   }
