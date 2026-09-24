@@ -75,3 +75,23 @@ test("the header spot-check list mirrors the contract test", () => {
   );
   assert.match(security, /X-Content-Type-Options/);
 });
+
+test("production smoke covers each actually published language", () => {
+  const smoke = readFileSync(SMOKE, "utf8");
+  for (const route of [
+    'get("/zh/")',
+    '"/zh/privacy/"',
+    '"/zh/security/"',
+    '"/zh/support/"',
+  ]) {
+    assert.ok(smoke.includes(route), `smoke must cover ${route}`);
+  }
+  assert.ok(
+    smoke.includes('data-language-choice="zh"'),
+    "root gateway must expose the published zh-Hans route",
+  );
+  assert.ok(
+    smoke.includes("en|vi|zh"),
+    "sitemap gate must accept only published EN/VI/zh routes",
+  );
+});

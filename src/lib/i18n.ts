@@ -68,6 +68,9 @@ export function normalizeActiveBrowserLanguage(
   const normalized = value?.trim().toLowerCase() ?? "";
   if (normalized === "vi" || normalized.startsWith("vi-")) return "vi";
   if (normalized === "en" || normalized.startsWith("en-")) return "en";
+  // Script-explicit Hans and region-explicit CN/SG are published via /zh/.
+  // Bare zh and Hant/HK/TW remain unresolved rather than silently converting.
+  if (/^zh-(?:hans|cn|sg)(?:-|$)/.test(normalized)) return "zh";
   return null;
 }
 
@@ -108,10 +111,10 @@ export function getAlternatePath(
   pathname: string,
   targetLang: Language,
 ): string {
-  const rest = pathname.replace(/^\/(en|vi|zh)/, "") || "/";
+  const rest = pathname.replace(/^\/(en|vi|zh)(?=\/|$)/, "") || "/";
   return `/${targetLang}${rest}`;
 }
 
 export function stripLanguagePrefix(pathname: string): string {
-  return pathname.replace(/^\/(en|vi|zh)/, "") || "/";
+  return pathname.replace(/^\/(en|vi|zh)(?=\/|$)/, "") || "/";
 }
