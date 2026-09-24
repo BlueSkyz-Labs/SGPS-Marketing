@@ -44,9 +44,7 @@ test("root gateway respects the returning user's explicit saved language", async
   await expect(page).toHaveURL(/\/vi\/$/);
 });
 
-test("root no-JS gateway offers every published locale including Simplified Chinese", async ({
-  browser,
-}) => {
+test("root no-JS gateway offers every live locale", async ({ browser }) => {
   const context = await browser.newContext({ javaScriptEnabled: false });
   try {
     const page = await context.newPage();
