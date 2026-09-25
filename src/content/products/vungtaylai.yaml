@@ -21,12 +21,12 @@ primaryAction:
   label: Preview Vững Tay Lái
   href: https://blueskyzlabs.com/en/products/vungtaylai/
 proof:
-  screenshot:
+  media:
     src: /products/vungtaylai/screenshot.png
-    alt: Vững Tay Lái by BlueSkyz Labs — AI Driving Coach
+    alt: Vững Tay Lái by BlueSkyz Labs — brand identity
     width: 1800
     height: 504
-  repositoryUrl: https://github.com/BlueSkyz-Labs/PRJ_VungTayLai
+  repositoryUrl: https://github.com/BlueSkyz-Labs/VungTayLai
   publicUrl: https://blueskyzlabs.com/en/products/vungtaylai/
   privacyUrl: https://blueskyzlabs.com/en/privacy/
   securityUrl: https://blueskyzlabs.com/en/security/
@@ -35,5 +35,5 @@ endorsement: A BlueSkyz Labs product
 featuredTier: ecosystem
 displayOrder: 5
 public: true
-sourceRevision: 5a0d79a2f2d095c5653c670d28a13e5b6dacbf86
+sourceRevision: bc23fd8c0782ee624e205f43206a1460f54d12a3
 lastReviewedAt: 2026-09-25

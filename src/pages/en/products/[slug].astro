@@ -22,7 +22,7 @@ interface Props {
 
 const { product } = Astro.props;
 const { data } = product;
-const screenshot = data.proof.screenshot;
+const media = data.proof.media;
 const capabilities = data.capabilities ?? [];
 
 const PLATFORM_LABELS: Record<string, string> = {
@@ -56,7 +56,7 @@ const productStructuredData = productJsonLd(
     name: data.name,
     description: data.shortDescription,
     slug: data.slug,
-    screenshotUrl: screenshot?.src,
+    mediaUrl: media?.src,
   },
   SITE.url,
   "en",
@@ -67,7 +67,7 @@ const productStructuredData = productJsonLd(
   title={`${data.name} — BlueSkyz Labs`}
   description={data.shortDescription}
   path={`/en/products/${data.slug}/`}
-  ogImage={data.proof.screenshot?.src}
+  ogImage={data.proof.media?.src}
   scene="product"
 >
   <script
@@ -181,7 +181,7 @@ const productStructuredData = productJsonLd(
         </section>
       ) : null}
 
-      {screenshot ? (
+      {media ? (
         <section class="mt-14" aria-labelledby="profile-proof">
           <h2
             id="profile-proof"
@@ -191,10 +191,10 @@ const productStructuredData = productJsonLd(
           </h2>
           <img
             class="mt-4 h-auto w-full max-w-4xl rounded-[var(--radius-card)] border border-[var(--border-subtle)]"
-            src={screenshot.src}
-            alt={screenshot.alt}
-            width={screenshot.width}
-            height={screenshot.height}
+            src={media.src}
+            alt={media.alt}
+            width={media.width}
+            height={media.height}
             loading="lazy"
             decoding="async"
           />

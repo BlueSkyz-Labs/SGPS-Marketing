@@ -23,12 +23,12 @@ primaryAction:
   label: Preview Sổ Trọ
   href: https://blueskyzlabs.com/en/products/sotro/
 proof:
-  screenshot:
+  media:
     src: /products/sotro/screenshot.png
-    alt: Sổ Trọ by BlueSkyz Labs — Smart Rental Management
+    alt: Sổ Trọ by BlueSkyz Labs — brand identity
     width: 1800
     height: 504
-  repositoryUrl: https://github.com/BlueSkyz-Labs/PRJ-SoTro
+  repositoryUrl: https://github.com/BlueSkyz-Labs/Sotro
   publicUrl: https://blueskyzlabs.com/en/products/sotro/
   privacyUrl: https://blueskyzlabs.com/en/privacy/
   securityUrl: https://blueskyzlabs.com/en/security/
@@ -37,5 +37,5 @@ endorsement: A BlueSkyz Labs product
 featuredTier: featured
 displayOrder: 3
 public: true
-sourceRevision: 5a0d79a2f2d095c5653c670d28a13e5b6dacbf86
+sourceRevision: b226e491517f34d49286b117e2d2634f7d47e763
 lastReviewedAt: 2026-09-25

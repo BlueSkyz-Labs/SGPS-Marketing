@@ -23,6 +23,6 @@ test("product truth models lifecycle, availability, proof and CTA", () => {
     assert.match(schema, new RegExp(field));
   }
   assert.match(schema, /A BlueSkyz Labs product/);
-  assert.match(schema, /productScreenshot/);
+  assert.match(schema, /productMedia/);
   assert.match(config, /productSchema/);
 });

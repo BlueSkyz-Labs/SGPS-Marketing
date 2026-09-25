@@ -55,8 +55,8 @@ test("flagship proof section is evidence-gated and optional", () => {
     "src/components/sections/FlagshipProof.astro",
     "utf8",
   );
-  assert.match(proof, /proof\.screenshot/);
-  assert.match(proof, /screenshot\.src/);
+  assert.match(proof, /proof\.media/);
+  assert.match(proof, /media\.src/);
   assert.match(proof, /data-flagship-proof/);
   assert.match(proof, /capabilities\.slice/);
   assert.doesNotMatch(proof, /jobs\.slice/);
