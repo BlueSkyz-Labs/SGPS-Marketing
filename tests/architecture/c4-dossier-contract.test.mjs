@@ -183,6 +183,52 @@ test("the compiler only reads canonical public selectors", () => {
   );
 });
 
+test("dossier sources render known canonical and unknown states from the shipped component", () => {
+  const component = readFileSync(
+    "src/components/dossier/DossierSources.astro",
+    "utf8",
+  );
+  const known = getPublicProvenance(CLAIM_ID, "en");
+  assert.ok(known, "the known source must resolve from canonical truth");
+  const canonical = EVIDENCE_INDEX.get(EVIDENCE_ID);
+  assert.ok(canonical, "the known source must exist in EVIDENCE_INDEX");
+
+  assert.match(component, /getPublicProvenance\(entry\.id, lang\)/);
+  assert.match(component, /data-dossier-sources/);
+  assert.match(component, /data-dossier-source=\{id\}/);
+  assert.match(component, /provenance && !provenance\.unknown/);
+  assert.match(component, /data-dossier-source-unknown=\{id\}/);
+  assert.match(component, /provenance\.sourceRefs\.length > 0/);
+  assert.match(component, /provenance\.freshness/);
+  assert.doesNotMatch(component, /entry\.freshness/);
+  assert.match(component, /<time datetime=\{provenance\.freshness\}>/);
+  assert.match(component, /data-dossier-source-link href=\{source\.href\}/);
+  assert.equal(
+    component.includes(canonical.href.en),
+    false,
+    "the footer must read destinations from canonical provenance",
+  );
+  assert.equal(
+    component.includes("2026-09-12"),
+    false,
+    "the footer must read freshness from canonical provenance",
+  );
+  for (const forbidden of [
+    "verified",
+    "approved",
+    "certified",
+    "audited",
+    "guaranteed",
+    "compliant",
+  ]) {
+    assert.equal(
+      component.toLowerCase().includes(forbidden),
+      false,
+      `the footer must not claim ${forbidden}`,
+    );
+  }
+});
+
 // ---------------------------------------------------------------------------
 // Issue #240 — a claim whose provenance resolves always lost its source link,
 // because the dossier asked a logical surface id for a path-shaped href and

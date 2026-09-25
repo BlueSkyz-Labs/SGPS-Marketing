@@ -101,6 +101,40 @@ test.describe("C4-C dossier composer", () => {
     });
   }
 
+  test("the dossier footer exposes canonical ordinary source links at 390px", async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto("/en/dossier/");
+    const sources = page.locator("[data-dossier-sources]");
+    await expect(sources).toBeVisible();
+    await expect(sources).toContainText("Security reporting route");
+    const links = sources.locator("[data-dossier-source-link]");
+    await expect(links).toHaveCount(4);
+    await expect(sources.locator("[data-dossier-freshness]")).toHaveCount(1);
+    await expect(sources.locator("[data-dossier-freshness]")).toHaveAttribute(
+      "data-dossier-freshness",
+      "2026-09-12",
+    );
+    await expect(sources.locator("[data-dossier-source-unknown]")).toHaveCount(
+      1,
+    );
+    for (let index = 0; index < 4; index += 1) {
+      const link = links.nth(index);
+      const href = await link.getAttribute("href");
+      expect(
+        href,
+        "every source is an ordinary absolute or root-relative link",
+      ).toMatch(/^(https:\/\/|\/(?!\/))/);
+      expect(await link.evaluate((element) => element.tagName)).toBe("A");
+    }
+    const contained = await sources.evaluate((element) => {
+      const box = element.getBoundingClientRect();
+      return box.left >= 0 && box.right <= window.innerWidth + 1;
+    });
+    expect(contained, "the sources footer stays inside 390px").toBe(true);
+  });
+
   test("the composer states that it is presentation only", async ({ page }) => {
     await page.goto("/en/dossier/");
     const note = await page.locator(".c4-dossier__note").innerText();
