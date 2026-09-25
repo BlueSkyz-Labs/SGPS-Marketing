@@ -1,9 +1,9 @@
 slug: apexagent
 name: ApexAgent
 shortDescription: Autonomous AI agents that execute complex business workflows with human-in-the-loop oversight.
-lifecycle: active
-availability: public
-publicLabel: Available
+lifecycle: development
+availability: preview
+publicLabel: In development
 audience:
   - business
   - team
@@ -22,12 +22,12 @@ primaryAction:
   label: Explore ApexAgent
   href: https://blueskyzlabs.com/en/products/apexagent/
 proof:
-  screenshot:
+  media:
     src: /products/apexagent/screenshot.png
-    alt: ApexAgent by BlueSkyz Labs — AI Agents for Business
+    alt: ApexAgent by BlueSkyz Labs — brand identity
     width: 1800
     height: 504
-  repositoryUrl: https://github.com/BlueSkyz-Labs/PRJ_ApexAgent
+  repositoryUrl: https://github.com/BlueSkyz-Labs/ApexAgent
   publicUrl: https://blueskyzlabs.com/en/products/apexagent/
   privacyUrl: https://blueskyzlabs.com/en/privacy/
   securityUrl: https://blueskyzlabs.com/en/security/
@@ -36,5 +36,5 @@ endorsement: A BlueSkyz Labs product
 featuredTier: hero
 displayOrder: 1
 public: true
-sourceRevision: 5a0d79a2f2d095c5653c670d28a13e5b6dacbf86
+sourceRevision: e5d1db8f5aa4dd11df026941571b1bd5e1f402b9
 lastReviewedAt: 2026-09-25

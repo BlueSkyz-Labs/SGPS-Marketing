@@ -43,7 +43,7 @@ if (!product) {
 }
 
 const { data } = product;
-const screenshot = data.proof.screenshot;
+const media = data.proof.media;
 const capabilities = data.capabilities ?? [];
 const profileHref = getProductProfilePath(lang, data.slug);
 const viewProfileLabel = labelFor(SHARED_LABELS.viewProfile, lang);
@@ -51,7 +51,7 @@ const viewProfileLabel = labelFor(SHARED_LABELS.viewProfile, lang);
 /**
  * Loading decision (recorded, not guessed): the theatre sits immediately after
  * the hero, so eager above-the-fold media would compete with the hero LCP.
- * The screenshot therefore stays lazy with intrinsic width/height (no CLS) and
+ * The proof media therefore stays lazy with intrinsic width/height (no CLS) and
  * opacity 1 — it is the act's visual protagonist, never faded in.
  */
 ---
@@ -104,10 +104,10 @@ const viewProfileLabel = labelFor(SHARED_LABELS.viewProfile, lang);
         </a>
       </div>
     </div>
-    {screenshot ? (
+    {media ? (
       <figure class="c2-flagship-theatre__frame m-0">
         <ProductVisual
-          screenshot={screenshot}
+          media={media}
           transitionStyle={productTransitionStyle("media", data.slug)}
           continuity="media"
         />

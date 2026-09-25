@@ -23,12 +23,12 @@ primaryAction:
   label: Preview Sổ Tằm
   href: https://blueskyzlabs.com/en/products/sotam/
 proof:
-  screenshot:
+  media:
     src: /products/sotam/screenshot.png
-    alt: Sổ Tằm by BlueSkyz Labs — AI Journal for Clarity
+    alt: Sổ Tằm by BlueSkyz Labs — brand identity
     width: 1800
     height: 504
-  repositoryUrl: https://github.com/BlueSkyz-Labs/PRJ_SoTam
+  repositoryUrl: https://github.com/BlueSkyz-Labs/sotam
   publicUrl: https://blueskyzlabs.com/en/products/sotam/
   privacyUrl: https://blueskyzlabs.com/en/privacy/
   securityUrl: https://blueskyzlabs.com/en/security/
@@ -37,5 +37,5 @@ endorsement: A BlueSkyz Labs product
 featuredTier: featured
 displayOrder: 2
 public: true
-sourceRevision: 5a0d79a2f2d095c5653c670d28a13e5b6dacbf86
+sourceRevision: 38a4d850c23845134631afb31b52914a2ad56e53
 lastReviewedAt: 2026-09-25

@@ -14,14 +14,14 @@ interface Props {
 
 const { product, lang } = Astro.props;
 const { data } = product;
-const screenshot = data.proof.screenshot;
+const media = data.proof.media;
 const capabilities = data.capabilities ?? [];
 const profileHref = getProductProfilePath(lang, data.slug);
 const profileLabel = labelFor(SHARED_LABELS.viewProfile, lang);
 const captionLabel = labelFor(SHARED_LABELS.proofCaption, lang);
 ---
 
-{screenshot ? (
+{media ? (
   <section
     class="border-b border-[var(--border-subtle)] py-16"
     aria-labelledby="flagship-proof-title"
@@ -49,7 +49,7 @@ const captionLabel = labelFor(SHARED_LABELS.proofCaption, lang);
             summary={data.endorsement}
             evidence={[
               { label: `${profileLabel} — ${data.name}`, href: profileHref },
-              { label: captionLabel, href: screenshot.src },
+              { label: captionLabel, href: media.src },
             ]}
             lang={lang}
           />
@@ -64,7 +64,7 @@ const captionLabel = labelFor(SHARED_LABELS.proofCaption, lang);
         </div>
       </div>
       <figure class="m-0">
-        <ProductVisual screenshot={screenshot} />
+        <ProductVisual media={media} />
       </figure>
     </div>
   </section>

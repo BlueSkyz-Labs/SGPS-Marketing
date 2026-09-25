@@ -37,7 +37,7 @@ export function productJsonLd(
     name: string;
     description: string;
     slug: string;
-    screenshotUrl?: string;
+    mediaUrl?: string;
   },
   siteUrl: string,
   lang: string,
@@ -55,8 +55,8 @@ export function productJsonLd(
       name: "BlueSkyz Labs",
       url: siteUrl,
     },
-    ...(product.screenshotUrl
-      ? { image: absoluteUrl(siteUrl, product.screenshotUrl) }
+    ...(product.mediaUrl
+      ? { image: absoluteUrl(siteUrl, product.mediaUrl) }
       : {}),
   };
 }
