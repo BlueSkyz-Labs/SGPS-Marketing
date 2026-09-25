@@ -48,7 +48,9 @@ test.describe("published registry listing", () => {
     await expect(page.locator("[data-product-card]")).toHaveCount(published);
     for (const slug of PRODUCT_SLUGS) {
       await expect(
-        page.locator(`[data-product-card] a[href="/en/products/${slug}/"]`).first(),
+        page
+          .locator(`[data-product-card] a[href="/en/products/${slug}/"]`)
+          .first(),
       ).toBeVisible();
     }
     const body = await page.locator("body").innerText();
