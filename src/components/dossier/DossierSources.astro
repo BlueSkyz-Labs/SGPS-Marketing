@@ -40,15 +40,19 @@ const LABELS: Record<
 };
 
 const labels = LABELS[lang];
+const statements = new Map(
+  CLAIMS.map((claim) => [claim.id, claim.statement?.[lang]] as const),
+);
 const resolved = entries.map((entry) => ({
   id: entry.id,
+  statement: statements.get(entry.id) ?? null,
   provenance: getPublicProvenance(entry.id, lang),
 }));
 ---
 
 <section class="c4-dossier-sources" data-dossier-sources>
   <h2>{labels.heading}</h2>
-  {resolved.map(({ id, provenance }) =>
+  {resolved.map(({ id, statement, provenance }) =>
     provenance && !provenance.unknown ? (
       <article data-dossier-source={id}>
         <h3>{provenance.statement}</h3>
@@ -75,8 +79,8 @@ const resolved = entries.map((entry) => ({
       </article>
     ) : (
       <article data-dossier-source-unknown={id}>
+        {statement && <h3>{statement}</h3>}
         <p>{labels.unknown}</p>
-        <p>{id}</p>
       </article>
     ),
   )}
