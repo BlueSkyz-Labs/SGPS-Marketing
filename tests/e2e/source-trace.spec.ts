@@ -1,4 +1,5 @@
 import { expect, test } from "@playwright/test";
+import { hasPublicProducts } from "./product-helpers.ts";
 
 const TRACE = '[data-source-trace="security-reporting-is-private"]';
 
@@ -37,6 +38,10 @@ test.describe("source-to-surface trace", () => {
   test("missing optional nodes disappear cleanly (empty registry)", async ({
     page,
   }) => {
+    test.skip(
+      hasPublicProducts,
+      "Public products are published; claim resolves when products exist",
+    );
     await page.goto("/en/products/");
     // The product claim cannot resolve without a public product: no trace.
     await expect(page.locator("[data-source-trace]")).toHaveCount(0);

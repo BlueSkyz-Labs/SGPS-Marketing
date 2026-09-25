@@ -1,5 +1,6 @@
 import { expect, test, type TestInfo } from "@playwright/test";
 import { startFixtureServer } from "./helpers/parity-fixture";
+import { hasPublicProducts } from "./product-helpers.ts";
 
 /**
  * C2 P3 (Task 7) — fixture-backed spec for the FlagshipTheatre component.
@@ -195,6 +196,10 @@ test.describe("C2 Flagship Theatre — real-site absence (honesty)", () => {
     test(`${locale.home} empty registry: no theatre, no media continuity, clean vocabulary`, async ({
       page,
     }, testInfo) => {
+      test.skip(
+        hasPublicProducts,
+        "Public products are published; empty registry absence only applies when registry is empty",
+      );
       // The REAL site (baseURL), not the fixture app: the production registry is
       // empty, so the act must be absent rather than filled with a shell.
       await page.goto(locale.home);

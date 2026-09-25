@@ -1,4 +1,5 @@
 import { expect, test } from "@playwright/test";
+import { hasPublicProducts } from "./product-helpers.ts";
 
 test("404 page recovers without atelier copy", async ({ page }) => {
   const response = await page.goto("/en/404/", {
@@ -47,6 +48,10 @@ test("homepage renders hero proposition", async ({ page }) => {
 test("products page empty registry omits hollow featured shelf", async ({
   page,
 }) => {
+  test.skip(
+    hasPublicProducts,
+    "Public products are published; empty shelf test only applies to empty registry",
+  );
   await page.goto("/en/products/");
   await expect(page.locator("[data-product-card]")).toHaveCount(0);
   await expect(page.locator("[data-proof-first-empty-state]")).toBeVisible();

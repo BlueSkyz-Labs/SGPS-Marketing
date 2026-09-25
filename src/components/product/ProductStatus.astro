@@ -7,7 +7,7 @@ const { label } = Astro.props;
 
 <span
   data-product-status={label}
-  class="inline-flex rounded-[var(--radius-card)] border border-[var(--border-subtle)] px-3 py-1 text-xs font-semibold tracking-wide text-[var(--action-primary)]"
+  class="inline-flex max-w-full rounded-[var(--radius-card)] border border-[var(--border-subtle)] px-2.5 py-1 text-xs font-semibold tracking-wide text-[var(--action-primary)] sm:px-3"
 >
   {label}
 </span>

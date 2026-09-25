@@ -1,4 +1,5 @@
 import { expect, test } from "@playwright/test";
+import { hasPublicProducts } from "./product-helpers.ts";
 
 test("homepage explains BlueSkyz and rejects old positioning", async ({
   page,
@@ -32,12 +33,15 @@ test("320px homepage has no horizontal overflow", async ({ page }) => {
 
 test("homepage keeps the C2 act landmarks", async ({ page }) => {
   await page.goto("/en/");
-  // The product act is present and honest while the public registry is empty:
-  // the heading explains the act, no product card is invented.
+  // The product act is present and honest:
   await expect(
     page.getByRole("heading", { name: "Featured products" }),
   ).toBeVisible();
-  await expect(page.locator("[data-product-card]")).toHaveCount(0);
+  if (hasPublicProducts) {
+    await expect(page.locator("[data-product-card]").first()).toBeVisible();
+  } else {
+    await expect(page.locator("[data-product-card]")).toHaveCount(0);
+  }
   await expect(
     page.getByRole("heading", { level: 2, name: "One house" }),
   ).toBeVisible();

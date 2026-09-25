@@ -1,4 +1,5 @@
 import { expect, test } from "@playwright/test";
+import { hasPublicProducts } from "./product-helpers.ts";
 
 const FORBIDDEN_PHRASING = [
   /has no products/i,
@@ -8,6 +9,12 @@ const FORBIDDEN_PHRASING = [
 ];
 
 test.describe("proof-first product empty state", () => {
+  test.beforeEach(() => {
+    test.skip(
+      hasPublicProducts,
+      "Empty state tests only apply when no public products are published",
+    );
+  });
   test("EN empty registry explains the proof-backed publication rule", async ({
     page,
   }) => {
