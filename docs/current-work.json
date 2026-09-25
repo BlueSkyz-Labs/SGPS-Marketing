@@ -197,7 +197,7 @@
     },
     {
       "id": "c3-d-adaptive",
-      "name": "C3-D Adaptive Experience (Task 1 experience-intent model merged ffbf78f; Task 2 visitor-controlled intent UI re-cut in progress — the first attempt was stopped for out-of-scope analytics/taxonomy edits and dependent specs left asserting removed behaviour)",
+      "name": "C3-D Adaptive Experience (Task 1 experience-intent model ffbf78f, Task 2 visitor-controlled intent UI #272 0644a7b, Task 3 fidelity tier resolver #273 d484299 — all landed 2026-09-26 with content-verified landing proof; Task 4 applying the adaptive fidelity engine in progress; Task 5 privacy/abuse red team pending)",
       "status": "IN_PROGRESS",
       "evidence": "docs/superpowers/plans/2026-09-13-c3-d-adaptive-experience.md"
     },
@@ -341,11 +341,11 @@
   ],
   "nextActionable": [
     "C4-A (Tasks 1-9), C4-B (Tasks 1-6), C4-D Architecture Salon (#263), C4-E Decision Atelier & Dossier Handoff (#231), C3, C3-D Task 1 (experience intent model ffbf78f) and C3-F Task 1 (release-story schema 4efb49b) are merged; C4-C Tasks 1-5 are merged (#267 b3b94cd boardroom presentation mode, #270 b95c784 dossier provenance/freshness footer), so the active frontier is the C3-D Task 2 re-cut.",
-    "In an isolated re-cut lane (no PR yet): C3-D Task 2 visitor-controlled intent UI, which must also update the specs that depend on the previous intent surface. Open with a blocked-public-activation correction landed and green: PR #269 (product truth, head 3e2ab8c; Quality Gates + Browser Assurance pass), awaiting owner merge.",
+    "Landed 2026-09-26: C3-D Task 2 visitor-controlled intent UI (#272, 0644a7b) and C3-D Task 3 fidelity tier resolver (#273, d484299) are on main with content-verified landing proof; C3-D Task 4 (apply the adaptive fidelity engine) runs in the isolated lane .worktrees/c3d-task4 and Task 5 (privacy and abuse red team) is the next step of the same plan. Open and green, awaiting owner merge: PR #269 (product truth, head 3e2ab8c).",
     "Blocked on owner fact: C3-F Task 2 and later (release source adapter, publication surface) — no authored public release source exists. C4-D Tasks 2 and 4 (Architecture Salon surface, Provenance Lens) are already landed (see the c4-d-salon wave), so the earlier suggestion here is superseded.",
     "Public product runtime remains honest-empty on main until owner-approved screenshot/product truth exists; the corrected registry (real repositories, per-product revisions, proof media declared as media) sits in open PR #269. C4-A Task 10 (gallery mount), C4-F and remote/model C4-G remain separately gated.",
     "Human E4, VI copy cross-check, trademark/legal clearance and the RUM/privacy provider decision remain owner-executed.",
-    "Verified merged 2026-09-25: #265 (ffbf78f), #266 (4efb49b), #267 (b3b94cd), #268 (2871ce2), #270 (b95c784). Earlier 2026-09-24: #234, #235, #257, #256, #253, #258, #229.",
-    "Residual: C3-D Task 2 re-cut in a lane, PR #269 product-provenance correction awaiting owner merge, PR #271 router record, C3-F release publication blocked on owner fact. Closed as verified with evidence: issue #240 (dossier claim-source links, fixed by f9c6165; contract test in tests/architecture/c4-dossier-contract.test.mjs passes in the 588-test suite). Owner-gated: E4, RUM, Concierge, Spatial/WebGL, screenshot/product truth."
+    "Verified merged 2026-09-26: #272 (0644a7b intent UI), #273 (d484299 fidelity resolver). 2026-09-25: #265 (ffbf78f), #266 (4efb49b), #267 (b3b94cd), #268 (2871ce2), #270 (b95c784). Earlier 2026-09-24: #234, #235, #257, #256, #253, #258, #229.",
+    "Residual: PR #269 (product-provenance correction, all checks green on 3e2ab8c) and PR #271 (this record) await owner merge; C3-D Task 4 is in a lane and Task 5 is queued; C3-F release publication stays owner-fact blocked. Closed as verified with evidence: issue #240 (dossier claim-source links, fixed by f9c6165; contract test in tests/architecture/c4-dossier-contract.test.mjs passes). Portfolio propagation of the fail-open evidence/claim gate class (§20): PRJ_ApexAgent #299 (guard) and #300 (state-accuracy ladder blocker) landed on main with landing proof, PRJ_FluentArc #419 is open and held because verify:local is red from another agent's in-flight overwrite of .sgps/experience/EXPERIENCE_CONVERGENCE_EVIDENCE.md, and PRJ_SoTam, PRJ-SoTro and PRG_VungTayLai were independently re-audited with no fail-open gate found. Owner-gated: E4, RUM, Concierge, Spatial/WebGL, screenshot/product truth."
   ]
 }
