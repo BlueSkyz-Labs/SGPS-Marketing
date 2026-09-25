@@ -91,3 +91,118 @@ test("contains no tracking, persistence, network, or benchmarking primitives", (
     /\b(?:fetch|XMLHttpRequest|localStorage|sessionStorage|document\.cookie|navigator\s*\.\s*hardwareConcurrency|Date\.now|Math\.random|WebGL|canvas)\b/,
   );
 });
+
+// ------------------------------------------------------------------ //
+// Task 2 contract: Visitor-Controlled Intent UI (C3-D)
+// ------------------------------------------------------------------ //
+
+const intentControlUrl = new URL(
+  "../../src/components/experience/IntentControl.astro",
+  import.meta.url,
+);
+const experienceIntentUrl = new URL(
+  "../../src/scripts/experience-intent.ts",
+  import.meta.url,
+);
+
+test("IntentControl.astro exists (Task 2 control surface)", () => {
+  assert.ok(
+    existsSync(intentControlUrl),
+    "IntentControl.astro must exist before it is imported",
+  );
+});
+
+test("IntentControl renders all five declared intents in server HTML", () => {
+  const src = readFileSync(intentControlUrl, "utf8");
+  // The component maps over EXPERIENCE_INTENTS which must include all five.
+  assert.ok(
+    src.includes("EXPERIENCE_INTENTS.map") ||
+      src.includes("EXPERIENCE_INTENTS.map("),
+    "IntentControl must iterate over the canonical EXPERIENCE_INTENTS array",
+  );
+  for (const intent of [
+    "explore-products",
+    "evaluate-product",
+    "verify-trust",
+    "understand-architecture",
+    "work-with-us",
+  ]) {
+    assert.ok(
+      src.includes(`"${intent}"`) || src.includes(`'${intent}'`),
+      `IntentControl must reference the "${intent}" intent id`,
+    );
+  }
+});
+
+test("IntentControl uses the canonical intent enum, not invented ids", () => {
+  const src = readFileSync(intentControlUrl, "utf8");
+  assert.ok(
+    src.includes("experience-intent"),
+    "IntentControl must consume the canonical experience-intent model",
+  );
+  assert.ok(
+    !src.includes("understand-blueskyz"),
+    'IntentControl must not use the legacy "understand-blueskyz" id',
+  );
+});
+
+test("IntentControl carries trilingual copy for every intent", () => {
+  const src = readFileSync(intentControlUrl, "utf8");
+  for (const intent of [
+    "explore-products",
+    "evaluate-product",
+    "verify-trust",
+    "understand-architecture",
+    "work-with-us",
+  ]) {
+    const intentStart = src.indexOf(`"${intent}"`);
+    assert.ok(intentStart !== -1, `IntentControl must reference "${intent}"`);
+    const intentBlock = src.slice(intentStart, intentStart + 800);
+    assert.ok(
+      intentBlock.includes("en:") &&
+        intentBlock.includes("vi:") &&
+        intentBlock.includes("zh:"),
+      `IntentControl must carry en/vi/zh labels for "${intent}"`,
+    );
+  }
+});
+
+test("IntentControl server HTML includes the control marker", () => {
+  const src = readFileSync(intentControlUrl, "utf8");
+  assert.ok(
+    src.includes("data-intent-control"),
+    "IntentControl must render the data-intent-control marker for client scripts",
+  );
+});
+
+test("experience-intent script contains no tracking, persistence, network, or benchmarking primitives", () => {
+  assert.ok(
+    existsSync(experienceIntentUrl),
+    "experience-intent.ts must exist before it is imported",
+  );
+  const src = readFileSync(experienceIntentUrl, "utf8");
+  assert.doesNotMatch(
+    src,
+    /\b(?:fetch|XMLHttpRequest|localStorage|sessionStorage|document\.cookie|navigator\s*\.\s*hardwareConcurrency|Date\.now|Math\.random|WebGL|canvas)\b/,
+  );
+});
+
+test("experience-intent script is idempotent (double-init safe)", () => {
+  const src = readFileSync(experienceIntentUrl, "utf8");
+  assert.ok(
+    src.includes("data-intent-control-ready"),
+    "experience-intent must guard against double-init with a ready marker",
+  );
+});
+
+test("experience-intent dispatches a semantic event, never sends data", () => {
+  const src = readFileSync(experienceIntentUrl, "utf8");
+  assert.ok(
+    src.includes("CustomEvent") || src.includes("dispatchEvent"),
+    "experience-intent must dispatch a semantic event for observers",
+  );
+  assert.ok(
+    !src.includes("navigator.sendBeacon") && !src.includes("fetch("),
+    "experience-intent must never transmit data to a remote endpoint",
+  );
+});
