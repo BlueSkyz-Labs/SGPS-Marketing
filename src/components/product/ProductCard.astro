@@ -21,7 +21,7 @@ const profileLabel = labelFor(SHARED_LABELS.viewProfile, lang);
   data-product-card
   data-product-tier={data.featuredTier}
   class:list={[
-    "rounded-[var(--radius-card)] border border-[var(--border-subtle)] bg-white p-6 transition-[transform,box-shadow,border-color] duration-200 ease-[var(--motion-ease-standard)] hover:-translate-y-0.5 hover:border-[color-mix(in_srgb,var(--brand-cobalt)_38%,var(--border-subtle))] hover:shadow-[0_18px_44px_-14px_color-mix(in_srgb,var(--brand-cobalt)_30%,transparent)] motion-reduce:transition-none motion-reduce:hover:translate-y-0 motion-reduce:hover:shadow-none",
+    "min-w-0 max-w-full rounded-[var(--radius-card)] border border-[var(--border-subtle)] bg-white p-4 sm:p-6 transition-[transform,box-shadow,border-color] duration-200 ease-[var(--motion-ease-standard)] hover:-translate-y-0.5 hover:border-[color-mix(in_srgb,var(--brand-cobalt)_38%,var(--border-subtle))] hover:shadow-[0_18px_44px_-14px_color-mix(in_srgb,var(--brand-cobalt)_30%,transparent)] motion-reduce:transition-none motion-reduce:hover:translate-y-0 motion-reduce:hover:shadow-none",
     emphasis === "hero" && "md:p-8",
   ]}
 >
@@ -34,7 +34,7 @@ const profileLabel = labelFor(SHARED_LABELS.viewProfile, lang);
   >
     <a
       href={profileHref}
-      class="text-inherit no-underline hover:underline"
+      class="inline-flex min-h-11 items-center text-inherit no-underline hover:underline"
       data-product-continuity="card"
       style={productTransitionStyle("card", data.slug)}
     >

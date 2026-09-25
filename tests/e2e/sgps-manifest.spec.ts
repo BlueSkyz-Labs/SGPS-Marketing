@@ -1,4 +1,5 @@
 import { expect, test } from "@playwright/test";
+import { hasPublicProducts } from "./product-helpers.ts";
 
 const MANIFEST = "/.well-known/sgps.json";
 
@@ -18,7 +19,7 @@ test.describe("public SGPS manifest", () => {
     };
     expect(parsed.schemaVersion).toBe("1.0");
     expect(parsed.generatedFrom).toBe("public-runtime-data");
-    expect(parsed.claims.length).toBe(2);
+    expect(parsed.claims.length).toBe(hasPublicProducts ? 3 : 2);
     const ids = parsed.claims.map((claim) => claim.id);
     expect([...ids].sort()).toEqual(ids);
 
