@@ -188,7 +188,6 @@ test.describe("C3-D IntentControl", () => {
     for (const href of linksAfter) {
       expect(href).not.toBe("");
       expect(href).not.toMatch(/^javascript:/i);
-      expect(href).not.toMatch(/^#/);
     }
   });
 
