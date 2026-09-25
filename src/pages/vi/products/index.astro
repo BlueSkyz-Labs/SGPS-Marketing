@@ -6,6 +6,7 @@ import ProductCard from "@/components/product/ProductCard.astro";
 import ProofFirstEmptyState from "@/components/product/ProofFirstEmptyState.astro";
 import { getPublicProducts } from "@/lib/products";
 import IntentLens from "@/components/experience/IntentLens.astro";
+import IntentControl from "@/components/experience/IntentControl.astro";
 import Atlas from "@/components/experience/Atlas.astro";
 
 const products = await getPublicProducts();
@@ -45,6 +46,7 @@ const emptyDescription = products.length
   <section class="border-t border-[var(--border-subtle)] py-16 lg:py-20">
     <Container>
       <IntentLens lang="vi" />
+      <IntentControl lang="vi" />
       <Atlas lang="vi" />
     </Container>
   </section>
