@@ -280,6 +280,219 @@
   }
 }
 
+/* ---- C4-C G3 — Boardroom presentation mode ---- */
+.c4-boardroom {
+  max-width: 72ch;
+  margin-block-start: var(--space-10);
+  padding-block-start: var(--space-8);
+  border-top: 1px solid
+    color-mix(in srgb, var(--brand-porcelain) 16%, transparent);
+}
+
+.c4-boardroom__header {
+  margin-block-end: var(--space-6);
+}
+
+.c4-boardroom__title {
+  margin: 0 0 var(--space-2);
+  font-size: var(--c4-type-section);
+}
+
+.c4-boardroom__lede {
+  margin: 0;
+  font-size: var(--c4-type-reading);
+  color: color-mix(in srgb, var(--brand-porcelain) 78%, transparent);
+}
+
+.c4-boardroom__stage {
+  position: relative;
+  min-height: 28rem;
+}
+
+.c4-boardroom__screen {
+  display: none;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+
+.c4-boardroom__screen--active {
+  display: block;
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .c4-boardroom__screen {
+    transition: none;
+  }
+}
+
+.c4-boardroom__screen-meta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin-block-end: var(--space-4);
+  font-size: var(--c4-type-meta);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--brand-porcelain) 62%, transparent);
+}
+
+.c4-boardroom__ordinal {
+  font-variant-numeric: tabular-nums;
+}
+
+.c4-boardroom__screen-heading {
+  margin: 0 0 var(--space-4);
+  font-size: var(--c4-type-display);
+  line-height: 1.08;
+  text-wrap: balance;
+}
+
+.c4-boardroom__screen-detail {
+  margin: 0 0 var(--space-4);
+  font-size: var(--c4-type-reading);
+  color: color-mix(in srgb, var(--brand-porcelain) 82%, transparent);
+  max-width: 62ch;
+}
+
+.c4-boardroom__source-link-wrapper {
+  margin: 0 0 var(--space-4);
+}
+
+.c4-boardroom__source-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  font-size: var(--c4-type-evidence);
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 0.25em;
+  overflow-wrap: anywhere;
+}
+
+.c4-boardroom__freshness {
+  margin: 0;
+  font-size: var(--c4-type-meta);
+  color: color-mix(in srgb, var(--brand-porcelain) 62%, transparent);
+}
+
+.c4-boardroom__controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  margin-block-start: var(--space-8);
+  padding-block: var(--space-4);
+  border-top: 1px solid
+    color-mix(in srgb, var(--brand-porcelain) 16%, transparent);
+}
+
+.c4-boardroom__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: 44px;
+  padding: var(--space-2) var(--space-4);
+  border: 1px solid var(--c4-hairline);
+  border-radius: 0.25rem;
+  background: var(--surface-primary);
+  color: inherit;
+  font-size: var(--c4-type-reading);
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.c4-boardroom__btn:focus-visible {
+  outline: 2px solid var(--brand-cobalt);
+  outline-offset: 2px;
+}
+
+.c4-boardroom__btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.c4-boardroom__btn--prev,
+.c4-boardroom__btn--next {
+  min-width: 8rem;
+}
+
+.c4-boardroom__btn--exit {
+  min-width: 10rem;
+}
+
+.c4-boardroom__btn-label {
+  font-weight: 600;
+}
+
+.c4-boardroom__progress {
+  font-size: var(--c4-type-meta);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.04em;
+  color: color-mix(in srgb, var(--brand-porcelain) 62%, transparent);
+  text-align: center;
+  min-width: 4rem;
+}
+
+.c4-boardroom__footer {
+  margin-block-start: var(--space-6);
+  padding-block-start: var(--space-4);
+  border-top: 1px solid
+    color-mix(in srgb, var(--brand-porcelain) 16%, transparent);
+}
+
+.c4-boardroom__empty-text {
+  margin: 0;
+  font-size: var(--c4-type-section);
+  color: color-mix(in srgb, var(--brand-porcelain) 62%, transparent);
+}
+
+/* Responsive adjustments */
+@media (max-width: 47.99rem) {
+  .c4-boardroom__controls {
+    flex-wrap: wrap;
+    gap: var(--space-3);
+  }
+  .c4-boardroom__btn--prev,
+  .c4-boardroom__btn--next {
+    min-width: 6rem;
+  }
+}
+
+@media (max-width: 24.99rem) {
+  .c4-boardroom__controls {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .c4-boardroom__btn {
+    justify-content: center;
+  }
+}
+
+/* Print: show the active screen content; hide controls */
+@media print {
+  .c4-boardroom__controls,
+  .c4-boardroom__btn--exit {
+    display: none;
+  }
+  .c4-boardroom__screen {
+    display: block;
+    opacity: 1;
+    page-break-inside: avoid;
+  }
+  .c4-boardroom__screen:not(:first-of-type) {
+    margin-block-start: var(--space-10);
+  }
+}
+
+/* Forced colors: keep outline visible */
+@media (forced-colors: active) {
+  .c4-boardroom__btn:focus-visible {
+    outline: 2px solid Highlight;
+    outline-offset: 2px;
+  }
+}
+
 @media (min-width: 64rem) {
   .c4-editorial-grid {
     grid-template-columns: minmax(0, 1fr) minmax(0, 1.618fr);

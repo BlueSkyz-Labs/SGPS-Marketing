@@ -1,0 +1,209 @@
+---
+import { compilePublicDossier, type Language } from "@/lib/dossier";
+
+/**
+ * C4-C Task 4 — Boardroom Presentation Mode.
+ *
+ * Contained presentation view of the same compiled public dossier.
+ * One dominant idea per screen, explicit controls, ArrowLeft/ArrowRight,
+ * Escape exits. Source links stay standard links. Focus is visible;
+ * no focus trap. Reduced motion neutralizes animations without losing
+ * comprehension. No global scroll hijack or browser navigation interception.
+ */
+
+interface Props {
+  lang: Language;
+}
+
+const { lang } = Astro.props;
+
+const LABELS: Record<
+  Language,
+  {
+    heading: string;
+    modeNote: string;
+    previous: string;
+    next: string;
+    exit: string;
+    sourceLabel: string;
+    section: string;
+  }
+> = {
+  en: {
+    heading: "Boardroom presentation",
+    modeNote:
+      "A contained presentation of already-published public dossier items. Sources remain directly inspectable.",
+    previous: "Previous",
+    next: "Next",
+    exit: "Exit presentation",
+    sourceLabel: "Source",
+    section: "Section",
+  },
+  vi: {
+    heading: "Trình bày phòng họp",
+    modeNote:
+      "Một bản trình bày giới hạn từ các mục hồ sơ công khai đã công bố. Các nguồn vẫn có thể kiểm tra trực tiếp.",
+    previous: "Trước",
+    next: "Tiếp",
+    exit: "Thoát trình bày",
+    sourceLabel: "Nguồn",
+    section: "Phần",
+  },
+  zh: {
+    heading: "会议室演示",
+    modeNote: "对已发布公开档案条目的受限演示视图。来源仍可直接查阅。",
+    previous: "上一项",
+    next: "下一项",
+    exit: "退出演示",
+    sourceLabel: "来源",
+    section: "章节",
+  },
+};
+
+const labels = LABELS[lang];
+
+import { CLAIMS, EVIDENCE_INDEX, BOUNDARY_INDEX } from "@/data/claims";
+
+const doc = compilePublicDossier({
+  lang,
+  claimIds: CLAIMS.map((c) => c.id),
+  evidenceIds: [...EVIDENCE_INDEX.keys()],
+  boundaryIds: [...BOUNDARY_INDEX.keys()],
+});
+
+const screens = doc.entries; // one dominant idea per screen
+const sectionLabels: Record<string, string> = {
+  claims: lang === "vi" ? "Tuyên bố" : lang === "zh" ? "声明" : "Claims",
+  evidence: lang === "vi" ? "Bằng chứng" : lang === "zh" ? "证据" : "Evidence",
+  boundaries:
+    lang === "vi" ? "Ranh giới" : lang === "zh" ? "边界" : "Boundaries",
+};
+---
+
+<section
+  class="c4-boardroom"
+  data-boardroom-deck
+  data-boardroom-lang={lang}
+  aria-label={labels.heading}
+>
+  <header class="c4-boardroom__header">
+    <h2 class="c4-boardroom__title">{labels.heading}</h2>
+    <p class="c4-boardroom__lede">{labels.modeNote}</p>
+  </header>
+
+  {/* Presentation stage: one screen at a time */}
+  <div class="c4-boardroom__stage" data-boardroom-stage>
+    {screens.length === 0 ? (
+      <div
+        class="c4-boardroom__screen c4-boardroom__screen--empty"
+        data-boardroom-screen
+      >
+        <p class="c4-boardroom__empty-text">
+          {lang === "vi"
+            ? "Không có mục nào để trình bày."
+            : lang === "zh"
+              ? "没有可演示的条目。"
+              : "No published items available for presentation."}
+        </p>
+      </div>
+    ) : (
+      screens.map((entry, index) => (
+        <article
+          class="c4-boardroom__screen"
+          data-boardroom-screen
+          data-boardroom-index={index}
+          aria-label={`${labels.section}: ${sectionLabels[entry.section] ?? entry.section}`}
+        >
+          <div class="c4-boardroom__screen-meta">
+            <span class="c4-boardroom__ordinal" aria-hidden="true">
+              {String(index + 1).padStart(2, "0")}
+            </span>
+            <span class="c4-boardroom__section-name">
+              {sectionLabels[entry.section] ?? entry.section}
+            </span>
+          </div>
+
+          <h3 class="c4-boardroom__screen-heading">{entry.label}</h3>
+
+          {entry.detail && (
+            <p class="c4-boardroom__screen-detail">{entry.detail}</p>
+          )}
+
+          {entry.href && (
+            <p class="c4-boardroom__source-link-wrapper">
+              <a
+                class="c4-boardroom__source-link"
+                href={entry.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={`${labels.sourceLabel}: ${entry.label}`}
+              >
+                {entry.href}
+              </a>
+            </p>
+          )}
+
+          {entry.freshness && (
+            <p class="c4-boardroom__freshness">
+              <time datetime={entry.freshness}>{entry.freshness}</time>
+            </p>
+          )}
+        </article>
+      ))
+    )}
+  </div>
+
+  {/* Explicit controls */}
+  <nav
+    class="c4-boardroom__controls"
+    aria-label={labels.heading}
+    data-boardroom-nav
+  >
+    <button
+      type="button"
+      class="c4-boardroom__btn c4-boardroom__btn--prev"
+      data-boardroom-prev
+      aria-label={labels.previous}
+      disabled={screens.length <= 1}
+    >
+      <span aria-hidden="true">&#9664;</span>
+      <span class="c4-boardroom__btn-label">{labels.previous}</span>
+    </button>
+
+    <div
+      class="c4-boardroom__progress"
+      data-boardroom-progress
+      aria-live="polite"
+    >
+      <span data-boardroom-progress-current>1</span>
+      <span aria-hidden="true">/</span>
+      <span data-boardroom-progress-total>{Math.max(1, screens.length)}</span>
+    </div>
+
+    <button
+      type="button"
+      class="c4-boardroom__btn c4-boardroom__btn--next"
+      data-boardroom-next
+      aria-label={labels.next}
+      disabled={screens.length <= 1}
+    >
+      <span class="c4-boardroom__btn-label">{labels.next}</span>
+      <span aria-hidden="true">&#9654;</span>
+    </button>
+  </nav>
+
+  <div class="c4-boardroom__footer">
+    <button
+      type="button"
+      class="c4-boardroom__btn c4-boardroom__btn--exit"
+      data-boardroom-exit
+      aria-label={labels.exit}
+    >
+      {labels.exit}
+    </button>
+  </div>
+</section>
+
+<script>
+  import "@/scripts/boardroom-mode.ts";
+</script>
