@@ -59,19 +59,25 @@ export function initBoardroomMode(): void {
   const count = Math.max(1, el.screens.length);
   let current = 0;
 
-  function show(index: number) {
+  function show(index: number, moveFocus = false) {
     const target = Math.max(0, Math.min(count - 1, index));
     current = target;
 
     el.screens.forEach((screen, i) => {
       const active = i === current;
       screen.classList.toggle("c4-boardroom__screen--active", active);
+      // Inactive screens are display:none, so their links are already out of
+      // the tab order; no focus trap is needed to contain the mode.
       screen.setAttribute("aria-hidden", active ? "false" : "true");
-      screen.setAttribute("tabindex", active ? "0" : "-1");
     });
 
-    const visibleScreen = el.screens[current];
-    if (visibleScreen) visibleScreen.focus();
+    // Focus moves only on explicit navigation: moving it on page load would
+    // hijack the visitor's reading position.
+    if (moveFocus) {
+      el.screens[current]
+        ?.querySelector<HTMLElement>(".c4-boardroom__screen-heading")
+        ?.focus();
+    }
 
     if (el.progressCurrent) {
       el.progressCurrent.textContent = String(current + 1);
@@ -88,20 +94,20 @@ export function initBoardroomMode(): void {
   show(0);
 
   el.prevBtn.addEventListener("click", () => {
-    if (current > 0) show(current - 1);
+    if (current > 0) show(current - 1, true);
   });
 
   el.nextBtn.addEventListener("click", () => {
-    if (current < count - 1) show(current + 1);
+    if (current < count - 1) show(current + 1, true);
   });
 
   el.exitBtn.addEventListener("click", () => {
-    // Exit presentation: scroll back to the deck header, disable active screen,
-    // and return focus to the exit button so keyboard path remains reachable.
+    // Exit presentation: leave the deck readable (all screens remain in the
+    // document), disable the controls and return focus to the exit button so
+    // the keyboard path stays reachable.
     el.screens.forEach((screen) => {
       screen.classList.remove("c4-boardroom__screen--active");
       screen.setAttribute("aria-hidden", "true");
-      screen.setAttribute("tabindex", "-1");
     });
     el.prevBtn.disabled = true;
     el.nextBtn.disabled = true;
@@ -115,14 +121,14 @@ export function initBoardroomMode(): void {
     if (event.key === "ArrowLeft") {
       if (current > 0) {
         event.preventDefault();
-        show(current - 1);
+        show(current - 1, true);
       }
       return;
     }
     if (event.key === "ArrowRight") {
       if (current < count - 1) {
         event.preventDefault();
-        show(current + 1);
+        show(current + 1, true);
       }
       return;
     }
@@ -135,21 +141,6 @@ export function initBoardroomMode(): void {
   }
 
   el.deck.addEventListener("keydown", onKey);
-
-  // Make the active screen a focus target without trapping the rest of the page.
-  // Focus is visible only when interacting with the deck; we never set a focus trap.
-  el.screens.forEach((screen) => {
-    screen.addEventListener("focus", () => {
-      // When focus lands inside a screen, keep it on the screen heading for clarity.
-      const heading = screen.querySelector("h3");
-      if (
-        heading instanceof HTMLElement &&
-        document.activeElement !== heading
-      ) {
-        heading.focus();
-      }
-    });
-  });
 }
 
 initBoardroomMode();

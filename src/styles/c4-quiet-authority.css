@@ -355,6 +355,12 @@
   max-width: 62ch;
 }
 
+/* Programmatic focus lands on the active screen heading; keep it visible. */
+.c4-boardroom__screen-heading:focus-visible {
+  outline: 2px solid var(--brand-cobalt);
+  outline-offset: 2px;
+}
+
 .c4-boardroom__source-link-wrapper {
   margin: 0 0 var(--space-4);
 }
@@ -488,6 +494,10 @@
 /* Forced colors: keep outline visible */
 @media (forced-colors: active) {
   .c4-boardroom__btn:focus-visible {
+    outline: 2px solid Highlight;
+    outline-offset: 2px;
+  }
+  .c4-boardroom__screen-heading:focus-visible {
     outline: 2px solid Highlight;
     outline-offset: 2px;
   }
