@@ -32,6 +32,35 @@ export function websiteJsonLd(siteUrl: string) {
   } as const;
 }
 
+export function productJsonLd(
+  product: {
+    name: string;
+    description: string;
+    slug: string;
+    screenshotUrl?: string;
+  },
+  siteUrl: string,
+  lang: string,
+) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    name: product.name,
+    description: product.description,
+    url: absoluteUrl(siteUrl, `/${lang}/products/${product.slug}/`),
+    applicationCategory: "BusinessApplication",
+    operatingSystem: "Web, iOS, Android, macOS, Windows",
+    publisher: {
+      "@type": "Organization",
+      name: "BlueSkyz Labs",
+      url: siteUrl,
+    },
+    ...(product.screenshotUrl
+      ? { image: absoluteUrl(siteUrl, product.screenshotUrl) }
+      : {}),
+  };
+}
+
 export function defaultOgImagePath(): string {
   return "/social/og-default.png";
 }
