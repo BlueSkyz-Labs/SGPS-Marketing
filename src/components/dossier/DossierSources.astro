@@ -1,0 +1,83 @@
+---
+import { CLAIMS } from "@/data/claims";
+import { getPublicProvenance } from "@/lib/provenance-lens";
+import type { Language } from "@/lib/dossier";
+
+interface SourceRequest {
+  id: string;
+}
+
+interface Props {
+  lang: Language;
+  entries?: readonly SourceRequest[];
+}
+
+const { lang, entries = CLAIMS.map((claim) => ({ id: claim.id })) } =
+  Astro.props;
+
+const LABELS: Record<
+  Language,
+  { heading: string; sources: string; freshness: string; unknown: string }
+> = {
+  en: {
+    heading: "Sources and freshness",
+    sources: "Published sources",
+    freshness: "Last reviewed",
+    unknown: "No canonical public source is published for this item.",
+  },
+  vi: {
+    heading: "Nguồn và độ mới",
+    sources: "Nguồn đã công bố",
+    freshness: "Rà soát gần nhất",
+    unknown: "Chưa công bố nguồn công khai chuẩn cho mục này.",
+  },
+  zh: {
+    heading: "来源与时效",
+    sources: "已发布来源",
+    freshness: "最近复核",
+    unknown: "尚未为此条目发布规范公开来源。",
+  },
+};
+
+const labels = LABELS[lang];
+const resolved = entries.map((entry) => ({
+  id: entry.id,
+  provenance: getPublicProvenance(entry.id, lang),
+}));
+---
+
+<section class="c4-dossier-sources" data-dossier-sources>
+  <h2>{labels.heading}</h2>
+  {resolved.map(({ id, provenance }) =>
+    provenance && !provenance.unknown ? (
+      <article data-dossier-source={id}>
+        <h3>{provenance.statement}</h3>
+        {provenance.sourceRefs.length > 0 && (
+          <div data-dossier-source-group>
+            <h4>{labels.sources}</h4>
+            <ul>
+              {provenance.sourceRefs.map((source) => (
+                <li>
+                  <a data-dossier-source-link href={source.href}>
+                    {source.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+        {provenance.freshness && (
+          <p data-dossier-freshness={provenance.freshness}>
+            {labels.freshness}:{" "}
+            <time datetime={provenance.freshness}>{provenance.freshness}</time>
+          </p>
+        )}
+      </article>
+    ) : (
+      <article data-dossier-source-unknown={id}>
+        <p>{labels.unknown}</p>
+        <p>{id}</p>
+      </article>
+    ),
+  )}
+</section>
