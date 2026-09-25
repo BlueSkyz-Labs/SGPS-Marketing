@@ -1,0 +1,40 @@
+slug: apexagent
+name: ApexAgent
+shortDescription: Autonomous AI agents that execute complex business workflows with human-in-the-loop oversight.
+lifecycle: active
+availability: public
+publicLabel: Available
+audience:
+  - business
+  - team
+jobs:
+  - Automate multi-step business operations and research
+  - Coordinate specialized agent swarms with deterministic guardrails
+capabilities:
+  - Multi-agent coordination with verifiable execution
+  - Enterprise tool integration and secure credential boundary
+  - Complete tamper-evident audit logs and provenance tracing
+platforms:
+  - web
+  - api
+primaryAction:
+  type: explore
+  label: Explore ApexAgent
+  href: https://blueskyzlabs.com/en/products/apexagent/
+proof:
+  screenshot:
+    src: /products/apexagent/screenshot.png
+    alt: ApexAgent by BlueSkyz Labs — AI Agents for Business
+    width: 1800
+    height: 504
+  repositoryUrl: https://github.com/BlueSkyz-Labs/PRJ_ApexAgent
+  publicUrl: https://blueskyzlabs.com/en/products/apexagent/
+  privacyUrl: https://blueskyzlabs.com/en/privacy/
+  securityUrl: https://blueskyzlabs.com/en/security/
+  supportUrl: https://blueskyzlabs.com/en/support/
+endorsement: A BlueSkyz Labs product
+featuredTier: hero
+displayOrder: 1
+public: true
+sourceRevision: 5a0d79a2f2d095c5653c670d28a13e5b6dacbf86
+lastReviewedAt: 2026-09-25

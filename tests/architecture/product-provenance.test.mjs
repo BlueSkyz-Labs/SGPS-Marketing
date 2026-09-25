@@ -29,10 +29,13 @@ function fixture(revision) {
   return dir;
 }
 
-test("the real registry is idle and says so honestly", () => {
+test("the real registry satisfies provenance honestly", () => {
   const result = run(ROOT);
   assert.equal(result.status, 0, result.stderr);
-  assert.match(result.stdout, /Product provenance: IDLE/);
+  assert.match(
+    result.stdout,
+    /Product provenance: (?:IDLE|PASS \(\d+ entries\))/,
+  );
 });
 
 test("a resolvable, reachable revision passes", () => {
