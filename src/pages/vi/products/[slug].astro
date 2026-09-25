@@ -1,0 +1,211 @@
+---
+import type { CollectionEntry } from "astro:content";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Container from "@/components/layout/Container.astro";
+import ProductStatus from "@/components/product/ProductStatus.astro";
+import ButtonLink from "@/components/ui/ButtonLink.astro";
+import { getPublicProducts } from "@/lib/products";
+
+export async function getStaticPaths() {
+  const products = await getPublicProducts();
+  return products.map((product) => ({
+    params: { slug: product.data.slug },
+    props: { product },
+  }));
+}
+
+interface Props {
+  product: CollectionEntry<"products">;
+}
+
+const { product } = Astro.props;
+const { data } = product;
+const screenshot = data.proof.screenshot;
+const capabilities = data.capabilities ?? [];
+
+const PLATFORM_LABELS: Record<string, string> = {
+  web: "Web",
+  android: "Android",
+  ios: "iOS",
+  macos: "macOS",
+  windows: "Windows",
+  api: "API",
+};
+
+const AUDIENCE_LABELS: Record<string, string> = {
+  individual: "Cá nhân",
+  professional: "Chuyên gia",
+  team: "Đội ngũ",
+  business: "Doanh nghiệp",
+  organization: "Tổ chức",
+};
+
+const proofLinks = [
+  { href: data.proof.publicUrl, label: "Trang sản phẩm" },
+  { href: data.proof.documentationUrl, label: "Tài liệu" },
+  { href: data.proof.repositoryUrl, label: "Mã nguồn" },
+  { href: data.proof.privacyUrl, label: "Quyền riêng tư" },
+  { href: data.proof.securityUrl, label: "Bảo mật" },
+  { href: data.proof.supportUrl, label: "Hỗ trợ" },
+].filter((link): link is { href: string; label: string } => Boolean(link.href));
+---
+
+<BaseLayout
+  title={`${data.name} — BlueSkyz Labs`}
+  description={data.shortDescription}
+  path={`/vi/products/${data.slug}/`}
+  ogImage={data.proof.screenshot?.src}
+  scene="product"
+>
+  <article class="py-16">
+    <Container>
+      <p class="text-sm font-medium text-[var(--text-muted)]">
+        <a
+          href="/vi/products/"
+          class="inline-flex min-h-11 items-center text-sm font-semibold text-[var(--action-primary)] no-underline hover:underline"
+        >
+          Sản phẩm
+        </a>
+        <span aria-hidden="true"> / </span>
+        <span>{data.name}</span>
+      </p>
+
+      <div class="mt-6 flex flex-wrap items-center gap-3">
+        <ProductStatus label={data.publicLabel} />
+        <p class="text-xs font-medium tracking-wide text-[var(--text-muted)]">
+          {data.endorsement}
+        </p>
+      </div>
+
+      <h1 class="mt-4 max-w-[20ch] text-4xl font-semibold tracking-tight text-[var(--text-primary)] sm:text-5xl">
+        {data.name}
+      </h1>
+      <p class="mt-5 max-w-2xl text-lg text-[var(--text-secondary)]">
+        {data.shortDescription}
+      </p>
+
+      <div class="mt-8 flex flex-wrap gap-3">
+        <ButtonLink href={data.primaryAction.href}>
+          {data.primaryAction.label}
+        </ButtonLink>
+        {data.secondaryAction ? (
+          <ButtonLink href={data.secondaryAction.href} variant="secondary">
+            {data.secondaryAction.label}
+          </ButtonLink>
+        ) : null}
+      </div>
+
+      <section class="mt-14" aria-labelledby="profile-status">
+        <h2
+          id="profile-status"
+          class="text-xl font-semibold tracking-tight text-[var(--text-primary)]"
+        >
+          Trạng thái & nền tảng
+        </h2>
+        <dl class="mt-4 grid gap-4 sm:grid-cols-3">
+          <div class="rounded-[var(--radius-card)] border border-[var(--border-subtle)] p-4 bg-[var(--bg-surface)]">
+            <dt class="text-xs font-semibold uppercase tracking-wider text-[var(--text-muted)]">
+              Trạng thái
+            </dt>
+            <dd class="mt-1 text-sm font-medium text-[var(--text-primary)]">
+              {data.publicLabel}
+            </dd>
+          </div>
+          <div class="rounded-[var(--radius-card)] border border-[var(--border-subtle)] p-4 bg-[var(--bg-surface)]">
+            <dt class="text-xs font-semibold uppercase tracking-wider text-[var(--text-muted)]">
+              Nền tảng
+            </dt>
+            <dd class="mt-1 text-sm font-medium text-[var(--text-primary)]">
+              {data.platforms
+                .map((p: string) => PLATFORM_LABELS[p] ?? p)
+                .join(", ")}
+            </dd>
+          </div>
+          <div class="rounded-[var(--radius-card)] border border-[var(--border-subtle)] p-4 bg-[var(--bg-surface)]">
+            <dt class="text-xs font-semibold uppercase tracking-wider text-[var(--text-muted)]">
+              Đối tượng
+            </dt>
+            <dd class="mt-1 text-sm font-medium text-[var(--text-primary)]">
+              {data.audience
+                .map((a: string) => AUDIENCE_LABELS[a] ?? a)
+                .join(", ")}
+            </dd>
+          </div>
+        </dl>
+      </section>
+
+      <section class="mt-14" aria-labelledby="profile-jobs">
+        <h2
+          id="profile-jobs"
+          class="text-xl font-semibold tracking-tight text-[var(--text-primary)]"
+        >
+          Mục đích sử dụng
+        </h2>
+        <ul class="mt-4 list-disc space-y-2 pl-5 text-[var(--text-secondary)]">
+          {data.jobs.map((job: string) => (
+            <li>{job}</li>
+          ))}
+        </ul>
+      </section>
+
+      {capabilities.length > 0 ? (
+        <section class="mt-14" aria-labelledby="profile-capabilities">
+          <h2
+            id="profile-capabilities"
+            class="text-xl font-semibold tracking-tight text-[var(--text-primary)]"
+          >
+            Năng lực cốt lõi
+          </h2>
+          <ul class="mt-4 list-disc space-y-2 pl-5 text-[var(--text-secondary)]">
+            {capabilities.map((capability: string) => (
+              <li>{capability}</li>
+            ))}
+          </ul>
+        </section>
+      ) : null}
+
+      {screenshot ? (
+        <section class="mt-14" aria-labelledby="profile-proof">
+          <h2
+            id="profile-proof"
+            class="text-xl font-semibold tracking-tight text-[var(--text-primary)]"
+          >
+            Bằng chứng & giao diện
+          </h2>
+          <img
+            class="mt-4 h-auto w-full max-w-4xl rounded-[var(--radius-card)] border border-[var(--border-subtle)]"
+            src={screenshot.src}
+            alt={screenshot.alt}
+            width={screenshot.width}
+            height={screenshot.height}
+            loading="lazy"
+            decoding="async"
+          />
+        </section>
+      ) : null}
+
+      {proofLinks.length > 0 ? (
+        <section class="mt-14" aria-labelledby="profile-trust">
+          <h2
+            id="profile-trust"
+            class="text-xl font-semibold tracking-tight text-[var(--text-primary)]"
+          >
+            Đường dẫn xác minh
+          </h2>
+          <ul class="mt-4 flex flex-wrap gap-4">
+            {proofLinks.map((link) => (
+              <li>
+                <a
+                  href={link.href}
+                  class="inline-flex min-h-11 items-center text-sm font-semibold text-[var(--action-primary)] no-underline hover:underline"
+                >
+                  {link.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ) : null}
+    </Container>
+  </article>
+</BaseLayout>

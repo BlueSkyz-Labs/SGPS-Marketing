@@ -1,0 +1,39 @@
+slug: vungtaylai
+name: Vững Tay Lái
+shortDescription: Real-time situational awareness and computer vision coaching for safe, confident road travel.
+lifecycle: prototype
+availability: preview
+publicLabel: In development
+audience:
+  - individual
+jobs:
+  - Detect blind-spot hazards and lane drifts in real time
+  - Build defensive driving habits with voice-guided coaching
+capabilities:
+  - Edge computer vision scene analysis with low latency
+  - Predictive road hazard alerts and collision warnings
+  - Personalized driving safety telemetry and habit scorecards
+platforms:
+  - android
+  - ios
+primaryAction:
+  type: preview
+  label: Preview Vững Tay Lái
+  href: https://blueskyzlabs.com/en/products/vungtaylai/
+proof:
+  screenshot:
+    src: /products/vungtaylai/screenshot.png
+    alt: Vững Tay Lái by BlueSkyz Labs — AI Driving Coach
+    width: 1800
+    height: 504
+  repositoryUrl: https://github.com/BlueSkyz-Labs/PRJ_VungTayLai
+  publicUrl: https://blueskyzlabs.com/en/products/vungtaylai/
+  privacyUrl: https://blueskyzlabs.com/en/privacy/
+  securityUrl: https://blueskyzlabs.com/en/security/
+  supportUrl: https://blueskyzlabs.com/en/support/
+endorsement: A BlueSkyz Labs product
+featuredTier: ecosystem
+displayOrder: 5
+public: true
+sourceRevision: 5a0d79a2f2d095c5653c670d28a13e5b6dacbf86
+lastReviewedAt: 2026-09-25
