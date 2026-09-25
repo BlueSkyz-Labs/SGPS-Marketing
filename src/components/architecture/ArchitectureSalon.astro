@@ -1,5 +1,8 @@
 ---
-import { PUBLIC_LENSES, getPublicArchitectureView } from "@/lib/public-architecture";
+import {
+  PUBLIC_LENSES,
+  getPublicArchitectureView,
+} from "@/lib/public-architecture";
 import type { Language } from "@/lib/i18n";
 import ArchitectureLens from "@/components/architecture/ArchitectureLens.astro";
 
@@ -45,7 +48,10 @@ const LABELS: Record<
 
 const labels = LABELS[lang];
 
-const views = PUBLIC_LENSES.map((lens) => ({ lens, view: getPublicArchitectureView(lens) }));
+const views = PUBLIC_LENSES.map((lens) => ({
+  lens,
+  view: getPublicArchitectureView(lens),
+}));
 const lastVerified = views[0]?.view.lastVerified ?? null;
 ---
 
@@ -55,31 +61,30 @@ const lastVerified = views[0]?.view.lastVerified ?? null;
 
   <nav class="c4-salon__nav" aria-label={labels.nav}>
     <ul class="c4-salon__nav-list">
-      {
-        views.map(({ lens }) => (
-          <li class="c4-salon__nav-item">
-            <a class="c4-salon__nav-link" href={`#lens-${lens}`}>
-              {lens}
-            </a>
-          </li>
-        ))
-      }
+      {views.map(({ lens }) => (
+        <li class="c4-salon__nav-item">
+          <a class="c4-salon__nav-link" href={`#lens-${lens}`}>
+            {lens}
+          </a>
+        </li>
+      ))}
     </ul>
   </nav>
 
-  {
-    views.map(({ lens, view }) => (
-      <ArchitectureLens lens={lens} nodes={view.nodes} edges={view.edges} lang={lang} />
-    ))
-  }
+  {views.map(({ lens, view }) => (
+    <ArchitectureLens
+      lens={lens}
+      nodes={view.nodes}
+      edges={view.edges}
+      lang={lang}
+    />
+  ))}
 
-  {
-    lastVerified && (
-      <p class="c4-salon__source">
-        {labels.source}: <time datetime={lastVerified}>{lastVerified}</time>
-      </p>
-    )
-  }
+  {lastVerified && (
+    <p class="c4-salon__source">
+      {labels.source}: <time datetime={lastVerified}>{lastVerified}</time>
+    </p>
+  )}
 </section>
 
 <script>
@@ -87,9 +92,13 @@ const lastVerified = views[0]?.view.lastVerified ?? null;
    * Optional enhancement: focus a lens named in a validated URL parameter.
    * An unknown value is ignored, so the safe default is the full page.
    */
-  const sections = document.querySelectorAll<HTMLElement>("[data-architecture-lens]");
+  const sections = document.querySelectorAll<HTMLElement>(
+    "[data-architecture-lens]",
+  );
   const allowed = new Set(
-    [...sections].map((section) => section.getAttribute("data-architecture-lens") ?? ""),
+    [...sections].map(
+      (section) => section.getAttribute("data-architecture-lens") ?? "",
+    ),
   );
   const requested = new URLSearchParams(window.location.search).get("lens");
   if (requested && allowed.has(requested)) {
