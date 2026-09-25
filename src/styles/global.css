@@ -661,6 +661,61 @@ html[data-intent="evaluate-product"] [data-journey-bar] a[href$="/products/"] {
   }
 }
 
+/* C3-D Fidelity Engine — tier-specific presentation.
+ *
+ * Default (no attribute / data-fidelity-tier="static-premium"):
+ *   all critical content visible, no motion — the safe no-JS baseline.
+ *
+ * "restrained":  lightweight native transitions only; no perpetual
+ *                animations; nothing hides content.
+ *
+ * "cinematic":   enhancement-only motion that stays inside the
+ *                client budget; never a precondition for reaching
+ *                content or actions.
+ */
+[data-fidelity-tier="static-premium"] *,
+[data-fidelity-tier="static-premium"] *::before,
+[data-fidelity-tier="static-premium"] *::after {
+  animation-duration: 0.01ms;
+  animation-iteration-count: 1;
+  transition-duration: 0.01ms;
+  scroll-behavior: auto !important;
+}
+
+[data-fidelity-tier="static-premium"] .horizon-field,
+[data-fidelity-tier="static-premium"] .experience-spine__link,
+[data-fidelity-tier="static-premium"] [data-journey-bar] a {
+  animation: none;
+  transition: none;
+}
+
+[data-fidelity-tier="restrained"] .experience-spine__link {
+  transition: color var(--motion-confirmation-duration, 150ms)
+    var(--motion-ease-standard, ease);
+}
+
+[data-fidelity-tier="restrained"] [data-journey-bar] a {
+  transition:
+    border-color 150ms var(--motion-ease-standard, ease),
+    box-shadow 150ms var(--motion-ease-standard, ease);
+}
+
+[data-fidelity-tier="cinematic"] .horizon-field__line {
+  animation: horizon-drift 6s ease-in-out infinite;
+}
+
+@keyframes horizon-drift {
+  0%,
+  100% {
+    opacity: 0.85;
+    transform: translateX(0);
+  }
+  50% {
+    opacity: 0.5;
+    transform: translateX(2px);
+  }
+}
+
 /* Mobile nav disclosure: hide default marker for consistent control chrome. */
 summary::-webkit-details-marker {
   display: none;

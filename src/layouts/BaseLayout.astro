@@ -125,6 +125,11 @@ const robotsNoindex = noindex || isNonProductionSiteUrl(SITE.url);
 
       initAnalyticsBridge();
     </script>
+    <script>
+      import { initFidelityEngine } from "@/scripts/fidelity-engine";
+
+      initFidelityEngine();
+    </script>
     <main id="main-content" class="flex-1" tabindex="-1">
       <slot />
       {surface ? <IntegrityLens surface={surface} lang={currentLang} /> : null}
