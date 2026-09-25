@@ -1,0 +1,111 @@
+---
+import {
+  PUBLIC_LENSES,
+  getPublicArchitectureView,
+} from "@/lib/public-architecture";
+import type { Language } from "@/lib/i18n";
+import ArchitectureLens from "@/components/architecture/ArchitectureLens.astro";
+
+/**
+ * C4-D Task 2 — architecture salon.
+ *
+ * Static-first and text-first: all five lenses are rendered as ordinary
+ * sections with semantic headings, reached by ordinary in-page links. Nothing
+ * is hidden behind JavaScript and no diagram carries information on its own.
+ * The optional script only moves focus to a lens named in a validated URL
+ * parameter; an unknown value changes nothing, so the safe default is simply
+ * the full page.
+ */
+interface Props {
+  lang: Language;
+}
+
+const { lang } = Astro.props;
+
+const LABELS: Record<
+  Language,
+  { heading: string; lede: string; nav: string; source: string }
+> = {
+  en: {
+    heading: "Architecture salon",
+    lede: "Five calm views of the system this site runs on. Every view is derived from the canonical architecture model; nothing here is a diagram-only claim.",
+    nav: "Views",
+    source: "Last verified against the canonical model",
+  },
+  vi: {
+    heading: "Phòng kiến trúc",
+    lede: "Năm góc nhìn tĩnh lặng về hệ thống mà trang này vận hành. Mọi góc nhìn đều dẫn xuất từ mô hình kiến trúc chuẩn; không có thông tin nào chỉ nằm trong sơ đồ.",
+    nav: "Góc nhìn",
+    source: "Xác minh gần nhất với mô hình chuẩn",
+  },
+  zh: {
+    heading: "架构沙龙",
+    lede: "本站运行系统的五个静态视角。所有视角均派生自规范架构模型；不存在仅由图示承载的信息。",
+    nav: "视角",
+    source: "最近一次对照规范模型核验",
+  },
+};
+
+const labels = LABELS[lang];
+
+const views = PUBLIC_LENSES.map((lens) => ({
+  lens,
+  view: getPublicArchitectureView(lens),
+}));
+const lastVerified = views[0]?.view.lastVerified ?? null;
+---
+
+<section class="c4-salon" data-architecture-salon>
+  <h2 class="c4-salon__heading">{labels.heading}</h2>
+  <p class="c4-salon__lede">{labels.lede}</p>
+
+  <nav class="c4-salon__nav" aria-label={labels.nav}>
+    <ul class="c4-salon__nav-list">
+      {views.map(({ lens }) => (
+        <li class="c4-salon__nav-item">
+          <a class="c4-salon__nav-link" href={`#lens-${lens}`}>
+            {lens}
+          </a>
+        </li>
+      ))}
+    </ul>
+  </nav>
+
+  {views.map(({ lens, view }) => (
+    <ArchitectureLens
+      lens={lens}
+      nodes={view.nodes}
+      edges={view.edges}
+      lang={lang}
+    />
+  ))}
+
+  {lastVerified && (
+    <p class="c4-salon__source">
+      {labels.source}: <time datetime={lastVerified}>{lastVerified}</time>
+    </p>
+  )}
+</section>
+
+<script>
+  /**
+   * Optional enhancement: focus a lens named in a validated URL parameter.
+   * An unknown value is ignored, so the safe default is the full page.
+   */
+  const sections = document.querySelectorAll<HTMLElement>(
+    "[data-architecture-lens]",
+  );
+  const allowed = new Set(
+    [...sections].map(
+      (section) => section.getAttribute("data-architecture-lens") ?? "",
+    ),
+  );
+  const requested = new URLSearchParams(window.location.search).get("lens");
+  if (requested && allowed.has(requested)) {
+    const target = document.getElementById(`lens-${requested}`);
+    if (target) {
+      target.setAttribute("tabindex", "-1");
+      target.focus({ preventScroll: false });
+    }
+  }
+</script>

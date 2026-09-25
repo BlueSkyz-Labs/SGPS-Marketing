@@ -1,7 +1,7 @@
 import { expect, test } from "@playwright/test";
 
 const LANGS = ["en", "vi"] as const;
-const ORDINALS = ["01", "02", "03"];
+const ORDINALS = ["01", "02", "03", "04"] as const;
 
 test.describe("C4-B maison orientation surface", () => {
   for (const lang of LANGS) {
@@ -15,7 +15,7 @@ test.describe("C4-B maison orientation surface", () => {
       await expect(index).toBeVisible();
 
       const items = index.locator("[data-maison-section]");
-      await expect(items).toHaveCount(3);
+      await expect(items).toHaveCount(ORDINALS.length);
       await expect(items.nth(0)).toHaveAttribute(
         "data-maison-section",
         "products",
@@ -25,6 +25,10 @@ test.describe("C4-B maison orientation surface", () => {
         "proof",
       );
       await expect(items.nth(2)).toHaveAttribute(
+        "data-maison-section",
+        "architecture",
+      );
+      await expect(items.nth(3)).toHaveAttribute(
         "data-maison-section",
         "studio",
       );
@@ -45,7 +49,7 @@ test.describe("C4-B maison orientation surface", () => {
         .evaluateAll((nodes) =>
           nodes.map((node) => node.getAttribute("href") ?? ""),
         );
-      expect(hrefs.length).toBe(3);
+      expect(hrefs.length).toBe(4);
       for (const href of hrefs) {
         expect(href.startsWith(`/${lang}/`), `${href} stays in-language`).toBe(
           true,

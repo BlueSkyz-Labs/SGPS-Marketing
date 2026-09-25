@@ -33,7 +33,6 @@ export const MAISON_ORDER: readonly MaisonSectionId[] = [
  * actually resolve.
  */
 export const MAISON_PENDING_SECTIONS: readonly MaisonSectionId[] = [
-  "architecture",
   "journal",
 ] as const;
 
@@ -45,6 +44,7 @@ const SECTION_ROUTE_KEY: Readonly<Partial<Record<MaisonSectionId, string>>> =
   Object.freeze({
     products: "products",
     proof: "security",
+    architecture: "architecture",
     studio: "about",
   });
 
