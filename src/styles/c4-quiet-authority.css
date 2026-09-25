@@ -654,8 +654,6 @@
 /* ---- C4-E G3 — decision atelier controls ---- */
 .decision-room__atelier {
   display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  min-inline-size: 0;
   gap: var(--space-3);
   margin-block: var(--space-6);
 }
@@ -673,18 +671,11 @@
 .decision-room__atelier-field {
   display: flex;
   flex-wrap: wrap;
-  min-inline-size: 0;
-  max-inline-size: 100%;
   gap: var(--space-3);
   margin: 0;
   padding: 0;
   border: 0;
-  /* The native select lays out its option list at the longest option's width
-     and WebKit does not apply overflow to the control itself, so that list
-     paints past the box and the document inherits it as scroll width at 200%
-     text zoom. Clipping the row keeps the intrinsic option width inside the
-     field it belongs to; the popup renders in its own layer and is unaffected. */
-  overflow: hidden;
+  overflow-x: clip;
 }
 .decision-room__atelier-label {
   align-self: center;
@@ -697,19 +688,10 @@
   align-items: center;
   min-height: 44px;
 }
-/* Native select intrinsic option width must not dictate the page width at 200% zoom.
-   The box is already clamped to the field, but the control renders its text with
-   white-space: pre, so a long Vietnamese option still paints past the box in
-   WebKit and the page inherits that as scroll width. Clipping the control's own
-   box keeps the intrinsic option width out of the document scroll without
-   touching the native dropdown, which renders in its own layer. */
 .decision-room__atelier-select {
-  box-sizing: border-box;
-  inline-size: min(100%, 20rem);
+  inline-size: min(100%, 32rem);
   min-inline-size: 0;
   max-inline-size: 100%;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 .decision-room__atelier-check {
   gap: var(--space-2);
@@ -729,4 +711,40 @@
   .decision-room__group-label {
     color: inherit;
   }
+}
+
+.decision-room__group-reason {
+  display: block;
+  margin-block-end: var(--space-1);
+  font-size: var(--c4-type-reading);
+  color: color-mix(in srgb, var(--brand-porcelain) 78%, transparent);
+}
+
+.decision-room__select {
+  display: inline-flex;
+  gap: var(--space-2);
+  align-items: center;
+  min-block-size: 44px;
+  margin-block-end: var(--space-2);
+  font-size: var(--c4-type-reading);
+}
+
+.decision-room__handoff {
+  margin-block-start: var(--space-4);
+  padding-block-start: var(--space-3);
+  border-block-start: 1px solid
+    color-mix(in srgb, var(--brand-porcelain) 18%, transparent);
+}
+
+.decision-room__handoff-empty,
+.decision-room__handoff-report {
+  margin: 0;
+  font-size: var(--c4-type-reading);
+  color: color-mix(in srgb, var(--brand-porcelain) 78%, transparent);
+}
+
+.decision-room__handoff-link {
+  display: inline-flex;
+  align-items: center;
+  min-block-size: 44px;
 }

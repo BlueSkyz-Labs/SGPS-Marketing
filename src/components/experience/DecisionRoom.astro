@@ -1,6 +1,10 @@
 ---
 import { buildDecisionItems, MAX_COMPARISON } from "@/lib/decision-room";
-import { ATELIER_CONSTRAINTS, ATELIER_GOALS } from "@/lib/decision-atelier";
+import {
+  ATELIER_CONSTRAINTS,
+  ATELIER_GOALS,
+  ATELIER_REASON_KEYS,
+} from "@/lib/decision-atelier";
 import { getPublicProducts } from "@/lib/products";
 import type { Language } from "@/data/site";
 
@@ -84,6 +88,21 @@ const ATELIER_COPY = {
       trust: "Trust",
       availability: "Availability",
     },
+    handoff: {
+      select: "Include in a dossier",
+      empty:
+        "Nothing is selected. Tick the items you want and the dossier will carry only those.",
+      action: "Open the dossier with {n} selected",
+      report: "{n} selection(s) cannot be included in a dossier.",
+    },
+    reasons: {
+      "in-scope":
+        "Listed because it is a published item in scope for this goal.",
+      "carries-source": "Listed because a published source is attached to it.",
+      "states-limits": "Listed because it states what it does not establish.",
+      "trust-surface": "Listed because it is published on a trust surface.",
+      "product-fact": "Listed because it is a published product fact.",
+    },
     groups: {
       "starting-points": "Starting points",
       "open-questions": "Open questions",
@@ -116,6 +135,21 @@ const ATELIER_COPY = {
       trust: "Tin cậy",
       availability: "Sẵn sàng",
     },
+    handoff: {
+      select: "Đưa vào hồ sơ",
+      empty:
+        "Chưa chọn gì. Hãy tick đúng những mục bạn muốn — hồ sơ chỉ mang những mục đó.",
+      action: "Mở hồ sơ với {n} mục đã chọn",
+      report: "{n} lựa chọn không thể đưa vào hồ sơ.",
+    },
+    reasons: {
+      "in-scope":
+        "Được liệt kê vì là mục đã công bố thuộc phạm vi mục tiêu này.",
+      "carries-source": "Được liệt kê vì có nguồn đã công bố kèm theo.",
+      "states-limits": "Được liệt kê vì nêu rõ điều nó không xác lập.",
+      "trust-surface": "Được liệt kê vì được công bố trên bề mặt tin cậy.",
+      "product-fact": "Được liệt kê vì là dữ kiện sản phẩm đã công bố.",
+    },
     groups: {
       "starting-points": "Điểm bắt đầu",
       "open-questions": "Câu hỏi mở",
@@ -147,6 +181,19 @@ const ATELIER_COPY = {
       technical: "技术",
       trust: "信任",
       availability: "可用性",
+    },
+    handoff: {
+      select: "加入档案",
+      empty: "尚未选择。请勾选你想要的条目，档案只会包含这些条目。",
+      action: "打开包含 {n} 个所选条目的档案",
+      report: "有 {n} 个选择无法加入档案。",
+    },
+    reasons: {
+      "in-scope": "列出原因：它是符合该目标的已发布条目。",
+      "carries-source": "列出原因：它附有已发布的来源。",
+      "states-limits": "列出原因：它说明了自身未确立的内容。",
+      "trust-surface": "列出原因：它发布在信任界面上。",
+      "product-fact": "列出原因：它是已发布的产品事实。",
     },
     groups: {
       "starting-points": "起点",
@@ -246,6 +293,16 @@ const domId = (id: string): string =>
     </template>
   ))}
 
+  {ATELIER_REASON_KEYS.map((reasonKey) => (
+    <template data-atelier-reason={reasonKey}>
+      {atelierCopy.reasons[reasonKey]}
+    </template>
+  ))}
+
+  <template data-atelier-handoff-report>{atelierCopy.handoff.report}</template>
+
+  <template data-atelier-handoff-action>{atelierCopy.handoff.action}</template>
+
   <div class="decision-room__items" data-decision-items>
     {items.map((item, index) => (
       <article
@@ -257,6 +314,17 @@ const domId = (id: string): string =>
         data-has-evidence={item.evidenceHref ? "" : undefined}
         data-has-boundary={item.boundaryText ? "" : undefined}
       >
+        {item.kind === "claim" ? (
+          <label class="decision-room__select">
+            <input
+              type="checkbox"
+              autocomplete="off"
+              data-atelier-item-select
+              value={item.id}
+            />
+            <span>{atelierCopy.handoff.select}</span>
+          </label>
+        ) : null}
         <span class="decision-room__kind">{KIND_LABELS[item.kind][lang]}</span>
         <h3 class="decision-room__label">{item.label[lang]}</h3>
         {item.summary ? (
@@ -316,13 +384,31 @@ const domId = (id: string): string =>
     {copy.reset}
   </button>
 
+  <div class="decision-room__handoff" data-atelier-handoff>
+    <p class="decision-room__handoff-empty" data-atelier-handoff-empty>
+      {atelierCopy.handoff.empty}
+    </p>
+    <a
+      class="decision-room__handoff-link"
+      data-atelier-handoff-link
+      hidden
+      href="#"
+    ></a>
+    <p
+      class="decision-room__handoff-report"
+      data-atelier-handoff-report
+      hidden
+    ></p>
+  </div>
+
   <p class="sr-only" role="status" aria-live="polite" data-decision-live></p>
 </section>
 
 <noscript>
   <style>
     [data-decision-add],
-    [data-decision-reset] {
+    [data-decision-reset],
+    [data-atelier-handoff-link] {
       display: none !important;
     }
   </style>

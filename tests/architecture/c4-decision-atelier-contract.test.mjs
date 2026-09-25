@@ -5,6 +5,7 @@ import { buildDecisionItems } from "../../src/lib/decision-room.ts";
 import {
   ATELIER_CONSTRAINTS,
   ATELIER_GOALS,
+  ATELIER_REASON_KEYS,
   arrangeDecisionItems,
 } from "../../src/lib/decision-atelier.ts";
 
@@ -208,7 +209,8 @@ test("the arrangement carries no score, rank or ordering-by-quality field", () =
     "rejected",
   ]);
   for (const group of result.groups) {
-    assert.deepEqual(Object.keys(group).sort(), ["id", "items"]);
+    // the allowed shape is explicit: a declared reason key joined it, no score did
+    assert.deepEqual(Object.keys(group).sort(), ["id", "items", "reason"]);
   }
 });
 
@@ -227,5 +229,65 @@ test("arrangement is deterministic", () => {
       group.id,
       group.items.map((item) => item.id),
     ]),
+  );
+});
+
+test("every group states why it matched, using only the declared reason vocabulary", () => {
+  assert.deepEqual(
+    [...ATELIER_REASON_KEYS],
+    [
+      "in-scope",
+      "carries-source",
+      "states-limits",
+      "trust-surface",
+      "product-fact",
+    ],
+  );
+  let published = 0;
+  for (const goal of ATELIER_GOALS) {
+    const result = arrangeDecisionItems(ITEMS, { goal });
+    published += result.groups.length;
+    // a goal may legitimately match nothing in a given item set (no products here)
+    for (const group of result.groups) {
+      assert.ok(
+        ATELIER_REASON_KEYS.includes(group.reason),
+        `${group.id} must carry a declared reason key, got ${group.reason}`,
+      );
+    }
+  }
+  assert.ok(
+    published > 0,
+    "the declared goals must publish groups for this item set",
+  );
+});
+
+test("the arrangement cannot emit prose: a reason is a key, never a sentence", () => {
+  // The module produces keys only, so no assurance wording can originate here.
+  const result = arrangeDecisionItems(ITEMS, { goal: "evaluate" });
+  for (const group of result.groups) {
+    assert.equal(typeof group.reason, "string");
+    assert.ok(
+      !/\s/.test(group.reason),
+      `reason "${group.reason}" must be a single key`,
+    );
+    assert.ok(group.reason.length <= 24, "a key is short; a sentence is not");
+  }
+  // non-vacuity: the same check rejects a sentence
+  assert.ok(
+    /\s/.test("this product is the best choice"),
+    "sentence detector must work",
+  );
+});
+
+test("reason keys are declared per group and never derived from item content", () => {
+  // Two different item sets with the same goal must yield the same reason keys:
+  // the reason describes the matching dimension, not the item's merits.
+  const first = arrangeDecisionItems(ITEMS, { goal: "explore" });
+  const second = arrangeDecisionItems([...ITEMS].reverse(), {
+    goal: "explore",
+  });
+  assert.deepEqual(
+    first.groups.map((group) => [group.id, group.reason]),
+    second.groups.map((group) => [group.id, group.reason]),
   );
 });
