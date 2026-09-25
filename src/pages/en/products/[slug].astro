@@ -5,6 +5,8 @@ import Container from "@/components/layout/Container.astro";
 import ProductStatus from "@/components/product/ProductStatus.astro";
 import ButtonLink from "@/components/ui/ButtonLink.astro";
 import { getPublicProducts } from "@/lib/products";
+import { safeJsonLd, productJsonLd } from "@/lib/seo";
+import { SITE } from "@/data/site";
 
 export async function getStaticPaths() {
   const products = await getPublicProducts();
@@ -48,6 +50,17 @@ const proofLinks = [
   { href: data.proof.securityUrl, label: "Security" },
   { href: data.proof.supportUrl, label: "Support" },
 ].filter((link): link is { href: string; label: string } => Boolean(link.href));
+
+const productStructuredData = productJsonLd(
+  {
+    name: data.name,
+    description: data.shortDescription,
+    slug: data.slug,
+    screenshotUrl: screenshot?.src,
+  },
+  SITE.url,
+  "en",
+);
 ---
 
 <BaseLayout
@@ -57,6 +70,10 @@ const proofLinks = [
   ogImage={data.proof.screenshot?.src}
   scene="product"
 >
+  <script
+    type="application/ld+json"
+    set:html={safeJsonLd(productStructuredData)}
+  ></script>
   <article class="py-16">
     <Container>
       <p class="text-sm font-medium text-[var(--text-muted)]">
