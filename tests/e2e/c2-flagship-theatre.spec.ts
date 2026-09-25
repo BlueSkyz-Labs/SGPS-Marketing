@@ -106,10 +106,7 @@ test.describe("C2 Flagship Theatre — fixture-backed (product present)", () => 
         "src",
         "/products/fixtures/fixture-flagship.png",
       );
-      await expect(img).toHaveAttribute(
-        "alt",
-        "Fixture flagship product screenshot",
-      );
+      await expect(img).toHaveAttribute("alt", "Fixture flagship proof media");
       await expect(img).toHaveAttribute("width", "1280");
       await expect(img).toHaveAttribute("height", "800");
       await expect(img).toHaveAttribute("loading", "lazy");

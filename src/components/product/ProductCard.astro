@@ -32,9 +32,12 @@ const profileLabel = labelFor(SHARED_LABELS.viewProfile, lang);
       emphasis === "hero" ? "text-2xl sm:text-3xl" : "text-xl",
     ]}
   >
+    {/* min-w-0 + overflow-wrap:anywhere: without them the title anchor pins its
+        own min-content (its longest word at 200% text zoom) and pushes the card
+        past its grid column. Caught by the 320px 200%-zoom assertion. */}
     <a
       href={profileHref}
-      class="inline-flex min-h-11 items-center text-inherit no-underline hover:underline"
+      class="inline-flex min-h-11 max-w-full min-w-0 items-center text-inherit no-underline [overflow-wrap:anywhere] hover:underline"
       data-product-continuity="card"
       style={productTransitionStyle("card", data.slug)}
     >
