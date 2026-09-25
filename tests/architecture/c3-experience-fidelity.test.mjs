@@ -169,15 +169,38 @@ test("resolver prefers prefers-reduced-motion over explicit cinematic preference
   assert.equal(tier, "static-premium");
 });
 
-test("resolver yields restrained when motion is welcome and no explicit override", async () => {
+test("explicit cinematic override degrades to restrained when view transitions are unsupported", async () => {
   const { resolveFidelityTier } = await loadModule();
-  const tier = resolveFidelityTier({
-    reducedMotion: false,
-    explicitOverride: undefined,
-  });
-  assert.ok(
-    ["restrained", "cinematic"].includes(tier),
-    "without reduced motion and no override, tier should be at least restrained",
+  assert.equal(
+    resolveFidelityTier({
+      explicitOverride: "cinematic",
+      nativeFeatures: { viewTransitions: false },
+    }),
+    "restrained",
+    "an unsupported native feature must degrade the override, never break content",
+  );
+});
+
+test("reduced motion wins over an explicit restrained override too", async () => {
+  const { resolveFidelityTier } = await loadModule();
+  assert.equal(
+    resolveFidelityTier({
+      reducedMotion: true,
+      explicitOverride: "restrained",
+    }),
+    "static-premium",
+  );
+});
+
+test("resolver yields cinematic once motion is welcome and the tier is not overridden", async () => {
+  const { resolveFidelityTier } = await loadModule();
+  assert.equal(
+    resolveFidelityTier({
+      reducedMotion: false,
+      explicitOverride: undefined,
+    }),
+    "cinematic",
+    "a motion-welcome signal with no override and supported native features yields cinematic",
   );
 });
 
