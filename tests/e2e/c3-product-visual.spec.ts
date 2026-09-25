@@ -44,7 +44,7 @@ test.describe("C3 ProductVisual — fixture-backed screenshot truth", () => {
       );
       await expect(image).toHaveAttribute(
         "alt",
-        "Fixture flagship product screenshot",
+        "Fixture flagship proof media",
       );
       await expect(image).toHaveAttribute("width", "1280");
       await expect(image).toHaveAttribute("height", "800");

@@ -5,7 +5,7 @@
  * e2e while the production registry stays intentionally empty. They are
  * deliberately obvious fixtures ("Fixture …"): they must never read as real
  * BlueSkyz Labs products and are never deployed. Production publication truth
- * remains the owner-gated screenshot floor.
+ * remains the owner-gated proof-media floor.
  */
 export const FIXTURE_FLAGSHIP_SLUG = "fixture-flagship";
 
@@ -18,7 +18,7 @@ interface FixtureProduct {
     capabilities: string[];
     primaryAction: { href: string; label: string };
     proof: {
-      screenshot: {
+      media: {
         src: string;
         alt: string;
         width: number;
@@ -45,9 +45,9 @@ export const FIXTURE_FLAGSHIP: FixtureProduct = {
     ],
     primaryAction: { href: "/en/contact/", label: "Contact" },
     proof: {
-      screenshot: {
+      media: {
         src: "/products/fixtures/fixture-flagship.png",
-        alt: "Fixture flagship product screenshot",
+        alt: "Fixture flagship proof media",
         width: 1280,
         height: 800,
       },
@@ -68,9 +68,9 @@ export const FIXTURE_SECONDARY: FixtureProduct = {
     capabilities: ["Fixture capability one", "Fixture capability two"],
     primaryAction: { href: "/en/contact/", label: "Contact" },
     proof: {
-      screenshot: {
+      media: {
         src: "/products/fixtures/fixture-secondary.png",
-        alt: "Fixture secondary product screenshot",
+        alt: "Fixture secondary proof media",
         width: 1280,
         height: 800,
       },
@@ -91,9 +91,9 @@ export const FIXTURE_ECOSYSTEM: FixtureProduct = {
     capabilities: ["Fixture capability one", "Fixture capability two"],
     primaryAction: { href: "/en/contact/", label: "Contact" },
     proof: {
-      screenshot: {
+      media: {
         src: "/products/fixtures/fixture-ecosystem.png",
-        alt: "Fixture ecosystem product screenshot",
+        alt: "Fixture ecosystem proof media",
         width: 1280,
         height: 800,
       },
