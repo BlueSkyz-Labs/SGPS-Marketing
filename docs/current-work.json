@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.0",
-  "updatedAt": "2026-09-25",
+  "updatedAt": "2026-09-26",
   "program": "C4 Quiet Authority — Digital Maison, Collected Edition, Executive Dossier & Architecture Salon",
   "status": "c4-in-progress",
   "authorities": {
@@ -340,12 +340,12 @@
     "Lane-helguard guard: helper now emits 'LOCAL-AHEAD skip' and exits 0 on local-ahead branches; reset incident documented (operational, not committed)."
   ],
   "nextActionable": [
-    "C4-A (Tasks 1-9), C4-B (Tasks 1-6), C4-D Architecture Salon (#263), C4-E Decision Atelier & Dossier Handoff (#231), C3, C3-D Task 1 (experience intent model ffbf78f) and C3-F Task 1 (release-story schema 4efb49b) are merged; C4-C Tasks 1-3 are merged and Task 4 (boardroom presentation mode) is in review as the active frontier.",
-    "In review: C3-D Task 2 re-cut (visitor-controlled intent UI, must also update the specs that depend on the previous intent surface). Open with a blocking correction in progress: PR #269 (product truth).",
-    "Blocked on owner fact: C3-F Task 2 and later (release source adapter, publication surface) — no authored public release source exists. Work that needs no new truth: C4-D Task 2 (Architecture Salon surface) and Task 4 (Provenance Lens component).",
-    "Public product runtime remains honest-empty until owner-approved screenshot/product truth exists. C4-A Task 10 (gallery mount), C4-F and remote/model C4-G remain separately gated.",
+    "C4-A (Tasks 1-9), C4-B (Tasks 1-6), C4-D Architecture Salon (#263), C4-E Decision Atelier & Dossier Handoff (#231), C3, C3-D Task 1 (experience intent model ffbf78f) and C3-F Task 1 (release-story schema 4efb49b) are merged; C4-C Tasks 1-5 are merged (#267 b3b94cd boardroom presentation mode, #270 b95c784 dossier provenance/freshness footer), so the active frontier is the C3-D Task 2 re-cut.",
+    "In an isolated re-cut lane (no PR yet): C3-D Task 2 visitor-controlled intent UI, which must also update the specs that depend on the previous intent surface. Open with a blocked-public-activation correction landed and green: PR #269 (product truth, head 3e2ab8c; Quality Gates + Browser Assurance pass), awaiting owner merge.",
+    "Blocked on owner fact: C3-F Task 2 and later (release source adapter, publication surface) — no authored public release source exists. C4-D Tasks 2 and 4 (Architecture Salon surface, Provenance Lens) are already landed (see the c4-d-salon wave), so the earlier suggestion here is superseded.",
+    "Public product runtime remains honest-empty on main until owner-approved screenshot/product truth exists; the corrected registry (real repositories, per-product revisions, proof media declared as media) sits in open PR #269. C4-A Task 10 (gallery mount), C4-F and remote/model C4-G remain separately gated.",
     "Human E4, VI copy cross-check, trademark/legal clearance and the RUM/privacy provider decision remain owner-executed.",
     "Verified merged 2026-09-25: #265 (ffbf78f), #266 (4efb49b), #267 (b3b94cd), #268 (2871ce2), #270 (b95c784). Earlier 2026-09-24: #234, #235, #257, #256, #253, #258, #229.",
-    "Residual: C3-D Task 2 re-cut, PR #269 product-provenance correction (provenance gate hardening included), C3-F release publication blocked on owner fact, lane-helper guard documentation. Owner-gated: E4, RUM, Concierge, Spatial/WebGL, screenshot/product truth."
+    "Residual: C3-D Task 2 re-cut in a lane, PR #269 product-provenance correction awaiting owner merge, PR #271 router record, C3-F release publication blocked on owner fact. Closed as verified with evidence: issue #240 (dossier claim-source links, fixed by f9c6165; contract test in tests/architecture/c4-dossier-contract.test.mjs passes in the 588-test suite). Owner-gated: E4, RUM, Concierge, Spatial/WebGL, screenshot/product truth."
   ]
 }
