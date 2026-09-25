@@ -121,3 +121,54 @@ test("reduced motion removes the transition instead of removing the content", ()
     "screens must render server-side so reduced motion and no-JS still read",
   );
 });
+
+test("without the enhancement every screen stays readable", () => {
+  assert.ok(
+    COMPONENT.includes('data-boardroom-ready="false"'),
+    "the deck must ship a not-ready state for the no-JS case",
+  );
+  assert.ok(
+    SCRIPT.includes('setAttribute("data-boardroom-ready", "true")'),
+    "the enhancement must flip the deck to ready",
+  );
+
+  // The default rule must be readable; only the ready-scoped rule may collapse
+  // the stage, or a visitor without JavaScript loses the whole section.
+  const base = STYLE.slice(STYLE.indexOf(".c4-boardroom__screen {"));
+  const baseRule = base.slice(0, base.indexOf("}"));
+  assert.match(
+    baseRule,
+    /display:\s*block/,
+    "the unscoped screen rule must keep screens readable by default",
+  );
+
+  const hidden = STYLE.match(
+    /\[data-boardroom-ready="true"\]\s*\.c4-boardroom__screen\s*\{[^}]*display:\s*none/,
+  );
+  assert.ok(
+    hidden,
+    "collapsing to one screen must be scoped behind the ready state",
+  );
+
+  const emptyState = STYLE.match(
+    /\[data-boardroom-ready="false"\]\s*\.c4-boardroom__controls\s*\{[^}]*display:\s*none/,
+  );
+  assert.ok(
+    emptyState,
+    "controls that cannot work without the enhancement must not be offered",
+  );
+
+  // A printed dossier contains every screen, whatever the ready state is.
+  const boardroomPrint = [...STYLE.matchAll(/@media print \{([\s\S]*?)\n\}/g)]
+    .map((match) => match[1])
+    .find((block) => block.includes(".c4-boardroom__controls"));
+  assert.ok(
+    boardroomPrint,
+    "the boardroom must declare its own print behaviour",
+  );
+  assert.match(
+    boardroomPrint,
+    /\[data-boardroom-ready\][^{]*\{[^}]*display:\s*block/,
+    "print must restore every screen",
+  );
+});

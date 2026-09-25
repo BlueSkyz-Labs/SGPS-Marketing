@@ -159,13 +159,17 @@ test.describe("C4-C boardroom presentation mode", () => {
     await expect(active.locator(".c4-boardroom__screen-heading")).toBeVisible();
     await expect(active).not.toBeEmpty();
 
-    const duration = await page
+    // "No transition" is a property of transition-property, not of a specific
+    // duration string (engines report the `none` duration differently).
+    const motion = await page
       .locator("[data-boardroom-screen]")
       .first()
-      .evaluate((element) => getComputedStyle(element).transitionDuration);
-    expect(duration.split(",").every((part) => part.trim() === "0s")).toBe(
-      true,
-    );
+      .evaluate((element) => ({
+        property: getComputedStyle(element).transitionProperty,
+        reduceMatched: matchMedia("(prefers-reduced-motion: reduce)").matches,
+      }));
+    expect(motion.reduceMatched).toBe(true);
+    expect(motion.property).toBe("none");
   });
 
   for (const lang of LANGS) {
@@ -195,15 +199,22 @@ test.describe("C4-C boardroom without JavaScript", () => {
     await page.goto("/en/dossier/");
 
     await expect(page.locator("[data-boardroom-deck]")).toBeVisible();
-    expect(
-      await page.locator("[data-boardroom-screen]").count(),
-    ).toBeGreaterThan(0);
-    // Without the enhancement nothing is hidden behind a presentation state.
+
+    // Without the enhancement no screen is collapsed: the whole presentation
+    // is an ordinary readable section list.
+    const screens = page.locator("[data-boardroom-screen]");
+    const count = await screens.count();
+    expect(count).toBeGreaterThan(0);
+    for (let index = 0; index < count; index += 1) {
+      await expect(screens.nth(index)).toBeVisible();
+    }
     expect(await page.locator(".c4-boardroom__screen--active").count()).toBe(0);
 
+    // Controls that cannot work must not be offered.
+    await expect(page.locator("[data-boardroom-next]")).toBeHidden();
+
     const links = page.locator(".c4-boardroom__source-link");
-    if (await links.count()) {
-      await expect(links.first()).toBeVisible();
-    }
+    expect(await links.count()).toBeGreaterThan(0);
+    await expect(links.first()).toBeVisible();
   });
 });

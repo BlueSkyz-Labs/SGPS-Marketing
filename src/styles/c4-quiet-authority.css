@@ -309,19 +309,32 @@
   min-height: 28rem;
 }
 
+/* Presentation mode is progressive enhancement. Without the enhancement every
+   screen is an ordinary readable section; only a JavaScript-ready deck
+   collapses the stage to one screen at a time. */
 .c4-boardroom__screen {
+  display: block;
+  opacity: 1;
+}
+
+[data-boardroom-ready="true"] .c4-boardroom__screen {
   display: none;
   opacity: 0;
   transition: opacity 0.25s ease;
 }
 
-.c4-boardroom__screen--active {
+[data-boardroom-ready="true"] .c4-boardroom__screen--active {
   display: block;
   opacity: 1;
 }
 
+/* The controls only mean anything once the enhancement is running. */
+[data-boardroom-ready="false"] .c4-boardroom__controls {
+  display: none;
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .c4-boardroom__screen {
+  [data-boardroom-ready="true"] .c4-boardroom__screen {
     transition: none;
   }
 }
@@ -475,13 +488,14 @@
   }
 }
 
-/* Print: show the active screen content; hide controls */
+/* Print: every screen prints, controls do not. The ready-scoped rules above
+   must not hide screens from a printed dossier. */
 @media print {
   .c4-boardroom__controls,
   .c4-boardroom__btn--exit {
     display: none;
   }
-  .c4-boardroom__screen {
+  [data-boardroom-ready] .c4-boardroom__screen {
     display: block;
     opacity: 1;
     page-break-inside: avoid;

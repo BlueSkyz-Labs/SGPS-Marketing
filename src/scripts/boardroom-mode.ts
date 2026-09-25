@@ -59,6 +59,11 @@ export function initBoardroomMode(): void {
   const count = Math.max(1, el.screens.length);
   let current = 0;
 
+  // Presentation mode is progressive enhancement: until this attribute flips,
+  // the stylesheet leaves every screen readable, so a visitor without
+  // JavaScript still reads the whole dossier.
+  el.deck.setAttribute("data-boardroom-ready", "true");
+
   function show(index: number, moveFocus = false) {
     const target = Math.max(0, Math.min(count - 1, index));
     current = target;
