@@ -108,13 +108,13 @@ Prefer CSS/media queries where possible; JS only reads what is necessary to choo
 
 ### Task 5: Privacy and abuse red team
 
-- [ ] **Step 1: inspect bundle/source for storage/network primitives**
+- [x] **Step 1: inspect bundle/source for storage/network primitives** — PR #276 exact-head assurance; see `docs/evidence/2026-09-26-c3-d-adaptive-fidelity-and-privacy-red-team.md`.
 
 Persistence is not required for V1. If later added, it requires separate justification and must remain first-party/local.
 
-- [ ] **Step 2: verify malformed URL/query state cannot inject arbitrary values**
+- [x] **Step 2: verify malformed URL/query state cannot inject arbitrary values** — PR #276 exact-head assurance; see `docs/evidence/2026-09-26-c3-d-adaptive-fidelity-and-privacy-red-team.md`.
 
-- [ ] **Step 3: verify intent/fidelity cannot alter truth state, claim state, or product lifecycle**
+- [x] **Step 3: verify intent/fidelity cannot alter truth state, claim state, or product lifecycle** — PR #276 exact-head assurance; see `docs/evidence/2026-09-26-c3-d-adaptive-fidelity-and-privacy-red-team.md`.
 
 ## Verification
 

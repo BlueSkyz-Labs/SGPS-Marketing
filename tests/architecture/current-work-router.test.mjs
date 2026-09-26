@@ -60,6 +60,36 @@ test("at most one wave is in progress; merged waves have evidence", () => {
   }
 });
 
+test("C3-C cannot be merged while required living-product steps remain", () => {
+  const wave = router.waves.find((item) => item.id === "c3-c-product");
+  const plan = readFileSync(
+    "docs/superpowers/plans/2026-09-13-c3-c-living-product-system.md",
+    "utf8",
+  );
+  const unfinishedSteps = plan.match(/^- \[ \] \*\*Step /gm) ?? [];
+
+  assert.ok(wave, "C3-C wave must exist in the canonical router");
+  if (unfinishedSteps.length > 0) {
+    assert.notEqual(
+      wave.status,
+      "MERGED",
+      "C3-C requires every living-product plan step before merge status",
+    );
+  }
+});
+
+test("C3-E runtime stays blocked while its owner decision is open", () => {
+  const wave = router.waves.find((item) => item.id === "c3-e-concierge");
+  const decision = router.openOwnerDecisions.find(
+    (item) => item.id === "c3-concierge-runtime-privacy-provider",
+  );
+
+  assert.ok(wave, "C3-E wave must exist in the canonical router");
+  assert.ok(decision, "C3-E owner decision must remain explicit");
+  assert.ok(decision.blocks.includes("c3-e-concierge-runtime"));
+  assert.equal(wave.status, "BLOCKED");
+});
+
 test("open owner decisions are well-formed and never auto-resolved", () => {
   assert.ok(Array.isArray(router.openOwnerDecisions));
   for (const decision of router.openOwnerDecisions) {
