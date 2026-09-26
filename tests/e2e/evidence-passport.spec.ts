@@ -101,7 +101,7 @@ test.describe("evidence passport", () => {
       passport.getByRole("link", { name: "在原文中查看 →" }),
     ).toHaveAttribute("href", "/zh/security/");
     await expect(
-      page.locator(`link[rel="alternate"][hreflang="zh"]`),
+      page.locator(`link[rel="alternate"][hreflang="zh-Hans"]`),
     ).toHaveAttribute(
       "href",
       /\/zh\/evidence\/security-reporting-is-private\/$/,
