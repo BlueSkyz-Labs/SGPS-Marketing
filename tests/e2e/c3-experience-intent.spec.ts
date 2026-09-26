@@ -306,6 +306,7 @@ test.describe("C3-D IntentControl", () => {
               .filter((attribute) => attribute.name.startsWith("data-"))
               .map((attribute) => [attribute.name, attribute.value]),
             text: element.textContent?.replace(/\s+/g, " ").trim() ?? "",
+            visible: element.checkVisibility(),
             links: Array.from(element.querySelectorAll("a")).map((link) =>
               link.getAttribute("href"),
             ),
@@ -314,11 +315,26 @@ test.describe("C3-D IntentControl", () => {
             JSON.stringify(left).localeCompare(JSON.stringify(right)),
           ),
       );
+    const seedCanonicalFixture = () =>
+      page.locator("#main-content").evaluate((main) => {
+        main.querySelector("[data-proof-first-empty-state]")?.remove();
+        const product = document.createElement("article");
+        product.dataset.productCard = "fixture-product";
+        product.dataset.productStatus = "preview";
+        product.dataset.lifecycle = "in-development";
+        product.innerHTML =
+          '<h2 data-product-continuity>Fixture product</h2><p data-claim-id="fixture-claim" data-truth-state="preview">Fixture capability boundary</p><a data-evidence-passport href="/en/evidence/privacy-no-tracking-on-this-site/">Inspect evidence</a>';
+        main.append(product);
+      });
 
     await page.goto("/en/products/");
     await expect(page.locator("[data-proof-first-empty-state]")).toBeVisible();
     await expect(page.locator("[data-product-card]")).toHaveCount(0);
+    await seedCanonicalFixture();
+
     const canonicalBefore = await readTruth();
+    expect(canonicalBefore.length).toBeGreaterThan(0);
+    expect(canonicalBefore.every((item) => item.visible)).toBe(true);
 
     for (const selector of ["[data-intent-lens]", "[data-intent-control]"]) {
       const buttons = page.locator(`${selector} button[data-intent]`);
@@ -328,12 +344,20 @@ test.describe("C3-D IntentControl", () => {
       }
     }
 
+    for (const tier of ["static-premium", "restrained", "cinematic"]) {
+      await page.locator("html").evaluate((root, value) => {
+        root.setAttribute("data-fidelity-tier", value);
+      }, tier);
+      expect(await readTruth()).toEqual(canonicalBefore);
+    }
+
     await page.emulateMedia({ reducedMotion: "reduce" });
     await page.reload();
     await expect(page.locator("html")).toHaveAttribute(
       "data-fidelity-tier",
       "static-premium",
     );
+    await seedCanonicalFixture();
     expect(await readTruth()).toEqual(canonicalBefore);
   });
 
