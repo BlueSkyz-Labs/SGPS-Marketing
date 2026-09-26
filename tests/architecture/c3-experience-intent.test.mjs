@@ -206,3 +206,63 @@ test("experience-intent dispatches a semantic event, never sends data", () => {
     "experience-intent must never transmit data to a remote endpoint",
   );
 });
+
+test("intent and fidelity runtime paths contain no persistence or network APIs", () => {
+  const paths = [
+    "../../src/scripts/experience-intent.ts",
+    "../../src/scripts/fidelity-engine.ts",
+    "../../src/scripts/analytics-bridge.ts",
+    "../../src/lib/analytics.ts",
+  ];
+  const forbidden =
+    /\b(?:fetch\s*\(|XMLHttpRequest|navigator\s*\.\s*sendBeacon|WebSocket|EventSource|localStorage|sessionStorage|indexedDB|cookieStore|document\s*\.\s*cookie|CacheStorage|caches\s*\.\s*(?:open|match))\b/i;
+
+  for (const path of paths) {
+    const entryUrl = new URL(path, import.meta.url);
+    assert.ok(existsSync(entryUrl), `${path} must exist for the privacy scan`);
+    assert.doesNotMatch(
+      readFileSync(entryUrl, "utf8"),
+      forbidden,
+      `${path} must not persist visitor intent/fidelity or transmit it`,
+    );
+  }
+});
+
+test("intent prioritization preserves product, claim, evidence, and lifecycle truth", () => {
+  const canonicalTruth = Object.freeze([
+    Object.freeze({
+      id: "product-apexagent",
+      kind: "product",
+      surface: "products",
+      lifecycle: "development",
+      publicLabel: "Preview",
+      claimIds: Object.freeze(["claim-agent-capability"]),
+      evidenceIds: Object.freeze(["evidence-agent-source"]),
+    }),
+    Object.freeze({
+      id: "claim-agent-capability",
+      kind: "trust",
+      surface: "security",
+      truthState: "not-published",
+      evidenceIds: Object.freeze(["evidence-agent-source"]),
+    }),
+  ]);
+  const original = JSON.stringify(canonicalTruth);
+  const byId = [...canonicalTruth].sort((left, right) =>
+    left.id.localeCompare(right.id),
+  );
+
+  for (const intent of EXPERIENCE_INTENTS) {
+    const prioritized = prioritizeForIntent(canonicalTruth, intent);
+    assert.deepEqual(
+      [...prioritized].sort((left, right) => left.id.localeCompare(right.id)),
+      byId,
+      `${intent} must preserve truth membership and authored fields`,
+    );
+    assert.equal(
+      JSON.stringify(canonicalTruth),
+      original,
+      `${intent} must not mutate the canonical input records`,
+    );
+  }
+});

@@ -4,6 +4,11 @@ import test from "node:test";
 
 const analytics = readFileSync("src/lib/analytics.ts", "utf8");
 const bridge = readFileSync("src/scripts/analytics-bridge.ts", "utf8");
+const analyticsModuleUrl = new URL(
+  "../../src/lib/analytics.ts",
+  import.meta.url,
+);
+const { sanitizeAnalyticsEvent } = await import(analyticsModuleUrl);
 
 const EXPECTED_EVENTS = [
   "intent_selected",
@@ -64,4 +69,24 @@ test("analytics emission is fail-safe (guarded try/catch)", () => {
   assert.match(analytics, /try\s*\{/);
   assert.match(analytics, /catch\s*\{/);
   assert.match(analytics, /DEDUPE_WINDOW_MS/);
+});
+
+test("intent telemetry rejects values outside the declared intent vocabulary", () => {
+  for (const intent of [
+    "profile-visitor<script>alert(1)</script>",
+    "?intent=verify-trust",
+  ]) {
+    assert.equal(
+      sanitizeAnalyticsEvent("intent_selected", { intent }),
+      null,
+      `${intent} must not enter the intent_selected taxonomy`,
+    );
+  }
+});
+
+test("intent telemetry accepts a declared experience intent", () => {
+  assert.deepEqual(
+    sanitizeAnalyticsEvent("intent_selected", { intent: "verify-trust" }),
+    { name: "intent_selected", properties: { intent: "verify-trust" } },
+  );
 });

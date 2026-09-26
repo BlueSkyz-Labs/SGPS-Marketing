@@ -7,8 +7,10 @@
  * facts. Init is idempotent.
  */
 import { orderItemsByMission } from "@/lib/journey";
+import { EXPERIENCE_INTENTS } from "@/lib/experience-intent";
 
 const INTENT_EVENT = "blueskyz:intent";
+const supportedIntents = new Set<string>(EXPERIENCE_INTENTS);
 
 export function initIntentControl(root: ParentNode = document): void {
   const control = root.querySelector("[data-intent-control]");
@@ -22,7 +24,7 @@ export function initIntentControl(root: ParentNode = document): void {
   control.setAttribute("data-intent-control-ready", "");
   const buttons = Array.from(
     control.querySelectorAll<HTMLButtonElement>("button[data-intent]"),
-  );
+  ).filter((button) => supportedIntents.has(button.dataset.intent ?? ""));
   if (buttons.length === 0) {
     return;
   }
