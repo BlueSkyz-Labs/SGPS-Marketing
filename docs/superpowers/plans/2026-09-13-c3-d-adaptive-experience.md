@@ -32,13 +32,13 @@
 - Produces enum-like intents: `explore-products`, `evaluate-product`, `verify-trust`, `understand-architecture`, `work-with-us`.
 - Produces pure selector `prioritizeForIntent(items, intent)` that reorders/promotes existing items without inventing/hiding required truth.
 
-- [ ] **Step 1: write tests for known, unknown, and default intent**
+- [x] **Step 1: write tests for known, unknown, and default intent**
 
-- [ ] **Step 2: write invariant test proving item membership is unchanged**
+- [x] **Step 2: write invariant test proving item membership is unchanged**
 
-- [ ] **Step 3: implement pure prioritization**
+- [x] **Step 3: implement pure prioritization**
 
-- [ ] **Step 4: verify deterministic output**
+- [x] **Step 4: verify deterministic output**
 
 ### Task 2: Build Visitor-Controlled Experience Graph UI (G5)
 
@@ -54,13 +54,13 @@
 - Consumes: current intent enum and existing routes/actions.
 - Produces: explicit control and local page presentation priority.
 
-- [ ] **Step 1: render all choices in server HTML**
+- [x] **Step 1: render all choices in server HTML**
 
-- [ ] **Step 2: implement local enhancement with no remote call**
+- [x] **Step 2: implement local enhancement with no remote call**
 
-- [ ] **Step 3: test keyboard, screen-reader state, mobile, and reset/default behavior**
+- [x] **Step 3: test keyboard, screen-reader state, mobile, and reset/default behavior**
 
-- [ ] **Step 4: verify same facts/routes remain reachable for every intent**
+- [x] **Step 4: verify same facts/routes remain reachable for every intent**
 
 ### Task 3: Define fidelity tier resolver (G6)
 
@@ -73,15 +73,15 @@
 
 - Produces `static-premium | restrained | cinematic` from explicit preference overrides and standards-based capability/preferences.
 
-- [ ] **Step 1: write deterministic resolver tests**
+- [x] **Step 1: write deterministic resolver tests**
 
 Reduced motion must force `static-premium` or equivalent non-travel behavior. Unsupported native features must never cause critical content failure.
 
-- [ ] **Step 2: reject fingerprinting primitives in the module**
+- [x] **Step 2: reject fingerprinting primitives in the module**
 
 The test should reject canvas fingerprinting, WebGL renderer inspection, audio fingerprinting, hardware benchmark loops, device identifiers, and network transmission.
 
-- [ ] **Step 3: implement feature/preference resolver**
+- [x] **Step 3: implement feature/preference resolver**
 
 Prefer CSS/media queries where possible; JS only reads what is necessary to choose enhancement already available locally.
 
@@ -98,13 +98,13 @@ Prefer CSS/media queries where possible; JS only reads what is necessary to choo
 - Consumes: fidelity tier.
 - Produces: page/root data attribute or class controlling optional enhancement level.
 
-- [ ] **Step 1: verify static-premium renders all critical content/actions**
+- [x] **Step 1: verify static-premium renders all critical content/actions**
 
-- [ ] **Step 2: verify restrained adds only lightweight native transitions/motion**
+- [x] **Step 2: verify restrained adds only lightweight native transitions/motion**
 
-- [ ] **Step 3: verify cinematic is enhancement-only and remains inside performance budget**
+- [x] **Step 3: verify cinematic is enhancement-only and remains inside performance budget**
 
-- [ ] **Step 4: test reduced motion and unsupported-feature fallback**
+- [x] **Step 4: test reduced motion and unsupported-feature fallback**
 
 ### Task 5: Privacy and abuse red team
 
