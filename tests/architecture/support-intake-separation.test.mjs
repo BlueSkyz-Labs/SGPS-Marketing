@@ -18,7 +18,7 @@ const routes = [
   {
     lang: "vi",
     fallback:
-      /Báo cáo bảo mật chỉ dành cho lỗ hổng nghi vấn, không tiếp nhận\s+yêu cầu hỗ trợ thông thường\./,
+      /Báo cáo\s+bảo mật chỉ dành cho lỗ hổng nghi vấn/,
     action: /Báo cáo lỗ hổng bảo mật/,
   },
   {
@@ -37,6 +37,9 @@ for (const { lang, fallback, action } of routes) {
     );
     assert.match(page, /mailto:\$\{SITE\.contactEmail\}/);
     assert.match(page, fallback);
+    if (lang === "vi") {
+      assert.match(page, /không tiếp nhận yêu cầu hỗ trợ\s+thông thường\./);
+    }
     const securityAction = page.match(
       new RegExp(`href="/${lang}/security/"[\\s\\S]*?</a>`),
     );
