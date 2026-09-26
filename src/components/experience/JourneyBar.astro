@@ -39,7 +39,10 @@ const renderedActions =
       </p>
       <ul class="flex flex-wrap gap-3">
         {renderedActions.map((action) => (
-          <li data-step-key={routeKeyFromPath(action.href)}>
+          <li
+            data-step-key={routeKeyFromPath(action.href)}
+            data-neutral-order={actions.indexOf(action)}
+          >
             <a
               class="inline-flex min-h-11 items-center gap-1.5 rounded-lg border border-[var(--border-subtle)] bg-white px-4 text-sm font-semibold text-[var(--text-primary)] no-underline transition-[border-color,box-shadow] duration-150 hover:border-[var(--action-primary)] hover:shadow-sm"
               href={action.href}

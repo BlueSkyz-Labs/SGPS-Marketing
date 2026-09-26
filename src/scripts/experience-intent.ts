@@ -36,7 +36,10 @@ export function initIntentControl(root: ParentNode = document): void {
   const bar = root.querySelector<HTMLElement>("[data-journey-bar]");
   const list = bar?.querySelector("ul");
   const originalItems = list
-    ? Array.from(list.querySelectorAll<HTMLElement>("li[data-step-key]"))
+    ? Array.from(list.querySelectorAll<HTMLElement>("li[data-step-key]")).sort(
+        (a, b) =>
+          Number(a.dataset.neutralOrder) - Number(b.dataset.neutralOrder),
+      )
     : [];
   const parseMap = (
     raw: string | null | undefined,

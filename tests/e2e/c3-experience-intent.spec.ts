@@ -132,6 +132,26 @@ test.describe("C3-D IntentControl", () => {
     await explore.click();
     await expect(explore).toHaveAttribute("aria-pressed", "false");
     expect(await page.locator("html").getAttribute("data-intent")).toBeNull();
+    const neutralSteps = await page
+      .locator("[data-journey-bar] li[data-step-key]")
+      .evaluateAll((items) =>
+        items.map((item) => ({
+          order: Number(item.getAttribute("data-neutral-order")),
+          key: item.getAttribute("data-step-key"),
+        })),
+      );
+    expect(neutralSteps.map(({ order }) => order).toSorted()).toEqual([
+      0, 1, 2,
+    ]);
+    const neutralOrder = neutralSteps
+      .toSorted((a, b) => a.order - b.order)
+      .map(({ key }) => key);
+    const resetOrder = await page
+      .locator("[data-journey-bar] li[data-step-key]")
+      .evaluateAll((items) =>
+        items.map((item) => item.getAttribute("data-step-key")),
+      );
+    expect(resetOrder).toEqual(neutralOrder);
   });
 
   test("keyboard operable: Tab focuses, Enter/Space selects", async ({
