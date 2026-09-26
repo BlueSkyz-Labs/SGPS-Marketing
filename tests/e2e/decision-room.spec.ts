@@ -176,7 +176,9 @@ test.describe("decision room", () => {
       );
     }
     const room = page.locator(ROOM);
-    await expect(room.getByRole("button", { name: "对比" }).first()).toBeVisible();
+    await expect(
+      room.getByRole("button", { name: "对比" }).first(),
+    ).toBeVisible();
   });
 
   test("390px keeps the room stacked and scrollable", async ({ page }) => {
