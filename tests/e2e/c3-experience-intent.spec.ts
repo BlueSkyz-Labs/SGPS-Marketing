@@ -216,4 +216,179 @@ test.describe("C3-D IntentControl", () => {
       expect(box?.height).toBeGreaterThanOrEqual(44);
     }
   });
+
+  test("malformed query values cannot inject or select an arbitrary intent", async ({
+    page,
+  }) => {
+    const hostile = encodeURIComponent(
+      '<svg id="query-injected" onload="alert(1)"></svg>',
+    );
+    await page.goto(
+      `/en/products/?intent=${hostile}&intent=verify-trust&intent[]=work-with-us`,
+    );
+
+    const control = page.locator("[data-intent-control]");
+    await expect(control.getByRole("button")).toHaveCount(5);
+    await expect(page.locator("#query-injected")).toHaveCount(0);
+    expect(await page.locator("html").getAttribute("data-intent")).toBeNull();
+    await expect(
+      control.getByRole("button", { name: "Explore products" }),
+    ).toHaveAttribute("aria-pressed", "true");
+  });
+
+  test("unrecognized intent markup cannot select arbitrary presentation state", async ({
+    page,
+  }) => {
+    await page.addInitScript(() => {
+      const observer = new MutationObserver(() => {
+        const control = document.querySelector<HTMLElement>(
+          "[data-intent-control]",
+        );
+        if (
+          !control ||
+          control.hasAttribute("data-intent-control-ready") ||
+          control.querySelector("[data-task5-untrusted-intent]")
+        ) {
+          return;
+        }
+
+        const button = document.createElement("button");
+        button.type = "button";
+        button.dataset.intent = "profile-visitor";
+        button.dataset.task5UntrustedIntent = "";
+        button.textContent = "Unrecognized intent";
+        control.append(button);
+        (
+          window as Window & { task5InjectedBeforeIntentInit?: boolean }
+        ).task5InjectedBeforeIntentInit = true;
+        observer.disconnect();
+      });
+      observer.observe(document, { childList: true, subtree: true });
+    });
+
+    await page.goto("/en/products/");
+    const injected = page.locator(
+      "[data-intent-control] [data-task5-untrusted-intent]",
+    );
+    await expect(injected).toBeVisible();
+    expect(
+      await page.evaluate(
+        () =>
+          (window as Window & { task5InjectedBeforeIntentInit?: boolean })
+            .task5InjectedBeforeIntentInit,
+      ),
+    ).toBe(true);
+
+    await injected.click();
+    expect(await page.locator("html").getAttribute("data-intent")).toBeNull();
+  });
+
+  test("intent and fidelity presentation leave canonical public truth unchanged", async ({
+    page,
+  }) => {
+    const truthSurface = page.locator(
+      [
+        "[data-proof-first-empty-state]",
+        "[data-product-card]",
+        "[data-product-continuity]",
+        "[data-product-status]",
+        "[data-claim-id]",
+        "[data-evidence-passport]",
+        "[data-truth-state]",
+        "[data-lifecycle]",
+      ].join(","),
+    );
+    const readTruth = () =>
+      truthSurface.evaluateAll((elements) =>
+        elements
+          .map((element) => ({
+            markers: Array.from(element.attributes)
+              .filter((attribute) => attribute.name.startsWith("data-"))
+              .map((attribute) => [attribute.name, attribute.value]),
+            text: element.textContent?.replace(/\s+/g, " ").trim() ?? "",
+            visible: element.checkVisibility(),
+            links: Array.from(element.querySelectorAll("a")).map((link) =>
+              link.getAttribute("href"),
+            ),
+          }))
+          .sort((left, right) =>
+            JSON.stringify(left).localeCompare(JSON.stringify(right)),
+          ),
+      );
+    const seedCanonicalFixture = () =>
+      page.locator("#main-content").evaluate((main) => {
+        main.querySelector("[data-proof-first-empty-state]")?.remove();
+        const product = document.createElement("article");
+        product.dataset.productCard = "fixture-product";
+        product.dataset.productStatus = "preview";
+        product.dataset.lifecycle = "in-development";
+        product.innerHTML =
+          '<h2 data-product-continuity>Fixture product</h2><p data-claim-id="fixture-claim" data-truth-state="preview">Fixture capability boundary</p><a data-evidence-passport href="/en/evidence/privacy-no-tracking-on-this-site/">Inspect evidence</a>';
+        main.append(product);
+      });
+
+    await page.goto("/en/products/");
+    await expect(page.locator("[data-proof-first-empty-state]")).toBeVisible();
+    await expect(page.locator("[data-product-card]")).toHaveCount(0);
+    await seedCanonicalFixture();
+
+    const canonicalBefore = await readTruth();
+    expect(canonicalBefore.length).toBeGreaterThan(0);
+    expect(canonicalBefore.every((item) => item.visible)).toBe(true);
+
+    for (const selector of ["[data-intent-lens]", "[data-intent-control]"]) {
+      const buttons = page.locator(`${selector} button[data-intent]`);
+      for (let index = 0; index < (await buttons.count()); index++) {
+        await buttons.nth(index).click();
+        expect(await readTruth()).toEqual(canonicalBefore);
+      }
+    }
+
+    for (const tier of ["static-premium", "restrained", "cinematic"]) {
+      await page.locator("html").evaluate((root, value) => {
+        root.setAttribute("data-fidelity-tier", value);
+      }, tier);
+      expect(await readTruth()).toEqual(canonicalBefore);
+    }
+
+    await page.emulateMedia({ reducedMotion: "reduce" });
+    await page.reload();
+    await expect(page.locator("html")).toHaveAttribute(
+      "data-fidelity-tier",
+      "static-premium",
+    );
+    await seedCanonicalFixture();
+    expect(await readTruth()).toEqual(canonicalBefore);
+  });
+
+  test("intent and fidelity do not cause network requests or persistent writes", async ({
+    page,
+  }) => {
+    const runtimeRequests: string[] = [];
+    page.on("request", (request) => {
+      if (
+        ["fetch", "xhr", "ping", "websocket", "eventsource"].includes(
+          request.resourceType(),
+        )
+      ) {
+        runtimeRequests.push(request.url());
+      }
+    });
+
+    await page.goto("/en/products/");
+    await page
+      .locator('[data-intent-control] button[data-intent="verify-trust"]')
+      .click();
+    await page
+      .locator('[data-intent-control] button[data-intent="work-with-us"]')
+      .click();
+    const storage = await page.evaluate(() => ({
+      cookie: document.cookie,
+      local: localStorage.length,
+      session: sessionStorage.length,
+    }));
+
+    expect(runtimeRequests).toEqual([]);
+    expect(storage).toEqual({ cookie: "", local: 0, session: 0 });
+  });
 });

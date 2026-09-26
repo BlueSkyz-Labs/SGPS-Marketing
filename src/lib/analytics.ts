@@ -7,6 +7,8 @@
  * calls, no storage, no cookies, no free text, no personal data. Callers
  * never depend on analytics success.
  */
+import { EXPERIENCE_INTENTS } from "./experience-intent.ts";
+
 export const ANALYTICS_EVENTS = [
   "intent_selected",
   "trust_route_opened",
@@ -40,11 +42,21 @@ function isEventName(value: string): value is AnalyticsEventName {
   return (ANALYTICS_EVENTS as readonly string[]).includes(value);
 }
 
+function isExperienceIntent(value: unknown): boolean {
+  return (
+    typeof value === "string" &&
+    (EXPERIENCE_INTENTS as readonly string[]).includes(value)
+  );
+}
+
 export function sanitizeAnalyticsEvent(
   name: string,
   properties: Record<string, unknown> = {},
 ): AnalyticsEvent | null {
   if (!isEventName(name)) {
+    return null;
+  }
+  if (name === "intent_selected" && !isExperienceIntent(properties.intent)) {
     return null;
   }
   const safe: Record<string, string> = {};
