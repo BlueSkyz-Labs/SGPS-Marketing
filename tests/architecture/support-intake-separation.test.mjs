@@ -27,7 +27,7 @@ const routes = [
 ];
 
 for (const { lang, fallback, action } of routes) {
-  test(`${lang} support empty-state does not route general support into security intake`, () => {
+  test(`${lang}: security disclosure is not general support`, () => {
     const page = readFileSync(`src/pages/${lang}/support.astro`, "utf8");
     assert.match(page, /const hasBusinessEmail = Boolean\(SITE\.contactEmail\)/);
     assert.match(page, /mailto:\$\{SITE\.contactEmail\}/);
@@ -41,7 +41,7 @@ for (const { lang, fallback, action } of routes) {
   });
 }
 
-test("all published locale support pages retain no fabricated email fallback", () => {
+test("never invent an unverified mailbox in any locale", () => {
   for (const { lang } of routes) {
     const page = readFileSync(`src/pages/${lang}/support.astro`, "utf8");
     assert.match(page, /hasBusinessEmail \? \(/);
