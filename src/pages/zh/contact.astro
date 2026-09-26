@@ -21,22 +21,20 @@ const hasBusinessEmail = Boolean(SITE.contactEmail);
         lede="请根据您的需求选择合适的通道联系 BlueSkyz。邮箱地址将在 BlueSkyz 公布后显示于此。"
       />
       <ul class="mt-12 grid gap-4 sm:grid-cols-2">
-        {!hasBusinessEmail ? (
-          <li class="flex min-w-0 flex-col rounded-xl border border-[var(--border-subtle)] bg-white p-6">
-            <h2 class="text-lg font-semibold tracking-tight">安全</h2>
-            <p class="mt-2 flex-1 text-sm leading-relaxed text-[var(--text-secondary)]">
-              请使用 GitHub 私有漏洞报告。安全邮箱将在 BlueSkyz 公布后显示于此。
-            </p>
-            <div class="mt-5">
-              <SafeAction
-                href={SECURITY_ADVISORY_URL}
-                label="打开私有漏洞报告"
-                boundary="private-reporting"
-                lang="zh"
-              />
-            </div>
-          </li>
-        ) : null}
+        <li class="flex min-w-0 flex-col rounded-xl border border-[var(--border-subtle)] bg-white p-6">
+          <h2 class="text-lg font-semibold tracking-tight">安全</h2>
+          <p class="mt-2 flex-1 text-sm leading-relaxed text-[var(--text-secondary)]">
+            如发现疑似安全漏洞，请通过 GitHub 私密通道报告。
+          </p>
+          <div class="mt-5">
+            <SafeAction
+              href={SECURITY_ADVISORY_URL}
+              label="打开私有漏洞报告"
+              boundary="private-reporting"
+              lang="zh"
+            />
+          </div>
+        </li>
         <li class="flex flex-col rounded-xl border border-[var(--border-subtle)] bg-white p-6">
           <h2 class="text-lg font-semibold tracking-tight">商务 / 一般咨询</h2>
           <p class="mt-2 flex-1 text-sm leading-relaxed text-[var(--text-secondary)]">
@@ -52,7 +50,7 @@ const hasBusinessEmail = Boolean(SITE.contactEmail);
                 用于商务咨询。
               </>
             ) : (
-              "商务邮箱将在 BlueSkyz 公布后显示于此。在此之前，您可通过「关于我们」了解我们，或通过「安全报告」使用可操作的可信通道。"
+              "商务联系邮箱尚未核实。您可以在「关于我们」查看已公开的信息。私密安全报告仅用于披露疑似漏洞，不是商务或一般咨询通道。"
             )}
           </p>
         </li>

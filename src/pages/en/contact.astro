@@ -21,23 +21,21 @@ const hasBusinessEmail = Boolean(SITE.contactEmail);
         lede="Reach BlueSkyz through the lane that matches your need. Email addresses appear here when BlueSkyz publishes them."
       />
       <ul class="mt-12 grid gap-4 sm:grid-cols-2">
-        {!hasBusinessEmail ? (
-          <li class="flex min-w-0 flex-col rounded-xl border border-[var(--border-subtle)] bg-white p-6">
-            <h2 class="text-lg font-semibold tracking-tight">Security</h2>
-            <p class="mt-2 flex-1 text-sm leading-relaxed text-[var(--text-secondary)]">
-              Use GitHub private vulnerability reporting. A security email will
-              appear here when BlueSkyz publishes one.
-            </p>
-            <div class="mt-5">
-              <SafeAction
-                href={SECURITY_ADVISORY_URL}
-                label="Open private vulnerability reporting"
-                boundary="private-reporting"
-                lang="en"
-              />
-            </div>
-          </li>
-        ) : null}
+        <li class="flex min-w-0 flex-col rounded-xl border border-[var(--border-subtle)] bg-white p-6">
+          <h2 class="text-lg font-semibold tracking-tight">Security</h2>
+          <p class="mt-2 flex-1 text-sm leading-relaxed text-[var(--text-secondary)]">
+            Use GitHub private vulnerability reporting for suspected security
+            vulnerabilities.
+          </p>
+          <div class="mt-5">
+            <SafeAction
+              href={SECURITY_ADVISORY_URL}
+              label="Open private vulnerability reporting"
+              boundary="private-reporting"
+              lang="en"
+            />
+          </div>
+        </li>
         <li class="flex flex-col rounded-xl border border-[var(--border-subtle)] bg-white p-6">
           <h2 class="text-lg font-semibold tracking-tight">
             Business / general
@@ -55,7 +53,7 @@ const hasBusinessEmail = Boolean(SITE.contactEmail);
                 for business inquiries.
               </>
             ) : (
-              "A business email will appear here when BlueSkyz publishes one. Until then, use About to learn who we are, or Security reporting for an actionable trust channel."
+              "A business email has not yet been verified. See About for published information. Private security reporting is exclusively for suspected vulnerabilities, not business or general enquiries."
             )}
           </p>
         </li>

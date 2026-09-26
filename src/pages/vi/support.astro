@@ -32,8 +32,10 @@ const hasBusinessEmail = Boolean(SITE.contactEmail);
         </p>
       ) : (
         <p class="mt-8 max-w-2xl text-[var(--text-secondary)]">
-          Email hỗ trợ doanh nghiệp sẽ xuất hiện ở đây khi BlueSkyz công bố.
-          Trong thời gian chờ, Báo cáo bảo mật là kênh tin cậy có thể hành động.
+          Chưa có email hỗ trợ sản phẩm chung được xác minh. Chỉ sử dụng kênh hỗ
+          trợ riêng khi đã được công bố trên hồ sơ sản phẩm có xác minh. Báo cáo
+          bảo mật chỉ dành cho lỗ hổng nghi vấn, không tiếp nhận yêu cầu hỗ trợ
+          thông thường.
         </p>
       )}
       <div class="mt-10 flex flex-wrap gap-3">
@@ -41,7 +43,7 @@ const hasBusinessEmail = Boolean(SITE.contactEmail);
           href="/vi/security/"
           class="inline-flex min-h-11 items-center rounded-lg border border-[var(--border-subtle)] bg-white px-5 text-sm font-semibold text-[var(--text-primary)] no-underline transition-colors hover:border-[var(--action-primary)]"
         >
-          Báo cáo bảo mật
+          Báo cáo lỗ hổng bảo mật
         </a>
         {hasBusinessEmail ? (
           <a
