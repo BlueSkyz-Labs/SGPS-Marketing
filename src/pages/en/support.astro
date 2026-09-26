@@ -17,7 +17,7 @@ const hasBusinessEmail = Boolean(SITE.contactEmail);
       <PageHeader
         eyebrow="Support"
         title="Help that stays honest"
-        lede="Product-specific support destinations publish on each product profile when verified. Until then, use the working paths below."
+        lede="Verified product profiles list their support paths. General support availability is stated below; security reporting is for vulnerabilities only."
       />
       {hasBusinessEmail ? (
         <p class="mt-8 max-w-2xl text-[var(--text-secondary)]">
@@ -33,8 +33,10 @@ const hasBusinessEmail = Boolean(SITE.contactEmail);
         </p>
       ) : (
         <p class="mt-8 max-w-2xl text-[var(--text-secondary)]">
-          A corporate support email will appear here when BlueSkyz publishes
-          one. Until then, Security reporting is the actionable trust channel.
+          A general product-support email has not yet been verified. Use a
+          product-specific support path only when it is published on that
+          product’s verified profile. Report a security vulnerability is for suspected
+          vulnerabilities, not routine customer support.
         </p>
       )}
       <div class="mt-10 flex flex-wrap gap-3">
