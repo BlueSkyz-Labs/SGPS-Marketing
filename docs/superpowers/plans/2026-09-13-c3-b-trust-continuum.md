@@ -107,7 +107,7 @@ Do not author new claims inside `product-proof.ts`.
 
 - [ ] **Step 3: neutralize non-essential motion under reduced motion**
 
-- [ ] **Step 4: verify forced-colors still exposes textual truth state**
+- [x] **Step 4: verify forced-colors still exposes textual truth state** — merged E2E coverage in PR #280; post-merge Source Assurance run `36231546326` passed on main.
 
 ### Task 5: Build Agent-Readable Product & Trust Passport (G9)
 
@@ -139,7 +139,7 @@ Reject:
 - corporate emails unless already explicitly public and required by the canonical route;
 - unsupported assurance wording.
 
-- [ ] **Step 3: prove RED, implement deterministic serializer, prove GREEN**
+- [x] **Step 3: prove RED, implement deterministic serializer, prove GREEN** — post-implementation mutation verification is recorded in `docs/evidence/2026-09-26-c3-b-red-team.md`; it does not claim the original historical RED run was recorded.
 
 ```bash
 node --test tests/architecture/c3-agent-passport.test.mjs
