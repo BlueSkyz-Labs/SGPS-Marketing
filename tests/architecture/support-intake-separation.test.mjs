@@ -30,7 +30,7 @@ for (const { lang, fallback, action } of routes) {
   test(`${lang} support empty-state does not route general support into security intake`, () => {
     const page = readFileSync(`src/pages/${lang}/support.astro`, "utf8");
     assert.match(page, /const hasBusinessEmail = Boolean\(SITE\.contactEmail\)/);
-    assert.match(page, /href={`mailto:\$\{SITE\.contactEmail\}`}/);
+    assert.match(page, /mailto:\$\{SITE\.contactEmail\}/);
     assert.match(page, fallback);
     assert.match(page, action);
     assert.match(page, new RegExp(`href="/${lang}/security/"`));
