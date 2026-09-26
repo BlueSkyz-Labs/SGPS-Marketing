@@ -11,12 +11,14 @@ import test from "node:test";
 const routes = [
   {
     lang: "en",
-    fallback: /Security reporting is for suspected\s+vulnerabilities, not routine customer support\./,
+    fallback:
+      /Security reporting is for suspected\s+vulnerabilities, not routine customer support\./,
     action: /Report a security vulnerability/,
   },
   {
     lang: "vi",
-    fallback: /Báo cáo bảo mật chỉ dành cho lỗ hổng nghi vấn, không tiếp nhận\s+yêu cầu hỗ trợ thông thường\./,
+    fallback:
+      /Báo cáo bảo mật chỉ dành cho lỗ hổng nghi vấn, không tiếp nhận\s+yêu cầu hỗ trợ thông thường\./,
     action: /Báo cáo lỗ hổng bảo mật/,
   },
   {
@@ -29,15 +31,24 @@ const routes = [
 for (const { lang, fallback, action } of routes) {
   test(`${lang}: security disclosure is not general support`, () => {
     const page = readFileSync(`src/pages/${lang}/support.astro`, "utf8");
-    assert.match(page, /const hasBusinessEmail = Boolean\(SITE\.contactEmail\)/);
+    assert.match(
+      page,
+      /const hasBusinessEmail = Boolean\(SITE\.contactEmail\)/,
+    );
     assert.match(page, /mailto:\$\{SITE\.contactEmail\}/);
     assert.match(page, fallback);
     assert.match(page, action);
     assert.match(page, new RegExp(`href="/${lang}/security/"`));
     assert.match(page, new RegExp(`href="/${lang}/contact/"`));
     assert.match(page, new RegExp(`href="/${lang}/about/"`));
-    assert.doesNotMatch(page, /support@blueskyzlabs\.com|security@blueskyzlabs\.com/);
-    assert.doesNotMatch(page, /Security reporting is the actionable trust channel|Báo cáo bảo mật là kênh tin cậy có thể hành động/);
+    assert.doesNotMatch(
+      page,
+      /support@blueskyzlabs\.com|security@blueskyzlabs\.com/,
+    );
+    assert.doesNotMatch(
+      page,
+      /Security reporting is the actionable trust channel|Báo cáo bảo mật là kênh tin cậy có thể hành động/,
+    );
   });
 }
 
@@ -46,7 +57,10 @@ test("never invent an unverified mailbox in any locale", () => {
     const page = readFileSync(`src/pages/${lang}/support.astro`, "utf8");
     assert.match(page, /hasBusinessEmail \? \(/);
     assert.match(page, /SITE\.contactEmail/);
-    assert.doesNotMatch(page, /href="mailto:(?:support|security|hello)@blueskyzlabs\.com"/);
+    assert.doesNotMatch(
+      page,
+      /href="mailto:(?:support|security|hello)@blueskyzlabs\.com"/,
+    );
   }
 });
 
