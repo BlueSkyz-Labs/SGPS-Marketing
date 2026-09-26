@@ -31,7 +31,10 @@ test.describe("C3-D Fidelity Engine — presentation tier", () => {
   test("static-premium: no-JS renders all critical content and actions", async ({
     browser,
   }) => {
-    const ctx = await browser.newContext({ javaScriptEnabled: false });
+    const ctx = await browser.newContext({
+      javaScriptEnabled: false,
+      viewport: { width: 390, height: 844 },
+    });
     const page = await ctx.newPage();
     await page.goto(ROOT);
 
