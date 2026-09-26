@@ -32,6 +32,51 @@ test.describe("C3-B truth choreography", () => {
     expect(labels).not.toMatch(/score|certified|verified|%/i);
   });
 
+  test("forced colors preserve truth labels and system-color surfaces", async ({
+    page,
+  }) => {
+    await page.emulateMedia({ forcedColors: "active" });
+    await page.goto(`${origin}/truth-choreography/`);
+
+    const systemColors = await page.evaluate(() => {
+      const probe = document.createElement("span");
+      probe.style.color = "CanvasText";
+      probe.style.backgroundColor = "Canvas";
+      document.body.append(probe);
+      const colors = {
+        text: getComputedStyle(probe).color,
+        background: getComputedStyle(probe).backgroundColor,
+      };
+      probe.remove();
+      return colors;
+    });
+
+    for (const state of [
+      "source-linked",
+      "reviewed",
+      "changed",
+      "not-published",
+      "unavailable",
+    ]) {
+      const item = page.locator(`[data-truth-state="${state}"]`);
+      await expect(item).toBeVisible();
+      const label = item.locator(".truth-state__label");
+      await expect(label).not.toBeEmpty();
+      await expect(item).toHaveAccessibleName(await label.innerText());
+      const colors = await item.evaluate((el) => {
+        const style = getComputedStyle(el);
+        return {
+          text: style.color,
+          background: style.backgroundColor,
+          border: style.borderTopColor,
+        };
+      });
+      expect(colors.text).toBe(systemColors.text);
+      expect(colors.background).toBe(systemColors.background);
+      expect(colors.border).toBe(systemColors.text);
+    }
+  });
+
   test("no-JS and motion-safe states", async ({ browser, page }) => {
     const context = await browser.newContext({
       javaScriptEnabled: false,
