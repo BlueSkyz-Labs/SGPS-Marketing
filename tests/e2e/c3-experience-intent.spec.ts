@@ -26,6 +26,36 @@ const ZH_INTENTS = [
 ];
 
 test.describe("C3-D IntentControl", () => {
+  test("exposes one canonical intent surface on the products page", async ({
+    page,
+  }) => {
+    await page.goto("/en/products/");
+    await expect(page.locator("[data-intent-control]")).toHaveCount(1);
+    await expect(page.locator("[data-intent-lens]")).toHaveCount(0);
+  });
+
+  test("every declared intent has a journey recommendation", async ({
+    page,
+  }) => {
+    await page.goto("/en/products/");
+    const orders = await page
+      .locator("[data-journey-bar]")
+      .getAttribute("data-mission-orders");
+    const recommendations = JSON.parse(orders ?? "{}") as Record<
+      string,
+      string[]
+    >;
+    for (const intent of [
+      "explore-products",
+      "evaluate-product",
+      "verify-trust",
+      "understand-architecture",
+      "work-with-us",
+    ]) {
+      expect(recommendations[intent]?.length).toBeGreaterThan(0);
+    }
+  });
+
   test("renders all five intent choices in server HTML on /en/products/", async ({
     page,
   }) => {
@@ -336,12 +366,10 @@ test.describe("C3-D IntentControl", () => {
     expect(canonicalBefore.length).toBeGreaterThan(0);
     expect(canonicalBefore.every((item) => item.visible)).toBe(true);
 
-    for (const selector of ["[data-intent-lens]", "[data-intent-control]"]) {
-      const buttons = page.locator(`${selector} button[data-intent]`);
-      for (let index = 0; index < (await buttons.count()); index++) {
-        await buttons.nth(index).click();
-        expect(await readTruth()).toEqual(canonicalBefore);
-      }
+    const buttons = page.locator("[data-intent-control] button[data-intent]");
+    for (let index = 0; index < (await buttons.count()); index++) {
+      await buttons.nth(index).click();
+      expect(await readTruth()).toEqual(canonicalBefore);
     }
 
     for (const tier of ["static-premium", "restrained", "cinematic"]) {

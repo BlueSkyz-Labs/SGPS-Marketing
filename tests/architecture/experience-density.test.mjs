@@ -5,7 +5,7 @@
  * ------------------------
  * This suite measures *structural density proxies* only: how many CTAs a
  * section declares, how deep/ordered its headings are, how many chips can
- * render in the intent lens and decision room, and how many sections a page
+ * render in the intent control and decision room, and how many sections a page
  * composes. It is a regression guard against dashboard creep (v3.1 C9).
  *
  * It CANNOT claim human comprehension, credibility, or trust. A green run
@@ -38,7 +38,6 @@ const read = (path) => readFileSync(path, "utf8");
 const HOME_SURFACE = [
   "src/components/sections/Hero.astro", // cta=4 (2 per branch), primary=2, h1
   "src/components/experience/ExperienceSpine.astro", // nav only, cta=0
-  "src/components/experience/IntentLens.astro", // 4 intent chips, cta=0
   "src/components/sections/FeaturedProducts.astro", // cta=1 (secondary)
   "src/components/sections/OneHouse.astro", // cta=0, h2
   "src/components/experience/OneHouseMatrix.astro", // nested, h3
@@ -231,12 +230,12 @@ test("homepage heading hierarchy is ordered, bounded, and one h1", () => {
 });
 
 /* ------------------------------------------------------------------ */
-/* 3. Chip / pill density in the intent lens and decision room         */
+/* 3. Chip / pill density in the intent control and decision room      */
 /* ------------------------------------------------------------------ */
 
 function countIntentChips() {
-  const src = read("src/components/experience/IntentLens.astro");
-  return (src.match(/id:\s*"/g) || []).length;
+  const src = read("src/components/experience/IntentControl.astro");
+  return (src.match(/^  "[a-z-]+": \{$/gm) || []).length;
 }
 
 function decisionRoomCap() {
@@ -255,7 +254,7 @@ test("simultaneous chip and status density stays bounded", () => {
   const intentChips = countIntentChips();
   assert.ok(
     intentChips <= MAX_CHIPS_INTENT_LENS,
-    `intent lens renders ${intentChips} chips, ceiling ${MAX_CHIPS_INTENT_LENS} — too many simultaneous intent chips stop being a lens (${HUMAN_E4_CAVEAT})`,
+    `intent control renders ${intentChips} chips, ceiling ${MAX_CHIPS_INTENT_LENS} (${HUMAN_E4_CAVEAT})`,
   );
 
   const roomChips = decisionRoomCap();

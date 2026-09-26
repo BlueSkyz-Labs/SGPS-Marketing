@@ -2,36 +2,36 @@
 // product index (design §8) — assertions retargeted, coverage preserved.
 import { expect, test, type Page } from "@playwright/test";
 
-const waitForLensHydration = async (page: Page) => {
-  // The lens script is external (CSP script-src 'self'); wait for its
-  // idempotent-init marker so clicks never race script hydration.
-  await expect(page.locator("[data-intent-lens]")).toHaveAttribute(
-    "data-intent-lens-ready",
+const waitForIntentHydration = async (page: Page) => {
+  await expect(page.locator("[data-intent-control]")).toHaveAttribute(
+    "data-intent-control-ready",
     "",
   );
 };
 
 const EN_INTENTS = [
+  "Explore products",
   "Evaluate a product",
-  "Understand BlueSkyz",
+  "Understand architecture",
   "Verify trust",
   "Work with us",
 ];
 const VI_INTENTS = [
+  "Khám phá sản phẩm",
   "Đánh giá sản phẩm",
-  "Tìm hiểu BlueSkyz",
+  "Tìm hiểu kiến trúc",
   "Kiểm chứng tin cậy",
   "Làm việc cùng chúng tôi",
 ];
 
-test("intent lens renders four unselected native buttons on /en/products/", async ({
+test("intent control renders five native buttons on /en/products/", async ({
   page,
 }) => {
   await page.goto("/en/products/");
-  const lens = page.locator("[data-intent-lens]");
+  const lens = page.locator("[data-intent-control]");
   await expect(lens).toBeVisible();
-  await expect(lens.getByRole("button")).toHaveCount(4);
-  for (const label of EN_INTENTS) {
+  await expect(lens.getByRole("button")).toHaveCount(5);
+  for (const label of EN_INTENTS.slice(1)) {
     await expect(lens.getByRole("button", { name: label })).toHaveAttribute(
       "aria-pressed",
       "false",
@@ -43,7 +43,7 @@ test("selecting an intent emphasizes without hiding facts", async ({
   page,
 }) => {
   await page.goto("/en/products/");
-  await waitForLensHydration(page);
+  await waitForIntentHydration(page);
 
   // The contract the page itself declares — the test never hardcodes it.
   // Mission state may only mark steps that are BOTH declared evidence steps
@@ -65,7 +65,7 @@ test("selecting an intent emphasizes without hiding facts", async ({
   expect(expectedMarked.length).toBeGreaterThan(0);
 
   await page
-    .locator("[data-intent-lens]")
+    .locator("[data-intent-control]")
     .getByRole("button", { name: "Verify trust" })
     .click();
 
@@ -128,7 +128,7 @@ test("evaluate-product intent emphasizes its own declared steps", async ({
   page,
 }) => {
   await page.goto("/en/products/");
-  await waitForLensHydration(page);
+  await waitForIntentHydration(page);
   const bar = page.locator("[data-journey-bar]");
   const evidenceKeys = JSON.parse(
     (await bar.getAttribute("data-mission-evidence")) ?? "{}",
@@ -145,7 +145,7 @@ test("evaluate-product intent emphasizes its own declared steps", async ({
   expect(expectedMarked.length).toBeGreaterThan(0);
 
   await page
-    .locator("[data-intent-lens]")
+    .locator("[data-intent-control]")
     .getByRole("button", { name: "Evaluate a product" })
     .click();
 
@@ -173,11 +173,11 @@ test("evaluate-product intent emphasizes its own declared steps", async ({
 
 test("intent selection is single-select and toggles off", async ({ page }) => {
   await page.goto("/en/products/");
-  await waitForLensHydration(page);
-  const lens = page.locator("[data-intent-lens]");
+  await waitForIntentHydration(page);
+  const lens = page.locator("[data-intent-control]");
   const verify = lens.getByRole("button", { name: "Verify trust" });
   const understand = lens.getByRole("button", {
-    name: "Understand BlueSkyz",
+    name: "Understand architecture",
   });
 
   await verify.click();
@@ -188,7 +188,7 @@ test("intent selection is single-select and toggles off", async ({ page }) => {
   await expect(verify).toHaveAttribute("aria-pressed", "false");
   await expect(page.locator("html")).toHaveAttribute(
     "data-intent",
-    "understand-blueskyz",
+    "understand-architecture",
   );
 
   await understand.click();
@@ -198,8 +198,8 @@ test("intent selection is single-select and toggles off", async ({ page }) => {
 
 test("intent interaction writes no cookies or storage", async ({ page }) => {
   await page.goto("/en/products/");
-  await waitForLensHydration(page);
-  const lens = page.locator("[data-intent-lens]");
+  await waitForIntentHydration(page);
+  const lens = page.locator("[data-intent-control]");
   await lens.getByRole("button", { name: "Verify trust" }).click();
   await lens.getByRole("button", { name: "Work with us" }).click();
   const state = await page.evaluate(() => ({
@@ -219,10 +219,13 @@ test("complete critical content without JavaScript", async ({ browser }) => {
   // Product discovery surface: the lens is server-rendered and actionable,
   // the exploration tool and the honest registry statement are present.
   await page.goto("/en/products/");
-  const lens = page.locator("[data-intent-lens]");
+  const lens = page.locator("[data-intent-control]");
   await expect(lens).toBeVisible();
-  await expect(lens.getByRole("button")).toHaveCount(4);
-  for (const label of EN_INTENTS) {
+  await expect(lens.getByRole("button")).toHaveCount(5);
+  await expect(
+    lens.getByRole("button", { name: "Explore products" }),
+  ).toHaveAttribute("aria-pressed", "true");
+  for (const label of EN_INTENTS.slice(1)) {
     await expect(lens.getByRole("button", { name: label })).toHaveAttribute(
       "aria-pressed",
       "false",
@@ -244,10 +247,13 @@ test("intent lens is localized and functional on /vi/products/", async ({
   page,
 }) => {
   await page.goto("/vi/products/");
-  await waitForLensHydration(page);
-  const lens = page.locator("[data-intent-lens]");
+  await waitForIntentHydration(page);
+  const lens = page.locator("[data-intent-control]");
   await expect(lens).toBeVisible();
-  for (const label of VI_INTENTS) {
+  await expect(
+    lens.getByRole("button", { name: "Khám phá sản phẩm" }),
+  ).toHaveAttribute("aria-pressed", "true");
+  for (const label of VI_INTENTS.slice(1)) {
     await expect(lens.getByRole("button", { name: label })).toHaveAttribute(
       "aria-pressed",
       "false",

@@ -413,7 +413,7 @@ body {
 
 /* Emphasis targets: selecting an intent only adds emphasis to relevant
    surfaces; nothing is hidden and defaults stay complete. */
-html[data-intent="understand-blueskyz"] section:has(#house-title),
+html[data-intent="understand-architecture"] section:has(#house-title),
 html[data-intent="verify-trust"] section:has(#trust-title),
 html[data-intent="work-with-us"] section:has(#about-title) {
   background: color-mix(in srgb, var(--brand-cobalt) 4%, white);

@@ -113,12 +113,12 @@ test("the demoted discovery surfaces are re-homed, not deleted", async ({
   // Product discovery/comparison still works: the lens and the exploration
   // tool render on the product index, wired to the site-wide journey bar.
   await page.goto("/en/products/");
-  await expect(page.locator("[data-intent-lens]")).toBeVisible();
+  await expect(page.locator("[data-intent-control]")).toBeVisible();
   await expect(page.locator("[data-atlas]")).toBeVisible();
   await expect(page.locator("[data-journey-bar]")).toBeVisible();
   // …and they are absent from the homepage narrative.
   await page.goto("/en/");
-  await expect(page.locator("[data-intent-lens]")).toHaveCount(0);
+  await expect(page.locator("[data-intent-control]")).toHaveCount(0);
   await expect(page.locator("[data-atlas]")).toHaveCount(0);
 
   // The command navigator (power-user entry point) still works.

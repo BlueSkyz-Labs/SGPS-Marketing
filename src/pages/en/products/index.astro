@@ -5,7 +5,6 @@ import PageHeader from "@/components/layout/PageHeader.astro";
 import ProductCard from "@/components/product/ProductCard.astro";
 import ProofFirstEmptyState from "@/components/product/ProofFirstEmptyState.astro";
 import { getPublicProducts } from "@/lib/products";
-import IntentLens from "@/components/experience/IntentLens.astro";
 import IntentControl from "@/components/experience/IntentControl.astro";
 import Atlas from "@/components/experience/Atlas.astro";
 
@@ -45,7 +44,6 @@ const emptyDescription = products.length
       with product evaluation; Atlas remains the deliberate exploration tool. */}
   <section class="border-t border-[var(--border-subtle)] py-16 lg:py-20">
     <Container>
-      <IntentLens lang="en" />
       <IntentControl lang="en" />
       <Atlas lang="en" />
     </Container>
