@@ -19,21 +19,21 @@ const products = (await getPublicProducts()).map((product) => ({
   name: product.data.name,
 }));
 const passport = getEvidencePassport(id ?? "", products);
-const title = passport ? `Evidence: ${passport.claim.zh}` : "Evidence";
+const title = passport ? `证据档案：${passport.claim.zh}` : "证据档案";
 ---
 
 <BaseLayout
   title={title}
-  description={passport?.claim.zh ?? "Evidence passport"}
+  description={passport?.claim.zh ?? "证据档案"}
   path={`/zh/evidence/${id}/`}
 >
   <section class="py-16 lg:py-24">
     <Container>
       <div class="max-w-3xl">
         <h1 class="evidence-passport__page-title" data-passport-page-title>
-          Evidence passport
+          证据档案
         </h1>
-        <EvidencePassport id={id ?? ""} lang="en" products={products} />
+        <EvidencePassport id={id ?? ""} lang="zh" products={products} />
       </div>
     </Container>
   </section>
