@@ -17,8 +17,7 @@ const routes = [
   },
   {
     lang: "vi",
-    fallback:
-      /Báo cáo\s+bảo mật chỉ dành cho lỗ hổng nghi vấn/,
+    fallback: /Báo cáo\s+bảo mật chỉ dành cho lỗ hổng nghi vấn/,
     action: /Báo cáo lỗ hổng bảo mật/,
   },
   {
