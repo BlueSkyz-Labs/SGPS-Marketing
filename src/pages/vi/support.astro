@@ -17,7 +17,7 @@ const hasBusinessEmail = Boolean(SITE.contactEmail);
       <PageHeader
         eyebrow="Hỗ trợ"
         title="Trợ giúp minh bạch"
-        lede="Điểm hỗ trợ cho từng sản phẩm sẽ được công bố trên trang sản phẩm tương ứng khi được xác minh. Trong thời gian chờ, hãy sử dụng các kênh bên dưới."
+        lede="Kênh hỗ trợ riêng chỉ xuất hiện trên hồ sơ sản phẩm khi đã xác minh. Trạng thái hỗ trợ chung được nêu bên dưới; báo cáo bảo mật chỉ dành cho lỗ hổng."
       />
       {hasBusinessEmail ? (
         <p class="mt-8 max-w-2xl text-[var(--text-secondary)]">
@@ -32,8 +32,10 @@ const hasBusinessEmail = Boolean(SITE.contactEmail);
         </p>
       ) : (
         <p class="mt-8 max-w-2xl text-[var(--text-secondary)]">
-          Email hỗ trợ doanh nghiệp sẽ xuất hiện ở đây khi BlueSkyz công bố.
-          Trong thời gian chờ, Báo cáo bảo mật là kênh tin cậy có thể hành động.
+          Chưa có email hỗ trợ sản phẩm chung được xác minh. Chỉ sử dụng kênh
+          hỗ trợ riêng khi đã được công bố trên hồ sơ sản phẩm có xác minh.
+          Báo cáo lỗ hổng bảo mật chỉ dành cho lỗ hổng nghi vấn, không tiếp nhận
+          yêu cầu hỗ trợ thông thường.
         </p>
       )}
       <div class="mt-10 flex flex-wrap gap-3">
