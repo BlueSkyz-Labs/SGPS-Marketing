@@ -80,7 +80,8 @@ jobs:
               --merge-commit "${POST_MERGE_MERGE_COMMIT:-}" \
               --ref origin/main || exit 1
           else
-            echo "Post-merge landing verification: SKIPPED (no merge commit provided — not a PASS by accident)"
+            echo "FAIL: post-merge landing verification requires github.event.pull_request.merge_commit_sha; missing evidence cannot be treated as SKIPPED/PASS." >&2
+            exit 1
           fi
         env:
           POST_MERGE_PR_NUMBER: ${{ github.event.pull_request.number || '' }}
