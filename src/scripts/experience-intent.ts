@@ -7,7 +7,10 @@
  * facts. Init is idempotent.
  */
 import { orderItemsByMission } from "@/lib/journey";
-import { EXPERIENCE_INTENTS } from "@/lib/experience-intent";
+import {
+  DEFAULT_EXPERIENCE_INTENT,
+  EXPERIENCE_INTENTS,
+} from "@/lib/experience-intent";
 
 const INTENT_EVENT = "blueskyz:intent";
 const supportedIntents = new Set<string>(EXPERIENCE_INTENTS);
@@ -33,7 +36,10 @@ export function initIntentControl(root: ParentNode = document): void {
   const bar = root.querySelector<HTMLElement>("[data-journey-bar]");
   const list = bar?.querySelector("ul");
   const originalItems = list
-    ? Array.from(list.querySelectorAll<HTMLElement>("li[data-step-key]"))
+    ? Array.from(list.querySelectorAll<HTMLElement>("li[data-step-key]")).sort(
+        (a, b) =>
+          Number(a.dataset.neutralOrder) - Number(b.dataset.neutralOrder),
+      )
     : [];
   const parseMap = (
     raw: string | null | undefined,
@@ -107,4 +113,6 @@ export function initIntentControl(root: ParentNode = document): void {
       }
     });
   }
+
+  applyIntent(DEFAULT_EXPERIENCE_INTENT);
 }

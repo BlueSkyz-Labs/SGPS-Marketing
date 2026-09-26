@@ -8,6 +8,7 @@ import { BRAND_PRINCIPLES, type Language as LocaleLanguage } from "@/data/site";
  * inherited from another locale.
  */
 import type { Language as SiteLanguage } from "./site.ts";
+import type { ExperienceIntent } from "@/lib/experience-intent";
 
 /** Canonical locale set (en|vi|zh). Maps below are typed with it; Atlas and
  * friends consume this same type so a zh surface compiles. */
@@ -232,8 +233,7 @@ export const PRINCIPLE_MATRIX: PrincipleMatrixEntry[] = BRAND_PRINCIPLES.map(
 /* is ever inferred from identity, history, or tracking.               */
 /* ------------------------------------------------------------------ */
 
-export type MissionId =
-  "evaluate-product" | "understand-blueskyz" | "verify-trust" | "work-with-us";
+export type MissionId = ExperienceIntent;
 
 export interface MissionStep {
   /** Language-less canonical route from the live registry. */
@@ -250,6 +250,32 @@ export interface Mission {
 }
 
 export const MISSIONS: Mission[] = [
+  {
+    id: "explore-products",
+    label: {
+      en: "Explore products",
+      vi: "Khám phá sản phẩm",
+      zh: "探索产品",
+    },
+    steps: [
+      {
+        path: "/products/",
+        label: { en: "Products", vi: "Sản phẩm", zh: "产品" },
+      },
+      {
+        path: "/architecture/",
+        label: { en: "Architecture", vi: "Kiến trúc", zh: "架构" },
+      },
+      {
+        path: "/about/",
+        label: { en: "About BlueSkyz", vi: "Về BlueSkyz", zh: "关于 BlueSkyz" },
+      },
+      {
+        path: "/contact/",
+        label: { en: "Contact", vi: "Liên hệ", zh: "联系我们" },
+      },
+    ],
+  },
   {
     id: "evaluate-product",
     label: {
@@ -283,29 +309,28 @@ export const MISSIONS: Mission[] = [
     ],
   },
   {
-    id: "understand-blueskyz",
+    id: "understand-architecture",
     label: {
-      en: "Understand BlueSkyz",
-      vi: "Tìm hiểu BlueSkyz",
-      zh: "了解 BlueSkyz",
+      en: "Understand architecture",
+      vi: "Tìm hiểu kiến trúc",
+      zh: "了解架构",
     },
     steps: [
+      {
+        path: "/architecture/",
+        label: { en: "Architecture", vi: "Kiến trúc", zh: "架构" },
+      },
       {
         path: "/about/",
         label: { en: "About BlueSkyz", vi: "Về BlueSkyz", zh: "关于 BlueSkyz" },
       },
       {
-        path: "/products/",
-        label: {
-          en: "Check product status",
-          vi: "Kiểm tra trạng thái sản phẩm",
-          zh: "查看产品状态",
-        },
+        path: "/security/",
+        label: { en: "Security", vi: "Bảo mật", zh: "安全" },
       },
-      { path: "/support/", label: { en: "Support", vi: "Hỗ trợ", zh: "支持" } },
       {
-        path: "/contact/",
-        label: { en: "Contact", vi: "Liên hệ", zh: "联系我们" },
+        path: "/products/",
+        label: { en: "Products", vi: "Sản phẩm", zh: "产品" },
       },
     ],
   },

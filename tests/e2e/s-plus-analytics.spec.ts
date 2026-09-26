@@ -35,10 +35,10 @@ test("intent selection emits a validated intent_selected event", async ({
   page,
 }) => {
   await page.goto("/en/products/");
-  await page.locator("[data-intent-lens]").waitFor();
+  await page.locator("[data-intent-control]").waitFor();
   await instrument(page);
   await page
-    .locator("[data-intent-lens]")
+    .locator("[data-intent-control]")
     .getByRole("button", { name: "Verify trust" })
     .click();
   await expect
@@ -141,13 +141,13 @@ test("free-text search input never enters telemetry", async ({ page }) => {
 
 test("duplicate events inside the dedupe window collapse", async ({ page }) => {
   await page.goto("/en/products/");
-  await page.locator("[data-intent-lens]").waitFor();
+  await page.locator("[data-intent-control]").waitFor();
   await instrument(page);
   // Three rapid toggles (press, unpress, press) executed in a single task so
   // the dedupe window is exercised deterministically regardless of CI load.
   await page.evaluate(() => {
     const verify = document.querySelector(
-      '[data-intent-lens] button[data-intent="verify-trust"]',
+      '[data-intent-control] button[data-intent="verify-trust"]',
     );
     if (verify instanceof HTMLButtonElement) {
       verify.click();

@@ -10,15 +10,17 @@
 import { expect, test, type Page } from "@playwright/test";
 
 const MISSION_LABELS = [
+  "Explore products",
   "Evaluate a product",
-  "Understand BlueSkyz",
+  "Understand architecture",
   "Verify trust",
   "Work with us",
 ] as const;
 
 const MISSION_IDS = [
+  "explore-products",
   "evaluate-product",
-  "understand-blueskyz",
+  "understand-architecture",
   "verify-trust",
   "work-with-us",
 ] as const;
@@ -68,16 +70,16 @@ const expectedEvidence = (contract: Contract, missionId: string): string[] =>
     contract.serverOrder.includes(key),
   );
 
-const waitForLensHydration = async (page: Page) => {
-  await expect(page.locator("[data-intent-lens]")).toHaveAttribute(
-    "data-intent-lens-ready",
+const waitForIntentHydration = async (page: Page) => {
+  await expect(page.locator("[data-intent-control]")).toHaveAttribute(
+    "data-intent-control-ready",
     "",
   );
 };
 
 const clickMission = async (page: Page, label: string) => {
   await page
-    .locator("[data-intent-lens]")
+    .locator("[data-intent-control]")
     .getByRole("button", { name: label })
     .click();
 };
@@ -89,11 +91,15 @@ test.describe("mission paths", () => {
       page,
     }) => {
       await page.goto("/en/products/");
-      await waitForLensHydration(page);
+      await waitForIntentHydration(page);
+      await clickMission(page, "Explore products");
+      await expect(page.locator("html")).not.toHaveAttribute("data-intent");
       const contract = await readContract(page);
 
       // The declared contract is real and covers every mission.
-      expect(Object.keys(contract.orders).sort()).toEqual([...MISSION_IDS]);
+      expect(Object.keys(contract.orders).sort()).toEqual(
+        [...MISSION_IDS].sort(),
+      );
       expect(contract.serverOrder.length).toBeGreaterThan(0);
 
       await clickMission(page, label);
@@ -127,10 +133,10 @@ test.describe("mission paths", () => {
 
   test("VI mission paths reorder deterministically", async ({ page }) => {
     await page.goto("/vi/products/");
-    await waitForLensHydration(page);
+    await waitForIntentHydration(page);
     const contract = await readContract(page);
     await page
-      .locator("[data-intent-lens]")
+      .locator("[data-intent-control]")
       .getByRole("button", { name: "Kiểm chứng tin cậy" })
       .click();
     expect(await stepKeys(page)).toEqual(
@@ -143,7 +149,7 @@ test.describe("mission paths", () => {
 
   test("mission selection writes no cookies or storage", async ({ page }) => {
     await page.goto("/en/products/");
-    await waitForLensHydration(page);
+    await waitForIntentHydration(page);
     for (const label of MISSION_LABELS) {
       await clickMission(page, label);
     }
@@ -190,8 +196,14 @@ test.describe("mission paths", () => {
     // Pinned from src/data/experience.ts MISSIONS (deliberate update point):
     // if the authored missions change, this must be updated by hand.
     const AUTHORED_ORDERS: Record<string, string[]> = {
+      "explore-products": ["products", "architecture", "about", "contact"],
       "evaluate-product": ["decision-room", "products", "about", "contact"],
-      "understand-blueskyz": ["about", "products", "support", "contact"],
+      "understand-architecture": [
+        "architecture",
+        "about",
+        "security",
+        "products",
+      ],
       "verify-trust": ["security", "privacy", "decision-room", "support"],
       "work-with-us": ["contact", "support", "about", "security"],
     };
@@ -212,7 +224,9 @@ test.describe("mission paths", () => {
   }) => {
     await page.goto("/en/products/");
     const contract = await readContract(page);
-    expect(Object.keys(contract.orders).sort()).toEqual([...MISSION_IDS]);
+    expect(Object.keys(contract.orders).sort()).toEqual(
+      [...MISSION_IDS].sort(),
+    );
     // Every declared step is a real public route (locale-stripped segment).
     for (const [missionId, keys] of Object.entries(contract.orders)) {
       expect(keys.length, `${missionId} declares steps`).toBeGreaterThan(0);
