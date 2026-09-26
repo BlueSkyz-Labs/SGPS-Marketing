@@ -1,6 +1,6 @@
 # C3-D Adaptive Fidelity and Privacy Red-Team Evidence
 
-Observed: 2026-09-26 03:16 UTC. Canonical branch at observation: `main`.
+Observed: 2026-09-26 03:23 UTC. Canonical branch at observation: `main`.
 
 ## Task 4 — Adaptive fidelity engine
 
@@ -22,6 +22,7 @@ Code candidate locally verified at `a42114c643471ac83aa102b3c9695ca5f5dbb62c` be
 - Client budget: 10,714 site-wide Brotli bytes; worst page 8,064, below 120,000.
 - Static links: 2,610 checked, 0 broken.
 - Local Node was 24.17.0 while the repository requires 24.20.0; these local results are supplemental. Exact PR gates must run on the pinned CI runtime before promotion.
+- Task 5 is proposed in PR #276; its exact-head gates were pending at this observation.
 
 The intent boundary accepts only the declared intent enum in the analytics sanitizer. The intent UI ignores unknown DOM intent values. No storage, cookies, or network transfer were introduced. Visitor intent/fidelity remains presentation-only; canonical product/claim/evidence membership is unchanged. Analytics/RUM transmission remains disabled absent the owner privacy/provider decision.
 
