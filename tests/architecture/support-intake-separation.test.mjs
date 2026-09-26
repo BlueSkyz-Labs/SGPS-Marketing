@@ -37,8 +37,11 @@ for (const { lang, fallback, action } of routes) {
     );
     assert.match(page, /mailto:\$\{SITE\.contactEmail\}/);
     assert.match(page, fallback);
-    assert.match(page, action);
-    assert.match(page, new RegExp(`href="/${lang}/security/"`));
+    const securityAction = page.match(
+      new RegExp(\`href="/\${lang}/security/"[\\s\\S]*?</a>\`),
+    );
+    assert.ok(securityAction);
+    assert.match(securityAction[0], action);
     assert.match(page, new RegExp(`href="/${lang}/contact/"`));
     assert.match(page, new RegExp(`href="/${lang}/about/"`));
     assert.doesNotMatch(
