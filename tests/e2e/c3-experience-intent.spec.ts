@@ -154,17 +154,25 @@ test.describe("C3-D IntentControl", () => {
     expect(resetOrder).toEqual(neutralOrder);
   });
 
-  test("keyboard operable: Tab focuses, Enter/Space selects", async ({
+  test("keyboard operable: Tab traverses choices and Space selects", async ({
     page,
   }) => {
     await page.goto("/en/products/");
     const control = page.locator("[data-intent-control]");
-    await control.getByRole("button", { name: "Verify trust" }).focus();
-    await page.keyboard.press("Enter");
+    const explore = control.getByRole("button", { name: "Explore products" });
+    const evaluate = control.getByRole("button", {
+      name: "Evaluate a product",
+    });
+
+    await explore.focus();
+    await page.keyboard.press("Tab");
+    await expect(evaluate).toBeFocused();
+    await page.keyboard.press("Space");
     await expect(page.locator("html")).toHaveAttribute(
       "data-intent",
-      "verify-trust",
+      "evaluate-product",
     );
+    await expect(evaluate).toHaveAttribute("aria-pressed", "true");
   });
 
   test("intent interaction writes no cookies or storage", async ({ page }) => {
