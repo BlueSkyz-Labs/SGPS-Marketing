@@ -31,11 +31,12 @@
 
 - Produces a validated record with fields such as `id`, `productSlug`, `title`, `summary`, `releaseDate`, `sourceRevision/sourceUrl`, `changes[]`, optional `productSurface`, and public evidence references.
 
-- [ ] **Step 1: write tests requiring resolvable product/source identity**
+- [x] **Step 1: write tests requiring resolvable product/source identity** — covered by `tests/architecture/c3-release-schema.test.mjs` and merged in PR #266.
 
-- [ ] **Step 2: write negative tests for future/generated date, unknown product, private source, unsupported metrics, and missing evidence**
+- [x] **Step 2: write negative tests for future/generated date, unknown product, private source, unsupported metrics, and missing evidence** — the schema suite covers these cases (14/14 passed in PR #266).
 
-- [ ] **Step 3: prove RED and implement strict schema**
+- [ ] **Step 3: prove RED** — the merged PR/evidence does not preserve a failing pre-implementation run, so the historical RED is not claimed.
+- [x] **Implementation: implement strict schema** — merged in PR #266 (`4efb49b`); exact-head verification recorded 14/14 schema tests and 562/562 architecture tests.
 
 ### Task 2: Build release source adapter
 
