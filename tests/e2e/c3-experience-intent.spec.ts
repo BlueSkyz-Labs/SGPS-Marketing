@@ -213,6 +213,17 @@ test.describe("C3-D IntentControl", () => {
       .evaluateAll((items) =>
         items.map((item) => item.getAttribute("data-step-key") ?? ""),
       );
+    const staticOrders = JSON.parse(
+      (await staticPage
+        .locator("[data-journey-bar]")
+        .getAttribute("data-mission-orders")) ?? "{}",
+    ) as Record<string, string[]>;
+    const staticDeclared = staticOrders["explore-products"]?.filter((key) =>
+      serverOrder.includes(key),
+    );
+    expect(serverOrder.slice(0, staticDeclared?.length ?? 0)).toEqual(
+      staticDeclared,
+    );
     await staticContext.close();
 
     await page.goto("/en/products/");
