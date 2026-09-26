@@ -9,9 +9,9 @@ const cases = [
 ];
 
 for (const { lang, boundary } of cases) {
-  test(`${lang}: business contact stays separate from vulnerability intake`, () => {
+  test(`${lang}: business and security remain separate`, () => {
     const page = readFileSync(`src/pages/${lang}/contact.astro`, "utf8");
-    assert.match(page, /const hasBusinessEmail = Boolean\(SITE\.contactEmail\)/);
+    assert.match(page, /hasBusinessEmail = Boolean\(SITE\.contactEmail\)/);
     assert.match(page, /mailto:\$\{SITE\.contactEmail\}/);
     assert.match(page, /SECURITY_ADVISORY_URL/);
     assert.ok(page.includes(boundary));
@@ -22,7 +22,7 @@ for (const { lang, boundary } of cases) {
   });
 }
 
-test("mutated security-as-business fallback fails its boundary assertion", () => {
+test("mutated security fallback fails", () => {
   const source = readFileSync("src/pages/en/contact.astro", "utf8");
   const altered = source.replace(
     "not business or general enquiries",
