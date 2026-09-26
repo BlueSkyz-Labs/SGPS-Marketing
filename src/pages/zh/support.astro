@@ -17,7 +17,7 @@ const hasBusinessEmail = Boolean(SITE.contactEmail);
       <PageHeader
         eyebrow="支持"
         title="诚实坦诚的帮助"
-        lede="经验证的产品支持入口将在各产品页发布。在此之前，请使用下方可用通道。"
+        lede="各产品的支持入口将在核实后显示在产品资料页。通用支持状态见下方；报告安全漏洞仅用于漏洞披露。"
       />
       {hasBusinessEmail ? (
         <p class="mt-8 max-w-2xl text-[var(--text-secondary)]">
@@ -32,27 +32,27 @@ const hasBusinessEmail = Boolean(SITE.contactEmail);
         </p>
       ) : (
         <p class="mt-8 max-w-2xl text-[var(--text-secondary)]">
-          A corporate support email will appear here when BlueSkyz publishes
-          one. Until then, 安全报告 is the actionable trust channel.
+          通用产品支持邮箱尚未核实。请仅使用已在经验证的产品资料页上公布的
+          专用支持入口。安全漏洞报告仅用于疑似安全问题，不接受一般客户支持请求。
         </p>
       )}
       <div class="mt-10 flex flex-wrap gap-3">
         <a
-          href="/en/security/"
+          href="/zh/security/"
           class="inline-flex min-h-11 items-center rounded-lg border border-[var(--border-subtle)] bg-white px-5 text-sm font-semibold text-[var(--text-primary)] no-underline transition-colors hover:border-[var(--action-primary)]"
         >
           安全报告
         </a>
         {hasBusinessEmail ? (
           <a
-            href="/en/contact/"
+            href="/zh/contact/"
             class="inline-flex min-h-11 items-center rounded-lg border border-[var(--border-subtle)] bg-white px-5 text-sm font-semibold text-[var(--text-primary)] no-underline transition-colors hover:border-[var(--action-primary)]"
           >
             联系 BlueSkyz
           </a>
         ) : (
           <a
-            href="/en/about/"
+            href="/zh/about/"
             class="inline-flex min-h-11 items-center rounded-lg border border-[var(--border-subtle)] bg-white px-5 text-sm font-semibold text-[var(--text-primary)] no-underline transition-colors hover:border-[var(--action-primary)]"
           >
             关于 BlueSkyz
