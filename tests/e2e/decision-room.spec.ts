@@ -3,6 +3,7 @@ import { expect, test } from "@playwright/test";
 const ROOM = "[data-decision-room]";
 const EN = "/en/decision-room/";
 const VI = "/vi/decision-room/";
+const ZH = "/zh/decision-room/";
 
 test.describe("decision room", () => {
   test("server-rendered items expose sources and compare buttons", async ({
@@ -138,6 +139,46 @@ test.describe("decision room", () => {
     await expect(room.locator("[data-decision-live]")).toHaveText(
       "Đang so sánh 1/4",
     );
+  });
+
+  test("ZH public pages keep metadata and page headings localized", async ({
+    page,
+  }) => {
+    for (const [path, title, heading, description] of [
+      [
+        "/zh/",
+        "BlueSkyz Labs",
+        "智能。提升。影响。",
+        "智能。提升。影响。我们打造智能化产品，赋能个人并提升工作方式。",
+      ],
+      [
+        "/zh/about/",
+        "关于我们",
+        "我们是谁",
+        "关于 BlueSkyz Labs — 我们打造智能化产品，赋能个人并提升工作方式。",
+      ],
+      [
+        ZH,
+        "决策室",
+        "依据来源作判断，不替你下结论",
+        "将最多四项公开事实并列对照 — 有来源的声明、信任路径，以及确保其严谨的边界说明。不作结论，不提建议。",
+      ],
+    ] as const) {
+      await page.goto(path);
+      await expect(page.locator("html")).toHaveAttribute("lang", "zh");
+      await expect(page).toHaveTitle(new RegExp(title));
+      await expect(page.getByRole("heading", { level: 1 })).toContainText(
+        heading,
+      );
+      await expect(page.locator('meta[name="description"]')).toHaveAttribute(
+        "content",
+        description,
+      );
+    }
+    const room = page.locator(ROOM);
+    await expect(
+      room.getByRole("button", { name: "对比" }).first(),
+    ).toBeVisible();
   });
 
   test("390px keeps the room stacked and scrollable", async ({ page }) => {

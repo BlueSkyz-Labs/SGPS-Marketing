@@ -3,6 +3,7 @@ import { expect, test } from "@playwright/test";
 const ID = "security-reporting-is-private";
 const EN = `/en/evidence/${ID}/`;
 const VI = `/vi/evidence/${ID}/`;
+const ZH = `/zh/evidence/${ID}/`;
 
 test.describe("evidence passport", () => {
   test("EN passport renders claim, sources, boundary, review, and context", async ({
@@ -72,6 +73,38 @@ test.describe("evidence passport", () => {
     ).toHaveAttribute(
       "href",
       /\/vi\/evidence\/security-reporting-is-private\/$/,
+    );
+  });
+
+  test("ZH passport localizes its document shell, claim, and metadata", async ({
+    page,
+  }) => {
+    await page.goto(ZH);
+    const passport = page.locator(`[data-evidence-passport="${ID}"]`);
+    await expect(page.locator("html")).toHaveAttribute("lang", "zh");
+    await expect(page).toHaveTitle(/证据档案：/);
+    await expect(page.locator('meta[name="description"]')).toHaveAttribute(
+      "content",
+      "安全报告通过 GitHub 私有渠道送达维护者，绝不会通过公开 issue 提出。",
+    );
+    await expect(
+      page.getByRole("heading", { level: 1, name: "证据档案" }),
+    ).toBeVisible();
+    await expect(
+      passport.getByRole("heading", {
+        level: 2,
+        name: "安全报告通过 GitHub 私有渠道送达维护者，绝不会通过公开 issue 提出。",
+      }),
+    ).toBeVisible();
+    await expect(passport.getByText("公开来源")).toBeVisible();
+    await expect(
+      passport.getByRole("link", { name: "在原文中查看 →" }),
+    ).toHaveAttribute("href", "/zh/security/");
+    await expect(
+      page.locator(`link[rel="alternate"][hreflang="zh-Hans"]`),
+    ).toHaveAttribute(
+      "href",
+      /\/zh\/evidence\/security-reporting-is-private\/$/,
     );
   });
 
