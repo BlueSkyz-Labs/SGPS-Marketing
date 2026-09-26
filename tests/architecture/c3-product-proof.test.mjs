@@ -94,6 +94,19 @@ test("missing evidence fails closed", async () => {
   assert.deepEqual(proofLinks(getProductProofLinks, "secure-export", []), []);
 });
 
+test("changed proof metadata is preserved and never promoted to reviewed", async () => {
+  const { getProductProofLinks } = await loadProofModule();
+  const resolved = resolvePublicClaim(productClaim(), PRODUCTS);
+  assert.ok(resolved);
+
+  const links = proofLinks(getProductProofLinks, "secure-export", [
+    { ...resolved, truthState: "changed" },
+  ]);
+  assert.equal(links.length, 1);
+  assert.equal(links[0]?.truthState, "changed");
+  assert.notEqual(links[0]?.truthState, "reviewed");
+});
+
 test("private-reporting evidence is not capability proof", async () => {
   const { getProductProofLinks } = await loadProofModule();
   const resolved = resolvePublicClaim(

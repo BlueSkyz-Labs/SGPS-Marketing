@@ -123,11 +123,11 @@ Do not author new claims inside `product-proof.ts`.
 - Consumes: canonical public products, claims, evidence references, public routes, review/freshness metadata already approved.
 - Produces: deterministic versioned JSON with no internal/private fields.
 
-- [ ] **Step 1: define strict public schema in the test**
+- [x] **Step 1: define strict public schema in the test**
 
 Allowed top-level shape should include only version, generated-from-public-source marker, products, claims/evidence references, public URLs, and explicit freshness/source metadata that already exists.
 
-- [ ] **Step 2: write negative leakage tests**
+- [x] **Step 2: write negative leakage tests**
 
 Reject:
 
@@ -145,7 +145,7 @@ Reject:
 node --test tests/architecture/c3-agent-passport.test.mjs
 ```
 
-- [ ] **Step 4: verify stable ordering and locale-safe public URLs**
+- [x] **Step 4: verify stable ordering and locale-safe public URLs**
 
 ### Task 6: Red-team Trust Continuum
 
@@ -153,15 +153,17 @@ node --test tests/architecture/c3-agent-passport.test.mjs
 
 - Create evidence ledger under `docs/evidence/`
 
-- [ ] **Step 1: test forged/unknown capability ids**
+- [x] **Step 1: test forged/unknown capability ids**
 
-- [ ] **Step 2: test missing evidence and stale metadata**
+- [x] **Step 2: test missing evidence and stale metadata**
 
-- [ ] **Step 3: test no-JS and reduced-motion paths**
+- [x] **Step 3: test no-JS and reduced-motion paths**
 
-- [ ] **Step 4: verify machine passport contains no hidden/private source**
+- [x] **Step 4: verify machine passport contains no hidden/private source**
 
-- [ ] **Step 5: run public assurance language scanner/integrity firewall**
+- [x] **Step 5: run public assurance language scanner/integrity firewall**
+
+Evidence: `docs/evidence/2026-09-26-c3-b-red-team.md`
 
 ## Verification
 
