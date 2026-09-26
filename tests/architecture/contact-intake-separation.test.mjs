@@ -14,6 +14,8 @@ for (const { lang, boundary } of cases) {
     assert.match(page, /hasBusinessEmail = Boolean\(SITE\.contactEmail\)/);
     assert.match(page, /mailto:\$\{SITE\.contactEmail\}/);
     assert.match(page, /SECURITY_ADVISORY_URL/);
+    assert.match(page, /boundary="private-reporting"/);
+    assert.doesNotMatch(page, /\{!hasBusinessEmail \? \(/);
     assert.ok(page.includes(boundary));
     assert.doesNotMatch(
       page,
