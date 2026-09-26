@@ -13,6 +13,8 @@ import {
   buildAgentPassport,
   serializeAgentPassport,
 } from "../../src/lib/agent-passport.ts";
+import { getEvidencePassportPath } from "../../src/lib/claims.ts";
+import { getProductIndexPath } from "../../src/lib/product-routes.ts";
 import { NEVER_IMPLIED_BY_ANY_STATE } from "../../src/lib/public-state-semantics.ts";
 
 const INPUT = {
@@ -140,6 +142,12 @@ test("public destinations only, and locale-safe", () => {
     assert.match(product.url.en, /^\/en\/products\//);
     assert.match(product.url.vi, /^\/vi\/products\//);
   }
+
+  assert.equal(getProductIndexPath("zh"), "/zh/products/");
+  assert.equal(
+    getEvidencePassportPath("zh", "privacy-no-tracking-on-this-site"),
+    "/zh/evidence/privacy-no-tracking-on-this-site/",
+  );
 
   // A reference that is not an ordinary public route is dropped, not rewritten.
   const withPrivateRef = buildAgentPassport({
