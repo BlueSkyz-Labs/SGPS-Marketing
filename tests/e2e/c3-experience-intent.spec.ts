@@ -199,6 +199,48 @@ test.describe("C3-D IntentControl", () => {
     await expect(verify).toHaveAttribute("aria-pressed", "false");
   });
 
+  test("default selection matches the html state and journey order", async ({
+    browser,
+    page,
+  }) => {
+    const staticContext = await browser.newContext({
+      javaScriptEnabled: false,
+    });
+    const staticPage = await staticContext.newPage();
+    await staticPage.goto("/en/products/");
+    const serverOrder = await staticPage
+      .locator("[data-journey-bar] li[data-step-key]")
+      .evaluateAll((items) =>
+        items.map((item) => item.getAttribute("data-step-key") ?? ""),
+      );
+    await staticContext.close();
+
+    await page.goto("/en/products/");
+    const control = page.locator("[data-intent-control]");
+    await expect(control).toHaveAttribute("data-intent-control-ready", "");
+    await expect(page.locator("html")).toHaveAttribute(
+      "data-intent",
+      "explore-products",
+    );
+
+    const bar = page.locator("[data-journey-bar]");
+    const orders = JSON.parse(
+      (await bar.getAttribute("data-mission-orders")) ?? "{}",
+    ) as Record<string, string[]>;
+    const visibleSteps = await bar
+      .locator("li[data-step-key]")
+      .evaluateAll((items) =>
+        items.map((item) => item.getAttribute("data-step-key") ?? ""),
+      );
+    const declared = orders["explore-products"]?.filter((key) =>
+      serverOrder.includes(key),
+    );
+    expect(visibleSteps).toEqual([
+      ...(declared ?? []),
+      ...serverOrder.filter((key) => !(declared ?? []).includes(key)),
+    ]);
+  });
+
   test("same facts/routes remain reachable after intent selection", async ({
     page,
   }) => {
@@ -260,7 +302,10 @@ test.describe("C3-D IntentControl", () => {
     const control = page.locator("[data-intent-control]");
     await expect(control.getByRole("button")).toHaveCount(5);
     await expect(page.locator("#query-injected")).toHaveCount(0);
-    expect(await page.locator("html").getAttribute("data-intent")).toBeNull();
+    await expect(page.locator("html")).toHaveAttribute(
+      "data-intent",
+      "explore-products",
+    );
     await expect(
       control.getByRole("button", { name: "Explore products" }),
     ).toHaveAttribute("aria-pressed", "true");
@@ -310,7 +355,10 @@ test.describe("C3-D IntentControl", () => {
     ).toBe(true);
 
     await injected.click();
-    expect(await page.locator("html").getAttribute("data-intent")).toBeNull();
+    await expect(page.locator("html")).toHaveAttribute(
+      "data-intent",
+      "explore-products",
+    );
   });
 
   test("intent and fidelity presentation leave canonical public truth unchanged", async ({

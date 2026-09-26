@@ -7,7 +7,10 @@
  * facts. Init is idempotent.
  */
 import { orderItemsByMission } from "@/lib/journey";
-import { EXPERIENCE_INTENTS } from "@/lib/experience-intent";
+import {
+  DEFAULT_EXPERIENCE_INTENT,
+  EXPERIENCE_INTENTS,
+} from "@/lib/experience-intent";
 
 const INTENT_EVENT = "blueskyz:intent";
 const supportedIntents = new Set<string>(EXPERIENCE_INTENTS);
@@ -107,4 +110,6 @@ export function initIntentControl(root: ParentNode = document): void {
       }
     });
   }
+
+  applyIntent(DEFAULT_EXPERIENCE_INTENT);
 }

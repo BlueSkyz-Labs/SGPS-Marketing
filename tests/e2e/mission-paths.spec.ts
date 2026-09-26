@@ -92,6 +92,8 @@ test.describe("mission paths", () => {
     }) => {
       await page.goto("/en/products/");
       await waitForIntentHydration(page);
+      await clickMission(page, "Explore products");
+      await expect(page.locator("html")).not.toHaveAttribute("data-intent");
       const contract = await readContract(page);
 
       // The declared contract is real and covers every mission.
@@ -99,13 +101,6 @@ test.describe("mission paths", () => {
         [...MISSION_IDS].sort(),
       );
       expect(contract.serverOrder.length).toBeGreaterThan(0);
-
-      // The canonical default is already pressed in server HTML. Clear it so
-      // this shared toggle contract starts from the same neutral state.
-      if (missionId === "explore-products") {
-        await clickMission(page, label);
-        await expect(page.locator("html")).not.toHaveAttribute("data-intent");
-      }
 
       await clickMission(page, label);
       await expect(page.locator("html")).toHaveAttribute(
