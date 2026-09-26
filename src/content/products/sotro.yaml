@@ -1,0 +1,41 @@
+slug: sotro
+name: Sổ Trọ
+shortDescription: Automated rental operations, digital contracts, and tenant communications for independent landlords.
+lifecycle: development
+availability: preview
+publicLabel: In development
+audience:
+  - professional
+  - business
+jobs:
+  - Manage rooms, tenants, utility readings, and rent cycles effortlessly
+  - Create legally compliant digital rental contracts with e-signatures
+capabilities:
+  - Automated utility & rent reconciliation with digital receipts
+  - Complete digital contract lifecycle and deposit protection
+  - Automated tenant notification via Zalo and SMS channels
+platforms:
+  - web
+  - android
+  - ios
+primaryAction:
+  type: preview
+  label: Preview Sổ Trọ
+  href: https://blueskyzlabs.com/en/products/sotro/
+proof:
+  media:
+    src: /products/sotro/screenshot.png
+    alt: Sổ Trọ by BlueSkyz Labs — brand identity
+    width: 1800
+    height: 504
+  repositoryUrl: https://github.com/BlueSkyz-Labs/Sotro
+  publicUrl: https://blueskyzlabs.com/en/products/sotro/
+  privacyUrl: https://blueskyzlabs.com/en/privacy/
+  securityUrl: https://blueskyzlabs.com/en/security/
+  supportUrl: https://blueskyzlabs.com/en/support/
+endorsement: A BlueSkyz Labs product
+featuredTier: featured
+displayOrder: 3
+public: true
+sourceRevision: b226e491517f34d49286b117e2d2634f7d47e763
+lastReviewedAt: 2026-09-25

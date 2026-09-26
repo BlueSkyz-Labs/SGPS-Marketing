@@ -6,6 +6,7 @@ import {
   type TestInfo,
 } from "@playwright/test";
 import { startFixtureServer } from "./helpers/parity-fixture";
+import { hasPublicProducts } from "./product-helpers.ts";
 
 /**
  * C2 P3 (Task 9) — native product continuity contract (fixture-backed, bilingual).
@@ -228,6 +229,10 @@ test.describe("C2 product continuity — real-site honesty (empty registry)", ()
     test(`/${lang}/ publishes no continuity names while the registry is empty`, async ({
       page,
     }, testInfo) => {
+      test.skip(
+        hasPublicProducts,
+        "Public products are published; empty registry contract only applies when registry is empty",
+      );
       await page.goto(`/${lang}/`);
       expect(await page.locator("[data-product-continuity]").count()).toBe(0);
       testInfo.annotations.push({

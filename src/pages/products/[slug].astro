@@ -20,7 +20,7 @@ interface Props {
 
 const { product } = Astro.props;
 const { data } = product;
-const screenshot = data.proof.screenshot;
+const media = data.proof.media;
 const capabilities = data.capabilities ?? [];
 
 const PLATFORM_LABELS: Record<string, string> = {
@@ -55,7 +55,7 @@ return Astro.redirect("/en/products/");
   title={data.name}
   description={data.shortDescription}
   path={`/products/${data.slug}/`}
-  ogImage={data.proof.screenshot?.src}
+  ogImage={data.proof.media?.src}
   scene="product"
 >
   <article class="py-16">
@@ -155,17 +155,17 @@ return Astro.redirect("/en/products/");
         </section>
       ) : null}
 
-      {screenshot ? (
+      {media ? (
         <section class="mt-14" aria-labelledby="profile-proof">
           <h2 id="profile-proof" class="text-xl font-semibold tracking-tight">
             Evidence
           </h2>
           <img
             class="mt-4 h-auto w-full max-w-3xl rounded-[var(--radius-card)] border border-[var(--border-subtle)]"
-            src={screenshot.src}
-            alt={screenshot.alt}
-            width={screenshot.width}
-            height={screenshot.height}
+            src={media.src}
+            alt={media.alt}
+            width={media.width}
+            height={media.height}
             loading="lazy"
             decoding="async"
           />

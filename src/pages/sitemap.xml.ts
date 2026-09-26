@@ -24,6 +24,11 @@ export const GET: APIRoute = async () => {
     : [
         ...PUBLIC_STATIC_PATHS.map((path) => absoluteUrl(SITE.url, path)),
         ...SUPPORTED_LANGUAGES.flatMap((lang) =>
+          products.map((product) =>
+            absoluteUrl(SITE.url, `/${lang}/products/${product.slug}/`),
+          ),
+        ),
+        ...SUPPORTED_LANGUAGES.flatMap((lang) =>
           evidenceIds.map((id) =>
             absoluteUrl(SITE.url, `/${lang}/evidence/${id}/`),
           ),

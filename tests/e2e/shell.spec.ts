@@ -1,4 +1,5 @@
 import { expect, test } from "@playwright/test";
+import { hasPublicProducts } from "./product-helpers";
 
 test("shell exposes skip link and product-led nav", async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 800 });
@@ -14,12 +15,20 @@ test("shell exposes skip link and product-led nav", async ({ page }) => {
   await expect(
     page.getByRole("link", { name: "Contact" }).first(),
   ).toBeVisible();
-  // Empty registry + empty email: primary CTA soft-lands on About, not Contact dead-end.
-  await expect(
-    page.getByRole("navigation", { name: "Primary" }).getByRole("link", {
-      name: "About BlueSkyz",
-    }),
-  ).toBeVisible();
+  // Primary CTA soft-lands on Explore products when products exist, or About when registry is empty.
+  if (hasPublicProducts) {
+    await expect(
+      page.getByRole("navigation", { name: "Primary" }).getByRole("link", {
+        name: "Explore products",
+      }),
+    ).toBeVisible();
+  } else {
+    await expect(
+      page.getByRole("navigation", { name: "Primary" }).getByRole("link", {
+        name: "About BlueSkyz",
+      }),
+    ).toBeVisible();
+  }
   await expect(page.getByRole("heading", { level: 1 })).toContainText(
     "Intelligence. Elevated.",
   );

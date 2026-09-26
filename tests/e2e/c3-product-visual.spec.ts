@@ -1,5 +1,6 @@
 import { expect, test } from "@playwright/test";
 import { startFixtureServer } from "./helpers/parity-fixture";
+import { hasPublicProducts } from "./product-helpers.ts";
 
 const THEATRE = "[data-flagship-theatre]";
 const VISUAL = "[data-product-visual]";
@@ -43,7 +44,7 @@ test.describe("C3 ProductVisual — fixture-backed screenshot truth", () => {
       );
       await expect(image).toHaveAttribute(
         "alt",
-        "Fixture flagship product screenshot",
+        "Fixture flagship proof media",
       );
       await expect(image).toHaveAttribute("width", "1280");
       await expect(image).toHaveAttribute("height", "800");
@@ -77,6 +78,10 @@ test.describe("C3 ProductVisual — fixture-backed screenshot truth", () => {
 test("real site fabricates no product visual while screenshot truth is unavailable", async ({
   page,
 }) => {
+  test.skip(
+    hasPublicProducts,
+    "Public products with verified screenshot truth are active",
+  );
   await page.goto("/en/");
   await expect(page.locator(VISUAL)).toHaveCount(0);
   await expect(page.locator('[data-product-continuity="media"]')).toHaveCount(
