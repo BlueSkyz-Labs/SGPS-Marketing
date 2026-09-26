@@ -2,12 +2,11 @@
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import Container from "@/components/layout/Container.astro";
 import PageHeader from "@/components/layout/PageHeader.astro";
-import { SITE } from "@/data/site";
 ---
 
 <BaseLayout
   title="关于我们"
-  description={`关于 BlueSkyz Labs — ${SITE.proposition}`}
+  description="关于 BlueSkyz Labs — 我们打造智能化产品，赋能个人并提升工作方式。"
   path="/zh/about/"
 >
   <section class="py-16 lg:py-24">
@@ -15,7 +14,7 @@ import { SITE } from "@/data/site";
       <PageHeader
         eyebrow="关于我们"
         title="我们是谁"
-        lede={`${SITE.proposition} ${SITE.supporting}`}
+        lede="我们打造智能化产品，赋能个人并提升工作方式。更高的视角，成就更明亮的明天。"
       />
       <div class="mt-12 max-w-2xl rounded-xl border border-[var(--border-subtle)] border-l-[3px] border-l-[color-mix(in_srgb,var(--brand-cobalt)_60%,var(--border-subtle))] bg-white p-6">
         <p class="text-[0.65rem] font-semibold tracking-[0.14em] text-[var(--text-muted)] uppercase">
