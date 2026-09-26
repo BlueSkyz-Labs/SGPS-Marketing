@@ -27,3 +27,10 @@ Code candidate locally verified at `a42114c643471ac83aa102b3c9695ca5f5dbb62c` be
 The intent boundary accepts only the declared intent enum in the analytics sanitizer. The intent UI ignores unknown DOM intent values. No storage, cookies, or network transfer were introduced. Visitor intent/fidelity remains presentation-only; canonical product/claim/evidence membership is unchanged. Analytics/RUM transmission remains disabled absent the owner privacy/provider decision.
 
 Owner-fact gates remain open: public product activation requires owner-approved product facts and real product UI screenshots; Concierge runtime/provider and WebGL GO remain separately gated.
+
+## Current convergence read-back — 2026-09-26 09:33 UTC
+
+- PR #276 merged at `d894eb1ce071c0f18652614365958df7b251e54b`; exact-head Source Assurance run `36216346386` passed both Quality Gates and Browser Assurance (Playwright/axe and Lighthouse) for candidate `f2f2fd5e466697acd7e9ffc28edea8802794ab12`.
+- The three Task 5 steps above are complete from that exact-head evidence; no local-only result is used as promotion proof.
+- `main` is now `e3a3c6f5827e56889127eba00b8368654f845f2d`. Main Source Assurance run `36231546326` passed both required jobs. Cloudflare Workers Build `61f7cc0c-a633-45ca-aa09-b58680e07a01` succeeded and provider deployment read-back shows version `8d12ab41-9669-453b-874d-79d417f87bdf` at 100% in deployment `7af4f796-83c5-4fa6-ab75-e543f87a166b`.
+- Production public smoke remains unavailable anonymously because the domain is still behind the owner-only Cloudflare Access application; this is not represented as a public E4 pass. No product truth was added by these changes.
