@@ -14,7 +14,6 @@ const ROOT = "/en/";
 const CRITICAL = [
   { selector: "#hero-title", text: /Intelligence|Trí tuệ/i },
   { selector: ".hero-actions", text: /./ },
-  { selector: "header nav", text: /./ },
 ];
 
 /** Action links that must remain reachable at every tier. */
@@ -42,10 +41,29 @@ test.describe("C3-D Fidelity Engine — presentation tier", () => {
       if (text) await expect(loc).toContainText(text);
     }
 
+    const primaryNav = page.getByRole("navigation", { name: "Primary" });
+    const mobileMenu = page.locator("header details > summary");
+    if (await primaryNav.isVisible()) {
+      await expect(primaryNav).toBeVisible();
+    } else {
+      await expect(
+        mobileMenu,
+        "mobile navigation disclosure missing",
+      ).toBeVisible();
+      await mobileMenu.click();
+      await expect(
+        page.getByRole("navigation", { name: "Mobile" }),
+        "mobile navigation missing after disclosure",
+      ).toBeVisible();
+    }
+
     for (const selector of ACTIONS) {
-      const links = page.locator(selector);
+      const links = page.locator(`${selector}:visible`);
       const count = await links.count();
-      expect(count, `${selector} missing at static-premium`).toBeGreaterThan(0);
+      expect(
+        count,
+        `${selector} missing or unreachable at static-premium`,
+      ).toBeGreaterThan(0);
       for (let i = 0; i < count; i++) {
         const href = await links.nth(i).getAttribute("href");
         expect(href?.startsWith("/"), `${selector} href is internal`).toBe(
