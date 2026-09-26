@@ -27,7 +27,7 @@ Mapping the brand-kit changelog (or any hand-written sample) into `ReleaseStoryI
 
 ## What is NOT claimed
 
-- No release index, story page, homepage or product-page release signal was built (Tasks 3–5 remain unstarted).
+- No release index, story page, homepage or product-page release signal was built. Task 3, Task 4 Steps 2–3 and Task 5 remain unstarted; Task 4 Step 1 is now covered by the empty-state regression below.
 - No sample, fixture or placeholder production release was created anywhere.
 - C3-F Task 1 (schema) is complete and unaffected; it validates releases whenever a real source exists.
 
@@ -40,3 +40,9 @@ An owner-approved public release source, e.g. authored release records carrying 
 - Plan: `docs/superpowers/plans/2026-09-13-c3-f-living-release-publication.md`
 - Task 1 (merged): PR #266 → `4efb49b`
 - Router update: `docs/current-work.json` (wave `c3-f-release` = `BLOCKED`, with the owner-fact item in `residualExternal`)
+
+## Supplemental empty-state regression — 2026-09-26
+
+- Added `tests/e2e/c3-release-empty-state.spec.ts` to assert that EN/VI home and product-index pages render no release signal while the public product registry has no product cards.
+- Mutation proof: inserting `<div data-release-signal>Upcoming release</div>` into the EN homepage made the Chromium test fail with expected count `0`, received `1`. The marker was removed; a clean `pnpm build` and the same test passed (1/1).
+- The mutation was temporary and is not part of the source diff. Local Node was v24.17.0 while the repo requires >=24.20.0; exact-head PR Source Assurance remains the promotion gate.

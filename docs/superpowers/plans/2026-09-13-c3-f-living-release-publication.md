@@ -93,7 +93,7 @@ If bilingual release copy is required by the live experience contract, do not pu
 
 - Produces: one concise recent-release affordance, not a feed wall.
 
-- [ ] **Step 1: show no release chrome when there is no valid release**
+- [x] **Step 1: show no release chrome when there is no valid release** — `tests/e2e/c3-release-empty-state.spec.ts` guards the empty public registry across EN/VI home and product index; the injected-marker mutation failed as expected and the restored build passed.
 
 - [ ] **Step 2: display freshness/version literally**
 
