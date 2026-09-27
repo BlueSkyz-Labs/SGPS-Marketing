@@ -30,7 +30,7 @@ test("sitemap emits product profile URLs from data.slug", () => {
 test("public profiles do not offer private repository links as accessible proof", () => {
   for (const lang of ["en", "vi", "zh"]) {
     const source = readFileSync(`src/pages/${lang}/products/[slug].astro`, "utf8");
-    assert.doesNotMatch(source, /href: data\\.proof\\.repositoryUrl/);
+    assert.doesNotMatch(source, /href: data\.proof\.repositoryUrl/);
   }
 });
 
