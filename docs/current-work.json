@@ -16,7 +16,9 @@
     "brandKitV4Plan": "docs/superpowers/plans/2026-09-27-brand-kit-v4-standardization.md",
     "v3Plan": "docs/superpowers/plans/2026-09-12-god-tier-v3-trust-experience-implementation.md",
     "agentGuide": "AGENTS.md",
-    "architectureModel": "architecture/sgps-model.json"
+    "architectureModel": "architecture/sgps-model.json",
+    "experienceConvergenceV5Plan": "docs/superpowers/plans/2026-09-27-experience-design-convergence-v5.md",
+    "experienceDesignAuditBaseline": "docs/evidence/2026-09-27-experience-design-audit-baseline.md"
   },
   "waves": [
     {
@@ -30,6 +32,12 @@
       "name": "SGPS Premium Experience & Design Excellence v2.0",
       "status": "PLANNED",
       "evidence": "docs/superpowers/plans/2026-09-27-sgps-premium-experience-excellence-v2.md"
+    },
+    {
+      "id": "experience-convergence-v5",
+      "name": "Experience & Design Convergence v5 — reconciles v2.0, Brand Kit v4 and Council #293 (PROPOSED, awaiting Owner approval; Wave 0 VietQR containment is P0)",
+      "status": "PLANNED",
+      "evidence": "docs/superpowers/plans/2026-09-27-experience-design-convergence-v5.md"
     },
     {
       "id": "v3-w1-w8",
@@ -334,6 +342,16 @@
       "id": "c3-spatial-webgl-go-gate",
       "question": "C3 spatial concept is approved as an experiment. WebGL/3D remains conditional on native 2.5D evidence, measured value, performance/accessibility budget and a separate owner GO decision.",
       "blocks": ["c3-g-webgl-runtime"]
+    },
+    {
+      "id": "vietqr-marketing-disposition",
+      "question": "The public VI Sổ Trọ profile renders a payable VietQR code from a default bank BIN and an invented account (audit F-01). Decide: remove from Marketing and hand to the Sổ Trọ repository (recommended), or keep as a labelled illustration with no default account/bank and en/zh parity. Paid Go-Live routing (SGPS-DEC-2026-016) applies.",
+      "blocks": ["experience-convergence-v5-wave0-vietqr-closure"]
+    },
+    {
+      "id": "shell-material-and-font-hosting",
+      "question": "Approve (a) one translucent shell material (header) with solid fallbacks while content surfaces keep the C4 no-blur grammar, via ADR; and (b) self-hosting the brand-specified Inter / Inter Display WOFF2 binaries.",
+      "blocks": ["experience-convergence-v5-wave2-material-font"]
     }
   ],
   "residualExternal": [
