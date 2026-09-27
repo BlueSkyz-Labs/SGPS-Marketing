@@ -173,7 +173,9 @@ const productStructuredData = productJsonLd(
             id="profile-capabilities"
             class="text-xl font-semibold tracking-tight text-[var(--text-primary)]"
           >
-            Main capabilities
+            {data.lifecycle === "active" || data.lifecycle === "maintenance"
+              ? "Main capabilities"
+              : "Development focus"}
           </h2>
           <ul class="mt-4 list-disc space-y-2 pl-5 text-[var(--text-secondary)]">
             {capabilities.map((capability: string) => (
