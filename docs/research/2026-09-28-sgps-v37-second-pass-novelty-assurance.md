@@ -1,0 +1,70 @@
+# SGPS Marketing v3.7 — second independent pass, novelty / assurance and Owner action
+Date: 2026-09-28 (+07); source base main@462aa460243d9dd07976306c962db0a26d49328a; original first-pass preservation commit 45f832b2df889b68dc3da7cc6a7d852e338f1a58.
+**Read first:** [Initial unanchored 10G+10S ledger](2026-09-28-sgps-v37-initial-independent-discovery.md). This addendum does not edit or backfill that ledger. Independent idea generation happened before the detailed historic #293 / C3 / C4 comparison. No users were interviewed or observed.
+
+## 1. Separate contrarian next-horizon pass
+Contrarian questions: what if the correct visitor outcome is to *reject* every listed product; what if a colorful proof graphic is unusable; what if a customer cannot disclose their requirement; what if a claim was revoked after a PDF was printed; what if disabled JavaScript, a screen reader, or an in-app browser changes task semantics? These are test scenarios, not empirical observations. Additional candidate IDs preserved independently:
+| ID | Different real-world job → proposed flow | Initial disposition |
+|---|---|---|
+| MKT-0928-NEW-G11 | Returning evaluator has a printed out-of-date claim → public-only dated correction card bound to claim ID, no subscription or personal tracking. | Candidate; likely C3-F/G08 extension. |
+| MKT-0928-NEW-G12 | Visitor finds *no* suitable public product, wants a responsible exit without submitting personal information → reason-for-no-match and owner-authorized non-promotional public next steps, or honest “nothing yet”. | Candidate; integrate G01 non-fit story, not a second product finder. |
+| MKT-0928-NEW-S11 | A screen-reader user gets truncated decorative graph labels → semantic list, full labels and meaningful ordering before diagram. | Candidate; compare with current Atlas semantic index. |
+| MKT-0928-NEW-S12 | A person sees two CTAs pointing to the identical destination → one main action with an explicit destination/availability label. | Candidate; source hygiene, not innovation if ordinary copy fix. |
+| MKT-0928-NEW-S13 | A user reopening a deeply linked translated profile reaches different place → canonical path fallback with explicit language notice if that route is missing. | Candidate; inspect getAlternatePath and route parity first. |
+
+Coverage ledger: novice/returning/procurement/low-confidence/privacy-conscious/accessibility users; five product-evaluation jobs; mobile slow 4G, in-app browser, desktop, no JS, text zoom, keyboard, interruption, link failure, cross-language and stale print. Unresolved: actual first-click behavior, task success, site served SHA, real support deliverability, a representative native reader and AT/device pilot. W3C WAI public cognitive guidance supports avoiding disorientation and explaining unfamiliar terms; it is design background, **not measured product demand** (https://www.w3.org/WAI/WCAG2/supplemental/objectives/o1-understandable/ ; https://www.w3.org/WAI/WCAG2/supplemental/objectives/o4-minimize-mistakes/).
+
+## 2. Historical and actual-source novelty validation (performed AFTER first pass)
+Compared source: current ProductHouse, ProductCard, DecisionRoom/DecisionAtelier, Atlas, LanguageSwitcher, content schema and #293 existing 10G/10S; AGENTS C3/C4 and current-work router; relevant #281/#290/#291/#293, active #302/#306/#307/#308/#309. SOURCE_VERIFIED code availability is not verified served UI or user value.
+| Candidate | Closest actual record/feature | Substantive delta and disposition |
+|---|---|---|
+| G01 | #293 G03 Outcome-led product discovery; ProductHouse, DecisionAtelier | Duplicate objective; FOLD_IN. |
+| G02 | #293 G05 Availability Passport, G10 dossier, current DecisionRoom | **Source-distinct HYPOTHESIS_REQUIRING_VALIDATION**: an explicit *negative suitability/why not* product-owned decision, rather than merely comparing public facts or showing lifecycle. No current product-owned negative-fit fact schema verified. Retain one pilot, no automatic feature scope. |
+| G03 | DecisionRoom → dossier / C4 | FOLD_IN existing public-only handoff; not independent. |
+| G04 | #293 G08 / existing product-transition and recovery | FOLD_IN; validate destination/cross-origin behavior under its owner. |
+| G05 | #293 G02, G07; current Evidence Passport / TrustLedger | EXISTING_SCOPE_IMPROVEMENT, no separate feature. |
+| G06 | Atlas semantic list and #293 accessible/mobile gates | EXISTING_SCOPE_IMPROVEMENT. |
+| G07 | #293 G06 Locale Meaning Parity | FOLD_IN. |
+| G08 | #293 G09 / C3-F signed, authored releases | FOLD_IN, owner-source dependent. |
+| G09 | #293 G02/G05 / lifecycle/availability states | FOLD_IN. |
+| G10 | Existing static-first no-account product path; #293 G03/05 | Existing-scope simplification hypothesis, **not** independent God-tier. |
+| G11 | C3-F authored release/change, G08 | FOLD_IN; withdrawal is a useful acceptance criterion of existing owner-authored chronology. |
+| G12 | G01 + G02 from this independent pool | FOLD_IN G02 negative-fit pilot; avoid second parallel discovery component. |
+| S01 | #293 S05 Lifecycle CTA | FOLD_IN. |
+| S02 | ProductCard: profile link and primaryAction.href can point to same product path depending record | P2 PRODUCT HYGIENE REVIEW, not new S+ innovation; no automatic bulk dedupe (the two links may represent deliberate labels). |
+| S03 | #293 S03 and source reflow suite | FOLD_IN. |
+| S04 | Existing passport/evidence and #293 S01/S04 | FOLD_IN. |
+| S05 | #293 S01 media kind/asset attribution | FOLD_IN. |
+| S06 | #281 owner/provider verified contact | FOLD_IN owner gate. |
+| S07 | LanguageSwitcher already uses getAlternatePath(currentPath, lang) | EXISTING_SCOPE_VERIFICATION, not novel. |
+| S08 | #293 G07 and product source remediation | FOLD_IN. |
+| S09 | #284 and #302 Firefox E2E / a11y owner | FOLD_IN regression requirement. |
+| S10 | Existing Astro/no-JS and #293 accessibility/low-data work | FOLD_IN. |
+| S11 | Atlas current semantic full-label index | FOLD_IN. |
+| S12 | S02 hygiene | FOLD_IN. |
+| S13 | getAlternatePath route implementation | EXISTING_SCOPE_VERIFICATION; source alone does not attest in-app/browser flow. |
+
+**Scoreboard at this source checkpoint:** initial 10 G + 10 S; independent contrarian +2 G +3 S = total **12 G +13 S initial research candidates**. Historical comparison retains **1 source-distinct material G hypothesis (G02)**, 0 independently qualified S. **1 retained after conceptual Red Team as RESEARCH/PILOT-FIRST only**; 24 folded/existing-scope/hygiene, 0 implemented, 0 USER_VALIDATED. *Qualified* gap vs 10+10 ambition: 9 G and 10 S, without inventing extra ideas. Both idea passes COMPLETED at desk-level; Discovery remains OPEN for genuine field evidence and unexamined jobs, not “fully converged.” Distinguish 20+5 generated independent hypotheses from genuinely novel validated outcomes.
+
+## 3. Three-pass Red Team and actual use journey for G02 (source-distinct)
+**What it is:** A non-promotional, source-bound negative-fit statement per product, for an evaluator asking “when should I NOT select this?”; not an automatic recommender, product review, numerical score, hidden profile or universal legal advice.
+**Situation/job:** A buyer considers Sổ Trọ and erroneously assumes marketplace/native Android/payments custody based on imagery or general sector assumptions. Source Product Truth explicitly excludes ERP/payment custody and native mobile V1; the exact public content must remain owner-approved and current. The user's misinterpretation is HYPOTHESIS, not observed.
+**Proposed A/B flow:** A = existing product profile with maturity, capabilities, source, limitations. B = same facts plus 2–3 product-owner-authored negative-fit criteria and “not established / ask owner” where no source → user identifies fit/non-fit → sees one valid public next step. No contact required. Expected value = reduces false expectation while preserving independent choice.
+**Source and architecture:** type-safe optional, owner-approved derivative of product source with evidence/date/lifecycle; no second Product Truth registry, no external analytics or AI, no inferred features or legal/commercial endorsements. Nothing ships from this research. Fail closed on empty/withdrawn claim. Source evidence at main SHA is only a candidate feasibility baseline.
+**Need challenge:** most people may not need explicit non-fit and ordinary accurate copy may suffice; run a no-build A comparison first. **Experience attack:** long list could look like an alarming negative review or inaccurate blanket exclusion; test 320px/200%/no-JS/VI+EN+ZH and provenance. **Adversarial attack:** competitor could quote stale no-fit claims, fabricated limits, or private source; require dated fact ID, owner review, no absolute unsupported language and safe canonical public route. **Solution challenge:** if accurate one-line limitation under normal card solves task, reject expanded capability. Disposition = PILOT-FIRST; one decision, no separate G12.
+**Pilot proposed (NOT performed):** synthetic fictional brief, task on an existing product profile A vs static conceptual B; ask user to find one reason it may not suit their job, one fact currently UNKNOWN, and appropriate public next step. Record task completion/false confidence/time and participant denominator ONLY if consented and actually observed. Stop B if stronger misleading claim, reduced readability, no material performance benefit or owner source unavailable. Separate consent and product facts verification first.
+**Approval request (NEW, not assumed):** MKT-V37-G02 = RESEARCH/PILOT ONLY: source mapping, static synthetic non-fit wireframe, no-live-data consented comprehension testing. EXCLUDES implementation, product claims mutation, telemetry, contact collection, merge and production rollout. First task upon approval = exact source-map one product's approved non-goals, build static synthetic A/B protocol, reconcile against #293 owner. Responsible single research owner = SGPS-Marketing #293 council lane; new research issue below only links, no competing code writer.
+
+## 4. Audited P1/P2 evidence and ownership (separate from discovery)
+**P1 public payment-authority false cue:** exact main@462aa46 still imports/renders VietQRCalculator on the public VI Sổ Trọ profile; PR #302 deletes it and adds negative architecture contract. PR #302 stays OPEN/UNMERGED; this is not main remediation or deployment proof. Its exact head cd02cdd has Source Assurance run 36330907589 = FAILURE: Quality Gates PASS, Browser Assurance FAIL (Firefox c3-microinteractions/decision-room deep-link, 2 failed, 2,504 passed, 66 skipped), Lighthouse skipped. Original #302 owner received precise blocker comment; do not bypass branch governance, weaken tests or force merge. No separate source writer.
+**P1 customer recourse:** #281 corporate contact/security mailbox is still an owner/provider fact gate; do not invent mailbox, support promise or fake inbound verification. #291/#292 Product Truth / screenshot-as-art / private link source corrections landed in recent main #303, but not proof of public runtime, exact served SHA or Human E4. #284/#290 and #306–#309 have their existing owners.
+**Product Hygiene:** S02 duplicate-destination possibility requires exact per-product URL evaluation; a source example Sổ Trọ primaryAction.href points back to its public profile while ProductCard also renders “View profile”, so two action labels may converge on the same destination. This is a reviewable decision-friction case, not proof of real-user harm; test current rendering then have existing experience/component owner take a scoped fix with negative route/locale check after #307/302 integration.
+**Feature Value:** Published products and successful clicks do not prove user task success; no new telemetry by default. Product-owned existing signals only; real participants 0 here.
+**Regression:** Exact base → exact changed head → browser/axe/keyboard/mobile/reduced motion/no JS/VI-EN-ZH/SEO/static budget evidence. No new Golden test standard. Prior PR green does not port to newer head.
+
+## 5. Cross-session Owner boundary fixture
+Scenario: research MKT-G02 approved, independently scoped bounded S02 fix approved later, MKT-G12 folded. Fresh agent must resume the one #293/this-research lane with G02 static pilot only, use original S02 component owner/PR if approved, NOT revive G12 as another finder, NOT merge a research plan as product release and NOT transfer stale CI green to #302. This is a documented desk fixture, **not an executed fresh-agent test**.
+
+## 6. Handoff / dependencies / outcomes
+One council research lane, no parallel product code owner. Current next safe actions: (1) original #302 owner repairs two exact Firefox failures and reruns quality/browser gate; (2) #281 Owner/provider mailbox facts; (3) this research owner maintains G02 synthetic no-build comparison and seeks narrow approval for actual participants; (4) component owner evaluates S02 after competing open brand changes. Product source, exact deployment, anonymous access, native-language review, physical device and user task success are distinct NOT_VERIFIED gates. No telemetry/provider/payment/new security boundary/production changes in this documentation.
+**No P0/P1 fixed by this documentation**, no tested code, no PR merge, no real pilot, no claim of user-value realization. Keep SGPS FULL architecture + experience; preserve current canonical truth and original owners.
