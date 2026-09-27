@@ -46,7 +46,7 @@ const AUDIENCE_LABELS: Record<string, string> = {
 const proofLinks = [
   { href: data.proof.publicUrl, label: "Trang sản phẩm" },
   { href: data.proof.documentationUrl, label: "Tài liệu" },
-  { href: data.proof.repositoryUrl, label: "Mã nguồn" },
+  // Product source revisions are recorded internally; private GitHub repos are not public proof links.
   { href: data.proof.privacyUrl, label: "Quyền riêng tư" },
   { href: data.proof.securityUrl, label: "Bảo mật" },
   { href: data.proof.supportUrl, label: "Hỗ trợ" },
@@ -190,7 +190,7 @@ const productStructuredData = productJsonLd(
             id="profile-proof"
             class="text-xl font-semibold tracking-tight text-[var(--text-primary)]"
           >
-            Bằng chứng & giao diện
+            Hình ảnh thương hiệu và nguồn tham khảo
           </h2>
           <img
             class="mt-4 h-auto w-full max-w-4xl rounded-[var(--radius-card)] border border-[var(--border-subtle)]"
