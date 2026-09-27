@@ -1,6 +1,6 @@
 slug: apexagent
 name: ApexAgent
-shortDescription: Autonomous AI agents that execute complex business workflows with human-in-the-loop oversight.
+shortDescription: A private, single-owner web/PWA AI workflow workspace; broader multi-account scope remains in development.
 lifecycle: development
 availability: preview
 publicLabel: In development
@@ -8,15 +8,14 @@ audience:
   - business
   - team
 jobs:
-  - Automate multi-step business operations and research
-  - Coordinate specialized agent swarms with deterministic guardrails
+  - Coordinate multi-step work with explicit human oversight
+  - Inspect agent activity and recover from interrupted workflows
 capabilities:
-  - Multi-agent coordination with verifiable execution
-  - Enterprise tool integration and secure credential boundary
-  - Complete tamper-evident audit logs and provenance tracing
+  - Private owner-scoped workflow workspace
+  - Server-mediated tool and credential boundaries
+  - Multi-account and paid capabilities are planned, not released
 platforms:
   - web
-  - api
 primaryAction:
   type: explore
   label: Explore ApexAgent
@@ -36,5 +35,5 @@ endorsement: A BlueSkyz Labs product
 featuredTier: hero
 displayOrder: 1
 public: true
-sourceRevision: e5d1db8f5aa4dd11df026941571b1bd5e1f402b9
-lastReviewedAt: 2026-09-25
+sourceRevision: f395a7de7cb561ee8330c6309ac57df257a7e184
+lastReviewedAt: 2026-09-27
