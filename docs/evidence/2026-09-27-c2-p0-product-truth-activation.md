@@ -22,7 +22,7 @@ All 5 products are backed by verified YAML declarations in `src/content/products
 | Slug         | Product Name | Tier      | Primary Category                    | Verified Proof Art              | Route Parity     |
 | :----------- | :----------- | :-------- | :---------------------------------- | :------------------------------ | :--------------- |
 | `apexagent`  | ApexAgent    | Hero      | Autonomous Agent Orchestration      | `apexagent-hero.png` (512x512)  | `en`, `vi`, `zh` |
-| `sotam`      | Sổ Tằm       | Featured  | Contemplative AI Journal            | `sotam-hero.png` (512x512)      | `en`, `vi`, `zh` |
+| `sotam`      | Sổ Tâm       | Featured  | Contemplative AI Journal            | `sotam-hero.png` (512x512)      | `en`, `vi`, `zh` |
 | `sotro`      | Sổ Trọ       | Featured  | Rental Operations & VietQR Billing  | `sotro-hero.png` (512x512)      | `en`, `vi`, `zh` |
 | `fluentarc`  | FluentArc    | Ecosystem | Adaptive Skill & Knowledge Frontier | `fluentarc-hero.png` (512x512)  | `en`, `vi`, `zh` |
 | `vungtaylai` | Vững Tay Lái | Ecosystem | Situational Road Safety Vision      | `vungtaylai-hero.png` (512x512) | `en`, `vi`, `zh` |
