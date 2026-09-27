@@ -1,6 +1,6 @@
 ---
 import ButtonLink from "@/components/ui/ButtonLink.astro";
-import { SITE } from "@/data/site";
+import { SITE, SHARED_LABELS, labelFor } from "@/data/site";
 import { emptyRegistryPrimaryCta, emptyRegistrySecondaryCta } from "@/lib/act";
 import { getPublicProducts } from "@/lib/products";
 
@@ -11,6 +11,7 @@ interface Props {
 }
 const { lang = "en" } = Astro.props;
 const isVi = lang === "vi";
+const isZh = lang === "zh";
 
 const hasPublicProducts = (await getPublicProducts()).length > 0;
 const emptyPrimary = emptyRegistryPrimaryCta(SITE.contactEmail, lang);
@@ -22,32 +23,39 @@ const emptySecondary = emptyRegistrySecondaryCta(SITE.contactEmail, lang);
     id="next-title"
     class="text-3xl font-semibold tracking-tight text-balance sm:text-4xl"
   >
-    {isVi ? "Bắt đầu từ điều bạn cần" : "Start with what you need"}
+    {isVi
+      ? "Bắt đầu từ điều bạn cần"
+      : isZh
+        ? "从您需要的开始"
+        : "Start with what you need"}
   </h2>
   <p class="mt-4 max-w-2xl text-lg text-[var(--text-secondary)] text-pretty">
     {hasPublicProducts
       ? isVi
         ? "Khám phá sản phẩm khi chúng sẵn sàng đánh giá, hoặc liên hệ BlueSkyz khi bạn có một vấn đề cụ thể đáng giải quyết."
-        : "Explore products when they are ready to evaluate, or contact BlueSkyz when you have a concrete problem worth solving."
+        : isZh
+          ? "当产品准备好接受评估时探索它们，或在您有具体问题需要解决时联系 BlueSkyz。"
+          : "Explore products when they are ready to evaluate, or contact BlueSkyz when you have a concrete problem worth solving."
       : SITE.contactEmail
         ? isVi
           ? "Chưa có sản phẩm công khai nào được công bố. Liên hệ BlueSkyz khi bạn có một vấn đề cụ thể đáng giải quyết, hoặc tìm hiểu chúng tôi là ai."
-          : "No public products are published yet. Contact BlueSkyz when you have a concrete problem worth solving, or learn who we are."
+          : isZh
+            ? "尚未发布任何公开产品。当您有具体问题需要解决时联系 BlueSkyz，或了解我们是谁。"
+            : "No public products are published yet. Contact BlueSkyz when you have a concrete problem worth solving, or learn who we are."
         : isVi
           ? "Chưa có sản phẩm công khai nào được công bố. Tìm hiểu chúng tôi là ai, hoặc sử dụng đường dẫn báo cáo bảo mật khi bạn cần một kênh tin cậy hoạt động."
-          : "No public products are published yet. Learn who we are, or use the security reporting path when you need a working trust channel."}
+          : isZh
+            ? "尚未发布任何公开产品。了解我们是谁，或在需要可靠信任渠道时使用安全报告途径。"
+            : "No public products are published yet. Learn who we are, or use the security reporting path when you need a working trust channel."}
   </p>
   <div class="mt-8 flex flex-wrap gap-3">
     {hasPublicProducts ? (
       <>
-        <ButtonLink href={isVi ? "/vi/products/" : "/en/products/"}>
-          {isVi ? "Khám phá sản phẩm" : "Explore products"}
+        <ButtonLink href={`/${lang}/products/`}>
+          {labelFor(SHARED_LABELS.exploreProducts, lang)}
         </ButtonLink>
-        <ButtonLink
-          href={isVi ? "/vi/contact/" : "/en/contact/"}
-          variant="secondary"
-        >
-          {isVi ? "Liên hệ" : "Contact"}
+        <ButtonLink href={`/${lang}/contact/`} variant="secondary">
+          {labelFor(SHARED_LABELS.contactUs, lang)}
         </ButtonLink>
       </>
     ) : (

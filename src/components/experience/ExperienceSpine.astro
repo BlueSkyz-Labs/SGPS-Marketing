@@ -2,12 +2,17 @@
 import { EXPERIENCE_STAGES } from "@/data/experience";
 
 interface Props {
-  lang?: "en" | "vi";
+  lang?: "en" | "vi" | "zh";
 }
 
 const { lang = "en" } = Astro.props;
 const isVi = lang === "vi";
-const navLabel = isVi ? "Câu chuyện trang chủ" : "Homepage story";
+const isZh = lang === "zh";
+const navLabel = isVi
+  ? "Câu chuyện trang chủ"
+  : isZh
+    ? "首页故事"
+    : "Homepage story";
 ---
 
 <nav class="experience-spine" aria-label={navLabel}>
