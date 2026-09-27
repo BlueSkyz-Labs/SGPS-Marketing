@@ -136,9 +136,12 @@ for (const file of files) {
       .split("\n")
       .filter((line) => /^(?:shortDescription:|  - |  label:|    alt:)/.test(line))
       .join(" ");
-    const audioScopePattern = /\b(?:voice|audio|transcrip\w*|speech|microphone)\b|giọng nói|ghi âm|âm thanh|语音|录音|转录/i;
+    const audioScopePattern =
+      /\b(?:voice|audio|transcrip\w*|speech|microphone)\b|giọng nói|ghi âm|âm thanh|语音|录音|转录/i;
     if (audioScopePattern.test(publicCopy)) {
-      problems.push("Sổ Tâm P0 public copy must not claim out-of-scope voice/audio/transcription");
+      problems.push(
+        "Sổ Tâm P0 public copy must not claim out-of-scope voice/audio/transcription",
+      );
     }
   }
 
