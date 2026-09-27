@@ -43,6 +43,17 @@ export function productJsonLd(
   siteUrl: string,
   lang: string,
 ) {
+  const osLabels: Record<string, string> = {
+    web: "Web",
+    android: "Android",
+    ios: "iOS",
+    macos: "macOS",
+    windows: "Windows",
+  };
+  const systems = [...new Set(product.platforms.flatMap((platform) =>
+    osLabels[platform] ? [osLabels[platform]] : [],
+  ))];
+
   return {
     "@context": "https://schema.org",
     "@type": "SoftwareApplication",
@@ -51,9 +62,7 @@ export function productJsonLd(
     url: absoluteUrl(siteUrl, `/${lang}/products/${product.slug}/`),
     // Do not invent product category/availability or OS from the masterbrand.
     // Platform evidence is owned by each product record, not a global default.
-    ...(product.platforms.length > 0
-      ? { operatingSystem: product.platforms.join(", ") }
-      : {}),
+    ...(systems.length > 0 ? { operatingSystem: systems.join(", ") } : {}),
     publisher: {
       "@type": "Organization",
       name: "BlueSkyz Labs",
