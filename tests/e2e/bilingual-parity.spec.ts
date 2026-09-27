@@ -159,7 +159,11 @@ test.describe("bilingual parity — product-present fixture", () => {
         (el as HTMLDetailsElement).open = true;
       });
     await expect(
-      page.getByText("Verified public artifact — not a concept mock.").first(),
+      page
+        .getByText(
+          "Brand identity artwork — not a screenshot of the running application.",
+        )
+        .first(),
     ).toBeVisible();
   });
 
@@ -184,7 +188,7 @@ test.describe("bilingual parity — product-present fixture", () => {
     await expect(
       page
         .getByText(
-          "Bằng chứng công khai đã xác minh — không phải bản mô phỏng ý tưởng.",
+          "Hình ảnh nhận diện thương hiệu — không phải ảnh chụp giao diện ứng dụng.",
         )
         .first(),
     ).toBeVisible();

@@ -1,6 +1,6 @@
 slug: fluentarc
 name: FluentArc
-shortDescription: Adaptive learning copilot that maps knowledge frontiers and accelerates skill mastery through deliberate practice.
+shortDescription: An extension-first, local-first approach to learning professional English from real work and qualified core content.
 lifecycle: concept
 availability: preview
 publicLabel: In development
@@ -8,16 +8,14 @@ audience:
   - individual
   - professional
 jobs:
-  - Map personal learning goals into personalized skill trees
-  - Retain complex technical knowledge through interactive retrieval practice
+  - Turn English encountered at work into reusable professional communication
+  - Practice professional and IT English through recall and application
 capabilities:
-  - Dynamic knowledge graph generation and concept mapping
-  - Spaced-repetition mastery loop tailored to memory decay
-  - Socratic reasoning tutor with instant feedback
+  - "Stage A focus: local browser-extension capture and understanding"
+  - "Stage A focus: qualified core content and FSRS-based recall"
+  - "Stage A focus: private learner state with export and recovery"
 platforms:
-  - web
-  - macos
-  - windows
+  - browser-extension
 primaryAction:
   type: preview
   label: Preview FluentArc
@@ -38,4 +36,4 @@ featuredTier: ecosystem
 displayOrder: 4
 public: true
 sourceRevision: b74a3027dc5ebd4cd4b3a3502576dc0d1edba6bc
-lastReviewedAt: 2026-09-25
+lastReviewedAt: 2026-09-27

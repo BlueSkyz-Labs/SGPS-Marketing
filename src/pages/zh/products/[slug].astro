@@ -27,6 +27,7 @@ const capabilities = data.capabilities ?? [];
 
 const PLATFORM_LABELS: Record<string, string> = {
   web: "Web",
+  "browser-extension": "浏览器扩展",
   android: "Android",
   ios: "iOS",
   macos: "macOS",
@@ -45,7 +46,7 @@ const AUDIENCE_LABELS: Record<string, string> = {
 const proofLinks = [
   { href: data.proof.publicUrl, label: "产品主页" },
   { href: data.proof.documentationUrl, label: "文档" },
-  { href: data.proof.repositoryUrl, label: "源码" },
+  // Product source revisions are recorded internally; private GitHub repos are not public proof links.
   { href: data.proof.privacyUrl, label: "隐私政策" },
   { href: data.proof.securityUrl, label: "安全声明" },
   { href: data.proof.supportUrl, label: "客户支持" },
@@ -57,6 +58,7 @@ const productStructuredData = productJsonLd(
     description: data.shortDescription,
     slug: data.slug,
     mediaUrl: media?.src,
+    platforms: data.platforms,
   },
   SITE.url,
   "zh",
@@ -171,7 +173,9 @@ const productStructuredData = productJsonLd(
             id="profile-capabilities"
             class="text-xl font-semibold tracking-tight text-[var(--text-primary)]"
           >
-            主要能力
+            {data.lifecycle === "active" || data.lifecycle === "maintenance"
+              ? "主要能力"
+              : "开发重点"}
           </h2>
           <ul class="mt-4 list-disc space-y-2 pl-5 text-[var(--text-secondary)]">
             {capabilities.map((capability: string) => (
@@ -187,7 +191,7 @@ const productStructuredData = productJsonLd(
             id="profile-proof"
             class="text-xl font-semibold tracking-tight text-[var(--text-primary)]"
           >
-            凭证与界面
+            品牌视觉与参考资料
           </h2>
           <img
             class="mt-4 h-auto w-full max-w-4xl rounded-[var(--radius-card)] border border-[var(--border-subtle)]"

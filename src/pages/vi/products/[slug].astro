@@ -28,6 +28,7 @@ const capabilities = data.capabilities ?? [];
 
 const PLATFORM_LABELS: Record<string, string> = {
   web: "Web",
+  "browser-extension": "Tiện ích trình duyệt",
   android: "Android",
   ios: "iOS",
   macos: "macOS",
@@ -46,7 +47,7 @@ const AUDIENCE_LABELS: Record<string, string> = {
 const proofLinks = [
   { href: data.proof.publicUrl, label: "Trang sản phẩm" },
   { href: data.proof.documentationUrl, label: "Tài liệu" },
-  { href: data.proof.repositoryUrl, label: "Mã nguồn" },
+  // Product source revisions are recorded internally; private GitHub repos are not public proof links.
   { href: data.proof.privacyUrl, label: "Quyền riêng tư" },
   { href: data.proof.securityUrl, label: "Bảo mật" },
   { href: data.proof.supportUrl, label: "Hỗ trợ" },
@@ -58,6 +59,7 @@ const productStructuredData = productJsonLd(
     description: data.shortDescription,
     slug: data.slug,
     mediaUrl: media?.src,
+    platforms: data.platforms,
   },
   SITE.url,
   "vi",
@@ -172,7 +174,9 @@ const productStructuredData = productJsonLd(
             id="profile-capabilities"
             class="text-xl font-semibold tracking-tight text-[var(--text-primary)]"
           >
-            Năng lực cốt lõi
+            {data.lifecycle === "active" || data.lifecycle === "maintenance"
+              ? "Năng lực cốt lõi"
+              : "Định hướng phát triển"}
           </h2>
           <ul class="mt-4 list-disc space-y-2 pl-5 text-[var(--text-secondary)]">
             {capabilities.map((capability: string) => (
@@ -190,7 +194,7 @@ const productStructuredData = productJsonLd(
             id="profile-proof"
             class="text-xl font-semibold tracking-tight text-[var(--text-primary)]"
           >
-            Bằng chứng & giao diện
+            Hình ảnh thương hiệu và nguồn tham khảo
           </h2>
           <img
             class="mt-4 h-auto w-full max-w-4xl rounded-[var(--radius-card)] border border-[var(--border-subtle)]"

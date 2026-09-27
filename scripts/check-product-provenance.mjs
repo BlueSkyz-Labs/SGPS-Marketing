@@ -125,6 +125,54 @@ for (const file of files) {
     );
   }
 
+  // Sổ Tâm P0 scope is explicitly audio-free (Product Truth / AGENTS / ADR).
+  // This is a bounded source-content tripwire, not a substitute for project-owner
+  // capability attestation or deployed runtime verification. See issue #291.
+  if (slug === "sotam") {
+    if (field(source, "name") !== "Sổ Tâm") {
+      problems.push("Sổ Tâm must retain its verified product name");
+    }
+    const publicCopy = source
+      .split("\n")
+      .filter((line) =>
+        /^(?:shortDescription:|  - |  label:|    alt:)/.test(line),
+      )
+      .join(" ");
+    const audioScopePattern =
+      /\b(?:voice|audio|transcrip\w*|speech|microphone)\b|giọng nói|ghi âm|âm thanh|语音|录音|转录/i;
+    if (audioScopePattern.test(publicCopy)) {
+      problems.push(
+        "Sổ Tâm P0 public copy must not claim out-of-scope voice/audio/transcription",
+      );
+    }
+  }
+
+  // Vững Tay Lái V0 is a Vietnamese-first class-B learning Web/PWA,
+  // not a native mobile app or an active-driving hazard-warning service.
+  // Product source: docs/product/PRODUCT_TRUTH.md (LOCK); see Council #293.
+  if (slug === "vungtaylai") {
+    const publicCopy = source
+      .split("\n")
+      .filter((line) =>
+        /^(?:shortDescription:|  - |  label:|    alt:)/.test(line),
+      )
+      .join(" ");
+    const prohibitedDrivingClaim =
+      /real.time|blind.spot|lane.drift|collision.warning|hazard.alert|computer.vision|cảnh báo va chạm|điểm mù|lệch làn|实时驾驶|碰撞预警/i;
+    if (prohibitedDrivingClaim.test(publicCopy)) {
+      problems.push(
+        "Vững Tay Lái V0 must not claim live driving or hazard-warning capabilities",
+      );
+    }
+    const platformsBlock =
+      /^platforms:\s*\n((?:\s+-\s+\w+\s*\n)*)/m.exec(source)?.[1] ?? "";
+    if (/^\s+-\s+(?:android|ios)\s*$/im.test(platformsBlock)) {
+      problems.push(
+        "Vững Tay Lái V0 must not claim native Android/iOS platforms",
+      );
+    }
+  }
+
   if (hasKey(source, "screenshot") && !hasKey(source, "media")) {
     problems.push(
       "proof declares a bare screenshot claim; brand or identity art must be declared as proof.media",

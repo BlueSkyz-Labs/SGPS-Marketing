@@ -1,6 +1,6 @@
 slug: sotro
 name: Sổ Trọ
-shortDescription: Automated rental operations, digital contracts, and tenant communications for independent landlords.
+shortDescription: A Vietnam-first digital landlord notebook for rooms, rent dues, trusted history, and today's work.
 lifecycle: development
 availability: preview
 publicLabel: In development
@@ -8,16 +8,14 @@ audience:
   - professional
   - business
 jobs:
-  - Manage rooms, tenants, utility readings, and rent cycles effortlessly
-  - Create legally compliant digital rental contracts with e-signatures
+  - See what remains unpaid this month and what needs attention today
+  - Maintain dependable room, tenant, meter, and monthly charge records
 capabilities:
-  - Automated utility & rent reconciliation with digital receipts
-  - Complete digital contract lifecycle and deposit protection
-  - Automated tenant notification via Zalo and SMS channels
+  - "Development scope: traceable utility charges and rental records"
+  - "Development scope: auditable receipts and human-confirmed payment states"
+  - Optional copy-and-open Zalo/SMS message templates, not automatic sending
 platforms:
   - web
-  - android
-  - ios
 primaryAction:
   type: preview
   label: Preview Sổ Trọ
@@ -37,5 +35,5 @@ endorsement: A BlueSkyz Labs product
 featuredTier: featured
 displayOrder: 3
 public: true
-sourceRevision: b226e491517f34d49286b117e2d2634f7d47e763
-lastReviewedAt: 2026-09-25
+sourceRevision: dafe6752ceb10b2aac38fb085caa114748ca3e2e
+lastReviewedAt: 2026-09-27

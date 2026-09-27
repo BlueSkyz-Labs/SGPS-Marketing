@@ -31,7 +31,15 @@ const publicLabel = z.enum([
   "Archived",
 ]);
 
-const platform = z.enum(["web", "android", "ios", "macos", "windows", "api"]);
+const platform = z.enum([
+  "web",
+  "browser-extension",
+  "android",
+  "ios",
+  "macos",
+  "windows",
+  "api",
+]);
 
 const audience = z.enum([
   "individual",

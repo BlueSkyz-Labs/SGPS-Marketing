@@ -27,6 +27,7 @@ const capabilities = data.capabilities ?? [];
 
 const PLATFORM_LABELS: Record<string, string> = {
   web: "Web",
+  "browser-extension": "Browser extension",
   android: "Android",
   ios: "iOS",
   macos: "macOS",
@@ -45,7 +46,7 @@ const AUDIENCE_LABELS: Record<string, string> = {
 const proofLinks = [
   { href: data.proof.publicUrl, label: "Product site" },
   { href: data.proof.documentationUrl, label: "Documentation" },
-  { href: data.proof.repositoryUrl, label: "Source" },
+  // Product source revisions are recorded internally; private GitHub repos are not public proof links.
   { href: data.proof.privacyUrl, label: "Privacy" },
   { href: data.proof.securityUrl, label: "Security" },
   { href: data.proof.supportUrl, label: "Support" },
@@ -57,6 +58,7 @@ const productStructuredData = productJsonLd(
     description: data.shortDescription,
     slug: data.slug,
     mediaUrl: media?.src,
+    platforms: data.platforms,
   },
   SITE.url,
   "en",
@@ -171,7 +173,9 @@ const productStructuredData = productJsonLd(
             id="profile-capabilities"
             class="text-xl font-semibold tracking-tight text-[var(--text-primary)]"
           >
-            Main capabilities
+            {data.lifecycle === "active" || data.lifecycle === "maintenance"
+              ? "Main capabilities"
+              : "Development focus"}
           </h2>
           <ul class="mt-4 list-disc space-y-2 pl-5 text-[var(--text-secondary)]">
             {capabilities.map((capability: string) => (
@@ -187,7 +191,7 @@ const productStructuredData = productJsonLd(
             id="profile-proof"
             class="text-xl font-semibold tracking-tight text-[var(--text-primary)]"
           >
-            Evidence
+            Brand artwork and references
           </h2>
           <img
             class="mt-4 h-auto w-full max-w-4xl rounded-[var(--radius-card)] border border-[var(--border-subtle)]"
