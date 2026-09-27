@@ -11,9 +11,9 @@ jobs:
   - Turn English encountered at work into reusable professional communication
   - Practice professional and IT English through recall and application
 capabilities:
-  - Stage A focus: local browser-extension capture and understanding
-  - Stage A focus: qualified core content and FSRS-based recall
-  - Stage A focus: private learner state with export and recovery
+  - "Stage A focus: local browser-extension capture and understanding"
+  - "Stage A focus: qualified core content and FSRS-based recall"
+  - "Stage A focus: private learner state with export and recovery"
 platforms:
   - browser-extension
 primaryAction:
