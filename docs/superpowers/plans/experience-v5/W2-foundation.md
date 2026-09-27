@@ -1,5 +1,7 @@
 # W2 — Design foundation (Brand Kit v4 tokens, type, material)
 
+> **Ownership (2026-09-27):** W2.1 tokens and W2.5 header material are implemented by the Brand Kit v4 lane (#301 landed, #306 open). Agents verify and extend those implementations against this card's acceptance and negative proofs; they must not open a parallel token or header implementation.
+
 Owner decisions: D-1 header-only translucent material; D-2 self-host Inter / Inter Display (`brand/blueskyz-production-v4/00_START_HERE/BRAND_STANDARDS.md:44`). Depends on W1.1 baselines so every visual change is reviewed as a diff.
 
 ## W2.1 One token layer synced from the brand kit
@@ -34,7 +36,7 @@ Owner decisions: D-1 header-only translucent material; D-2 self-host Inter / Int
 
 - Sticky header: `background: color-mix(in srgb, var(--surface-primary) 82%, transparent)` + `backdrop-filter: blur(12px) saturate(1.2)` inside `@supports (backdrop-filter: blur(1px))`.
 - Solid fallbacks: `@media (prefers-reduced-transparency: reduce)`, `@media (forced-colors: active)`, `[data-fidelity-tier="static-premium"]` → opaque `--surface-primary`.
-- Write ADR `docs/decisions/0008-shell-material-exception.md` (header only; content surfaces keep C4 no-blur). Update `tests/architecture/c4-material-grammar.test.mjs` with an explicit allow for the shell selector only, plus a negative test that blur on any other selector fails.
+- Write an ADR with the next free number in `docs/decisions/` (0008 is taken; 0012 at the time of writing) for the header-only exception (content surfaces keep C4 no-blur). Update `tests/architecture/c4-material-grammar.test.mjs` with an explicit allow for the shell selector only, plus a negative test that blur on any other selector fails.
 - **Acceptance:** Lighthouse mobile Performance ≥ 0.95 unchanged; scroll jank check (Chromium performance trace, no long frames > 50 ms attributed to backdrop-filter on a 4× CPU throttle).
 
 **Exit criteria W2:** tokens generated and drift-guarded; Inter self-hosted within budget; lockup legible in all themes; shell material behind ADR.

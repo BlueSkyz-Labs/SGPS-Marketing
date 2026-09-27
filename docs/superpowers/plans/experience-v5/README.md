@@ -2,9 +2,9 @@
 
 **Master plan:** `../2026-09-27-experience-design-convergence-v5.md` (Owner-approved 2026-09-27).  
 **Audit baseline:** `docs/evidence/2026-09-27-experience-design-audit-baseline.md`.  
-**Done before this pack:** Wave 0 (VietQR removed, OS dark mode, hero bleed, footer switcher, identity stage, hermetic guard test) and the premium Atlas plate, merged via PR #302.
+**Done before this pack (PR #302):** Wave 0 (VietQR removed, OS dark mode, hero bleed, footer switcher, identity stage, hermetic guard test) and the premium Atlas plate.
 
-This pack splits the remaining work into task cards an agent can pick up without re-deriving context. Each card is `WORK_READY` only when its **Depends on** items are merged on `main`.
+**Surface ownership:** tokens, sticky header material, bento ProductCard and device frame belong to the Brand Kit v4 lane (`docs/superpowers/plans/2026-09-27-brand-kit-v4-standardization.md`; #301 landed, #306/#307/#308 open). Cards here verify/extend those, never re-implement them. An Owner-directed reference implementation of the Sổ Trọ flagship, vi/zh product copy, self-hosted Inter and segmented controls exists in PR #302 history (commits `ad178ae`, `6af7e82`, `cd02cdd`); re-cut it on top of the Brand Kit v4 lane.
 
 ## Agent protocol (every card)
 

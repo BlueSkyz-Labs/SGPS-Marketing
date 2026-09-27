@@ -17,6 +17,8 @@ Depends on W2.1. Product facts come only from `src/content/products/*.yaml` (own
 
 ## W3.3 Bento product card & profile
 
+> **Ownership:** the bento ProductCard and device frame are implemented by the Brand Kit v4 lane (#307, #308). Converge on one icon helper and one localized-copy source; do not duplicate.
+
 - `ProductCard.astro`: product icon already published at `public/brand/blueskyz/v4/products/<slug>.svg` (source: `brand/blueskyz-production-v4/03_ICONS/03_PRODUCT_ICONS/`), static status chip (no pulse), platform chips from `platforms`, CTA from W3.2. Hover elevation already exists — keep reduced-motion neutraliser.
 - Profile: endorsed lockup (`public/brand/blueskyz/v4/products/<slug>_endorsed_lockup_{light,dark}.svg`, theme-swapped like W2.4) + 128 px icon header; bento grid for jobs and direction (replaces `<ul>`); identity stage for `identity-art`; device frame reserved for future `ui-screenshot`.
 - De-duplicate: homepage flagship product is excluded from the featured grid (`ProductHouse` receives the flagship slug).
