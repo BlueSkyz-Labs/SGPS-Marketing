@@ -399,6 +399,8 @@
 }
 
 .c2-flagship-theatre__frame img {
+  max-width: 100%;
+  height: auto;
   opacity: 1;
   transform: none;
 }
