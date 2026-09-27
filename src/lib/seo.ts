@@ -50,9 +50,13 @@ export function productJsonLd(
     macos: "macOS",
     windows: "Windows",
   };
-  const systems = [...new Set(product.platforms.flatMap((platform) =>
-    osLabels[platform] ? [osLabels[platform]] : [],
-  ))];
+  const systems = [
+    ...new Set(
+      product.platforms.flatMap((platform) =>
+        osLabels[platform] ? [osLabels[platform]] : [],
+      ),
+    ),
+  ];
 
   return {
     "@context": "https://schema.org",
