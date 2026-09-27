@@ -20,6 +20,9 @@
   --surface-primary: var(--brand-porcelain);
   --surface-subtle: #f1f5f9;
   --surface-inverse: var(--brand-ink);
+  /* Raised cards/controls: white on porcelain, slate-900 on ink. Components
+     must use this token, never a literal white that ignores the theme. */
+  --surface-raised: #ffffff;
   --text-primary: var(--brand-ink);
   --text-secondary: #334155;
   /* Brand slate_500 (#64748B) fails AA on Porcelain; UI muted stays #475569. */
@@ -77,6 +80,7 @@
   --surface-primary: var(--brand-ink);
   --surface-subtle: #0f172a;
   --surface-inverse: var(--brand-porcelain);
+  --surface-raised: #0f172a;
   --text-primary: #ffffff;
   --text-secondary: #cbd5e1;
   --text-muted: #94a3b8;
@@ -98,6 +102,7 @@
     --surface-primary: var(--brand-ink);
     --surface-subtle: #0f172a;
     --surface-inverse: var(--brand-porcelain);
+    --surface-raised: #0f172a;
     --text-primary: #ffffff;
     --text-secondary: #cbd5e1;
     --text-muted: #94a3b8;
@@ -388,7 +393,7 @@ body {
   padding: 0 1rem;
   border: 1px solid var(--border-subtle);
   border-radius: 0.5rem;
-  background: white;
+  background: var(--surface-raised);
   color: var(--text-secondary);
   font-size: 0.875rem;
   font-weight: 500;
@@ -451,7 +456,7 @@ html[data-intent="evaluate-product"] [data-journey-bar] a[href$="/products/"] {
   width: min(92vw, 34rem);
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-md);
-  background: white;
+  background: var(--surface-raised);
   color: var(--text-primary);
   padding: 0;
   box-shadow: 0 24px 60px -24px
@@ -474,7 +479,7 @@ html[data-intent="evaluate-product"] [data-journey-bar] a[href$="/products/"] {
   width: 100%;
   border: 1px solid var(--border-subtle);
   border-radius: 0.5rem;
-  background: white;
+  background: var(--surface-raised);
   padding: 0 0.75rem;
   font-size: 0.9375rem;
   color: var(--text-primary);
@@ -1019,7 +1024,7 @@ summary {
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-card, 0.75rem);
   padding: 1.5rem 1.75rem;
-  background: white;
+  background: var(--surface-raised);
 }
 .evidence-passport__claim {
   margin-top: 0.5rem;
@@ -1090,7 +1095,7 @@ summary {
   gap: 0.5rem;
   border: 1px solid var(--border-subtle);
   border-radius: 0.75rem;
-  background: #fff;
+  background: var(--surface-raised);
   padding: 1.25rem;
   scroll-margin-top: 6rem;
   box-shadow: var(--elevation-1);

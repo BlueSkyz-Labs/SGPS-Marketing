@@ -18,7 +18,9 @@ const CRAFT_IMPORT = /import\s+"@\/styles\/c3-craft\.css";/g;
 const ROLE_CONTRACTS = [
   ["--c3-image-surface-radius", "var(--radius-card)"],
   ["--c3-image-surface-border", "var(--border-subtle)"],
-  ["--c3-image-surface-background", "var(--surface-primary)"],
+  // Identity art is authored for the ink ground (plan v5 Wave 0.4, audit F-04);
+  // still a Brand v4 token, never a raw colour.
+  ["--c3-image-surface-background", "var(--brand-ink)"],
   ["--c3-route-transition-duration", "var(--motion-continuity-duration)"],
   ["--c3-route-transition-ease", "var(--motion-ease-standard)"],
   ["--c3-interaction-duration", "var(--motion-confirmation-duration)"],

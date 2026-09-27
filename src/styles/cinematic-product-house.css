@@ -510,11 +510,27 @@
    Closing signature
    ------------------------------------------------- */
 
-/* Decorative closing HorizonField — muted, pointer-events off */
-.c2-closing-signature {
+/* Decorative closing HorizonField — muted, pointer-events off.
+   .horizon-field is absolutely positioned (inset: 0) for use inside the hero.
+   The closing signature has no positioned ancestor, so without an in-flow box
+   it resolved against the initial containing block and painted its ink depth
+   gradient across the top of the page, under the hero. Give it its own
+   bounded, in-flow box at the end of the document. Compound selector so it
+   outranks the base .horizon-field rule regardless of bundle order. */
+.horizon-field.c2-closing-signature {
+  position: relative;
+  inset: auto;
+  height: clamp(6rem, 14vw, 10rem);
   margin-top: 2rem;
   opacity: 0.45;
   pointer-events: none;
+}
+
+/* The depth layer fades to ink for the dark hero plane. The closing
+   signature sits on porcelain, where that fade reads as a grey smudge; keep
+   only the halo and the horizon line there. */
+.c2-closing-signature .horizon-field__depth {
+  display: none;
 }
 
 @media (prefers-reduced-motion: no-preference) {

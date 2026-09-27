@@ -4,7 +4,6 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
 import Container from "@/components/layout/Container.astro";
 import ProductStatus from "@/components/product/ProductStatus.astro";
 import ButtonLink from "@/components/ui/ButtonLink.astro";
-import VietQRCalculator from "@/components/product/VietQRCalculator.astro";
 import { getPublicProducts } from "@/lib/products";
 import { safeJsonLd, productJsonLd } from "@/lib/seo";
 import { SITE } from "@/data/site";
@@ -186,8 +185,6 @@ const productStructuredData = productJsonLd(
         </section>
       ) : null}
 
-      {data.slug === "sotro" ? <VietQRCalculator /> : null}
-
       {media ? (
         <section class="mt-14" aria-labelledby="profile-proof">
           <h2
@@ -197,7 +194,7 @@ const productStructuredData = productJsonLd(
             Hình ảnh thương hiệu và nguồn tham khảo
           </h2>
           <img
-            class="mt-4 h-auto w-full max-w-4xl rounded-[var(--radius-card)] border border-[var(--border-subtle)]"
+            class="mt-4 h-auto w-full max-w-4xl rounded-[var(--radius-card)] border border-[var(--border-subtle)] bg-[var(--c3-image-surface-background)]"
             src={media.src}
             alt={media.alt}
             width={media.width}

@@ -53,6 +53,29 @@ for (const locale of LOCALES) {
       await expect(horizon).toHaveAttribute("aria-hidden", "true");
     });
 
+    test("Closing horizon stays at the end of the document", async ({
+      page,
+    }) => {
+      await page.goto(locale.path);
+      // Regression: without its own in-flow box the closing signature
+      // resolved against the viewport and painted a grey band under the hero.
+      const box = await page.evaluate(() => {
+        const horizon = document.querySelector("[data-closing-horizon]");
+        if (!horizon) return null;
+        const h = horizon.getBoundingClientRect();
+        return {
+          top: h.top + scrollY,
+          height: h.height,
+          doc: document.documentElement.scrollHeight,
+        };
+      });
+      expect(box).not.toBeNull();
+      // It must sit in the last part of the page and stay a bounded band,
+      // never a viewport-sized layer anchored near the top.
+      expect(box!.top).toBeGreaterThan(box!.doc * 0.6);
+      expect(box!.height).toBeLessThan(400);
+    });
+
     test("No horizontal overflow at 390px", async ({ page }) => {
       await page.setViewportSize({ width: 390, height: 844 });
       await page.goto(locale.path);

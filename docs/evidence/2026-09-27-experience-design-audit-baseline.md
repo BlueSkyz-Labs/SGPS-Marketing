@@ -49,6 +49,15 @@ Severity: **P0** = user harm/safety; **P1** = visible defect or false signal on 
 | F-15 | P3        | Both 2026-09-27 plans cite `C:\00. AI Project\00_BlueSkyzLabs` as brand authority. That path is not reproducible by any other lane; the in-repo copy `brand/blueskyz-production-v4/` (with `SHA256SUMS.txt`) is the verifiable source.                                                                                                                                                                                                                                                                                                                     | Plans; `brand/`                                                                            |
 | F-16 | P3        | Central control plane is stale for this repository: `sgps-control-plane/portfolio-repositories.json` records `enforcement_state: FAIL`, `last_reconciled: 2026-09-07`, while this repo records ruleset `22500299` as active. Per SGPS rule 51 the central index must follow merged project evidence; this needs a read-back, not a local claim.                                                                                                                                                                                                            | `sgps-control-plane@60ad1ac`                                                               |
 
+### Addendum (found while executing Wave 0, same day)
+
+| ID   | Sev | Finding                                                                                                                                     |
+| ---- | --- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| F-17 | P1  | OS dark mode broken site-wide (white-on-white cards/actions, invisible footer). Fixed in Wave 0.6; see `2026-09-27-experience-v5-wave0.md`. |
+| F-18 | P2  | Header wordmark invisible on dark non-hero pages.                                                                                           |
+| F-19 | P1  | Products page "Verify this page" states the registry is unpublished while five products are listed.                                         |
+| F-20 | P3  | Atlas graph label overlap at 1440 px.                                                                                                       |
+
 ## What is already strong (preserve)
 
 - Client JS 13.5 KB Brotli site-wide; zero inline scripts; CSP-compatible build.

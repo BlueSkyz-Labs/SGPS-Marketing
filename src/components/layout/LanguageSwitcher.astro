@@ -28,7 +28,15 @@ const CODE: Record<string, string> = { en: "EN", vi: "VI", zh: "中文" };
 <div
   role="navigation"
   aria-label={aria}
-  class="inline-flex min-w-0 flex-wrap items-center gap-0.5 rounded-lg border border-[var(--border-subtle)] bg-[var(--surface-primary)] p-0.5"
+  class:list={[
+    "inline-flex min-w-0 flex-wrap items-center gap-0.5 rounded-lg border p-0.5",
+    // The dark variant sits on the inverse (ink) surface in every theme, so
+    // it must not inherit the theme-dependent primary surface: in the light
+    // theme that surface is porcelain and the porcelain labels vanished.
+    variant === "dark"
+      ? "border-white/15 bg-white/5"
+      : "border-[var(--border-subtle)] bg-[var(--surface-primary)]",
+  ]}
 >
   {SUPPORTED_LANGUAGES.map((lang) => {
     const isActive = currentLang === lang;

@@ -23,8 +23,8 @@
   "waves": [
     {
       "id": "brand-kit-v4-standardization",
-      "name": "Brand Kit v4 Aesthetic Standardization & Living Maison",
-      "status": "IN_PROGRESS",
+      "name": "Brand Kit v4 Aesthetic Standardization & Living Maison — items adjudicated and routed into Experience Convergence v5 Waves 2–4",
+      "status": "PLANNED",
       "evidence": "docs/superpowers/plans/2026-09-27-brand-kit-v4-standardization.md"
     },
     {
@@ -35,8 +35,8 @@
     },
     {
       "id": "experience-convergence-v5",
-      "name": "Experience & Design Convergence v5 — reconciles v2.0, Brand Kit v4 and Council #293 (PROPOSED, awaiting Owner approval; Wave 0 VietQR containment is P0)",
-      "status": "PLANNED",
+      "name": "Experience & Design Convergence v5 — Owner-approved 2026-09-27 (D-0 remove VietQR from Marketing, D-1 header-only translucent material, D-2 self-host Inter); Wave 0 in progress",
+      "status": "IN_PROGRESS",
       "evidence": "docs/superpowers/plans/2026-09-27-experience-design-convergence-v5.md"
     },
     {
@@ -342,16 +342,6 @@
       "id": "c3-spatial-webgl-go-gate",
       "question": "C3 spatial concept is approved as an experiment. WebGL/3D remains conditional on native 2.5D evidence, measured value, performance/accessibility budget and a separate owner GO decision.",
       "blocks": ["c3-g-webgl-runtime"]
-    },
-    {
-      "id": "vietqr-marketing-disposition",
-      "question": "The public VI Sổ Trọ profile renders a payable VietQR code from a default bank BIN and an invented account (audit F-01). Decide: remove from Marketing and hand to the Sổ Trọ repository (recommended), or keep as a labelled illustration with no default account/bank and en/zh parity. Paid Go-Live routing (SGPS-DEC-2026-016) applies.",
-      "blocks": ["experience-convergence-v5-wave0-vietqr-closure"]
-    },
-    {
-      "id": "shell-material-and-font-hosting",
-      "question": "Approve (a) one translucent shell material (header) with solid fallbacks while content surfaces keep the C4 no-blur grammar, via ADR; and (b) self-hosting the brand-specified Inter / Inter Display WOFF2 binaries.",
-      "blocks": ["experience-convergence-v5-wave2-material-font"]
     }
   ],
   "residualExternal": [
@@ -365,6 +355,7 @@
     "Lane-helguard guard: helper now emits 'LOCAL-AHEAD skip' and exits 0 on local-ahead branches; reset incident documented (operational, not committed)."
   ],
   "nextActionable": [
+    "Experience Convergence v5 Wave 0 (docs/evidence/2026-09-27-experience-v5-wave0.md): VietQR removed from Marketing per Owner D-0, footer switcher contrast, closing-horizon bleed, identity-art ink stage, hermetic post-merge guard test. Next: Wave 1 gates (visual regression, axe incomplete contrast, mobile Lighthouse, CSS/font budgets, locale leak probe). Handover owed to the Sổ Trọ repository for any VietQR capability (reference commit 4ac2e80).",
     "C3-D Tasks 1–5 are merged and verified: Task 5 PR #276 exact-head Source Assurance run 36216346386 passed; main e3a3c6f exact post-merge Source Assurance run 36231546326 passed; Cloudflare deployment 7af4f796 has version 8d12ab41 at 100%. Anonymous public smoke remains blocked by owner-only Cloudflare Access.",
     "Blocked on owner fact: C3-F Task 2 and later (release source adapter, publication surface) — no authored public release source exists. C4-D Tasks 2 and 4 (Architecture Salon surface, Provenance Lens) are already landed (see the c4-d-salon wave), so the earlier suggestion here is superseded.",
     "Public product runtime remains honest-empty on main until owner-approved screenshot/product truth exists. PR #269 is a draft; its media are identity artwork rather than verified product UI screenshots. C4-A Task 10 (gallery mount), C4-F and remote/model C4-G remain separately gated.",
