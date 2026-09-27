@@ -1,8 +1,8 @@
 {
   "schemaVersion": "1.0",
-  "updatedAt": "2026-09-26",
-  "program": "C4 Quiet Authority — Digital Maison, Collected Edition, Executive Dossier & Architecture Salon",
-  "status": "c4-in-progress",
+  "updatedAt": "2026-09-27",
+  "program": "SGPS Premium Experience & Design Excellence v2.0 (God-Tier × Tier S+)",
+  "status": "sgps-v2-in-progress",
   "authorities": {
     "experienceContract": "docs/superpowers/specs/2026-09-03-blueskyz-web-v1-c1-1-design.md",
     "c2Design": "docs/superpowers/specs/2026-09-13-c2-cinematic-product-house-design.md",
@@ -10,11 +10,19 @@
     "c3Design": "docs/superpowers/specs/2026-09-13-c3-living-verifiable-product-experience-design.md",
     "c3MasterPlan": "docs/superpowers/plans/2026-09-13-c3-living-verifiable-product-experience-master.md",
     "c3SgpsDelta": "docs/evidence/2026-09-16-c3-sgps-delta-reconciliation.md",
+    "sgpsV2Design": "docs/superpowers/specs/2026-09-27-sgps-premium-experience-excellence-v2-design.md",
+    "sgpsV2Plan": "docs/superpowers/plans/2026-09-27-sgps-premium-experience-excellence-v2.md",
     "v3Plan": "docs/superpowers/plans/2026-09-12-god-tier-v3-trust-experience-implementation.md",
     "agentGuide": "AGENTS.md",
     "architectureModel": "architecture/sgps-model.json"
   },
   "waves": [
+    {
+      "id": "sgps-premium-v2",
+      "name": "SGPS Premium Experience & Design Excellence v2.0",
+      "status": "IN_PROGRESS",
+      "evidence": "docs/superpowers/plans/2026-09-27-sgps-premium-experience-excellence-v2.md"
+    },
     {
       "id": "v3-w1-w8",
       "name": "God-tier v3 (Tasks 1-23)",

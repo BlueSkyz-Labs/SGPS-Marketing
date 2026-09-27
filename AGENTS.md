@@ -7,6 +7,8 @@ Trusted current source of truth only:
 - **Approved C3 successor design:** `docs/superpowers/specs/2026-09-13-c3-living-verifiable-product-experience-design.md` — extends C2 after dependency readiness is proven.
 - **Active C3 execution router:** `docs/superpowers/plans/2026-09-13-c3-living-verifiable-product-experience-master.md` — routes C3 into independent child plans; never execute C3 as one mega-PR.
 - **Active residual / owner-gated work:** `docs/current-work.json` — canonical current-work router, including product screenshot/owner facts, Human E4, RUM privacy decision, C3 Concierge provider/privacy gate and Spatial/WebGL GO gate.
+- **Approved SGPS Premium Experience & Design Excellence v2.0 design spec:** `docs/superpowers/specs/2026-09-27-sgps-premium-experience-excellence-v2-design.md` — authoritative v2.0 experience specification adopting SGPS FULL.
+- **Active SGPS v2.0 master plan:** `docs/superpowers/plans/2026-09-27-sgps-premium-experience-excellence-v2.md` — master execution plan routing into independent phases.
 - **C3 / SGPS delta reconciliation:** `docs/evidence/2026-09-16-c3-sgps-delta-reconciliation.md` — records the live post-C2 baseline and explicit applicability of current SGPS source overlays without silently repinning the project.
 - **Historical implementation plan:** `docs/superpowers/plans/2026-09-04-blueskyz-web-v1-c1-1-implementation.md`.
 - **Framework decision:** `docs/decisions/0004-web-framework-selection.md` (`ASTRO_7`).
