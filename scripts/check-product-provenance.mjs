@@ -125,6 +125,22 @@ for (const file of files) {
     );
   }
 
+  // Sổ Tâm P0 scope is explicitly audio-free (Product Truth / AGENTS / ADR).
+  // This is a bounded source-content tripwire, not a substitute for project-owner
+  // capability attestation or deployed runtime verification. See issue #291.
+  if (slug === "sotam") {
+    if (field(source, "name") !== "Sổ Tâm") {
+      problems.push("Sổ Tâm must retain its verified product name");
+    }
+    const publicCopy = source
+      .split("\\n")
+      .filter((line) => /^(?:shortDescription:|  - |  label:|    alt:)/.test(line))
+      .join(" ");
+    if (/\\b(?:voice|audio|transcrip\\w*|speech|microphone)\\b|giọng nói|ghi âm|âm thanh|语音|录音|转录/i.test(publicCopy)) {
+      problems.push("Sổ Tâm P0 public copy must not claim out-of-scope voice/audio/transcription");
+    }
+  }
+
   if (hasKey(source, "screenshot") && !hasKey(source, "media")) {
     problems.push(
       "proof declares a bare screenshot claim; brand or identity art must be declared as proof.media",
