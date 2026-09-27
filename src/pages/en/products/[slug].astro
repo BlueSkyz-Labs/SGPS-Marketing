@@ -45,7 +45,7 @@ const AUDIENCE_LABELS: Record<string, string> = {
 const proofLinks = [
   { href: data.proof.publicUrl, label: "Product site" },
   { href: data.proof.documentationUrl, label: "Documentation" },
-  { href: data.proof.repositoryUrl, label: "Source" },
+  // Product source revisions are recorded internally; private GitHub repos are not public proof links.
   { href: data.proof.privacyUrl, label: "Privacy" },
   { href: data.proof.securityUrl, label: "Security" },
   { href: data.proof.supportUrl, label: "Support" },
@@ -187,7 +187,7 @@ const productStructuredData = productJsonLd(
             id="profile-proof"
             class="text-xl font-semibold tracking-tight text-[var(--text-primary)]"
           >
-            Evidence
+            Brand artwork and references
           </h2>
           <img
             class="mt-4 h-auto w-full max-w-4xl rounded-[var(--radius-card)] border border-[var(--border-subtle)]"
