@@ -26,3 +26,17 @@ test("sitemap emits product profile URLs from data.slug", () => {
   assert.match(sitemap, /product\.data\.slug/);
   assert.doesNotMatch(sitemap, /product\.id/);
 });
+
+test("public profiles do not offer private repository links as accessible proof", () => {
+  for (const lang of ["en", "vi", "zh"]) {
+    const source = readFileSync(`src/pages/${lang}/products/[slug].astro`, "utf8");
+    assert.doesNotMatch(source, /href: data\\.proof\\.repositoryUrl/);
+  }
+});
+
+test("brand identity art is never advertised as a screenshot of running software", () => {
+  const labels = readFileSync("src/data/site.ts", "utf8");
+  assert.match(labels, /Brand identity artwork — not a screenshot of the running application/);
+  assert.match(labels, /Hình ảnh nhận diện thương hiệu — không phải ảnh chụp giao diện ứng dụng/);
+  assert.match(labels, /品牌视觉素材，并非应用运行界面的截图/);
+});
