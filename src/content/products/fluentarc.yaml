@@ -1,0 +1,41 @@
+slug: fluentarc
+name: FluentArc
+shortDescription: Adaptive learning copilot that maps knowledge frontiers and accelerates skill mastery through deliberate practice.
+lifecycle: concept
+availability: preview
+publicLabel: In development
+audience:
+  - individual
+  - professional
+jobs:
+  - Map personal learning goals into personalized skill trees
+  - Retain complex technical knowledge through interactive retrieval practice
+capabilities:
+  - Dynamic knowledge graph generation and concept mapping
+  - Spaced-repetition mastery loop tailored to memory decay
+  - Socratic reasoning tutor with instant feedback
+platforms:
+  - web
+  - macos
+  - windows
+primaryAction:
+  type: preview
+  label: Preview FluentArc
+  href: https://blueskyzlabs.com/en/products/fluentarc/
+proof:
+  media:
+    src: /products/fluentarc/screenshot.png
+    alt: FluentArc by BlueSkyz Labs — brand identity
+    width: 1800
+    height: 504
+  repositoryUrl: https://github.com/BlueSkyz-Labs/FluentArc
+  publicUrl: https://blueskyzlabs.com/en/products/fluentarc/
+  privacyUrl: https://blueskyzlabs.com/en/privacy/
+  securityUrl: https://blueskyzlabs.com/en/security/
+  supportUrl: https://blueskyzlabs.com/en/support/
+endorsement: A BlueSkyz Labs product
+featuredTier: ecosystem
+displayOrder: 4
+public: true
+sourceRevision: b74a3027dc5ebd4cd4b3a3502576dc0d1edba6bc
+lastReviewedAt: 2026-09-25

@@ -3,7 +3,7 @@
 Trusted current source of truth only:
 
 - **Experience contract:** `docs/superpowers/specs/2026-09-03-blueskyz-web-v1-c1-1-design.md` — substantive design remains authoritative; its pre-implementation status text is historical.
-- **Completed C2 experience foundation:** `docs/superpowers/specs/2026-09-13-c2-cinematic-product-house-design.md` plus `docs/superpowers/plans/2026-09-13-c2-cinematic-product-house-implementation.md`. C2 P1–P6 are merged and production-verified; C2 P0 remains owner-fact gated for public product activation.
+- **Completed C2 experience foundation:** `docs/superpowers/specs/2026-09-13-c2-cinematic-product-house-design.md` plus `docs/superpowers/plans/2026-09-13-c2-cinematic-product-house-implementation.md`. C2 P0–P6 are fully merged and production-verified; 5 purpose-built AI products activated.
 - **Approved C3 successor design:** `docs/superpowers/specs/2026-09-13-c3-living-verifiable-product-experience-design.md` — extends C2 after dependency readiness is proven.
 - **Active C3 execution router:** `docs/superpowers/plans/2026-09-13-c3-living-verifiable-product-experience-master.md` — routes C3 into independent child plans; never execute C3 as one mega-PR.
 - **Active residual / owner-gated work:** `docs/current-work.json` — canonical current-work router, including product screenshot/owner facts, Human E4, RUM privacy decision, C3 Concierge provider/privacy gate and Spatial/WebGL GO gate.

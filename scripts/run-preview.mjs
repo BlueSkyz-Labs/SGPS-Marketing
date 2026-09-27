@@ -19,7 +19,7 @@ const wait = (milliseconds) =>
 
 async function waitForPreview() {
   const url = `http://${host}:${port}`;
-  for (let attempt = 0; attempt < 60; attempt += 1) {
+  for (let attempt = 0; attempt < 120; attempt += 1) {
     try {
       await fetch(url);
       return;

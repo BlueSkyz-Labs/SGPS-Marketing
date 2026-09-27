@@ -1,6 +1,5 @@
-// C2: discovery surfaces (Intent Lens, Atlas) moved off the homepage to the
-// product index (design §8) — assertions retargeted, coverage preserved.
 import { expect, test } from "@playwright/test";
+import { hasPublicProducts } from "./product-helpers.ts";
 
 test.describe("atlas v2 evidence constellation", () => {
   test("EN atlas shows claim and evidence nodes, zero product nodes", async ({
@@ -16,14 +15,19 @@ test.describe("atlas v2 evidence constellation", () => {
 
     const claims = atlas.locator('[data-atlas-kind="claim"]');
     const evidence = atlas.locator('[data-atlas-kind="evidence"]');
-    expect(await claims.count()).toBe(2);
+    expect(await claims.count()).toBe(hasPublicProducts ? 3 : 2);
     expect(await evidence.count()).toBeGreaterThanOrEqual(3);
 
-    // Zero public products => zero product nodes, with the honest empty note.
-    await expect(atlas.locator('[data-atlas-kind="product"]')).toHaveCount(0);
-    await expect(
-      atlas.getByText("No public products are published yet."),
-    ).toBeVisible();
+    if (hasPublicProducts) {
+      await expect(
+        atlas.locator('[data-atlas-kind="product"]').first(),
+      ).toBeVisible();
+    } else {
+      await expect(atlas.locator('[data-atlas-kind="product"]')).toHaveCount(0);
+      await expect(
+        atlas.getByText("No public products are published yet."),
+      ).toBeVisible();
+    }
   });
 
   test("claim and evidence nodes link only to live public surfaces", async ({
@@ -32,11 +36,11 @@ test.describe("atlas v2 evidence constellation", () => {
     await page.goto("/en/products/");
     const atlas = page.locator("[data-atlas]");
     const claims = atlas.locator('[data-atlas-kind="claim"] a');
-    expect(await claims.count()).toBe(2);
+    expect(await claims.count()).toBe(hasPublicProducts ? 3 : 2);
     for (const href of await claims.evaluateAll((links) =>
       links.map((link) => link.getAttribute("href") ?? ""),
     )) {
-      expect(href).toMatch(/^\/en\/(security|privacy)\/$/);
+      expect(href).toMatch(/^\/en\/(security|privacy|products)\/$/);
     }
     const evidenceLinks = atlas.locator('[data-atlas-kind="evidence"] a');
     expect(await evidenceLinks.count()).toBeGreaterThanOrEqual(3);
@@ -84,7 +88,13 @@ test.describe("atlas v2 evidence constellation", () => {
     const atlas = page.locator("[data-atlas]");
     await expect(atlas.getByText("Tuyên bố").first()).toBeVisible();
     await expect(atlas.getByText("Bằng chứng").first()).toBeVisible();
-    await expect(atlas.locator('[data-atlas-kind="product"]')).toHaveCount(0);
+    if (hasPublicProducts) {
+      await expect(
+        atlas.locator('[data-atlas-kind="product"]').first(),
+      ).toBeVisible();
+    } else {
+      await expect(atlas.locator('[data-atlas-kind="product"]')).toHaveCount(0);
+    }
   });
 
   test("no-JS atlas is complete", async ({ browser }) => {
@@ -94,7 +104,9 @@ test.describe("atlas v2 evidence constellation", () => {
     const atlas = page.locator("[data-atlas]");
     await expect(atlas).toBeVisible();
     expect(await atlas.locator("[data-atlas-node]").count()).toBeGreaterThan(5);
-    await expect(atlas.locator('[data-atlas-kind="claim"]')).toHaveCount(2);
+    await expect(atlas.locator('[data-atlas-kind="claim"]')).toHaveCount(
+      hasPublicProducts ? 3 : 2,
+    );
     await context.close();
   });
 

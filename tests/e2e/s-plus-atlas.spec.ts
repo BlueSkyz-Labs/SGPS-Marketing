@@ -1,6 +1,5 @@
-// C2: discovery surfaces (Intent Lens, Atlas) moved off the homepage to the
-// product index (design §8) — assertions retargeted, coverage preserved.
 import { expect, test } from "@playwright/test";
+import { hasPublicProducts } from "./product-helpers.ts";
 
 test("atlas renders truth-derived nodes with decorative SVG hidden from AT", async ({
   page,
@@ -27,17 +26,28 @@ test("atlas renders truth-derived nodes with decorative SVG hidden from AT", asy
     countKind("evidence"),
     atlas.locator("[data-atlas-node]").count(),
   ]);
+  const product = await countKind("product");
   expect(brand).toBe(1);
   expect(principle).toBe(4);
   expect(trust).toBe(3);
-  expect(claim).toBe(2);
+  if (hasPublicProducts) {
+    expect(claim).toBe(3);
+    expect(product).toBeGreaterThanOrEqual(1);
+  } else {
+    expect(claim).toBe(2);
+    expect(product).toBe(0);
+  }
   expect(evidence).toBeGreaterThanOrEqual(1);
-  expect(brand + principle + trust + claim + evidence).toBe(nodes);
+  expect(brand + principle + trust + claim + evidence + product).toBe(nodes);
 });
 
 test("zero public products means zero product nodes (honest empty state)", async ({
   page,
 }) => {
+  test.skip(
+    hasPublicProducts,
+    "Public products are published; empty state test only applies when registry is empty",
+  );
   await page.goto("/en/products/");
   const atlas = page.locator("[data-atlas]");
   await expect(
@@ -110,6 +120,6 @@ test("atlas renders without JavaScript", async ({ browser }) => {
   ).toBeGreaterThanOrEqual(10);
   await expect(
     atlas.locator("[data-atlas-node][data-atlas-kind='claim']"),
-  ).toHaveCount(2);
+  ).toHaveCount(hasPublicProducts ? 3 : 2);
   await context.close();
 });

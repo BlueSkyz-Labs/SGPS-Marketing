@@ -1,8 +1,8 @@
 ---
 import type { CollectionEntry } from "astro:content";
 
-type ProductScreenshot = NonNullable<
-  CollectionEntry<"products">["data"]["proof"]["screenshot"]
+type ProductMedia = NonNullable<
+  CollectionEntry<"products">["data"]["proof"]["media"]
 >;
 
 /**
@@ -14,18 +14,13 @@ type ProductScreenshot = NonNullable<
  * shared naming convention in `src/lib`.
  */
 interface Props {
-  screenshot: ProductScreenshot;
+  media: ProductMedia;
   loading?: "eager" | "lazy";
   transitionStyle?: string;
   continuity?: "media";
 }
 
-const {
-  screenshot,
-  loading = "lazy",
-  transitionStyle,
-  continuity,
-} = Astro.props;
+const { media, loading = "lazy", transitionStyle, continuity } = Astro.props;
 ---
 
 <div
@@ -35,10 +30,10 @@ const {
   style={transitionStyle}
 >
   <img
-    src={screenshot.src}
-    alt={screenshot.alt}
-    width={screenshot.width}
-    height={screenshot.height}
+    src={media.src}
+    alt={media.alt}
+    width={media.width}
+    height={media.height}
     class="c3-product-visual__image"
     loading={loading}
     decoding="async"

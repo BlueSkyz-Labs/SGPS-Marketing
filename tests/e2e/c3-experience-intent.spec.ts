@@ -2,6 +2,7 @@
 // Tests the IntentControl component: server HTML, keyboard, screen-reader
 // state, mobile, reset/default, no-JS, and the presentation-only boundary.
 import { expect, test } from "@playwright/test";
+import { getPublicProductCount, hasPublicProducts } from "./product-helpers.ts";
 
 const EN_INTENTS = [
   "Explore products",
@@ -445,9 +446,17 @@ test.describe("C3-D IntentControl", () => {
       });
 
     await page.goto("/en/products/");
-    await expect(page.locator("[data-proof-first-empty-state]")).toBeVisible();
-    await expect(page.locator("[data-product-card]")).toHaveCount(0);
-    await seedCanonicalFixture();
+    if (!hasPublicProducts) {
+      await expect(
+        page.locator("[data-proof-first-empty-state]"),
+      ).toBeVisible();
+      await expect(page.locator("[data-product-card]")).toHaveCount(0);
+      await seedCanonicalFixture();
+    } else {
+      await expect(page.locator("[data-product-card]")).toHaveCount(
+        getPublicProductCount(),
+      );
+    }
 
     const canonicalBefore = await readTruth();
     expect(canonicalBefore.length).toBeGreaterThan(0);
@@ -472,7 +481,9 @@ test.describe("C3-D IntentControl", () => {
       "data-fidelity-tier",
       "static-premium",
     );
-    await seedCanonicalFixture();
+    if (!hasPublicProducts) {
+      await seedCanonicalFixture();
+    }
     expect(await readTruth()).toEqual(canonicalBefore);
   });
 

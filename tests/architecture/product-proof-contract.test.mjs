@@ -14,14 +14,19 @@ const productVisual = readFileSync(
 );
 const profile = readFileSync("src/pages/products/[slug].astro", "utf8");
 
-test("product proof screenshot is a local sized artifact contract", () => {
-  assert.match(schema, /screenshot:\s*productScreenshot/);
+test("product proof media is a local sized artifact contract", () => {
+  assert.match(schema, /media:\s*productMedia/);
   assert.match(schema, /src:\s*z[\s.]*string\(/);
   assert.match(schema, /alt:\s*z\.string/);
   assert.match(schema, /width:\s*z\.number/);
   assert.match(schema, /height:\s*z\.number/);
   assert.match(schema, /\/products\//);
-  assert.doesNotMatch(schema, /screenshot:\s*z\.string\(\)\.optional\(\)/);
+  assert.doesNotMatch(schema, /media:\s*z\.string\(\)\.optional\(\)/);
+  assert.doesNotMatch(
+    schema,
+    /screenshot:/,
+    "identity media must never be declared as a screenshot claim",
+  );
 });
 
 test("product action and proof URLs require https schemes", () => {
@@ -46,13 +51,13 @@ test("public products require verified capabilities distinct from jobs", () => {
   assert.match(schema, /capabilities\.length/);
 });
 
-test("ProductVisual owns intrinsic screenshot rendering without owning product truth", () => {
+test("ProductVisual owns intrinsic media rendering without owning product truth", () => {
   assert.match(productVisual, /CollectionEntry<"products">/);
   assert.match(productVisual, /data-product-visual/);
-  assert.match(productVisual, /screenshot\.src/);
-  assert.match(productVisual, /screenshot\.alt/);
-  assert.match(productVisual, /screenshot\.width/);
-  assert.match(productVisual, /screenshot\.height/);
+  assert.match(productVisual, /media\.src/);
+  assert.match(productVisual, /media\.alt/);
+  assert.match(productVisual, /media\.width/);
+  assert.match(productVisual, /media\.height/);
   assert.match(productVisual, /loading=\{loading\}/);
   assert.match(productVisual, /decoding="async"/);
   assert.doesNotMatch(
@@ -65,7 +70,8 @@ test("FlagshipProof renders capabilities through the shared ProductVisual", () =
   assert.match(flagship, /capabilities\.slice\(0,\s*3\)/);
   assert.doesNotMatch(flagship, /data\.jobs\.slice/);
   assert.match(flagship, /ProductVisual/);
-  assert.match(flagship, /screenshot=\{screenshot\}/);
+  assert.match(flagship, /media=\{media\}/);
+  assert.match(flagship, /data\.proof\.media/);
 });
 
 test("product profile exposes public status without internal enums", () => {
@@ -73,8 +79,8 @@ test("product profile exposes public status without internal enums", () => {
   assert.doesNotMatch(profile, /data\.lifecycle/);
   assert.doesNotMatch(profile, /data\.availability/);
   assert.match(profile, /Main capabilities|capabilities/);
-  assert.match(profile, /screenshot\.src/);
-  assert.match(profile, /width=\{screenshot\.width\}/);
-  assert.match(profile, /height=\{screenshot\.height\}/);
-  assert.match(profile, /ogImage=\{data\.proof\.screenshot\?\.src\}/);
+  assert.match(profile, /media\.src/);
+  assert.match(profile, /width=\{media\.width\}/);
+  assert.match(profile, /height=\{media\.height\}/);
+  assert.match(profile, /ogImage=\{data\.proof\.media\?\.src\}/);
 });

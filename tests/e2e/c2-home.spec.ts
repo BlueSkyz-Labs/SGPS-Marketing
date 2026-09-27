@@ -1,4 +1,5 @@
 import { expect, test } from "@playwright/test";
+import { hasPublicProducts } from "./product-helpers.ts";
 
 /**
  * C2 — six-act homepage narrative.
@@ -82,6 +83,10 @@ for (const viewport of VIEWPORTS) {
       test(`${locale.path} does not fabricate a product when the registry is empty`, async ({
         page,
       }) => {
+        test.skip(
+          hasPublicProducts,
+          "Public products are published; honest fallback only applies when registry is empty",
+        );
         await page.goto(locale.path);
         // Empty public registry: the flagship act renders nothing at all…
         await expect(page.locator("[data-flagship-theatre]")).toHaveCount(0);
@@ -94,6 +99,18 @@ for (const viewport of VIEWPORTS) {
         // With an empty registry, no product cards exist and no hierarchy tier is emitted.
         await expect(page.locator("[data-product-card]")).toHaveCount(0);
         await expect(page.locator('[data-product-tier="hero"]')).toHaveCount(0);
+      });
+
+      test(`${locale.path} renders verified product house when public products are published`, async ({
+        page,
+      }) => {
+        test.skip(
+          !hasPublicProducts,
+          "Public products required for active product house test",
+        );
+        await page.goto(locale.path);
+        await expect(page.locator("[data-flagship-theatre]")).toBeVisible();
+        await expect(page.locator("[data-product-card]").first()).toBeVisible();
       });
 
       test(`${locale.path} does not scroll sideways`, async ({ page }) => {

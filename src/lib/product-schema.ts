@@ -106,12 +106,12 @@ const action = z.object({
 });
 
 /** Local product evidence only — CSP img-src is 'self' data:; remote URLs cannot render. */
-const productScreenshot = z.object({
+const productMedia = z.object({
   src: z
     .string()
     .regex(
       /^\/products\/[a-z0-9][a-z0-9/_-]*\.(?:avif|jpe?g|png|webp)$/i,
-      "screenshot.src must be a local /products/... image path",
+      "proof media src must be a local /products/... image path",
     ),
   alt: z.string().min(1).max(160),
   width: z.number().int().positive().max(8192),
@@ -135,12 +135,13 @@ export const productSchema = z
     secondaryAction: action.optional(),
     proof: z
       .object({
-        // OPEN DECISION (owner, #125 C1c vs live schema): screenshot is
-        // OPTIONAL here. Flipping to a mandatory floor means replacing
-        // `productScreenshot.optional()` with `productScreenshot` below AND
-        // pointing every published product at a real /products/... asset —
-        // do not flip without the assets, or listing breaks.
-        screenshot: productScreenshot.optional(),
+        /**
+         * OPEN DECISION (owner, #125 C1c): proof media is OPTIONAL here, and it is brand or
+         * identity art — never claimed as a screenshot of running software. Flipping it to
+         * mandatory means replacing `.optional()` AND pointing every published product at a real
+         * /products/... asset in the same change; without those assets the proof frame disappears.
+         */
+        media: productMedia.optional(),
         publicUrl: httpsUrl.optional(),
         repositoryUrl: httpsUrl.optional(),
         documentationUrl: httpsUrl.optional(),
@@ -208,14 +209,14 @@ export const productSchema = z
     }
 
     if (
-      value.proof.screenshot &&
+      value.proof.media &&
       (!value.capabilities || value.capabilities.length < 2)
     ) {
       ctx.addIssue({
         code: "custom",
         path: ["capabilities"],
         message:
-          "screenshot proof requires 2–3 verified capabilities for FlagshipProof",
+          "proof media requires 2–3 verified capabilities for FlagshipProof",
       });
     }
 

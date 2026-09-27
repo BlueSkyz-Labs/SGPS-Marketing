@@ -43,7 +43,7 @@ if (!product) {
 }
 
 const { data } = product;
-const screenshot = data.proof.screenshot;
+const media = data.proof.media;
 const capabilities = data.capabilities ?? [];
 const profileHref = getProductProfilePath(lang, data.slug);
 const viewProfileLabel = labelFor(SHARED_LABELS.viewProfile, lang);
@@ -51,7 +51,7 @@ const viewProfileLabel = labelFor(SHARED_LABELS.viewProfile, lang);
 /**
  * Loading decision (recorded, not guessed): the theatre sits immediately after
  * the hero, so eager above-the-fold media would compete with the hero LCP.
- * The screenshot therefore stays lazy with intrinsic width/height (no CLS) and
+ * The proof media therefore stays lazy with intrinsic width/height (no CLS) and
  * opacity 1 — it is the act's visual protagonist, never faded in.
  */
 ---
@@ -92,22 +92,22 @@ const viewProfileLabel = labelFor(SHARED_LABELS.viewProfile, lang);
       <div class="mt-8 flex flex-wrap items-center gap-3">
         <a
           href={data.primaryAction.href}
-          class="inline-flex min-h-11 items-center rounded-[var(--radius-sm)] bg-[var(--action-primary)] px-5 py-2.5 font-medium text-white no-underline hover:bg-[var(--action-primary-hover)]"
+          class="inline-flex min-h-11 max-w-full items-center justify-center rounded-[var(--radius-sm)] bg-[var(--action-primary)] px-4 py-2.5 font-medium text-white no-underline hover:bg-[var(--action-primary-hover)] sm:px-5"
         >
           {data.primaryAction.label}
         </a>
         <a
           href={profileHref}
-          class="inline-flex min-h-11 items-center rounded-[var(--radius-sm)] border border-[var(--border-subtle)] px-5 py-2.5 font-medium text-[var(--text-primary)] no-underline hover:bg-[var(--bg-subtle)]"
+          class="inline-flex min-h-11 max-w-full items-center justify-center rounded-[var(--radius-sm)] border border-[var(--border-subtle)] px-4 py-2.5 font-medium text-[var(--text-primary)] no-underline hover:bg-[var(--bg-subtle)] sm:px-5"
         >
           {viewProfileLabel}
         </a>
       </div>
     </div>
-    {screenshot ? (
+    {media ? (
       <figure class="c2-flagship-theatre__frame m-0">
         <ProductVisual
-          screenshot={screenshot}
+          media={media}
           transitionStyle={productTransitionStyle("media", data.slug)}
           continuity="media"
         />
