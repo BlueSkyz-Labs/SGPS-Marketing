@@ -208,3 +208,37 @@ test("Sổ Tâm out-of-scope voice/transcription copy fails independently", () =
     "sotam.yaml",
   );
 });
+
+test("Vững Tay Lái rejects false active-driving safety promises", () => {
+  withFixture(
+    record({
+      slug: "vungtaylai",
+      name: "Vững Tay Lái",
+      repositoryUrl: "https://github.com/BlueSkyz-Labs/VungTayLai",
+      extra: ["capabilities:", "  - Real-time collision warnings"],
+    }),
+    (dir) => {
+      const result = run(dir);
+      assert.equal(result.status, 1);
+      assert.match(result.stderr, /must not claim live driving/);
+    },
+    "vungtaylai.yaml",
+  );
+});
+
+test("Vững Tay Lái V0 rejects invented native Android/iOS platform support", () => {
+  withFixture(
+    record({
+      slug: "vungtaylai",
+      name: "Vững Tay Lái",
+      repositoryUrl: "https://github.com/BlueSkyz-Labs/VungTayLai",
+      extra: ["platforms:", "  - android"],
+    }),
+    (dir) => {
+      const result = run(dir);
+      assert.equal(result.status, 1);
+      assert.match(result.stderr, /must not claim native Android\/iOS/);
+    },
+    "vungtaylai.yaml",
+  );
+});
