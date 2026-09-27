@@ -115,6 +115,16 @@ test("the sticky header surface is authored in the craft layer, not in a dropped
   );
   assert.match(
     css,
+    /\.header-glass\s*\{[^}]*background-color:\s*var\(--surface-primary-glass\)/,
+    "the frosted surface must derive from the scene token, not a hard-coded theme colour",
+  );
+  assert.match(
+    css,
+    /header\[data-scene="ink"\]\s*\{[^}]*--surface-primary-glass:/,
+    "the ink scene must re-point the glass token alongside its surface token, or porcelain text lands on a porcelain surface",
+  );
+  assert.match(
+    css,
     /@media\s*\(forced-colors:\s*active\)\s*\{[^}]*\.header-glass\s*\{[^}]*border-bottom-color:\s*CanvasText/,
     "forced-colors mode must keep the hairline visible",
   );

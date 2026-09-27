@@ -60,6 +60,7 @@
  */
 header[data-scene="ink"] {
   --surface-primary: var(--brand-ink);
+  --surface-primary-glass: rgba(11, 16, 32, 0.82);
   --surface-subtle: color-mix(in srgb, var(--brand-porcelain) 14%, transparent);
   --border-subtle: color-mix(in srgb, var(--brand-porcelain) 24%, transparent);
   --text-primary: var(--brand-porcelain);
@@ -216,31 +217,23 @@ main details > summary:active {
   z-index: 50;
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
+  /* Frosted surface = the scene's own surface at 82%. It must follow the
+     scene token (header[data-scene=...] re-points --surface-primary), never a
+     hard-coded theme colour: the ink scene pairs an ink surface with porcelain
+     text, and a theme-keyed background put porcelain behind porcelain text. */
+  background-color: var(--surface-primary-glass);
   /* Specular bottom hairline: light-catching on the ink surface. */
   border-bottom-color: rgba(255, 255, 255, 0.1);
 }
 
-/* Light mode: porcelain 82% */
+/* Light mode hairline (the surface itself comes from the scene token). */
 [data-theme="light"] .header-glass {
-  background-color: rgba(247, 248, 250, 0.82);
   border-bottom-color: rgba(203, 213, 225, 0.8);
 }
 
 @media (prefers-color-scheme: light) {
   :root:not([data-theme="dark"]) .header-glass {
-    background-color: rgba(247, 248, 250, 0.82);
     border-bottom-color: rgba(203, 213, 225, 0.8);
-  }
-}
-
-/* Dark mode: ink 82% */
-[data-theme="dark"] .header-glass {
-  background-color: rgba(11, 16, 32, 0.82);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) .header-glass {
-    background-color: rgba(11, 16, 32, 0.82);
   }
 }
 
