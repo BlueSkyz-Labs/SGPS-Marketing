@@ -130,8 +130,10 @@ test("social locale and skip link reflect the published language", () => {
   assert.match(layout, /跳转到主要内容/);
 });
 
-test("SoftwareApplication metadata does not invent category or cross-product platforms", () => {
-  const roadSafety = seo.productJsonLd(
+test(
+  "SoftwareApplication metadata does not invent category or cross-product platforms",
+  () => {
+    const roadSafety = seo.productJsonLd(
     {
       name: "Vững Tay Lái",
       description: "Product in development",
@@ -141,11 +143,14 @@ test("SoftwareApplication metadata does not invent category or cross-product pla
     "https://blueskyzlabs.com",
     "vi",
   );
-  assert.equal(roadSafety.operatingSystem, "Android, iOS");
-  assert.equal("applicationCategory" in roadSafety, false);
-  assert.doesNotMatch(JSON.stringify(roadSafety), /Windows|macOS|BusinessApplication/);
+    assert.equal(roadSafety.operatingSystem, "Android, iOS");
+    assert.equal("applicationCategory" in roadSafety, false);
+    assert.doesNotMatch(
+      JSON.stringify(roadSafety),
+      /Windows|macOS|BusinessApplication/,
+    );
 
-  const apiOnly = seo.productJsonLd(
+    const apiOnly = seo.productJsonLd(
     {
       name: "API prototype",
       description: "Unreleased",
@@ -155,5 +160,6 @@ test("SoftwareApplication metadata does not invent category or cross-product pla
     "https://blueskyzlabs.com",
     "en",
   );
-  assert.equal("operatingSystem" in apiOnly, false);
-});
+    assert.equal("operatingSystem" in apiOnly, false);
+  },
+);
