@@ -143,7 +143,8 @@ test("provenance search derives from public data only and transmits no query", (
   // The navigator event carries action/kind only — never the typed query.
   assert.doesNotMatch(script, /detail:[^}]*query/is);
   assert.match(component, /command-navigator__kind/);
-  assert.match(component, /evidence: isVi \? "Bằng chứng" : "Evidence"/);
+  assert.match(component, /evidence: isVi \? "Bằng chứng"/);
+  assert.match(component, /isZh \? "证据" : "Evidence"/);
 });
 
 /* ------------------------------------------------------------------ */

@@ -71,6 +71,11 @@ export const SHARED_LABELS = {
     vi: "Bằng chứng công khai đã xác minh — không phải bản mô phỏng ý tưởng.",
     zh: "已核验的公开凭证 — 并非概念稿。",
   },
+  primaryNav: { en: "Primary", vi: "Chính", zh: "主导航" },
+  mobileNav: { en: "Mobile", vi: "Di động", zh: "移动导航" },
+  footerNav: { en: "Footer", vi: "Chân trang", zh: "页脚导航" },
+  nextSteps: { en: "Next steps", vi: "Bước tiếp theo", zh: "下一步" },
+  houseIndex: { en: "House index", vi: "Mục lục ngôi nhà", zh: "网站目录" },
 } as const satisfies Record<string, LocalizedLabel>;
 
 export function labelFor(

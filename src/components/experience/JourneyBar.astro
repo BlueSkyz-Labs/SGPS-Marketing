@@ -8,11 +8,12 @@ import {
 import { getMissionOrders, getMissionEvidenceKeys } from "@/data/experience";
 import { DEFAULT_EXPERIENCE_INTENT } from "@/lib/experience-intent";
 import { getLanguageFromPath } from "@/lib/i18n";
+import { SHARED_LABELS, labelFor } from "@/data/site";
 
 const pathname = Astro.url.pathname;
 const lang = getLanguageFromPath(pathname);
 const actions = getJourneyActions(pathname, lang);
-const navLabel = lang === "vi" ? "Bước tiếp theo" : "Next steps";
+const navLabel = labelFor(SHARED_LABELS.nextSteps, lang);
 const missionOrders = getMissionOrders();
 const missionEvidence = getMissionEvidenceKeys();
 const renderedActions =
