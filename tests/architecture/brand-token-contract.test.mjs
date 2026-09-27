@@ -9,7 +9,7 @@ const css = readFileSync(join(root, "src", "styles", "global.css"), "utf8");
 const rootBlock = css.match(/:root\s*\{([^}]*)\}/s)?.[1] ?? "";
 const themeBlock = css.match(/@theme\s*\{([^}]*)\}/s)?.[1] ?? "";
 
-// Canonical Brand Kit v4 palette (07_DESIGN_TOKENS/tokens.css).
+// Canonical Brand Kit v4 palette (07_DESIGN_TOKENS/tokens.json).
 const PALETTE = {
   ink: "#0b1020",
   porcelain: "#f7f8fa",
@@ -21,6 +21,14 @@ const PALETTE = {
   slate100: "#f1f5f9",
   actionDark: "#1d4ed8",
   white: "#ffffff",
+};
+
+// Real brand source values — tokens.json (v4.0.0).
+const TOKENS = {
+  radius: { sm: "8px", md: "12px", lg: "20px", pill: "999px" },
+  shadow: { subtle: "0 8px 28px rgba(11,16,32,.12)" },
+  semantic: { border: "#CBD5E1" },
+  semanticDark: { border: "#334155" },
 };
 
 test("brand palette tokens exist and match the kit", () => {
@@ -51,8 +59,6 @@ test("card radius stays on the canonical kit md (12px) scale", () => {
 });
 
 test("no off-palette hardcoded colors in card/badge surfaces (brand consistency)", () => {
-  // Allow the authored palette + W3 dark-surface tones. Anything else that a
-  // component author hard-codes is a brand-consistency defect.
   const allow = new Set([
     "#0b1020",
     "#f7f8fa",
@@ -81,6 +87,75 @@ test("no off-palette hardcoded colors in card/badge surfaces (brand consistency)
   assert.ok(
     found.size === 0,
     `off-palette hex colors used in components: ${[...found].join(", ")}`,
+  );
+});
+
+test("CSS root exposes the real Brand Kit v4 --bsl-* tokens (tokens.json)", () => {
+  assert.match(
+    rootBlock,
+    /--bsl-radius-sm\s*:\s*8px/,
+    "--bsl-radius-sm must be 8px per tokens.json",
+  );
+  assert.match(
+    rootBlock,
+    /--bsl-radius-md\s*:\s*12px/,
+    "--bsl-radius-md must be 12px per tokens.json",
+  );
+  assert.match(
+    rootBlock,
+    /--bsl-radius-lg\s*:\s*20px/,
+    "--bsl-radius-lg must be 20px per tokens.json",
+  );
+  assert.match(
+    rootBlock,
+    /--bsl-shadow-subtle\s*:\s*0\s*8px\s*28px\s*rgba\(11,\s*16,\s*32,\s*0\.12\)/,
+    "--bsl-shadow-subtle must match tokens.json",
+  );
+  assert.match(
+    rootBlock,
+    /--bsl-border\s*:\s*#CBD5E1/i,
+    `--bsl-border must be ${TOKENS.semantic.border} per tokens.json semantic.border`,
+  );
+});
+
+test("Brand Kit v4 tokens.json has no radius.xl — --radius-xl must NOT exist in CSS", () => {
+  assert.ok(
+    !/--bsl-radius-xl|--radius-xl\s*:/.test(css),
+    "--radius-xl must not exist: tokens.json defines no radius.xl (plan discrepancy: plan mentions 28px, source wins)",
+  );
+});
+
+test("border-specular utility exists with specular top highlight", () => {
+  assert.match(
+    css,
+    /\.border-specular\s*\{[^}]*border-top-color[^}]*\}/,
+    ".border-specular must set a top highlight",
+  );
+  assert.match(
+    css,
+    /\.border-specular\s*\{[^}]*border\s*:\s*1px\s*solid\s*var\(--bsl-border\)/,
+    ".border-specular must use --bsl-border",
+  );
+});
+
+test("dark mode overrides --bsl-border to semanticDark.border (#334155)", () => {
+  assert.match(
+    css,
+    /\[data-theme="dark"\][^}]*--bsl-border\s*:\s*#334155/,
+    "dark mode --bsl-border must be #334155",
+  );
+  assert.match(
+    css,
+    /@media\s*\(prefers-color-scheme:\s*dark\)[^}]*--bsl-border\s*:\s*#334155/s,
+    "prefers-color-scheme dark --bsl-border must be #334155",
+  );
+});
+
+test("forced-colors mode degrades .border-specular gracefully", () => {
+  assert.match(
+    css,
+    /@media\s*\(forced-colors:\s*active\)[^}]*\.border-specular/,
+    "forced-colors media query must guard .border-specular",
   );
 });
 
