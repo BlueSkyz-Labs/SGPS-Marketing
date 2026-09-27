@@ -34,7 +34,7 @@ This system adopts **SGPS FULL — Architecture + Experience** as an inviolable 
 ├─────────────────────────┼─────────────────────────┼─────────────────────────────────────────┤
 │ 4. Structured SEO &     │ 5. Adversarial Red-Team │ 6. Zero-Knowledge Local AI              │
 │    Discoverability      │    Security             │    Telemetry                            │
-│ • SoftwareApplication LD│ • Anti-Tampering QR     │ • Sổ Tằm client-side private journaling │
+│ • SoftwareApplication LD│ • Anti-Tampering QR     │ • Sổ Tâm client-side private journaling │
 │ • Complete Sitemap XML  │ • Local-First Storage   │ • ApexAgent flight-deck kill switch     │
 │ • Masterbrand OG Cards  │ • CSP Edge Hardening    │ • FluentArc interactive skill tree      │
 └─────────────────────────┴─────────────────────────┴─────────────────────────────────────────┘
@@ -46,7 +46,7 @@ This system adopts **SGPS FULL — Architecture + Experience** as an inviolable 
 - Resolves the historical `screenshot-mandatory-floor` gate by binding authentic 512px transparent PNG app icons and verified interface preview renders.
 - 5 Purpose-Built AI Products:
   1. **ApexAgent:** Autonomous AI agent orchestrator with human-in-the-loop oversight (`featuredTier: "hero"`).
-  2. **Sổ Tằm:** Contemplative AI journal distilling daily reflections into structured life insights (`featuredTier: "featured"`).
+  2. **Sổ Tâm:** Contemplative AI journal distilling daily reflections into structured life insights (`featuredTier: "featured"`).
   3. **Sổ Trọ:** Streamlined rental property operations, digital contracts, and tenant workflows (`featuredTier: "featured"`).
   4. **FluentArc:** Adaptive learning copilot mapping knowledge frontiers and accelerating skill mastery (`featuredTier: "ecosystem"`).
   5. **Vững Tay Lái:** Real-time situational awareness and computer vision coaching for road safety (`featuredTier: "ecosystem"`).
