@@ -79,10 +79,13 @@ test("product status chrome avoids universal pills and all-caps", () => {
 });
 
 test("support empty state offers working trust paths without Contact loop", () => {
-  const support = readFileSync("src/pages/support.astro", "utf8");
+  // src/pages/support.astro is a redirect-only stub (Astro.redirect to the
+  // locale page) with no markup of its own; the rendered content this guard
+  // cares about lives on the locale page it redirects to.
+  const support = readFileSync("src/pages/en/support.astro", "utf8");
   assert.match(support, /SITE\.contactEmail/);
-  assert.match(support, /href="\/security\/"/);
-  assert.match(support, /href="\/about\/"/);
+  assert.match(support, /href="\/en\/security\/"/);
+  assert.match(support, /href="\/en\/about\/"/);
   assert.match(support, /hasBusinessEmail/);
 });
 

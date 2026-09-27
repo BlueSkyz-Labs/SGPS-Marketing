@@ -6,13 +6,19 @@ const ADVISORY =
   "https://github.com/BlueSkyz-Labs/SGPS-Marketing/security/advisories/new";
 
 test("support empty state offers contact and security recourse", () => {
-  const support = readFileSync("src/pages/support.astro", "utf8");
-  assert.match(support, /href="\/contact\/"/);
-  assert.match(support, /href="\/security\/"/);
-  assert.match(support, /href="\/about\/"/);
+  // The root src/pages/support.astro is a pure Astro.redirect("/en/support/")
+  // stub with no rendered markup of its own; the actually rendered content
+  // lives in the locale page, so assert there instead of on dead source.
+  const support = readFileSync("src/pages/en/support.astro", "utf8");
+  assert.match(support, /href="\/en\/contact\/"/);
+  assert.match(support, /href="\/en\/security\/"/);
+  assert.match(support, /href="\/en\/about\/"/);
   assert.match(support, /SITE\.contactEmail/);
   assert.match(support, /hasBusinessEmail/);
   assert.match(support, /min-h-11/);
+
+  const rootStub = readFileSync("src/pages/support.astro", "utf8");
+  assert.match(rootStub, /Astro\.redirect\("\/en\/support\/"\)/);
 });
 
 test("trust section links meet touch-target floor", () => {
@@ -44,9 +50,14 @@ test("security surface exposes actionable private reporting CTA", () => {
 });
 
 test("contact security lane deep-links advisory when email unset", () => {
-  const contact = readFileSync("src/pages/contact.astro", "utf8");
+  // Same rationale as the support test above: root src/pages/contact.astro
+  // is a redirect-only stub; the rendered lane lives on the locale page.
+  const contact = readFileSync("src/pages/en/contact.astro", "utf8");
   assert.match(contact, /SECURITY_ADVISORY_URL/);
   assert.match(contact, /Open private vulnerability reporting/);
+
+  const rootStub = readFileSync("src/pages/contact.astro", "utf8");
+  assert.match(rootStub, /Astro\.redirect\("\/en\/contact\/"\)/);
 });
 
 test("flagship proof section is evidence-gated and optional", () => {
