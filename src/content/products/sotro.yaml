@@ -11,8 +11,8 @@ jobs:
   - See what remains unpaid this month and what needs attention today
   - Maintain dependable room, tenant, meter, and monthly charge records
 capabilities:
-  - Development scope: traceable utility charges and rental records
-  - Development scope: auditable receipts and human-confirmed payment states
+  - "Development scope: traceable utility charges and rental records"
+  - "Development scope: auditable receipts and human-confirmed payment states"
   - Optional copy-and-open Zalo/SMS message templates, not automatic sending
 platforms:
   - web
