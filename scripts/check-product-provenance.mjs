@@ -134,7 +134,9 @@ for (const file of files) {
     }
     const publicCopy = source
       .split("\n")
-      .filter((line) => /^(?:shortDescription:|  - |  label:|    alt:)/.test(line))
+      .filter((line) =>
+        /^(?:shortDescription:|  - |  label:|    alt:)/.test(line),
+      )
       .join(" ");
     const audioScopePattern =
       /\b(?:voice|audio|transcrip\w*|speech|microphone)\b|giọng nói|ghi âm|âm thanh|语音|录音|转录/i;
@@ -151,7 +153,9 @@ for (const file of files) {
   if (slug === "vungtaylai") {
     const publicCopy = source
       .split("\n")
-      .filter((line) => /^(?:shortDescription:|  - |  label:|    alt:)/.test(line))
+      .filter((line) =>
+        /^(?:shortDescription:|  - |  label:|    alt:)/.test(line),
+      )
       .join(" ");
     const prohibitedDrivingClaim =
       /real.time|blind.spot|lane.drift|collision.warning|hazard.alert|computer.vision|cảnh báo va chạm|điểm mù|lệch làn|实时驾驶|碰撞预警/i;
