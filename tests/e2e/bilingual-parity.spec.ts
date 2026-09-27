@@ -159,7 +159,11 @@ test.describe("bilingual parity — product-present fixture", () => {
         (el as HTMLDetailsElement).open = true;
       });
     await expect(
-      page.getByText("Brand identity artwork — not a screenshot of the running application.").first(),
+      page
+        .getByText(
+          "Brand identity artwork — not a screenshot of the running application.",
+        )
+        .first(),
     ).toBeVisible();
   });
 
