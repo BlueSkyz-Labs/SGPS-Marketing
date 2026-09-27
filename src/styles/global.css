@@ -607,6 +607,18 @@ html[data-intent="evaluate-product"] [data-journey-bar] a[href$="/products/"] {
     animation: flare-settle 1100ms cubic-bezier(0.22, 1, 0.36, 1) both;
   }
 
+  /* ProductCard status badge — one-shot entrance animation. */
+  [data-product-status]::before {
+    content: "";
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--brand-cobalt);
+    margin-right: 0.5rem;
+    animation: status-badge-entrance 600ms var(--motion-ease-standard) both;
+  }
+
   @keyframes reveal-rise {
     from {
       transform: translateY(0.5rem);
@@ -662,6 +674,24 @@ html[data-intent="evaluate-product"] [data-journey-bar] a[href$="/products/"] {
       transform: scaleX(1);
     }
   }
+
+  /* ProductCard status badge — one-shot entrance animation.
+   * Neutralised under prefers-reduced-motion per motion-reduction contract.
+   */
+  @keyframes status-badge-entrance {
+    0% {
+      opacity: 0;
+      transform: scale(0.6);
+    }
+    60% {
+      opacity: 1;
+      transform: scale(1.1);
+    }
+    100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -692,6 +722,11 @@ html[data-intent="evaluate-product"] [data-journey-bar] a[href$="/products/"] {
     animation: none;
     transform: none;
     opacity: 1;
+  }
+
+  [data-product-status]::before {
+    animation: none !important;
+    background: var(--brand-cobalt);
   }
 }
 

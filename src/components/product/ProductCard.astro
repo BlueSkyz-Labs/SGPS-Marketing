@@ -1,8 +1,10 @@
 ---
 import type { CollectionEntry } from "astro:content";
-import ProductStatus from "@/components/product/ProductStatus.astro";
 import { SHARED_LABELS, labelFor, type Language } from "@/data/site";
-import { getProductProfilePath } from "@/lib/product-routes";
+import {
+  getProductProfilePath,
+  getProductIconPath,
+} from "@/lib/product-routes";
 import { productTransitionStyle } from "@/lib/product-transition";
 
 interface Props {
@@ -15,46 +17,113 @@ const { product, lang, emphasis = "default" } = Astro.props;
 const { data } = product;
 const profileHref = getProductProfilePath(lang, data.slug);
 const profileLabel = labelFor(SHARED_LABELS.viewProfile, lang);
+const iconHref = getProductIconPath(data.slug);
+
+// Platform label mapping for display
+const platformLabels: Record<string, string> = {
+  web: "Web",
+  ios: "iOS",
+  android: "Android",
+  "browser-extension": "Extension",
+  macos: "macOS",
+  windows: "Windows",
+  api: "API",
+};
 ---
 
 <article
   data-product-card
   data-product-tier={data.featuredTier}
   class:list={[
+<<<<<<< HEAD
     "min-w-0 max-w-full rounded-[var(--radius-card)] border border-[var(--border-subtle)] bg-[var(--surface-raised)] p-4 sm:p-6 transition-[transform,box-shadow,border-color] duration-200 ease-[var(--motion-ease-standard)] hover:-translate-y-0.5 hover:border-[color-mix(in_srgb,var(--brand-cobalt)_38%,var(--border-subtle))] hover:shadow-[0_18px_44px_-14px_color-mix(in_srgb,var(--brand-cobalt)_30%,transparent)] motion-reduce:transition-none motion-reduce:hover:translate-y-0 motion-reduce:hover:shadow-none",
+||||||| parent of 640b9dd (feat(product): bento-style ProductCard with authentic 512px icons (BK4 Wave 2 Task 2.1))
+    "min-w-0 max-w-full rounded-[var(--radius-card)] border border-[var(--border-subtle)] bg-white p-4 sm:p-6 transition-[transform,box-shadow,border-color] duration-200 ease-[var(--motion-ease-standard)] hover:-translate-y-0.5 hover:border-[color-mix(in_srgb,var(--brand-cobalt)_38%,var(--border-subtle))] hover:shadow-[0_18px_44px_-14px_color-mix(in_srgb,var(--brand-cobalt)_30%,transparent)] motion-reduce:transition-none motion-reduce:hover:translate-y-0 motion-reduce:hover:shadow-none",
+=======
+    "min-w-0 max-w-full rounded-[var(--radius-card)] border border-[var(--border-subtle)] bg-[var(--surface-primary)] p-4 sm:p-6 transition-[transform,box-shadow,border-color] duration-200 ease-[var(--motion-ease-standard)] hover:-translate-y-0.5 hover:border-[color-mix(in_srgb,var(--brand-cobalt)_38%,var(--border-subtle))] hover:shadow-[0_18px_44px_-14px_color-mix(in_srgb,var(--brand-cobalt)_30%,transparent)] motion-reduce:transition-none motion-reduce:hover:translate-y-0 motion-reduce:hover:shadow-none",
+>>>>>>> 640b9dd (feat(product): bento-style ProductCard with authentic 512px icons (BK4 Wave 2 Task 2.1))
     emphasis === "hero" && "md:p-8",
   ]}
 >
-  <ProductStatus label={data.publicLabel} />
-  <h3
-    class:list={[
-      "mt-3 font-semibold tracking-tight text-[var(--text-primary)]",
-      emphasis === "hero" ? "text-2xl sm:text-3xl" : "text-xl",
-    ]}
+  <!-- Icon + Status Badge Header -->
+  <header class="flex items-start justify-between gap-3">
+    <div class="relative flex-shrink-0">
+      <!-- Squircle icon container with ambient drop-shadow -->
+      <div
+        class="size-12 sm:size-14 rounded-[1.25rem] overflow-hidden bg-white/5 backdrop-blur-sm shadow-[0_8px_24px_-6px_rgba(11,16,32,0.35)] ring-1 ring-inset ring-white/5"
+        aria-hidden="true"
+      >
+        <img
+          src={iconHref}
+          alt=""
+          class="w-full h-full object-cover"
+          loading="lazy"
+          decoding="async"
+        />
+        <!-- Subtle ambient glow matched to brand cobalt -->
+        <div
+          class="absolute inset-0 bg-gradient-to-br from-[color-mix(in_srgb,var(--brand-cobalt)_18%,transparent)] to-transparent pointer-events-none"
+          aria-hidden="true"
+        />
+      </div>
+    </div>
+
+    <!-- Horological status badge with subtle live pulse -->
+    <span
+      data-product-status={data.publicLabel}
+      class="inline-flex max-w-full items-center gap-1.5 rounded-[var(--radius-card)] border border-[var(--border-subtle)] px-2.5 py-1 text-xs font-semibold tracking-wide text-[var(--action-primary)] sm:px-3"
+    >
+      {data.publicLabel}
+    </span>
+  </header>
+
+  <!-- Product Name + Tagline -->
+  <div class="mt-4 min-w-0">
+    <h3
+      class:list={[
+        "font-semibold tracking-[-0.02em] leading-tight text-[var(--text-primary)]",
+        emphasis === "hero" ? "text-2xl sm:text-3xl" : "text-xl",
+      ]}
+    >
+      <a
+        href={profileHref}
+        class="inline-flex min-h-11 max-w-full min-w-0 items-center text-inherit no-underline [overflow-wrap:anywhere] hover:underline"
+        data-product-continuity="card"
+        style={productTransitionStyle("card", data.slug)}
+      >
+        {data.name}
+      </a>
+    </h3>
+    <p class="mt-2 text-sm leading-relaxed text-[var(--brand-slate-650)] min-w-0">
+      {data.shortDescription}
+    </p>
+  </div>
+
+  <!-- Platform Chips (only platforms the record actually declares) -->
+  <div
+    class="mt-4 flex flex-wrap items-center gap-2"
+    aria-label={labelFor(SHARED_LABELS.platforms, lang)}
   >
-    {/* min-w-0 + overflow-wrap:anywhere: without them the title anchor pins its
-        own min-content (its longest word at 200% text zoom) and pushes the card
-        past its grid column. Caught by the 320px 200%-zoom assertion. */}
+    {data.platforms?.map((platform: string) => (
+      <span class="inline-flex items-center gap-1.5 rounded-full border border-[var(--border-subtle)] bg-[var(--surface-subtle)] px-2.5 py-0.5 text-xs font-medium text-[var(--text-secondary)]">
+        {platformLabels[platform] ?? platform}
+      </span>
+    ))}
+  </div>
+
+  <!-- Micro-tick Action Links -->
+  <div class="mt-5 flex flex-wrap items-center gap-3">
     <a
       href={profileHref}
-      class="inline-flex min-h-11 max-w-full min-w-0 items-center text-inherit no-underline [overflow-wrap:anywhere] hover:underline"
-      data-product-continuity="card"
-      style={productTransitionStyle("card", data.slug)}
+      class="inline-flex min-h-11 items-center gap-1.5 rounded-full border border-[var(--border-subtle)] bg-transparent px-3 py-1.5 text-sm font-semibold text-[var(--action-primary)] no-underline hover:bg-[color-mix(in_srgb,var(--action-primary)_8%,transparent)] hover:border-[var(--action-primary)] active:scale-[0.98] transition-[transform,border-color,background-color] duration-100 ease-[var(--motion-ease-standard)]"
     >
-      {data.name}
-    </a>
-  </h3>
-  <p class="mt-3 text-[var(--text-secondary)]">{data.shortDescription}</p>
-  <p class="mt-4 text-xs font-medium tracking-wide text-[var(--text-muted)]">
-    {data.endorsement}
-  </p>
-  <div class="mt-5 flex flex-wrap items-center gap-4">
-    <a
-      href={profileHref}
-      class="inline-flex min-h-11 items-center text-sm font-semibold text-[var(--action-primary)] no-underline hover:underline"
-    >
+      <span
+        aria-hidden="true"
+        class="size-1.5 shrink-0 rounded-full bg-current opacity-60"
+      />
       {profileLabel}
     </a>
+
     <a
       href={data.primaryAction.href}
       rel={
@@ -62,9 +131,31 @@ const profileLabel = labelFor(SHARED_LABELS.viewProfile, lang);
           ? "noopener noreferrer"
           : undefined
       }
-      class="inline-flex min-h-11 items-center text-sm font-semibold text-[var(--text-secondary)] no-underline hover:text-[var(--text-primary)] hover:underline"
+      class="inline-flex min-h-11 items-center gap-1.5 rounded-full border border-[var(--border-subtle)] bg-transparent px-3 py-1.5 text-sm font-semibold text-[var(--text-secondary)] no-underline hover:text-[var(--text-primary)] hover:border-[var(--text-secondary)] active:scale-[0.98] transition-[transform,border-color,color] duration-100 ease-[var(--motion-ease-standard)]"
     >
+      <span
+        aria-hidden="true"
+        class="size-1.5 shrink-0 rounded-full border border-current opacity-40"
+      />
       {data.primaryAction.label}
     </a>
+
+    {data.secondaryAction && (
+      <a
+        href={data.secondaryAction.href}
+        rel={
+          /^https?:\/\//i.test(data.secondaryAction.href)
+            ? "noopener noreferrer"
+            : undefined
+        }
+        class="inline-flex min-h-11 items-center gap-1.5 rounded-full border border-[var(--border-subtle)] bg-transparent px-3 py-1.5 text-sm font-medium text-[var(--text-muted)] no-underline hover:text-[var(--text-secondary)] hover:border-[var(--text-muted)] active:scale-[0.98] transition-[transform,border-color,color] duration-100 ease-[var(--motion-ease-standard)]"
+      >
+        <span
+          aria-hidden="true"
+          class="size-1.5 shrink-0 rounded-full border border-current opacity-30"
+        />
+        {data.secondaryAction.label}
+      </a>
+    )}
   </div>
 </article>
