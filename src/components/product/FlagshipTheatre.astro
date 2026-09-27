@@ -18,6 +18,13 @@ import { productTransitionStyle } from "@/lib/product-transition";
  * product truth of its own: every visible fact comes from the record. With
  * `product === null` it renders nothing — the homepage falls back honestly
  * rather than fabricating a product moment.
+ *
+ * Wave 2 Task 2.2 — cinematic device frame:
+ *   The proof screenshot is encased in a presentation-only device/browser frame
+ *   with window controls and a titanium chamfer edge, backed by a soft ambient
+ *   backlight. The capability bullets are transformed into three micro-feature
+ *   cards. The frame carries no product truth; the screenshot's honest caption
+ *   and the verbatim capability copy are preserved.
  */
 interface Props {
   product: CollectionEntry<"products"> | null;
@@ -74,20 +81,28 @@ const viewProfileLabel = labelFor(SHARED_LABELS.viewProfile, lang);
         {data.shortDescription}
       </p>
       {capabilities.length > 0 ? (
-        <ul class="mt-6 space-y-2 text-[var(--text-secondary)]">
-          {capabilities.slice(0, 3).map((capability: string) => (
-            <li class="c2-flagship-theatre__capability">
-              {capability}
-              <ProductProofLink
-                slug={data.slug}
-                capability={capability}
-                products={products}
-                claims={claims}
-                lang={lang}
-              />
-            </li>
+        <div class="mt-6 c2-flagship-theatre__features">
+          {capabilities.slice(0, 3).map((capability: string, i: number) => (
+            <div class="c2-flagship-theatre__feature">
+              <span
+                class="c2-flagship-theatre__feature-index"
+                aria-hidden="true"
+              >
+                {String(i + 1).padStart(2, "0")}
+              </span>
+              <span class="c2-flagship-theatre__feature-text">
+                {capability}
+                <ProductProofLink
+                  slug={data.slug}
+                  capability={capability}
+                  products={products}
+                  claims={claims}
+                  lang={lang}
+                />
+              </span>
+            </div>
           ))}
-        </ul>
+        </div>
       ) : null}
       <div class="mt-8 flex flex-wrap items-center gap-3">
         <a
@@ -105,16 +120,194 @@ const viewProfileLabel = labelFor(SHARED_LABELS.viewProfile, lang);
       </div>
     </div>
     {media ? (
-      <figure class="c2-flagship-theatre__frame m-0">
-        <ProductVisual
-          media={media}
-          transitionStyle={productTransitionStyle("media", data.slug)}
-          continuity="media"
-        />
-        <figcaption class="mt-3 text-sm text-[var(--text-muted)]">
-          {labelFor(SHARED_LABELS.proofCaption, lang)}
-        </figcaption>
-      </figure>
+      <div class="c2-flagship-theatre__backlight">
+        <div class="c2-flagship-theatre__device-frame">
+          <div class="c2-flagship-theatre__window-controls" aria-hidden="true">
+            <span class="c2-flagship-theatre__window-dot c2-flagship-theatre__window-dot--red"></span>
+            <span class="c2-flagship-theatre__window-dot c2-flagship-theatre__window-dot--yellow"></span>
+            <span class="c2-flagship-theatre__window-dot c2-flagship-theatre__window-dot--green"></span>
+          </div>
+          <figure class="c2-flagship-theatre__frame m-0">
+            <ProductVisual
+              media={media}
+              variant="framed"
+              transitionStyle={productTransitionStyle("media", data.slug)}
+              continuity="media"
+            />
+            <figcaption class="mt-3 text-sm text-[var(--text-muted)]">
+              {labelFor(SHARED_LABELS.proofCaption, lang)}
+            </figcaption>
+          </figure>
+        </div>
+      </div>
     ) : null}
   </div>
 </section>
+
+<style>
+  /* ---- C2 P3 Wave 2 — soft ambient backlight ---- */
+  .c2-flagship-theatre__backlight {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1rem;
+    min-height: 20rem;
+    overflow: hidden;
+  }
+
+  .c2-flagship-theatre__backlight::before {
+    content: "";
+    position: absolute;
+    inset: -1rem;
+    background: radial-gradient(
+      ellipse at 50% 40%,
+      color-mix(in srgb, var(--brand-cobalt) 20%, transparent) 0%,
+      color-mix(in srgb, var(--brand-cobalt) 10%, transparent) 35%,
+      transparent 70%
+    );
+    filter: blur(48px);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ---- C2 P3 Wave 2 — device frame (titanium chamfer) ---- */
+  .c2-flagship-theatre__device-frame {
+    position: relative;
+    z-index: 1;
+    background: var(--surface-primary);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    box-shadow:
+      0 1px 0 rgba(255, 255, 255, 0.08) inset,
+      var(--brand-shadow-subtle);
+    overflow: hidden;
+    min-width: 0;
+  }
+
+  /*
+   * The proof image stays at its intrinsic aspect ratio but must never exceed
+   * the frame's width — important on mobile viewports where the intrinsic
+   * dimensions would otherwise overflow.
+   */
+  .c2-flagship-theatre__frame img {
+    max-width: 100%;
+    height: auto;
+  }
+
+  /*
+   * Titanium chamfer — a single specular pass across the top edge.
+   * Derived entirely from existing tokens; no raw palette cluster.
+   */
+  .c2-flagship-theatre__device-frame::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      color-mix(in srgb, var(--brand-porcelain) 35%, transparent) 18%,
+      color-mix(in srgb, var(--brand-porcelain) 65%, transparent) 50%,
+      color-mix(in srgb, var(--brand-porcelain) 35%, transparent) 82%,
+      transparent 100%
+    );
+    z-index: 2;
+    pointer-events: none;
+  }
+
+  /* ---- Window controls (decorative, pointer-inert) ---- */
+  .c2-flagship-theatre__window-controls {
+    display: flex;
+    gap: 0.5rem;
+    padding: 0.625rem 1rem;
+    background: var(--surface-subtle);
+    border-bottom: 1px solid var(--border-subtle);
+  }
+
+  .c2-flagship-theatre__window-dot {
+    display: block;
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    flex: none;
+  }
+
+  .c2-flagship-theatre__window-dot--red {
+    background: color-mix(in srgb, var(--brand-ink) 80%, transparent);
+  }
+
+  .c2-flagship-theatre__window-dot--yellow {
+    background: color-mix(in srgb, var(--brand-slate-500) 75%, transparent);
+  }
+
+  .c2-flagship-theatre__window-dot--green {
+    background: color-mix(in srgb, var(--brand-cobalt) 65%, transparent);
+  }
+
+  /* ---- Micro-feature cards (capability bullets re-presented) ---- */
+  .c2-flagship-theatre__features {
+    display: grid;
+    gap: 0.75rem;
+  }
+
+  @media (min-width: 640px) {
+    .c2-flagship-theatre__features {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  .c2-flagship-theatre__feature {
+    display: flex;
+    gap: 0.75rem;
+    padding: 0.875rem 1rem;
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    background: var(--surface-subtle);
+    min-height: 0;
+  }
+
+  .c2-flagship-theatre__feature-index {
+    flex: none;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    font-variant-numeric: tabular-nums;
+    line-height: 1;
+  }
+
+  .c2-flagship-theatre__feature-text {
+    flex: 1;
+    min-width: 0;
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+  }
+
+  /* ---- Reduced motion: neutralise all decorative layers ---- */
+  @media (prefers-reduced-motion: reduce) {
+    .c2-flagship-theatre__backlight::before {
+      opacity: 0.6;
+    }
+  }
+
+  /* ---- Print: hide decorative layers, keep content ---- */
+  @media print {
+    .c2-flagship-theatre__backlight::before {
+      display: none;
+    }
+    .c2-flagship-theatre__window-controls {
+      display: none;
+    }
+    .c2-flagship-theatre__device-frame {
+      border: 1px solid var(--border-subtle);
+      box-shadow: none;
+    }
+    .c2-flagship-theatre__device-frame::before {
+      display: none;
+    }
+  }
+</style>
