@@ -16,12 +16,15 @@
     "brandKitV4Plan": "docs/superpowers/plans/2026-09-27-brand-kit-v4-standardization.md",
     "v3Plan": "docs/superpowers/plans/2026-09-12-god-tier-v3-trust-experience-implementation.md",
     "agentGuide": "AGENTS.md",
-    "architectureModel": "architecture/sgps-model.json"
+    "architectureModel": "architecture/sgps-model.json",
+    "experienceConvergenceV5Plan": "docs/superpowers/plans/2026-09-27-experience-design-convergence-v5.md",
+    "experienceDesignAuditBaseline": "docs/evidence/2026-09-27-experience-design-audit-baseline.md",
+    "experienceV5ExecutionPack": "docs/superpowers/plans/experience-v5/README.md"
   },
   "waves": [
     {
       "id": "brand-kit-v4-standardization",
-      "name": "Brand Kit v4 Aesthetic Standardization & Living Maison",
+      "name": "Brand Kit v4 Aesthetic Standardization & Living Maison — canonical lane for tokens (#301 landed), sticky header (#306), bento ProductCard (#307) and device frame (#308); v5 does not duplicate these surfaces",
       "status": "IN_PROGRESS",
       "evidence": "docs/superpowers/plans/2026-09-27-brand-kit-v4-standardization.md"
     },
@@ -30,6 +33,12 @@
       "name": "SGPS Premium Experience & Design Excellence v2.0",
       "status": "PLANNED",
       "evidence": "docs/superpowers/plans/2026-09-27-sgps-premium-experience-excellence-v2.md"
+    },
+    {
+      "id": "experience-convergence-v5",
+      "name": "Experience & Design Convergence v5 — Owner-approved 2026-09-27 (D-0 remove VietQR from Marketing, D-1 header-only translucent material, D-2 self-host Inter). PR #302 lands the P0 VietQR removal, Wave 0 defect fixes, the premium Atlas plate and the W1–W6 agent pack; header/token/ProductCard surfaces are owned by the Brand Kit v4 lane",
+      "status": "PLANNED",
+      "evidence": "docs/superpowers/plans/2026-09-27-experience-design-convergence-v5.md"
     },
     {
       "id": "v3-w1-w8",
@@ -348,6 +357,7 @@
     "Lane-helguard guard: helper now emits 'LOCAL-AHEAD skip' and exits 0 on local-ahead branches; reset incident documented (operational, not committed)."
   ],
   "nextActionable": [
+    "Experience Convergence v5 (PR #302): P0 VietQR removal, Wave 0 fixes (OS dark mode, footer switcher, hero bleed, identity stage, hermetic guard) and the premium Atlas plate land with the agent pack docs/superpowers/plans/experience-v5/. Canonical owner of tokens, sticky header material and ProductCard is the Brand Kit v4 lane (#301 landed; #306/#307/#308 open) — agents extend, never re-implement those surfaces. Owner-directed follow-ups to re-cut on top of that lane: Sổ Trọ flagship showcase, localized vi/zh product copy, self-hosted Inter, segmented controls, Prismatic hero (reference implementation: commits ad178ae/6af7e82/cd02cdd in PR #302 history). EXTERNAL: Human E4, native VI/ZH review, served-SHA/anonymous read-back, Sổ Trọ VietQR handover (4ac2e80).",
     "C3-D Tasks 1–5 are merged and verified: Task 5 PR #276 exact-head Source Assurance run 36216346386 passed; main e3a3c6f exact post-merge Source Assurance run 36231546326 passed; Cloudflare deployment 7af4f796 has version 8d12ab41 at 100%. Anonymous public smoke remains blocked by owner-only Cloudflare Access.",
     "Blocked on owner fact: C3-F Task 2 and later (release source adapter, publication surface) — no authored public release source exists. C4-D Tasks 2 and 4 (Architecture Salon surface, Provenance Lens) are already landed (see the c4-d-salon wave), so the earlier suggestion here is superseded.",
     "Public product runtime is live for five products (Sổ Tâm, Sổ Trọ, FluentArc, ApexAgent, VungTayLai): #269 landed, and #292 (main e21c954) reconciled the five-product truth — corrected product name, removed unverified voice/transcription claims, per-product platform SEO/JSON-LD, and identity artwork captioned as artwork rather than a running-app screenshot. Verified product UI screenshots remain absent by design (honest empty state), so C4-A Task 10 (gallery mount), C4-F and remote/model C4-G remain separately gated.",

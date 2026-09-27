@@ -9,7 +9,10 @@
 :root {
   --c3-image-surface-radius: var(--radius-card);
   --c3-image-surface-border: var(--border-subtle);
-  --c3-image-surface-background: var(--surface-primary);
+  /* Every public product media item today is brand identity art authored
+     for the ink ground (white wordmark). On a porcelain surface the product
+     name in the art was illegible, so the stage is ink in both themes. */
+  --c3-image-surface-background: var(--brand-ink);
   --c3-route-transition-duration: var(--motion-continuity-duration);
   --c3-route-transition-ease: var(--motion-ease-standard);
   --c3-interaction-duration: var(--motion-confirmation-duration);

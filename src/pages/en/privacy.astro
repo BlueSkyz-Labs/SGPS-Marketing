@@ -24,7 +24,7 @@ const hasBusinessEmail = Boolean(SITE.contactEmail);
         lede="This corporate site is static marketing content. Full legal privacy wording publishes when BlueSkyz approves it."
       />
       <dl class="mt-12 max-w-2xl space-y-8">
-        <div class="rounded-xl border border-[var(--border-subtle)] bg-white p-6">
+        <div class="rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-raised)] p-6">
           <dt class="text-sm font-semibold tracking-tight">
             What is collected
           </dt>
@@ -35,14 +35,14 @@ const hasBusinessEmail = Boolean(SITE.contactEmail);
             requested URL.
           </dd>
         </div>
-        <div class="rounded-xl border border-[var(--border-subtle)] bg-white p-6">
+        <div class="rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-raised)] p-6">
           <dt class="text-sm font-semibold tracking-tight">Why</dt>
           <dd class="mt-2 text-sm leading-relaxed text-[var(--text-secondary)]">
             Request logs exist for security, abuse prevention, and reliable
             delivery of static assets — not for advertising profiles.
           </dd>
         </div>
-        <div class="rounded-xl border border-[var(--border-subtle)] bg-white p-6">
+        <div class="rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-raised)] p-6">
           <dt class="text-sm font-semibold tracking-tight">How it is used</dt>
           <dd class="mt-2 text-sm leading-relaxed text-[var(--text-secondary)]">
             Logs stay with the hosting platform operators for operational
@@ -50,7 +50,7 @@ const hasBusinessEmail = Boolean(SITE.contactEmail);
             on this foundation.
           </dd>
         </div>
-        <div class="rounded-xl border border-[var(--border-subtle)] bg-white p-6">
+        <div class="rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-raised)] p-6">
           <dt class="text-sm font-semibold tracking-tight">
             Deletion and product privacy
           </dt>
@@ -67,21 +67,21 @@ const hasBusinessEmail = Boolean(SITE.contactEmail);
       <div class="mt-12 flex flex-wrap gap-3">
         <a
           href="/en/security/"
-          class="inline-flex min-h-11 items-center rounded-lg border border-[var(--border-subtle)] bg-white px-5 text-sm font-semibold text-[var(--text-primary)] no-underline transition-colors hover:border-[var(--action-primary)]"
+          class="inline-flex min-h-11 items-center rounded-lg border border-[var(--border-subtle)] bg-[var(--surface-raised)] px-5 text-sm font-semibold text-[var(--text-primary)] no-underline transition-colors hover:border-[var(--action-primary)]"
         >
           Security reporting
         </a>
         {hasBusinessEmail ? (
           <a
             href="/en/contact/"
-            class="inline-flex min-h-11 items-center rounded-lg border border-[var(--border-subtle)] bg-white px-5 text-sm font-semibold text-[var(--text-primary)] no-underline transition-colors hover:border-[var(--action-primary)]"
+            class="inline-flex min-h-11 items-center rounded-lg border border-[var(--border-subtle)] bg-[var(--surface-raised)] px-5 text-sm font-semibold text-[var(--text-primary)] no-underline transition-colors hover:border-[var(--action-primary)]"
           >
             Contact BlueSkyz
           </a>
         ) : (
           <a
             href="/en/about/"
-            class="inline-flex min-h-11 items-center rounded-lg border border-[var(--border-subtle)] bg-white px-5 text-sm font-semibold text-[var(--text-primary)] no-underline transition-colors hover:border-[var(--action-primary)]"
+            class="inline-flex min-h-11 items-center rounded-lg border border-[var(--border-subtle)] bg-[var(--surface-raised)] px-5 text-sm font-semibold text-[var(--text-primary)] no-underline transition-colors hover:border-[var(--action-primary)]"
           >
             About BlueSkyz
           </a>

@@ -41,21 +41,21 @@ const hasBusinessEmail = Boolean(SITE.contactEmail);
       <div class="mt-10 flex flex-wrap gap-3">
         <a
           href="/vi/security/"
-          class="inline-flex min-h-11 items-center rounded-lg border border-[var(--border-subtle)] bg-white px-5 text-sm font-semibold text-[var(--text-primary)] no-underline transition-colors hover:border-[var(--action-primary)]"
+          class="inline-flex min-h-11 items-center rounded-lg border border-[var(--border-subtle)] bg-[var(--surface-raised)] px-5 text-sm font-semibold text-[var(--text-primary)] no-underline transition-colors hover:border-[var(--action-primary)]"
         >
           Báo cáo lỗ hổng bảo mật
         </a>
         {hasBusinessEmail ? (
           <a
             href="/vi/contact/"
-            class="inline-flex min-h-11 items-center rounded-lg border border-[var(--border-subtle)] bg-white px-5 text-sm font-semibold text-[var(--text-primary)] no-underline transition-colors hover:border-[var(--action-primary)]"
+            class="inline-flex min-h-11 items-center rounded-lg border border-[var(--border-subtle)] bg-[var(--surface-raised)] px-5 text-sm font-semibold text-[var(--text-primary)] no-underline transition-colors hover:border-[var(--action-primary)]"
           >
             Liên hệ BlueSkyz
           </a>
         ) : (
           <a
             href="/vi/about/"
-            class="inline-flex min-h-11 items-center rounded-lg border border-[var(--border-subtle)] bg-white px-5 text-sm font-semibold text-[var(--text-primary)] no-underline transition-colors hover:border-[var(--action-primary)]"
+            class="inline-flex min-h-11 items-center rounded-lg border border-[var(--border-subtle)] bg-[var(--surface-raised)] px-5 text-sm font-semibold text-[var(--text-primary)] no-underline transition-colors hover:border-[var(--action-primary)]"
           >
             Về BlueSkyz
           </a>

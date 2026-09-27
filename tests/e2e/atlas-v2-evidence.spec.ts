@@ -110,6 +110,33 @@ test.describe("atlas v2 evidence constellation", () => {
     await context.close();
   });
 
+  test("focusing an index entry lights its plate node", async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await page.goto("/en/products/");
+    const row = page
+      .locator('[data-atlas-node][data-atlas-kind="trust"]')
+      .first();
+    const index = await row.getAttribute("data-atlas-i");
+    await row.locator("a").focus();
+    const plate = page.locator("[data-atlas] svg").first();
+    const lit = plate.locator(`g[data-atlas-i="${index}"]`);
+    const dimmed = plate.locator('g[data-atlas-i="0"]');
+    await expect
+      .poll(async () =>
+        Number(await dimmed.evaluate((el) => getComputedStyle(el).opacity)),
+      )
+      .toBeLessThan(0.5);
+    expect(
+      Number(await lit.evaluate((el) => getComputedStyle(el).opacity)),
+    ).toBe(1);
+    await page.evaluate(() => (document.activeElement as HTMLElement).blur());
+    await expect
+      .poll(async () =>
+        Number(await dimmed.evaluate((el) => getComputedStyle(el).opacity)),
+      )
+      .toBe(1);
+  });
+
   test("no animation on atlas nodes (reduced-motion safe)", async ({
     page,
   }) => {

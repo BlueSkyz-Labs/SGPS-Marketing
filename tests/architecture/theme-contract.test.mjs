@@ -17,6 +17,7 @@ const REQUIRED_DARK_TOKENS = [
   "--surface-primary",
   "--surface-subtle",
   "--surface-inverse",
+  "--surface-raised",
   "--text-primary",
   "--text-secondary",
   "--text-muted",

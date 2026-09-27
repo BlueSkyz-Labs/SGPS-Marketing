@@ -10,6 +10,7 @@ Trusted current source of truth only:
 - **Approved SGPS Premium Experience & Design Excellence v2.0 design spec:** `docs/superpowers/specs/2026-09-27-sgps-premium-experience-excellence-v2-design.md` — authoritative v2.0 experience specification adopting SGPS FULL.
 - **Active SGPS v2.0 master plan:** `docs/superpowers/plans/2026-09-27-sgps-premium-experience-excellence-v2.md` — master execution plan routing into independent phases.
 - **Approved Brand Kit v4 Standardization design spec:** `docs/superpowers/specs/2026-09-27-brand-kit-v4-standardization-design.md` — authoritative Brand Kit v4 aesthetic standardization specification.
+- **Active Experience & Design Convergence v5 plan (Owner-approved 2026-09-27):** `docs/superpowers/plans/2026-09-27-experience-design-convergence-v5.md` — reconciles the v2.0 and Brand Kit v4 plans with Council #293; where they conflict, its adjudication table governs. Marketing is not a payment authority (Owner D-0).
 - **Active Brand Kit v4 Standardization master plan:** `docs/superpowers/plans/2026-09-27-brand-kit-v4-standardization.md` — master execution plan for Brand Kit v4 aesthetic standardization and Living Maison.
 - **C3 / SGPS delta reconciliation:** `docs/evidence/2026-09-16-c3-sgps-delta-reconciliation.md` — records the live post-C2 baseline and explicit applicability of current SGPS source overlays without silently repinning the project.
 - **Historical implementation plan:** `docs/superpowers/plans/2026-09-04-blueskyz-web-v1-c1-1-implementation.md`.

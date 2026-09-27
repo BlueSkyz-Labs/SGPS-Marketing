@@ -29,7 +29,9 @@ const languageName = isVi
     : "English";
 ---
 
-<footer class="mt-auto bg-[var(--surface-inverse)] text-[var(--brand-porcelain)]">
+<!-- Always ink: its text is porcelain in both themes. --surface-inverse flips
+     to porcelain in dark mode, which made every footer label invisible. -->
+<footer class="mt-auto bg-[var(--brand-ink)] text-[var(--brand-porcelain)]">
   <Container class="flex flex-col gap-10 py-14">
     <div class="flex flex-wrap items-center justify-between gap-6">
       <BrandLockup size="footer" />
