@@ -1,6 +1,6 @@
 ---
 import { getMaisonSections } from "@/lib/maison";
-import type { Language } from "@/data/site";
+import { SHARED_LABELS, labelFor, type Language } from "@/data/site";
 
 /**
  * C4-B G1 — Maison orientation surface.
@@ -15,7 +15,7 @@ interface Props {
 
 const { lang = "en" } = Astro.props;
 const sections = getMaisonSections(lang);
-const heading = lang === "vi" ? "Mục lục ngôi nhà" : "House index";
+const heading = labelFor(SHARED_LABELS.houseIndex, lang);
 ---
 
 {sections.length > 0 && (

@@ -2,7 +2,7 @@
 import BrandLockup from "@/components/brand/BrandLockup.astro";
 import Container from "@/components/layout/Container.astro";
 import LanguageSwitcher from "@/components/layout/LanguageSwitcher.astro";
-import { SITE, getFooterLinks } from "@/data/site";
+import { SITE, SHARED_LABELS, labelFor, getFooterLinks } from "@/data/site";
 import { getLanguageFromPath } from "@/lib/i18n";
 
 const currentPath = Astro.url.pathname;
@@ -36,7 +36,7 @@ const languageName = isVi
       <LanguageSwitcher variant="dark" />
     </div>
     <div class="grid gap-8 sm:grid-cols-[minmax(0,1fr)_minmax(0,1.25fr)]">
-      <nav aria-label={isVi ? "Chân trang" : "Footer"}>
+      <nav aria-label={labelFor(SHARED_LABELS.footerNav, lang)}>
         <ul class="flex flex-wrap gap-x-7 gap-y-1 sm:grid sm:grid-cols-2 sm:gap-x-6 sm:gap-y-1">
           {FOOTER_LINKS.map((item) => (
             <li>

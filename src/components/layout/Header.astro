@@ -46,7 +46,7 @@ const primaryCta = hasPublicProducts
     <BrandLockup href={`/${lang}/`} surface={lockupSurface(scene)} />
 
     <nav
-      aria-label={lang === "vi" ? "Chính" : "Primary"}
+      aria-label={labelFor(SHARED_LABELS.primaryNav, lang)}
       class="hidden flex-wrap items-center gap-2 md:flex"
     >
       <button
@@ -82,7 +82,7 @@ const primaryCta = hasPublicProducts
       </summary>
       <div class="absolute right-0 z-20 mt-2 w-56 rounded-lg border border-[var(--border-subtle)] bg-[var(--surface-primary)] p-3 shadow-sm">
         <nav
-          aria-label={lang === "vi" ? "Di động" : "Mobile"}
+          aria-label={labelFor(SHARED_LABELS.mobileNav, lang)}
           class="flex flex-col gap-2"
         >
           <button
