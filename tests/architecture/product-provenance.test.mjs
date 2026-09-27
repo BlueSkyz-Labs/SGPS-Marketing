@@ -173,7 +173,6 @@ test("identity art claimed as a bare screenshot fails closed", () => {
   );
 });
 
-
 test("Sổ Tâm product name cannot be silently changed to Sổ Tằm", () => {
   withFixture(
     record({
@@ -201,7 +200,7 @@ test("Sổ Tâm out-of-scope voice/transcription copy fails independently", () =
     (dir) => {
       const result = run(dir);
       assert.equal(result.status, 1);
-      assert.match(result.stderr, /out-of-scope voice\\/audio\\/transcription/);
+      assert.match(result.stderr, /out-of-scope voice\/audio\/transcription/);
     },
     "sotam.yaml",
   );
