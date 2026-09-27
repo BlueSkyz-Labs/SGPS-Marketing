@@ -10,9 +10,9 @@ jobs:
   - Prepare for Vietnam class-B driving knowledge with clear source context
   - Practice questions, identify misconceptions, and revisit difficult concepts
 capabilities:
-  - Development target: source-aware lessons and class-B practice modes
-  - Development target: confidence-first answers and misconception feedback
-  - Development target: offline-ready learning progress and revision
+  - "Development target: source-aware lessons and class-B practice modes"
+  - "Development target: confidence-first answers and misconception feedback"
+  - "Development target: offline-ready learning progress and revision"
 platforms:
   - web
 primaryAction:
