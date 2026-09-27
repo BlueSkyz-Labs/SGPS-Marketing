@@ -25,3 +25,7 @@ Any VietQR/bill-calculator capability belongs to the Sổ Trọ repository under
 ## Measurements
 
 Recorded in the PR description for the exact head that CI verifies.
+
+## Atlas premium plate (Owner request 2026-09-27)
+
+`src/components/experience/Atlas.astro` redesigned as an evidence constellation on an ink plate: deterministic radial sectors per node kind on three orbits, footnote codes (C1…, E1…) for claims/evidence so long statements never collide, legend with counts, grouped authoritative index (house / trust & evidence / products), and CSS-only `:has()` linking — focusing or hovering an index row lights its node and brand edge while others dim to 0.22. No client script, no node animation, one `circle` per node (existing E2E contract), 0 overflow at 320–1440 px. Guards: `tests/architecture/atlas-premium-contract.test.mjs`; E2E `focusing an index entry lights its plate node`. Screenshots are attached to PR #302.

@@ -1,5 +1,9 @@
 ---
-import { buildAtlasModel, type AtlasNodeKind } from "@/lib/atlas";
+import {
+  buildAtlasModel,
+  type AtlasNode,
+  type AtlasNodeKind,
+} from "@/lib/atlas";
 import { getPublicProducts } from "@/lib/products";
 
 import type { Language } from "@/data/site";
@@ -24,23 +28,22 @@ const kindLabels: Record<AtlasNodeKind, string> = {
   product: isVi ? "Sản phẩm" : isZh ? "产品" : "Product",
 };
 
-// Decorative SVG labels are truncated; the semantic node list below is the
-// authoritative source of full labels.
-const truncate = (text: string, max: number): string => {
-  if (text.length <= max) return text;
-  const cut = text.slice(0, max - 1);
-  const lastSpace = cut.lastIndexOf(" ");
-  const body =
-    lastSpace >= Math.floor(max * 0.55) ? cut.slice(0, lastSpace) : cut;
-  return `${body}…`;
-};
-
 const heading = "BlueSkyz Atlas";
+const eyebrow = isVi
+  ? "Chòm sao bằng chứng"
+  : isZh
+    ? "证据星图"
+    : "Evidence constellation";
 const lede = isVi
   ? "Sơ đồ hóa từ chính những nguồn trang này công bố: thương hiệu mẹ, các nguyên tắc, những bề mặt tin cậy có thể xác minh, và các tuyên bố công khai cùng bằng chứng mà chúng dẫn chiếu. Nút sản phẩm chỉ xuất hiện khi sản phẩm thật được công bố."
   : isZh
     ? "依据本站发布的信息制图：主品牌、其原则、可验证的信任层面，以及公开声明与其引用的证据。产品节点仅在真实产品发布后出现。"
     : "Mapped from the same sources this site publishes: the masterbrand, its principles, verifiable trust surfaces, and the public claims with the evidence they cite. Product nodes appear only when real products are public.";
+const indexHint = isVi
+  ? "Di chuột hoặc chuyển tiêu điểm vào một mục để làm nổi bật nút tương ứng trên chòm sao."
+  : isZh
+    ? "将指针悬停或聚焦在条目上，即可在星图中突出显示对应节点。"
+    : "Hover or focus an entry to light its node in the constellation.";
 
 const emptyLabel = isVi
   ? "Chưa có sản phẩm công khai nào được công bố."
@@ -48,74 +51,198 @@ const emptyLabel = isVi
     ? "目前尚未发布任何公开产品。"
     : "No public products are published yet.";
 
-// Deterministic constellation layouts (no randomness): a landscape plate for
-// desktop and a portrait plate for narrow screens so labels stay legible.
-const desktopPositions = new Map<string, { x: number; y: number }>();
-desktopPositions.set("brand", { x: 320, y: 164 });
-nodes
-  .filter((node) => node.kind === "principle")
-  .forEach((node, index) => {
-    desktopPositions.set(node.id, { x: 88 + index * 154.6, y: 52 });
-  });
-nodes
-  .filter((node) => node.kind === "trust")
-  .forEach((node, index) => {
-    desktopPositions.set(node.id, { x: 130 + index * 190, y: 276 });
-  });
-nodes
-  .filter((node) => node.kind === "claim")
-  .forEach((node, index) => {
-    desktopPositions.set(node.id, { x: 560, y: 120 + index * 90 });
-  });
-nodes
-  .filter((node) => node.kind === "evidence")
-  .forEach((node, index) => {
-    desktopPositions.set(node.id, { x: 440 + index * 70, y: 250 });
-  });
-nodes
-  .filter((node) => node.kind === "product")
-  .forEach((node, index) => {
-    desktopPositions.set(node.id, { x: 600, y: 96 + index * 44 });
-  });
+const groupTitles = {
+  house: isVi ? "Ngôi nhà" : isZh ? "品牌之家" : "The house",
+  proof: isVi
+    ? "Tin cậy & bằng chứng"
+    : isZh
+      ? "信任与证据"
+      : "Trust & evidence",
+  products: isVi ? "Sản phẩm" : isZh ? "产品" : "Products",
+};
 
-const mobilePositions = new Map<string, { x: number; y: number }>();
-mobilePositions.set("brand", { x: 180, y: 272 });
-nodes
-  .filter((node) => node.kind === "principle")
-  .forEach((node, index) => {
-    const column = index % 2;
-    const row = Math.floor(index / 2);
-    mobilePositions.set(node.id, { x: 92 + column * 176, y: 66 + row * 112 });
+// Editorial reference codes: claims and evidence carry short footnote-style
+// marks in the plate (full labels live in the authoritative index below), so
+// long statements never collide inside the drawing.
+const codes = new Map<string, string>();
+let claimCount = 0;
+let evidenceCount = 0;
+for (const node of nodes) {
+  if (node.kind === "claim") codes.set(node.id, `C${++claimCount}`);
+  if (node.kind === "evidence") codes.set(node.id, `E${++evidenceCount}`);
+}
+const indexOf = new Map(nodes.map((node, index) => [node.id, index]));
+
+type Anchor = "start" | "middle" | "end";
+interface Placed {
+  x: number;
+  y: number;
+  lx: number;
+  ly: number;
+  anchor: Anchor;
+}
+
+interface Sector {
+  radius: number;
+  from: number;
+  to: number;
+}
+
+type Plate = {
+  width: number;
+  height: number;
+  cx: number;
+  cy: number;
+  rings: number[];
+  sectors: Record<Exclude<AtlasNodeKind, "brand">, Sector>;
+  labelled: AtlasNodeKind[];
+};
+
+// Deterministic radial composition (no randomness, no runtime layout): each
+// kind owns an angular sector on its own orbit so labels never share space.
+const DESKTOP: Plate = {
+  width: 1000,
+  height: 560,
+  cx: 500,
+  cy: 282,
+  rings: [170, 232, 330],
+  sectors: {
+    principle: { radius: 170, from: 232, to: 308 },
+    trust: { radius: 232, from: 152, to: 196 },
+    claim: { radius: 232, from: -24, to: 24 },
+    evidence: { radius: 330, from: -38, to: 38 },
+    product: { radius: 232, from: 42, to: 138 },
+  },
+  labelled: ["brand", "principle", "trust", "claim", "evidence", "product"],
+};
+
+const MOBILE: Plate = {
+  width: 360,
+  height: 420,
+  cx: 176,
+  cy: 214,
+  rings: [100, 138, 164],
+  sectors: {
+    principle: { radius: 100, from: 240, to: 300 },
+    trust: { radius: 138, from: 158, to: 202 },
+    claim: { radius: 124, from: -32, to: 32 },
+    evidence: { radius: 164, from: -52, to: 52 },
+    product: { radius: 138, from: 50, to: 130 },
+  },
+  // Narrow plate: only the house and claim marks are labelled; trust,
+  // evidence and product names stay in the authoritative index below.
+  labelled: ["brand", "principle", "claim"],
+};
+
+const toRad = (deg: number) => (deg * Math.PI) / 180;
+const round = (value: number) => Math.round(value * 10) / 10;
+
+function layout(plate: Plate): Map<string, Placed> {
+  const placed = new Map<string, Placed>();
+  placed.set("brand", {
+    x: plate.cx,
+    y: plate.cy,
+    lx: plate.cx,
+    ly: plate.cy + 44,
+    anchor: "middle",
   });
-nodes
-  .filter((node) => node.kind === "trust")
-  .forEach((node, index) => {
-    mobilePositions.set(node.id, { x: 60 + index * 120, y: 392 });
-  });
-nodes
-  .filter((node) => node.kind === "claim")
-  .forEach((node, index) => {
-    mobilePositions.set(node.id, { x: 290, y: 226 + index * 74 });
-  });
-nodes
-  .filter((node) => node.kind === "evidence")
-  .forEach((node, index) => {
-    mobilePositions.set(node.id, { x: 96 + index * 62, y: 330 });
-  });
-nodes
-  .filter((node) => node.kind === "product")
-  .forEach((node, index) => {
-    mobilePositions.set(node.id, { x: 330, y: 210 + index * 40 });
-  });
+  for (const kind of Object.keys(plate.sectors) as Array<
+    keyof Plate["sectors"]
+  >) {
+    const members = nodes.filter((node) => node.kind === kind);
+    const { radius, from, to } = plate.sectors[kind];
+    members.forEach((node, index) => {
+      const angle =
+        members.length === 1
+          ? (from + to) / 2
+          : from + ((to - from) * index) / (members.length - 1);
+      const cos = Math.cos(toRad(angle));
+      const sin = Math.sin(toRad(angle));
+      const x = round(plate.cx + radius * cos);
+      const y = round(plate.cy + radius * sin);
+      const anchor: Anchor =
+        cos > 0.34 ? "start" : cos < -0.34 ? "end" : "middle";
+      const gap = kind === "evidence" || kind === "claim" ? 12 : 16;
+      const lx = round(
+        anchor === "start" ? x + gap : anchor === "end" ? x - gap : x,
+      );
+      // Narrow plates stagger neighbouring centred labels so short words on
+      // adjacent nodes never share a baseline.
+      const stagger = plate.width < 500 && index % 2 === 1 ? 14 : 0;
+      const ly = round(
+        anchor === "middle"
+          ? y + (sin < 0 ? -18 - stagger : 28 + stagger)
+          : y + 4.5,
+      );
+      placed.set(node.id, { x, y, lx, ly, anchor });
+    });
+  }
+  return placed;
+}
+
+const plates = [
+  {
+    id: "d",
+    plate: DESKTOP,
+    positions: layout(DESKTOP),
+    className: "hidden md:block",
+  },
+  { id: "m", plate: MOBILE, positions: layout(MOBILE), className: "md:hidden" },
+];
+
+const nodeRadius: Record<AtlasNodeKind, number> = {
+  brand: 13,
+  principle: 6.5,
+  trust: 7,
+  claim: 6,
+  evidence: 4.5,
+  product: 8,
+};
+
+const labelFor = (node: AtlasNode): string => codes.get(node.id) ?? node.label;
+
+// Gentle orbital bend: brand edges bow slightly clockwise; claim → evidence
+// edges bow outward so the evidence rail reads as footnotes, not wiring.
+function edgePath(a: Placed, b: Placed, bend: number): string {
+  const mx = (a.x + b.x) / 2;
+  const my = (a.y + b.y) / 2;
+  const dx = b.x - a.x;
+  const dy = b.y - a.y;
+  const qx = round(mx - dy * bend);
+  const qy = round(my + dx * bend);
+  return `M${a.x} ${a.y} Q${qx} ${qy} ${b.x} ${b.y}`;
+}
+
+const legendKinds = (
+  ["principle", "trust", "claim", "evidence", "product"] as AtlasNodeKind[]
+).map((kind) => ({
+  kind,
+  label: kindLabels[kind],
+  count: nodes.filter((node) => node.kind === kind).length,
+}));
+
+const groups = [
+  { id: "house", title: groupTitles.house, kinds: ["brand", "principle"] },
+  {
+    id: "proof",
+    title: groupTitles.proof,
+    kinds: ["trust", "claim", "evidence"],
+  },
+  { id: "products", title: groupTitles.products, kinds: ["product"] },
+].map((group) => ({
+  ...group,
+  members: nodes.filter((node) => group.kinds.includes(node.kind)),
+}));
 ---
 
 <section
-  class="border-b border-[var(--border-subtle)] py-16 lg:py-20"
+  class="atlas-section border-b border-[var(--border-subtle)] py-16 lg:py-20"
   aria-labelledby="atlas-title"
 >
+  <p class="atlas-eyebrow">{eyebrow}</p>
   <h2
     id="atlas-title"
-    class="text-3xl font-semibold tracking-tight text-balance sm:text-4xl"
+    class="mt-3 text-3xl font-semibold tracking-tight text-balance sm:text-4xl"
   >
     {heading}
   </h2>
@@ -123,143 +250,872 @@ nodes
     {lede}
   </p>
 
-  <div data-atlas class="mt-10">
-    <svg
-      viewBox="0 0 640 320"
-      role="presentation"
-      aria-hidden="true"
-      class="hidden w-full md:block"
-    >
-      {edges.map((edge) => {
-        const from = desktopPositions.get(edge.from);
-        const to = desktopPositions.get(edge.to);
-        if (!from || !to) return null;
-        return (
-          <line
-            x1={from.x}
-            y1={from.y}
-            x2={to.x}
-            y2={to.y}
-            stroke="color-mix(in srgb, var(--brand-cobalt) 45%, transparent)"
-            stroke-width="1.25"
-          />
-        );
-      })}
-      {nodes.map((node) => {
-        const point = desktopPositions.get(node.id);
-        if (!point) return null;
-        const isBrand = node.kind === "brand";
-        return (
-          <g>
-            <circle
-              cx={point.x}
-              cy={point.y}
-              r={isBrand ? 10 : node.kind === "claim" ? 8 : 6}
-              fill={
-                isBrand
-                  ? "var(--brand-cobalt)"
-                  : node.kind === "trust" || node.kind === "evidence"
-                    ? "var(--brand-porcelain)"
-                    : "color-mix(in srgb, var(--brand-cobalt) 55%, white)"
-              }
-              stroke="color-mix(in srgb, var(--brand-cobalt) 55%, transparent)"
-              stroke-width="1.25"
-            />
-            {node.kind !== "evidence" ? (
-              <text
-                x={point.x}
-                y={point.y - 18}
-                text-anchor="middle"
-                font-size="13"
-                fill="var(--text-secondary)"
-              >
-                {node.kind === "claim" ? truncate(node.label, 16) : node.label}
-              </text>
-            ) : null}
-          </g>
-        );
-      })}
-    </svg>
-
-    <svg
-      viewBox="0 0 360 424"
-      role="presentation"
-      aria-hidden="true"
-      class="w-full md:hidden"
-    >
-      {edges.map((edge) => {
-        const from = mobilePositions.get(edge.from);
-        const to = mobilePositions.get(edge.to);
-        if (!from || !to) return null;
-        return (
-          <line
-            x1={from.x}
-            y1={from.y}
-            x2={to.x}
-            y2={to.y}
-            stroke="color-mix(in srgb, var(--brand-cobalt) 45%, transparent)"
-            stroke-width="1.25"
-          />
-        );
-      })}
-      {nodes.map((node) => {
-        const point = mobilePositions.get(node.id);
-        if (!point) return null;
-        const isBrand = node.kind === "brand";
-        return (
-          <g>
-            <circle
-              cx={point.x}
-              cy={point.y}
-              r={isBrand ? 11 : node.kind === "claim" ? 8 : 6}
-              fill={
-                isBrand
-                  ? "var(--brand-cobalt)"
-                  : node.kind === "trust" || node.kind === "evidence"
-                    ? "var(--brand-porcelain)"
-                    : "color-mix(in srgb, var(--brand-cobalt) 55%, white)"
-              }
-              stroke="color-mix(in srgb, var(--brand-cobalt) 55%, transparent)"
-              stroke-width="1.25"
-            />
-            {node.kind !== "evidence" ? (
-              <text
-                x={point.x}
-                y={point.y - 18}
-                text-anchor="middle"
-                font-size="14"
-                fill="var(--text-muted)"
-              >
-                {node.kind === "claim" ? truncate(node.label, 18) : node.label}
-              </text>
-            ) : null}
-          </g>
-        );
-      })}
-    </svg>
-
-    <ul class="atlas-list mt-8 divide-y divide-[var(--border-subtle)] rounded-lg border border-[var(--border-subtle)] bg-[var(--surface-raised)]">
-      {nodes.map((node) => (
-        <li
-          data-atlas-node
-          data-atlas-kind={node.kind}
-          class="flex items-center justify-between gap-4 px-4"
+  <div data-atlas class="atlas-stage mt-10">
+    <div class="atlas-plate">
+      {plates.map(({ id, plate, positions, className }) => (
+        <svg
+          viewBox={`0 0 ${plate.width} ${plate.height}`}
+          role="presentation"
+          aria-hidden="true"
+          class:list={["atlas-svg w-full", className]}
         >
-          <a
-            href={node.href}
-            class="inline-flex min-h-11 items-center text-sm font-medium text-[var(--text-primary)] no-underline hover:text-[var(--action-primary)]"
-          >
-            {node.label}
-          </a>
-          <span class="text-[0.65rem] font-semibold tracking-[0.14em] text-[var(--text-muted)] uppercase">
-            {kindLabels[node.kind]}
-          </span>
-        </li>
+          <defs>
+            <radialGradient id={`atlas-${id}-core`} cx="50%" cy="50%" r="50%">
+              <stop
+                offset="0%"
+                stop-color="var(--brand-cobalt)"
+                stop-opacity="0.55"
+              />
+              <stop
+                offset="45%"
+                stop-color="var(--brand-cobalt)"
+                stop-opacity="0.16"
+              />
+              <stop
+                offset="100%"
+                stop-color="var(--brand-cobalt)"
+                stop-opacity="0"
+              />
+            </radialGradient>
+            <linearGradient id={`atlas-${id}-edge`} x1="0" y1="0" x2="1" y2="0">
+              <stop
+                offset="0%"
+                stop-color="var(--brand-cobalt)"
+                stop-opacity="0.75"
+              />
+              <stop
+                offset="100%"
+                stop-color="var(--brand-porcelain)"
+                stop-opacity="0.35"
+              />
+            </linearGradient>
+            <pattern
+              id={`atlas-${id}-grid`}
+              width="24"
+              height="24"
+              patternUnits="userSpaceOnUse"
+            >
+              <rect
+                x="11.5"
+                y="11.5"
+                width="1"
+                height="1"
+                fill="var(--brand-porcelain)"
+                opacity="0.14"
+              />
+            </pattern>
+          </defs>
+
+          <rect
+            width={plate.width}
+            height={plate.height}
+            fill={`url(#atlas-${id}-grid)`}
+          />
+          <ellipse
+            cx={plate.cx}
+            cy={plate.cy}
+            rx={plate.rings[1]}
+            ry={plate.rings[1]}
+            fill={`url(#atlas-${id}-core)`}
+          />
+          {plate.rings.map((ring, index) => (
+            <ellipse
+              class="atlas-orbit"
+              cx={plate.cx}
+              cy={plate.cy}
+              rx={ring}
+              ry={ring}
+              fill="none"
+              stroke="var(--brand-porcelain)"
+              stroke-opacity={0.16 - index * 0.035}
+              stroke-dasharray={index === 0 ? "none" : "2 6"}
+            />
+          ))}
+
+          <g class="atlas-edges">
+            {edges.map((edge) => {
+              const from = positions.get(edge.from);
+              const to = positions.get(edge.to);
+              if (!from || !to) return null;
+              const isFootnote = edge.from !== "brand";
+              return (
+                <path
+                  data-atlas-i={indexOf.get(edge.to)}
+                  d={edgePath(from, to, isFootnote ? -0.18 : 0.08)}
+                  fill="none"
+                  stroke={
+                    isFootnote
+                      ? "var(--brand-porcelain)"
+                      : `url(#atlas-${id}-edge)`
+                  }
+                  stroke-opacity={isFootnote ? 0.32 : 0.9}
+                  stroke-width={isFootnote ? 0.9 : 1.2}
+                  stroke-dasharray={isFootnote ? "3 4" : undefined}
+                  vector-effect="non-scaling-stroke"
+                />
+              );
+            })}
+          </g>
+
+          {nodes.map((node) => {
+            const point = positions.get(node.id);
+            if (!point) return null;
+            const r = nodeRadius[node.kind];
+            const showLabel = plate.labelled.includes(node.kind);
+            return (
+              <g
+                class={`atlas-node atlas-node--${node.kind}`}
+                data-atlas-i={indexOf.get(node.id)}
+              >
+                {node.kind === "brand" ? (
+                  <ellipse
+                    cx={point.x}
+                    cy={point.y}
+                    rx={r + 9}
+                    ry={r + 9}
+                    fill="none"
+                    stroke="var(--brand-cobalt)"
+                    stroke-opacity="0.55"
+                  />
+                ) : null}
+                {node.kind === "product" ? (
+                  <ellipse
+                    cx={point.x}
+                    cy={point.y}
+                    rx={r + 5}
+                    ry={r + 5}
+                    fill="none"
+                    stroke="var(--brand-porcelain)"
+                    stroke-opacity="0.28"
+                  />
+                ) : null}
+                <circle cx={point.x} cy={point.y} r={r} />
+                {node.kind === "principle" ? (
+                  <path
+                    d={`M${point.x} ${point.y - 3}L${point.x + 3} ${point.y}L${point.x} ${point.y + 3}L${point.x - 3} ${point.y}Z`}
+                    fill="var(--brand-ink)"
+                  />
+                ) : null}
+                {showLabel ? (
+                  <text
+                    x={point.lx}
+                    y={point.ly}
+                    text-anchor={point.anchor}
+                    class={`atlas-label atlas-label--${node.kind}`}
+                  >
+                    {labelFor(node)}
+                  </text>
+                ) : null}
+              </g>
+            );
+          })}
+        </svg>
       ))}
-    </ul>
+
+      <ul class="atlas-legend" role="list">
+        {legendKinds.map((entry) => (
+          <li class="atlas-legend__item">
+            <span
+              class={`atlas-swatch atlas-swatch--${entry.kind}`}
+              aria-hidden="true"
+            />
+            <span>{entry.label}</span>
+            <span class="atlas-legend__count">{entry.count}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+
+    <p class="atlas-hint">{indexHint}</p>
+
+    <div class="atlas-index">
+      {groups.map((group) => (
+        <div class="atlas-group">
+          <h3 class="atlas-group__title">
+            {group.title}
+            <span class="atlas-group__count">{group.members.length}</span>
+          </h3>
+          {group.members.length > 0 ? (
+            <ul class="atlas-list" role="list">
+              {group.members.map((node) => (
+                <li
+                  data-atlas-node
+                  data-atlas-kind={node.kind}
+                  data-atlas-i={indexOf.get(node.id)}
+                  class="atlas-row"
+                >
+                  <span
+                    class={`atlas-swatch atlas-swatch--${node.kind}`}
+                    aria-hidden="true"
+                  />
+                  {codes.has(node.id) ? (
+                    <span class="atlas-code">{codes.get(node.id)}</span>
+                  ) : null}
+                  <a href={node.href} class="atlas-row__link">
+                    {node.label}
+                  </a>
+                  <span class="atlas-row__kind">{kindLabels[node.kind]}</span>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p class="atlas-group__empty">{emptyLabel}</p>
+          )}
+        </div>
+      ))}
+    </div>
 
     {products.length === 0 && (
       <p class="mt-4 text-sm text-[var(--text-muted)]">{emptyLabel}</p>
     )}
   </div>
 </section>
+
+<style>
+  /* Atlas — evidence constellation. The plate is an ink stage in both themes
+     (like the identity stage), so plate colours use fixed brand tokens; the
+     index below follows the page theme. Static SVG/CSS only: no client JS,
+     no animation on nodes; hover/focus linking uses :has() as a progressive
+     enhancement and degrades to a plain, complete index. */
+  .atlas-eyebrow {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--action-primary);
+  }
+
+  .atlas-plate {
+    position: relative;
+    overflow: hidden;
+    border: 1px solid
+      color-mix(in srgb, var(--brand-porcelain) 12%, transparent);
+    border-radius: var(--radius-xl);
+    background:
+      radial-gradient(
+        60% 70% at 50% 45%,
+        color-mix(in srgb, var(--brand-cobalt) 18%, transparent),
+        transparent 70%
+      ),
+      linear-gradient(
+        170deg,
+        #0f172a 0%,
+        var(--brand-ink) 55%,
+        color-mix(in srgb, var(--brand-ink) 72%, black) 100%
+      );
+    box-shadow:
+      inset 0 1px 0 color-mix(in srgb, var(--brand-porcelain) 10%, transparent),
+      0 24px 60px -28px color-mix(in srgb, var(--brand-ink) 70%, transparent);
+    color: var(--brand-porcelain);
+    padding: clamp(0.75rem, 2vw, 1.5rem);
+  }
+
+  .atlas-svg {
+    height: auto;
+    overflow: visible;
+  }
+
+  .atlas-node circle {
+    stroke-width: 1.25;
+    transition:
+      opacity var(--motion-normal) var(--motion-ease-standard),
+      filter var(--motion-normal) var(--motion-ease-standard);
+  }
+  .atlas-node--brand circle {
+    fill: var(--brand-cobalt);
+    stroke: color-mix(in srgb, var(--brand-porcelain) 70%, transparent);
+  }
+  .atlas-node--principle circle {
+    fill: var(--brand-porcelain);
+    stroke: color-mix(in srgb, var(--brand-cobalt) 60%, transparent);
+  }
+  .atlas-node--trust circle {
+    fill: var(--brand-ink);
+    stroke: var(--brand-porcelain);
+    stroke-width: 2;
+  }
+  .atlas-node--claim circle {
+    fill: color-mix(in srgb, var(--brand-cobalt) 80%, white);
+    stroke: color-mix(in srgb, var(--brand-porcelain) 60%, transparent);
+  }
+  .atlas-node--evidence circle {
+    fill: var(--brand-ink);
+    stroke: color-mix(in srgb, var(--brand-cobalt) 70%, white);
+    stroke-width: 1.5;
+  }
+  .atlas-node--product circle {
+    fill: var(--brand-porcelain);
+    stroke: var(--brand-cobalt);
+    stroke-width: 2.5;
+  }
+
+  .atlas-label {
+    fill: color-mix(in srgb, var(--brand-porcelain) 84%, transparent);
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+  }
+  .atlas-label--brand {
+    fill: var(--brand-porcelain);
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .atlas-label--product {
+    fill: var(--brand-porcelain);
+    font-weight: 600;
+  }
+  .atlas-label--claim,
+  .atlas-label--evidence {
+    fill: color-mix(in srgb, var(--brand-cobalt) 45%, white);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+  }
+
+  .atlas-edges path,
+  .atlas-node {
+    transition: opacity var(--motion-normal) var(--motion-ease-standard);
+  }
+
+  /* Index ↔ plate linking (progressive enhancement). */
+  .atlas-stage:has(.atlas-index [data-atlas-i]:is(:hover, :focus-within))
+    .atlas-plate
+    :is(.atlas-node, .atlas-edges path) {
+    opacity: 0.22;
+  }
+  .atlas-stage:has(.atlas-index [data-atlas-i="0"]:is(:hover, :focus-within))
+    .atlas-plate
+    .atlas-svg
+    [data-atlas-i="0"],
+  .atlas-stage:has(.atlas-index [data-atlas-i="1"]:is(:hover, :focus-within))
+    .atlas-plate
+    .atlas-svg
+    [data-atlas-i="1"],
+  .atlas-stage:has(.atlas-index [data-atlas-i="2"]:is(:hover, :focus-within))
+    .atlas-plate
+    .atlas-svg
+    [data-atlas-i="2"],
+  .atlas-stage:has(.atlas-index [data-atlas-i="3"]:is(:hover, :focus-within))
+    .atlas-plate
+    .atlas-svg
+    [data-atlas-i="3"],
+  .atlas-stage:has(.atlas-index [data-atlas-i="4"]:is(:hover, :focus-within))
+    .atlas-plate
+    .atlas-svg
+    [data-atlas-i="4"],
+  .atlas-stage:has(.atlas-index [data-atlas-i="5"]:is(:hover, :focus-within))
+    .atlas-plate
+    .atlas-svg
+    [data-atlas-i="5"],
+  .atlas-stage:has(.atlas-index [data-atlas-i="6"]:is(:hover, :focus-within))
+    .atlas-plate
+    .atlas-svg
+    [data-atlas-i="6"],
+  .atlas-stage:has(.atlas-index [data-atlas-i="7"]:is(:hover, :focus-within))
+    .atlas-plate
+    .atlas-svg
+    [data-atlas-i="7"],
+  .atlas-stage:has(.atlas-index [data-atlas-i="8"]:is(:hover, :focus-within))
+    .atlas-plate
+    .atlas-svg
+    [data-atlas-i="8"],
+  .atlas-stage:has(.atlas-index [data-atlas-i="9"]:is(:hover, :focus-within))
+    .atlas-plate
+    .atlas-svg
+    [data-atlas-i="9"],
+  .atlas-stage:has(.atlas-index [data-atlas-i="10"]:is(:hover, :focus-within))
+    .atlas-plate
+    .atlas-svg
+    [data-atlas-i="10"],
+  .atlas-stage:has(.atlas-index [data-atlas-i="11"]:is(:hover, :focus-within))
+    .atlas-plate
+    .atlas-svg
+    [data-atlas-i="11"],
+  .atlas-stage:has(.atlas-index [data-atlas-i="12"]:is(:hover, :focus-within))
+    .atlas-plate
+    .atlas-svg
+    [data-atlas-i="12"],
+  .atlas-stage:has(.atlas-index [data-atlas-i="13"]:is(:hover, :focus-within))
+    .atlas-plate
+    .atlas-svg
+    [data-atlas-i="13"],
+  .atlas-stage:has(.atlas-index [data-atlas-i="14"]:is(:hover, :focus-within))
+    .atlas-plate
+    .atlas-svg
+    [data-atlas-i="14"],
+  .atlas-stage:has(.atlas-index [data-atlas-i="15"]:is(:hover, :focus-within))
+    .atlas-plate
+    .atlas-svg
+    [data-atlas-i="15"],
+  .atlas-stage:has(.atlas-index [data-atlas-i="16"]:is(:hover, :focus-within))
+    .atlas-plate
+    .atlas-svg
+    [data-atlas-i="16"],
+  .atlas-stage:has(.atlas-index [data-atlas-i="17"]:is(:hover, :focus-within))
+    .atlas-plate
+    .atlas-svg
+    [data-atlas-i="17"],
+  .atlas-stage:has(.atlas-index [data-atlas-i="18"]:is(:hover, :focus-within))
+    .atlas-plate
+    .atlas-svg
+    [data-atlas-i="18"],
+  .atlas-stage:has(.atlas-index [data-atlas-i="19"]:is(:hover, :focus-within))
+    .atlas-plate
+    .atlas-svg
+    [data-atlas-i="19"],
+  .atlas-stage:has(.atlas-index [data-atlas-i="20"]:is(:hover, :focus-within))
+    .atlas-plate
+    .atlas-svg
+    [data-atlas-i="20"],
+  .atlas-stage:has(.atlas-index [data-atlas-i="21"]:is(:hover, :focus-within))
+    .atlas-plate
+    .atlas-svg
+    [data-atlas-i="21"],
+  .atlas-stage:has(.atlas-index [data-atlas-i="22"]:is(:hover, :focus-within))
+    .atlas-plate
+    .atlas-svg
+    [data-atlas-i="22"],
+  .atlas-stage:has(.atlas-index [data-atlas-i="23"]:is(:hover, :focus-within))
+    .atlas-plate
+    .atlas-svg
+    [data-atlas-i="23"],
+  .atlas-stage:has(.atlas-index [data-atlas-i="24"]:is(:hover, :focus-within))
+    .atlas-plate
+    .atlas-svg
+    [data-atlas-i="24"],
+  .atlas-stage:has(.atlas-index [data-atlas-i="25"]:is(:hover, :focus-within))
+    .atlas-plate
+    .atlas-svg
+    [data-atlas-i="25"],
+  .atlas-stage:has(.atlas-index [data-atlas-i="26"]:is(:hover, :focus-within))
+    .atlas-plate
+    .atlas-svg
+    [data-atlas-i="26"],
+  .atlas-stage:has(.atlas-index [data-atlas-i="27"]:is(:hover, :focus-within))
+    .atlas-plate
+    .atlas-svg
+    [data-atlas-i="27"],
+  .atlas-stage:has(.atlas-index [data-atlas-i="28"]:is(:hover, :focus-within))
+    .atlas-plate
+    .atlas-svg
+    [data-atlas-i="28"],
+  .atlas-stage:has(.atlas-index [data-atlas-i="29"]:is(:hover, :focus-within))
+    .atlas-plate
+    .atlas-svg
+    [data-atlas-i="29"],
+  .atlas-stage:has(.atlas-index [data-atlas-i="30"]:is(:hover, :focus-within))
+    .atlas-plate
+    .atlas-svg
+    [data-atlas-i="30"],
+  .atlas-stage:has(.atlas-index [data-atlas-i="31"]:is(:hover, :focus-within))
+    .atlas-plate
+    .atlas-svg
+    [data-atlas-i="31"],
+  .atlas-stage:has(.atlas-index [data-atlas-i="32"]:is(:hover, :focus-within))
+    .atlas-plate
+    .atlas-svg
+    [data-atlas-i="32"],
+  .atlas-stage:has(.atlas-index [data-atlas-i="33"]:is(:hover, :focus-within))
+    .atlas-plate
+    .atlas-svg
+    [data-atlas-i="33"],
+  .atlas-stage:has(.atlas-index [data-atlas-i="34"]:is(:hover, :focus-within))
+    .atlas-plate
+    .atlas-svg
+    [data-atlas-i="34"],
+  .atlas-stage:has(.atlas-index [data-atlas-i="35"]:is(:hover, :focus-within))
+    .atlas-plate
+    .atlas-svg
+    [data-atlas-i="35"],
+  .atlas-stage:has(.atlas-index [data-atlas-i="36"]:is(:hover, :focus-within))
+    .atlas-plate
+    .atlas-svg
+    [data-atlas-i="36"],
+  .atlas-stage:has(.atlas-index [data-atlas-i="37"]:is(:hover, :focus-within))
+    .atlas-plate
+    .atlas-svg
+    [data-atlas-i="37"],
+  .atlas-stage:has(.atlas-index [data-atlas-i="38"]:is(:hover, :focus-within))
+    .atlas-plate
+    .atlas-svg
+    [data-atlas-i="38"],
+  .atlas-stage:has(.atlas-index [data-atlas-i="39"]:is(:hover, :focus-within))
+    .atlas-plate
+    .atlas-svg
+    [data-atlas-i="39"] {
+    opacity: 1;
+  }
+  .atlas-stage:has(.atlas-index [data-atlas-i="0"]:is(:hover, :focus-within))
+    .atlas-plate
+    .atlas-svg
+    [data-atlas-i="0"]
+    circle,
+  .atlas-stage:has(.atlas-index [data-atlas-i="1"]:is(:hover, :focus-within))
+    .atlas-plate
+    .atlas-svg
+    [data-atlas-i="1"]
+    circle,
+  .atlas-stage:has(.atlas-index [data-atlas-i="2"]:is(:hover, :focus-within))
+    .atlas-plate
+    .atlas-svg
+    [data-atlas-i="2"]
+    circle,
+  .atlas-stage:has(.atlas-index [data-atlas-i="3"]:is(:hover, :focus-within))
+    .atlas-plate
+    .atlas-svg
+    [data-atlas-i="3"]
+    circle,
+  .atlas-stage:has(.atlas-index [data-atlas-i="4"]:is(:hover, :focus-within))
+    .atlas-plate
+    .atlas-svg
+    [data-atlas-i="4"]
+    circle,
+  .atlas-stage:has(.atlas-index [data-atlas-i="5"]:is(:hover, :focus-within))
+    .atlas-plate
+    .atlas-svg
+    [data-atlas-i="5"]
+    circle,
+  .atlas-stage:has(.atlas-index [data-atlas-i="6"]:is(:hover, :focus-within))
+    .atlas-plate
+    .atlas-svg
+    [data-atlas-i="6"]
+    circle,
+  .atlas-stage:has(.atlas-index [data-atlas-i="7"]:is(:hover, :focus-within))
+    .atlas-plate
+    .atlas-svg
+    [data-atlas-i="7"]
+    circle,
+  .atlas-stage:has(.atlas-index [data-atlas-i="8"]:is(:hover, :focus-within))
+    .atlas-plate
+    .atlas-svg
+    [data-atlas-i="8"]
+    circle,
+  .atlas-stage:has(.atlas-index [data-atlas-i="9"]:is(:hover, :focus-within))
+    .atlas-plate
+    .atlas-svg
+    [data-atlas-i="9"]
+    circle,
+  .atlas-stage:has(.atlas-index [data-atlas-i="10"]:is(:hover, :focus-within))
+    .atlas-plate
+    .atlas-svg
+    [data-atlas-i="10"]
+    circle,
+  .atlas-stage:has(.atlas-index [data-atlas-i="11"]:is(:hover, :focus-within))
+    .atlas-plate
+    .atlas-svg
+    [data-atlas-i="11"]
+    circle,
+  .atlas-stage:has(.atlas-index [data-atlas-i="12"]:is(:hover, :focus-within))
+    .atlas-plate
+    .atlas-svg
+    [data-atlas-i="12"]
+    circle,
+  .atlas-stage:has(.atlas-index [data-atlas-i="13"]:is(:hover, :focus-within))
+    .atlas-plate
+    .atlas-svg
+    [data-atlas-i="13"]
+    circle,
+  .atlas-stage:has(.atlas-index [data-atlas-i="14"]:is(:hover, :focus-within))
+    .atlas-plate
+    .atlas-svg
+    [data-atlas-i="14"]
+    circle,
+  .atlas-stage:has(.atlas-index [data-atlas-i="15"]:is(:hover, :focus-within))
+    .atlas-plate
+    .atlas-svg
+    [data-atlas-i="15"]
+    circle,
+  .atlas-stage:has(.atlas-index [data-atlas-i="16"]:is(:hover, :focus-within))
+    .atlas-plate
+    .atlas-svg
+    [data-atlas-i="16"]
+    circle,
+  .atlas-stage:has(.atlas-index [data-atlas-i="17"]:is(:hover, :focus-within))
+    .atlas-plate
+    .atlas-svg
+    [data-atlas-i="17"]
+    circle,
+  .atlas-stage:has(.atlas-index [data-atlas-i="18"]:is(:hover, :focus-within))
+    .atlas-plate
+    .atlas-svg
+    [data-atlas-i="18"]
+    circle,
+  .atlas-stage:has(.atlas-index [data-atlas-i="19"]:is(:hover, :focus-within))
+    .atlas-plate
+    .atlas-svg
+    [data-atlas-i="19"]
+    circle,
+  .atlas-stage:has(.atlas-index [data-atlas-i="20"]:is(:hover, :focus-within))
+    .atlas-plate
+    .atlas-svg
+    [data-atlas-i="20"]
+    circle,
+  .atlas-stage:has(.atlas-index [data-atlas-i="21"]:is(:hover, :focus-within))
+    .atlas-plate
+    .atlas-svg
+    [data-atlas-i="21"]
+    circle,
+  .atlas-stage:has(.atlas-index [data-atlas-i="22"]:is(:hover, :focus-within))
+    .atlas-plate
+    .atlas-svg
+    [data-atlas-i="22"]
+    circle,
+  .atlas-stage:has(.atlas-index [data-atlas-i="23"]:is(:hover, :focus-within))
+    .atlas-plate
+    .atlas-svg
+    [data-atlas-i="23"]
+    circle,
+  .atlas-stage:has(.atlas-index [data-atlas-i="24"]:is(:hover, :focus-within))
+    .atlas-plate
+    .atlas-svg
+    [data-atlas-i="24"]
+    circle,
+  .atlas-stage:has(.atlas-index [data-atlas-i="25"]:is(:hover, :focus-within))
+    .atlas-plate
+    .atlas-svg
+    [data-atlas-i="25"]
+    circle,
+  .atlas-stage:has(.atlas-index [data-atlas-i="26"]:is(:hover, :focus-within))
+    .atlas-plate
+    .atlas-svg
+    [data-atlas-i="26"]
+    circle,
+  .atlas-stage:has(.atlas-index [data-atlas-i="27"]:is(:hover, :focus-within))
+    .atlas-plate
+    .atlas-svg
+    [data-atlas-i="27"]
+    circle,
+  .atlas-stage:has(.atlas-index [data-atlas-i="28"]:is(:hover, :focus-within))
+    .atlas-plate
+    .atlas-svg
+    [data-atlas-i="28"]
+    circle,
+  .atlas-stage:has(.atlas-index [data-atlas-i="29"]:is(:hover, :focus-within))
+    .atlas-plate
+    .atlas-svg
+    [data-atlas-i="29"]
+    circle,
+  .atlas-stage:has(.atlas-index [data-atlas-i="30"]:is(:hover, :focus-within))
+    .atlas-plate
+    .atlas-svg
+    [data-atlas-i="30"]
+    circle,
+  .atlas-stage:has(.atlas-index [data-atlas-i="31"]:is(:hover, :focus-within))
+    .atlas-plate
+    .atlas-svg
+    [data-atlas-i="31"]
+    circle,
+  .atlas-stage:has(.atlas-index [data-atlas-i="32"]:is(:hover, :focus-within))
+    .atlas-plate
+    .atlas-svg
+    [data-atlas-i="32"]
+    circle,
+  .atlas-stage:has(.atlas-index [data-atlas-i="33"]:is(:hover, :focus-within))
+    .atlas-plate
+    .atlas-svg
+    [data-atlas-i="33"]
+    circle,
+  .atlas-stage:has(.atlas-index [data-atlas-i="34"]:is(:hover, :focus-within))
+    .atlas-plate
+    .atlas-svg
+    [data-atlas-i="34"]
+    circle,
+  .atlas-stage:has(.atlas-index [data-atlas-i="35"]:is(:hover, :focus-within))
+    .atlas-plate
+    .atlas-svg
+    [data-atlas-i="35"]
+    circle,
+  .atlas-stage:has(.atlas-index [data-atlas-i="36"]:is(:hover, :focus-within))
+    .atlas-plate
+    .atlas-svg
+    [data-atlas-i="36"]
+    circle,
+  .atlas-stage:has(.atlas-index [data-atlas-i="37"]:is(:hover, :focus-within))
+    .atlas-plate
+    .atlas-svg
+    [data-atlas-i="37"]
+    circle,
+  .atlas-stage:has(.atlas-index [data-atlas-i="38"]:is(:hover, :focus-within))
+    .atlas-plate
+    .atlas-svg
+    [data-atlas-i="38"]
+    circle,
+  .atlas-stage:has(.atlas-index [data-atlas-i="39"]:is(:hover, :focus-within))
+    .atlas-plate
+    .atlas-svg
+    [data-atlas-i="39"]
+    circle {
+    filter: drop-shadow(0 0 6px var(--brand-cobalt));
+  }
+
+  .atlas-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.25rem;
+    margin-top: 0.75rem;
+    padding-top: 0.875rem;
+    border-top: 1px solid
+      color-mix(in srgb, var(--brand-porcelain) 10%, transparent);
+    font-size: 0.8125rem;
+    color: color-mix(in srgb, var(--brand-porcelain) 80%, transparent);
+  }
+  .atlas-legend__item {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .atlas-legend__count {
+    font-variant-numeric: tabular-nums;
+    color: color-mix(in srgb, var(--brand-porcelain) 55%, transparent);
+  }
+
+  .atlas-swatch {
+    display: inline-block;
+    flex: none;
+    width: 0.625rem;
+    height: 0.625rem;
+    border-radius: 999px;
+    border: 1.5px solid var(--brand-cobalt);
+  }
+  .atlas-swatch--brand,
+  .atlas-swatch--claim {
+    background: var(--brand-cobalt);
+  }
+  .atlas-swatch--principle {
+    background: var(--brand-porcelain);
+  }
+  .atlas-swatch--trust,
+  .atlas-swatch--evidence {
+    background: var(--brand-ink);
+    border-color: color-mix(
+      in srgb,
+      var(--brand-porcelain) 80%,
+      var(--brand-cobalt)
+    );
+  }
+  .atlas-swatch--product {
+    background: var(--brand-porcelain);
+    border-width: 2.5px;
+  }
+
+  .atlas-hint {
+    margin-top: 1rem;
+    font-size: 0.8125rem;
+    color: var(--text-muted);
+  }
+
+  .atlas-index {
+    display: grid;
+    gap: 1.25rem;
+    margin-top: 1.25rem;
+  }
+  @media (min-width: 1024px) {
+    .atlas-index {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      align-items: start;
+    }
+  }
+  .atlas-group {
+    min-width: 0;
+  }
+  .atlas-group__title {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.75rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--border-subtle);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+  }
+  .atlas-group__count {
+    font-variant-numeric: tabular-nums;
+    color: var(--text-muted);
+  }
+  .atlas-group__empty {
+    padding-block: 0.75rem;
+    font-size: 0.875rem;
+    color: var(--text-muted);
+  }
+
+  .atlas-list {
+    margin-top: 0.5rem;
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-card);
+    background: var(--surface-raised);
+    overflow: hidden;
+  }
+  .atlas-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.25rem 0.625rem;
+    min-width: 0;
+    padding-inline: 0.875rem;
+    border-top: 1px solid var(--border-subtle);
+    transition: background-color var(--motion-fast) var(--motion-ease-standard);
+  }
+  .atlas-row:first-child {
+    border-top: 0;
+  }
+  .atlas-row:is(:hover, :focus-within) {
+    background: color-mix(
+      in srgb,
+      var(--brand-cobalt) 7%,
+      var(--surface-raised)
+    );
+  }
+  .atlas-code {
+    font-size: 0.6875rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    font-variant-numeric: tabular-nums;
+    color: var(--action-primary);
+  }
+  .atlas-row__link {
+    display: inline-flex;
+    flex: 1 1 12rem;
+    align-items: center;
+    min-width: 0;
+    min-height: 2.75rem;
+    overflow-wrap: anywhere;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--text-primary);
+    text-decoration: none;
+  }
+  .atlas-row__link:hover {
+    color: var(--action-primary);
+  }
+  .atlas-row__kind {
+    font-size: 0.625rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .atlas-node,
+    .atlas-node circle,
+    .atlas-edges path,
+    .atlas-row {
+      transition: none;
+    }
+  }
+
+  @media (forced-colors: active) {
+    .atlas-plate {
+      background: Canvas;
+      border-color: CanvasText;
+    }
+    .atlas-swatch {
+      forced-color-adjust: none;
+    }
+  }
+</style>

@@ -97,6 +97,10 @@ Per-product, per-locale Open Graph images generated at build time from the brand
 
 Human E4 (Owner self-tests), native VI/ZH review, real UI screenshots from product owners, the #281 mailbox, served-SHA/anonymous-access read-back, and control-plane reconciliation of `portfolio-repositories.json` (F-16) by the control-plane single writer. These stay `NOT VERIFIED` until performed.
 
+## Execution pack
+
+Detailed agent task cards: `docs/superpowers/plans/experience-v5/README.md` (W1–W6). Wave 0 and the premium Atlas plate are done (PR #302).
+
 ## DAG
 
 `W0 → W1 → W2 → {W3, W4} → W5`; W6 runs in parallel and never blocks source waves. D-0 blocks closing 0.1 only; D-1/D-2 block W2 items 3–4 only.

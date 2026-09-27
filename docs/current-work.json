@@ -18,7 +18,8 @@
     "agentGuide": "AGENTS.md",
     "architectureModel": "architecture/sgps-model.json",
     "experienceConvergenceV5Plan": "docs/superpowers/plans/2026-09-27-experience-design-convergence-v5.md",
-    "experienceDesignAuditBaseline": "docs/evidence/2026-09-27-experience-design-audit-baseline.md"
+    "experienceDesignAuditBaseline": "docs/evidence/2026-09-27-experience-design-audit-baseline.md",
+    "experienceV5ExecutionPack": "docs/superpowers/plans/experience-v5/README.md"
   },
   "waves": [
     {
@@ -355,7 +356,7 @@
     "Lane-helguard guard: helper now emits 'LOCAL-AHEAD skip' and exits 0 on local-ahead branches; reset incident documented (operational, not committed)."
   ],
   "nextActionable": [
-    "Experience Convergence v5 Wave 0 (docs/evidence/2026-09-27-experience-v5-wave0.md): VietQR removed from Marketing per Owner D-0, footer switcher contrast, closing-horizon bleed, identity-art ink stage, hermetic post-merge guard test. Next: Wave 1 gates (visual regression, axe incomplete contrast, mobile Lighthouse, CSS/font budgets, locale leak probe). Handover owed to the Sổ Trọ repository for any VietQR capability (reference commit 4ac2e80).",
+    "Experience Convergence v5: Wave 0 and the premium Atlas plate are done (PR #302). Next: execute the agent pack docs/superpowers/plans/experience-v5/README.md starting with W1 (visual regression, axe incomplete contrast, theme contrast, mobile Lighthouse, CSS/font budgets, locale-leak and truth-copy probes). W3/W4 may run in parallel after W2.1. VietQR capability handover is owed to the Sổ Trọ repository (reference 4ac2e80).",
     "C3-D Tasks 1–5 are merged and verified: Task 5 PR #276 exact-head Source Assurance run 36216346386 passed; main e3a3c6f exact post-merge Source Assurance run 36231546326 passed; Cloudflare deployment 7af4f796 has version 8d12ab41 at 100%. Anonymous public smoke remains blocked by owner-only Cloudflare Access.",
     "Blocked on owner fact: C3-F Task 2 and later (release source adapter, publication surface) — no authored public release source exists. C4-D Tasks 2 and 4 (Architecture Salon surface, Provenance Lens) are already landed (see the c4-d-salon wave), so the earlier suggestion here is superseded.",
     "Public product runtime remains honest-empty on main until owner-approved screenshot/product truth exists. PR #269 is a draft; its media are identity artwork rather than verified product UI screenshots. C4-A Task 10 (gallery mount), C4-F and remote/model C4-G remain separately gated.",

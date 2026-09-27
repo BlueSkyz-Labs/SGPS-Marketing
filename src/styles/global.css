@@ -1228,13 +1228,6 @@ html[data-intent] [data-journey-bar] li[data-evidence-first="true"] a {
   );
 }
 
-.atlas-list {
-  box-shadow: var(--elevation-1);
-}
-.atlas-list li {
-  padding-block: 0.125rem;
-}
-
 .evidence-passport {
   box-shadow: var(--elevation-1);
 }
@@ -1334,12 +1327,6 @@ h3 {
   padding-inline: min(1.25rem, 6vw);
 }
 
-/* Wave H12 — text-zoom safety for atlas rows: the chip drops below the label
-   instead of overflowing the row at extreme text sizes. */
-.atlas-list li {
-  flex-wrap: wrap;
-}
-.atlas-list li a {
-  min-width: 0;
-  overflow-wrap: anywhere;
-}
+/* Wave H12 — text-zoom safety for atlas rows now lives in Atlas.astro
+   (.atlas-row wraps; .atlas-row__link has min-width: 0 and
+   overflow-wrap: anywhere). */
