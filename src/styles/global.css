@@ -52,10 +52,16 @@
   --space-8: 2rem;
   --space-12: 3rem;
   --space-16: 4rem;
+  /* Brand Kit v4 radius tokens (tokens.json: sm=8px, md=12px, lg=20px; no xl in source). */
+  --bsl-radius-sm: 8px;
+  --bsl-radius-md: 12px;
+  --bsl-radius-lg: 20px;
+  /* Semantic border tokens from tokens.json (light=#CBD5E1, dark=#334155). */
+  --bsl-border: #cbd5e1;
+  --bsl-shadow-subtle: 0 8px 28px rgba(11, 16, 32, 0.12);
   --radius-sm: 0.5rem;
   --radius-md: 0.75rem;
   --radius-lg: 1.25rem;
-  --radius-xl: 1.75rem;
   --motion-fast: 120ms;
   --motion-normal: 200ms;
   --motion-slow: 320ms;
@@ -84,6 +90,7 @@
   --action-primary: #3b82f6;
   --focus-ring: #3b82f6;
   --brand-text-disabled: #64748b;
+  --bsl-border: #334155;
 }
 
 [data-theme="light"] {
@@ -105,6 +112,23 @@
     --action-primary: #3b82f6;
     --focus-ring: #3b82f6;
     --brand-text-disabled: #64748b;
+    --bsl-border: #334155;
+  }
+}
+
+/* Specular hairline border: subtle top highlight, degrades gracefully. */
+.border-specular {
+  border: 1px solid var(--bsl-border);
+  border-top-color: color-mix(
+    in srgb,
+    var(--brand-white, #fff) 40%,
+    transparent
+  );
+}
+
+@media (forced-colors: active) {
+  .border-specular {
+    border-top-color: Highlight;
   }
 }
 
