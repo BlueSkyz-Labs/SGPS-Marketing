@@ -130,36 +130,33 @@ test("social locale and skip link reflect the published language", () => {
   assert.match(layout, /跳转到主要内容/);
 });
 
-test(
-  "SoftwareApplication metadata does not invent category or cross-product platforms",
-  () => {
-    const roadSafety = seo.productJsonLd(
-      {
-        name: "Vững Tay Lái",
-        description: "Product in development",
-        slug: "vungtaylai",
-        platforms: ["android", "ios"],
-      },
-      "https://blueskyzlabs.com",
-      "vi",
-    );
-    assert.equal(roadSafety.operatingSystem, "Android, iOS");
-    assert.equal("applicationCategory" in roadSafety, false);
-    assert.doesNotMatch(
-      JSON.stringify(roadSafety),
-      /Windows|macOS|BusinessApplication/,
-    );
+test("SoftwareApplication metadata does not invent category or cross-product platforms", () => {
+  const roadSafety = seo.productJsonLd(
+    {
+      name: "Vững Tay Lái",
+      description: "Product in development",
+      slug: "vungtaylai",
+      platforms: ["android", "ios"],
+    },
+    "https://blueskyzlabs.com",
+    "vi",
+  );
+  assert.equal(roadSafety.operatingSystem, "Android, iOS");
+  assert.equal("applicationCategory" in roadSafety, false);
+  assert.doesNotMatch(
+    JSON.stringify(roadSafety),
+    /Windows|macOS|BusinessApplication/,
+  );
 
-    const apiOnly = seo.productJsonLd(
-      {
-        name: "API prototype",
-        description: "Unreleased",
-        slug: "api-prototype",
-        platforms: ["api"],
-      },
-      "https://blueskyzlabs.com",
-      "en",
-    );
-    assert.equal("operatingSystem" in apiOnly, false);
-  },
-);
+  const apiOnly = seo.productJsonLd(
+    {
+      name: "API prototype",
+      description: "Unreleased",
+      slug: "api-prototype",
+      platforms: ["api"],
+    },
+    "https://blueskyzlabs.com",
+    "en",
+  );
+  assert.equal("operatingSystem" in apiOnly, false);
+});
