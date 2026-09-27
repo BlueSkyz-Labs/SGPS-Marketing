@@ -78,3 +78,44 @@ test("every scene has a style variant and no scene authors a raw palette", () =>
     "scene variants must re-point semantic tokens instead of authoring hex colours",
   );
 });
+
+test("the sticky header surface is authored in the craft layer, not in a dropped utility", () => {
+  const header = read(HEADER);
+  assert.match(
+    header,
+    /class="header-glass border-b/,
+    "the header must carry the shared glass surface class",
+  );
+  assert.doesNotMatch(
+    header,
+    /\[border-bottom-color:/,
+    "an arbitrary border-bottom-color variant carrying a nested :where()/@media never compiles; the hairline must be authored in the craft layer",
+  );
+
+  const css = read(CRAFT_CSS);
+  assert.match(
+    css,
+    /\.header-glass\s*\{[^}]*position:\s*sticky/,
+    "header-glass must stick to the top of the viewport",
+  );
+  assert.match(
+    css,
+    /\.header-glass\s*\{[^}]*backdrop-filter:\s*blur\(12px\)/,
+    "header-glass must frost the surface behind it",
+  );
+  assert.match(
+    css,
+    /\.header-glass\s*\{[^}]*border-bottom-color:/,
+    "the specular hairline must be declared on the glass surface itself",
+  );
+  assert.match(
+    css,
+    /\[data-theme="light"\]\s*\.header-glass\s*\{[^}]*border-bottom-color:/,
+    "the light theme must declare its own hairline colour",
+  );
+  assert.match(
+    css,
+    /@media\s*\(forced-colors:\s*active\)\s*\{[^}]*\.header-glass\s*\{[^}]*border-bottom-color:\s*CanvasText/,
+    "forced-colors mode must keep the hairline visible",
+  );
+});

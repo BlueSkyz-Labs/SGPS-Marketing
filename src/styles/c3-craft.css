@@ -216,16 +216,20 @@ main details > summary:active {
   z-index: 50;
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
+  /* Specular bottom hairline: light-catching on the ink surface. */
+  border-bottom-color: rgba(255, 255, 255, 0.1);
 }
 
 /* Light mode: porcelain 82% */
 [data-theme="light"] .header-glass {
   background-color: rgba(247, 248, 250, 0.82);
+  border-bottom-color: rgba(203, 213, 225, 0.8);
 }
 
 @media (prefers-color-scheme: light) {
   :root:not([data-theme="dark"]) .header-glass {
     background-color: rgba(247, 248, 250, 0.82);
+    border-bottom-color: rgba(203, 213, 225, 0.8);
   }
 }
 
@@ -291,5 +295,12 @@ header details nav a:where(:hover, :focus-visible) {
     text-shadow: none;
     box-shadow: none;
     transition: none;
+  }
+}
+
+/* forced-colors: the header hairline must stay visible when colors are forced. */
+@media (forced-colors: active) {
+  .header-glass {
+    border-bottom-color: CanvasText;
   }
 }
