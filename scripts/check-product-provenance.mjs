@@ -156,11 +156,16 @@ for (const file of files) {
     const prohibitedDrivingClaim =
       /real.time|blind.spot|lane.drift|collision.warning|hazard.alert|computer.vision|cảnh báo va chạm|điểm mù|lệch làn|实时驾驶|碰撞预警/i;
     if (prohibitedDrivingClaim.test(publicCopy)) {
-      problems.push("Vững Tay Lái V0 must not claim live driving or hazard-warning capabilities");
+      problems.push(
+        "Vững Tay Lái V0 must not claim live driving or hazard-warning capabilities",
+      );
     }
-    const platformsBlock = /^platforms:\s*\n((?:\s+-\s+\w+\s*\n)*)/m.exec(source)?.[1] ?? "";
+    const platformsBlock =
+      /^platforms:\s*\n((?:\s+-\s+\w+\s*\n)*)/m.exec(source)?.[1] ?? "";
     if (/^\s+-\s+(?:android|ios)\s*$/im.test(platformsBlock)) {
-      problems.push("Vững Tay Lái V0 must not claim native Android/iOS platforms");
+      problems.push(
+        "Vững Tay Lái V0 must not claim native Android/iOS platforms",
+      );
     }
   }
 
