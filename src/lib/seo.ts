@@ -38,6 +38,7 @@ export function productJsonLd(
     description: string;
     slug: string;
     mediaUrl?: string;
+    platforms: readonly string[];
   },
   siteUrl: string,
   lang: string,
@@ -48,8 +49,11 @@ export function productJsonLd(
     name: product.name,
     description: product.description,
     url: absoluteUrl(siteUrl, `/${lang}/products/${product.slug}/`),
-    applicationCategory: "BusinessApplication",
-    operatingSystem: "Web, iOS, Android, macOS, Windows",
+    // Do not invent product category/availability or OS from the masterbrand.
+    // Platform evidence is owned by each product record, not a global default.
+    ...(product.platforms.length > 0
+      ? { operatingSystem: product.platforms.join(", ") }
+      : {}),
     publisher: {
       "@type": "Organization",
       name: "BlueSkyz Labs",
