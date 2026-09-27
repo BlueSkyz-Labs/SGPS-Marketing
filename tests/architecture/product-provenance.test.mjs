@@ -195,7 +195,10 @@ test("Sổ Tâm out-of-scope voice/transcription copy fails independently", () =
       slug: "sotam",
       name: "Sổ Tâm",
       repositoryUrl: "https://github.com/BlueSkyz-Labs/sotam",
-      extra: ["jobs:", "  - Voice-to-reflection synthesis with private transcription"],
+      extra: [
+        "jobs:",
+        "  - Voice-to-reflection synthesis with private transcription",
+      ],
     }),
     (dir) => {
       const result = run(dir);
