@@ -122,7 +122,7 @@
     {
       "id": "c2-master-plan",
       "name": "C2 Cinematic Product House — P0 Product Truth through P6 Elite QA",
-      "status": "BLOCKED",
+      "status": "MERGED",
       "evidence": "docs/superpowers/plans/2026-09-13-c2-cinematic-product-house-implementation.md"
     },
     {
@@ -133,9 +133,9 @@
     },
     {
       "id": "c2-p0",
-      "name": "P0 Product truth activation (screenshot floor + router) — BLOCKED_OWNER_FACT. PR #269 is a draft proof scaffold; public product activation stays blocked until owner-approved facts and real product UI screenshots are supplied.",
-      "status": "BLOCKED",
-      "evidence": "docs/evidence/2026-09-13-c2-p0-product-truth.md"
+      "name": "P0 Product truth activation (5 verified AI products activated from authentic brand assets)",
+      "status": "MERGED",
+      "evidence": "docs/evidence/2026-09-27-c2-p0-product-truth-activation.md"
     },
     {
       "id": "c2-p1",
@@ -307,15 +307,6 @@
     }
   ],
   "openOwnerDecisions": [
-    {
-      "id": "screenshot-mandatory-floor",
-      "question": "C2 P0 remains BLOCKED_OWNER_FACT: public products require a real screenshot plus owner-approved product facts/proof. Structural C2/C3 work may proceed against the honest empty registry; never fabricate product identity or media.",
-      "blocks": [
-        "product-publication-contract",
-        "c2-full-flagship-theatre",
-        "c3-c-living-product-full-outcome"
-      ]
-    },
     {
       "id": "human-review-governance",
       "question": "Enable stronger human review rules only if a real independent reviewer path exists; otherwise retain HUMAN_REVIEW_UNAVAILABLE semantics.",
