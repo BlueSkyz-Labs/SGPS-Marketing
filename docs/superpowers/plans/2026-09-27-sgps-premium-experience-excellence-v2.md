@@ -185,9 +185,9 @@
 
 ---
 
-## Phase 5: Sổ Tằm Zero-Knowledge AI & ApexAgent Flight Deck (G03, G05, G06)
+## Phase 5: Sổ Tâm Zero-Knowledge AI & ApexAgent Flight Deck (G03, G05, G06)
 
-### Task 11: Sổ Tằm Zero-Knowledge Client Reflection Scaffold
+### Task 11: Sổ Tâm Zero-Knowledge Client Reflection Scaffold
 
 **Files to create:**
 

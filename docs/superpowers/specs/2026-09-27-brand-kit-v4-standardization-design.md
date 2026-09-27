@@ -100,7 +100,7 @@ Every product card is transformed from an unstyled white box into an exquisite B
 2. **Feature Bento Grid:**
    - Completely replaces `<ul><li>` bullets with a responsive Bento Grid of features, jobs-to-be-done, and platform capabilities.
 3. **Interactive Affordance Module:**
-   - Dedicated slots for real-world utilities (e.g. Sổ Trọ VietQR billing engine, Sổ Tằm Zen reflection preview).
+   - Dedicated slots for real-world utilities (e.g. Sổ Trọ VietQR billing engine, Sổ Tâm Zen reflection preview).
 
 ---
 
