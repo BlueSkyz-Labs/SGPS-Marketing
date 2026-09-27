@@ -30,11 +30,11 @@ function run(root) {
   });
 }
 
-function withFixture(lines, assertion) {
+function withFixture(lines, assertion, productFile = "sotro.yaml") {
   const dir = mkdtempSync(join(tmpdir(), "product-provenance-"));
   mkdirSync(join(dir, "src/content/products"), { recursive: true });
   writeFileSync(
-    join(dir, "src/content/products/sotro.yaml"),
+    join(dir, "src/content/products", productFile),
     `${lines.join("\n")}\n`,
   );
   try {
@@ -47,12 +47,13 @@ function withFixture(lines, assertion) {
 function record(overrides = {}) {
   const {
     slug = "sotro",
+    name = "Example",
     repositoryUrl = "https://github.com/BlueSkyz-Labs/Sotro",
     revision = FOREIGN_REVISION,
     media = ["media:", "  src: /products/sotro/brand.png"],
     extra = [],
   } = overrides;
-  const lines = [`slug: ${slug}`, "name: Example", "proof:"];
+  const lines = [`slug: ${slug}`, `name: ${name}`, "proof:"];
   if (repositoryUrl !== null) lines.push(`  repositoryUrl: ${repositoryUrl}`);
   if (revision !== null) lines.push(`sourceRevision: ${revision}`);
   if (media) lines.push(...media);
@@ -169,5 +170,39 @@ test("identity art claimed as a bare screenshot fails closed", () => {
       assert.equal(result.status, 1);
       assert.match(result.stderr, /bare screenshot claim/);
     },
+  );
+});
+
+
+test("Sổ Tâm product name cannot be silently changed to Sổ Tằm", () => {
+  withFixture(
+    record({
+      slug: "sotam",
+      name: "Sổ Tằm",
+      repositoryUrl: "https://github.com/BlueSkyz-Labs/sotam",
+    }),
+    (dir) => {
+      const result = run(dir);
+      assert.equal(result.status, 1);
+      assert.match(result.stderr, /verified product name/);
+    },
+    "sotam.yaml",
+  );
+});
+
+test("Sổ Tâm out-of-scope voice/transcription copy fails independently", () => {
+  withFixture(
+    record({
+      slug: "sotam",
+      name: "Sổ Tâm",
+      repositoryUrl: "https://github.com/BlueSkyz-Labs/sotam",
+      extra: ["jobs:", "  - Voice-to-reflection synthesis with private transcription"],
+    }),
+    (dir) => {
+      const result = run(dir);
+      assert.equal(result.status, 1);
+      assert.match(result.stderr, /out-of-scope voice\\/audio\\/transcription/);
+    },
+    "sotam.yaml",
   );
 });
