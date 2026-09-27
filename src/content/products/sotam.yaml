@@ -1,6 +1,6 @@
 slug: sotam
-name: Sổ Tằm
-shortDescription: A contemplative AI journal that distills daily reflections into structured insights and mental clarity.
+name: Sổ Tâm
+shortDescription: A local-first journal for private written reflections and personal memories.
 lifecycle: development
 availability: preview
 publicLabel: In development
@@ -8,24 +8,24 @@ audience:
   - individual
   - professional
 jobs:
-  - Capture voice and written stream-of-consciousness reflections
-  - Discover recurring emotional patterns and cognitive blind spots
+  - Write private reflections at your own pace
+  - Revisit your journal entries and personal memories
 capabilities:
-  - Voice-to-reflection synthesis with private transcription
-  - Long-term cognitive pattern analysis and emotional trends
-  - Zero-cloud local encrypted storage with sovereign export
+  - Local-first written journaling in a private Personal Vault
+  - User-controlled local export of reflections
+  - Private Vault storage with explicit recovery boundaries
 platforms:
   - web
   - ios
   - android
 primaryAction:
   type: preview
-  label: Preview Sổ Tằm
+  label: Preview Sổ Tâm
   href: https://blueskyzlabs.com/en/products/sotam/
 proof:
   media:
     src: /products/sotam/screenshot.png
-    alt: Sổ Tằm by BlueSkyz Labs — brand identity
+    alt: Sổ Tâm by BlueSkyz Labs — brand identity
     width: 1800
     height: 504
   repositoryUrl: https://github.com/BlueSkyz-Labs/sotam
@@ -37,5 +37,5 @@ endorsement: A BlueSkyz Labs product
 featuredTier: featured
 displayOrder: 2
 public: true
-sourceRevision: 38a4d850c23845134631afb31b52914a2ad56e53
-lastReviewedAt: 2026-09-25
+sourceRevision: ffb771b5f47886b581df0c1409c7f1b5ea758724
+lastReviewedAt: 2026-09-27
