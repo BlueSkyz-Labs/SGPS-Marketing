@@ -1,21 +1,20 @@
 slug: vungtaylai
 name: Vững Tay Lái
-shortDescription: Real-time situational awareness and computer vision coaching for safe, confident road travel.
+shortDescription: A Vietnamese-first Web/PWA learning experience for class-B driving knowledge, understanding, and exam practice.
 lifecycle: prototype
 availability: preview
 publicLabel: In development
 audience:
   - individual
 jobs:
-  - Detect blind-spot hazards and lane drifts in real time
-  - Build defensive driving habits with voice-guided coaching
+  - Prepare for Vietnam class-B driving knowledge with clear source context
+  - Practice questions, identify misconceptions, and revisit difficult concepts
 capabilities:
-  - Edge computer vision scene analysis with low latency
-  - Predictive road hazard alerts and collision warnings
-  - Personalized driving safety telemetry and habit scorecards
+  - Development target: source-aware lessons and class-B practice modes
+  - Development target: confidence-first answers and misconception feedback
+  - Development target: offline-ready learning progress and revision
 platforms:
-  - android
-  - ios
+  - web
 primaryAction:
   type: preview
   label: Preview Vững Tay Lái
@@ -35,5 +34,5 @@ endorsement: A BlueSkyz Labs product
 featuredTier: ecosystem
 displayOrder: 5
 public: true
-sourceRevision: bc23fd8c0782ee624e205f43206a1460f54d12a3
-lastReviewedAt: 2026-09-25
+sourceRevision: 228ea827f2af66ee46aea38c6aecb934ec99878c
+lastReviewedAt: 2026-09-27
