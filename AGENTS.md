@@ -9,6 +9,8 @@ Trusted current source of truth only:
 - **Active residual / owner-gated work:** `docs/current-work.json` — canonical current-work router, including product screenshot/owner facts, Human E4, RUM privacy decision, C3 Concierge provider/privacy gate and Spatial/WebGL GO gate.
 - **Approved SGPS Premium Experience & Design Excellence v2.0 design spec:** `docs/superpowers/specs/2026-09-27-sgps-premium-experience-excellence-v2-design.md` — authoritative v2.0 experience specification adopting SGPS FULL.
 - **Active SGPS v2.0 master plan:** `docs/superpowers/plans/2026-09-27-sgps-premium-experience-excellence-v2.md` — master execution plan routing into independent phases.
+- **Approved Brand Kit v4 Standardization design spec:** `docs/superpowers/specs/2026-09-27-brand-kit-v4-standardization-design.md` — authoritative Brand Kit v4 aesthetic standardization specification.
+- **Active Brand Kit v4 Standardization master plan:** `docs/superpowers/plans/2026-09-27-brand-kit-v4-standardization.md` — master execution plan for Brand Kit v4 aesthetic standardization and Living Maison.
 - **C3 / SGPS delta reconciliation:** `docs/evidence/2026-09-16-c3-sgps-delta-reconciliation.md` — records the live post-C2 baseline and explicit applicability of current SGPS source overlays without silently repinning the project.
 - **Historical implementation plan:** `docs/superpowers/plans/2026-09-04-blueskyz-web-v1-c1-1-implementation.md`.
 - **Framework decision:** `docs/decisions/0004-web-framework-selection.md` (`ASTRO_7`).
