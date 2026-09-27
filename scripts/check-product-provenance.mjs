@@ -133,10 +133,11 @@ for (const file of files) {
       problems.push("Sổ Tâm must retain its verified product name");
     }
     const publicCopy = source
-      .split("\\n")
+      .split("\n")
       .filter((line) => /^(?:shortDescription:|  - |  label:|    alt:)/.test(line))
       .join(" ");
-    if (/\\b(?:voice|audio|transcrip\\w*|speech|microphone)\\b|giọng nói|ghi âm|âm thanh|语音|录音|转录/i.test(publicCopy)) {
+    const audioScopePattern = /\b(?:voice|audio|transcrip\w*|speech|microphone)\b|giọng nói|ghi âm|âm thanh|语音|录音|转录/i;
+    if (audioScopePattern.test(publicCopy)) {
       problems.push("Sổ Tâm P0 public copy must not claim out-of-scope voice/audio/transcription");
     }
   }
