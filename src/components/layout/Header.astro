@@ -40,7 +40,7 @@ const primaryCta = hasPublicProducts
 
 <header
   data-scene={scene}
-  class="border-b border-[var(--border-subtle)] bg-[var(--surface-primary)] text-[var(--text-primary)]"
+  class="header-glass border-b text-[var(--text-primary)] [border-bottom-color:color-mix(in_srgb,var(--brand-white,white)_10%,transparent)]:where([data-theme=dark],@media(prefers-color-scheme:dark):not([data-theme=light])) [border-bottom-color:color-mix(in_srgb,var(--bsl-slate300,#cbd5e1)_80%,transparent)]:where([data-theme=light],@media(prefers-color-scheme:light):not([data-theme=dark]))"
 >
   <Container class="header-bar flex min-h-16 flex-wrap items-center justify-between gap-x-4 gap-y-1 py-3">
     <BrandLockup href={`/${lang}/`} surface={lockupSurface(scene)} />

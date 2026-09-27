@@ -204,3 +204,92 @@ main details > summary:active {
     border-color: CanvasText;
   }
 }
+
+/* Task 1.2 — Sticky Frosted Glass Header surface.
+ *
+ * Explicit rgba backgrounds so the contrast test can measure them.
+ * backdrop-filter provides the frosted glass effect.
+ */
+.header-glass {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+/* Light mode: porcelain 82% */
+[data-theme="light"] .header-glass {
+  background-color: rgba(247, 248, 250, 0.82);
+}
+
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) .header-glass {
+    background-color: rgba(247, 248, 250, 0.82);
+  }
+}
+
+/* Dark mode: ink 82% */
+[data-theme="dark"] .header-glass {
+  background-color: rgba(11, 16, 32, 0.82);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .header-glass {
+    background-color: rgba(11, 16, 32, 0.82);
+  }
+}
+
+/* Task 1.2 — Sticky Frosted Glass Header Micro-interactions (Brand Kit v4 Wave 1).
+ *
+ * Tactile hover/focus states for navigation links and the Command Navigator
+ * button. Respects prefers-reduced-motion by disabling motion entirely.
+ */
+
+/* Navigation links (desktop) */
+header nav a:where(:hover, :focus-visible) {
+  transform: translateY(-1px);
+  text-shadow: 0 0 8px color-mix(in srgb, var(--brand-cobalt) 40%, transparent);
+  transition:
+    transform var(--motion-confirmation-duration) var(--motion-ease-standard),
+    text-shadow var(--motion-confirmation-duration) var(--motion-ease-standard);
+}
+
+/* Command Navigator trigger button */
+header button[data-command-trigger]:where(:hover, :focus-visible) {
+  transform: translateY(-1px);
+  box-shadow:
+    0 4px 12px -4px color-mix(in srgb, var(--brand-ink) 30%, transparent),
+    0 0 0 1px color-mix(in srgb, var(--brand-cobalt) 30%, transparent);
+  border-color: color-mix(
+    in srgb,
+    var(--brand-cobalt) 30%,
+    var(--border-subtle)
+  );
+  transition:
+    transform var(--motion-confirmation-duration) var(--motion-ease-standard),
+    box-shadow var(--motion-confirmation-duration) var(--motion-ease-standard),
+    border-color var(--motion-confirmation-duration) var(--motion-ease-standard);
+}
+
+/* Mobile navigation links */
+header details nav a:where(:hover, :focus-visible) {
+  background-color: var(--surface-subtle);
+  transform: translateX(2px);
+  transition:
+    background-color var(--motion-confirmation-duration)
+      var(--motion-ease-standard),
+    transform var(--motion-confirmation-duration) var(--motion-ease-standard);
+}
+
+/* prefers-reduced-motion: disable motion entirely (not merely shorten) */
+@media (prefers-reduced-motion: reduce) {
+  header nav a:where(:hover, :focus-visible),
+  header button[data-command-trigger]:where(:hover, :focus-visible),
+  header details nav a:where(:hover, :focus-visible) {
+    transform: none;
+    text-shadow: none;
+    box-shadow: none;
+    transition: none;
+  }
+}
