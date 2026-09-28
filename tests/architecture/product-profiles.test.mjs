@@ -13,6 +13,21 @@ test("product profile route is statically wired for public entries", () => {
   assert.match(source, /primaryAction/);
 });
 
+test("localized product-profile primary CTAs use the app sign-in destination", () => {
+  for (const lang of ["en", "vi", "zh"]) {
+    const source = readFileSync(
+      `src/pages/${lang}/products/[slug].astro`,
+      "utf8",
+    );
+    assert.match(source, /data\.appAccess\?\.signInUrl/, lang);
+    assert.doesNotMatch(source, /href=\{data\.primaryAction\.href\}/, lang);
+    assert.match(source, /showSignIn=\{false\}/, lang);
+  }
+
+  const card = readFileSync("src/components/product/ProductCard.astro", "utf8");
+  assert.match(card, /href=\{data\.primaryAction\.href\}/);
+});
+
 test("product cards deep-link into locale-aware profile routes", () => {
   const card = readFileSync("src/components/product/ProductCard.astro", "utf8");
   const labels = readFileSync("src/data/site.ts", "utf8");
