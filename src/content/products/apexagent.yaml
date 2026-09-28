@@ -32,8 +32,32 @@ proof:
   securityUrl: https://blueskyzlabs.com/en/security/
   supportUrl: https://blueskyzlabs.com/en/support/
 endorsement: A BlueSkyz Labs product
-featuredTier: hero
-displayOrder: 1
-public: true
+featuredTier: hidden
+displayOrder: 2
+public: false
 sourceRevision: f395a7de7cb561ee8330c6309ac57df257a7e184
 lastReviewedAt: 2026-09-27
+# Localized copy: faithful translations of the English claims above; the
+# English record stays canonical for claim/proof binding. Native VI/ZH review
+# is an Owner feedback checkpoint (plan v5 W3.4).
+i18n:
+  vi:
+    shortDescription: "Không gian làm việc AI dạng web/PWA, riêng tư cho một chủ sở hữu; phạm vi nhiều tài khoản rộng hơn vẫn đang được phát triển."
+    jobs:
+      - "Điều phối công việc nhiều bước với sự giám sát rõ ràng của con người"
+      - "Theo dõi hoạt động của agent và khôi phục các quy trình bị gián đoạn"
+    capabilities:
+      - "Không gian làm việc riêng tư theo phạm vi chủ sở hữu"
+      - "Ranh giới công cụ và thông tin xác thực do máy chủ kiểm soát"
+      - "Tính năng nhiều tài khoản và trả phí đang được lên kế hoạch, chưa phát hành"
+    primaryActionLabel: "Khám phá ApexAgent"
+  zh:
+    shortDescription: "私有、单一所有者的 Web/PWA AI 工作流工作区；更广泛的多账户范围仍在开发中。"
+    jobs:
+      - "在明确的人工监督下协调多步骤工作"
+      - "查看智能体活动并从中断的工作流中恢复"
+    capabilities:
+      - "私有的所有者范围工作流工作区"
+      - "由服务器中介的工具与凭据边界"
+      - "多账户与付费功能已在规划中，尚未发布"
+    primaryActionLabel: "了解 ApexAgent"

@@ -35,15 +35,22 @@ test.describe("SGPS integrity lens", () => {
     );
   });
 
-  test("/en/products/ lens reports the not-published registry state", async ({
+  test("/en/products/ lens reports the populated registry state", async ({
     page,
   }) => {
     await page.goto("/en/products/");
     const lens = page.locator('[data-integrity-lens][data-surface="products"]');
     await expect(lens).toBeVisible();
-    await expect(lens.locator('[data-truth-state="not-published"]')).toHaveText(
-      /Not published/,
+    // Published products override the stale empty-registry entry; its reason remains in products-integrity-summary.test.mjs.
+    await expect(lens.locator('[data-truth-state="source-linked"]')).toHaveText(
+      /Source-linked/,
     );
+    await expect(lens).toContainText(
+      "The public registry lists the products currently published on this site.",
+    );
+    await expect(
+      lens.locator('[data-truth-state="not-published"]'),
+    ).toHaveCount(0);
     await expect(lens.locator("[data-evidence-review]")).toHaveCount(0);
   });
 
