@@ -9,13 +9,35 @@ Date: 2026-09-28 (+07); source base main@462aa460243d9dd07976306c962db0a26d49328
 
 Contrarian questions: what if the correct visitor outcome is to *reject* every listed product; what if a colorful proof graphic is unusable; what if a customer cannot disclose their requirement; what if a claim was revoked after a PDF was printed; what if disabled JavaScript, a screen reader, or an in-app browser changes task semantics? These are test scenarios, not empirical observations. Additional candidate IDs preserved independently:
 
-| ID               | Different real-world job → proposed flow                                                                                                                                                                            | Initial disposition                                                  |
-| ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------- |
-| MKT-0928-NEW-G11 | Returning evaluator has a printed out-of-date claim → public-only dated correction card bound to claim ID, no subscription or personal tracking.                                                                    | Candidate; likely C3-F/G08 extension.                                |
-| MKT-0928-NEW-G12 | Visitor finds *no* suitable public product, wants a responsible exit without submitting personal information → reason-for-no-match and owner-authorized non-promotional public next steps, or honest “nothing yet”. | Candidate; integrate G01 non-fit story, not a second product finder. |
-| MKT-0928-NEW-S11 | A screen-reader user gets truncated decorative graph labels → semantic list, full labels and meaningful ordering before diagram.                                                                                    | Candidate; compare with current Atlas semantic index.                |
-| MKT-0928-NEW-S12 | A person sees two CTAs pointing to the identical destination → one main action with an explicit destination/availability label.                                                                                     | Candidate; source hygiene, not innovation if ordinary copy fix.      |
-| MKT-0928-NEW-S13 | A user reopening a deeply linked translated profile reaches different place → canonical path fallback with explicit language notice if that route is missing.                                                       | Candidate; inspect getAlternatePath and route parity first.          |
+**MKT-0928-NEW-G11**
+
+**Different real-world job → proposed flow:** Returning evaluator has a printed out-of-date claim → public-only dated correction card bound to claim ID, no subscription or personal tracking.
+
+**Initial disposition:** Candidate; likely C3-F/G08 extension.
+
+**MKT-0928-NEW-G12**
+
+**Different real-world job → proposed flow:** Visitor finds *no* suitable public product, wants a responsible exit without submitting personal information → reason-for-no-match and owner-authorized non-promotional public next steps, or honest “nothing yet”.
+
+**Initial disposition:** Candidate; integrate G01 non-fit story, not a second product finder.
+
+**MKT-0928-NEW-S11**
+
+**Different real-world job → proposed flow:** A screen-reader user gets truncated decorative graph labels → semantic list, full labels and meaningful ordering before diagram.
+
+**Initial disposition:** Candidate; compare with current Atlas semantic index.
+
+**MKT-0928-NEW-S12**
+
+**Different real-world job → proposed flow:** A person sees two CTAs pointing to the identical destination → one main action with an explicit destination/availability label.
+
+**Initial disposition:** Candidate; source hygiene, not innovation if ordinary copy fix.
+
+**MKT-0928-NEW-S13**
+
+**Different real-world job → proposed flow:** A user reopening a deeply linked translated profile reaches different place → canonical path fallback with explicit language notice if that route is missing.
+
+**Initial disposition:** Candidate; inspect getAlternatePath and route parity first.
 
 Coverage ledger: novice/returning/procurement/low-confidence/privacy-conscious/accessibility users; five product-evaluation jobs; mobile slow 4G, in-app browser, desktop, no JS, text zoom, keyboard, interruption, link failure, cross-language and stale print. Unresolved: actual first-click behavior, task success, site served SHA, real support deliverability, a representative native reader and AT/device pilot. W3C WAI public cognitive guidance supports avoiding disorientation and explaining unfamiliar terms; it is design background, **not measured product demand** (https://www.w3.org/WAI/WCAG2/supplemental/objectives/o1-understandable/ ; https://www.w3.org/WAI/WCAG2/supplemental/objectives/o4-minimize-mistakes/).
 
@@ -23,33 +45,155 @@ Coverage ledger: novice/returning/procurement/low-confidence/privacy-conscious/a
 
 Compared source: current ProductHouse, ProductCard, DecisionRoom/DecisionAtelier, Atlas, LanguageSwitcher, content schema and #293 existing 10G/10S; AGENTS C3/C4 and current-work router; relevant #281/#290/#291/#293, active #302/#306/#307/#308/#309. SOURCE_VERIFIED code availability is not verified served UI or user value.
 
-| Candidate | Closest actual record/feature                                                                    | Substantive delta and disposition                                                                                                                                                                                                                                                                 |
-| --------- | ------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| G01       | #293 G03 Outcome-led product discovery; ProductHouse, DecisionAtelier                            | Duplicate objective; FOLD_IN.                                                                                                                                                                                                                                                                     |
-| G02       | #293 G05 Availability Passport, G10 dossier, current DecisionRoom                                | **Source-distinct HYPOTHESIS_REQUIRING_VALIDATION**: an explicit *negative suitability/why not* product-owned decision, rather than merely comparing public facts or showing lifecycle. No current product-owned negative-fit fact schema verified. Retain one pilot, no automatic feature scope. |
-| G03       | DecisionRoom → dossier / C4                                                                      | FOLD_IN existing public-only handoff; not independent.                                                                                                                                                                                                                                            |
-| G04       | #293 G08 / existing product-transition and recovery                                              | FOLD_IN; validate destination/cross-origin behavior under its owner.                                                                                                                                                                                                                              |
-| G05       | #293 G02, G07; current Evidence Passport / TrustLedger                                           | EXISTING_SCOPE_IMPROVEMENT, no separate feature.                                                                                                                                                                                                                                                  |
-| G06       | Atlas semantic list and #293 accessible/mobile gates                                             | EXISTING_SCOPE_IMPROVEMENT.                                                                                                                                                                                                                                                                       |
-| G07       | #293 G06 Locale Meaning Parity                                                                   | FOLD_IN.                                                                                                                                                                                                                                                                                          |
-| G08       | #293 G09 / C3-F signed, authored releases                                                        | FOLD_IN, owner-source dependent.                                                                                                                                                                                                                                                                  |
-| G09       | #293 G02/G05 / lifecycle/availability states                                                     | FOLD_IN.                                                                                                                                                                                                                                                                                          |
-| G10       | Existing static-first no-account product path; #293 G03/05                                       | Existing-scope simplification hypothesis, **not** independent God-tier.                                                                                                                                                                                                                           |
-| G11       | C3-F authored release/change, G08                                                                | FOLD_IN; withdrawal is a useful acceptance criterion of existing owner-authored chronology.                                                                                                                                                                                                       |
-| G12       | G01 + G02 from this independent pool                                                             | FOLD_IN G02 negative-fit pilot; avoid second parallel discovery component.                                                                                                                                                                                                                        |
-| S01       | #293 S05 Lifecycle CTA                                                                           | FOLD_IN.                                                                                                                                                                                                                                                                                          |
-| S02       | ProductCard: profile link and primaryAction.href can point to same product path depending record | P2 PRODUCT HYGIENE REVIEW, not new S+ innovation; no automatic bulk dedupe (the two links may represent deliberate labels).                                                                                                                                                                       |
-| S03       | #293 S03 and source reflow suite                                                                 | FOLD_IN.                                                                                                                                                                                                                                                                                          |
-| S04       | Existing passport/evidence and #293 S01/S04                                                      | FOLD_IN.                                                                                                                                                                                                                                                                                          |
-| S05       | #293 S01 media kind/asset attribution                                                            | FOLD_IN.                                                                                                                                                                                                                                                                                          |
-| S06       | #281 owner/provider verified contact                                                             | FOLD_IN owner gate.                                                                                                                                                                                                                                                                               |
-| S07       | LanguageSwitcher already uses getAlternatePath(currentPath, lang)                                | EXISTING_SCOPE_VERIFICATION, not novel.                                                                                                                                                                                                                                                           |
-| S08       | #293 G07 and product source remediation                                                          | FOLD_IN.                                                                                                                                                                                                                                                                                          |
-| S09       | #284 and #302 Firefox E2E / a11y owner                                                           | FOLD_IN regression requirement.                                                                                                                                                                                                                                                                   |
-| S10       | Existing Astro/no-JS and #293 accessibility/low-data work                                        | FOLD_IN.                                                                                                                                                                                                                                                                                          |
-| S11       | Atlas current semantic full-label index                                                          | FOLD_IN.                                                                                                                                                                                                                                                                                          |
-| S12       | S02 hygiene                                                                                      | FOLD_IN.                                                                                                                                                                                                                                                                                          |
-| S13       | getAlternatePath route implementation                                                            | EXISTING_SCOPE_VERIFICATION; source alone does not attest in-app/browser flow.                                                                                                                                                                                                                    |
+**G01**
+
+**Closest actual record/feature:** #293 G03 Outcome-led product discovery; ProductHouse, DecisionAtelier
+
+**Substantive delta and disposition:** Duplicate objective; FOLD_IN.
+
+**G02**
+
+**Closest actual record/feature:** #293 G05 Availability Passport, G10 dossier, current DecisionRoom
+
+**Substantive delta and disposition:** **Source-distinct HYPOTHESIS_REQUIRING_VALIDATION**: an explicit *negative suitability/why not* product-owned decision, rather than merely comparing public facts or showing lifecycle. No current product-owned negative-fit fact schema verified. Retain one pilot, no automatic feature scope.
+
+**G03**
+
+**Closest actual record/feature:** DecisionRoom → dossier / C4
+
+**Substantive delta and disposition:** FOLD_IN existing public-only handoff; not independent.
+
+**G04**
+
+**Closest actual record/feature:** #293 G08 / existing product-transition and recovery
+
+**Substantive delta and disposition:** FOLD_IN; validate destination/cross-origin behavior under its owner.
+
+**G05**
+
+**Closest actual record/feature:** #293 G02, G07; current Evidence Passport / TrustLedger
+
+**Substantive delta and disposition:** EXISTING_SCOPE_IMPROVEMENT, no separate feature.
+
+**G06**
+
+**Closest actual record/feature:** Atlas semantic list and #293 accessible/mobile gates
+
+**Substantive delta and disposition:** EXISTING_SCOPE_IMPROVEMENT.
+
+**G07**
+
+**Closest actual record/feature:** #293 G06 Locale Meaning Parity
+
+**Substantive delta and disposition:** FOLD_IN.
+
+**G08**
+
+**Closest actual record/feature:** #293 G09 / C3-F signed, authored releases
+
+**Substantive delta and disposition:** FOLD_IN, owner-source dependent.
+
+**G09**
+
+**Closest actual record/feature:** #293 G02/G05 / lifecycle/availability states
+
+**Substantive delta and disposition:** FOLD_IN.
+
+**G10**
+
+**Closest actual record/feature:** Existing static-first no-account product path; #293 G03/05
+
+**Substantive delta and disposition:** Existing-scope simplification hypothesis, **not** independent God-tier.
+
+**G11**
+
+**Closest actual record/feature:** C3-F authored release/change, G08
+
+**Substantive delta and disposition:** FOLD_IN; withdrawal is a useful acceptance criterion of existing owner-authored chronology.
+
+**G12**
+
+**Closest actual record/feature:** G01 + G02 from this independent pool
+
+**Substantive delta and disposition:** FOLD_IN G02 negative-fit pilot; avoid second parallel discovery component.
+
+**S01**
+
+**Closest actual record/feature:** #293 S05 Lifecycle CTA
+
+**Substantive delta and disposition:** FOLD_IN.
+
+**S02**
+
+**Closest actual record/feature:** ProductCard: profile link and primaryAction.href can point to same product path depending record
+
+**Substantive delta and disposition:** P2 PRODUCT HYGIENE REVIEW, not new S+ innovation; no automatic bulk dedupe (the two links may represent deliberate labels).
+
+**S03**
+
+**Closest actual record/feature:** #293 S03 and source reflow suite
+
+**Substantive delta and disposition:** FOLD_IN.
+
+**S04**
+
+**Closest actual record/feature:** Existing passport/evidence and #293 S01/S04
+
+**Substantive delta and disposition:** FOLD_IN.
+
+**S05**
+
+**Closest actual record/feature:** #293 S01 media kind/asset attribution
+
+**Substantive delta and disposition:** FOLD_IN.
+
+**S06**
+
+**Closest actual record/feature:** #281 owner/provider verified contact
+
+**Substantive delta and disposition:** FOLD_IN owner gate.
+
+**S07**
+
+**Closest actual record/feature:** LanguageSwitcher already uses getAlternatePath(currentPath, lang)
+
+**Substantive delta and disposition:** EXISTING_SCOPE_VERIFICATION, not novel.
+
+**S08**
+
+**Closest actual record/feature:** #293 G07 and product source remediation
+
+**Substantive delta and disposition:** FOLD_IN.
+
+**S09**
+
+**Closest actual record/feature:** #284 and #302 Firefox E2E / a11y owner
+
+**Substantive delta and disposition:** FOLD_IN regression requirement.
+
+**S10**
+
+**Closest actual record/feature:** Existing Astro/no-JS and #293 accessibility/low-data work
+
+**Substantive delta and disposition:** FOLD_IN.
+
+**S11**
+
+**Closest actual record/feature:** Atlas current semantic full-label index
+
+**Substantive delta and disposition:** FOLD_IN.
+
+**S12**
+
+**Closest actual record/feature:** S02 hygiene
+
+**Substantive delta and disposition:** FOLD_IN.
+
+**S13**
+
+**Closest actual record/feature:** getAlternatePath route implementation
+
+**Substantive delta and disposition:** EXISTING_SCOPE_VERIFICATION; source alone does not attest in-app/browser flow.
 
 **Scoreboard at this source checkpoint:** initial 10 G + 10 S; independent contrarian +2 G +3 S = total **12 G +13 S initial research candidates**. Historical comparison retains **1 source-distinct material G hypothesis (G02)**, 0 independently qualified S. **1 retained after conceptual Red Team as RESEARCH/PILOT-FIRST only**; 24 folded/existing-scope/hygiene, 0 implemented, 0 USER_VALIDATED. *Qualified* gap vs 10+10 ambition: 9 G and 10 S, without inventing extra ideas. Both idea passes COMPLETED at desk-level; Discovery remains OPEN for genuine field evidence and unexamined jobs, not “fully converged.” Distinguish 20+5 generated independent hypotheses from genuinely novel validated outcomes.
 
