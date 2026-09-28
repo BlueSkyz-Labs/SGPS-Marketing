@@ -28,11 +28,29 @@ No scoring, “best product” ranking, dynamically inferred persona, tracking, 
 
 ## 4. Three tasks (synthetic scripts only, no participants run)
 
-| Task | Participant's job                                                                            | Correct outcome to observe                                                                                            | Critical negative                                                                                   |
-| ---- | -------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------- |
-| T1   | A person seeking 20-room notebook wants to know whether this is a currently usable live app. | Distinguishes product direction/development from independent deployed/available evidence; chooses honest status path. | Claims instant public trial based on Preview.                                                       |
-| T2   | Another fictional buyer needs full ERP and custodial recurring collection.                   | Identifies verified current non-goals without describing a hypothetical future as permanently impossible.             | Describes the website as payment authority or asserts unsourced live provider capabilities.         |
-| T3   | Returning evaluator has a stale printed screenshot and no working contact channel.           | Identifies current dated public limitations, UNKNOWN owner/provider facts, and safe no-contact exit.                  | Follows private repo link as public proof, invents support inbox, or treats artwork as verified UI. |
+**T1**
+
+**Participant's job:** A person seeking 20-room notebook wants to know whether this is a currently usable live app.
+
+**Correct outcome to observe:** Distinguishes product direction/development from independent deployed/available evidence; chooses honest status path.
+
+**Critical negative:** Claims instant public trial based on Preview.
+
+**T2**
+
+**Participant's job:** Another fictional buyer needs full ERP and custodial recurring collection.
+
+**Correct outcome to observe:** Identifies verified current non-goals without describing a hypothetical future as permanently impossible.
+
+**Critical negative:** Describes the website as payment authority or asserts unsourced live provider capabilities.
+
+**T3**
+
+**Participant's job:** Returning evaluator has a stale printed screenshot and no working contact channel.
+
+**Correct outcome to observe:** Identifies current dated public limitations, UNKNOWN owner/provider facts, and safe no-contact exit.
+
+**Critical negative:** Follows private repo link as public proof, invents support inbox, or treats artwork as verified UI.
 
 Comparison record only after a consented session: participant anonymous coarse cohort, date, mock version, task ID, device class if volunteered, randomized A/B order, unprompted correct answer, severe misconception yes/no, correction prompting, completion time if actually timed, adverse/negative evidence, optional preference and free-text without PII. For counts, state observed numerator/denominator and limits. Sample target is NOT a claimed sample.
 
@@ -46,14 +64,32 @@ Comparison record only after a consented session: participant anonymous coarse c
 
 ## 6. Desk evidence checkpoint
 
-| Evidence type                                                | State                            |
-| ------------------------------------------------------------ | -------------------------------- |
-| Owner research decision                                      | APPROVED, bounded as above       |
-| Source/non-goal readback                                     | SOURCE_VERIFIED at named commits |
-| Fictional alternatives                                       | 2 static concepts documented     |
-| Task scripts                                                 | 3/3 designed, NOT executed       |
-| Real consenting participants / observed task results         | 0 / NOT_VERIFIED                 |
-| Browser/device/runtime/deployment/Human E4                   | NOT_RUN/NOT_VERIFIED             |
-| Product code, real data, new telemetry, PR merge, production | NONE                             |
+**Owner research decision**
+
+**State:** APPROVED, bounded as above
+
+**Source/non-goal readback**
+
+**State:** SOURCE_VERIFIED at named commits
+
+**Fictional alternatives**
+
+**State:** 2 static concepts documented
+
+**Task scripts**
+
+**State:** 3/3 designed, NOT executed
+
+**Real consenting participants / observed task results**
+
+**State:** 0 / NOT_VERIFIED
+
+**Browser/device/runtime/deployment/Human E4**
+
+**State:** NOT_RUN/NOT_VERIFIED
+
+**Product code, real data, new telemetry, PR merge, production**
+
+**State:** NONE
 
 First authorized follow-up: #310 research owner reviews domain wording with Sổ Trọ original Product Truth owner (read-only), then runs this paper protocol only when a qualified consented participant channel exists. If not, preserve NOT_VERIFIED rather than fabricate a synthetic “PASS”. Current source correction PR #302 has merged to main; separately verify Cloudflare served SHA and anonymous access through the original deployment lane, not this pilot.
