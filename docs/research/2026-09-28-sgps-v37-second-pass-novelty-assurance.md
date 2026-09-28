@@ -7,7 +7,7 @@ Date: 2026-09-28 (+07); source base main@462aa460243d9dd07976306c962db0a26d49328
 
 ## 1. Separate contrarian next-horizon pass
 
-Contrarian questions: what if the correct visitor outcome is to *reject* every listed product; what if a colorful proof graphic is unusable; what if a customer cannot disclose their requirement; what if a claim was revoked after a PDF was printed; what if disabled JavaScript, a screen reader, or an in-app browser changes task semantics? These are test scenarios, not empirical observations. Additional candidate IDs preserved independently:
+Contrarian questions: what if the correct visitor outcome is to _reject_ every listed product; what if a colorful proof graphic is unusable; what if a customer cannot disclose their requirement; what if a claim was revoked after a PDF was printed; what if disabled JavaScript, a screen reader, or an in-app browser changes task semantics? These are test scenarios, not empirical observations. Additional candidate IDs preserved independently:
 
 **MKT-0928-NEW-G11**
 
@@ -17,7 +17,7 @@ Contrarian questions: what if the correct visitor outcome is to *reject* every l
 
 **MKT-0928-NEW-G12**
 
-**Different real-world job → proposed flow:** Visitor finds *no* suitable public product, wants a responsible exit without submitting personal information → reason-for-no-match and owner-authorized non-promotional public next steps, or honest “nothing yet”.
+**Different real-world job → proposed flow:** Visitor finds _no_ suitable public product, wants a responsible exit without submitting personal information → reason-for-no-match and owner-authorized non-promotional public next steps, or honest “nothing yet”.
 
 **Initial disposition:** Candidate; integrate G01 non-fit story, not a second product finder.
 
@@ -55,7 +55,7 @@ Compared source: current ProductHouse, ProductCard, DecisionRoom/DecisionAtelier
 
 **Closest actual record/feature:** #293 G05 Availability Passport, G10 dossier, current DecisionRoom
 
-**Substantive delta and disposition:** **Source-distinct HYPOTHESIS_REQUIRING_VALIDATION**: an explicit *negative suitability/why not* product-owned decision, rather than merely comparing public facts or showing lifecycle. No current product-owned negative-fit fact schema verified. Retain one pilot, no automatic feature scope.
+**Substantive delta and disposition:** **Source-distinct HYPOTHESIS_REQUIRING_VALIDATION**: an explicit _negative suitability/why not_ product-owned decision, rather than merely comparing public facts or showing lifecycle. No current product-owned negative-fit fact schema verified. Retain one pilot, no automatic feature scope.
 
 **G03**
 
@@ -195,7 +195,7 @@ Compared source: current ProductHouse, ProductCard, DecisionRoom/DecisionAtelier
 
 **Substantive delta and disposition:** EXISTING_SCOPE_VERIFICATION; source alone does not attest in-app/browser flow.
 
-**Scoreboard at this source checkpoint:** initial 10 G + 10 S; independent contrarian +2 G +3 S = total **12 G +13 S initial research candidates**. Historical comparison retains **1 source-distinct material G hypothesis (G02)**, 0 independently qualified S. **1 retained after conceptual Red Team as RESEARCH/PILOT-FIRST only**; 24 folded/existing-scope/hygiene, 0 implemented, 0 USER_VALIDATED. *Qualified* gap vs 10+10 ambition: 9 G and 10 S, without inventing extra ideas. Both idea passes COMPLETED at desk-level; Discovery remains OPEN for genuine field evidence and unexamined jobs, not “fully converged.” Distinguish 20+5 generated independent hypotheses from genuinely novel validated outcomes.
+**Scoreboard at this source checkpoint:** initial 10 G + 10 S; independent contrarian +2 G +3 S = total **12 G +13 S initial research candidates**. Historical comparison retains **1 source-distinct material G hypothesis (G02)**, 0 independently qualified S. **1 retained after conceptual Red Team as RESEARCH/PILOT-FIRST only**; 24 folded/existing-scope/hygiene, 0 implemented, 0 USER_VALIDATED. _Qualified_ gap vs 10+10 ambition: 9 G and 10 S, without inventing extra ideas. Both idea passes COMPLETED at desk-level; Discovery remains OPEN for genuine field evidence and unexamined jobs, not “fully converged.” Distinguish 20+5 generated independent hypotheses from genuinely novel validated outcomes.
 
 ## 3. Three-pass Red Team and actual use journey for G02 (source-distinct)
 
