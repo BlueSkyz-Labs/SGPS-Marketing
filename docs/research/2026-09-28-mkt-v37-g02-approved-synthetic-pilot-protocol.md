@@ -21,9 +21,11 @@ Fixture common header for both: `NGHIÊN CỨU GIẢ LẬP — KHÔNG PHẢI N�
 **A — No-build challenger:** the current product-profile pattern, with a plain one-sentence clarification immediately below status, based only on product-approved non-goals: `Đang phát triển; đây là sổ quản lý nhà trọ quy mô nhỏ, không phải hệ thống ERP hoặc đơn vị giữ tiền thanh toán.` This line is a paper sample, NOT production copy.
 
 **B — New candidate, static-only:** same profile/status plus optional three-row decision panel:
+
 1. `Phạm vi nghiên cứu: quản lý phòng/việc cần làm và khoản chưa thu cho chủ trọ nhỏ` — description of documented product direction, NOT released feature guarantee.
 2. `Không thuộc phạm vi sản phẩm hiện tại: ERP tổng quát hoặc dịch vụ giữ hộ tiền` — cite owner source ID/date in internal research notes, not private GitHub link on public page.
 3. `Chưa xác minh: có thể sử dụng công khai trên thiết bị của bạn hay chưa` — no Try/Download CTA or runtime assertion. End with truthful `Tìm hiểu tình trạng phát triển` / `Quay về danh sách sản phẩm`; no forced contact.
+
 No scoring, “best product” ranking, dynamically inferred persona, tracking, AI concierge or new claim authority.
 
 ## 4. Three tasks (synthetic scripts only, no participants run)
