@@ -80,9 +80,7 @@ test.describe("C2 Flagship Theatre — fixture-backed (product present)", () => 
       );
 
       // Exactly 3 capability items.
-      const caps = page.locator(
-        `${THEATRE} li.c2-flagship-theatre__capability`,
-      );
+      const caps = page.locator(`${THEATRE} div.c2-flagship-theatre__feature`);
       await expect(caps).toHaveCount(3);
 
       // Primary action uses the record label.
