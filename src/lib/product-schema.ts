@@ -296,7 +296,8 @@ export const productSchema = z
       ctx.addIssue({
         code: "custom",
         path: ["appAccess", "signInUrl"],
-        message: "sign-in URL must target this product's canonical subdomain, without userinfo, query or fragment",
+        message:
+          "sign-in URL must target this product's canonical subdomain, without userinfo, query or fragment",
       });
     }
     for (const platform of ["android", "ios"] as const) {
@@ -305,7 +306,7 @@ export const productSchema = z
         ctx.addIssue({
           code: "custom",
           path: ["appAccess", platform, "storeUrl"],
-          message: `${platform} store URL must target the official platform's listing URL`,
+          message: `${platform} store URL must target its official platform listing`,
         });
       }
     }
