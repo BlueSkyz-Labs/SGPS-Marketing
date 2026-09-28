@@ -1,13 +1,19 @@
 ---
+import { statusLabelFor } from "@/lib/product-copy";
+import type { Language } from "@/data/site";
+import type { PublicLabel } from "@/lib/product-schema";
+
 interface Props {
-  label: string;
+  label: PublicLabel;
+  lang: Language;
 }
-const { label } = Astro.props;
+const { label, lang } = Astro.props;
+const displayLabel = statusLabelFor(label, lang);
 ---
 
 <span
   data-product-status={label}
   class="inline-flex max-w-full rounded-[var(--radius-card)] border border-[var(--border-subtle)] px-2.5 py-1 text-xs font-semibold tracking-wide text-[var(--action-primary)] sm:px-3"
 >
-  {label}
+  {displayLabel}
 </span>
