@@ -19,12 +19,11 @@ import { productTransitionStyle } from "@/lib/product-transition";
  * `product === null` it renders nothing — the homepage falls back honestly
  * rather than fabricating a product moment.
  *
- * Wave 2 Task 2.2 — cinematic device frame:
- *   The proof screenshot is encased in a presentation-only device/browser frame
- *   with window controls and a titanium chamfer edge, backed by a soft ambient
- *   backlight. The capability bullets are transformed into three micro-feature
- *   cards. The frame carries no product truth; the screenshot's honest caption
- *   and the verbatim capability copy are preserved.
+ * Wave 2 Task 2.2 — cinematic presentation frame:
+ *   The record's brand-identity artwork is shown inside decorative browser
+ *   chrome; it is not a running-app screenshot. The localized caption states
+ *   that boundary. The capability bullets are transformed into three
+ *   micro-feature cards without changing their record-backed copy.
  */
 interface Props {
   product: CollectionEntry<"products"> | null;
@@ -187,19 +186,19 @@ const viewProfileLabel = labelFor(SHARED_LABELS.viewProfile, lang);
   }
 
   /*
-   * The proof image stays at its intrinsic aspect ratio but must never exceed
-   * the frame's width — important on mobile viewports where the intrinsic
-   * dimensions would otherwise overflow.
-   */
+  * The record media stays at its intrinsic aspect ratio but must never exceed
+    * the frame's width — important on mobile viewports where the intrinsic
+    * dimensions would otherwise overflow.
+    */
   .c2-flagship-theatre__frame img {
     max-width: 100%;
     height: auto;
   }
 
   /*
-   * Titanium chamfer — a single specular pass across the top edge.
-   * Derived entirely from existing tokens; no raw palette cluster.
-   */
+    * Titanium chamfer — a single specular pass across the top edge.
+    * Derived entirely from existing tokens; no raw palette cluster.
+    */
   .c2-flagship-theatre__device-frame::before {
     content: "";
     position: absolute;
