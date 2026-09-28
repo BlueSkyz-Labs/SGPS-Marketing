@@ -96,3 +96,39 @@ test("negative proof: a store link on an in-development app is rejected", () => 
     "appAccess:\n  android:\n    state: in-development\n    storeUrl: https://play.google.com/x\n  ios:\n    state: available\n";
   assert.deepEqual(mobileViolations(bad), ["android", "ios"]);
 });
+
+export function supportedPlatforms(text) {
+  const block = text.match(/^platforms:\n((?: {2}- [^\n]+\n)+)/m)?.[1] ?? "";
+  return [...block.matchAll(/^ {2}- ([a-z-]+)$/gm)].map((m) => m[1]);
+}
+
+export function prematureNativePlatforms(text) {
+  const platforms = supportedPlatforms(text);
+  return mobileStates(text)
+    .filter((app) => app.state === "in-development")
+    .filter((app) => platforms.includes(app.key))
+    .map((app) => app.key);
+}
+
+test("pending native apps cannot appear as supported platforms", () => {
+  for (const slug of PUBLISHED) {
+    const record = records.find(([key]) => key === slug)?.[1] ?? "";
+    assert.deepEqual(prematureNativePlatforms(record), [], slug);
+  }
+  const sotam = records.find(([key]) => key === "sotam")?.[1] ?? "";
+  assert.deepEqual(supportedPlatforms(sotam), ["web"]);
+  assert.deepEqual(
+    mobileStates(sotam).map((app) => app.state),
+    ["in-development", "in-development"],
+  );
+});
+
+test("negative proof: prematurely listing a native OS fails", () => {
+  const sotam = records.find(([key]) => key === "sotam")?.[1] ?? "";
+  const altered = sotam.replace(
+    "platforms:\n  - web\n",
+    "platforms:\n  - web\n  - android\n",
+  );
+  assert.notEqual(altered, sotam);
+  assert.deepEqual(prematureNativePlatforms(altered), ["android"]);
+});

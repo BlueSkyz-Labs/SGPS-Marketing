@@ -1,6 +1,10 @@
 import { z } from "astro/zod";
 import { isHttpsUrl } from "./https-url.ts";
 import { isNonProductionSiteUrl } from "./truth.ts";
+import {
+  isCanonicalAppSignInUrl,
+  isOfficialMobileStoreUrl,
+} from "./app-access-url.ts";
 
 const lifecycle = z.enum([
   "concept",
@@ -282,6 +286,29 @@ export const productSchema = z
         message:
           "proof media requires 2–3 verified capabilities for FlagshipProof",
       });
+    }
+
+    // Link authority is enforced by the schema, not only by a test that
+    // greps current YAML records. Generic HTTPS is insufficient for a
+    // sign-in/store CTA because visitors may trust the product-house label.
+    const signInUrl = value.appAccess?.signInUrl;
+    if (signInUrl && !isCanonicalAppSignInUrl(value.slug, signInUrl)) {
+      ctx.addIssue({
+        code: "custom",
+        path: ["appAccess", "signInUrl"],
+        message:
+          "sign-in URL must target this product's canonical subdomain, without userinfo, query or fragment",
+      });
+    }
+    for (const platform of ["android", "ios"] as const) {
+      const storeUrl = value.appAccess?.[platform]?.storeUrl;
+      if (storeUrl && !isOfficialMobileStoreUrl(platform, storeUrl)) {
+        ctx.addIssue({
+          code: "custom",
+          path: ["appAccess", platform, "storeUrl"],
+          message: `${platform} store URL must target its official platform listing`,
+        });
+      }
     }
 
     // Coherence + public listing rules apply only to public listings.
