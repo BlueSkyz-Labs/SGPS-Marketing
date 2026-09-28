@@ -10,7 +10,7 @@ APPROVED: read-only source/non-goal mapping; two **paper/Markdown-only fictional
 ## 2. Actual source versus hypothesis
 
 - Public Marketing Sổ Trọ entry: `lifecycle: development`, `availability: preview`, `platforms: [web]` and development-scope wording; artwork has `screenshot.png` filename but alt describes brand identity. The existing ProductCard exposes a profile link and a record-owned primary action. Do not assert that a preview CTA means an app is public/deployed.
-- Approved Sổ Trọ strategic contract: deliberately simple Vietnam-first landlord notebook, initial 1–50 rooms, not ERP, marketplace, generic chatbot or payment custodian. These facts are *source facts* (not live capability/product launch evidence).
+- Approved Sổ Trọ strategic contract: deliberately simple Vietnam-first landlord notebook, initial 1–50 rooms, not ERP, marketplace, generic chatbot or payment custodian. These facts are _source facts_ (not live capability/product launch evidence).
 - Hypothesis: a visitor may infer generic platform/payments/automated legal scope despite conservative copy. No visitor observation exists. G02 is materially distinct only if communicating explicit **negative fit** changes a legitimate evaluation decision beyond readable current limitations.
 - Following merged #302, **Marketing has no payment-authority generator in src/** under the source guard. Neither hypothetical variant includes bank account, QR, payment or checkout.
 
