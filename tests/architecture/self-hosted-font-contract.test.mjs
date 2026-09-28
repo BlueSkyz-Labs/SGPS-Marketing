@@ -6,7 +6,7 @@ const css = readFileSync("src/styles/global.css", "utf8");
 const layout = readFileSync("src/layouts/BaseLayout.astro", "utf8");
 const fontFaces = css.match(/@font-face\s*\{[^}]+\}/g) ?? [];
 
-test("self-hosted Inter subsets are licensed and preload Latin only in English", () => {
+test("self-hosted Inter subsets are licensed and preloaded before locale text paints", () => {
   const latin = "public/fonts/inter-latin-opsz-v5.3.0.woff2";
   const vietnamese = "public/fonts/inter-vietnamese-opsz-v5.3.0.woff2";
   assert.ok(statSync(latin).size + statSync(vietnamese).size <= 100_000);
@@ -25,9 +25,14 @@ test("self-hosted Inter subsets are licensed and preload Latin only in English",
     );
   }
   assert.match(css, /size-adjust\s*:\s*107%/);
+  // Latin is used in brand/navigation text in all three locales, including VI.
+  // VI additionally preloads its diacritic subset rather than shifting after paint.
   assert.match(
     layout,
-    /currentLang === "en"[\s\S]*?rel="preload"[\s\S]*?href="\/fonts\/inter-latin-opsz-v5\.3\.0\.woff2"[\s\S]*?as="font"[\s\S]*?crossorigin/,
+    /<link\s+rel="preload"\s+href="\/fonts\/inter-latin-opsz-v5\.3\.0\.woff2"\s+as="font"\s+type="font\/woff2"\s+crossorigin/,
   );
-  assert.doesNotMatch(layout, /preload[\s\S]{0,120}inter-vietnamese/);
+  assert.match(
+    layout,
+    /currentLang === "vi"\s*\?\s*\(\s*<link\s+rel="preload"\s+href="\/fonts\/inter-vietnamese-opsz-v5\.3\.0\.woff2"\s+as="font"\s+type="font\/woff2"\s+crossorigin/,
+  );
 });
