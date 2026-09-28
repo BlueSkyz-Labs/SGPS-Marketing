@@ -36,7 +36,7 @@
     },
     {
       "id": "experience-convergence-v5",
-      "name": "Experience & Design Convergence v5 — Wave 0 P0 VietQR removal, OS-dark/visual fixes and premium Atlas source-MERGED through PR #302 at main@3342d912. Remaining v5 work is queued PLANNED while Brand Kit v4 is the repository's ONE IN_PROGRESS execution wave (#306/#307/#308); Cloudflare served SHA, anonymous access and Human E4 remain NOT_VERIFIED.",
+      "name": "Experience & Design Convergence v5 — initial Wave 0/P0 source slice MERGED via #302 (main@3342d912); remaining tasks PLANNED under one-active-wave rule. Brand Kit v4 owns header/tokens/ProductCard/Flagship frame. #306 header merged; #307/#308 and #316 require fresh reconciliation. No source merge alone establishes served-SHA/anonymous/E4.",
       "status": "PLANNED",
       "evidence": "docs/superpowers/plans/2026-09-27-experience-design-convergence-v5.md"
     },
@@ -150,7 +150,7 @@
     },
     {
       "id": "c2-p0",
-      "name": "P0 Product truth activation (5 verified AI products activated from authentic brand assets)",
+      "name": "HISTORICAL 2026-09-27 C2 P0: five product profiles source-listed/brand assets via #269; current publication superseded by #314 (Sổ Trọ and Sổ Tâm only). MERGED here is historical source-wave status, never proof of five running apps, verified UI screenshots or deployed anonymous access.",
       "status": "MERGED",
       "evidence": "docs/evidence/2026-09-27-c2-p0-product-truth-activation.md"
     },
@@ -327,7 +327,9 @@
     {
       "id": "human-review-governance",
       "question": "Enable stronger human review rules only if a real independent reviewer path exists; otherwise retain HUMAN_REVIEW_UNAVAILABLE semantics.",
-      "blocks": ["branch-protection-independent-review"]
+      "blocks": [
+        "branch-protection-independent-review"
+      ]
     },
     {
       "id": "rum-provider",
@@ -337,19 +339,23 @@
     {
       "id": "c3-concierge-runtime-privacy-provider",
       "question": "C3 direction is approved, but remote Concierge/model provider, retrieval runtime, log retention/privacy, abuse controls and cost ceiling require a dedicated architecture/privacy/security decision plus owner approval before implementation.",
-      "blocks": ["c3-e-concierge-runtime"]
+      "blocks": [
+        "c3-e-concierge-runtime"
+      ]
     },
     {
       "id": "c3-spatial-webgl-go-gate",
       "question": "C3 spatial concept is approved as an experiment. WebGL/3D remains conditional on native 2.5D evidence, measured value, performance/accessibility budget and a separate owner GO decision.",
-      "blocks": ["c3-g-webgl-runtime"]
+      "blocks": [
+        "c3-g-webgl-runtime"
+      ]
     }
   ],
   "residualExternal": [
     "Human E4: OWNER SELF-TESTS (owner directive 2026-09-13, NON-BLOCKER). Agent-side max complete: protocol (docs/evidence/2026-09-12-v3-human-e4.md), session template + red-team template (docs/evidence/templates/). Automated substitutes already in CI (axe matrix, Lighthouse). Real-participant sessions are owner-executed.",
     "VI copy review: OWNER CROSS-CHECKS WITH ANOTHER AGENT (owner directive 2026-09-13, NON-BLOCKER). Agent fixed the 3 weakest spots + EN/VI parity guards; remainder awaits the cross-check audit.",
     "Trademark/legal clearance and specialty print (brand kit caveats).",
-    "Localized product profile routes are exercised by the five published products; each profile still fails closed on product truth, and the route-contract architecture test stays authoritative.",
+    "CURRENT main@9d9d8f5 after #314/#321: only Sổ Trọ and Sổ Tâm have public product registry entries/profiles. ApexAgent, FluentArc and Vững Tay Lái are hidden/nonpublic, despite historical #269 five-profile landing. Source-only route/build checks do not prove served-SHA, anonymous runtime or underlying product capabilities.",
     "Post-merge landing verification: #231 is verified on main at 45e3fdd and #263 is verified on main at dce8673; #225, #228 and #230 are closed as superseded.",
     "Evidence document: the 2026-09-24 convergence read-back (#257) is published at docs/evidence/2026-09-25-c4-convergence-readback.md; the C3-F release-source finding is recorded at docs/evidence/2026-09-25-c3f-release-source-blocked.md; lane-helper guard evidence remains documentation-only (operational).",
     "Owner fact required for public-truth promotion: src/data/site.ts#contactEmail and #securityEmail are empty, so scripts/check-promotion-state.mjs reports public-truth BLOCKED_OWNER_FACT (issue #281); source and deployment stages PASS with no FAIL. An invented mailbox must never satisfy this gate.",
@@ -357,12 +363,12 @@
     "Lane-helguard guard: helper now emits 'LOCAL-AHEAD skip' and exits 0 on local-ahead branches; reset incident documented (operational, not committed)."
   ],
   "nextActionable": [
-    "CURRENT SOURCE TRUTH (2026-09-28): PR #302 is MERGED on main@3342d912, including no-payment-authority negative guard; exact-head Source Assurance #36343395524 and #36345280804 both show Quality Gates and Browser Assurance SUCCESS. Wave 0 source remediation only, NOT automatically Cloudflare served-SHA, anonymous access or Human E4. Do not restart #302. Brand Kit v4 original owners #306 sticky header, #307 ProductCard, #308 Flagship device frame must rebase against merged Wave 0, preserve OS-dark surface token and product artwork-vs-UI truth, and run new exact-head gates. #281 mailbox remains provider/Owner verified receive/reply gate. Research-only v3.7 G02 approval and protocol remain in existing Issue #310 / Draft #311; neither code nor merge nor launch authority. Remaining v5 W1–W6 tasks follow one canonical plan/owner; no parallel writer or second policy registry.",
+    "2026-09-28 source checkpoint main@9d9d8f5: #302 (v5 Wave 0), #306 (Brand Kit header), #314 (publish Sổ Trọ + Sổ Tâm only; direct sign-in and localized copy), and #321 (privacy-off telemetry taxonomy) MERGED. #320 app-access URL authority and #322 Sổ Tâm native-platform truth are Draft, exact-head Quality Gates SUCCESS, Browser Assurance independent/in progress at this checkpoint; neither is yet main protection. #307 ProductCard, #308 Flagship frame, #316 Inter self-host are open/behind or conflicted and must independently reconcile main before gates/merge. Keep Brand Kit v4 canonical ownership; do not restart #302 or re-add Marketing payment authority. #281 mailbox, anonymous served-SHA, actual product runtime, Human E4 and VI/ZH human review remain external or owner-gated.",
     "C3-D Tasks 1–5 are merged and verified: Task 5 PR #276 exact-head Source Assurance run 36216346386 passed; main e3a3c6f exact post-merge Source Assurance run 36231546326 passed; Cloudflare deployment 7af4f796 has version 8d12ab41 at 100%. Anonymous public smoke remains blocked by owner-only Cloudflare Access.",
     "Blocked on owner fact: C3-F Task 2 and later (release source adapter, publication surface) — no authored public release source exists. C4-D Tasks 2 and 4 (Architecture Salon surface, Provenance Lens) are already landed (see the c4-d-salon wave), so the earlier suggestion here is superseded.",
-    "Public product runtime is live for five products (Sổ Tâm, Sổ Trọ, FluentArc, ApexAgent, VungTayLai): #269 landed, and #292 (main e21c954) reconciled the five-product truth — corrected product name, removed unverified voice/transcription claims, per-product platform SEO/JSON-LD, and identity artwork captioned as artwork rather than a running-app screenshot. Verified product UI screenshots remain absent by design (honest empty state), so C4-A Task 10 (gallery mount), C4-F and remote/model C4-G remain separately gated.",
+    "CURRENT Marketing public product profiles = two only: Sổ Trọ and Sổ Tâm after #314. #269 historically source-listed five; #292 corrected Sổ Tâm name/audio claims and identity-art captions; neither establishes five live product runtimes or a verified running-UI screenshot. #322 independently addresses Sổ Tâm Web vs native-in-development metadata (DRAFT at checkpoint); preserve exact-head gates. C4-A gallery, C4-F and remote/model C4-G remain separately gated on approved real product proof/provider.",
     "Human E4, VI copy cross-check, trademark/legal clearance and the RUM/privacy provider decision remain owner-executed.",
     "Verified merged 2026-09-27: #298 (947af10 Brand Kit v4 standardization plan + spec, activating the in-progress wave), #292 (e21c954 five-product Marketing truth reconciliation for #291/#293), #299 (Sổ Tâm name correction across the v2.0 and Brand Kit v4 sources). 2026-09-26: #272 (0644a7b intent UI), #273 (d484299 fidelity resolver), #274 (a0d3f7d adaptive fidelity engine). 2026-09-25: #265 (ffbf78f), #266 (4efb49b), #267 (b3b94cd), #268 (2871ce2), #270 (b95c784). Earlier 2026-09-24: #234, #235, #257, #256, #253, #258, #229.",
-    "Residual: #269 landed (five product profiles published); the outstanding owner fact is a verified product UI screenshot per product, and C3-F release publication stays owner-fact blocked. Support/security-intake truth correction merged as PR #282 at main 6d1468e; exact-head Quality Gates and Browser Assurance passed for cff176d. Cloudflare main deployment 994a1583 serves version 9cf7f741 at 100%. This does not verify a real support mailbox or anonymous public access; those remain owner/provider gates. Closed as verified with evidence: issue #240 (dossier claim-source links, fixed by f9c6165; contract test in tests/architecture/c4-dossier-contract.test.mjs passes). Portfolio propagation of the fail-open evidence/claim gate class (§20): PRJ_ApexAgent #299 (guard) and #300 (state-accuracy ladder blocker) landed on main with landing proof, PRJ_FluentArc #419 is open and held because verify:local is red from another agent's in-flight overwrite of .sgps/experience/EXPERIENCE_CONVERGENCE_EVIDENCE.md, and PRJ_SoTam, PRJ-SoTro and PRG_VungTayLai were independently re-audited with no fail-open gate found. Owner-gated: E4, RUM, Concierge runtime, Spatial/WebGL, screenshot/product truth and public Access launch approval."
+    "Residual historical #269 five-profile source landing is superseded by #314 current two-public Product Truth (Sổ Trọ, Sổ Tâm); the three other registry records remain hidden/nonpublic. Verified UI screenshots require independent per-product evidence; C3-F release publication stays owner-fact blocked. Support/security-intake truth correction merged as PR #282 at main 6d1468e; exact-head Quality Gates and Browser Assurance passed for cff176d. Cloudflare main deployment 994a1583 serves version 9cf7f741 at 100%. This does not verify a real support mailbox or anonymous public access; those remain owner/provider gates. Closed as verified with evidence: issue #240 (dossier claim-source links, fixed by f9c6165; contract test in tests/architecture/c4-dossier-contract.test.mjs passes). Portfolio propagation of the fail-open evidence/claim gate class (§20): PRJ_ApexAgent #299 (guard) and #300 (state-accuracy ladder blocker) landed on main with landing proof, PRJ_FluentArc #419 is open and held because verify:local is red from another agent's in-flight overwrite of .sgps/experience/EXPERIENCE_CONVERGENCE_EVIDENCE.md, and PRJ_SoTam, PRJ-SoTro and PRG_VungTayLai were independently re-audited with no fail-open gate found. Owner-gated: E4, RUM, Concierge runtime, Spatial/WebGL, screenshot/product truth and public Access launch approval."
   ]
 }
