@@ -4,6 +4,8 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
 import Container from "@/components/layout/Container.astro";
 import ProductStatus from "@/components/product/ProductStatus.astro";
 import ButtonLink from "@/components/ui/ButtonLink.astro";
+import { productCopy } from "@/lib/product-copy";
+import AppAccess from "@/components/product/AppAccess.astro";
 import { getPublicProducts } from "@/lib/products";
 import { safeJsonLd, productJsonLd } from "@/lib/seo";
 import { SITE } from "@/data/site";
@@ -23,7 +25,8 @@ interface Props {
 const { product } = Astro.props;
 const { data } = product;
 const media = data.proof.media;
-const capabilities = data.capabilities ?? [];
+const copy = productCopy(data, "en");
+const capabilities = copy.capabilities;
 
 const PLATFORM_LABELS: Record<string, string> = {
   web: "Web",
@@ -55,7 +58,7 @@ const proofLinks = [
 const productStructuredData = productJsonLd(
   {
     name: data.name,
-    description: data.shortDescription,
+    description: copy.shortDescription,
     slug: data.slug,
     mediaUrl: media?.src,
     platforms: data.platforms,
@@ -67,7 +70,7 @@ const productStructuredData = productJsonLd(
 
 <BaseLayout
   title={`${data.name} — BlueSkyz Labs`}
-  description={data.shortDescription}
+  description={copy.shortDescription}
   path={`/en/products/${data.slug}/`}
   ogImage={data.proof.media?.src}
   scene="product"
@@ -92,7 +95,7 @@ const productStructuredData = productJsonLd(
       <div class="mt-6 flex flex-wrap items-center gap-3">
         <ProductStatus label={data.publicLabel} />
         <p class="text-xs font-medium tracking-wide text-[var(--text-muted)]">
-          {data.endorsement}
+          {copy.endorsement}
         </p>
       </div>
 
@@ -100,12 +103,12 @@ const productStructuredData = productJsonLd(
         {data.name}
       </h1>
       <p class="mt-5 max-w-2xl text-lg text-[var(--text-secondary)]">
-        {data.shortDescription}
+        {copy.shortDescription}
       </p>
 
       <div class="mt-8 flex flex-wrap gap-3">
         <ButtonLink href={data.primaryAction.href}>
-          {data.primaryAction.label}
+          {copy.primaryActionLabel}
         </ButtonLink>
         {data.secondaryAction ? (
           <ButtonLink href={data.secondaryAction.href} variant="secondary">
@@ -113,6 +116,8 @@ const productStructuredData = productJsonLd(
           </ButtonLink>
         ) : null}
       </div>
+
+      <AppAccess appAccess={data.appAccess} productName={data.name} lang="en" />
 
       <section class="mt-14" aria-labelledby="profile-status">
         <h2
@@ -127,7 +132,7 @@ const productStructuredData = productJsonLd(
               Status
             </dt>
             <dd class="mt-1 text-sm font-medium text-[var(--text-primary)]">
-              {data.publicLabel}
+              {copy.statusLabel}
             </dd>
           </div>
           <div class="rounded-[var(--radius-card)] border border-[var(--border-subtle)] p-4 bg-[var(--bg-surface)]">
@@ -161,7 +166,7 @@ const productStructuredData = productJsonLd(
           What it’s for
         </h2>
         <ul class="mt-4 list-disc space-y-2 pl-5 text-[var(--text-secondary)]">
-          {data.jobs.map((job: string) => (
+          {copy.jobs.map((job: string) => (
             <li>{job}</li>
           ))}
         </ul>

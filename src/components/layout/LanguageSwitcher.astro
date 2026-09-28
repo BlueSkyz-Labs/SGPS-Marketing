@@ -15,39 +15,33 @@ const { variant = "light" } = Astro.props;
 const currentPath = Astro.url.pathname;
 const currentLang = getLanguageFromPath(currentPath);
 
-const NATIVE_NAMES = { en: "English", vi: "Tiếng Việt", zh: "中文" } as const;
+const NATIVE_NAMES = {
+  en: "English",
+  vi: "Tiếng Việt",
+  zh: "中文",
+} as const;
+
 const GROUP_LABEL: Record<string, string> = {
   en: "Language",
   vi: "Ngôn ngữ",
   zh: "语言",
 };
 const aria = GROUP_LABEL[currentLang] ?? GROUP_LABEL.en;
-const CODE: Record<string, string> = { en: "EN", vi: "VI", zh: "中文" };
+const CODE: Record<string, string> = { en: "EN", vi: "VI", zh: "ZH" };
+
+const isDark = variant === "dark";
 ---
 
-<div
-  role="navigation"
+<nav
   aria-label={aria}
+  data-language-switcher
   class:list={[
-    "inline-flex min-w-0 flex-wrap items-center gap-0.5 rounded-lg border p-0.5",
-    // The dark variant sits on the inverse (ink) surface in every theme, so
-    // it must not inherit the theme-dependent primary surface: in the light
-    // theme that surface is porcelain and the porcelain labels vanished.
-    variant === "dark"
-      ? "border-white/15 bg-white/5"
-      : "border-[var(--border-subtle)] bg-[var(--surface-primary)]",
+    "lang-toggle-shell",
+    isDark ? "lang-toggle-shell--dark" : "lang-toggle-shell--light",
   ]}
 >
   {SUPPORTED_LANGUAGES.map((lang) => {
     const isActive = currentLang === lang;
-    const activeClasses =
-      variant === "dark"
-        ? "text-[var(--brand-porcelain)] bg-white/10 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.15)]"
-        : "text-[var(--text-primary)] bg-[var(--surface-subtle)] shadow-[inset_0_0_0_1px_var(--border-subtle)]";
-    const idleClasses =
-      variant === "dark"
-        ? "text-[color-mix(in_srgb,var(--brand-porcelain)_82%,white)] hover:text-white"
-        : "text-[var(--text-secondary)] hover:text-[var(--text-primary)]";
     return (
       <a
         href={getAlternatePath(currentPath, lang)}
@@ -56,17 +50,176 @@ const CODE: Record<string, string> = { en: "EN", vi: "VI", zh: "中文" };
         aria-current={isActive ? "page" : undefined}
         aria-label={NATIVE_NAMES[lang as keyof typeof NATIVE_NAMES]}
         title={NATIVE_NAMES[lang as keyof typeof NATIVE_NAMES]}
-        style={`${languageTransitionStyle(lang)}; min-width: 44px; min-height: 44px`}
+        style={languageTransitionStyle(lang)}
         class:list={[
-          "inline-flex min-h-11 min-w-11 items-center justify-center px-2 text-sm font-semibold no-underline rounded-md transition-colors",
-          isActive ? activeClasses : idleClasses,
+          "lang-toggle-item",
+          isActive ? "lang-toggle-item--active" : "lang-toggle-item--idle",
         ]}
       >
-        {CODE[lang] ?? LANGUAGES[lang].label}
+        <span
+          class:list={[
+            "lang-toggle-flag",
+            isActive ? "lang-toggle-flag--visible" : "lang-toggle-flag--hidden",
+          ]}
+          aria-hidden="true"
+        >
+          <img
+            src={`/brand/blueskyz/flags/${lang}.svg`}
+            alt=""
+            width="20"
+            height="20"
+            loading="eager"
+            decoding="async"
+          />
+        </span>
+        <span class="lang-toggle-code">{CODE[lang]}</span>
       </a>
     );
   })}
-</div>
+</nav>
+
+<style>
+  /* ─── Shell ─────────────────────────────────────────────────────────── */
+  .lang-toggle-shell {
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+    padding: 3px;
+    border-radius: 999px;
+    /* Neumorphic inset cavity — carved-in look */
+    box-shadow:
+      inset 2px 2px 5px rgba(11, 16, 32, 0.12),
+      inset -2px -2px 4px rgba(255, 255, 255, 0.72);
+  }
+
+  .lang-toggle-shell--light {
+    background: var(--brand-porcelain, #f7f8fa);
+    border: 1px solid rgba(11, 16, 32, 0.08);
+  }
+
+  .lang-toggle-shell--dark {
+    background: rgba(255, 255, 255, 0.08);
+    box-shadow:
+      inset 2px 2px 5px rgba(0, 0, 0, 0.3),
+      inset -2px -2px 4px rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+  }
+
+  /* ─── Item ───────────────────────────────────────────────────────────── */
+  .lang-toggle-item {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    min-width: 44px;
+    min-height: 44px;
+    padding: 0 10px;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-decoration: none;
+    transition:
+      background 180ms
+        var(--motion-ease-standard, cubic-bezier(0.22, 1, 0.36, 1)),
+      box-shadow 180ms
+        var(--motion-ease-standard, cubic-bezier(0.22, 1, 0.36, 1)),
+      color 120ms ease;
+    white-space: nowrap;
+  }
+
+  /* Active pill — floats with convex neumorphic shadow */
+  .lang-toggle-shell--light .lang-toggle-item--active {
+    background: var(--surface-raised);
+    color: var(--brand-ink, #0b1020);
+    box-shadow:
+      2px 2px 6px rgba(11, 16, 32, 0.14),
+      -1px -1px 4px rgba(255, 255, 255, 0.9);
+  }
+
+  .lang-toggle-shell--dark .lang-toggle-item--active {
+    background: rgba(255, 255, 255, 0.14);
+    color: var(--brand-porcelain, #f7f8fa);
+    box-shadow:
+      2px 2px 6px rgba(0, 0, 0, 0.35),
+      -1px -1px 3px rgba(255, 255, 255, 0.06);
+  }
+
+  /* Idle — transparent, muted text */
+  .lang-toggle-shell--light .lang-toggle-item--idle {
+    background: transparent;
+    color: var(--brand-slate-650, #475569);
+  }
+
+  .lang-toggle-shell--dark .lang-toggle-item--idle {
+    background: transparent;
+    color: rgba(247, 248, 250, 0.6);
+  }
+
+  .lang-toggle-item--idle:hover {
+    color: var(--brand-ink, #0b1020);
+  }
+
+  .lang-toggle-shell--dark .lang-toggle-item--idle:hover {
+    color: var(--brand-porcelain, #f7f8fa);
+  }
+
+  /* ─── Flag badge ─────────────────────────────────────────────────────── */
+  .lang-toggle-flag {
+    display: inline-flex;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    overflow: hidden;
+    flex-shrink: 0;
+    box-shadow: 0 1px 3px rgba(11, 16, 32, 0.2);
+  }
+
+  .lang-toggle-flag img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+  }
+
+  .lang-toggle-flag--hidden {
+    width: 0;
+    opacity: 0;
+    overflow: hidden;
+    pointer-events: none;
+    transform: scale(0.6);
+    transition:
+      width 180ms var(--motion-ease-standard, cubic-bezier(0.22, 1, 0.36, 1)),
+      opacity 150ms ease,
+      transform 180ms
+        var(--motion-ease-standard, cubic-bezier(0.22, 1, 0.36, 1));
+  }
+
+  .lang-toggle-flag--visible {
+    width: 20px;
+    opacity: 1;
+    transform: scale(1);
+    transition:
+      width 180ms var(--motion-ease-standard, cubic-bezier(0.22, 1, 0.36, 1)),
+      opacity 150ms ease,
+      transform 180ms
+        var(--motion-ease-standard, cubic-bezier(0.22, 1, 0.36, 1));
+  }
+
+  /* ─── Code text ──────────────────────────────────────────────────────── */
+  .lang-toggle-code {
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* ─── Reduced motion ─────────────────────────────────────────────────── */
+  @media (prefers-reduced-motion: reduce) {
+    .lang-toggle-item,
+    .lang-toggle-flag--hidden,
+    .lang-toggle-flag--visible {
+      transition: none !important;
+    }
+  }
+</style>
 
 <script>
   import { LANGUAGE_STORAGE_KEY, isActiveLanguage } from "@/lib/i18n";

@@ -44,8 +44,11 @@ export function initAnalyticsBridge(): void {
 
     const journeyLink = target.closest("[data-journey-bar] a");
     if (journeyLink) {
-      const href = journeyLink.getAttribute("href") ?? "";
-      const destination = href.split("/").filter(Boolean).pop() ?? "";
+      // The authored step key is categorical route truth. Never derive
+      // telemetry data from raw hrefs: queries/fragments are not dimensions.
+      const destination = journeyLink
+        .closest("[data-step-key]")
+        ?.getAttribute("data-step-key");
       emitAnalyticsEvent("journey_action_opened", {
         kind: "route",
         destination,
