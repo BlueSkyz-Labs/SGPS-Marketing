@@ -44,7 +44,7 @@ test.describe("C3 ProductVisual — fixture-backed screenshot truth", () => {
       );
       await expect(image).toHaveAttribute(
         "alt",
-        "Fixture flagship proof media",
+        "Fixture flagship brand identity artwork",
       );
       await expect(image).toHaveAttribute("width", "1280");
       await expect(image).toHaveAttribute("height", "800");
@@ -54,13 +54,12 @@ test.describe("C3 ProductVisual — fixture-backed screenshot truth", () => {
       const imageBox = await image.boundingBox();
       expect(
         imageBox,
-        "product screenshot must be rendered and measurable",
+        "identity artwork must be rendered and measurable",
       ).not.toBeNull();
       expect(imageBox!.width).toBeGreaterThanOrEqual(viewport.readableFloor);
       expect(imageBox!.x).toBeGreaterThanOrEqual(0);
-      // The image must never overflow its viewport horizontally. The frame
-      // owns that constraint (min-width: 0 + overflow: hidden), so this is an
-      // exact bound with a 1px allowance for sub-pixel rounding only.
+      // The image must never overflow its viewport horizontally. The ink stage
+      // owns that constraint, with 1px for sub-pixel rounding only.
       expect(imageBox!.x + imageBox!.width).toBeLessThanOrEqual(
         viewport.width + 1,
       );
