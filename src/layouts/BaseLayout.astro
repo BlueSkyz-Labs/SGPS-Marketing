@@ -69,10 +69,17 @@ const robotsNoindex = noindex || isNonProductionSiteUrl(SITE.url);
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width" />
     <script is:inline src="/theme-init.js"></script>
-    {currentLang === "en" ? (
+    <link
+      rel="preload"
+      href="/fonts/inter-latin-opsz-v5.3.0.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    {currentLang === "vi" ? (
       <link
         rel="preload"
-        href="/fonts/inter-latin-opsz-v5.3.0.woff2"
+        href="/fonts/inter-vietnamese-opsz-v5.3.0.woff2"
         as="font"
         type="font/woff2"
         crossorigin
