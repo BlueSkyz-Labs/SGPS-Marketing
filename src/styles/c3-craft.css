@@ -206,17 +206,9 @@ main details > summary:active {
   }
 }
 
-/* Task 1.2 — Sticky Frosted Glass Header surface.
- *
- * Explicit rgba backgrounds so the contrast test can measure them.
- * backdrop-filter provides the frosted glass effect.
- */
+/* ADR 0012 — the header is the sole optional translucent surface. */
 .header-glass {
-  position: sticky;
-  top: 0;
-  z-index: 50;
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  background-color: var(--surface-primary);
   /* Frosted surface = the scene's own surface at 82%. It must follow the
      scene token (header[data-scene=...] re-points --surface-primary), never a
      hard-coded theme colour: the ink scene pairs an ink surface with porcelain
@@ -224,6 +216,45 @@ main details > summary:active {
   background-color: var(--surface-primary-glass);
   /* Specular bottom hairline: light-catching on the ink surface. */
   border-bottom-color: rgba(255, 255, 255, 0.1);
+}
+
+@media (min-width: 768px) and (min-height: 560px) {
+  .header-glass {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+  }
+
+  @supports (backdrop-filter: blur(1px)) {
+    .header-glass {
+      background-color: var(--surface-primary-glass);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .header-glass {
+    background-color: var(--surface-primary);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+}
+
+[data-fidelity-tier="static-premium"] .header-glass {
+  background-color: var(--surface-primary);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+@media (forced-colors: active) {
+  .header-glass {
+    background-color: Canvas;
+    border-bottom-color: CanvasText;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
 }
 
 /* Light mode hairline (the surface itself comes from the scene token). */
