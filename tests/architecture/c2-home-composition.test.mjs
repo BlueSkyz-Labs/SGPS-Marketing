@@ -92,7 +92,11 @@ test("the flagship act consumes the product record instead of authoring facts", 
   );
   // Facts come from the record.
   assert.match(theatre, /data\.name/);
-  assert.match(theatre, /data\.shortDescription/);
+  assert.match(theatre, /productCopy\(data,\s*lang\)/);
+  assert.match(theatre, /copy\.shortDescription/);
+  assert.match(theatre, /copy\.jobs/);
+  assert.match(theatre, /copy\.capabilities/);
+  assert.match(theatre, /copy\.primaryActionLabel/);
   assert.match(theatre, /data\.publicLabel/);
   assert.match(theatre, /data\.primaryAction/);
   assert.match(house, /data\.featuredTier/);

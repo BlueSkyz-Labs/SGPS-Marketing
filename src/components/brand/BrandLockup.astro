@@ -39,11 +39,14 @@ function lockupGeometry(
 }
 
 const geometry = lockupGeometry(size, surface);
+const adaptive = surface === "porcelain" && size !== "footer";
+const reverse = lockupGeometry(size, "ink");
 const Tag = href ? "a" : "p";
 const className = [
   "brand-lockup inline-flex min-h-11 items-center no-underline",
   size === "header" && "brand-signal",
   size === "hero" && "brand-signal",
+  adaptive && "brand-lockup--adaptive",
 ]
   .filter(Boolean)
   .join(" ");
@@ -55,7 +58,17 @@ const className = [
     alt="BlueSkyz Labs logo"
     width={geometry.width}
     height={geometry.height}
-    class="block h-auto max-w-full"
+    class="brand-lockup__img brand-lockup__img--light block h-auto max-w-full"
     decoding="async"
   />
+  {adaptive ? (
+    <img
+      src={reverse.src}
+      alt="BlueSkyz Labs logo"
+      width={reverse.width}
+      height={reverse.height}
+      class="brand-lockup__img brand-lockup__img--dark h-auto max-w-full"
+      decoding="async"
+    />
+  ) : null}
 </Tag>
