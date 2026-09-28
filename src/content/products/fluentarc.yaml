@@ -32,8 +32,32 @@ proof:
   securityUrl: https://blueskyzlabs.com/en/security/
   supportUrl: https://blueskyzlabs.com/en/support/
 endorsement: A BlueSkyz Labs product
-featuredTier: ecosystem
+featuredTier: hidden
 displayOrder: 4
-public: true
+public: false
 sourceRevision: b74a3027dc5ebd4cd4b3a3502576dc0d1edba6bc
 lastReviewedAt: 2026-09-27
+# Localized copy: faithful translations of the English claims above; the
+# English record stays canonical for claim/proof binding. Native VI/ZH review
+# is an Owner feedback checkpoint (plan v5 W3.4).
+i18n:
+  vi:
+    shortDescription: "Cách học tiếng Anh chuyên nghiệp ưu tiên tiện ích trình duyệt và lưu cục bộ, từ chính công việc thực tế và nội dung cốt lõi được chọn lọc."
+    jobs:
+      - "Biến tiếng Anh gặp trong công việc thành cách giao tiếp chuyên nghiệp dùng lại được"
+      - "Luyện tiếng Anh chuyên nghiệp và CNTT qua ghi nhớ và vận dụng"
+    capabilities:
+      - "Trọng tâm giai đoạn A: thu thập và hiểu nội dung cục bộ qua tiện ích trình duyệt"
+      - "Trọng tâm giai đoạn A: nội dung cốt lõi được chọn lọc và ôn tập theo FSRS"
+      - "Trọng tâm giai đoạn A: dữ liệu học tập riêng tư, có xuất và khôi phục"
+    primaryActionLabel: "Xem trước FluentArc"
+  zh:
+    shortDescription: "以浏览器扩展为先、本地优先的方式，从真实工作和经过筛选的核心内容中学习职场英语。"
+    jobs:
+      - "将工作中遇到的英语转化为可复用的职场表达"
+      - "通过回忆与应用练习职场与 IT 英语"
+    capabilities:
+      - "A 阶段重点：本地浏览器扩展采集与理解"
+      - "A 阶段重点：经筛选的核心内容与基于 FSRS 的记忆复习"
+      - "A 阶段重点：私有学习数据，支持导出与恢复"
+    primaryActionLabel: "预览 FluentArc"

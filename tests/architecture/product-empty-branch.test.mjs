@@ -55,8 +55,10 @@ test("only records that declare public: true count as published", () => {
 test("the real registry reports the published product count", () => {
   assert.equal(
     getPublicProductCount(join(ROOT, "src/content/products")),
-    5,
-    "the shipped registry publishes five products",
+    2,
+    // Owner 2026-09-28: only Sổ Trọ and Sổ Tâm are published; ApexAgent,
+    // FluentArc and VungTayLai stay in the registry with public: false.
+    "the shipped registry publishes Sổ Trọ and Sổ Tâm only",
   );
 });
 
