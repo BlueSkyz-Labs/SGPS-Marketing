@@ -18,6 +18,9 @@
   --brand-porcelain: #f7f8fa;
   --brand-cobalt: #2564ff;
   --surface-primary: var(--brand-porcelain);
+  /* Frosted header surface: the same scene token at 82% so a translucent
+     surface can never drift away from the scene's text colour. */
+  --surface-primary-glass: rgba(247, 248, 250, 0.82);
   --surface-subtle: #f1f5f9;
   --surface-inverse: var(--brand-ink);
   /* Raised cards/controls: white on porcelain, slate-900 on ink. Components
@@ -84,6 +87,7 @@
 [data-theme="dark"] {
   color-scheme: dark;
   --surface-primary: var(--brand-ink);
+  --surface-primary-glass: rgba(11, 16, 32, 0.82);
   --surface-subtle: #0f172a;
   --surface-inverse: var(--brand-porcelain);
   --surface-raised: #0f172a;
@@ -107,6 +111,7 @@
   :root:not([data-theme="light"]) {
     color-scheme: dark;
     --surface-primary: var(--brand-ink);
+    --surface-primary-glass: rgba(11, 16, 32, 0.82);
     --surface-subtle: #0f172a;
     --surface-inverse: var(--brand-porcelain);
     --surface-raised: #0f172a;
