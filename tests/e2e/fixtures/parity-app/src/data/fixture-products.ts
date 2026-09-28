@@ -15,8 +15,23 @@ interface FixtureProduct {
     name: string;
     publicLabel: string;
     shortDescription: string;
+    jobs?: string[];
     platforms: string[];
     capabilities: string[];
+    i18n?: {
+      vi: {
+        shortDescription: string;
+        jobs: string[];
+        capabilities: string[];
+        primaryActionLabel: string;
+      };
+      zh: {
+        shortDescription: string;
+        jobs: string[];
+        capabilities: string[];
+        primaryActionLabel: string;
+      };
+    };
     primaryAction: { href: string; label: string };
     secondaryAction?: { href: string; label: string };
     proof: {
@@ -40,17 +55,36 @@ export const FIXTURE_FLAGSHIP: FixtureProduct = {
     name: "Fixture Flagship",
     publicLabel: "In development",
     shortDescription: "Fixture description for the flagship act.",
+    jobs: ["Fixture job one", "Fixture job two"],
     platforms: ["web"],
     capabilities: [
       "Fixture capability one",
       "Fixture capability two",
       "Fixture capability three",
     ],
+    i18n: {
+      vi: {
+        shortDescription: "Mô tả thử nghiệm cho sản phẩm chủ lực.",
+        jobs: ["Công việc thử nghiệm một", "Công việc thử nghiệm hai"],
+        capabilities: [
+          "Phạm vi thử nghiệm một",
+          "Phạm vi thử nghiệm hai",
+          "Phạm vi thử nghiệm ba",
+        ],
+        primaryActionLabel: "Liên hệ thử nghiệm",
+      },
+      zh: {
+        shortDescription: "旗舰产品的测试说明。",
+        jobs: ["测试工作一", "测试工作二"],
+        capabilities: ["测试范围一", "测试范围二", "测试范围三"],
+        primaryActionLabel: "联系演示",
+      },
+    },
     primaryAction: { href: "/en/contact/", label: "Contact" },
     proof: {
       media: {
         src: "/products/fixtures/fixture-flagship.png",
-        alt: "Fixture flagship proof media",
+        alt: "Fixture flagship brand identity artwork",
         width: 1280,
         height: 800,
       },
