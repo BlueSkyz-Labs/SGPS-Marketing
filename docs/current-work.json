@@ -36,8 +36,8 @@
     },
     {
       "id": "experience-convergence-v5",
-      "name": "Experience & Design Convergence v5 — Wave 0 P0 VietQR removal, OS-dark/visual fixes and premium Atlas source-MERGED through PR #302 at main@3342d912. Remaining W1–W6 and Brand Kit v4 shared surfaces (#306/#307/#308) are IN_PROGRESS with separate exact-head gates; deployment/anonymous access/Human E4 NOT_VERIFIED.",
-      "status": "IN_PROGRESS",
+      "name": "Experience & Design Convergence v5 — Wave 0 P0 VietQR removal, OS-dark/visual fixes and premium Atlas source-MERGED through PR #302 at main@3342d912. Remaining v5 work is queued PLANNED while Brand Kit v4 is the repository's ONE IN_PROGRESS execution wave (#306/#307/#308); Cloudflare served SHA, anonymous access and Human E4 remain NOT_VERIFIED.",
+      "status": "PLANNED",
       "evidence": "docs/superpowers/plans/2026-09-27-experience-design-convergence-v5.md"
     },
     {
