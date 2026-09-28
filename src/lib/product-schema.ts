@@ -1,6 +1,10 @@
 import { z } from "astro/zod";
 import { isHttpsUrl } from "./https-url.ts";
 import { isNonProductionSiteUrl } from "./truth.ts";
+import {
+  isCanonicalAppSignInUrl,
+  isOfficialMobileStoreUrl,
+} from "./app-access-url.ts";
 
 const lifecycle = z.enum([
   "concept",
@@ -126,6 +130,38 @@ const productMedia = z.object({
   height: z.number().int().positive().max(8192),
 });
 
+/**
+ * Localized public copy (plan v5 W3.4). Faithful translations of the English
+ * record; the English fields stay canonical for claim/proof binding, SEO
+ * provenance and the P1 truth tripwires. Array lengths must match English.
+ */
+const localeCopy = z.object({
+  shortDescription: z.string().min(1).max(220),
+  jobs: z.array(z.string().min(1)).min(1),
+  capabilities: z.array(z.string().min(1).max(160)).optional(),
+  primaryActionLabel: z.string().min(1).max(40),
+});
+
+/**
+ * Owner 2026-09-28: a direct link to the running app's sign-in page, plus the
+ * native mobile apps shown honestly as in development. `signInUrl` is optional
+ * until the Owner supplies the exact production URL; nothing is rendered for it
+ * when absent. A native app is never linked to a store until it is `available`
+ * with a verified store URL.
+ */
+const mobileAppState = z.enum(["in-development", "available"]);
+const mobileApp = z
+  .object({ state: mobileAppState, storeUrl: httpsUrl.optional() })
+  .refine((app) => (app.state === "available") === Boolean(app.storeUrl), {
+    message:
+      "an available mobile app needs a store URL; one in development has none",
+  });
+const appAccess = z.object({
+  signInUrl: httpsUrl.optional(),
+  android: mobileApp.optional(),
+  ios: mobileApp.optional(),
+});
+
 export const productSchema = z
   .object({
     slug: z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/),
@@ -141,6 +177,7 @@ export const productSchema = z
     platforms: z.array(platform).min(1),
     primaryAction: action,
     secondaryAction: action.optional(),
+    appAccess: appAccess.optional(),
     proof: z
       .object({
         /**
@@ -167,8 +204,31 @@ export const productSchema = z
     public: z.boolean(),
     sourceRevision: z.string().regex(/^[0-9a-f]{7,40}$/),
     lastReviewedAt: z.coerce.date(),
+    i18n: z
+      .object({ vi: localeCopy.optional(), zh: localeCopy.optional() })
+      .optional(),
   })
   .superRefine((value, ctx) => {
+    for (const lang of ["vi", "zh"] as const) {
+      const copy = value.i18n?.[lang];
+      if (!copy) continue;
+      if (copy.jobs.length !== value.jobs.length) {
+        ctx.addIssue({
+          code: "custom",
+          path: ["i18n", lang, "jobs"],
+          message: `${lang} jobs must mirror the ${value.jobs.length} English jobs`,
+        });
+      }
+      if (
+        (copy.capabilities?.length ?? 0) !== (value.capabilities?.length ?? 0)
+      ) {
+        ctx.addIssue({
+          code: "custom",
+          path: ["i18n", lang, "capabilities"],
+          message: `${lang} capabilities must mirror the English capabilities`,
+        });
+      }
+    }
     const immatureLifecycles: ReadonlySet<Lifecycle> = new Set([
       "concept",
       "prototype",
@@ -226,6 +286,29 @@ export const productSchema = z
         message:
           "proof media requires 2–3 verified capabilities for FlagshipProof",
       });
+    }
+
+    // Link authority is enforced by the schema, not only by a test that
+    // greps current YAML records. Generic HTTPS is insufficient for a
+    // sign-in/store CTA because visitors may trust the product-house label.
+    const signInUrl = value.appAccess?.signInUrl;
+    if (signInUrl && !isCanonicalAppSignInUrl(value.slug, signInUrl)) {
+      ctx.addIssue({
+        code: "custom",
+        path: ["appAccess", "signInUrl"],
+        message:
+          "sign-in URL must target this product's canonical subdomain, without userinfo, query or fragment",
+      });
+    }
+    for (const platform of ["android", "ios"] as const) {
+      const storeUrl = value.appAccess?.[platform]?.storeUrl;
+      if (storeUrl && !isOfficialMobileStoreUrl(platform, storeUrl)) {
+        ctx.addIssue({
+          code: "custom",
+          path: ["appAccess", platform, "storeUrl"],
+          message: `${platform} store URL must target its official platform listing`,
+        });
+      }
     }
 
     // Coherence + public listing rules apply only to public listings.

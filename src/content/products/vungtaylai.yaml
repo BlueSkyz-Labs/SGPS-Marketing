@@ -31,8 +31,32 @@ proof:
   securityUrl: https://blueskyzlabs.com/en/security/
   supportUrl: https://blueskyzlabs.com/en/support/
 endorsement: A BlueSkyz Labs product
-featuredTier: ecosystem
+featuredTier: hidden
 displayOrder: 5
-public: true
+public: false
 sourceRevision: 228ea827f2af66ee46aea38c6aecb934ec99878c
 lastReviewedAt: 2026-09-27
+# Localized copy: faithful translations of the English claims above; the
+# English record stays canonical for claim/proof binding. Native VI/ZH review
+# is an Owner feedback checkpoint (plan v5 W3.4).
+i18n:
+  vi:
+    shortDescription: "Trải nghiệm học Web/PWA ưu tiên tiếng Việt cho kiến thức, hiểu biết và luyện thi lý thuyết lái xe hạng B."
+    jobs:
+      - "Chuẩn bị kiến thức lái xe hạng B tại Việt Nam với nguồn tham chiếu rõ ràng"
+      - "Luyện câu hỏi, nhận ra hiểu lầm và ôn lại các khái niệm khó"
+    capabilities:
+      - "Mục tiêu phát triển: bài học có dẫn nguồn và các chế độ luyện tập hạng B"
+      - "Mục tiêu phát triển: câu trả lời ưu tiên độ tự tin và phản hồi về hiểu lầm"
+      - "Mục tiêu phát triển: tiến độ học và ôn tập sẵn sàng ngoại tuyến"
+    primaryActionLabel: "Xem trước Vững Tay Lái"
+  zh:
+    shortDescription: "以越南语为先的 Web/PWA 学习体验，面向 B 类驾照的知识、理解与考试练习。"
+    jobs:
+      - "在清晰的来源背景下准备越南 B 类驾驶知识"
+      - "练习题目、识别误解并复习难点概念"
+    capabilities:
+      - "开发目标：附来源的课程与 B 类练习模式"
+      - "开发目标：以信心为先的作答与误解反馈"
+      - "开发目标：支持离线的学习进度与复习"
+    primaryActionLabel: "预览 Vững Tay Lái"
