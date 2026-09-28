@@ -80,6 +80,16 @@ export const SHARED_LABELS = {
     vi: "Khám phá các sản phẩm đang phát triển. Trạng thái và tư liệu tham khảo được ghi rõ cho từng sản phẩm.",
     zh: "探索开发中的产品。每款产品均分别说明其状态与参考资料。",
   },
+  continuationHeading: {
+    en: "The rest of the house, in development",
+    vi: "Những sản phẩm khác đang được phát triển",
+    zh: "其他正在开发的产品",
+  },
+  continuationBody: {
+    en: "Each product shows its recorded stage — concept, prototype or development — its platform and an honest next step.",
+    vi: "Mỗi sản phẩm hiển thị đúng giai đoạn đã ghi nhận — ý tưởng, nguyên mẫu hay phát triển — cùng nền tảng và bước tiếp theo trung thực.",
+    zh: "每款产品均标明其记录的阶段（概念、原型或开发）、平台以及如实的下一步。",
+  },
   viewProfile: { en: "View profile", vi: "Xem hồ sơ", zh: "查看产品简介" },
   proofCaption: {
     en: "Brand identity artwork — not a screenshot of the running application.",
