@@ -20,10 +20,10 @@ const profileHref = getProductProfilePath(lang, data.slug);
 const copy = productCopy(data, lang);
 const profileLabel = labelFor(SHARED_LABELS.viewProfile, lang);
 const iconHref = getProductIconPath(data.slug);
-const primaryActionUrl = new URL(data.primaryAction.href);
+const englishProfilePath = getProductProfilePath("en", data.slug);
 const primaryActionHref =
-  primaryActionUrl.origin === "https://blueskyzlabs.com" &&
-  primaryActionUrl.pathname === getProductProfilePath("en", data.slug)
+  data.primaryAction.href === englishProfilePath ||
+  data.primaryAction.href === `https://blueskyzlabs.com${englishProfilePath}`
     ? profileHref
     : data.primaryAction.href;
 ---
