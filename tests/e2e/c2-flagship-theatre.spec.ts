@@ -61,6 +61,8 @@ test.describe("C2 Flagship Theatre — fixture-backed (product present)", () => 
         "Fixture capability three",
       ],
       action: "Contact",
+      caption:
+        "Brand identity artwork — not a screenshot of the running application.",
     },
     {
       lang: "vi",
@@ -78,6 +80,8 @@ test.describe("C2 Flagship Theatre — fixture-backed (product present)", () => 
         "Phạm vi thử nghiệm ba",
       ],
       action: "Liên hệ thử nghiệm",
+      caption:
+        "Hình ảnh nhận diện thương hiệu — không phải ảnh chụp giao diện ứng dụng.",
     },
     {
       lang: "zh",
@@ -91,6 +95,7 @@ test.describe("C2 Flagship Theatre — fixture-backed (product present)", () => 
       scopeHeading: "开发范围",
       capabilities: ["测试范围一", "测试范围二", "测试范围三"],
       action: "联系演示",
+      caption: "品牌视觉素材，并非应用运行界面的截图。",
     },
   ]) {
     test(`${locale.lang}: theatre renders truth-driven from the fixture record`, async ({
@@ -155,14 +160,29 @@ test.describe("C2 Flagship Theatre — fixture-backed (product present)", () => 
       const img = page.locator(`${THEATRE} img`);
       await expect(img).toBeVisible();
       await expect(img).toHaveAttribute(
+        "alt",
+        "Fixture flagship brand identity artwork",
+      );
+      await expect(img).toHaveAttribute(
         "src",
         "/products/fixtures/fixture-flagship.png",
       );
-      await expect(img).toHaveAttribute("alt", "Fixture flagship proof media");
       await expect(img).toHaveAttribute("width", "1280");
       await expect(img).toHaveAttribute("height", "800");
       await expect(img).toHaveAttribute("loading", "lazy");
       await expect(img).toHaveAttribute("decoding", "async");
+      await expect(
+        page.locator(`${THEATRE} [data-flagship-ink-stage]`),
+      ).toHaveCount(1);
+      await expect(
+        page.locator(`${THEATRE} .c2-flagship-theatre__device-frame`),
+      ).toHaveCount(0);
+      await expect(
+        page.locator(`${THEATRE} .c2-flagship-theatre__window-controls`),
+      ).toHaveCount(0);
+      await expect(page.locator(`${THEATRE} figcaption`)).toHaveText(
+        locale.caption,
+      );
       // Opacity stays 1 (no fade-in).
       const opacity = await img.evaluate((el) => getComputedStyle(el).opacity);
       expect(opacity).toBe("1");
@@ -199,6 +219,46 @@ test.describe("C2 Flagship Theatre — fixture-backed (product present)", () => 
         mediaNames.length,
         "media continuity name must be unique in document",
       ).toBe(1);
+    });
+  }
+});
+
+test.describe("public flagship artwork presentation", () => {
+  for (const locale of [
+    {
+      lang: "en",
+      path: "/en/",
+      caption:
+        "Brand identity artwork — not a screenshot of the running application.",
+    },
+    {
+      lang: "vi",
+      path: "/vi/",
+      caption:
+        "Hình ảnh nhận diện thương hiệu — không phải ảnh chụp giao diện ứng dụng.",
+    },
+    {
+      lang: "zh",
+      path: "/zh/",
+      caption: "品牌视觉素材，并非应用运行界面的截图。",
+    },
+  ]) {
+    test(`${locale.lang}: homepage shows Sổ Trọ identity art without app chrome`, async ({
+      page,
+    }) => {
+      test.skip(!hasPublicProducts, "No published hero product is available");
+      await page.goto(locale.path);
+
+      const theatre = page.locator(THEATRE);
+      await expect(theatre.locator(TITLE)).toHaveText("Sổ Trọ");
+      await expect(theatre.locator("[data-flagship-ink-stage]")).toHaveCount(1);
+      await expect(
+        theatre.locator(".c2-flagship-theatre__device-frame"),
+      ).toHaveCount(0);
+      await expect(
+        theatre.locator(".c2-flagship-theatre__window-controls"),
+      ).toHaveCount(0);
+      await expect(theatre.locator("figcaption")).toHaveText(locale.caption);
     });
   }
 });

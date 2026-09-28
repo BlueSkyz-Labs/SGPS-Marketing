@@ -84,7 +84,7 @@ export const FIXTURE_FLAGSHIP: FixtureProduct = {
     proof: {
       media: {
         src: "/products/fixtures/fixture-flagship.png",
-        alt: "Fixture flagship proof media",
+        alt: "Fixture flagship brand identity artwork",
         width: 1280,
         height: 800,
       },
