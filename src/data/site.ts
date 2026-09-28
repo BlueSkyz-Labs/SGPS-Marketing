@@ -91,6 +91,7 @@ export const SHARED_LABELS = {
     zh: "每款产品均标明其记录的阶段（概念、原型或开发）、平台以及如实的下一步。",
   },
   viewProfile: { en: "View profile", vi: "Xem hồ sơ", zh: "查看产品简介" },
+  signIn: { en: "Sign in", vi: "Đăng nhập", zh: "登录" },
   proofCaption: {
     en: "Brand identity artwork — not a screenshot of the running application.",
     vi: "Hình ảnh nhận diện thương hiệu — không phải ảnh chụp giao diện ứng dụng.",
