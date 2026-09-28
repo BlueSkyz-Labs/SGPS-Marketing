@@ -1,0 +1,21 @@
+---
+// @ts-nocheck — synthetic fixture data; never shipped, never typechecked.
+import "@/styles/global.css";
+import "@/styles/c3-craft.css";
+import ProductHouse from "@/components/product/ProductHouse.astro";
+import { FIXTURE_PRODUCTS } from "../data/fixture-products";
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Product cards fixture</title>
+  </head>
+  <body>
+    <main>
+      <ProductHouse products={FIXTURE_PRODUCTS} lang="en" />
+    </main>
+  </body>
+</html>

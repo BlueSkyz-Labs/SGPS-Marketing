@@ -16,20 +16,42 @@ import ProofFirstEmptyState from "./ProofFirstEmptyState.astro";
 interface Props {
   products: CollectionEntry<"products">[];
   lang: Language;
+  /** The Flagship Theatre already presents the hero above this section. */
+  mode?: "house" | "continuation";
 }
 
-const { products, lang } = Astro.props;
+const { products, lang, mode = "house" } = Astro.props;
 
-const hero = products.find((product) => product.data.featuredTier === "hero");
-const featured = products
+const flagship = products.find(
+  (product) => product.data.featuredTier === "hero",
+);
+const isContinuation = mode === "continuation" && Boolean(flagship);
+const visibleProducts = isContinuation
+  ? products.filter((product) => product.data.slug !== flagship?.data.slug)
+  : products;
+
+if (isContinuation && visibleProducts.length === 0) {
+  return null;
+}
+
+const hero = isContinuation ? undefined : flagship;
+const featured = visibleProducts
   .filter((product) => product.data.featuredTier === "featured")
   .slice(0, 2);
-const ecosystem = products.filter(
+const ecosystem = visibleProducts.filter(
   (product) => product.data.featuredTier === "ecosystem",
 );
 
-const headingLabel = labelFor(SHARED_LABELS.featuredHeading, lang);
-const bodyLabel = labelFor(SHARED_LABELS.featuredBody, lang);
+const headingLabel = labelFor(
+  isContinuation
+    ? SHARED_LABELS.continuationHeading
+    : SHARED_LABELS.featuredHeading,
+  lang,
+);
+const bodyLabel = labelFor(
+  isContinuation ? SHARED_LABELS.continuationBody : SHARED_LABELS.featuredBody,
+  lang,
+);
 const ctaLabel = labelFor(SHARED_LABELS.exploreAllProducts, lang);
 const indexPath = getProductIndexPath(lang);
 ---
