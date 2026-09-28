@@ -34,6 +34,38 @@ const ALLOWED_PROPERTIES: Record<AnalyticsEventName, readonly string[]> = {
   atlas_node_opened: ["kind"],
 };
 
+/**
+ * The property *names* are not a privacy guarantee: a free-form destination,
+ * surface or kind could itself carry email, search or referral parameters.
+ * Keep semantic dimensions closed over the first-party event vocabulary.
+ * No visitor-provided text, raw URLs, query strings or identifiers.
+ */
+const ALLOWED_CATEGORY_VALUES: Partial<
+  Record<AnalyticsEventName, Readonly<Record<string, readonly string[]>>>
+> = {
+  trust_route_opened: {
+    surface: ["privacy", "security", "support"],
+  },
+  journey_action_opened: {
+    kind: ["route"],
+    destination: [
+      "products",
+      "decision-room",
+      "about",
+      "security",
+      "contact",
+      "support",
+      "privacy",
+    ],
+  },
+  command_result_opened: {
+    kind: ["route", "trust", "product", "evidence"],
+  },
+  atlas_node_opened: {
+    kind: ["brand", "principle", "trust", "claim", "evidence", "product"],
+  },
+};
+
 const DEDUPE_WINDOW_MS = 1000;
 const MAX_VALUE_LENGTH = 64;
 const lastEmittedAt = new Map<string, number>();
@@ -62,13 +94,17 @@ export function sanitizeAnalyticsEvent(
   const safe: Record<string, string> = {};
   for (const key of ALLOWED_PROPERTIES[name]) {
     const raw = properties[key];
+    if (raw === undefined) continue;
     if (
-      typeof raw === "string" &&
-      raw.length > 0 &&
-      raw.length <= MAX_VALUE_LENGTH
+      typeof raw !== "string" ||
+      raw.length === 0 ||
+      raw.length > MAX_VALUE_LENGTH
     ) {
-      safe[key] = raw;
+      return null;
     }
+    const vocabulary = ALLOWED_CATEGORY_VALUES[name]?.[key];
+    if (vocabulary && !vocabulary.includes(raw)) return null;
+    safe[key] = raw;
   }
   return { name, properties: safe };
 }
