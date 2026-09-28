@@ -101,6 +101,20 @@ test("the flagship act consumes the product record instead of authoring facts", 
   assert.doesNotMatch(house, /\bLorem\b|placeholder product/i);
 });
 
+test("localized homepages show the flagship once and continue with other products", () => {
+  for (const lang of LOCALES) {
+    const source = readFileSync(homePath(lang), "utf8");
+    assert.match(source, /<FlagshipTheatre product=\{flagship\}/, lang);
+    assert.match(
+      source,
+      new RegExp(
+        `<ProductHouse products=\\{products\\} lang="${lang}" mode="continuation"`,
+      ),
+      lang,
+    );
+  }
+});
+
 test("the empty registry falls back honestly instead of fabricating a product", () => {
   const house = readFileSync(
     "src/components/product/ProductHouse.astro",
