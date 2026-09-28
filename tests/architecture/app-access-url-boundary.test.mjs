@@ -5,6 +5,7 @@
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { test } from "node:test";
+import { productSchema } from "../../src/lib/product-schema.ts";
 import {
   isCanonicalAppSignInUrl,
   isOfficialMobileStoreUrl,
@@ -82,4 +83,75 @@ test("the product schema invokes both destination authority checks", () => {
   const checks = source.indexOf(marker);
   const earlyReturn = source.indexOf("if (!value.public) return;");
   assert.ok(checks !== -1 && checks < earlyReturn);
+});
+
+function syntheticProduct(appAccess, publicState = true) {
+  return {
+    slug: "sotro",
+    name: "Fixture Sổ Trọ",
+    shortDescription: "Synthetic record for destination authority checks.",
+    lifecycle: "development",
+    availability: "preview",
+    publicLabel: "In development",
+    audience: ["individual"],
+    jobs: ["Review a synthetic record"],
+    capabilities: ["Synthetic scope A", "Synthetic scope B"],
+    platforms: ["web"],
+    primaryAction: {
+      type: "preview",
+      label: "Preview",
+      href: "https://blueskyzlabs.com/en/products/sotro/",
+    },
+    proof: { publicUrl: "https://blueskyzlabs.com/en/products/sotro/" },
+    appAccess,
+    endorsement: "A BlueSkyz Labs product",
+    featuredTier: "hero",
+    displayOrder: 1,
+    public: publicState,
+    sourceRevision: "abcdef1",
+    lastReviewedAt: "2026-09-27",
+  };
+}
+
+test("canonical schema fails closed on deceptive product records", () => {
+  const good = {
+    signInUrl: "https://sotro.blueskyzlabs.com/login",
+    android: {
+      state: "available",
+      storeUrl: "https://play.google.com/store/apps/details?id=x",
+    },
+    ios: {
+      state: "available",
+      storeUrl: "https://apps.apple.com/vn/app/fixture/id12345",
+    },
+  };
+  assert.equal(productSchema.safeParse(syntheticProduct(good)).success, true);
+
+  const altered = {
+    ...good,
+    signInUrl: "https://sotam.blueskyzlabs.com/auth/login",
+    android: {
+      state: "available",
+      storeUrl: "https://play.google.com.evil.co/store/apps/details?id=x",
+    },
+    ios: {
+      state: "available",
+      storeUrl: "https://apps.apple.com/vn/app/not-a-listing",
+    },
+  };
+  for (const publicState of [true, false]) {
+    const result = productSchema.safeParse(
+      syntheticProduct(altered, publicState),
+    );
+    assert.equal(result.success, false);
+    if (result.success) continue;
+    const paths = result.error.issues.map((issue) => issue.path.join("."));
+    for (const key of [
+      "appAccess.signInUrl",
+      "appAccess.android.storeUrl",
+      "appAccess.ios.storeUrl",
+    ]) {
+      assert.ok(paths.includes(key), `missing authority violation for ${key}`);
+    }
+  }
 });
