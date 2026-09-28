@@ -72,7 +72,13 @@ test.describe("C2 Flagship Theatre — fixture-backed (product present)", () => 
       // spans (truth-state chips, the proof affordance).
       const status = page.locator(`${THEATRE} [data-product-status]`);
       await expect(status).toHaveCount(1);
-      expect((await status.textContent())?.trim()).toBe("In development");
+      expect((await status.textContent())?.trim()).toBe(
+        locale.lang === "vi" ? "Đang phát triển" : "In development",
+      );
+      await expect(status).toHaveAttribute(
+        "data-product-status",
+        "In development",
+      );
 
       // Short description present.
       await expect(page.locator(THEATRE)).toContainText(
@@ -80,9 +86,7 @@ test.describe("C2 Flagship Theatre — fixture-backed (product present)", () => 
       );
 
       // Exactly 3 capability items.
-      const caps = page.locator(
-        `${THEATRE} li.c2-flagship-theatre__capability`,
-      );
+      const caps = page.locator(`${THEATRE} div.c2-flagship-theatre__feature`);
       await expect(caps).toHaveCount(3);
 
       // Primary action uses the record label.

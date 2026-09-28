@@ -1,0 +1,29 @@
+---
+// @ts-nocheck — synthetic fixture data; never shipped, never typechecked.
+import "@/styles/global.css";
+import "@/styles/c3-craft.css";
+import FlagshipTheatre from "@/components/product/FlagshipTheatre.astro";
+import ProductHouse from "@/components/product/ProductHouse.astro";
+import { FIXTURE_FLAGSHIP, FIXTURE_PRODUCTS } from "../data/fixture-products";
+import { FIXTURE_CLAIMS, FIXTURE_PRODUCT_REFS } from "../data/fixture-claims";
+---
+
+<!doctype html>
+<html lang="zh">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Product acts fixture (ZH)</title>
+  </head>
+  <body>
+    <main>
+      <FlagshipTheatre
+        product={FIXTURE_FLAGSHIP}
+        products={FIXTURE_PRODUCT_REFS}
+        claims={FIXTURE_CLAIMS}
+        lang="zh"
+      />
+      <ProductHouse products={FIXTURE_PRODUCTS} lang="zh" />
+    </main>
+  </body>
+</html>

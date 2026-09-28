@@ -25,7 +25,8 @@ test("localized product-profile primary CTAs use the app sign-in destination", (
   }
 
   const card = readFileSync("src/components/product/ProductCard.astro", "utf8");
-  assert.match(card, /href=\{data\.primaryAction\.href\}/);
+  assert.match(card, /data\.primaryAction\.href/);
+  assert.match(card, /href=\{primaryActionHref\}/);
 });
 
 test("product cards deep-link into locale-aware profile routes", () => {
