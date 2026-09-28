@@ -20,6 +20,14 @@ primaryAction:
   type: preview
   label: Preview Sổ Trọ
   href: https://blueskyzlabs.com/en/products/sotro/
+# Owner 2026-09-28: direct sign-in link (ADR 0006 product subdomain; read back
+# 2026-09-28: served SPA bundle routes /login; HTTP 200). Native apps stay in development until store-listed.
+appAccess:
+  signInUrl: https://sotro.blueskyzlabs.com/login
+  android:
+    state: in-development
+  ios:
+    state: in-development
 proof:
   media:
     src: /products/sotro/screenshot.png
@@ -32,8 +40,32 @@ proof:
   securityUrl: https://blueskyzlabs.com/en/security/
   supportUrl: https://blueskyzlabs.com/en/support/
 endorsement: A BlueSkyz Labs product
-featuredTier: featured
-displayOrder: 3
+featuredTier: hero
+displayOrder: 1
 public: true
 sourceRevision: dafe6752ceb10b2aac38fb085caa114748ca3e2e
 lastReviewedAt: 2026-09-27
+# Localized copy: faithful translations of the English claims above; the
+# English record stays canonical for claim/proof binding. Native VI/ZH review
+# is an Owner feedback checkpoint (plan v5 W3.4).
+i18n:
+  vi:
+    shortDescription: "Sổ tay số cho chủ nhà trọ tại Việt Nam: phòng, tiền thuê còn nợ, lịch sử đáng tin cậy và việc cần làm hôm nay."
+    jobs:
+      - "Xem khoản nào chưa thu trong tháng và việc gì cần xử lý hôm nay"
+      - "Lưu giữ hồ sơ phòng, người thuê, chỉ số đồng hồ và phí hằng tháng một cách đáng tin cậy"
+    capabilities:
+      - "Phạm vi phát triển: phí điện nước và hồ sơ thuê trọ có thể truy vết"
+      - "Phạm vi phát triển: biên nhận có thể kiểm tra và trạng thái thanh toán do con người xác nhận"
+      - "Mẫu tin nhắn Zalo/SMS tuỳ chọn để sao chép rồi tự mở, không tự động gửi"
+    primaryActionLabel: "Xem trước Sổ Trọ"
+  zh:
+    shortDescription: "面向越南房东的数字笔记本：房间、应收租金、可信的历史记录与今日待办。"
+    jobs:
+      - "查看本月尚未收取的款项以及今天需要处理的事项"
+      - "维护可靠的房间、租客、表计读数与每月费用记录"
+    capabilities:
+      - "开发范围：可追溯的水电费用与租赁记录"
+      - "开发范围：可审计的收据与人工确认的付款状态"
+      - "可选的 Zalo/短信模板：复制后自行打开发送，不会自动发送"
+    primaryActionLabel: "预览 Sổ Trọ"
