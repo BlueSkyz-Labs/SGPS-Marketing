@@ -11,23 +11,16 @@ import {
 } from "../../src/lib/app-access-url.ts";
 
 test("approved product sign-in shapes stay usable", () => {
-  assert.equal(
-    isCanonicalAppSignInUrl(
-      "sotro",
-      "https://sotro.blueskyzlabs.com/login",
-    ),
-    true,
-  );
-  assert.equal(
-    isCanonicalAppSignInUrl(
-      "sotam",
-      "https://sotam.blueskyzlabs.com/auth/login",
-    ),
-    true,
-  );
+  const approved = [
+    ["sotro", "https://sotro.blueskyzlabs.com/login"],
+    ["sotam", "https://sotam.blueskyzlabs.com/auth/login"],
+  ];
+  for (const [slug, url] of approved) {
+    assert.equal(isCanonicalAppSignInUrl(slug, url), true);
+  }
 });
 
-test("sign-in authority rejects foreign hosts, deceptive URLs and leaking parameters", () => {
+test("sign-in authority rejects deceptive destinations and leaking parameters", () => {
   const invalid = [
     "http://sotro.blueskyzlabs.com/login",
     "https://sotam.blueskyzlabs.com/login",
@@ -42,42 +35,23 @@ test("sign-in authority rejects foreign hosts, deceptive URLs and leaking parame
     "not a URL",
   ];
   for (const candidate of invalid) {
-    assert.equal(
-      isCanonicalAppSignInUrl("sotro", candidate),
-      false,
-      candidate,
-    );
+    assert.equal(isCanonicalAppSignInUrl("sotro", candidate), false, candidate);
   }
-  assert.equal(
-    isCanonicalAppSignInUrl(
-      "sotro.attacker",
-      "https://sotro.attacker.blueskyzlabs.com/login",
-    ),
-    false,
-  );
+  const badSlug = "sotro.attacker";
+  const badUrl = "https://sotro.attacker.blueskyzlabs.com/login";
+  assert.equal(isCanonicalAppSignInUrl(badSlug, badUrl), false);
 });
 
-test("official platform listing URLs are distinct from arbitrary HTTPS links", () => {
-  assert.equal(
-    isOfficialMobileStoreUrl(
-      "android",
-      "https://play.google.com/store/apps/details?id=com.example.app",
-    ),
-    true,
-  );
-  assert.equal(
-    isOfficialMobileStoreUrl(
-      "ios",
-      "https://apps.apple.com/vn/app/example/id123456789",
-    ),
-    true,
-  );
+test("official store listings cannot swap platforms or use deceptive hosts", () => {
+  const playUrl = "https://play.google.com/store/apps/details?id=com.example.app";
+  const appleUrl = "https://apps.apple.com/vn/app/example/id123456789";
+  assert.equal(isOfficialMobileStoreUrl("android", playUrl), true);
+  assert.equal(isOfficialMobileStoreUrl("ios", appleUrl), true);
   assert.equal(
     isOfficialMobileStoreUrl("ios", "https://apps.apple.com/app/id123456789"),
     true,
   );
-
-  for (const [platform, candidate] of [
+  const invalid = [
     ["android", "https://play.google.com.attacker.invalid/store/apps/details?id=x"],
     ["android", "https://user@play.google.com/store/apps/details?id=x"],
     ["android", "https://play.google.com/store/apps/details"],
@@ -88,7 +62,8 @@ test("official platform listing URLs are distinct from arbitrary HTTPS links", (
     ["ios", "https://apps.apple.com/vn/app/x"],
     ["ios", "https://apps.apple.com/vn/app/x/idnot-a-number"],
     ["ios", "javascript:alert(1)"],
-  ]) {
+  ];
+  for (const [platform, candidate] of invalid) {
     assert.equal(
       isOfficialMobileStoreUrl(platform, candidate),
       false,
@@ -97,7 +72,7 @@ test("official platform listing URLs are distinct from arbitrary HTTPS links", (
   }
 });
 
-test("the product schema actually enforces both authority checks", () => {
+test("the product schema invokes both destination authority checks", () => {
   const source = readFileSync("src/lib/product-schema.ts", "utf8");
   assert.match(source, /isCanonicalAppSignInUrl\(value\.slug, signInUrl\)/);
   assert.match(source, /isOfficialMobileStoreUrl\(platform, storeUrl\)/);
