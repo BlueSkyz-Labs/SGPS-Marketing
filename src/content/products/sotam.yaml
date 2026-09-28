@@ -16,8 +16,8 @@ capabilities:
   - Private Vault storage with explicit recovery boundaries
 platforms:
   - web
-  - ios
-  - android
+# Native Android/iOS are planned, not supported public platforms yet.
+# appAccess independently renders their in-development status without store CTAs.
 primaryAction:
   type: preview
   label: Preview Sổ Tâm
