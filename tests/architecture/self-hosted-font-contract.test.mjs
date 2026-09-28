@@ -6,7 +6,7 @@ const css = readFileSync("src/styles/global.css", "utf8");
 const layout = readFileSync("src/layouts/BaseLayout.astro", "utf8");
 const fontFaces = css.match(/@font-face\s*\{[^}]+\}/g) ?? [];
 
-test("self-hosted Inter subsets are licensed and preloaded narrowly", () => {
+test("self-hosted Inter subsets are licensed and preload Latin only in English", () => {
   const latin = "public/fonts/inter-latin-opsz-v5.3.0.woff2";
   const vietnamese = "public/fonts/inter-vietnamese-opsz-v5.3.0.woff2";
   assert.ok(statSync(latin).size + statSync(vietnamese).size <= 100_000);
@@ -27,7 +27,7 @@ test("self-hosted Inter subsets are licensed and preloaded narrowly", () => {
   assert.match(css, /size-adjust\s*:\s*107%/);
   assert.match(
     layout,
-    /rel="preload"[\s\S]*?href="\/fonts\/inter-latin-opsz-v5\.3\.0\.woff2"[\s\S]*?as="font"[\s\S]*?crossorigin/,
+    /currentLang === "en"[\s\S]*?rel="preload"[\s\S]*?href="\/fonts\/inter-latin-opsz-v5\.3\.0\.woff2"[\s\S]*?as="font"[\s\S]*?crossorigin/,
   );
   assert.doesNotMatch(layout, /preload[\s\S]{0,120}inter-vietnamese/);
 });
