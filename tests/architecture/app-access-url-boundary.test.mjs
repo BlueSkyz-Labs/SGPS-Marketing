@@ -20,7 +20,7 @@ test("approved product sign-in shapes stay usable", () => {
   }
 });
 
-test("sign-in authority rejects deceptive destinations and leaking parameters", () => {
+test("sign-in rejects deceptive destinations and parameters", () => {
   const invalid = [
     "http://sotro.blueskyzlabs.com/login",
     "https://sotam.blueskyzlabs.com/login",
@@ -42,8 +42,8 @@ test("sign-in authority rejects deceptive destinations and leaking parameters", 
   assert.equal(isCanonicalAppSignInUrl(badSlug, badUrl), false);
 });
 
-test("official store listings cannot swap platforms or use deceptive hosts", () => {
-  const playUrl = "https://play.google.com/store/apps/details?id=com.example.app";
+test("store listings reject platform swapping and deceptive hosts", () => {
+  const playUrl = "https://play.google.com/store/apps/details?id=x";
   const appleUrl = "https://apps.apple.com/vn/app/example/id123456789";
   assert.equal(isOfficialMobileStoreUrl("android", playUrl), true);
   assert.equal(isOfficialMobileStoreUrl("ios", appleUrl), true);
@@ -52,7 +52,7 @@ test("official store listings cannot swap platforms or use deceptive hosts", () 
     true,
   );
   const invalid = [
-    ["android", "https://play.google.com.attacker.invalid/store/apps/details?id=x"],
+    ["android", "https://play.google.com.evil.test/store/apps/details?id=x"],
     ["android", "https://user@play.google.com/store/apps/details?id=x"],
     ["android", "https://play.google.com/store/apps/details"],
     ["android", "https://apps.apple.com/app/id12345"],
@@ -78,7 +78,8 @@ test("the product schema invokes both destination authority checks", () => {
   assert.match(source, /isOfficialMobileStoreUrl\(platform, storeUrl\)/);
   assert.match(source, /path: \["appAccess", "signInUrl"\]/);
   assert.match(source, /path: \["appAccess", platform, "storeUrl"\]/);
-  const checks = source.indexOf("const signInUrl = value.appAccess?.signInUrl;");
+  const marker = "const signInUrl = value.appAccess?.signInUrl;";
+  const checks = source.indexOf(marker);
   const earlyReturn = source.indexOf("if (!value.public) return;");
   assert.ok(checks !== -1 && checks < earlyReturn);
 });
