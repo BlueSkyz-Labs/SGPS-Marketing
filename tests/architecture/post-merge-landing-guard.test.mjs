@@ -8,6 +8,15 @@ import test from "node:test";
 
 const ROOT = resolve(fileURLToPath(new URL("../..", import.meta.url)));
 const SCRIPT = "scripts/verify-post-merge-landing.mjs";
+const FIXTURE_ENV = { ...process.env };
+for (const key of [
+  "GIT_DIR",
+  "GIT_WORK_TREE",
+  "GIT_INDEX_FILE",
+  "GIT_PREFIX",
+]) {
+  delete FIXTURE_ENV[key];
+}
 
 function git(args) {
   return execFileSync("git", args, { cwd: ROOT, encoding: "utf8" }).trim();
@@ -47,7 +56,7 @@ test("(b) an orphaned merge commit (PR #248 class) fails loudly", () => {
         cwd: dir,
         encoding: "utf8",
         env: {
-          ...process.env,
+          ...FIXTURE_ENV,
           GIT_AUTHOR_NAME: "fixture",
           GIT_AUTHOR_EMAIL: "fixture@example.invalid",
           GIT_COMMITTER_NAME: "fixture",
@@ -62,21 +71,18 @@ test("(b) an orphaned merge commit (PR #248 class) fails loudly", () => {
     const orphan = g(["rev-parse", "HEAD"]);
 
     assert.equal(
-      spawnSync("git", [
-        "-C",
-        dir,
-        "merge-base",
-        "--is-ancestor",
-        orphan,
-        "origin/main",
-      ]).status,
+      spawnSync(
+        "git",
+        ["-C", dir, "merge-base", "--is-ancestor", orphan, "origin/main"],
+        { env: FIXTURE_ENV },
+      ).status,
       1,
       "fixture must be an orphan for this regression",
     );
     const r = spawnSync(
       process.execPath,
       [resolve(ROOT, SCRIPT), "--merge-commit", orphan, "--ref", "origin/main"],
-      { cwd: dir, encoding: "utf8" },
+      { cwd: dir, encoding: "utf8", env: FIXTURE_ENV },
     );
     assert.equal(r.status, 1, "guard must fail loudly for an orphaned merge");
     assert.ok(

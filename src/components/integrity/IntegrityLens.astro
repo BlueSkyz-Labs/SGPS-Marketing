@@ -2,6 +2,7 @@
 import { getIntegrityEntriesForSurface } from "@/lib/integrity";
 import { getPublicClaims, getClaimAnchor } from "@/lib/claims";
 import { getPublicProducts } from "@/lib/products";
+import { getProductsIntegrityPresentation } from "@/lib/products-integrity-summary.mjs";
 import TruthState from "./TruthState.astro";
 import EvidenceDetails from "./EvidenceDetails.astro";
 import SourceTrace from "./SourceTrace.astro";
@@ -56,14 +57,22 @@ const LABELS = {
         const linkedClaim = claims.find(
           (candidate) => candidate.reviewId === entry.id,
         );
+        const presentation =
+          entry.surface === "products"
+            ? getProductsIntegrityPresentation(
+                entry.summary,
+                products.length,
+                lang,
+              )
+            : { state: entry.state, summary: entry.summary[lang] };
         return (
           <article
             data-integrity-entry={entry.id}
             id={linkedClaim ? getClaimAnchor(linkedClaim.claim.id) : undefined}
           >
-            <TruthState state={entry.state} lang={lang} />
+            <TruthState state={presentation.state} lang={lang} />
             <EvidenceDetails
-              summary={entry.summary[lang]}
+              summary={presentation.summary}
               evidence={entry.evidence.map((ev) => ({
                 label: ev.label[lang],
                 href: ev.href[lang],
