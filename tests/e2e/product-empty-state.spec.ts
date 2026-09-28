@@ -1,13 +1,8 @@
 import { expect, test } from "@playwright/test";
 import { getPublicProductCount } from "./product-helpers.ts";
 
-const PRODUCT_SLUGS = [
-  "apexagent",
-  "fluentarc",
-  "sotam",
-  "sotro",
-  "vungtaylai",
-];
+// Owner 2026-09-28: only Sổ Trọ and Sổ Tâm are published.
+const PRODUCT_SLUGS = ["sotam", "sotro"];
 
 test.describe("published products render without client scripting", () => {
   test.use({ javaScriptEnabled: false });

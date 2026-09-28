@@ -19,16 +19,17 @@
 
 ## Wave map
 
-| Wave                             | File               | Depends on              | Owner gate                                                       |
-| -------------------------------- | ------------------ | ----------------------- | ---------------------------------------------------------------- |
-| W1 Gates that see what users see | `W1-gates.md`      | —                       | none                                                             |
-| W2 Design foundation             | `W2-foundation.md` | W1.1 (visual baselines) | D-1/D-2 approved 2026-09-27                                      |
-| W3 Product presentation & locale | `W3-product.md`    | W2.1                    | native review is a feedback checkpoint, zh promotion per DEC-019 |
-| W4 Homepage narrative & craft    | `W4-homepage.md`   | W2.1                    | none                                                             |
-| W5 Share & discovery             | `W5-share.md`      | W3.1                    | none                                                             |
-| W6 External & human gates        | `W6-external.md`   | —                       | Owner/provider                                                   |
+| Wave                             | File                  | Depends on                     | Owner gate                                                       |
+| -------------------------------- | --------------------- | ------------------------------ | ---------------------------------------------------------------- |
+| W1 Gates that see what users see | `W1-gates.md`         | —                              | none                                                             |
+| W2 Design foundation             | `W2-foundation.md`    | W1.1 (visual baselines)        | D-1/D-2 approved 2026-09-27                                      |
+| W3 Product presentation & locale | `W3-product.md`       | W2.1                           | native review is a feedback checkpoint, zh promotion per DEC-019 |
+| W4 Homepage narrative & craft    | `W4-homepage.md`      | W2.1                           | none                                                             |
+| W5 Share & discovery             | `W5-share.md`         | W3.1                           | none                                                             |
+| W6 External & human gates        | `W6-external.md`      | —                              | Owner/provider                                                   |
+| W7 Premium re-cut (Owner)        | `W7-premium-recut.md` | skeleton landed; per-card deps | native review is a feedback checkpoint                           |
 
-W3 and W4 can run in parallel after W2.1. W6 never blocks source waves.
+W3 and W4 can run in parallel after W2.1. W6 never blocks source waves. W7 cards carry their own dependencies and supersede the overlapping W3.3/W3.4 items.
 
 ## Global acceptance (every PR)
 

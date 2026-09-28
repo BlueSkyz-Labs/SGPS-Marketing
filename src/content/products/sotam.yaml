@@ -22,6 +22,14 @@ primaryAction:
   type: preview
   label: Preview Sổ Tâm
   href: https://blueskyzlabs.com/en/products/sotam/
+# Owner 2026-09-28: direct sign-in link (ADR 0006 product subdomain; read back
+# 2026-09-28: HTTP 302 to the Logto OIDC sign-in). Native apps stay in development until store-listed.
+appAccess:
+  signInUrl: https://sotam.blueskyzlabs.com/auth/login
+  android:
+    state: in-development
+  ios:
+    state: in-development
 proof:
   media:
     src: /products/sotam/screenshot.png
@@ -39,3 +47,27 @@ displayOrder: 2
 public: true
 sourceRevision: ffb771b5f47886b581df0c1409c7f1b5ea758724
 lastReviewedAt: 2026-09-27
+# Localized copy: faithful translations of the English claims above; the
+# English record stays canonical for claim/proof binding. Native VI/ZH review
+# is an Owner feedback checkpoint (plan v5 W3.4).
+i18n:
+  vi:
+    shortDescription: "Cuốn nhật ký ưu tiên lưu cục bộ cho những suy ngẫm và kỷ niệm riêng tư được viết ra."
+    jobs:
+      - "Viết những suy ngẫm riêng tư theo nhịp của riêng bạn"
+      - "Xem lại các trang nhật ký và kỷ niệm cá nhân"
+    capabilities:
+      - "Viết nhật ký ưu tiên lưu cục bộ trong Personal Vault riêng tư"
+      - "Người dùng tự xuất các suy ngẫm ra máy của mình"
+      - "Lưu trữ trong Vault riêng tư với ranh giới khôi phục rõ ràng"
+    primaryActionLabel: "Xem trước Sổ Tâm"
+  zh:
+    shortDescription: "本地优先的日记，用于记录私密的书面反思与个人回忆。"
+    jobs:
+      - "按自己的节奏书写私密反思"
+      - "回顾日记条目与个人回忆"
+    capabilities:
+      - "在私有 Personal Vault 中以本地优先方式书写日记"
+      - "由用户控制的本地反思导出"
+      - "私有 Vault 存储，具备明确的恢复边界"
+    primaryActionLabel: "预览 Sổ Tâm"
