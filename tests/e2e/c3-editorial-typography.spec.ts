@@ -293,3 +293,86 @@ test.describe("C3-A Editorial Typography — display hierarchy", () => {
     expect(h1Styles.fontSize).toBeGreaterThanOrEqual(24);
   });
 });
+
+test.describe("Self-hosted Inter — Vietnamese delivery", () => {
+  test("keeps font transfer under 100 KB with no layout shifts", async ({
+    page,
+  }) => {
+    await page.addInitScript(() => {
+      const observedWindow = window as Window & {
+        __layoutShifts: { value: number; sources: string[] }[];
+      };
+      observedWindow.__layoutShifts = [];
+      new PerformanceObserver((list) => {
+        for (const rawEntry of list.getEntries()) {
+          const entry = rawEntry as PerformanceEntry & {
+            value: number;
+            hadRecentInput: boolean;
+            sources: {
+              node: Node | null;
+              previousRect: DOMRectReadOnly;
+              currentRect: DOMRectReadOnly;
+            }[];
+          };
+          if (entry.hadRecentInput) continue;
+          observedWindow.__layoutShifts.push({
+            value: entry.value,
+            sources: entry.sources.map(
+              ({ node, previousRect, currentRect }) => {
+                const element = node instanceof Element ? node : null;
+                const name = element?.className
+                  ? `${node?.nodeName}.${String(element.className).replace(/\s+/g, ".")}`
+                  : (node?.nodeName ?? "unknown");
+                return `${name} ${previousRect.width}x${previousRect.height}->${currentRect.width}x${currentRect.height}`;
+              },
+            ),
+          });
+        }
+      }).observe({ type: "layout-shift", buffered: true });
+    });
+
+    const fontResponses: Promise<Buffer>[] = [];
+    const fontPaths: string[] = [];
+    page.on("response", (response) => {
+      if (
+        /\/fonts\/inter-(latin|vietnamese)-opsz-v5\.3\.0\.woff2$/.test(
+          response.url(),
+        )
+      ) {
+        fontPaths.push(new URL(response.url()).pathname);
+        fontResponses.push(response.body());
+      }
+    });
+
+    await page.goto("/vi/");
+    await page.evaluate(async () => {
+      await document.fonts.ready;
+      await new Promise((resolve) =>
+        requestAnimationFrame(() => requestAnimationFrame(resolve)),
+      );
+    });
+
+    const transferredBytes = (await Promise.all(fontResponses)).reduce(
+      (total, body) => total + body.byteLength,
+      0,
+    );
+    const layoutShifts = await page.evaluate(
+      () =>
+        (
+          window as Window & {
+            __layoutShifts: { value: number; sources: string[] }[];
+          }
+        ).__layoutShifts,
+    );
+    expect(fontPaths).toContain("/fonts/inter-latin-opsz-v5.3.0.woff2");
+    expect(fontPaths).toContain("/fonts/inter-vietnamese-opsz-v5.3.0.woff2");
+    expect(
+      await page.evaluate(() => document.fonts.check('16px "Inter Variable"')),
+    ).toBe(true);
+    expect(transferredBytes).toBeLessThanOrEqual(100_000);
+    expect(
+      layoutShifts.reduce((total, entry) => total + entry.value, 0),
+      JSON.stringify(layoutShifts),
+    ).toBe(0);
+  });
+});
