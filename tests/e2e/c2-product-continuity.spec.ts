@@ -96,7 +96,7 @@ test.describe("C2 product continuity — static-first no-JS contract", () => {
     test.setTimeout(60_000);
     const server = await startFixtureServer();
     try {
-      await page.goto(`${server.origin}/product-acts/`);
+      await page.goto(`${server.origin}/product-cards/`);
       const link = page.locator('a[data-product-continuity="card"]').first();
       await clickThrough(page, link);
       await expect(page).toHaveURL(/\/en\/products\/fixture-flagship\/$/);
@@ -216,7 +216,7 @@ test.describe("C2 product continuity — fixture-backed", () => {
   test("EN: the destination title carries the same card name as its source", async ({
     page,
   }, testInfo) => {
-    await page.goto(`${origin}/product-acts/`);
+    await page.goto(`${origin}/product-cards/`);
     const source = page.locator('a[data-product-continuity="card"]').first();
     const sourceSlug =
       ((await source.getAttribute("href")) ?? "").match(PROFILE_HREF)?.[1] ??
