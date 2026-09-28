@@ -74,6 +74,10 @@ test("decorative entrance animations only run when motion is welcome", () => {
   assert.ok(keyframesAt > -1, "keyframes must be defined");
 });
 
+test("product status badges stay static and do not imply a live state", () => {
+  assert.doesNotMatch(css, /data-product-status::before|status-badge-entrance/);
+});
+
 test("every keyframes block defined in global.css is actually used", () => {
   const defined = [...css.matchAll(/@keyframes\s+([a-z-]+)/g)].map(
     (match) => match[1],
