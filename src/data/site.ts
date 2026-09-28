@@ -35,6 +35,21 @@ export interface LocalizedLabel {
  * Centralized so shared chrome can never leak English into Vietnamese pages.
  */
 export const SHARED_LABELS = {
+  flagshipEyebrow: {
+    en: "Flagship product",
+    vi: "Sản phẩm chủ lực",
+    zh: "旗舰产品",
+  },
+  jobsHeading: {
+    en: "What it helps people do",
+    vi: "Việc sản phẩm hỗ trợ",
+    zh: "可完成的工作",
+  },
+  scopeHeading: {
+    en: "Development scope",
+    vi: "Phạm vi phát triển",
+    zh: "开发范围",
+  },
   search: { en: "Search", vi: "Tìm", zh: "搜索" },
   searchPages: { en: "Search pages", vi: "Tìm trang", zh: "搜索页面" },
   menu: { en: "Menu", vi: "Menu", zh: "菜单" },

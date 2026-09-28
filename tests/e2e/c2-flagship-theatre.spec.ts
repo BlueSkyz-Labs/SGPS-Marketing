@@ -49,11 +49,48 @@ test.describe("C2 Flagship Theatre — fixture-backed (product present)", () => 
       lang: "en",
       path: "/product-acts/",
       profilePath: "/en/products/fixture-flagship/",
+      status: "In development",
+      eyebrow: "Flagship product",
+      description: "Fixture description for the flagship act.",
+      jobsHeading: "What it helps people do",
+      jobs: ["Fixture job one", "Fixture job two"],
+      scopeHeading: "Development scope",
+      capabilities: [
+        "Fixture capability one",
+        "Fixture capability two",
+        "Fixture capability three",
+      ],
+      action: "Contact",
     },
     {
       lang: "vi",
       path: "/product-acts-vi/",
       profilePath: "/vi/products/fixture-flagship/",
+      status: "Đang phát triển",
+      eyebrow: "Sản phẩm chủ lực",
+      description: "Mô tả thử nghiệm cho sản phẩm chủ lực.",
+      jobsHeading: "Việc sản phẩm hỗ trợ",
+      jobs: ["Công việc thử nghiệm một", "Công việc thử nghiệm hai"],
+      scopeHeading: "Phạm vi phát triển",
+      capabilities: [
+        "Phạm vi thử nghiệm một",
+        "Phạm vi thử nghiệm hai",
+        "Phạm vi thử nghiệm ba",
+      ],
+      action: "Liên hệ thử nghiệm",
+    },
+    {
+      lang: "zh",
+      path: "/product-acts-zh/",
+      profilePath: "/zh/products/fixture-flagship/",
+      status: "开发中",
+      eyebrow: "旗舰产品",
+      description: "旗舰产品的测试说明。",
+      jobsHeading: "可完成的工作",
+      jobs: ["测试工作一", "测试工作二"],
+      scopeHeading: "开发范围",
+      capabilities: ["测试范围一", "测试范围二", "测试范围三"],
+      action: "联系演示",
     },
   ]) {
     test(`${locale.lang}: theatre renders truth-driven from the fixture record`, async ({
@@ -66,24 +103,35 @@ test.describe("C2 Flagship Theatre — fixture-backed (product present)", () => 
 
       // Act title is the record name.
       await expect(page.locator(TITLE)).toHaveText("Fixture Flagship");
+      await expect(
+        page.locator(`${THEATRE} [data-flagship-eyebrow]`),
+      ).toHaveText(locale.eyebrow);
+      await expect(
+        page.getByRole("heading", { name: locale.jobsHeading }),
+      ).toBeVisible();
+      for (const job of locale.jobs) {
+        await expect(page.locator(THEATRE)).toContainText(job);
+      }
+      await expect(
+        page.getByRole("heading", { name: locale.scopeHeading }),
+      ).toBeVisible();
+      for (const capability of locale.capabilities) {
+        await expect(page.locator(THEATRE)).toContainText(capability);
+      }
 
       // Status family (subordinate, via ProductStatus) carries the record label.
       // Scoped to the status element: the theatre legitimately carries other
       // spans (truth-state chips, the proof affordance).
       const status = page.locator(`${THEATRE} [data-product-status]`);
       await expect(status).toHaveCount(1);
-      expect((await status.textContent())?.trim()).toBe(
-        locale.lang === "vi" ? "Đang phát triển" : "In development",
-      );
+      expect((await status.textContent())?.trim()).toBe(locale.status);
       await expect(status).toHaveAttribute(
         "data-product-status",
         "In development",
       );
 
       // Short description present.
-      await expect(page.locator(THEATRE)).toContainText(
-        "Fixture description for the flagship act.",
-      );
+      await expect(page.locator(THEATRE)).toContainText(locale.description);
 
       // Exactly 3 capability items.
       const caps = page.locator(`${THEATRE} div.c2-flagship-theatre__feature`);
@@ -96,7 +144,7 @@ test.describe("C2 Flagship Theatre — fixture-backed (product present)", () => 
       expect(primaryHref).toBe("/en/contact/");
       await expect(
         page.locator(`${THEATRE} a[href="/en/contact/"]`),
-      ).toContainText("Contact");
+      ).toContainText(locale.action);
 
       // Profile anchor links to the canonical localized profile path.
       await expect(
