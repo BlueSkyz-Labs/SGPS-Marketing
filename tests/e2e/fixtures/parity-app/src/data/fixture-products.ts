@@ -15,8 +15,10 @@ interface FixtureProduct {
     name: string;
     publicLabel: string;
     shortDescription: string;
+    platforms: string[];
     capabilities: string[];
     primaryAction: { href: string; label: string };
+    secondaryAction?: { href: string; label: string };
     proof: {
       media: {
         src: string;
@@ -38,6 +40,7 @@ export const FIXTURE_FLAGSHIP: FixtureProduct = {
     name: "Fixture Flagship",
     publicLabel: "In development",
     shortDescription: "Fixture description for the flagship act.",
+    platforms: ["web"],
     capabilities: [
       "Fixture capability one",
       "Fixture capability two",
@@ -65,6 +68,7 @@ export const FIXTURE_SECONDARY: FixtureProduct = {
     name: "Fixture Secondary",
     publicLabel: "Preview",
     shortDescription: "Fixture description for a secondary product.",
+    platforms: ["web"],
     capabilities: ["Fixture capability one", "Fixture capability two"],
     primaryAction: { href: "/en/contact/", label: "Contact" },
     proof: {
@@ -88,6 +92,7 @@ export const FIXTURE_ECOSYSTEM: FixtureProduct = {
     name: "Fixture Ecosystem",
     publicLabel: "Preview",
     shortDescription: "Fixture description for an ecosystem product.",
+    platforms: ["web"],
     capabilities: ["Fixture capability one", "Fixture capability two"],
     primaryAction: { href: "/en/contact/", label: "Contact" },
     proof: {
