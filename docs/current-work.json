@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.0",
-  "updatedAt": "2026-09-27",
+  "updatedAt": "2026-09-28",
   "program": "SGPS Premium Experience & Design Excellence v2.0 (God-Tier × Tier S+)",
   "status": "sgps-v2-in-progress",
   "authorities": {
@@ -36,8 +36,8 @@
     },
     {
       "id": "experience-convergence-v5",
-      "name": "Experience & Design Convergence v5 — Owner-approved 2026-09-27 (D-0 remove VietQR from Marketing, D-1 header-only translucent material, D-2 self-host Inter). PR #302 lands the P0 VietQR removal, Wave 0 defect fixes, the premium Atlas plate and the W1–W6 agent pack; header/token/ProductCard surfaces are owned by the Brand Kit v4 lane",
-      "status": "PLANNED",
+      "name": "Experience & Design Convergence v5 — Owner-approved D-0 remove Marketing VietQR, D-1 header-only translucency, D-2 self-host Inter. PR #302 is MERGED at main@3342d912 (P0 removal, Wave 0 fixes, premium Atlas and W1–W6 plan). Remaining v5 waves are not claimed complete. Brand Kit v4 is sole owner of tokens/header/ProductCard/device-frame changes.",
+      "status": "IN_PROGRESS",
       "evidence": "docs/superpowers/plans/2026-09-27-experience-design-convergence-v5.md"
     },
     {
@@ -327,7 +327,9 @@
     {
       "id": "human-review-governance",
       "question": "Enable stronger human review rules only if a real independent reviewer path exists; otherwise retain HUMAN_REVIEW_UNAVAILABLE semantics.",
-      "blocks": ["branch-protection-independent-review"]
+      "blocks": [
+        "branch-protection-independent-review"
+      ]
     },
     {
       "id": "rum-provider",
@@ -337,12 +339,23 @@
     {
       "id": "c3-concierge-runtime-privacy-provider",
       "question": "C3 direction is approved, but remote Concierge/model provider, retrieval runtime, log retention/privacy, abuse controls and cost ceiling require a dedicated architecture/privacy/security decision plus owner approval before implementation.",
-      "blocks": ["c3-e-concierge-runtime"]
+      "blocks": [
+        "c3-e-concierge-runtime"
+      ]
     },
     {
       "id": "c3-spatial-webgl-go-gate",
       "question": "C3 spatial concept is approved as an experiment. WebGL/3D remains conditional on native 2.5D evidence, measured value, performance/accessibility budget and a separate owner GO decision.",
-      "blocks": ["c3-g-webgl-runtime"]
+      "blocks": [
+        "c3-g-webgl-runtime"
+      ]
+    },
+    {
+      "id": "marketing-v37-g02-research-pilot",
+      "question": "MKT-V37-G02 negative-fit transparency: research/pilot-only approval is PROPOSED in #310/#311, not granted. An approved research protocol would use fictional static prototypes and no live visitor tracking. Product implementation, Product Truth changes, PR merge and production require distinct approval.",
+      "blocks": [
+        "marketing-v37-g02-research-pilot"
+      ]
     }
   ],
   "residualExternal": [
@@ -357,7 +370,7 @@
     "Lane-helguard guard: helper now emits 'LOCAL-AHEAD skip' and exits 0 on local-ahead branches; reset incident documented (operational, not committed)."
   ],
   "nextActionable": [
-    "Experience Convergence v5 (PR #302): P0 VietQR removal, Wave 0 fixes (OS dark mode, footer switcher, hero bleed, identity stage, hermetic guard) and the premium Atlas plate land with the agent pack docs/superpowers/plans/experience-v5/. Canonical owner of tokens, sticky header material and ProductCard is the Brand Kit v4 lane (#301 landed; #306/#307/#308 open) — agents extend, never re-implement those surfaces. Owner-directed follow-ups to re-cut on top of that lane: Sổ Trọ flagship showcase, localized vi/zh product copy, self-hosted Inter, segmented controls, Prismatic hero (reference implementation: commits ad178ae/6af7e82/cd02cdd in PR #302 history). EXTERNAL: Human E4, native VI/ZH review, served-SHA/anonymous read-back, Sổ Trọ VietQR handover (4ac2e80).",
+    "2026-09-28 exact source readback: PR #302 MERGED, main@3342d912; P0 Marketing VietQR removed in source and post-merge Source Assurance #36345280827 SUCCESS (Quality Gates + Browser Assurance). Do NOT infer exact Cloudflare served revision, anonymous access, real payment handover or Human E4 from source/CI. Brand Kit #306 (header) and #308 (device frame) are mergeable but BEHIND main; #307 (ProductCard) is DIRTY/conflicted after #302. Reconcile against main and re-run merged-tree/exact-head assurance in canonical lane before promoting, no duplicate write. #309 Test Intelligence baseline is at superseded 462aa460 and needs a main@3342d912 delta addendum; upstream canonical approval remains separately gated. #311 v3.7 is DRAFT research only, its exact-head Source Assurance #36343309279 FAILED Formatting on two research Markdown files; G02 Research/Pilot is proposed, NOT Owner-approved. Owner-fact #281 business/security mailbox remains open. Owner-directed v5 follow-ups (Sổ Trọ flagship, authored vi/zh copy, self-hosted Inter, segmented control, Prismatic hero) require independent scoped PRs after Brand Kit reconciliation, with product-truth and accessibility proof.",
     "C3-D Tasks 1–5 are merged and verified: Task 5 PR #276 exact-head Source Assurance run 36216346386 passed; main e3a3c6f exact post-merge Source Assurance run 36231546326 passed; Cloudflare deployment 7af4f796 has version 8d12ab41 at 100%. Anonymous public smoke remains blocked by owner-only Cloudflare Access.",
     "Blocked on owner fact: C3-F Task 2 and later (release source adapter, publication surface) — no authored public release source exists. C4-D Tasks 2 and 4 (Architecture Salon surface, Provenance Lens) are already landed (see the c4-d-salon wave), so the earlier suggestion here is superseded.",
     "Public product runtime is live for five products (Sổ Tâm, Sổ Trọ, FluentArc, ApexAgent, VungTayLai): #269 landed, and #292 (main e21c954) reconciled the five-product truth — corrected product name, removed unverified voice/transcription claims, per-product platform SEO/JSON-LD, and identity artwork captioned as artwork rather than a running-app screenshot. Verified product UI screenshots remain absent by design (honest empty state), so C4-A Task 10 (gallery mount), C4-F and remote/model C4-G remain separately gated.",
