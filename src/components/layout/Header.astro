@@ -1,5 +1,6 @@
 ---
 import BrandLockup from "@/components/brand/BrandLockup.astro";
+import BlueSkyzIcon from "@/components/icon/BlueSkyzIcon.astro";
 import Container from "@/components/layout/Container.astro";
 import LanguageSwitcher from "@/components/layout/LanguageSwitcher.astro";
 import ThemeToggle from "@/components/layout/ThemeToggle.astro";
@@ -55,6 +56,7 @@ const primaryCta = hasPublicProducts
         aria-keyshortcuts="Control+K Meta+K"
         class="inline-flex min-h-11 items-center gap-2 rounded-lg border border-[var(--border-subtle)] px-3 text-sm font-medium text-[var(--text-secondary)] transition-colors hover:text-[var(--text-primary)]"
       >
+        <BlueSkyzIcon name="search" class="h-4 w-4 shrink-0" />
         {labelFor(SHARED_LABELS.search, lang)}
         <kbd class="rounded border border-[var(--border-subtle)] bg-[var(--surface-subtle)] px-1.5 py-0.5 text-[0.65rem] font-medium">
           Ctrl / ⌘K
@@ -89,8 +91,9 @@ const primaryCta = hasPublicProducts
             type="button"
             data-command-trigger
             aria-keyshortcuts="Control+K Meta+K"
-            class="min-h-11 rounded-md border border-[var(--border-subtle)] px-3 py-2 text-left text-sm font-medium text-[var(--text-primary)]"
+            class="inline-flex min-h-11 items-center gap-2 rounded-md border border-[var(--border-subtle)] px-3 py-2 text-left text-sm font-medium text-[var(--text-primary)]"
           >
+            <BlueSkyzIcon name="search" class="h-4 w-4 shrink-0" />
             {labelFor(SHARED_LABELS.searchPages, lang)}
           </button>
           {NAV.map((item) => (

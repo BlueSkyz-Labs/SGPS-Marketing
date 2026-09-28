@@ -34,6 +34,12 @@ export const ICON_REGISTRY: Readonly<Record<string, IconDefinition>> =
     external: Object.freeze({
       paths: Object.freeze(["M14 5h5v5", "M19 5l-8 8", "M18 14v5H5V6h5"]),
     }),
+    search: Object.freeze({
+      paths: Object.freeze([
+        "M11 5a6 6 0 1 0 0 12 6 6 0 0 0 0-12Z",
+        "m16 16 4 4",
+      ]),
+    }),
   });
 
 export type IconName = keyof typeof ICON_REGISTRY;
