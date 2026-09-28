@@ -5,29 +5,22 @@ type ProductMedia = NonNullable<
   CollectionEntry<"products">["data"]["proof"]["media"]
 >;
 
-/**\n * C3-A Task 2 — the single shared product-visual primitive.\n *\n * It owns presentation only: intrinsic size, alt text and the optional\n * continuity hook all come from the caller. It never derives product facts,\n * and it forwards — never authors — the continuity identity produced by the\n * shared naming convention in `src/lib`.\n *\n * Variant "framed" is a presentation-only toggle: it ships a scoped class that\n * the caller (FlagshipTheatre) uses to adjust the visual container when the\n * image is encased in a device frame. It does not add, alter or imply product\n * truth.\n */
+/**
+ * C3-A Task 2 — shared static product visual.
+ * Renders record-backed image metadata and forwards the caller's continuity identity.
+ */
 interface Props {
   media: ProductMedia;
   loading?: "eager" | "lazy";
   transitionStyle?: string;
   continuity?: "media";
-  /** Presentation-only toggle; scoped class for the caller's device-frame context. */
-  variant?: "default" | "framed";
 }
 
-const {
-  media,
-  loading = "lazy",
-  transitionStyle,
-  continuity,
-  variant = "default",
-} = Astro.props;
-
-const variantClass = variant === "framed" ? "c3-product-visual--framed" : "";
+const { media, loading = "lazy", transitionStyle, continuity } = Astro.props;
 ---
 
 <div
-  class:list={["c3-product-visual", variantClass]}
+  class="c3-product-visual"
   data-product-visual
   data-product-continuity={continuity}
   style={transitionStyle}
