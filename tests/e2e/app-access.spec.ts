@@ -37,6 +37,24 @@ test.describe("app access", () => {
     });
   }
 
+  for (const lang of ["en", "vi", "zh"]) {
+    for (const slug of PUBLISHED) {
+      test(`${lang}/${slug}: profile primary CTA opens sign-in, not itself`, async ({
+        page,
+      }) => {
+        await page.goto(`/${lang}/products/${slug}/`);
+        const primaryActions = page.locator(
+          `main article a[href="${SIGN_IN[slug]}"]`,
+        );
+        await expect(primaryActions).toHaveCount(1);
+        await expect(primaryActions).toHaveAttribute("href", SIGN_IN[slug]);
+        expect(new URL(SIGN_IN[slug]).pathname).not.toBe(
+          new URL(page.url()).pathname,
+        );
+      });
+    }
+  }
+
   test("hidden products have no profile page and are not listed", async ({
     page,
   }) => {
