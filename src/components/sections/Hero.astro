@@ -99,16 +99,29 @@ const emptySecondary = emptyRegistrySecondaryCta(SITE.contactEmail, lang);
       </div>
     </div>
     <div class="hero-visual" aria-hidden="true">
-      <span class="hero-visual-glow"></span>
-      <img
-        class="hero-mark rounded-[var(--radius-card)]"
-        src="/brand/blueskyz/v4/hero/website_hero_1920x1080.webp"
-        alt=""
-        width="1920"
-        height="1080"
-        decoding="async"
-      />
-      <span class="hero-visual-sheen"></span>
+      <picture>
+        <source
+          type="image/avif"
+          media="(min-width: 1024px)"
+          srcset="/brand/blueskyz/v4/hero/prismatic-r4d-mark-560.avif 560w, /brand/blueskyz/v4/hero/prismatic-r4d-mark-840.avif 840w"
+          sizes="30rem"
+        />
+        <source
+          type="image/webp"
+          media="(min-width: 1024px)"
+          srcset="/brand/blueskyz/v4/hero/prismatic-r4d-mark-560.webp 560w, /brand/blueskyz/v4/hero/prismatic-r4d-mark-840.webp 840w"
+          sizes="30rem"
+        />
+        <img
+          class="hero-mark"
+          src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+          alt=""
+          width="560"
+          height="560"
+          decoding="async"
+          fetchpriority="low"
+        />
+      </picture>
       <span class="hero-seam"></span>
     </div>
   </Reveal>
