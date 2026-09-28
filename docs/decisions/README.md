@@ -17,6 +17,7 @@ Each file: `NNNN-short-slug.md` — chronological, never edited, only added.
 | 0009 | 2026-09-19 | Multilingual baseline & language preference    | Accepted   |
 | 0010 | 2026-09-18 | Third locale (zh-Hans) and Light/Dark theming  | Accepted   |
 | 0011 | 2026-09-24 | Model-assisted briefing synthesis gate (NO-GO) | Proposed   |
+| 0012 | 2026-09-27 | Shell material exception (translucent header)  | Accepted   |
 | #    | Date       | Title                                          | Status     |
 | ---- | ---------- | ---------------------------------------------  | ---------- |
 | 0001 | 2026-08-29 | Adopt Quiet Luxury aesthetic                   | Superseded |
