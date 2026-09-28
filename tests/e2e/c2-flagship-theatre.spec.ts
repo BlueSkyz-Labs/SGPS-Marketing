@@ -49,11 +49,53 @@ test.describe("C2 Flagship Theatre — fixture-backed (product present)", () => 
       lang: "en",
       path: "/product-acts/",
       profilePath: "/en/products/fixture-flagship/",
+      status: "In development",
+      eyebrow: "Flagship product",
+      description: "Fixture description for the flagship act.",
+      jobsHeading: "What it helps people do",
+      jobs: ["Fixture job one", "Fixture job two"],
+      scopeHeading: "Development scope",
+      capabilities: [
+        "Fixture capability one",
+        "Fixture capability two",
+        "Fixture capability three",
+      ],
+      action: "Contact",
+      caption:
+        "Brand identity artwork — not a screenshot of the running application.",
     },
     {
       lang: "vi",
       path: "/product-acts-vi/",
       profilePath: "/vi/products/fixture-flagship/",
+      status: "Đang phát triển",
+      eyebrow: "Sản phẩm chủ lực",
+      description: "Mô tả thử nghiệm cho sản phẩm chủ lực.",
+      jobsHeading: "Việc sản phẩm hỗ trợ",
+      jobs: ["Công việc thử nghiệm một", "Công việc thử nghiệm hai"],
+      scopeHeading: "Phạm vi phát triển",
+      capabilities: [
+        "Phạm vi thử nghiệm một",
+        "Phạm vi thử nghiệm hai",
+        "Phạm vi thử nghiệm ba",
+      ],
+      action: "Liên hệ thử nghiệm",
+      caption:
+        "Hình ảnh nhận diện thương hiệu — không phải ảnh chụp giao diện ứng dụng.",
+    },
+    {
+      lang: "zh",
+      path: "/product-acts-zh/",
+      profilePath: "/zh/products/fixture-flagship/",
+      status: "开发中",
+      eyebrow: "旗舰产品",
+      description: "旗舰产品的测试说明。",
+      jobsHeading: "可完成的工作",
+      jobs: ["测试工作一", "测试工作二"],
+      scopeHeading: "开发范围",
+      capabilities: ["测试范围一", "测试范围二", "测试范围三"],
+      action: "联系演示",
+      caption: "品牌视觉素材，并非应用运行界面的截图。",
     },
   ]) {
     test(`${locale.lang}: theatre renders truth-driven from the fixture record`, async ({
@@ -66,18 +108,35 @@ test.describe("C2 Flagship Theatre — fixture-backed (product present)", () => 
 
       // Act title is the record name.
       await expect(page.locator(TITLE)).toHaveText("Fixture Flagship");
+      await expect(
+        page.locator(`${THEATRE} [data-flagship-eyebrow]`),
+      ).toHaveText(locale.eyebrow);
+      await expect(
+        page.getByRole("heading", { name: locale.jobsHeading }),
+      ).toBeVisible();
+      for (const job of locale.jobs) {
+        await expect(page.locator(THEATRE)).toContainText(job);
+      }
+      await expect(
+        page.getByRole("heading", { name: locale.scopeHeading }),
+      ).toBeVisible();
+      for (const capability of locale.capabilities) {
+        await expect(page.locator(THEATRE)).toContainText(capability);
+      }
 
       // Status family (subordinate, via ProductStatus) carries the record label.
       // Scoped to the status element: the theatre legitimately carries other
       // spans (truth-state chips, the proof affordance).
       const status = page.locator(`${THEATRE} [data-product-status]`);
       await expect(status).toHaveCount(1);
-      expect((await status.textContent())?.trim()).toBe("In development");
+      expect((await status.textContent())?.trim()).toBe(locale.status);
+      await expect(status).toHaveAttribute(
+        "data-product-status",
+        "In development",
+      );
 
       // Short description present.
-      await expect(page.locator(THEATRE)).toContainText(
-        "Fixture description for the flagship act.",
-      );
+      await expect(page.locator(THEATRE)).toContainText(locale.description);
 
       // Exactly 3 capability items.
       const caps = page.locator(`${THEATRE} div.c2-flagship-theatre__feature`);
@@ -90,7 +149,7 @@ test.describe("C2 Flagship Theatre — fixture-backed (product present)", () => 
       expect(primaryHref).toBe("/en/contact/");
       await expect(
         page.locator(`${THEATRE} a[href="/en/contact/"]`),
-      ).toContainText("Contact");
+      ).toContainText(locale.action);
 
       // Profile anchor links to the canonical localized profile path.
       await expect(
@@ -101,14 +160,29 @@ test.describe("C2 Flagship Theatre — fixture-backed (product present)", () => 
       const img = page.locator(`${THEATRE} img`);
       await expect(img).toBeVisible();
       await expect(img).toHaveAttribute(
+        "alt",
+        "Fixture flagship brand identity artwork",
+      );
+      await expect(img).toHaveAttribute(
         "src",
         "/products/fixtures/fixture-flagship.png",
       );
-      await expect(img).toHaveAttribute("alt", "Fixture flagship proof media");
       await expect(img).toHaveAttribute("width", "1280");
       await expect(img).toHaveAttribute("height", "800");
       await expect(img).toHaveAttribute("loading", "lazy");
       await expect(img).toHaveAttribute("decoding", "async");
+      await expect(
+        page.locator(`${THEATRE} [data-flagship-ink-stage]`),
+      ).toHaveCount(1);
+      await expect(
+        page.locator(`${THEATRE} .c2-flagship-theatre__device-frame`),
+      ).toHaveCount(0);
+      await expect(
+        page.locator(`${THEATRE} .c2-flagship-theatre__window-controls`),
+      ).toHaveCount(0);
+      await expect(page.locator(`${THEATRE} figcaption`)).toHaveText(
+        locale.caption,
+      );
       // Opacity stays 1 (no fade-in).
       const opacity = await img.evaluate((el) => getComputedStyle(el).opacity);
       expect(opacity).toBe("1");
@@ -145,6 +219,46 @@ test.describe("C2 Flagship Theatre — fixture-backed (product present)", () => 
         mediaNames.length,
         "media continuity name must be unique in document",
       ).toBe(1);
+    });
+  }
+});
+
+test.describe("public flagship artwork presentation", () => {
+  for (const locale of [
+    {
+      lang: "en",
+      path: "/en/",
+      caption:
+        "Brand identity artwork — not a screenshot of the running application.",
+    },
+    {
+      lang: "vi",
+      path: "/vi/",
+      caption:
+        "Hình ảnh nhận diện thương hiệu — không phải ảnh chụp giao diện ứng dụng.",
+    },
+    {
+      lang: "zh",
+      path: "/zh/",
+      caption: "品牌视觉素材，并非应用运行界面的截图。",
+    },
+  ]) {
+    test(`${locale.lang}: homepage shows Sổ Trọ identity art without app chrome`, async ({
+      page,
+    }) => {
+      test.skip(!hasPublicProducts, "No published hero product is available");
+      await page.goto(locale.path);
+
+      const theatre = page.locator(THEATRE);
+      await expect(theatre.locator(TITLE)).toHaveText("Sổ Trọ");
+      await expect(theatre.locator("[data-flagship-ink-stage]")).toHaveCount(1);
+      await expect(
+        theatre.locator(".c2-flagship-theatre__device-frame"),
+      ).toHaveCount(0);
+      await expect(
+        theatre.locator(".c2-flagship-theatre__window-controls"),
+      ).toHaveCount(0);
+      await expect(theatre.locator("figcaption")).toHaveText(locale.caption);
     });
   }
 });

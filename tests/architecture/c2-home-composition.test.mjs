@@ -92,13 +92,31 @@ test("the flagship act consumes the product record instead of authoring facts", 
   );
   // Facts come from the record.
   assert.match(theatre, /data\.name/);
-  assert.match(theatre, /data\.shortDescription/);
+  assert.match(theatre, /productCopy\(data,\s*lang\)/);
+  assert.match(theatre, /copy\.shortDescription/);
+  assert.match(theatre, /copy\.jobs/);
+  assert.match(theatre, /copy\.capabilities/);
+  assert.match(theatre, /copy\.primaryActionLabel/);
   assert.match(theatre, /data\.publicLabel/);
   assert.match(theatre, /data\.primaryAction/);
   assert.match(house, /data\.featuredTier/);
   // No invented product identity in the cinematic layer.
   assert.doesNotMatch(theatre, /\bLorem\b|placeholder product/i);
   assert.doesNotMatch(house, /\bLorem\b|placeholder product/i);
+});
+
+test("localized homepages show the flagship once and continue with other products", () => {
+  for (const lang of LOCALES) {
+    const source = readFileSync(homePath(lang), "utf8");
+    assert.match(source, /<FlagshipTheatre product=\{flagship\}/, lang);
+    assert.match(
+      source,
+      new RegExp(
+        `<ProductHouse products=\\{products\\} lang="${lang}" mode="continuation"`,
+      ),
+      lang,
+    );
+  }
 });
 
 test("the empty registry falls back honestly instead of fabricating a product", () => {

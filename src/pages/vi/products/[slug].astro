@@ -3,6 +3,7 @@ import type { CollectionEntry } from "astro:content";
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import Container from "@/components/layout/Container.astro";
 import ProductStatus from "@/components/product/ProductStatus.astro";
+import ProductLadder from "@/components/product/ProductLadder.astro";
 import ButtonLink from "@/components/ui/ButtonLink.astro";
 import { productCopy } from "@/lib/product-copy";
 import AppAccess from "@/components/product/AppAccess.astro";
@@ -93,7 +94,7 @@ const productStructuredData = productJsonLd(
       </p>
 
       <div class="mt-6 flex flex-wrap items-center gap-3">
-        <ProductStatus label={data.publicLabel} />
+        <ProductStatus label={data.publicLabel} lang="vi" />
         <p class="text-xs font-medium tracking-wide text-[var(--text-muted)]">
           {copy.endorsement}
         </p>
@@ -118,6 +119,7 @@ const productStructuredData = productJsonLd(
       </div>
 
       <AppAccess appAccess={data.appAccess} productName={data.name} lang="vi" />
+      <ProductLadder lifecycle={data.lifecycle} lang="vi" />
 
       <section class="mt-14" aria-labelledby="profile-status">
         <h2

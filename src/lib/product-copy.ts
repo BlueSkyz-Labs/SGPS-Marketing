@@ -63,13 +63,16 @@ export function productCopy(data: ProductData, lang: Language): ProductCopy {
   };
 }
 
-/** Honest development ladder: where the record's lifecycle sits today. */
+/** Every schema-valid lifecycle stage, including terminal states. */
 export const LIFECYCLE_LADDER: readonly Lifecycle[] = [
   "concept",
   "prototype",
   "development",
   "beta",
   "active",
+  "maintenance",
+  "sunset",
+  "archived",
 ];
 
 const LIFECYCLE_LABELS: Record<Lifecycle, Record<Language, string>> = {

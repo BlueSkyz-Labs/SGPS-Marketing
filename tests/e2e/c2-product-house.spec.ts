@@ -22,44 +22,36 @@ test.describe("C2 Product House — fixture-backed hierarchy", () => {
     await closeServer?.();
   });
 
-  test("fixture EN renders the hero tier as a distinct block above the grid", async ({
+  test("fixture EN does not repeat the flagship in the continuation grid", async ({
     page,
   }) => {
     await page.goto(`${origin}/product-acts/`);
     const cards = page.locator("[data-product-card]");
-    await expect(cards).toHaveCount(3);
+    await expect(cards).toHaveCount(2);
 
-    // The hero leads the act.
     const tiers = await cards.evaluateAll((els) =>
       els.map((el) => el.getAttribute("data-product-tier")),
     );
-    expect(tiers[0]).toBe("hero");
-
-    // The hero is NOT a tile inside the secondary grid: it sits outside the
-    // grid container, so the tiers cannot read as one equal-weight grid.
-    // (The fixture app is unstyled by design — visual hierarchy is a CSS
-    // concern asserted on the styled surfaces, not here.)
-    const heroInsideGrid = await page
-      .locator('[data-product-tier="hero"]')
-      .evaluate((el) => el.closest(".grid.gap-4") !== null);
-    expect(heroInsideGrid).toBe(false);
+    expect(tiers).toEqual(["featured", "ecosystem"]);
+    await expect(
+      page.locator("[data-flagship-theatre] h2").first(),
+    ).toContainText("Fixture Flagship");
+    await expect(cards.filter({ hasText: "Fixture Flagship" })).toHaveCount(0);
+    await expect(page.locator("#product-house-title")).toHaveText(
+      "The rest of the house, in development",
+    );
 
     const grid = page.locator(".grid.gap-4");
     await expect(grid).toHaveCount(1);
-    const gridTiers = await grid
-      .locator("[data-product-card]")
-      .evaluateAll((els) =>
-        els.map((el) => el.getAttribute("data-product-tier")).sort(),
-      );
-    expect(gridTiers).toEqual(["ecosystem", "featured"]);
+    await expect(grid.locator("[data-product-card]")).toHaveCount(2);
   });
 
-  test("fixture EN shows exactly 3 product cards with correct localized profile links", async ({
+  test("continuation keeps canonical links for the remaining products", async ({
     page,
   }) => {
     await page.goto(`${origin}/product-acts/`);
     const cards = page.locator("[data-product-card]");
-    await expect(cards).toHaveCount(3);
+    await expect(cards).toHaveCount(2);
 
     // Every card must carry the continuity link pointing at the canonical
     // localized profile path.
@@ -68,7 +60,6 @@ test.describe("C2 Product House — fixture-backed hierarchy", () => {
       .evaluateAll((els) => els.map((el) => el.getAttribute("href")));
     // Fixture records have slugs fixture-flagship, fixture-secondary, fixture-ecosystem.
     const expectedHrefs = [
-      "/en/products/fixture-flagship/",
       "/en/products/fixture-secondary/",
       "/en/products/fixture-ecosystem/",
     ];
@@ -85,7 +76,7 @@ test.describe("C2 Product House — fixture-backed hierarchy", () => {
     const primaryActions = page
       .locator("[data-product-card] a")
       .filter({ hasText: "Contact" });
-    await expect(primaryActions).toHaveCount(3);
+    await expect(primaryActions).toHaveCount(2);
   });
 
   test("fixture VI does not contain EN-only copy leaks", async ({ page }) => {
@@ -93,16 +84,42 @@ test.describe("C2 Product House — fixture-backed hierarchy", () => {
     const bodyText = await page.locator("body").textContent();
     // These EN strings must not appear on the VI page.
     expect(bodyText ?? "").not.toContain("View profile");
-    expect(bodyText ?? "").not.toContain("Explore all products");
+    expect(bodyText ?? "").not.toContain(
+      "The rest of the house, in development",
+    );
   });
 
   test("fixture VI labels are localized (different from EN)", async ({
     page,
   }) => {
     await page.goto(`${origin}/product-acts-vi/`);
-    await expect(page.getByText("Sản phẩm nổi bật")).toBeVisible();
-    await expect(page.getByText("Khám phá tất cả sản phẩm")).toBeVisible();
+    await expect(
+      page.getByText("Những sản phẩm khác đang được phát triển"),
+    ).toBeVisible();
+    await expect(
+      page.getByText(
+        "Mỗi sản phẩm hiển thị đúng giai đoạn đã ghi nhận — ý tưởng, nguyên mẫu hay phát triển — cùng nền tảng và bước tiếp theo trung thực.",
+      ),
+    ).toBeVisible();
     await expect(page.getByText("Xem hồ sơ").first()).toBeVisible();
+    const status = page.locator("[data-product-status]").first();
+    await expect(status).toHaveText("Đang phát triển");
+    await expect(status).toHaveAttribute(
+      "data-product-status",
+      "In development",
+    );
+  });
+
+  test("fixture ZH status is localized without changing its canonical value", async ({
+    page,
+  }) => {
+    await page.goto(`${origin}/product-acts-zh/`);
+    const status = page.locator("[data-product-status]").first();
+    await expect(status).toHaveText("开发中");
+    await expect(status).toHaveAttribute(
+      "data-product-status",
+      "In development",
+    );
   });
 
   test("fixture EN keeps every tier reachable through ordinary links", async ({
@@ -119,7 +136,7 @@ test.describe("C2 Product House — fixture-backed hierarchy", () => {
             "",
         ),
       );
-    expect(linked).toHaveLength(3);
+    expect(linked).toHaveLength(2);
     for (const href of linked) {
       expect(href).toMatch(/^\/en\/products\/[a-z0-9-]+\/$/);
     }
