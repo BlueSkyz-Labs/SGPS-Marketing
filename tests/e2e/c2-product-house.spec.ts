@@ -103,6 +103,24 @@ test.describe("C2 Product House — fixture-backed hierarchy", () => {
     await expect(page.getByText("Sản phẩm nổi bật")).toBeVisible();
     await expect(page.getByText("Khám phá tất cả sản phẩm")).toBeVisible();
     await expect(page.getByText("Xem hồ sơ").first()).toBeVisible();
+    const status = page.locator("[data-product-status]").first();
+    await expect(status).toHaveText("Đang phát triển");
+    await expect(status).toHaveAttribute(
+      "data-product-status",
+      "In development",
+    );
+  });
+
+  test("fixture ZH status is localized without changing its canonical value", async ({
+    page,
+  }) => {
+    await page.goto(`${origin}/product-acts-zh/`);
+    const status = page.locator("[data-product-status]").first();
+    await expect(status).toHaveText("开发中");
+    await expect(status).toHaveAttribute(
+      "data-product-status",
+      "In development",
+    );
   });
 
   test("fixture EN keeps every tier reachable through ordinary links", async ({
