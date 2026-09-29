@@ -2,7 +2,7 @@
   "ci": {
     "collect": {
       "url": [
-        "http://127.0.0.1:3000/",
+        "http://127.0.0.1:3000/en/",
         "http://127.0.0.1:3000/vi/",
         "http://127.0.0.1:3000/en/products/",
         "http://127.0.0.1:3000/vi/products/sotro/"
