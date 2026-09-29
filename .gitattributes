@@ -12,3 +12,6 @@
 *.webp binary
 *.woff binary
 *.woff2 binary
+
+# Brand kit mirror: keep the exact bytes that SHA256SUMS.txt certifies (two CSVs use CRLF).
+brand/blueskyz-production-v4/** -text

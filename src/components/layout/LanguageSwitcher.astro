@@ -48,7 +48,7 @@ const isDark = variant === "dark";
         data-language-choice={lang}
         hreflang={LANGUAGES[lang].hreflang}
         aria-current={isActive ? "page" : undefined}
-        aria-label={NATIVE_NAMES[lang as keyof typeof NATIVE_NAMES]}
+        aria-label={`${CODE[lang]} — ${NATIVE_NAMES[lang as keyof typeof NATIVE_NAMES]}`}
         title={NATIVE_NAMES[lang as keyof typeof NATIVE_NAMES]}
         style={languageTransitionStyle(lang)}
         class:list={[
@@ -93,8 +93,42 @@ const isDark = variant === "dark";
   }
 
   .lang-toggle-shell--light {
-    background: var(--brand-porcelain, #f7f8fa);
+    /* F-21: the header sits on the ink hero, where the ambient text tokens */
+    /* are re-pointed at porcelain, so the switcher owns its palette. */
+    --lang-shell-bg: var(--brand-porcelain, #f7f8fa);
+    --lang-pill-bg: #ffffff;
+    --lang-pill-fg: var(--brand-ink, #0b1020);
+    --lang-idle-fg: #475569;
+    --lang-idle-hover-fg: var(--brand-ink, #0b1020);
+    background: var(--lang-shell-bg);
     border: 1px solid rgba(11, 16, 32, 0.08);
+  }
+
+  /* Dark cavity: the active pill steps one tone lighter than the shell. */
+  :global([data-theme="dark"]) .lang-toggle-shell--light {
+    --lang-shell-bg: #0f172a;
+    --lang-pill-bg: #1e293b;
+    --lang-pill-fg: #ffffff;
+    --lang-idle-fg: #cbd5e1;
+    --lang-idle-hover-fg: #ffffff;
+    border-color: rgba(255, 255, 255, 0.12);
+    box-shadow:
+      inset 2px 2px 5px rgba(0, 0, 0, 0.3),
+      inset -2px -2px 4px rgba(255, 255, 255, 0.05);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :global(:root:not([data-theme="light"])) .lang-toggle-shell--light {
+      --lang-shell-bg: #0f172a;
+      --lang-pill-bg: #1e293b;
+      --lang-pill-fg: #ffffff;
+      --lang-idle-fg: #cbd5e1;
+      --lang-idle-hover-fg: #ffffff;
+      border-color: rgba(255, 255, 255, 0.12);
+      box-shadow:
+        inset 2px 2px 5px rgba(0, 0, 0, 0.3),
+        inset -2px -2px 4px rgba(255, 255, 255, 0.05);
+    }
   }
 
   .lang-toggle-shell--dark {
@@ -130,8 +164,8 @@ const isDark = variant === "dark";
 
   /* Active pill — floats with convex neumorphic shadow */
   .lang-toggle-shell--light .lang-toggle-item--active {
-    background: var(--surface-raised);
-    color: var(--brand-ink, #0b1020);
+    background: var(--lang-pill-bg);
+    color: var(--lang-pill-fg);
     box-shadow:
       2px 2px 6px rgba(11, 16, 32, 0.14),
       -1px -1px 4px rgba(255, 255, 255, 0.9);
@@ -145,10 +179,10 @@ const isDark = variant === "dark";
       -1px -1px 3px rgba(255, 255, 255, 0.06);
   }
 
-  /* Idle — transparent, muted text */
+  /* Idle — transparent, palette-owned text */
   .lang-toggle-shell--light .lang-toggle-item--idle {
     background: transparent;
-    color: var(--brand-slate-650, #475569);
+    color: var(--lang-idle-fg);
   }
 
   .lang-toggle-shell--dark .lang-toggle-item--idle {
@@ -156,8 +190,8 @@ const isDark = variant === "dark";
     color: rgba(247, 248, 250, 0.6);
   }
 
-  .lang-toggle-item--idle:hover {
-    color: var(--brand-ink, #0b1020);
+  .lang-toggle-shell--light .lang-toggle-item--idle:hover {
+    color: var(--lang-idle-hover-fg);
   }
 
   .lang-toggle-shell--dark .lang-toggle-item--idle:hover {

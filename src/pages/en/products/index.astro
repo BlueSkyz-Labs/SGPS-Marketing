@@ -32,11 +32,19 @@ const emptyDescription = products.length
           <ProofFirstEmptyState lang="en" />
         </div>
       ) : (
-        <div class="mt-12 grid gap-4 md:grid-cols-2">
-          {products.map((product) => (
-            <ProductCard product={product} lang="en" />
-          ))}
-        </div>
+        <section class="mt-12" aria-labelledby="published-products">
+          <h2
+            id="published-products"
+            class="text-xs font-semibold tracking-[0.18em] text-[var(--text-secondary)] uppercase"
+          >
+            Published products
+          </h2>
+          <div class="mt-6 grid gap-4 md:grid-cols-2">
+            {products.map((product) => (
+              <ProductCard product={product} lang="en" />
+            ))}
+          </div>
+        </section>
       )}
     </Container>
   </section>

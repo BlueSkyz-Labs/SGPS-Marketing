@@ -4,7 +4,7 @@
 **Audit baseline:** `docs/evidence/2026-09-27-experience-design-audit-baseline.md`.  
 **Done before this pack (PR #302):** Wave 0 (VietQR removed, OS dark mode, hero bleed, footer switcher, identity stage, hermetic guard test) and the premium Atlas plate.
 
-**Surface ownership:** tokens, sticky header material, bento ProductCard and device frame belong to the Brand Kit v4 lane (`docs/superpowers/plans/2026-09-27-brand-kit-v4-standardization.md`; #301 landed, #306/#307/#308 open). Cards here verify/extend those, never re-implement them. An Owner-directed reference implementation of the Sổ Trọ flagship, vi/zh product copy, self-hosted Inter and segmented controls exists in PR #302 history (commits `ad178ae`, `6af7e82`, `cd02cdd`); re-cut it on top of the Brand Kit v4 lane.
+**Surface ownership:** tokens, sticky header material and bento ProductCard belong to the Brand Kit v4 lane (`docs/superpowers/plans/2026-09-27-brand-kit-v4-standardization.md`; #301/#306/#307/#308 are merged). W7 extends those surfaces without re-implementing them. Under the approved W7 recut, identity artwork stays on the ink stage; device chrome is reserved for a real `ui-screenshot`, which is not currently available. An Owner-directed reference implementation of the Sổ Trọ flagship, vi/zh product copy, self-hosted Inter and segmented controls exists in PR #302 history (commits `ad178ae`, `6af7e82`, `cd02cdd`); adapt it to the current Brand Kit v4 and Product Truth state.
 
 ## Agent protocol (every card)
 
