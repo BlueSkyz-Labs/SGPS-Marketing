@@ -68,15 +68,25 @@ test.describe("C2 Product House — fixture-backed hierarchy", () => {
     }
   });
 
-  test("fixture EN action labels are literal from fixture records (not cinematic)", async ({
+  test("fixture EN cards render the lifecycle-derived verb and never Try", async ({
     page,
   }) => {
     await page.goto(`${origin}/product-acts/`);
-    // Fixture primary actions have label "Contact" (not invented copy).
-    const primaryActions = page
-      .locator("[data-product-card] a")
-      .filter({ hasText: "Contact" });
-    await expect(primaryActions).toHaveCount(2);
+    // Fixture records are in development; fixture-secondary's first-party
+    // origin is deliberately mutated to look Try-eligible. The lifecycle gate
+    // must still withhold Try in the rendered card.
+    const verbs = await page
+      .locator("[data-product-card] [data-product-cta]")
+      .evaluateAll((els) =>
+        els.map((el) => el.getAttribute("data-product-cta")),
+      );
+    expect(verbs).toEqual([
+      "view-development-status",
+      "view-development-status",
+    ]);
+    await expect(
+      page.locator('[data-product-card] [data-product-cta="try"]'),
+    ).toHaveCount(0);
   });
 
   test("fixture VI does not contain EN-only copy leaks", async ({ page }) => {
@@ -101,7 +111,16 @@ test.describe("C2 Product House — fixture-backed hierarchy", () => {
         "Mỗi sản phẩm hiển thị đúng giai đoạn đã ghi nhận — ý tưởng, nguyên mẫu hay phát triển — cùng nền tảng và bước tiếp theo trung thực.",
       ),
     ).toBeVisible();
-    await expect(page.getByText("Xem hồ sơ").first()).toBeVisible();
+    await expect(page.getByText("Xem hồ sơ")).toHaveCount(0);
+    // Every card verb is localized; no second "View profile" chip is needed
+    // because the derived CTA already opens the localized profile.
+    const viVerbs = await page
+      .locator("[data-product-card] [data-product-cta]")
+      .evaluateAll((els) => els.map((el) => (el.textContent ?? "").trim()));
+    expect(viVerbs).toEqual([
+      "Xem trạng thái phát triển",
+      "Xem trạng thái phát triển",
+    ]);
     const status = page.locator("[data-product-status]").first();
     await expect(status).toHaveText("Đang phát triển");
     await expect(status).toHaveAttribute(
@@ -120,6 +139,9 @@ test.describe("C2 Product House — fixture-backed hierarchy", () => {
       "data-product-status",
       "In development",
     );
+    await expect(
+      page.locator("[data-product-card] [data-product-cta]").first(),
+    ).toHaveText("查看开发状态");
   });
 
   test("fixture EN keeps every tier reachable through ordinary links", async ({

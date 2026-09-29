@@ -22,11 +22,36 @@ test("localized product-profile primary CTAs use the app sign-in destination", (
     assert.match(source, /data\.appAccess\?\.signInUrl/, lang);
     assert.doesNotMatch(source, /href=\{data\.primaryAction\.href\}/, lang);
     assert.match(source, /showSignIn=\{false\}/, lang);
+    assert.match(source, /resolveLifecycleCta/, lang);
+    assert.doesNotMatch(source, /data\.primaryAction\.label/, lang);
   }
 
   const card = readFileSync("src/components/product/ProductCard.astro", "utf8");
+  assert.match(card, /resolveLifecycleCta/);
   assert.match(card, /data\.primaryAction\.href/);
-  assert.match(card, /href=\{primaryActionHref\}/);
+  assert.match(card, /href=\{cta\.href\}/);
+  assert.match(card, /data-product-cta=\{cta\.verb\}/);
+});
+
+test("lifecycle CTA verbs are authored once in src/lib/lifecycle-cta.ts", () => {
+  const mapper = readFileSync("src/lib/lifecycle-cta.ts", "utf8");
+  assert.match(mapper, /LIFECYCLE_CTA_VERB_LABELS/);
+  assert.match(mapper, /isProductAppOriginUrl/);
+
+  const surfaces = [
+    ["ProductCard", "src/components/product/ProductCard.astro"],
+    ["FlagshipTheatre", "src/components/product/FlagshipTheatre.astro"],
+    ...["en", "vi", "zh"].map((lang) => [
+      `${lang} profile`,
+      `src/pages/${lang}/products/[slug].astro`,
+    ]),
+  ];
+  for (const [name, path] of surfaces) {
+    const source = readFileSync(path, "utf8");
+    assert.match(source, /resolveLifecycleCta/, name);
+    // No surface may re-author a Try verb inline; it comes from the mapper.
+    assert.doesNotMatch(source, /"Try"|Dùng thử|试用/, name);
+  }
 });
 
 test("product cards deep-link into locale-aware profile routes", () => {
