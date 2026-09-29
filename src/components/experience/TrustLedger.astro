@@ -20,7 +20,7 @@ const STATUS_LABELS: Record<TrustState, Record<Language, string>> = {
 
 const STATUS_CLASSES: Record<TrustState, string> = {
   available:
-    "border-[color-mix(in_srgb,var(--brand-cobalt)_35%,transparent)] bg-[color-mix(in_srgb,var(--brand-cobalt)_6%,white)] text-[var(--action-primary)]",
+    "border-[color-mix(in_srgb,var(--brand-cobalt)_35%,transparent)] bg-[color-mix(in_srgb,var(--brand-cobalt)_6%,var(--surface-raised))] text-[var(--action-primary)]",
   "not-published":
     "border-[var(--border-subtle)] bg-[var(--surface-subtle)] text-[var(--text-muted)]",
 };
