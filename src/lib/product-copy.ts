@@ -1,5 +1,9 @@
-import type { Language } from "@/data/site";
-import type { Lifecycle, PublicLabel } from "@/lib/product-schema";
+import { SHARED_LABELS, labelFor, type Language } from "@/data/site";
+import type {
+  Lifecycle,
+  ProofMediaKind,
+  PublicLabel,
+} from "@/lib/product-schema";
 import type { ProductEntry } from "@/lib/products";
 
 type ProductData = ProductEntry["data"];
@@ -88,6 +92,28 @@ const LIFECYCLE_LABELS: Record<Lifecycle, Record<Language, string>> = {
 
 export function lifecycleLabel(stage: Lifecycle, lang: Language): string {
   return LIFECYCLE_LABELS[stage][lang];
+}
+
+/**
+ * Plan v5 W3.1 — the one caption resolver for proof media. Wording derives from
+ * the record's typed `proof.media.kind`, never from the asset filename.
+ * `identity-art` keeps the authored disclosure in SHARED_LABELS.proofCaption;
+ * `ui-screenshot` states plainly what it is. A screenshot is only ever claimed
+ * by a record whose owner supplied a real capture.
+ */
+const UI_SCREENSHOT_CAPTIONS: Record<Language, string> = {
+  en: "Screenshot of the running application.",
+  vi: "Ảnh chụp giao diện ứng dụng đang chạy.",
+  zh: "应用运行界面的截图。",
+};
+
+export function proofCaptionForKind(
+  kind: ProofMediaKind,
+  lang: Language,
+): string {
+  return kind === "ui-screenshot"
+    ? UI_SCREENSHOT_CAPTIONS[lang]
+    : labelFor(SHARED_LABELS.proofCaption, lang);
 }
 
 const PLATFORM_LABELS: Record<string, Record<Language, string>> = {
