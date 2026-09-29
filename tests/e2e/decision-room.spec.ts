@@ -122,10 +122,9 @@ test.describe("decision room", () => {
     expect(href).toMatch(/^\/en\/decision-room\/#room-item-trust-/);
     await hook.click();
     await expect(page).toHaveURL(/\/en\/decision-room\/#room-item-trust-/);
-    const target = page.locator(
-      "#room-item-trust-privacy, #room-item-trust-security, #room-item-trust-support",
-    );
-    await expect(target.first()).toBeInViewport();
+    await page.waitForLoadState("load");
+    const targetId = new URL(href!, page.url()).hash;
+    await expect(page.locator(targetId)).toBeInViewport();
   });
 
   test("VI room is localized", async ({ page }) => {
