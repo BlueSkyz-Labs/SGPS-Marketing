@@ -30,7 +30,8 @@ appAccess:
     state: in-development
 proof:
   media:
-    src: /products/sotro/screenshot.png
+    kind: identity-art
+    src: /products/sotro/identity.png
     alt: Sổ Trọ by BlueSkyz Labs — brand identity
     width: 1800
     height: 504

@@ -5,7 +5,7 @@ import { getProductProfilePath } from "@/lib/product-routes";
 import ProductStatus from "@/components/product/ProductStatus.astro";
 import ProductVisual from "@/components/product/ProductVisual.astro";
 import ProductProofLink from "@/components/integrity/ProductProofLink.astro";
-import { productCopy } from "@/lib/product-copy";
+import { productCopy, proofCaptionForKind } from "@/lib/product-copy";
 import { resolveLifecycleCta } from "@/lib/lifecycle-cta";
 import {
   getPublicClaims,
@@ -146,7 +146,7 @@ const ctaIsExternal = cta.external || /^https?:\/\//i.test(cta.href);
           href={cta.href}
           rel={ctaIsExternal ? "noopener noreferrer" : undefined}
           data-product-cta={cta.verb}
-          class="inline-flex min-h-11 max-w-full items-center justify-center rounded-[var(--radius-sm)] bg-[var(--action-primary)] px-4 py-2.5 font-medium text-white no-underline hover:bg-[var(--action-primary-hover)] sm:px-5"
+          class="inline-flex min-h-11 max-w-full items-center justify-center rounded-[var(--radius-sm)] bg-[var(--action-fill)] px-4 py-2.5 font-medium text-white no-underline hover:bg-[var(--action-primary-hover)] sm:px-5"
         >
           {cta.label}
         </a>
@@ -171,7 +171,7 @@ const ctaIsExternal = cta.external || /^https?:\/\//i.test(cta.href);
             transitionStyle={productTransitionStyle("media", data.slug)}
             continuity="media"
           />
-          <figcaption>{labelFor(SHARED_LABELS.proofCaption, lang)}</figcaption>
+          <figcaption>{proofCaptionForKind(media.kind, lang)}</figcaption>
         </figure>
       </div>
     ) : null}

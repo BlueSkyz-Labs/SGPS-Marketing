@@ -121,6 +121,12 @@
   --motion-distance-sm: 0.25rem;
   --motion-distance-md: 0.5rem;
   --motion-distance-lg: 1.25rem;
+  /* F-27/F-32: the solid action fill and its hover state carry white text, so
+     they must stay dark enough in both themes. The dark `--action-primary`
+     (#3b82f6) only reached 3.67:1 as a fill, and the hover token was never
+     defined, which made the flagship CTA transparent on hover. */
+  --action-fill: #2564ff;
+  --action-primary-hover: #1d4ed8;
   color-scheme: light;
 }
 
@@ -140,6 +146,8 @@
   --focus-ring: #3b82f6;
   --brand-text-disabled: #64748b;
   --bsl-border: #334155;
+  --action-fill: #2564ff;
+  --action-primary-hover: #1d4ed8;
 }
 
 [data-theme="light"] {
@@ -164,6 +172,8 @@
     --focus-ring: #3b82f6;
     --brand-text-disabled: #64748b;
     --bsl-border: #334155;
+    --action-fill: #2564ff;
+    --action-primary-hover: #1d4ed8;
   }
 }
 
@@ -484,7 +494,7 @@ body {
 
 .intent-chip[aria-pressed="true"] {
   border-color: var(--action-primary);
-  background: color-mix(in srgb, var(--brand-cobalt) 6%, white);
+  background: color-mix(in srgb, var(--brand-cobalt) 6%, var(--surface-raised));
   color: var(--action-primary);
 }
 
@@ -493,7 +503,7 @@ body {
 html[data-intent="understand-architecture"] section:has(#house-title),
 html[data-intent="verify-trust"] section:has(#trust-title),
 html[data-intent="work-with-us"] section:has(#about-title) {
-  background: color-mix(in srgb, var(--brand-cobalt) 4%, white);
+  background: color-mix(in srgb, var(--brand-cobalt) 4%, var(--surface-raised));
 }
 
 html[data-intent="evaluate-product"] [data-journey-bar] a[href$="/products/"] {
@@ -902,6 +912,18 @@ summary {
 :where(body)
   :where(div, section, article, aside, ul, ol, li, figure, form, details, a) {
   min-width: 0;
+}
+
+/* F-23 (2026-09-29): two-character CJK labels — the footer navigation and the
+   product-profile breadcrumb — were only 28-30px wide at 390px and broke the
+   project's zero-sub-44px-target rule. This rule is deliberately unlayered:
+   Tailwind utilities live in `@layer utilities`, and unlayered declarations beat
+   layered ones, so a `min-w-*` utility on those links silently lost to the
+   `min-width: 0` guard above. Keep the 44px floor here instead. */
+.footer-nav-link,
+.breadcrumb-link {
+  min-width: 2.75rem;
+  justify-content: center;
 }
 
 /* Declared on the root of the page, not per element type: `overflow-wrap` is
@@ -1316,7 +1338,11 @@ html[data-intent] [data-journey-bar] li[data-evidence-first="true"] a {
   transform: translateY(-1px);
 }
 .decision-room__add[aria-pressed="true"] {
-  background: color-mix(in srgb, var(--brand-cobalt) 10%, white);
+  background: color-mix(
+    in srgb,
+    var(--brand-cobalt) 10%,
+    var(--surface-raised)
+  );
   box-shadow: inset 0 0 0 1px var(--action-primary);
 }
 

@@ -89,6 +89,18 @@ const PAIRS = [
     `${KIT}/04_DIGITAL/10_WEB_OPTIMIZED/website_hero_1920x1080.avif`,
     "public/brand/blueskyz/v4/hero/website_hero_1920x1080.avif",
   ],
+  [
+    `${KIT}/04_DIGITAL/01_WEBSITE/open_graph_1200x630.png`,
+    "public/social/og-default.png",
+  ],
+  [
+    `${KIT}/04_DIGITAL/10_WEB_OPTIMIZED/open_graph_1200x630.webp`,
+    "public/social/og-default.webp",
+  ],
+  [
+    `${KIT}/04_DIGITAL/10_WEB_OPTIMIZED/open_graph_1200x630.avif`,
+    "public/social/og-default.avif",
+  ],
   ...[
     ["intelligence", "intelligence"],
     ["elevation", "elevation"],

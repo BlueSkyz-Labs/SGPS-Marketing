@@ -5,7 +5,8 @@ on:
     # `closed` is what makes the post-merge landing guard actually run:
     # on opened/synchronize there is no merge commit yet (merge_commit_sha
     # is null), so without this event type the guard would never execute.
-    types: [opened, synchronize, reopened, closed]
+    # `labeled`/`unlabeled` rerun the merge policy when the Owner approves.
+    types: [opened, synchronize, reopened, labeled, unlabeled, closed]
   push:
     branches:
       - main
@@ -38,6 +39,25 @@ jobs:
         run: |
           corepack enable
           pnpm --version
+      - name: Merge policy (protected paths need the owner-approved label)
+        # Auto-merge lands a PR once required checks pass, so this required job
+        # also holds governance, supply-chain, deployment and gate roots until
+        # the Owner labels the PR. The policy file is read from the BASE commit
+        # so a pull request cannot relax the rule for itself.
+        if: ${{ github.event_name == 'pull_request' && github.event.action != 'closed' }}
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          PR_LABELS: ${{ toJSON(github.event.pull_request.labels.*.name) }}
+        run: |
+          policy="${RUNNER_TEMP}/check-merge-policy.mjs"
+          if git cat-file -e "${BASE_SHA}:scripts/check-merge-policy.mjs" 2>/dev/null; then
+            git show "${BASE_SHA}:scripts/check-merge-policy.mjs" > "${policy}"
+          else
+            # Bootstrap only: the pull request that introduces the policy.
+            cp scripts/check-merge-policy.mjs "${policy}"
+          fi
+          node "${policy}" --base "${BASE_SHA}" --head "${HEAD_SHA}"
       - name: Install frozen dependency graph
         run: pnpm install --frozen-lockfile
       - name: Dependency vulnerability audit

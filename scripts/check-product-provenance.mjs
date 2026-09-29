@@ -67,6 +67,15 @@ function hasKey(source, name) {
   return new RegExp(`^\\s*${name}:\\s*$`, "m").test(source);
 }
 
+/** Extracts the indented block under `name:` (canonical YAML shape; null when absent). */
+function block(source, name) {
+  const match = new RegExp(
+    `^(\\s*)${name}:\\s*\\n((?:\\1[ \\t]+[^\\n]*\\n?)*)`,
+    "m",
+  ).exec(source);
+  return match ? match[2] : null;
+}
+
 /** True when the revision resolves to an object in the repository being guarded. */
 function revisionBelongsToThisRepository(revision) {
   try {
@@ -177,6 +186,56 @@ for (const file of files) {
     problems.push(
       "proof declares a bare screenshot claim; brand or identity art must be declared as proof.media",
     );
+  }
+
+  // Plan v5 W3.1 — typed proof media. A record must declare what its media is,
+  // and its own evidence (alt wording, asset name) must not contradict that
+  // declaration. Missing or unparsable media metadata fails closed.
+  const mediaKey = hasKey(source, "media");
+  const mediaBlock = mediaKey ? block(source, "media") : null;
+
+  if (mediaKey && !mediaBlock) {
+    problems.push(
+      "proof.media must be an indented block so its declared kind can be checked",
+    );
+  }
+
+  if (mediaBlock) {
+    const kind = field(mediaBlock, "kind");
+    const mediaSrc = field(mediaBlock, "src");
+    const mediaAlt = field(mediaBlock, "alt");
+
+    if (!kind) {
+      problems.push(
+        "proof.media must declare kind: identity-art or ui-screenshot",
+      );
+    } else if (kind !== "identity-art" && kind !== "ui-screenshot") {
+      problems.push(
+        `proof.media.kind ${kind} must be identity-art or ui-screenshot`,
+      );
+    } else if (kind === "ui-screenshot") {
+      if (mediaSrc && /identity/i.test(mediaSrc)) {
+        problems.push(
+          `proof.media.kind ui-screenshot contradicts the identity artwork asset ${mediaSrc}`,
+        );
+      }
+      if (mediaAlt && /\b(?:identity|artwork)\b/i.test(mediaAlt)) {
+        problems.push(
+          "proof.media.kind ui-screenshot contradicts artwork/identity wording in alt",
+        );
+      }
+    } else {
+      if (mediaAlt && /\bscreenshot\b/i.test(mediaAlt)) {
+        problems.push(
+          "proof.media.kind identity-art must not claim to be a screenshot (alt)",
+        );
+      }
+      if (mediaSrc && /\bscreenshot\b/i.test(mediaSrc)) {
+        problems.push(
+          "proof.media.kind identity-art must not cite a screenshot asset (src)",
+        );
+      }
+    }
   }
 
   if (problems.length > 0) {
