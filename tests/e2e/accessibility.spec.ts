@@ -92,6 +92,7 @@ for (const route of ["/zh/", "/zh/products/sotro/"] as const) {
   }) => {
     await page.setViewportSize({ width: 390, height: 844 });
     await page.goto(route, { waitUntil: "networkidle" });
+    await page.evaluate(() => document.fonts.ready);
     const offenders = await page.evaluate(() => {
       const rows: string[] = [];
       for (const el of document.querySelectorAll<HTMLElement>(

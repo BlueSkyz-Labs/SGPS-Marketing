@@ -154,6 +154,7 @@ for (const config of [
     }
     for (const route of CHOICE_ROUTES) {
       await page.goto(route);
+      await page.evaluate(() => document.fonts.ready);
       const results = await languageChoiceContrast(page);
       expect(
         results.length,
