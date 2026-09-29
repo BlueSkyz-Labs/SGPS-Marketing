@@ -30,8 +30,6 @@ export const PROTECTED_PATHS = [
   "docs/decisions/",
   "AGENTS.md",
   "SECURITY.md",
-  "package.json",
-  "pnpm-lock.yaml",
   "pnpm-workspace.yaml",
   ".node-version",
   "wrangler.toml",
@@ -48,8 +46,73 @@ export function isProtected(path) {
   );
 }
 
-export function evaluateMergePolicy({ changedFiles, labels }) {
-  const protectedFiles = changedFiles.filter(isProtected).sort();
+// package.json is judged by content, not path: routine dependency patch or
+// minor bumps flow automatically, while anything that can weaken a gate or
+// widen the supply chain is held for the Owner.
+const GATE_FIELDS = [
+  "scripts",
+  "engines",
+  "packageManager",
+  "pnpm",
+  "overrides",
+];
+const DEP_FIELDS = [
+  "dependencies",
+  "devDependencies",
+  "optionalDependencies",
+  "peerDependencies",
+];
+
+function majorOf(spec) {
+  const match = /^[\^~>=<\s]*v?(\d+)(?:\.(\d+))?/.exec(String(spec));
+  if (!match) return null; // git/file/link/workspace/tag specs
+  const major = Number(match[1]);
+  // 0.x releases treat a minor bump as breaking.
+  return major === 0 ? `0.${match[2] ?? "x"}` : String(major);
+}
+
+export function packageJsonRisks(baseText, headText) {
+  if (headText === null) return ["package.json deleted"];
+  if (baseText === null) return ["package.json added"];
+  let base;
+  let head;
+  try {
+    base = JSON.parse(baseText);
+    head = JSON.parse(headText);
+  } catch {
+    return ["package.json is not valid JSON"];
+  }
+  const risks = [];
+  for (const field of GATE_FIELDS) {
+    if (JSON.stringify(base[field]) !== JSON.stringify(head[field])) {
+      risks.push(`package.json ${field} changed`);
+    }
+  }
+  for (const field of DEP_FIELDS) {
+    const before = base[field] ?? {};
+    const after = head[field] ?? {};
+    for (const [name, spec] of Object.entries(after)) {
+      if (!(name in before)) {
+        risks.push(`package.json ${field}: new dependency ${name}`);
+        continue;
+      }
+      if (before[name] === spec) continue;
+      const from = majorOf(before[name]);
+      const to = majorOf(spec);
+      if (from === null || to === null || from !== to) {
+        risks.push(`package.json ${field}: ${name} ${before[name]} -> ${spec}`);
+      }
+    }
+  }
+  return risks.sort();
+}
+
+export function evaluateMergePolicy({
+  changedFiles,
+  labels,
+  packageJsonRisks: risks = [],
+}) {
+  const protectedFiles = [...changedFiles.filter(isProtected), ...risks].sort();
   const approved = labels.includes(APPROVAL_LABEL);
   return {
     ok: protectedFiles.length === 0 || approved,
@@ -83,6 +146,17 @@ function changedFilesBetween(base, head) {
   return out.split("\0").filter(Boolean);
 }
 
+function fileAt(commit, path) {
+  try {
+    return execFileSync("git", ["show", `${commit}:${path}`], {
+      encoding: "utf8",
+      stdio: ["ignore", "pipe", "pipe"],
+    });
+  } catch {
+    return null;
+  }
+}
+
 function main() {
   const { base, head } = parseArgs(process.argv.slice(2));
   let labels;
@@ -95,9 +169,20 @@ function main() {
     console.error("FAIL: PR_LABELS must be a JSON array of label names.");
     process.exit(1);
   }
+  const changedFiles = changedFilesBetween(base, head);
+  const forkPoint = execFileSync("git", ["merge-base", base, head], {
+    encoding: "utf8",
+    stdio: ["ignore", "pipe", "pipe"],
+  }).trim();
   const result = evaluateMergePolicy({
-    changedFiles: changedFilesBetween(base, head),
+    changedFiles,
     labels,
+    packageJsonRisks: changedFiles.includes("package.json")
+      ? packageJsonRisks(
+          fileAt(forkPoint, "package.json"),
+          fileAt(head, "package.json"),
+        )
+      : [],
   });
   if (result.protectedFiles.length === 0) {
     console.log("PASS: no protected path changed.");

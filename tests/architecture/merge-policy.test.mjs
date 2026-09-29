@@ -6,6 +6,7 @@ import {
   APPROVAL_LABEL,
   evaluateMergePolicy,
   isProtected,
+  packageJsonRisks,
 } from "../../scripts/check-merge-policy.mjs";
 
 test("ordinary source, test and content changes merge without the label", () => {
@@ -26,7 +27,6 @@ test("negative proof: a protected change without the label is blocked", () => {
     changedFiles: [
       "src/pages/en/index.astro",
       ".github/workflows/quality-gates.yml",
-      "pnpm-lock.yaml",
       "scripts/check-merge-policy.mjs",
     ],
     labels: ["documentation"],
@@ -34,7 +34,6 @@ test("negative proof: a protected change without the label is blocked", () => {
   assert.equal(result.ok, false);
   assert.deepEqual(result.protectedFiles, [
     ".github/workflows/quality-gates.yml",
-    "pnpm-lock.yaml",
     "scripts/check-merge-policy.mjs",
   ]);
 });
@@ -84,4 +83,59 @@ test("Quality Gates runs the policy from the base commit and reruns on label cha
     workflow,
     /run:[^\n]*github\.event\.pull_request\.labels/,
   );
+});
+
+const PKG = {
+  scripts: { "test:architecture": "node --test tests/architecture/*.test.mjs" },
+  dependencies: { astro: "^7.1.0", zero: "^0.4.2" },
+  devDependencies: { eslint: "^10.2.0" },
+};
+const pkg = (patch) => JSON.stringify({ ...PKG, ...patch });
+
+test("lockfile and routine dependency bumps flow without the label", () => {
+  assert.equal(isProtected("pnpm-lock.yaml"), false);
+  assert.equal(isProtected("package.json"), false);
+  assert.deepEqual(
+    packageJsonRisks(
+      pkg({}),
+      pkg({
+        dependencies: { astro: "^7.3.1", zero: "^0.4.9" },
+        devDependencies: { eslint: "^10.4.0" },
+      }),
+    ),
+    [],
+  );
+});
+
+test("negative proof: gate-weakening or supply-chain package.json changes are held", () => {
+  assert.deepEqual(
+    packageJsonRisks(
+      pkg({}),
+      pkg({
+        scripts: { "test:architecture": "echo skipped" },
+        dependencies: {
+          astro: "^8.0.0",
+          zero: "^0.5.0",
+          "left-pad": "^1.3.0",
+        },
+        devDependencies: { eslint: "github:someone/eslint" },
+      }),
+    ),
+    [
+      "package.json dependencies: astro ^7.1.0 -> ^8.0.0",
+      "package.json dependencies: new dependency left-pad",
+      "package.json dependencies: zero ^0.4.2 -> ^0.5.0",
+      "package.json devDependencies: eslint ^10.2.0 -> github:someone/eslint",
+      "package.json scripts changed",
+    ],
+  );
+  const held = evaluateMergePolicy({
+    changedFiles: ["package.json", "pnpm-lock.yaml"],
+    labels: [],
+    packageJsonRisks: ["package.json scripts changed"],
+  });
+  assert.equal(held.ok, false);
+  assert.deepEqual(packageJsonRisks(pkg({}), "{not json"), [
+    "package.json is not valid JSON",
+  ]);
 });
