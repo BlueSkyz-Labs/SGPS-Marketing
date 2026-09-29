@@ -1,5 +1,14 @@
 import assert from "node:assert/strict";
-import { existsSync, readFileSync } from "node:fs";
+import {
+  existsSync,
+  mkdirSync,
+  mkdtempSync,
+  readdirSync,
+  readFileSync,
+  rmSync,
+} from "node:fs";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
 import test from "node:test";
 import { inflateSync } from "node:zlib";
 
@@ -114,24 +123,31 @@ function countDarkPixelsInRgbPng(path) {
   return { dark, height, width };
 }
 
-test("brand asset generator projects C1.1 primitives only", () => {
-  const path = "scripts/generate-brand-assets.py";
-  assert.equal(existsSync(path), true);
-  const source = readFileSync(path, "utf8");
-  assert.match(source, /Porcelain|PORCELAIN/);
-  assert.match(source, /Cobalt|COBALT/);
-  assert.match(source, /#0[Bb]1020|INK\s*=\s*\(11,\s*16,\s*32/);
-  assert.doesNotMatch(
-    source,
-    /Quiet Luxury|champagne|Cormorant|#C9A962|GOLD\s*=/i,
-  );
-  assert.match(source, /Does not invent R4d geometry/);
-  assert.match(source, /symbol_mono_ink\.svg/);
-  assert.match(source, /micro_mark_ink\.svg/);
-  assert.match(source, /require_r4d_symbol/);
-  assert.match(source, /horizontal_light_1800\.png|rsvg-convert/);
-  assert.match(source, /brand_mark_for_og|rasterize_svg/);
-  assert.doesNotMatch(source, /rounded_rectangle/);
+// Brand files are copied from the v4 kit, never regenerated: a generator
+// would silently replace the kit Open Graph master, and a legacy tree would
+// keep publishing superseded marks.
+const PUBLISHED_BRAND_ROOT = "public/brand/blueskyz";
+const ALLOWED_BRAND_DIRS = ["flags", "v4"];
+
+function legacyBrandEntries(root) {
+  return readdirSync(root)
+    .filter((name) => !ALLOWED_BRAND_DIRS.includes(name))
+    .sort();
+}
+
+test("only the v4 kit projection and flags are published as brand files", () => {
+  assert.deepEqual(legacyBrandEntries(PUBLISHED_BRAND_ROOT), []);
+  assert.equal(existsSync("scripts/generate-brand-assets.py"), false);
+});
+
+test("negative proof: a legacy brand tree beside v4 is reported", () => {
+  const root = mkdtempSync(join(tmpdir(), "bsl-brand-"));
+  try {
+    for (const name of ["flags", "v4", "r4d"]) mkdirSync(join(root, name));
+    assert.deepEqual(legacyBrandEntries(root), ["r4d"]);
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
 });
 
 test("committed OG assets exist for masterbrand social previews", () => {
