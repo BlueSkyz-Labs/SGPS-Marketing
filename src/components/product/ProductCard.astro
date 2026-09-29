@@ -6,6 +6,7 @@ import {
   getProductIconPath,
 } from "@/lib/product-routes";
 import { platformLabel, productCopy } from "@/lib/product-copy";
+import { resolveLifecycleCta } from "@/lib/lifecycle-cta";
 import { productTransitionStyle } from "@/lib/product-transition";
 
 interface Props {
@@ -20,12 +21,18 @@ const profileHref = getProductProfilePath(lang, data.slug);
 const copy = productCopy(data, lang);
 const profileLabel = labelFor(SHARED_LABELS.viewProfile, lang);
 const iconHref = getProductIconPath(data.slug);
-const englishProfilePath = getProductProfilePath("en", data.slug);
-const primaryActionHref =
-  data.primaryAction.href === englishProfilePath ||
-  data.primaryAction.href === `https://blueskyzlabs.com${englishProfilePath}`
-    ? profileHref
-    : data.primaryAction.href;
+// Single source for the card's action verb + destination (plan v5 W3.2).
+const cta = resolveLifecycleCta(
+  {
+    slug: data.slug,
+    lifecycle: data.lifecycle,
+    availability: data.availability,
+    primaryActionHref: data.primaryAction.href,
+  },
+  lang,
+);
+const showProfileLink = cta.href !== profileHref;
+const ctaIsExternal = cta.external || /^https?:\/\//i.test(cta.href);
 ---
 
 <article
@@ -102,9 +109,9 @@ const primaryActionHref =
     ))}
   </div>
 
-  <!-- Micro-tick Action Links -->
+  <!-- Micro-tick Action Links (verb + destination from the lifecycle mapper) -->
   <div class="mt-5 flex flex-wrap items-center gap-3">
-    {primaryActionHref !== profileHref && (
+    {showProfileLink && (
       <a
         href={profileHref}
         class="inline-flex min-h-11 max-w-full min-w-0 items-center gap-1.5 rounded-full border border-[var(--border-subtle)] bg-transparent px-3 py-1.5 text-sm font-semibold text-[var(--action-primary)] no-underline [overflow-wrap:anywhere] hover:bg-[color-mix(in_srgb,var(--action-primary)_8%,transparent)] hover:border-[var(--action-primary)] active:scale-[0.98] transition-[transform,border-color,background-color] duration-100 ease-[var(--motion-ease-standard)]"
@@ -118,19 +125,16 @@ const primaryActionHref =
     )}
 
     <a
-      href={primaryActionHref}
-      rel={
-        /^https?:\/\//i.test(primaryActionHref)
-          ? "noopener noreferrer"
-          : undefined
-      }
+      href={cta.href}
+      rel={ctaIsExternal ? "noopener noreferrer" : undefined}
+      data-product-cta={cta.verb}
       class="inline-flex min-h-11 max-w-full min-w-0 items-center gap-1.5 rounded-full border border-[var(--border-subtle)] bg-transparent px-3 py-1.5 text-sm font-semibold text-[var(--text-secondary)] no-underline [overflow-wrap:anywhere] hover:text-[var(--text-primary)] hover:border-[var(--text-secondary)] active:scale-[0.98] transition-[transform,border-color,color] duration-100 ease-[var(--motion-ease-standard)]"
     >
       <span
         aria-hidden="true"
         class="size-1.5 shrink-0 rounded-full border border-current opacity-40"
       />
-      {copy.primaryActionLabel}
+      {cta.label}
     </a>
 
     {data.secondaryAction && (

@@ -4,6 +4,11 @@ import {
   isPublicClaimHttpsUrl,
   productSchema,
 } from "../../src/lib/product-schema.ts";
+import {
+  LIFECYCLE_CTA_VERBS,
+  LIFECYCLE_CTA_VERB_LABELS,
+  resolveLifecycleCta,
+} from "../../src/lib/lifecycle-cta.ts";
 
 function baseProduct(overrides = {}) {
   return {
@@ -188,4 +193,215 @@ test("waitlist availability cannot claim Try", () => {
     }),
   );
   assert.equal(result.success, false);
+});
+
+// ---------------------------------------------------------------------------
+// Plan v5 W3.2 — lifecycle → CTA mapper (fail-closed Try gate)
+// ---------------------------------------------------------------------------
+
+/** Minimal mapper input; a mutated product record, never a registry entry. */
+function ctaProduct(overrides = {}) {
+  return {
+    slug: "demo-product",
+    lifecycle: "development",
+    availability: "preview",
+    primaryActionHref: "https://blueskyzlabs.com/en/products/demo-product/",
+    ...overrides,
+  };
+}
+
+const ALL_AVAILABILITIES = [
+  "private",
+  "waitlist",
+  "preview",
+  "public",
+  "invite-only",
+  "unavailable",
+];
+
+test("negative proof: a development product can never map to Try", () => {
+  // Mutated fixture: the destination *is* an allow-listed first-party product
+  // origin, so only the recorded lifecycle/availability can withhold Try.
+  for (const lifecycle of ["concept", "prototype", "development"]) {
+    for (const availability of ALL_AVAILABILITIES) {
+      for (const lang of ["en", "vi", "zh"]) {
+        const cta = resolveLifecycleCta(
+          ctaProduct({
+            lifecycle,
+            availability,
+            primaryActionHref: "https://demo-product.blueskyzlabs.com/",
+          }),
+          lang,
+        );
+        assert.notEqual(
+          cta.verb,
+          "try",
+          `${lifecycle}/${availability}/${lang} must never render Try`,
+        );
+        assert.equal(
+          cta.href,
+          `/${lang}/products/demo-product/`,
+          `${lifecycle}/${availability}/${lang} must stay on the recorded status page`,
+        );
+        assert.equal(cta.external, false);
+        assert.notEqual(cta.label, "Try");
+      }
+    }
+  }
+});
+
+test("Try requires public availability even on a mature lifecycle", () => {
+  for (const lifecycle of ["beta", "active", "maintenance"]) {
+    for (const availability of ALL_AVAILABILITIES.filter(
+      (value) => value !== "public",
+    )) {
+      const cta = resolveLifecycleCta(
+        ctaProduct({
+          lifecycle,
+          availability,
+          primaryActionHref: "https://demo-product.blueskyzlabs.com/",
+        }),
+        "en",
+      );
+      assert.notEqual(
+        cta.verb,
+        "try",
+        `${lifecycle}/${availability} must not render Try`,
+      );
+      assert.equal(cta.href, "/en/products/demo-product/");
+    }
+  }
+
+  for (const lifecycle of ["sunset", "archived"]) {
+    const cta = resolveLifecycleCta(
+      ctaProduct({
+        lifecycle,
+        availability: "unavailable",
+        primaryActionHref: "https://demo-product.blueskyzlabs.com/",
+      }),
+      "en",
+    );
+    assert.notEqual(cta.verb, "try", `${lifecycle} must not render Try`);
+  }
+});
+
+test("Try requires an allow-listed first-party HTTPS origin", () => {
+  const rejected = [
+    "https://blueskyzlabs.com/en/products/demo-product/",
+    "https://other-product.blueskyzlabs.com/",
+    "http://demo-product.blueskyzlabs.com/",
+    "https://demo-product.blueskyzlabs.com.evil.test/",
+    "https://demo-product.blueskyzlabs.com@evil.test/",
+    "https://visitor@demo-product.blueskyzlabs.com/",
+    "https://demo-product.blueskyzlabs.com:444/",
+    "https://demo-product.blueskyzlabs.com/?ref=attacker",
+    "https://demo-product.blueskyzlabs.com/#session",
+    "https://demo-product.workers.dev/",
+    "https://demo-product.pages.dev/",
+    "https://demo-product.tonydemo.com/",
+    "https://demo-product.blueskyzlabs.com/ ",
+    "not a URL",
+  ];
+  for (const href of rejected) {
+    const cta = resolveLifecycleCta(
+      ctaProduct({
+        lifecycle: "active",
+        availability: "public",
+        primaryActionHref: href,
+      }),
+      "en",
+    );
+    assert.notEqual(cta.verb, "try", `Try destination accepted: ${href}`);
+    assert.equal(cta.href, "/en/products/demo-product/", href);
+    assert.equal(cta.external, false, href);
+  }
+});
+
+test("positive control: public availability + first-party origin maps to Try", () => {
+  const root = resolveLifecycleCta(
+    ctaProduct({
+      lifecycle: "active",
+      availability: "public",
+      primaryActionHref: "https://demo-product.blueskyzlabs.com/",
+    }),
+    "en",
+  );
+  assert.deepEqual(root, {
+    verb: "try",
+    label: "Try",
+    href: "https://demo-product.blueskyzlabs.com/",
+    external: true,
+  });
+
+  const withPath = resolveLifecycleCta(
+    ctaProduct({
+      lifecycle: "beta",
+      availability: "public",
+      primaryActionHref: "https://demo-product.blueskyzlabs.com/app",
+    }),
+    "vi",
+  );
+  assert.equal(withPath.verb, "try");
+  assert.equal(withPath.label, "Dùng thử");
+  assert.equal(withPath.href, "https://demo-product.blueskyzlabs.com/app");
+});
+
+test("an unknown lifecycle value fails closed", () => {
+  const cta = resolveLifecycleCta(
+    ctaProduct({
+      lifecycle: "mystery",
+      availability: "public",
+      primaryActionHref: "https://demo-product.blueskyzlabs.com/",
+    }),
+    "en",
+  );
+  assert.equal(cta.verb, "learn");
+  assert.equal(cta.href, "/en/products/demo-product/");
+  assert.equal(cta.external, false);
+});
+
+test("non-Try destinations stay on the localized recorded-status page", () => {
+  const cases = [
+    ["development", "public", "https://demo-product.blueskyzlabs.com/"],
+    [
+      "prototype",
+      "preview",
+      "https://blueskyzlabs.com/en/products/demo-product/",
+    ],
+    ["beta", "preview", "https://demo-product.blueskyzlabs.com/"],
+    ["beta", "invite-only", "https://demo-product.blueskyzlabs.com/"],
+    ["sunset", "unavailable", "https://demo-product.blueskyzlabs.com/"],
+    [
+      "archived",
+      "unavailable",
+      "https://blueskyzlabs.com/en/products/demo-product/",
+    ],
+  ];
+  for (const [lifecycle, availability, href] of cases) {
+    for (const lang of ["en", "vi", "zh"]) {
+      const cta = resolveLifecycleCta(
+        ctaProduct({ lifecycle, availability, primaryActionHref: href }),
+        lang,
+      );
+      assert.notEqual(cta.verb, "try", `${lifecycle}/${availability}/${lang}`);
+      assert.equal(cta.href, `/${lang}/products/demo-product/`);
+      assert.equal(cta.label, LIFECYCLE_CTA_VERB_LABELS[cta.verb][lang]);
+    }
+  }
+});
+
+test("CTA verb vocabulary is bounded and fully localized", () => {
+  assert.deepEqual([...LIFECYCLE_CTA_VERBS].sort(), [
+    "learn",
+    "try",
+    "view-development-status",
+  ]);
+  for (const verb of LIFECYCLE_CTA_VERBS) {
+    const label = LIFECYCLE_CTA_VERB_LABELS[verb];
+    for (const lang of ["en", "vi", "zh"]) {
+      assert.ok(label[lang].trim().length > 0, `${verb}/${lang}`);
+    }
+    assert.notEqual(label.vi, label.en, `${verb} must be translated for vi`);
+    assert.notEqual(label.zh, label.en, `${verb} must be translated for zh`);
+  }
 });

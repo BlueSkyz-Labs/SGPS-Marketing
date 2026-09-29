@@ -6,6 +6,8 @@ import { expect, test } from "@playwright/test";
 const ROUTES = [
   "/en/",
   "/en/products/",
+  "/en/products/sotro/",
+  "/en/products/sotam/",
   "/en/about/",
   "/en/contact/",
   "/en/support/",
@@ -13,11 +15,16 @@ const ROUTES = [
   "/en/security/",
   "/vi/",
   "/vi/products/",
+  "/vi/products/sotro/",
+  "/vi/products/sotam/",
   "/vi/about/",
   "/vi/contact/",
   "/vi/support/",
   "/vi/privacy/",
   "/vi/security/",
+  "/zh/",
+  "/zh/products/sotro/",
+  "/zh/products/sotam/",
 ] as const;
 
 for (const route of ROUTES) {
