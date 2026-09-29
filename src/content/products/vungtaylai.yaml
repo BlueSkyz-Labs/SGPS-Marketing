@@ -21,7 +21,8 @@ primaryAction:
   href: https://blueskyzlabs.com/en/products/vungtaylai/
 proof:
   media:
-    src: /products/vungtaylai/screenshot.png
+    kind: identity-art
+    src: /products/vungtaylai/identity.png
     alt: Vững Tay Lái by BlueSkyz Labs — brand identity
     width: 1800
     height: 504

@@ -32,7 +32,8 @@ appAccess:
     state: in-development
 proof:
   media:
-    src: /products/sotam/screenshot.png
+    kind: identity-art
+    src: /products/sotam/identity.png
     alt: Sổ Tâm by BlueSkyz Labs — brand identity
     width: 1800
     height: 504

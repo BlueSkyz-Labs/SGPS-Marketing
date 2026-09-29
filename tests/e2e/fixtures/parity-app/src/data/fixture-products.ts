@@ -36,6 +36,7 @@ interface FixtureProduct {
     secondaryAction?: { href: string; label: string };
     proof: {
       media: {
+        kind: "identity-art" | "ui-screenshot";
         src: string;
         alt: string;
         width: number;
@@ -83,6 +84,7 @@ export const FIXTURE_FLAGSHIP: FixtureProduct = {
     primaryAction: { href: "/en/contact/", label: "Contact" },
     proof: {
       media: {
+        kind: "identity-art",
         src: "/products/fixtures/fixture-flagship.png",
         alt: "Fixture flagship brand identity artwork",
         width: 1280,
@@ -107,6 +109,7 @@ export const FIXTURE_SECONDARY: FixtureProduct = {
     primaryAction: { href: "/en/contact/", label: "Contact" },
     proof: {
       media: {
+        kind: "identity-art",
         src: "/products/fixtures/fixture-secondary.png",
         alt: "Fixture secondary proof media",
         width: 1280,
@@ -131,6 +134,7 @@ export const FIXTURE_ECOSYSTEM: FixtureProduct = {
     primaryAction: { href: "/en/contact/", label: "Contact" },
     proof: {
       media: {
+        kind: "identity-art",
         src: "/products/fixtures/fixture-ecosystem.png",
         alt: "Fixture ecosystem proof media",
         width: 1280,
