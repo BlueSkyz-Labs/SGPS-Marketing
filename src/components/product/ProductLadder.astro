@@ -1,0 +1,78 @@
+---
+import type { Language } from "@/data/site";
+import { LIFECYCLE_LADDER, lifecycleLabel } from "@/lib/product-copy";
+import type { Lifecycle } from "@/lib/product-schema";
+
+interface Props {
+  lifecycle: Lifecycle;
+  lang: Language;
+}
+
+const { lifecycle, lang } = Astro.props;
+const heading = { en: "Lifecycle", vi: "Vòng đời", zh: "生命周期" }[lang];
+---
+
+<section class="product-ladder" aria-label={heading}>
+  <p class="product-ladder__caption">
+    {heading}: <strong>{lifecycleLabel(lifecycle, lang)}</strong>
+  </p>
+  <ol class="product-ladder__stages">
+    {LIFECYCLE_LADDER.map((stage) => (
+      <li
+        class="product-ladder__stage"
+        aria-current={stage === lifecycle ? "step" : undefined}
+      >
+        {lifecycleLabel(stage, lang)}
+      </li>
+    ))}
+  </ol>
+</section>
+
+<style>
+  .product-ladder {
+    margin-top: 1rem;
+  }
+
+  .product-ladder__caption {
+    margin: 0 0 0.5rem;
+    color: var(--text-muted);
+    font-size: 0.75rem;
+  }
+
+  .product-ladder__caption strong {
+    color: var(--text-primary);
+  }
+
+  .product-ladder__stages {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 8rem), 1fr));
+    gap: 0.5rem;
+    padding: 0;
+    list-style: none;
+  }
+
+  .product-ladder__stage {
+    min-width: 0;
+    border-top: 2px solid var(--border-subtle);
+    padding-top: 0.35rem;
+    color: var(--text-muted);
+    font-size: 0.75rem;
+  }
+
+  .product-ladder__stage[aria-current="step"] {
+    border-color: var(--action-primary);
+    color: var(--text-primary);
+    font-weight: 600;
+  }
+
+  @media (forced-colors: active) {
+    .product-ladder__stage {
+      border-color: CanvasText;
+      color: CanvasText;
+    }
+
+    .product-ladder__stage[aria-current="step"] {
+      border-color: Highlight;
+    }
+  }
+</style>

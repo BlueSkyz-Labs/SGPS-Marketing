@@ -364,8 +364,7 @@ body {
   top: 0;
   z-index: 10;
   border-bottom: 1px solid var(--border-subtle);
-  background: color-mix(in srgb, white 88%, transparent);
-  backdrop-filter: blur(10px);
+  background: var(--surface-primary);
 }
 
 .experience-spine__list {
@@ -1397,3 +1396,26 @@ h3 {
 /* Wave H12 — text-zoom safety for atlas rows now lives in Atlas.astro
    (.atlas-row wraps; .atlas-row__link has min-width: 0 and
    overflow-wrap: anywhere). */
+
+/* Experience v5 — theme-adaptive brand lockup (F-18). */
+.brand-lockup__img--dark {
+  display: none;
+}
+[data-theme="dark"] .brand-lockup--adaptive .brand-lockup__img--light {
+  display: none;
+}
+[data-theme="dark"] .brand-lockup--adaptive .brand-lockup__img--dark {
+  display: block;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"])
+    .brand-lockup--adaptive
+    .brand-lockup__img--light {
+    display: none;
+  }
+  :root:not([data-theme="light"])
+    .brand-lockup--adaptive
+    .brand-lockup__img--dark {
+    display: block;
+  }
+}

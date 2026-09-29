@@ -35,6 +35,21 @@ export interface LocalizedLabel {
  * Centralized so shared chrome can never leak English into Vietnamese pages.
  */
 export const SHARED_LABELS = {
+  flagshipEyebrow: {
+    en: "Flagship product",
+    vi: "Sản phẩm chủ lực",
+    zh: "旗舰产品",
+  },
+  jobsHeading: {
+    en: "What it helps people do",
+    vi: "Việc sản phẩm hỗ trợ",
+    zh: "可完成的工作",
+  },
+  scopeHeading: {
+    en: "Development scope",
+    vi: "Phạm vi phát triển",
+    zh: "开发范围",
+  },
   search: { en: "Search", vi: "Tìm", zh: "搜索" },
   searchPages: { en: "Search pages", vi: "Tìm trang", zh: "搜索页面" },
   menu: { en: "Menu", vi: "Menu", zh: "菜单" },
@@ -65,7 +80,18 @@ export const SHARED_LABELS = {
     vi: "Khám phá các sản phẩm đang phát triển. Trạng thái và tư liệu tham khảo được ghi rõ cho từng sản phẩm.",
     zh: "探索开发中的产品。每款产品均分别说明其状态与参考资料。",
   },
+  continuationHeading: {
+    en: "The rest of the house, in development",
+    vi: "Những sản phẩm khác đang được phát triển",
+    zh: "其他正在开发的产品",
+  },
+  continuationBody: {
+    en: "Each product shows its recorded stage — concept, prototype or development — its platform and an honest next step.",
+    vi: "Mỗi sản phẩm hiển thị đúng giai đoạn đã ghi nhận — ý tưởng, nguyên mẫu hay phát triển — cùng nền tảng và bước tiếp theo trung thực.",
+    zh: "每款产品均标明其记录的阶段（概念、原型或开发）、平台以及如实的下一步。",
+  },
   viewProfile: { en: "View profile", vi: "Xem hồ sơ", zh: "查看产品简介" },
+  signIn: { en: "Sign in", vi: "Đăng nhập", zh: "登录" },
   proofCaption: {
     en: "Brand identity artwork — not a screenshot of the running application.",
     vi: "Hình ảnh nhận diện thương hiệu — không phải ảnh chụp giao diện ứng dụng.",
@@ -76,6 +102,7 @@ export const SHARED_LABELS = {
   footerNav: { en: "Footer", vi: "Chân trang", zh: "页脚导航" },
   nextSteps: { en: "Next steps", vi: "Bước tiếp theo", zh: "下一步" },
   houseIndex: { en: "House index", vi: "Mục lục ngôi nhà", zh: "网站目录" },
+  platforms: { en: "Platforms", vi: "Nền tảng", zh: "平台" },
 } as const satisfies Record<string, LocalizedLabel>;
 
 export function labelFor(

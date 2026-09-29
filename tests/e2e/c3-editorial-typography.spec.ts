@@ -227,6 +227,46 @@ test.describe("C3-A Editorial Typography — 200% text zoom", () => {
     });
   }
 
+  test("768px: the product cards do not overflow their own box at 200% text", async ({
+    page,
+  }) => {
+    // The document-level guard above can pass locally and fail on a runner with
+    // wider fallback fonts. This one is font-independent: it measures each
+    // product card's own box, where a flex child that pins min-content
+    // (min-width: auto) shows up as scrollWidth > clientWidth regardless of the
+    // glyph widths. Found live: the card header row carried flex-wrap: nowrap
+    // and the status badge could not shrink, overflowing by 151px.
+    // 768px is the failing condition: md:grid-cols-2 is a px breakpoint, so a
+    // 200% root font squeezes each card into a half-width column while every
+    // rem-based size inside it doubles.
+    await page.setViewportSize({ width: 768, height: 900 });
+    await page.goto("/en/");
+    await page.evaluate(() => {
+      document.documentElement.style.fontSize = "200%";
+    });
+    const offenders = await page.evaluate(() => {
+      const out: string[] = [];
+      const clipped = (el: Element) => {
+        const s = getComputedStyle(el);
+        return s.overflow !== "visible" || s.overflowX !== "visible";
+      };
+      for (const card of document.querySelectorAll(
+        "article[data-product-tier]",
+      )) {
+        for (const el of [card, ...card.querySelectorAll("*")]) {
+          if (clipped(el) || el.clientWidth === 0) continue;
+          if (el.scrollWidth > el.clientWidth + 1) {
+            out.push(
+              `${el.tagName.toLowerCase()} excess=${el.scrollWidth - el.clientWidth} text="${(el.textContent ?? "").trim().slice(0, 24)}"`,
+            );
+          }
+        }
+      }
+      return out.slice(0, 6);
+    });
+    expect(offenders, offenders.join(" | ")).toEqual([]);
+  });
+
   test("320px: the key routes reflow at 200% text", async ({ page }) => {
     // Same structural defect class as the homepage: a grid/flex child that pins
     // its min-content (product-act intro row, bilingual mirror pair, boundary

@@ -13,9 +13,10 @@ interface Props {
   appAccess: ProductEntry["data"]["appAccess"];
   productName: string;
   lang: Language;
+  showSignIn?: boolean;
 }
 
-const { appAccess, productName, lang } = Astro.props;
+const { appAccess, productName, lang, showSignIn = true } = Astro.props;
 
 const LABELS = {
   heading: { en: "Use the app", vi: "Truy cập ứng dụng", zh: "使用应用" },
@@ -34,7 +35,7 @@ const STORES = [
   { key: "ios", name: "iOS", store: "App Store" },
 ] as const;
 
-const signInUrl = appAccess?.signInUrl;
+const signInUrl = showSignIn ? appAccess?.signInUrl : undefined;
 const apps = STORES.flatMap((s) => {
   const app = appAccess?.[s.key];
   return app ? [{ ...s, app }] : [];
