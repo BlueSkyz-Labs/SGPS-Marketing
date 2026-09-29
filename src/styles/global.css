@@ -904,6 +904,18 @@ summary {
   min-width: 0;
 }
 
+/* F-23 (2026-09-29): two-character CJK labels — the footer navigation and the
+   product-profile breadcrumb — were only 28-30px wide at 390px and broke the
+   project's zero-sub-44px-target rule. This rule is deliberately unlayered:
+   Tailwind utilities live in `@layer utilities`, and unlayered declarations beat
+   layered ones, so a `min-w-*` utility on those links silently lost to the
+   `min-width: 0` guard above. Keep the 44px floor here instead. */
+.footer-nav-link,
+.breadcrumb-link {
+  min-width: 2.75rem;
+  justify-content: center;
+}
+
 /* Declared on the root of the page, not per element type: `overflow-wrap` is
    inherited, so every descendant - including a bare text node inside a block
    whose border box is narrower than its text, which no element-level scan can
