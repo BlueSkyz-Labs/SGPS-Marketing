@@ -21,7 +21,10 @@ test("the fragment anchor only re-asserts an out-of-view fragment target", () =>
   assert.match(source, /behavior: "instant"/);
   // Never mutate the URL or reach the network.
   assert.doesNotMatch(source, /location\.(?:hash|href|assign|replace)\s*=/);
-  assert.doesNotMatch(source, /fetch\(|XMLHttpRequest|localStorage|sessionStorage/);
+  assert.doesNotMatch(
+    source,
+    /fetch\(|XMLHttpRequest|localStorage|sessionStorage/,
+  );
 });
 
 test("the layout loads the fragment anchor after the document scripts", () => {
