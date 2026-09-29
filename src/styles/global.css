@@ -40,7 +40,13 @@
 @font-face {
   font-family: "Inter Fallback";
   src: local("Arial"), local("Helvetica"), local("Liberation Sans");
-  size-adjust: 107%;
+  /* Calibrated 2026-09-29 on /vi/: the fallback rendered an h1 473 px wide
+     where Inter renders 506 px (+6.98 %), so at the old 107 % the fallback
+     wrapped differently and the swap moved the hero. 107 % x 1.0698 = 114.5 %.
+     No typeface is metric-identical to another at every size and string: this
+     reduces the swap delta, while the engine-aware font preload injected by
+     public/theme-init.js is what keeps Chromium's measured CLS at exactly 0. */
+  size-adjust: 114.5%;
   ascent-override: 90%;
   descent-override: 22.5%;
   line-gap-override: 0%;

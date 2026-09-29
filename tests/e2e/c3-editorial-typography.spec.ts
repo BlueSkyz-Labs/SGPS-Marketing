@@ -371,19 +371,10 @@ test.describe("Self-hosted Inter — Vietnamese delivery", () => {
       }).observe({ type: "layout-shift", buffered: true });
     });
 
-    const fontResponses: Promise<Buffer>[] = [];
-    const fontPaths: string[] = [];
-    page.on("response", (response) => {
-      if (
-        /\/fonts\/inter-(latin|vietnamese)-opsz-v5\.3\.0\.woff2$/.test(
-          response.url(),
-        )
-      ) {
-        fontPaths.push(new URL(response.url()).pathname);
-        fontResponses.push(response.body());
-      }
-    });
-
+    // Measure real wire transfer, not `response.body()` byte sums: a cached
+    // second fetch still yields the full body but costs no network. Resource
+    // Timing exposes the actual transfer size, so a genuine double download
+    // (observed on WebKit when the font preload carried `crossorigin`) fails.
     await page.goto("/vi/");
     await page.evaluate(async () => {
       await document.fonts.ready;
@@ -392,8 +383,21 @@ test.describe("Self-hosted Inter — Vietnamese delivery", () => {
       );
     });
 
-    const transferredBytes = (await Promise.all(fontResponses)).reduce(
-      (total, body) => total + body.byteLength,
+    const fontTransfers = await page.evaluate(() =>
+      performance
+        .getEntriesByType("resource")
+        .filter((entry) =>
+          /\/fonts\/inter-(latin|vietnamese)-opsz-v5\.3\.0\.woff2$/.test(
+            entry.name,
+          ),
+        )
+        .map((entry) => ({
+          path: new URL(entry.name).pathname,
+          transferSize: (entry as PerformanceResourceTiming).transferSize,
+        })),
+    );
+    const transferredBytes = fontTransfers.reduce(
+      (total, entry) => total + entry.transferSize,
       0,
     );
     const layoutShifts = await page.evaluate(
@@ -404,12 +408,24 @@ test.describe("Self-hosted Inter — Vietnamese delivery", () => {
           }
         ).__layoutShifts,
     );
-    expect(fontPaths).toContain("/fonts/inter-latin-opsz-v5.3.0.woff2");
-    expect(fontPaths).toContain("/fonts/inter-vietnamese-opsz-v5.3.0.woff2");
+    for (const subset of ["latin", "vietnamese"]) {
+      const downloads = fontTransfers.filter(
+        (entry) =>
+          entry.path.includes(`inter-${subset}-opsz-v5.3.0.woff2`) &&
+          entry.transferSize > 1_024,
+      );
+      expect(
+        downloads.length,
+        `${subset} subset must be downloaded exactly once; a repeated full transfer means the font preload was not reused:\n${JSON.stringify(fontTransfers, null, 2)}`,
+      ).toBe(1);
+    }
     expect(
       await page.evaluate(() => document.fonts.check('16px "Inter Variable"')),
     ).toBe(true);
-    expect(transferredBytes).toBeLessThanOrEqual(100_000);
+    expect(
+      transferredBytes,
+      JSON.stringify(fontTransfers, null, 2),
+    ).toBeLessThanOrEqual(100_000);
     expect(
       layoutShifts.reduce((total, entry) => total + entry.value, 0),
       JSON.stringify(layoutShifts),
