@@ -123,3 +123,70 @@ test("saved theme bootstrap is blocking and read-only", () => {
   assert.match(theme, /applyTheme\(mode, false\)/);
   assert.match(theme, /if \(persist\) \{/);
 });
+
+/**
+ * F-21 source guard (2026-09-29). The header mounts LanguageSwitcher with the
+ * "light" shell. Its active label used `--surface-raised` (theme aware) with the
+ * fixed `--brand-ink` token, so dark mode rendered rgb(11,16,32) on
+ * rgb(15,23,42) = 1.06:1. Labels in that shell must therefore use theme-aware
+ * text tokens, and the shell itself must flip to a dark cavity in both dark
+ * configurations. The e2e guard in tests/e2e/os-dark-contrast.spec.ts measures
+ * the rendered pixels; this guard keeps the source from regressing silently.
+ */
+const SWITCHER = join(
+  root,
+  "src",
+  "components",
+  "layout",
+  "LanguageSwitcher.astro",
+);
+
+function declarationColor(source, selector) {
+  const index = source.indexOf(selector);
+  if (index < 0) return null;
+  const block = source.slice(index, source.indexOf("}", index));
+  return block.match(/color:\s*([^;]+);/)?.[1]?.trim() ?? null;
+}
+
+export function fixedInkLabelOffenders(source) {
+  const offenders = [];
+  for (const selector of [
+    ".lang-toggle-shell--light .lang-toggle-item--active",
+    ".lang-toggle-shell--light .lang-toggle-item--idle",
+  ]) {
+    const color = declarationColor(source, selector);
+    if (!color || !/var\(--text-(?:primary|muted)\)/.test(color)) {
+      offenders.push(`${selector}: ${color ?? "missing color"}`);
+    }
+  }
+  return offenders;
+}
+
+test("language switcher labels use theme-aware text tokens, never fixed ink", () => {
+  const switcher = readFileSync(SWITCHER, "utf8");
+  assert.deepEqual(fixedInkLabelOffenders(switcher), []);
+  assert.match(
+    switcher,
+    /:global\(\[data-theme="dark"\]\) \.lang-toggle-shell--light/,
+    "explicit dark theme must keep a dark switcher cavity",
+  );
+  assert.match(
+    switcher,
+    /prefers-color-scheme: dark\)[\s\S]*?:global\(:root:not\(\[data-theme="light"\]\)\) \.lang-toggle-shell--light/,
+    "OS dark (without a pinned theme) must keep a dark switcher cavity",
+  );
+  // Accessible name must contain the visible code (WCAG 2.5.3 label in name).
+  assert.match(switcher, /aria-label=\{`\$\{CODE\[lang\]\}/);
+});
+
+test("RED: the fixed-ink regression is detected", () => {
+  const switcher = readFileSync(SWITCHER, "utf8");
+  const mutated = switcher.replace(
+    "color: var(--text-primary);",
+    "color: var(--brand-ink, #0b1020);",
+  );
+  assert.notEqual(mutated, switcher, "mutation must apply");
+  assert.deepEqual(fixedInkLabelOffenders(mutated), [
+    ".lang-toggle-shell--light .lang-toggle-item--active: var(--brand-ink, #0b1020)",
+  ]);
+});
