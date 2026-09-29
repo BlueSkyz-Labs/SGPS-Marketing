@@ -130,6 +130,11 @@ const robotsNoindex = noindex || isNonProductionSiteUrl(SITE.url);
 
       initFidelityEngine();
     </script>
+    <script>
+      import { initFragmentAnchor } from "@/scripts/fragment-anchor";
+
+      initFragmentAnchor();
+    </script>
     <main id="main-content" class="flex-1" tabindex="-1">
       <slot />
       {surface ? <IntegrityLens surface={surface} lang={currentLang} /> : null}
