@@ -22,7 +22,8 @@ primaryAction:
   href: https://blueskyzlabs.com/en/products/fluentarc/
 proof:
   media:
-    src: /products/fluentarc/screenshot.png
+    kind: identity-art
+    src: /products/fluentarc/identity.png
     alt: FluentArc by BlueSkyz Labs — brand identity
     width: 1800
     height: 504

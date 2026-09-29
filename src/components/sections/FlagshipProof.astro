@@ -6,6 +6,7 @@ import ButtonLink from "@/components/ui/ButtonLink.astro";
 import EvidenceDetails from "@/components/integrity/EvidenceDetails.astro";
 import { SHARED_LABELS, labelFor, type Language } from "@/data/site";
 import { getProductProfilePath } from "@/lib/product-routes";
+import { proofCaptionForKind } from "@/lib/product-copy";
 
 interface Props {
   product: CollectionEntry<"products">;
@@ -18,7 +19,6 @@ const media = data.proof.media;
 const capabilities = data.capabilities ?? [];
 const profileHref = getProductProfilePath(lang, data.slug);
 const profileLabel = labelFor(SHARED_LABELS.viewProfile, lang);
-const captionLabel = labelFor(SHARED_LABELS.proofCaption, lang);
 ---
 
 {media ? (
@@ -49,7 +49,10 @@ const captionLabel = labelFor(SHARED_LABELS.proofCaption, lang);
             summary={data.endorsement}
             evidence={[
               { label: `${profileLabel} — ${data.name}`, href: profileHref },
-              { label: captionLabel, href: media.src },
+              {
+                label: proofCaptionForKind(media.kind, lang),
+                href: media.src,
+              },
             ]}
             lang={lang}
           />
