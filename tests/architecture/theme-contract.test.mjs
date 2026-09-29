@@ -125,13 +125,12 @@ test("saved theme bootstrap is blocking and read-only", () => {
 });
 
 /**
- * F-21 source guard (2026-09-29). The header mounts LanguageSwitcher with the
- * "light" shell. Its active label used `--surface-raised` (theme aware) with the
- * fixed `--brand-ink` token, so dark mode rendered rgb(11,16,32) on
- * rgb(15,23,42) = 1.06:1. Labels in that shell must therefore use theme-aware
- * text tokens, and the shell itself must flip to a dark cavity in both dark
- * configurations. The e2e guard in tests/e2e/os-dark-contrast.spec.ts measures
- * the rendered pixels; this guard keeps the source from regressing silently.
+ * F-21 source guard (2026-09-29). The header sits on the ink hero, where the
+ * ambient `--text-*` tokens are re-pointed at porcelain for on-ink copy, while
+ * the switcher's own surface is white/light in the light theme. Reading the page
+ * context therefore produced porcelain-on-white (1.06:1, axe serious) even after
+ * the dark-mode fix. The switcher must own its palette through local properties
+ * and must never bind those labels to the ambient tokens.
  */
 const SWITCHER = join(
   root,
@@ -148,23 +147,26 @@ function declarationColor(source, selector) {
   return block.match(/color:\s*([^;]+);/)?.[1]?.trim() ?? null;
 }
 
-export function fixedInkLabelOffenders(source) {
+export function ambientTokenLabelOffenders(source) {
   const offenders = [];
   for (const selector of [
     ".lang-toggle-shell--light .lang-toggle-item--active",
     ".lang-toggle-shell--light .lang-toggle-item--idle",
   ]) {
     const color = declarationColor(source, selector);
-    if (!color || !/var\(--text-(?:primary|muted)\)/.test(color)) {
+    const owned = /var\(--lang-(?:pill|idle)-fg\)/.test(color ?? "");
+    const ambient = /var\(--text-(?:primary|muted)\)/.test(color ?? "");
+    if (!owned || ambient) {
       offenders.push(`${selector}: ${color ?? "missing color"}`);
     }
   }
   return offenders;
 }
 
-test("language switcher labels use theme-aware text tokens, never fixed ink", () => {
+test("language switcher owns its palette instead of reading the page context", () => {
   const switcher = readFileSync(SWITCHER, "utf8");
-  assert.deepEqual(fixedInkLabelOffenders(switcher), []);
+  assert.deepEqual(ambientTokenLabelOffenders(switcher), []);
+  assert.match(switcher, /--lang-pill-fg:/, "the palette must be declared");
   assert.match(
     switcher,
     /:global\(\[data-theme="dark"\]\) \.lang-toggle-shell--light/,
@@ -179,14 +181,14 @@ test("language switcher labels use theme-aware text tokens, never fixed ink", ()
   assert.match(switcher, /aria-label=\{`\$\{CODE\[lang\]\}/);
 });
 
-test("RED: the fixed-ink regression is detected", () => {
+test("RED: the ambient-token regression is detected", () => {
   const switcher = readFileSync(SWITCHER, "utf8");
   const mutated = switcher.replace(
+    "color: var(--lang-pill-fg);",
     "color: var(--text-primary);",
-    "color: var(--brand-ink, #0b1020);",
   );
   assert.notEqual(mutated, switcher, "mutation must apply");
-  assert.deepEqual(fixedInkLabelOffenders(mutated), [
-    ".lang-toggle-shell--light .lang-toggle-item--active: var(--brand-ink, #0b1020)",
+  assert.deepEqual(ambientTokenLabelOffenders(mutated), [
+    ".lang-toggle-shell--light .lang-toggle-item--active: var(--text-primary)",
   ]);
 });
