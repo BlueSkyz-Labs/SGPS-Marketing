@@ -83,10 +83,21 @@ test("mobile menu disclosure is keyboard operable", async ({ page }) => {
  * F-23 guard (2026-09-29). The project standard is zero interactive targets
  * under 44 x 44 px. Two-character zh labels only met the height: the footer nav
  * links measured 30x44 and the profile breadcrumb 28x44 at 390 px, while the
- * longer en/vi labels stayed above 44 px and hid the defect. This scans both zh
- * routes and reports every offender with its text and measured box.
+ * longer en/vi labels stayed above 44 px and hid the defect (the audit round 2
+ * note G-5: the same rule also failed on en/vi, e.g. the footer "About" link at
+ * 42x44). This scans both index and product-detail routes in all three locales
+ * and reports every offender with its text and measured box.
  */
-for (const route of ["/zh/", "/zh/products/sotro/"] as const) {
+const TARGET_ROUTES = [
+  "/en/",
+  "/vi/",
+  "/zh/",
+  "/en/products/sotro/",
+  "/vi/products/sotro/",
+  "/zh/products/sotro/",
+] as const;
+
+for (const route of TARGET_ROUTES) {
   test(`no interactive target under 44px on ${route} at 390px`, async ({
     page,
   }) => {
