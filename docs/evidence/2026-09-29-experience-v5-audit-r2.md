@@ -82,3 +82,15 @@ The Cloudflare connector lists Workers and their last-modified time but exposes 
 ## NOT VERIFIED
 
 Production and anonymous access; Firefox and WebKit locally; real-user comprehension; native VI/ZH review; GitHub security settings; whether #337 and #340 CI finished green.
+
+## Brand kit v4 — Owner Drive copy vs repository (E1)
+
+| Check                                                             | Result                                                                                                                                                                                                                       |
+| ----------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Drive `SHA256SUMS.txt` vs `brand/blueskyz-production-v4/`         | Same size (29 829 B); sampled hashes identical (guidelines PDF, `tokens.json`, `ASSET_USAGE_MATRIX.csv`, `verify_brand_kit.py`, a concept PNG). Drive `MANIFEST.csv` differs only by BOM/CRLF.                               |
+| Repository `sha256sum -c`                                         | 238/240 OK; the two failures are CSVs normalised to LF by `.gitattributes` and match once CRLF is restored.                                                                                                                  |
+| `09_QA_AUDIT/v4/verify_brand_kit.py`                              | PASS (raster 153, SVG 46, JSON 4, XML 1).                                                                                                                                                                                    |
+| Drive-only files                                                  | A duplicate guidelines PDF (same size) and `Mockup DEMO.png` (1254×1254, not in the manifest). The mockup shows hidden products, an unverified asset-count claim and a signature: reference only, never a production source. |
+| `public/` icons, logos, product marks and default OG vs kit bytes | 62/128 files are byte-identical to kit files. The rest are the hero mark resized to 560 and 840 px, three flags, and a legacy `public/brand/blueskyz/r4d/` tree that pages do not reference.                                 |
+
+Gaps in applying the kit (for the implementation lane, not this PR): no per-product Open Graph images (W5.1; only `/social/og-default.png`); the legacy `r4d/` tree is still published although only a hygiene test names it; the endorsed product lockups render on the Sổ Trọ and Sổ Tâm profiles only. Limitation: Drive binaries were compared by size and sampled hash, not by a full per-file hash.
