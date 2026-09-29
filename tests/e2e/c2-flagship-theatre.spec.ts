@@ -60,7 +60,7 @@ test.describe("C2 Flagship Theatre — fixture-backed (product present)", () => 
         "Fixture capability two",
         "Fixture capability three",
       ],
-      action: "Contact",
+      action: "View development status",
       caption:
         "Brand identity artwork — not a screenshot of the running application.",
     },
@@ -79,7 +79,7 @@ test.describe("C2 Flagship Theatre — fixture-backed (product present)", () => 
         "Phạm vi thử nghiệm hai",
         "Phạm vi thử nghiệm ba",
       ],
-      action: "Liên hệ thử nghiệm",
+      action: "Xem trạng thái phát triển",
       caption:
         "Hình ảnh nhận diện thương hiệu — không phải ảnh chụp giao diện ứng dụng.",
     },
@@ -94,7 +94,7 @@ test.describe("C2 Flagship Theatre — fixture-backed (product present)", () => 
       jobs: ["测试工作一", "测试工作二"],
       scopeHeading: "开发范围",
       capabilities: ["测试范围一", "测试范围二", "测试范围三"],
-      action: "联系演示",
+      action: "查看开发状态",
       caption: "品牌视觉素材，并非应用运行界面的截图。",
     },
   ]) {
@@ -142,19 +142,19 @@ test.describe("C2 Flagship Theatre — fixture-backed (product present)", () => 
       const caps = page.locator(`${THEATRE} div.c2-flagship-theatre__feature`);
       await expect(caps).toHaveCount(3);
 
-      // Primary action uses the record label.
-      const primaryHref = await page
-        .locator(`${THEATRE} a[href="/en/contact/"]`)
-        .getAttribute("href");
-      expect(primaryHref).toBe("/en/contact/");
+      // Primary action carries the lifecycle-derived verb (no Try for a
+      // development record) and stays on the localized recorded-status page.
       await expect(
-        page.locator(`${THEATRE} a[href="/en/contact/"]`),
-      ).toContainText(locale.action);
-
-      // Profile anchor links to the canonical localized profile path.
-      await expect(
-        page.locator(`${THEATRE} a[href="${locale.profilePath}"]`),
+        page.locator(`${THEATRE} [data-product-cta="view-development-status"]`),
       ).toHaveCount(1);
+      await expect(
+        page.locator(`${THEATRE} [data-product-cta="try"]`),
+      ).toHaveCount(0);
+      const primaryLink = page.locator(
+        `${THEATRE} a[href="${locale.profilePath}"]`,
+      );
+      await expect(primaryLink).toHaveCount(1);
+      await expect(primaryLink).toContainText(locale.action);
 
       // Screenshot has intrinsic dimensions and non-empty alt from the record.
       const img = page.locator(`${THEATRE} img`);
@@ -287,13 +287,17 @@ test.describe("C2 Flagship Theatre — no JavaScript (static-first)", () => {
     await expect(page.locator("#flagship-theatre-title")).toHaveText(
       "Fixture Flagship",
     );
-    // Both actions render and profile link is usable.
+    // Both the verb and the profile destination render without JavaScript;
+    // the development lifecycle still withholds Try.
+    await expect(
+      page.locator(`${THEATRE} [data-product-cta="view-development-status"]`),
+    ).toHaveCount(1);
+    await expect(
+      page.locator(`${THEATRE} [data-product-cta="try"]`),
+    ).toHaveCount(0);
     await expect(
       page.locator(`${THEATRE} a[href='/en/products/fixture-flagship/']`),
     ).toHaveCount(1);
-    await expect(page.locator(`${THEATRE} a[href='/en/contact/']`)).toHaveCount(
-      1,
-    );
   });
 });
 

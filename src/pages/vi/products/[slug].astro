@@ -7,6 +7,7 @@ import ProductLadder from "@/components/product/ProductLadder.astro";
 import ProductVisual from "@/components/product/ProductVisual.astro";
 import ButtonLink from "@/components/ui/ButtonLink.astro";
 import { productCopy, proofCaptionForKind } from "@/lib/product-copy";
+import { resolveLifecycleCta } from "@/lib/lifecycle-cta";
 import AppAccess from "@/components/product/AppAccess.astro";
 import { getPublicProducts } from "@/lib/products";
 import { safeJsonLd, productJsonLd } from "@/lib/seo";
@@ -29,6 +30,21 @@ const { data } = product;
 const media = data.proof.media;
 const copy = productCopy(data, "vi");
 const capabilities = copy.capabilities;
+
+// Plan v5 W3.2 — this page already *is* the recorded status surface, so the
+// mapper only adds an action when it yields an eligible first-party Try
+// destination and the record carries no direct app sign-in. A development
+// product therefore never renders Try here.
+const cta = resolveLifecycleCta(
+  {
+    slug: data.slug,
+    lifecycle: data.lifecycle,
+    availability: data.availability,
+    primaryActionHref: data.primaryAction.href,
+  },
+  "vi",
+);
+const showTryCta = cta.verb === "try" && !data.appAccess?.signInUrl;
 
 const PLATFORM_LABELS: Record<string, string> = {
   web: "Web",
@@ -158,8 +174,18 @@ const productStructuredData = productJsonLd(
           </div>
         </div>
 
-        <!-- Primary action opens the product's own sign-in; secondary stays an owner-authored link -->
+        <!-- Lifecycle CTA (only when the mapper yields an eligible first-party Try); sign-in stays the direct app entry -->
         <div class="flex flex-wrap items-center gap-3 pt-2">
+          {showTryCta ? (
+            <span data-product-cta={cta.verb}>
+              <ButtonLink
+                href={cta.href}
+                class="shadow-[var(--bsl-shadow-subtle)]"
+              >
+                {cta.label}
+              </ButtonLink>
+            </span>
+          ) : null}
           {data.appAccess?.signInUrl ? (
             <ButtonLink
               href={data.appAccess.signInUrl}
@@ -247,7 +273,7 @@ const productStructuredData = productJsonLd(
           {copy.jobs.map((job: string, i: number) => (
             <div class="group relative rounded-[var(--radius-card)] border border-[var(--border-subtle)] bg-[var(--surface-raised)] p-5 transition-[transform,box-shadow,border-color] duration-200 hover:-translate-y-0.5 hover:border-[color-mix(in_srgb,var(--brand-cobalt)_40%,var(--border-subtle))] hover:shadow-[0_12px_28px_-8px_color-mix(in_srgb,var(--brand-cobalt)_18%,transparent)] motion-reduce:transition-none motion-reduce:hover:translate-y-0">
               <span
-                class="text-xs font-mono font-bold tracking-widest text-[var(--brand-cobalt)]"
+                class="text-xs font-mono font-bold tracking-widest text-[var(--badge-ink)]"
                 aria-hidden="true"
               >
                 {String(i + 1).padStart(2, "0")}
@@ -281,7 +307,7 @@ const productStructuredData = productJsonLd(
             {capabilities.map((capability: string, i: number) => (
               <div class="relative flex items-start gap-4 rounded-[var(--radius-card)] border border-[var(--border-subtle)] bg-[var(--surface-raised)] p-5 transition-[transform,box-shadow,border-color] duration-200 hover:-translate-y-0.5 hover:border-[color-mix(in_srgb,var(--brand-cobalt)_40%,var(--border-subtle))] hover:shadow-[0_12px_28px_-8px_color-mix(in_srgb,var(--brand-cobalt)_18%,transparent)] motion-reduce:transition-none motion-reduce:hover:translate-y-0">
                 <div
-                  class="flex size-8 flex-shrink-0 items-center justify-center rounded-lg bg-[color-mix(in_srgb,var(--brand-cobalt)_12%,var(--surface-subtle))] text-xs font-mono font-bold text-[var(--brand-cobalt)] ring-1 ring-inset ring-[var(--brand-cobalt)]/20"
+                  class="flex size-8 flex-shrink-0 items-center justify-center rounded-lg bg-[color-mix(in_srgb,var(--brand-cobalt)_12%,var(--surface-subtle))] text-xs font-mono font-bold text-[var(--badge-ink)] ring-1 ring-inset ring-[var(--brand-cobalt)]/20"
                   aria-hidden="true"
                 >
                   {String(i + 1).padStart(2, "0")}
