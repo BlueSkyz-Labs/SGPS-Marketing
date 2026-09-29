@@ -4,8 +4,9 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
 import Container from "@/components/layout/Container.astro";
 import ProductStatus from "@/components/product/ProductStatus.astro";
 import ProductLadder from "@/components/product/ProductLadder.astro";
+import ProductVisual from "@/components/product/ProductVisual.astro";
 import ButtonLink from "@/components/ui/ButtonLink.astro";
-import { productCopy } from "@/lib/product-copy";
+import { productCopy, proofCaptionForKind } from "@/lib/product-copy";
 import AppAccess from "@/components/product/AppAccess.astro";
 import { getPublicProducts } from "@/lib/products";
 import { safeJsonLd, productJsonLd } from "@/lib/seo";
@@ -62,6 +63,7 @@ const productStructuredData = productJsonLd(
     description: copy.shortDescription,
     slug: data.slug,
     mediaUrl: media?.src,
+    ...(media ? { mediaCaption: proofCaptionForKind(media.kind, "vi") } : {}),
     platforms: data.platforms,
   },
   SITE.url,
@@ -80,45 +82,104 @@ const productStructuredData = productJsonLd(
     type="application/ld+json"
     set:html={safeJsonLd(productStructuredData)}
   ></script>
-  <article class="py-16">
+  <article class="py-12 sm:py-16">
     <Container>
-      <p class="text-sm font-medium text-[var(--text-muted)]">
-        <a
-          href="/vi/products/"
-          class="inline-flex min-h-11 items-center text-sm font-semibold text-[var(--action-primary)] no-underline hover:underline"
-        >
-          Sản phẩm
-        </a>
-        <span aria-hidden="true"> / </span>
-        <span>{data.name}</span>
-      </p>
+      <!-- Breadcrumb navigation -->
+      <nav
+        aria-label="Breadcrumb"
+        class="text-sm font-medium text-[var(--text-muted)]"
+      >
+        <ol class="flex items-center gap-2">
+          <li>
+            <a
+              href="/vi/products/"
+              class="breadcrumb-link inline-flex min-h-11 items-center text-sm font-semibold text-[var(--action-primary)] no-underline hover:underline"
+            >
+              Sản phẩm
+            </a>
+          </li>
+          <li aria-hidden="true" class="text-[var(--border-subtle)]">
+            /
+          </li>
+          <li aria-current="page" class="text-[var(--text-primary)]">
+            {data.name}
+          </li>
+        </ol>
+      </nav>
 
-      <div class="mt-6 flex flex-wrap items-center gap-3">
-        <ProductStatus label={data.publicLabel} lang="vi" />
-        <p class="text-xs font-medium tracking-wide text-[var(--text-muted)]">
-          {copy.endorsement}
-        </p>
-      </div>
+      <!-- Hero Stage: 128px Squircle Icon + Endorsed Brand Lockup + Dual CTAs -->
+      <header class="mt-8 flex flex-col md:flex-row md:items-start justify-between gap-6 pb-10 border-b border-[var(--border-subtle)]">
+        <div class="flex flex-col sm:flex-row sm:items-center gap-6">
+          <!-- 128px App Icon in Squircle Container with Ambient Glow -->
+          <div
+            class="relative flex-shrink-0 size-24 sm:size-28 rounded-2xl overflow-hidden bg-white/5 backdrop-blur-sm shadow-[0_12px_32px_-8px_rgba(11,16,32,0.35)] ring-1 ring-inset ring-white/10 p-2.5 flex items-center justify-center"
+            aria-hidden="true"
+          >
+            <img
+              src={`/products/${data.slug}/icon.png`}
+              alt=""
+              class="w-full h-full object-contain"
+              loading="eager"
+              decoding="async"
+              width="128"
+              height="128"
+            />
+          </div>
 
-      <h1 class="mt-4 max-w-[20ch] text-4xl font-semibold tracking-tight text-[var(--text-primary)] sm:text-5xl">
-        {data.name}
-      </h1>
-      <p class="mt-5 max-w-2xl text-lg text-[var(--text-secondary)]">
+          <div>
+            <div class="flex flex-wrap items-center gap-3">
+              <ProductStatus label={data.publicLabel} lang="vi" />
+              <p class="text-xs font-medium tracking-wide text-[var(--text-muted)]">
+                {copy.endorsement}
+              </p>
+            </div>
+
+            <h1 class="mt-3 text-3xl sm:text-4xl lg:text-5xl font-semibold tracking-tight text-[var(--text-primary)]">
+              {data.name}
+            </h1>
+
+            <!-- Authentic Endorsed Lockup SVG -->
+            <div class="mt-3" aria-hidden="true">
+              <img
+                src={`/brand/blueskyz/v4/products/${data.slug}_endorsed_lockup_light.svg`}
+                alt=""
+                class="h-8 sm:h-10 w-auto profile-lockup-light"
+                loading="eager"
+                decoding="async"
+              />
+              <img
+                src={`/brand/blueskyz/v4/products/${data.slug}_endorsed_lockup_dark.svg`}
+                alt=""
+                class="h-8 sm:h-10 w-auto profile-lockup-dark"
+                loading="eager"
+                decoding="async"
+              />
+            </div>
+          </div>
+        </div>
+
+        <!-- Primary action opens the product's own sign-in; secondary stays an owner-authored link -->
+        <div class="flex flex-wrap items-center gap-3 pt-2">
+          {data.appAccess?.signInUrl ? (
+            <ButtonLink
+              href={data.appAccess.signInUrl}
+              class="shadow-[var(--bsl-shadow-subtle)]"
+            >
+              {labelFor(SHARED_LABELS.signIn, "vi")} · {data.name}
+            </ButtonLink>
+          ) : null}
+          {data.secondaryAction ? (
+            <ButtonLink href={data.secondaryAction.href} variant="secondary">
+              {data.secondaryAction.label}
+            </ButtonLink>
+          ) : null}
+        </div>
+      </header>
+
+      <!-- Short Description -->
+      <p class="mt-8 max-w-3xl text-lg sm:text-xl leading-relaxed text-[var(--text-secondary)]">
         {copy.shortDescription}
       </p>
-
-      <div class="mt-8 flex flex-wrap gap-3">
-        {data.appAccess?.signInUrl ? (
-          <ButtonLink href={data.appAccess.signInUrl}>
-            {labelFor(SHARED_LABELS.signIn, "vi")} · {data.name}
-          </ButtonLink>
-        ) : null}
-        {data.secondaryAction ? (
-          <ButtonLink href={data.secondaryAction.href} variant="secondary">
-            {data.secondaryAction.label}
-          </ButtonLink>
-        ) : null}
-      </div>
 
       <AppAccess
         appAccess={data.appAccess}
@@ -128,37 +189,38 @@ const productStructuredData = productJsonLd(
       />
       <ProductLadder lifecycle={data.lifecycle} lang="vi" />
 
-      <section class="mt-14" aria-labelledby="profile-status">
+      <!-- Status & Platforms Bento -->
+      <section class="mt-12" aria-labelledby="profile-status">
         <h2
           id="profile-status"
-          class="text-xl font-semibold tracking-tight text-[var(--text-primary)]"
+          class="text-xs font-semibold uppercase tracking-widest text-[var(--text-muted)]"
         >
           Trạng thái & nền tảng
         </h2>
         <dl class="mt-4 grid gap-4 sm:grid-cols-3">
-          <div class="rounded-[var(--radius-card)] border border-[var(--border-subtle)] p-4 bg-[var(--bg-surface)]">
+          <div class="rounded-[var(--radius-card)] border border-[var(--border-subtle)] p-5 bg-[var(--surface-raised)] transition-[border-color,box-shadow] duration-200 hover:border-[color-mix(in_srgb,var(--brand-cobalt)_40%,var(--border-subtle))]">
             <dt class="text-xs font-semibold uppercase tracking-wider text-[var(--text-muted)]">
               Trạng thái
             </dt>
-            <dd class="mt-1 text-sm font-medium text-[var(--text-primary)]">
+            <dd class="mt-2 text-base font-semibold text-[var(--text-primary)]">
               {copy.statusLabel}
             </dd>
           </div>
-          <div class="rounded-[var(--radius-card)] border border-[var(--border-subtle)] p-4 bg-[var(--bg-surface)]">
+          <div class="rounded-[var(--radius-card)] border border-[var(--border-subtle)] p-5 bg-[var(--surface-raised)] transition-[border-color,box-shadow] duration-200 hover:border-[color-mix(in_srgb,var(--brand-cobalt)_40%,var(--border-subtle))]">
             <dt class="text-xs font-semibold uppercase tracking-wider text-[var(--text-muted)]">
               Nền tảng
             </dt>
-            <dd class="mt-1 text-sm font-medium text-[var(--text-primary)]">
+            <dd class="mt-2 text-base font-semibold text-[var(--text-primary)]">
               {data.platforms
                 .map((p: string) => PLATFORM_LABELS[p] ?? p)
                 .join(", ")}
             </dd>
           </div>
-          <div class="rounded-[var(--radius-card)] border border-[var(--border-subtle)] p-4 bg-[var(--bg-surface)]">
+          <div class="rounded-[var(--radius-card)] border border-[var(--border-subtle)] p-5 bg-[var(--surface-raised)] transition-[border-color,box-shadow] duration-200 hover:border-[color-mix(in_srgb,var(--brand-cobalt)_40%,var(--border-subtle))]">
             <dt class="text-xs font-semibold uppercase tracking-wider text-[var(--text-muted)]">
               Đối tượng
             </dt>
-            <dd class="mt-1 text-sm font-medium text-[var(--text-primary)]">
+            <dd class="mt-2 text-base font-semibold text-[var(--text-primary)]">
               {data.audience
                 .map((a: string) => AUDIENCE_LABELS[a] ?? a)
                 .join(", ")}
@@ -167,74 +229,133 @@ const productStructuredData = productJsonLd(
         </dl>
       </section>
 
-      <section class="mt-14" aria-labelledby="profile-jobs">
-        <h2
-          id="profile-jobs"
-          class="text-xl font-semibold tracking-tight text-[var(--text-primary)]"
-        >
-          Mục đích sử dụng
-        </h2>
-        <ul class="mt-4 list-disc space-y-2 pl-5 text-[var(--text-secondary)]">
-          {copy.jobs.map((job: string) => (
-            <li>{job}</li>
+      <!-- Feature Bento Grid: What it's for (Jobs) -->
+      <section class="mt-16" aria-labelledby="profile-jobs">
+        <div class="flex items-center gap-3">
+          <span
+            class="inline-block size-2 rounded-full bg-[var(--brand-cobalt)]"
+            aria-hidden="true"
+          ></span>
+          <h2
+            id="profile-jobs"
+            class="text-xl sm:text-2xl font-semibold tracking-tight text-[var(--text-primary)]"
+          >
+            Mục đích sử dụng
+          </h2>
+        </div>
+        <div class="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {copy.jobs.map((job: string, i: number) => (
+            <div class="group relative rounded-[var(--radius-card)] border border-[var(--border-subtle)] bg-[var(--surface-raised)] p-5 transition-[transform,box-shadow,border-color] duration-200 hover:-translate-y-0.5 hover:border-[color-mix(in_srgb,var(--brand-cobalt)_40%,var(--border-subtle))] hover:shadow-[0_12px_28px_-8px_color-mix(in_srgb,var(--brand-cobalt)_18%,transparent)] motion-reduce:transition-none motion-reduce:hover:translate-y-0">
+              <span
+                class="text-xs font-mono font-bold tracking-widest text-[var(--brand-cobalt)]"
+                aria-hidden="true"
+              >
+                {String(i + 1).padStart(2, "0")}
+              </span>
+              <p class="mt-2 text-sm leading-relaxed text-[var(--text-secondary)] group-hover:text-[var(--text-primary)] overflow-wrap-anywhere">
+                {job}
+              </p>
+            </div>
           ))}
-        </ul>
+        </div>
       </section>
 
+      <!-- Feature Bento Grid: Capabilities -->
       {capabilities.length > 0 ? (
-        <section class="mt-14" aria-labelledby="profile-capabilities">
-          <h2
-            id="profile-capabilities"
-            class="text-xl font-semibold tracking-tight text-[var(--text-primary)]"
-          >
-            {data.lifecycle === "active" || data.lifecycle === "maintenance"
-              ? "Năng lực cốt lõi"
-              : "Định hướng phát triển"}
-          </h2>
-          <ul class="mt-4 list-disc space-y-2 pl-5 text-[var(--text-secondary)]">
-            {capabilities.map((capability: string) => (
-              <li>{capability}</li>
+        <section class="mt-16" aria-labelledby="profile-capabilities">
+          <div class="flex items-center gap-3">
+            <span
+              class="inline-block size-2 rounded-full bg-[var(--brand-cobalt)]"
+              aria-hidden="true"
+            ></span>
+            <h2
+              id="profile-capabilities"
+              class="text-xl sm:text-2xl font-semibold tracking-tight text-[var(--text-primary)]"
+            >
+              {data.lifecycle === "active" || data.lifecycle === "maintenance"
+                ? "Năng lực cốt lõi"
+                : "Trọng tâm phát triển"}
+            </h2>
+          </div>
+          <div class="mt-6 grid gap-4 sm:grid-cols-2">
+            {capabilities.map((capability: string, i: number) => (
+              <div class="relative flex items-start gap-4 rounded-[var(--radius-card)] border border-[var(--border-subtle)] bg-[var(--surface-raised)] p-5 transition-[transform,box-shadow,border-color] duration-200 hover:-translate-y-0.5 hover:border-[color-mix(in_srgb,var(--brand-cobalt)_40%,var(--border-subtle))] hover:shadow-[0_12px_28px_-8px_color-mix(in_srgb,var(--brand-cobalt)_18%,transparent)] motion-reduce:transition-none motion-reduce:hover:translate-y-0">
+                <div
+                  class="flex size-8 flex-shrink-0 items-center justify-center rounded-lg bg-[color-mix(in_srgb,var(--brand-cobalt)_12%,var(--surface-subtle))] text-xs font-mono font-bold text-[var(--brand-cobalt)] ring-1 ring-inset ring-[var(--brand-cobalt)]/20"
+                  aria-hidden="true"
+                >
+                  {String(i + 1).padStart(2, "0")}
+                </div>
+                <div class="min-w-0 flex-1">
+                  <p class="text-sm font-medium leading-relaxed text-[var(--text-primary)] overflow-wrap-anywhere">
+                    {capability}
+                  </p>
+                </div>
+              </div>
             ))}
-          </ul>
+          </div>
         </section>
       ) : null}
 
+      <!-- Proof artifact: brand identity artwork on the ink stage, captioned as artwork -->
       {media ? (
-        <section class="mt-14" aria-labelledby="profile-proof">
-          <h2
-            id="profile-proof"
-            class="text-xl font-semibold tracking-tight text-[var(--text-primary)]"
-          >
-            Hình ảnh thương hiệu và nguồn tham khảo
-          </h2>
-          <img
-            class="mt-4 h-auto w-full max-w-4xl rounded-[var(--radius-card)] border border-[var(--border-subtle)] bg-[var(--c3-image-surface-background)]"
-            src={media.src}
-            alt={media.alt}
-            width={media.width}
-            height={media.height}
-            loading="lazy"
-            decoding="async"
-          />
+        <section class="mt-16" aria-labelledby="profile-proof">
+          <div class="flex items-center gap-3">
+            <span
+              class="inline-block size-2 rounded-full bg-[var(--brand-cobalt)]"
+              aria-hidden="true"
+            ></span>
+            <h2
+              id="profile-proof"
+              class="text-xl sm:text-2xl font-semibold tracking-tight text-[var(--text-primary)]"
+            >
+              Hình ảnh thương hiệu và nguồn tham khảo
+            </h2>
+          </div>
+          <figure class="mt-6 m-0 max-w-4xl" data-profile-identity-stage>
+            <ProductVisual media={media} />
+            <figcaption class="mt-3 text-sm text-[var(--text-muted)]">
+              {proofCaptionForKind(media.kind, "vi")}
+            </figcaption>
+          </figure>
         </section>
       ) : null}
 
+      <!-- Trust Paths -->
       {proofLinks.length > 0 ? (
-        <section class="mt-14" aria-labelledby="profile-trust">
-          <h2
-            id="profile-trust"
-            class="text-xl font-semibold tracking-tight text-[var(--text-primary)]"
-          >
-            Đường dẫn xác minh
-          </h2>
-          <ul class="mt-4 flex flex-wrap gap-4">
+        <section class="mt-16" aria-labelledby="profile-trust">
+          <div class="flex items-center gap-3">
+            <span
+              class="inline-block size-2 rounded-full bg-[var(--brand-cobalt)]"
+              aria-hidden="true"
+            ></span>
+            <h2
+              id="profile-trust"
+              class="text-xl sm:text-2xl font-semibold tracking-tight text-[var(--text-primary)]"
+            >
+              Đường dẫn xác minh
+            </h2>
+          </div>
+          <ul class="mt-6 flex flex-wrap gap-3">
             {proofLinks.map((link) => (
               <li>
                 <a
                   href={link.href}
-                  class="inline-flex min-h-11 items-center text-sm font-semibold text-[var(--action-primary)] no-underline hover:underline"
+                  class="inline-flex min-h-11 items-center gap-2 rounded-[var(--radius-card)] border border-[var(--border-subtle)] bg-[var(--surface-raised)] px-4 py-2 text-sm font-semibold text-[var(--action-primary)] no-underline transition-[background-color,border-color,transform] duration-150 hover:-translate-y-0.5 hover:border-[var(--brand-cobalt)] hover:shadow-sm motion-reduce:transition-none motion-reduce:hover:translate-y-0"
                 >
                   {link.label}
+                  <svg
+                    class="size-4 opacity-70"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                    aria-hidden="true"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M5.22 14.78a.75.75 0 001.06 0l7.22-7.22v5.69a.75.75 0 001.5 0v-7.5a.75.75 0 00-.75-.75h-7.5a.75.75 0 000 1.5h5.69l-7.22 7.22a.75.75 0 000 1.06z"
+                      clip-rule="evenodd"
+                    />
+                  </svg>
                 </a>
               </li>
             ))}
@@ -244,3 +365,26 @@ const productStructuredData = productJsonLd(
     </Container>
   </article>
 </BaseLayout>
+
+<style>
+  .profile-lockup-light {
+    display: block;
+  }
+  .profile-lockup-dark {
+    display: none;
+  }
+  :global([data-theme="dark"]) .profile-lockup-light {
+    display: none;
+  }
+  :global([data-theme="dark"]) .profile-lockup-dark {
+    display: block;
+  }
+  @media (prefers-color-scheme: dark) {
+    :global(:root:not([data-theme="light"])) .profile-lockup-light {
+      display: none;
+    }
+    :global(:root:not([data-theme="light"])) .profile-lockup-dark {
+      display: block;
+    }
+  }
+</style>

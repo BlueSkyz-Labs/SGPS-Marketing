@@ -333,3 +333,102 @@ test.describe("C3-A Editorial Typography — display hierarchy", () => {
     expect(h1Styles.fontSize).toBeGreaterThanOrEqual(24);
   });
 });
+
+test.describe("Self-hosted Inter — Vietnamese delivery", () => {
+  test("keeps font transfer under 100 KB with no layout shifts", async ({
+    page,
+  }) => {
+    await page.addInitScript(() => {
+      const observedWindow = window as Window & {
+        __layoutShifts: { value: number; sources: string[] }[];
+      };
+      observedWindow.__layoutShifts = [];
+      new PerformanceObserver((list) => {
+        for (const rawEntry of list.getEntries()) {
+          const entry = rawEntry as PerformanceEntry & {
+            value: number;
+            hadRecentInput: boolean;
+            sources: {
+              node: Node | null;
+              previousRect: DOMRectReadOnly;
+              currentRect: DOMRectReadOnly;
+            }[];
+          };
+          if (entry.hadRecentInput) continue;
+          observedWindow.__layoutShifts.push({
+            value: entry.value,
+            sources: entry.sources.map(
+              ({ node, previousRect, currentRect }) => {
+                const element = node instanceof Element ? node : null;
+                const name = element?.className
+                  ? `${node?.nodeName}.${String(element.className).replace(/\s+/g, ".")}`
+                  : (node?.nodeName ?? "unknown");
+                return `${name} ${previousRect.width}x${previousRect.height}->${currentRect.width}x${currentRect.height}`;
+              },
+            ),
+          });
+        }
+      }).observe({ type: "layout-shift", buffered: true });
+    });
+
+    // Measure real wire transfer, not `response.body()` byte sums: a cached
+    // second fetch still yields the full body but costs no network. Resource
+    // Timing exposes the actual transfer size, so a genuine double download
+    // (observed on WebKit when the font preload carried `crossorigin`) fails.
+    await page.goto("/vi/");
+    await page.evaluate(async () => {
+      await document.fonts.ready;
+      await new Promise((resolve) =>
+        requestAnimationFrame(() => requestAnimationFrame(resolve)),
+      );
+    });
+
+    const fontTransfers = await page.evaluate(() =>
+      performance
+        .getEntriesByType("resource")
+        .filter((entry) =>
+          /\/fonts\/inter-(latin|vietnamese)-opsz-v5\.3\.0\.woff2$/.test(
+            entry.name,
+          ),
+        )
+        .map((entry) => ({
+          path: new URL(entry.name).pathname,
+          transferSize: (entry as PerformanceResourceTiming).transferSize,
+        })),
+    );
+    const transferredBytes = fontTransfers.reduce(
+      (total, entry) => total + entry.transferSize,
+      0,
+    );
+    const layoutShifts = await page.evaluate(
+      () =>
+        (
+          window as Window & {
+            __layoutShifts: { value: number; sources: string[] }[];
+          }
+        ).__layoutShifts,
+    );
+    for (const subset of ["latin", "vietnamese"]) {
+      const downloads = fontTransfers.filter(
+        (entry) =>
+          entry.path.includes(`inter-${subset}-opsz-v5.3.0.woff2`) &&
+          entry.transferSize > 1_024,
+      );
+      expect(
+        downloads.length,
+        `${subset} subset must be downloaded exactly once; a repeated full transfer means the font preload was not reused:\n${JSON.stringify(fontTransfers, null, 2)}`,
+      ).toBe(1);
+    }
+    expect(
+      await page.evaluate(() => document.fonts.check('16px "Inter Variable"')),
+    ).toBe(true);
+    expect(
+      transferredBytes,
+      JSON.stringify(fontTransfers, null, 2),
+    ).toBeLessThanOrEqual(100_000);
+    expect(
+      layoutShifts.reduce((total, entry) => total + entry.value, 0),
+      JSON.stringify(layoutShifts),
+    ).toBe(0);
+  });
+});

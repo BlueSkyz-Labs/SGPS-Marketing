@@ -1,18 +1,24 @@
 ---
+import BlueSkyzIcon from "@/components/icon/BlueSkyzIcon.astro";
+
 interface Props {
   href: string;
   variant?: "primary" | "secondary" | "on-ink";
   class?: string;
+  icon?: "arrow-right" | "external" | "none";
 }
-const { href, variant = "primary", class: className = "" } = Astro.props;
+const { href, variant = "primary", class: className = "", icon } = Astro.props;
 const isExternal = /^https?:\/\//i.test(href);
+const trailingIcon =
+  icon ??
+  (isExternal ? "external" : variant === "primary" ? "arrow-right" : "none");
 ---
 
 <a
   href={href}
   rel={isExternal ? "noopener noreferrer" : undefined}
   class:list={[
-    "inline-flex min-h-11 items-center justify-center rounded-lg px-5 py-2.5 text-sm font-semibold no-underline transition-[background-color,border-color,transform] duration-150 focus-visible:ring-2 focus-visible:ring-[var(--brand-cobalt)] focus-visible:ring-offset-2 focus-visible:outline-none active:scale-[0.98]",
+    "inline-flex min-h-11 max-w-full items-center justify-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold no-underline [overflow-wrap:anywhere] transition-[background-color,border-color,transform] duration-150 focus-visible:ring-2 focus-visible:ring-[var(--brand-cobalt)] focus-visible:ring-offset-2 focus-visible:outline-none active:scale-[0.98] motion-reduce:transition-none motion-reduce:active:scale-100",
     variant === "primary" &&
       "bg-[var(--brand-cobalt)] text-[#ffffff] hover:bg-[#1d4ed8] hover:shadow-[0_12px_30px_-10px_color-mix(in_srgb,var(--brand-cobalt)_60%,transparent)] motion-reduce:hover:shadow-none",
     variant === "secondary" &&
@@ -23,4 +29,7 @@ const isExternal = /^https?:\/\//i.test(href);
   ]}
 >
   <slot />
+  {trailingIcon !== "none" ? (
+    <BlueSkyzIcon name={trailingIcon} class="btn__icon h-4 w-4 shrink-0" />
+  ) : null}
 </a>

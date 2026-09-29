@@ -50,7 +50,12 @@ function record(overrides = {}) {
     name = "Example",
     repositoryUrl = "https://github.com/BlueSkyz-Labs/Sotro",
     revision = FOREIGN_REVISION,
-    media = ["media:", "  src: /products/sotro/brand.png"],
+    media = [
+      "media:",
+      "  kind: identity-art",
+      "  src: /products/sotro/identity.png",
+      "  alt: Sotro by BlueSkyz Labs - brand identity artwork",
+    ],
     extra = [],
   } = overrides;
   const lines = [`slug: ${slug}`, `name: ${name}`, "proof:"];
@@ -169,6 +174,116 @@ test("identity art claimed as a bare screenshot fails closed", () => {
       const result = run(dir);
       assert.equal(result.status, 1);
       assert.match(result.stderr, /bare screenshot claim/);
+    },
+  );
+});
+
+test("positive control: a screenshot-kind record with matching evidence passes", () => {
+  withFixture(
+    record({
+      media: [
+        "media:",
+        "  kind: ui-screenshot",
+        "  src: /products/sotro/screenshot.png",
+        "  alt: Screenshot of the running Sotro application",
+      ],
+    }),
+    (dir) => {
+      const result = run(dir);
+      assert.equal(result.status, 0, result.stderr);
+      assert.match(result.stdout, /Product provenance: PASS \(1 entries\)/);
+    },
+  );
+});
+
+test("negative proof: ui-screenshot kind with identity-art caption fails closed", () => {
+  withFixture(
+    record({
+      media: [
+        "media:",
+        "  kind: ui-screenshot",
+        "  src: /products/sotro/screenshot.png",
+        "  alt: Sotro by BlueSkyz Labs - brand identity artwork",
+      ],
+    }),
+    (dir) => {
+      const result = run(dir);
+      assert.equal(result.status, 1);
+      assert.match(
+        result.stderr,
+        /ui-screenshot contradicts artwork\/identity wording/,
+      );
+    },
+  );
+});
+
+test("negative proof: ui-screenshot kind on an identity asset fails closed", () => {
+  withFixture(
+    record({
+      media: [
+        "media:",
+        "  kind: ui-screenshot",
+        "  src: /products/sotro/identity.png",
+        "  alt: Screenshot of the running Sotro application",
+      ],
+    }),
+    (dir) => {
+      const result = run(dir);
+      assert.equal(result.status, 1);
+      assert.match(result.stderr, /contradicts the identity artwork asset/);
+    },
+  );
+});
+
+test("negative proof: identity-art kind claiming a screenshot fails closed", () => {
+  withFixture(
+    record({
+      media: [
+        "media:",
+        "  kind: identity-art",
+        "  src: /products/sotro/screenshot.png",
+        "  alt: Screenshot of the running Sotro application",
+      ],
+    }),
+    (dir) => {
+      const result = run(dir);
+      assert.equal(result.status, 1);
+      assert.match(
+        result.stderr,
+        /identity-art must not claim to be a screenshot/,
+      );
+      assert.match(
+        result.stderr,
+        /identity-art must not cite a screenshot asset/,
+      );
+    },
+  );
+});
+
+test("a missing media kind fails closed", () => {
+  withFixture(
+    record({ media: ["media:", "  src: /products/sotro/identity.png"] }),
+    (dir) => {
+      const result = run(dir);
+      assert.equal(result.status, 1);
+      assert.match(result.stderr, /must declare kind/);
+    },
+  );
+});
+
+test("an unknown media kind fails closed", () => {
+  withFixture(
+    record({
+      media: [
+        "media:",
+        "  kind: promo-render",
+        "  src: /products/sotro/identity.png",
+      ],
+    }),
+    (dir) => {
+      const result = run(dir);
+      assert.equal(result.status, 1);
+      assert.match(result.stderr, /must be identity-art or ui-screenshot/);
     },
   );
 });

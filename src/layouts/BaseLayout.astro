@@ -69,6 +69,14 @@ const robotsNoindex = noindex || isNonProductionSiteUrl(SITE.url);
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width" />
     <script is:inline src="/theme-init.js"></script>
+    <!-- Fonts are not preloaded from the HTML: measured 2026-09-29, a
+         spec-correct font preload (`crossorigin`) makes WebKit download every
+         subset twice (177 KB vs 88 KB on /vi/) and omitting `crossorigin` makes
+         Firefox download twice. public/theme-init.js injects the preload only
+         for engines that reuse it, so Chromium/Firefox reach first paint with
+         Inter (CLS 0) and WebKit makes one @font-face transfer behind the
+         metric-calibrated "Inter Fallback" face. -->
+
     <link rel="icon" href="/icons/favicon.svg" type="image/svg+xml" />
     <link rel="icon" href="/icons/favicon.ico" sizes="any" />
     <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
@@ -129,6 +137,11 @@ const robotsNoindex = noindex || isNonProductionSiteUrl(SITE.url);
       import { initFidelityEngine } from "@/scripts/fidelity-engine";
 
       initFidelityEngine();
+    </script>
+    <script>
+      import { initFragmentAnchor } from "@/scripts/fragment-anchor";
+
+      initFragmentAnchor();
     </script>
     <main id="main-content" class="flex-1" tabindex="-1">
       <slot />

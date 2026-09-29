@@ -8,6 +8,8 @@ type ProductMedia = NonNullable<
 /**
  * C3-A Task 2 — shared static product visual.
  * Renders record-backed image metadata and forwards the caller's continuity identity.
+ * Plan v5 W3.1 — the typed media kind travels with the visual so the surface
+ * (ink ground for artwork) follows the record, not the filename.
  */
 interface Props {
   media: ProductMedia;
@@ -22,6 +24,7 @@ const { media, loading = "lazy", transitionStyle, continuity } = Astro.props;
 <div
   class="c3-product-visual"
   data-product-visual
+  data-media-kind={media.kind}
   data-product-continuity={continuity}
   style={transitionStyle}
 >
