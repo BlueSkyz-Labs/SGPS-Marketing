@@ -38,6 +38,11 @@ export function productJsonLd(
     description: string;
     slug: string;
     mediaUrl?: string;
+    /**
+     * Plan v5 W3.1 — caption derived from the proof media kind by
+     * `proofCaptionForKind`, never from the asset filename.
+     */
+    mediaCaption?: string;
     platforms: readonly string[];
   },
   siteUrl: string,
@@ -73,7 +78,13 @@ export function productJsonLd(
       url: siteUrl,
     },
     ...(product.mediaUrl
-      ? { image: absoluteUrl(siteUrl, product.mediaUrl) }
+      ? {
+          image: {
+            "@type": "ImageObject",
+            url: absoluteUrl(siteUrl, product.mediaUrl),
+            ...(product.mediaCaption ? { caption: product.mediaCaption } : {}),
+          },
+        }
       : {}),
   };
 }
