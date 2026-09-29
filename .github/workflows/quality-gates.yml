@@ -136,5 +136,7 @@ jobs:
 
       - name: Playwright and axe assurance
         run: pnpm test:e2e
-      - name: Lighthouse CI
+      - name: Lighthouse CI (desktop)
         run: pnpm lighthouse
+      - name: Lighthouse CI (mobile routes)
+        run: pnpm exec lhci autorun --config=./lighthouserc.mobile.json
