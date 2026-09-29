@@ -164,11 +164,11 @@ test("empty registry soft-lands via email-aware Act helper", () => {
 test("UI muted token must not equal brand slate_500", () => {
   const css = readFileSync("src/styles/global.css", "utf8");
   const tokens = readFileSync(
-    "public/brand/blueskyz/r4d/brand_tokens.json",
+    "brand/blueskyz-production-v4/07_DESIGN_TOKENS/tokens.json",
     "utf8",
   );
   const muted = css.match(/--text-muted:\s*(#[0-9a-fA-F]{6})/)?.[1];
-  const slate500 = JSON.parse(tokens).colors?.slate_500;
+  const slate500 = JSON.parse(tokens).color?.brand?.slate500;
   assert.ok(muted);
   assert.ok(slate500);
   assert.notEqual(muted.toLowerCase(), String(slate500).toLowerCase());
