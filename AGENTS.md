@@ -64,6 +64,7 @@ Before any material work, refresh live `main`, open PRs/issues, `docs/current-wo
 - Empty public registry + empty email → Act soft-land via `src/lib/act.ts` (About / Security), not a Contact dead-end.
 - Normal changes use **branch → PR → exact-head Source Assurance → merge**. Direct-to-`main` is not a fallback.
 - Active ruleset `main-promotion-governance` (`22500299`) protects `main`: PR required, strict `Quality Gates` + `Browser Assurance`, conversation resolution, non-fast-forward/deletion blocking, no bypass actors.
+- Auto-merge is allowed. A PR that changes a path listed in `scripts/check-merge-policy.mjs` (`PROTECTED_PATHS`: CI, hooks, scripts, brand kit, ADRs, agent/security policy, deploy and gate configs; plus `package.json` changes to scripts/engines/overrides, new dependencies or major bumps. Lockfile-only and patch/minor bumps flow automatically) fails `Quality Gates` until the Owner adds the `owner-approved` label. Agents never add, remove or ask to bypass that label, and never enable auto-merge on such a PR.
 - Green evidence belongs only to the exact tested SHA. UNKNOWN / skipped / stale checks are not PASS.
 - GitHub Actions is **source assurance only**: read-only token, no persisted checkout credentials, no Cloudflare secrets, no deployment commands.
 - Cloudflare Workers Builds remains preview/production build and deployment authority.

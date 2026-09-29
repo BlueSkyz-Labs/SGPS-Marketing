@@ -5,7 +5,7 @@ import { getProductProfilePath } from "@/lib/product-routes";
 import ProductStatus from "@/components/product/ProductStatus.astro";
 import ProductVisual from "@/components/product/ProductVisual.astro";
 import ProductProofLink from "@/components/integrity/ProductProofLink.astro";
-import { productCopy } from "@/lib/product-copy";
+import { productCopy, proofCaptionForKind } from "@/lib/product-copy";
 import {
   getPublicClaims,
   type PublicProductRef,
@@ -154,7 +154,7 @@ const viewProfileLabel = labelFor(SHARED_LABELS.viewProfile, lang);
             transitionStyle={productTransitionStyle("media", data.slug)}
             continuity="media"
           />
-          <figcaption>{labelFor(SHARED_LABELS.proofCaption, lang)}</figcaption>
+          <figcaption>{proofCaptionForKind(media.kind, lang)}</figcaption>
         </figure>
       </div>
     ) : null}

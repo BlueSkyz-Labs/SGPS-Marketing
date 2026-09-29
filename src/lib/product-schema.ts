@@ -53,6 +53,14 @@ const audience = z.enum([
   "organization",
 ]);
 
+/**
+ * Plan v5 W3.1 — typed proof media. A record must say what its media IS:
+ * authored brand identity artwork, or a screenshot of the running application.
+ * Captions and presentational treatment derive from this field, never from the
+ * asset filename.
+ */
+const proofMediaKind = z.enum(["identity-art", "ui-screenshot"]);
+
 const actionType = z.enum([
   "open",
   "try",
@@ -67,6 +75,7 @@ const actionType = z.enum([
 export type Lifecycle = z.infer<typeof lifecycle>;
 export type Availability = z.infer<typeof availability>;
 export type PublicLabel = z.infer<typeof publicLabel>;
+export type ProofMediaKind = z.infer<typeof proofMediaKind>;
 
 /** Public product claim URLs: https only, never local/preview/docs hosts. */
 export function isPublicClaimHttpsUrl(value: string): boolean {
@@ -119,6 +128,7 @@ const action = z.object({
 
 /** Local product evidence only — CSP img-src is 'self' data:; remote URLs cannot render. */
 const productMedia = z.object({
+  kind: proofMediaKind,
   src: z
     .string()
     .regex(
@@ -185,6 +195,8 @@ export const productSchema = z
          * identity art — never claimed as a screenshot of running software. Flipping it to
          * mandatory means replacing `.optional()` AND pointing every published product at a real
          * /products/... asset in the same change; without those assets the proof frame disappears.
+         * When media IS declared, `kind` is required (plan v5 W3.1) and the record's own wording
+         * must agree with it.
          */
         media: productMedia.optional(),
         publicUrl: httpsUrl.optional(),
