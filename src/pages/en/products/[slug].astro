@@ -7,6 +7,7 @@ import ProductLadder from "@/components/product/ProductLadder.astro";
 import ProductVisual from "@/components/product/ProductVisual.astro";
 import ButtonLink from "@/components/ui/ButtonLink.astro";
 import { productCopy } from "@/lib/product-copy";
+import { resolveLifecycleCta } from "@/lib/lifecycle-cta";
 import AppAccess from "@/components/product/AppAccess.astro";
 import { getPublicProducts } from "@/lib/products";
 import { safeJsonLd, productJsonLd } from "@/lib/seo";
@@ -29,6 +30,21 @@ const { data } = product;
 const media = data.proof.media;
 const copy = productCopy(data, "en");
 const capabilities = copy.capabilities;
+
+// Plan v5 W3.2 — this page already *is* the recorded status surface, so the
+// mapper only adds an action when it yields an eligible first-party Try
+// destination and the record carries no direct app sign-in. A development
+// product therefore never renders Try here.
+const cta = resolveLifecycleCta(
+  {
+    slug: data.slug,
+    lifecycle: data.lifecycle,
+    availability: data.availability,
+    primaryActionHref: data.primaryAction.href,
+  },
+  "en",
+);
+const showTryCta = cta.verb === "try" && !data.appAccess?.signInUrl;
 
 const PLATFORM_LABELS: Record<string, string> = {
   web: "Web",
@@ -157,8 +173,18 @@ const productStructuredData = productJsonLd(
           </div>
         </div>
 
-        <!-- Primary action opens the product's own sign-in; secondary stays an owner-authored link -->
+        <!-- Lifecycle CTA (only when the mapper yields an eligible first-party Try); sign-in stays the direct app entry -->
         <div class="flex flex-wrap items-center gap-3 pt-2">
+          {showTryCta ? (
+            <span data-product-cta={cta.verb}>
+              <ButtonLink
+                href={cta.href}
+                class="shadow-[var(--bsl-shadow-subtle)]"
+              >
+                {cta.label}
+              </ButtonLink>
+            </span>
+          ) : null}
           {data.appAccess?.signInUrl ? (
             <ButtonLink
               href={data.appAccess.signInUrl}

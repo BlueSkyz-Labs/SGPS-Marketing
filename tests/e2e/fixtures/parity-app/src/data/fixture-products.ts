@@ -14,6 +14,8 @@ interface FixtureProduct {
     slug: string;
     name: string;
     publicLabel: string;
+    lifecycle: string;
+    availability: string;
     shortDescription: string;
     jobs?: string[];
     platforms: string[];
@@ -54,6 +56,8 @@ export const FIXTURE_FLAGSHIP: FixtureProduct = {
     public: true,
     name: "Fixture Flagship",
     publicLabel: "In development",
+    lifecycle: "development",
+    availability: "preview",
     shortDescription: "Fixture description for the flagship act.",
     jobs: ["Fixture job one", "Fixture job two"],
     platforms: ["web"],
@@ -101,10 +105,18 @@ export const FIXTURE_SECONDARY: FixtureProduct = {
     public: true,
     name: "Fixture Secondary",
     publicLabel: "Preview",
+    lifecycle: "development",
+    availability: "preview",
     shortDescription: "Fixture description for a secondary product.",
     platforms: ["web"],
     capabilities: ["Fixture capability one", "Fixture capability two"],
-    primaryAction: { href: "/en/contact/", label: "Contact" },
+    // Mutated fixture (W3.2 negative proof): an allow-listed first-party
+    // product origin that *would* satisfy the Try destination rule. The
+    // recorded `development` lifecycle must still block Try in every locale.
+    primaryAction: {
+      href: "https://fixture-secondary.blueskyzlabs.com/",
+      label: "Contact",
+    },
     proof: {
       media: {
         src: "/products/fixtures/fixture-secondary.png",
@@ -125,6 +137,8 @@ export const FIXTURE_ECOSYSTEM: FixtureProduct = {
     public: true,
     name: "Fixture Ecosystem",
     publicLabel: "Preview",
+    lifecycle: "concept",
+    availability: "waitlist",
     shortDescription: "Fixture description for an ecosystem product.",
     platforms: ["web"],
     capabilities: ["Fixture capability one", "Fixture capability two"],

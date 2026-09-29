@@ -6,6 +6,7 @@ import ProductStatus from "@/components/product/ProductStatus.astro";
 import ProductVisual from "@/components/product/ProductVisual.astro";
 import ProductProofLink from "@/components/integrity/ProductProofLink.astro";
 import { productCopy } from "@/lib/product-copy";
+import { resolveLifecycleCta } from "@/lib/lifecycle-cta";
 import {
   getPublicClaims,
   type PublicProductRef,
@@ -55,6 +56,18 @@ const copy = productCopy(data, lang);
 const capabilities = copy.capabilities;
 const profileHref = getProductProfilePath(lang, data.slug);
 const viewProfileLabel = labelFor(SHARED_LABELS.viewProfile, lang);
+// Plan v5 W3.2 — one labelled source for the act's action verb + destination.
+const cta = resolveLifecycleCta(
+  {
+    slug: data.slug,
+    lifecycle: data.lifecycle,
+    availability: data.availability,
+    primaryActionHref: data.primaryAction.href,
+  },
+  lang,
+);
+const showProfileCta = cta.href !== profileHref;
+const ctaIsExternal = cta.external || /^https?:\/\//i.test(cta.href);
 
 /**
  * Loading decision (recorded, not guessed): the theatre sits immediately after
@@ -130,17 +143,21 @@ const viewProfileLabel = labelFor(SHARED_LABELS.viewProfile, lang);
       ) : null}
       <div class="mt-8 flex flex-wrap items-center gap-3">
         <a
-          href={data.primaryAction.href}
+          href={cta.href}
+          rel={ctaIsExternal ? "noopener noreferrer" : undefined}
+          data-product-cta={cta.verb}
           class="inline-flex min-h-11 max-w-full items-center justify-center rounded-[var(--radius-sm)] bg-[var(--action-primary)] px-4 py-2.5 font-medium text-white no-underline hover:bg-[var(--action-primary-hover)] sm:px-5"
         >
-          {copy.primaryActionLabel}
+          {cta.label}
         </a>
-        <a
-          href={profileHref}
-          class="inline-flex min-h-11 max-w-full items-center justify-center rounded-[var(--radius-sm)] border border-[var(--border-subtle)] px-4 py-2.5 font-medium text-[var(--text-primary)] no-underline hover:bg-[var(--bg-subtle)] sm:px-5"
-        >
-          {viewProfileLabel}
-        </a>
+        {showProfileCta ? (
+          <a
+            href={profileHref}
+            class="inline-flex min-h-11 max-w-full items-center justify-center rounded-[var(--radius-sm)] border border-[var(--border-subtle)] px-4 py-2.5 font-medium text-[var(--text-primary)] no-underline hover:bg-[var(--bg-subtle)] sm:px-5"
+          >
+            {viewProfileLabel}
+          </a>
+        ) : null}
       </div>
     </div>
     {media ? (

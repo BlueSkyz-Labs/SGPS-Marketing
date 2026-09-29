@@ -43,6 +43,26 @@ export function isCanonicalAppSignInUrl(
   );
 }
 
+/**
+ * Product app origin authority (plan v5 W3.2): a `Try` destination must be the
+ * product's own first-party HTTPS origin, not any HTTPS page and not a
+ * look-alike host. Shares `parsePublicDestination` so the sign-in and
+ * app-origin boundaries cannot drift; it proves URL shape/host only, never
+ * that the app is deployed or accepts visitors.
+ */
+export function isProductAppOriginUrl(
+  productSlug: string,
+  value: string,
+): boolean {
+  if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(productSlug)) return false;
+  const url = parsePublicDestination(value);
+  return (
+    url !== null &&
+    url.hostname === `${productSlug}.blueskyzlabs.com` &&
+    url.search === ""
+  );
+}
+
 /** A store-labelled link must resolve to that platform's official store. */
 export function isOfficialMobileStoreUrl(
   platform: MobileAppPlatform,

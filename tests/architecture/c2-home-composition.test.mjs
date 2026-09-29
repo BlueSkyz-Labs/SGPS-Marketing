@@ -96,7 +96,8 @@ test("the flagship act consumes the product record instead of authoring facts", 
   assert.match(theatre, /copy\.shortDescription/);
   assert.match(theatre, /copy\.jobs/);
   assert.match(theatre, /copy\.capabilities/);
-  assert.match(theatre, /copy\.primaryActionLabel/);
+  assert.match(theatre, /resolveLifecycleCta/);
+  assert.match(theatre, /data-product-cta=\{cta\.verb\}/);
   assert.match(theatre, /data\.publicLabel/);
   assert.match(theatre, /data\.primaryAction/);
   assert.match(house, /data\.featuredTier/);
