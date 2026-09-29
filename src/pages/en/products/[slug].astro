@@ -273,7 +273,7 @@ const productStructuredData = productJsonLd(
           {copy.jobs.map((job: string, i: number) => (
             <div class="group relative rounded-[var(--radius-card)] border border-[var(--border-subtle)] bg-[var(--surface-raised)] p-5 transition-[transform,box-shadow,border-color] duration-200 hover:-translate-y-0.5 hover:border-[color-mix(in_srgb,var(--brand-cobalt)_40%,var(--border-subtle))] hover:shadow-[0_12px_28px_-8px_color-mix(in_srgb,var(--brand-cobalt)_18%,transparent)] motion-reduce:transition-none motion-reduce:hover:translate-y-0">
               <span
-                class="text-xs font-mono font-bold tracking-widest text-[var(--brand-cobalt)]"
+                class="text-xs font-mono font-bold tracking-widest text-[var(--badge-ink)]"
                 aria-hidden="true"
               >
                 {String(i + 1).padStart(2, "0")}
@@ -307,7 +307,7 @@ const productStructuredData = productJsonLd(
             {capabilities.map((capability: string, i: number) => (
               <div class="relative flex items-start gap-4 rounded-[var(--radius-card)] border border-[var(--border-subtle)] bg-[var(--surface-raised)] p-5 transition-[transform,box-shadow,border-color] duration-200 hover:-translate-y-0.5 hover:border-[color-mix(in_srgb,var(--brand-cobalt)_40%,var(--border-subtle))] hover:shadow-[0_12px_28px_-8px_color-mix(in_srgb,var(--brand-cobalt)_18%,transparent)] motion-reduce:transition-none motion-reduce:hover:translate-y-0">
                 <div
-                  class="flex size-8 flex-shrink-0 items-center justify-center rounded-lg bg-[color-mix(in_srgb,var(--brand-cobalt)_12%,var(--surface-subtle))] text-xs font-mono font-bold text-[var(--brand-cobalt)] ring-1 ring-inset ring-[var(--brand-cobalt)]/20"
+                  class="flex size-8 flex-shrink-0 items-center justify-center rounded-lg bg-[color-mix(in_srgb,var(--brand-cobalt)_12%,var(--surface-subtle))] text-xs font-mono font-bold text-[var(--badge-ink)] ring-1 ring-inset ring-[var(--brand-cobalt)]/20"
                   aria-hidden="true"
                 >
                   {String(i + 1).padStart(2, "0")}

@@ -121,6 +121,9 @@
   --motion-distance-sm: 0.25rem;
   --motion-distance-md: 0.5rem;
   --motion-distance-lg: 1.25rem;
+  /* F-24: numeral text sitting on the cobalt tints must clear 4.5:1 in both
+     themes; `--brand-cobalt` (#2564ff) only reached 3.78:1 on the light tint. */
+  --badge-ink: #1d4ed8;
   /* F-27/F-32: the solid action fill and its hover state carry white text, so
      they must stay dark enough in both themes. The dark `--action-primary`
      (#3b82f6) only reached 3.67:1 as a fill, and the hover token was never
@@ -146,6 +149,7 @@
   --focus-ring: #3b82f6;
   --brand-text-disabled: #64748b;
   --bsl-border: #334155;
+  --badge-ink: #93c5fd;
   --action-fill: #2564ff;
   --action-primary-hover: #1d4ed8;
 }
@@ -172,6 +176,7 @@
     --focus-ring: #3b82f6;
     --brand-text-disabled: #64748b;
     --bsl-border: #334155;
+    --badge-ink: #93c5fd;
     --action-fill: #2564ff;
     --action-primary-hover: #1d4ed8;
   }
