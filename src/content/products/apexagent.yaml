@@ -22,7 +22,8 @@ primaryAction:
   href: https://blueskyzlabs.com/en/products/apexagent/
 proof:
   media:
-    src: /products/apexagent/screenshot.png
+    kind: identity-art
+    src: /products/apexagent/identity.png
     alt: ApexAgent by BlueSkyz Labs — brand identity
     width: 1800
     height: 504

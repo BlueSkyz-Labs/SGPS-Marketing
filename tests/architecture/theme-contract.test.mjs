@@ -123,3 +123,72 @@ test("saved theme bootstrap is blocking and read-only", () => {
   assert.match(theme, /applyTheme\(mode, false\)/);
   assert.match(theme, /if \(persist\) \{/);
 });
+
+/**
+ * F-21 source guard (2026-09-29). The header sits on the ink hero, where the
+ * ambient `--text-*` tokens are re-pointed at porcelain for on-ink copy, while
+ * the switcher's own surface is white/light in the light theme. Reading the page
+ * context therefore produced porcelain-on-white (1.06:1, axe serious) even after
+ * the dark-mode fix. The switcher must own its palette through local properties
+ * and must never bind those labels to the ambient tokens.
+ */
+const SWITCHER = join(
+  root,
+  "src",
+  "components",
+  "layout",
+  "LanguageSwitcher.astro",
+);
+
+function declarationColor(source, selector) {
+  const index = source.indexOf(selector);
+  if (index < 0) return null;
+  const block = source.slice(index, source.indexOf("}", index));
+  return block.match(/color:\s*([^;]+);/)?.[1]?.trim() ?? null;
+}
+
+export function ambientTokenLabelOffenders(source) {
+  const offenders = [];
+  for (const selector of [
+    ".lang-toggle-shell--light .lang-toggle-item--active",
+    ".lang-toggle-shell--light .lang-toggle-item--idle",
+  ]) {
+    const color = declarationColor(source, selector);
+    const owned = /var\(--lang-(?:pill|idle)-fg\)/.test(color ?? "");
+    const ambient = /var\(--text-(?:primary|muted)\)/.test(color ?? "");
+    if (!owned || ambient) {
+      offenders.push(`${selector}: ${color ?? "missing color"}`);
+    }
+  }
+  return offenders;
+}
+
+test("language switcher owns its palette instead of reading the page context", () => {
+  const switcher = readFileSync(SWITCHER, "utf8");
+  assert.deepEqual(ambientTokenLabelOffenders(switcher), []);
+  assert.match(switcher, /--lang-pill-fg:/, "the palette must be declared");
+  assert.match(
+    switcher,
+    /:global\(\[data-theme="dark"\]\) \.lang-toggle-shell--light/,
+    "explicit dark theme must keep a dark switcher cavity",
+  );
+  assert.match(
+    switcher,
+    /prefers-color-scheme: dark\)[\s\S]*?:global\(:root:not\(\[data-theme="light"\]\)\) \.lang-toggle-shell--light/,
+    "OS dark (without a pinned theme) must keep a dark switcher cavity",
+  );
+  // Accessible name must contain the visible code (WCAG 2.5.3 label in name).
+  assert.match(switcher, /aria-label=\{`\$\{CODE\[lang\]\}/);
+});
+
+test("RED: the ambient-token regression is detected", () => {
+  const switcher = readFileSync(SWITCHER, "utf8");
+  const mutated = switcher.replace(
+    "color: var(--lang-pill-fg);",
+    "color: var(--text-primary);",
+  );
+  assert.notEqual(mutated, switcher, "mutation must apply");
+  assert.deepEqual(ambientTokenLabelOffenders(mutated), [
+    ".lang-toggle-shell--light .lang-toggle-item--active: var(--text-primary)",
+  ]);
+});
