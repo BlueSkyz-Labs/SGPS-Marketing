@@ -90,3 +90,49 @@ test("intent telemetry accepts a declared experience intent", () => {
     { name: "intent_selected", properties: { intent: "verify-trust" } },
   );
 });
+
+test("categorical dimension values cannot carry free text or raw URL data", () => {
+  const invalidCases = [
+    ["trust_route_opened", { surface: "privacy?email=x" }],
+    ["journey_action_opened", { kind: "route", destination: "products?x" }],
+    ["journey_action_opened", { destination: "https://other.test/" }],
+    ["command_result_opened", { kind: "private search query" }],
+    ["atlas_node_opened", { kind: "product<script>" }],
+    ["trust_route_opened", { surface: "x".repeat(65) }],
+    ["atlas_node_opened", { kind: 123 }],
+  ];
+  for (const [name, properties] of invalidCases) {
+    assert.equal(sanitizeAnalyticsEvent(name, properties), null);
+  }
+});
+
+test("first-party categories survive and extra property names are discarded", () => {
+  const event = sanitizeAnalyticsEvent("journey_action_opened", {
+    kind: "route",
+    destination: "products",
+    email: "private@example.com",
+  });
+  assert.equal(event?.properties.kind, "route");
+  assert.equal(event?.properties.destination, "products");
+  assert.equal(Object.hasOwn(event?.properties ?? {}, "email"), false);
+  assert.equal(
+    sanitizeAnalyticsEvent("trust_route_opened", { surface: "privacy" })
+      ?.properties.surface,
+    "privacy",
+  );
+  assert.equal(
+    sanitizeAnalyticsEvent("command_result_opened", { kind: "route" })
+      ?.properties.kind,
+    "route",
+  );
+  assert.equal(
+    sanitizeAnalyticsEvent("atlas_node_opened", { kind: "product" })?.properties
+      .kind,
+    "product",
+  );
+});
+
+test("journey telemetry never derives the destination from raw href", () => {
+  assert.match(bridge, /closest\("\[data-step-key\]"\)/);
+  assert.doesNotMatch(bridge, /journeyLink\.getAttribute\("href"\)/);
+});

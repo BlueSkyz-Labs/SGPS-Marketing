@@ -1,13 +1,8 @@
 import { expect, test } from "@playwright/test";
 import { getPublicProductCount } from "./product-helpers.ts";
 
-const PRODUCT_SLUGS = [
-  "apexagent",
-  "fluentarc",
-  "sotam",
-  "sotro",
-  "vungtaylai",
-];
+// Owner 2026-09-28: only Sổ Trọ and Sổ Tâm are published.
+const PRODUCT_SLUGS = ["sotam", "sotro"];
 
 test.describe("published products render without client scripting", () => {
   test.use({ javaScriptEnabled: false });
@@ -55,5 +50,29 @@ test.describe("published registry listing", () => {
     }
     const body = await page.locator("body").innerText();
     expect(body).not.toMatch(/has no products|không có sản phẩm/i);
+  });
+
+  test("localized cards avoid English copy and duplicate profile actions", async ({
+    page,
+  }) => {
+    for (const lang of ["en", "vi", "zh"] as const) {
+      await page.goto(`/${lang}/products/`);
+      for (const card of await page.locator("[data-product-card]").all()) {
+        const cardText = (await card.innerText()).toLowerCase();
+        if (lang !== "en") {
+          expect(cardText).not.toContain("view profile");
+          expect(cardText).not.toContain("preview");
+        }
+        const actionLinks = await card
+          .locator(":scope > div:last-child a")
+          .evaluateAll((links) =>
+            links.map((link) => link.getAttribute("href")),
+          );
+        expect(new Set(actionLinks).size).toBe(actionLinks.length);
+        for (const href of actionLinks) {
+          expect(href).toContain(`/${lang}/products/`);
+        }
+      }
+    }
   });
 });

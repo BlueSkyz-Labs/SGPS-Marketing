@@ -26,6 +26,8 @@ Depends on W2.1. Product facts come only from `src/content/products/*.yaml` (own
 
 ## W3.4 Localized product content (F-05, G06)
 
+> **Superseded by W7:** the localization skeleton landed as a parallel `i18n` block with the `productCopy` resolver (see `W7-premium-recut.md`). The bullets below remain the acceptance intent; the locale-map shape is not used.
+
 - Schema: `jobs`, `capabilities`, `shortDescription`, `publicLabel`, `audience` labels, `primaryAction.label` become locale maps `{ en, vi, zh }` keyed per claim; build **fails** when a locale is missing (no English fallback).
 - Authoring: translate existing English claims faithfully; do not add or strengthen meaning. Mark the PR `FEEDBACK_CHECKPOINT: native VI/ZH review` and list every string for the Owner cross-check. zh promotion remains gated by DEC-019 residuals.
 - Localize status/chip vocabulary in `src/lib/product-schema.ts` / `public-state-semantics.ts`.

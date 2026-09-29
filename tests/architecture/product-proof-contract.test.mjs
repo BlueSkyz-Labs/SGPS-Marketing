@@ -12,6 +12,10 @@ const productVisual = readFileSync(
   "src/components/product/ProductVisual.astro",
   "utf8",
 );
+const theatre = readFileSync(
+  "src/components/product/FlagshipTheatre.astro",
+  "utf8",
+);
 const profile = readFileSync("src/pages/products/[slug].astro", "utf8");
 
 test("product proof media is a local sized artifact contract", () => {
@@ -64,6 +68,13 @@ test("ProductVisual owns intrinsic media rendering without owning product truth"
     productVisual,
     /data\.(?:name|shortDescription|capabilities|jobs|publicLabel)/,
   );
+});
+
+test("identity artwork stays on the ink stage without invented app chrome", () => {
+  assert.match(schema, /identity art — never claimed as a screenshot/);
+  assert.match(theatre, /data-flagship-ink-stage/);
+  assert.doesNotMatch(theatre, /variant="framed"/);
+  assert.doesNotMatch(theatre, /device-frame|window-controls/);
 });
 
 test("FlagshipProof renders capabilities through the shared ProductVisual", () => {

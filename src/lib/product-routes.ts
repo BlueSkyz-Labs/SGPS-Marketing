@@ -9,3 +9,8 @@ export function getProductIndexPath(lang: Language): string {
 export function getProductProfilePath(lang: Language, slug: string): string {
   return `/${lang}/products/${slug}/`;
 }
+
+/** Product icon asset path (static, not locale-prefixed — served from public/). */
+export function getProductIconPath(slug: string): string {
+  return `/products/${slug}/icon.png`;
+}

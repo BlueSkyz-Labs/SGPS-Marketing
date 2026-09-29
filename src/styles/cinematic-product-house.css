@@ -162,10 +162,20 @@
   }
 }
 
+/* The <picture> is a shrink-to-fit grid item; give it a definite box so the
+   mark's slot is reserved before the responsive source loads (CLS). */
+.hero-visual > picture {
+  display: block;
+  width: min(100%, 30rem);
+  aspect-ratio: 1;
+}
+
 .hero-mark {
   position: relative;
-  width: min(100%, 30rem);
+  display: block;
+  width: 100%;
   height: auto;
+  aspect-ratio: 1;
   filter: drop-shadow(
     0 28px 64px color-mix(in srgb, var(--brand-cobalt) 32%, transparent)
   );
@@ -399,6 +409,8 @@
 }
 
 .c2-flagship-theatre__frame img {
+  max-width: 100%;
+  height: auto;
   opacity: 1;
   transform: none;
 }

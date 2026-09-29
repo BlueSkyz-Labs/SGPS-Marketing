@@ -6,12 +6,8 @@ type ProductMedia = NonNullable<
 >;
 
 /**
- * C3-A Task 2 — the single shared product-visual primitive.
- *
- * It owns presentation only: intrinsic size, alt text and the optional
- * continuity hook all come from the caller. It never derives product facts,
- * and it forwards — never authors — the continuity identity produced by the
- * shared naming convention in `src/lib`.
+ * C3-A Task 2 — shared static product visual.
+ * Renders record-backed image metadata and forwards the caller's continuity identity.
  */
 interface Props {
   media: ProductMedia;
