@@ -170,15 +170,37 @@
   aspect-ratio: 1;
 }
 
+/* Ambient cobalt halo — the "dimensional" half of the Prismatic R4d mark
+   (brand kit §4.2). A static radial falloff: bloom is done with gradient
+   geometry, never `filter: blur` and never animation, so the mark's slot stays
+   a no-perpetual-motion zone and reduced motion needs no special case. */
+.hero-visual::before {
+  content: "";
+  position: absolute;
+  inset: 4% 8%;
+  border-radius: 50%;
+  background: radial-gradient(
+    closest-side,
+    color-mix(in srgb, var(--brand-cobalt) 34%, transparent),
+    transparent 72%
+  );
+  pointer-events: none;
+}
+
 .hero-mark {
   position: relative;
   display: block;
   width: 100%;
   height: auto;
   aspect-ratio: 1;
+  /* Two shadow layers read as depth rather than a sticker: a close contact
+     shadow anchors the mark, the wide cobalt cast ties it to the halo. */
   filter: drop-shadow(
-    0 28px 64px color-mix(in srgb, var(--brand-cobalt) 32%, transparent)
-  );
+      0 10px 22px color-mix(in srgb, var(--brand-ink) 28%, transparent)
+    )
+    drop-shadow(
+      0 28px 64px color-mix(in srgb, var(--brand-cobalt) 32%, transparent)
+    );
 }
 
 /* Quiet Luxury sheen — a soft diagonal light pass across the mark (the
@@ -278,6 +300,17 @@
   letter-spacing: -0.03em;
   line-height: 1.1;
   color: var(--brand-porcelain);
+}
+
+/* Locale harmonisation for the display type. Vietnamese stacks tone marks above
+   and below the same letterforms, so the English tracking closes those marks
+   together and the English leading lets the stacks touch the line above. The
+   numbers differ so the rendered texture matches: VI is looser and taller per
+   line, EN keeps the tight display setting. Nothing else changes per locale —
+   one family, one hierarchy, one colour. */
+:lang(vi) .hero-headline {
+  letter-spacing: -0.015em;
+  line-height: 1.16;
 }
 
 .hero-tagline {
