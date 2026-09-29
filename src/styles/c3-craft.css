@@ -41,6 +41,12 @@
   height: auto;
   border: 1px solid var(--c3-image-surface-border);
   border-radius: var(--c3-image-surface-radius);
+}
+
+/* Plan v5 W3.1: the ink ground is the identity-art presentation only. A
+   `ui-screenshot` item gets no simulated chrome here; its device frame is
+   reserved for W3.3 and is never imitated by a background. */
+.c3-product-visual[data-media-kind="identity-art"] .c3-product-visual__image {
   background-color: var(--c3-image-surface-background);
 }
 
