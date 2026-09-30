@@ -107,11 +107,27 @@ jobs:
           POST_MERGE_PR_NUMBER: ${{ github.event.pull_request.number || '' }}
           POST_MERGE_MERGE_COMMIT: ${{ github.event.pull_request.merge_commit_sha || '' }}
 
-  browser-assurance:
-    name: Browser Assurance
+  # Browser Assurance is sharded so the wall-clock cost is the slowest engine,
+  # not the sum of all four. Coverage is unchanged: the shard list below must
+  # equal E2E_PROJECTS in scripts/run-e2e.mjs
+  # (tests/architecture/browser-assurance-matrix.test.mjs enforces it).
+  browser-shards:
+    name: Browser shard (${{ matrix.project }})
     needs: quality-gates
     runs-on: ubuntu-24.04
     timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - project: chromium
+            browser: chromium
+          - project: firefox
+            browser: firefox
+          - project: webkit
+            browser: webkit
+          - project: mobile-chromium
+            browser: chromium
     steps:
       - name: Checkout exact candidate
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
@@ -131,13 +147,15 @@ jobs:
         run: pnpm install --frozen-lockfile
       - name: Build browser test artifact
         run: pnpm build
-      - name: Install Playwright runtimes
+      - name: Install Playwright runtime
         timeout-minutes: 10
+        env:
+          SHARD_BROWSER: ${{ matrix.browser }}
         run: |
           set -e
           installed=0
           for attempt in 1 2 3; do
-            if pnpm exec playwright install --with-deps chromium firefox webkit; then
+            if pnpm exec playwright install --with-deps "$SHARD_BROWSER"; then
               installed=1
               break
             fi
@@ -148,15 +166,62 @@ jobs:
             echo "Playwright runtime installation failed after 3 attempts" >&2
             exit 1
           fi
-          node -e "const {chromium,firefox,webkit}=require('@playwright/test');
-            Promise.all([chromium.launch(),firefox.launch(),webkit.launch()])
-              .then((browsers)=>Promise.all(browsers.map((b)=>b.close())))
-              .then(()=>console.log('All three browser runtimes launched successfully'))
-              .catch((error)=>{console.error(error);process.exit(1);});"
-
+          node -e "require('@playwright/test')[process.env.SHARD_BROWSER].launch()
+            .then((browser)=>browser.close())
+            .then(()=>console.log(process.env.SHARD_BROWSER+' runtime launched successfully'))
+            .catch((error)=>{console.error(error);process.exit(1);});"
       - name: Playwright and axe assurance
+        env:
+          E2E_PROJECT: ${{ matrix.project }}
         run: pnpm test:e2e
+
+  # Lighthouse keeps its own runner: parallel browser shards would add CPU
+  # contention to a timing-sensitive gate.
+  lighthouse:
+    name: Lighthouse CI
+    needs: quality-gates
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - name: Checkout exact candidate
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+          fetch-depth: 0
+      - name: Set up Node 24.20.0
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+        with:
+          node-version: 24.20.0
+      - name: Activate project package manager
+        run: |
+          corepack enable
+          pnpm --version
+      - name: Install frozen dependency graph
+        run: pnpm install --frozen-lockfile
       - name: Lighthouse CI (desktop)
         run: pnpm lighthouse
       - name: Lighthouse CI (mobile routes)
         run: pnpm exec lhci autorun --config=./lighthouserc.mobile.json
+
+  # The single required check. It stays named "Browser Assurance" so the
+  # branch ruleset keeps working, and it fails closed: every shard and
+  # Lighthouse must be `success`; failed, cancelled and skipped all fail.
+  browser-assurance:
+    name: Browser Assurance
+    needs: [browser-shards, lighthouse]
+    if: ${{ always() }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - name: Require every browser shard and Lighthouse to succeed
+        env:
+          NEEDS_JSON: ${{ toJson(needs) }}
+        run: |
+          set -euo pipefail
+          echo "$NEEDS_JSON" | jq -r 'to_entries[] | "\(.key): \(.value.result)"'
+          bad="$(echo "$NEEDS_JSON" | jq '[.[] | select(.result != "success")] | length')"
+          if [ "$bad" != "0" ]; then
+            echo "Browser Assurance failed: $bad required job(s) did not succeed" >&2
+            exit 1
+          fi
