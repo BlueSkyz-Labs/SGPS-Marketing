@@ -13,12 +13,12 @@ const WORKFLOW = readFileSync(
 function postMergeStep(source) {
   const label = "- name: Post-merge landing verification (fail-closed)";
   const start = source.indexOf(label);
-  const end = source.indexOf("\n  browser-assurance:", start);
+  const end = source.indexOf("\n  browser-shards:", start);
   assert.notEqual(start, -1, "post-merge verification step must exist");
   assert.notEqual(
     end,
     -1,
-    "post-merge verification step must end before browser-assurance",
+    "post-merge verification step must end before the browser jobs",
   );
   return source.slice(start, end);
 }

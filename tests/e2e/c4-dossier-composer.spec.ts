@@ -70,6 +70,9 @@ test.describe("C4-C dossier composer", () => {
 
   test("composition transmits nothing", async ({ page }) => {
     await page.goto("/en/dossier/");
+    // Chromium fetches the favicon lazily after `load`; let page-load traffic
+    // settle so only requests caused by the selection below are counted.
+    await page.waitForLoadState("networkidle");
     const sent: string[] = [];
     page.on("request", (request) => {
       if (!request.url().includes("/en/dossier")) sent.push(request.url());
