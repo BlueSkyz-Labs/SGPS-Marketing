@@ -6,7 +6,6 @@ import ProductCard from "@/components/product/ProductCard.astro";
 import ProofFirstEmptyState from "@/components/product/ProofFirstEmptyState.astro";
 import { getPublicProducts } from "@/lib/products";
 import IntentControl from "@/components/experience/IntentControl.astro";
-import Atlas from "@/components/experience/Atlas.astro";
 
 const products = await getPublicProducts();
 const emptyDescription = products.length
@@ -18,7 +17,6 @@ const emptyDescription = products.length
   title="Products"
   description={emptyDescription}
   path="/en/products/"
-  surface="products"
   scene="product"
 >
   <section class="py-16 lg:py-20">
@@ -48,12 +46,19 @@ const emptyDescription = products.length
       )}
     </Container>
   </section>
-  {/* C2: discovery surfaces re-homed from the homepage (design §8) — Intent Lens sits
-      with product evaluation; Atlas remains the deliberate exploration tool. */}
+  {/* Experience v6 S3: Atlas and evidence moved to /verify; one quiet link remains. */}
   <section class="border-t border-[var(--border-subtle)] py-16 lg:py-20">
     <Container>
       <IntentControl lang="en" />
-      <Atlas lang="en" />
+      <p class="mt-8">
+        <a
+          href="/en/verify/"
+          class="inline-flex min-h-11 items-center text-sm font-semibold text-[var(--action-primary)] underline underline-offset-4 hover:no-underline"
+          data-verify-link
+        >
+          How we verify →
+        </a>
+      </p>
     </Container>
   </section>
 </BaseLayout>

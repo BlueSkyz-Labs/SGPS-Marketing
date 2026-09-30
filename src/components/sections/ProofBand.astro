@@ -1,12 +1,11 @@
 ---
 import type { Language } from "@/data/site";
-import { SHARED_LABELS, labelFor } from "@/data/site";
 
 /**
  * Experience v6 S1 — one compact proof band on the home: the existing Trust
  * heading and line, one quiet link. `Trust.astro` (ledger cards, evidence
  * teasers, Decision Room links) keeps its component and routes; S3 re-stages
- * it on /verify.
+ * it on /verify, which this band links to.
  */
 interface Props {
   lang?: Language;
@@ -44,9 +43,16 @@ const isZhHant = lang === "zh-hant";
           : "Privacy, security, and support paths are first-class routes — not slogans."}
   </p>
   <a
-    href={`/${lang}/security/`}
+    href={`/${lang}/verify/`}
     class="mt-4 inline-flex min-h-11 items-center text-sm font-semibold text-[var(--action-primary)] underline underline-offset-4 hover:no-underline"
   >
-    {labelFor(SHARED_LABELS.security, lang)} →
+    {isVi
+      ? "Cách chúng tôi xác minh"
+      : isZh
+        ? "我们如何核验"
+        : isZhHant
+          ? "我們如何核驗"
+          : "How we verify"}{" "}
+    →
   </a>
 </section>
