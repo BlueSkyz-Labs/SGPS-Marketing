@@ -15,8 +15,9 @@ import TrustLedger from "@/components/experience/TrustLedger.astro";
 import Atlas from "@/components/experience/Atlas.astro";
 import EvidenceTeaser from "@/components/integrity/EvidenceTeaser.astro";
 import IntegrityLens from "@/components/integrity/IntegrityLens.astro";
+import DeepLinkOpener from "@/components/verify/DeepLinkOpener.astro";
 import SourceTrace from "@/components/integrity/SourceTrace.astro";
-import { getPublicClaims } from "@/lib/claims";
+import { getClaimTrace, getPublicClaims } from "@/lib/claims";
 import { getPublicProducts } from "@/lib/products";
 import type { Language } from "@/data/site";
 
@@ -31,6 +32,20 @@ const products = (await getPublicProducts()).map((product) => ({
   name: product.data.name,
 }));
 const claims = getPublicClaims(products);
+
+// Claims can share evidence; emit each evidence anchor id once per page (first
+// claim wins) so deep links stay unique and resolvable.
+const seenEvidence = new Set<string>();
+const omitAnchorsByClaim = new Map<string, string[]>();
+for (const resolved of claims) {
+  const omit: string[] = [];
+  for (const step of getClaimTrace(resolved.claim.id, products) ?? []) {
+    if (step.kind !== "evidence") continue;
+    if (seenEvidence.has(step.id)) omit.push(step.id);
+    else seenEvidence.add(step.id);
+  }
+  omitAnchorsByClaim.set(resolved.claim.id, omit);
+}
 
 const COPY = {
   en: {
@@ -145,6 +160,9 @@ const c = COPY[lang];
                   claimId={resolved.claim.id}
                   lang={lang}
                   products={products}
+                  omitAnchorIds={
+                    omitAnchorsByClaim.get(resolved.claim.id) ?? []
+                  }
                 />
               ))}
             </div>
@@ -169,6 +187,8 @@ const c = COPY[lang];
     </p>
   </Container>
 </section>
+
+<DeepLinkOpener />
 
 <style>
   .verify-layer {
