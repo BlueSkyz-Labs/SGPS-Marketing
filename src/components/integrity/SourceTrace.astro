@@ -6,9 +6,11 @@ interface Props {
   claimId: string;
   lang: Language;
   products: { slug: string; name: string }[];
+  /** Evidence ids whose anchor id is already emitted elsewhere on the page. */
+  omitAnchorIds?: string[];
 }
 
-const { claimId, lang, products } = Astro.props;
+const { claimId, lang, products, omitAnchorIds = [] } = Astro.props;
 const trace = getClaimTrace(claimId, products);
 
 const ROLE_LABELS: Record<ClaimTraceStep["kind"], Record<Language, string>> = {
@@ -39,7 +41,11 @@ const HEADING: Record<Language, string> = {
         <li
           class="source-trace__step"
           data-trace-step={step.kind}
-          id={step.kind === "evidence" ? `evidence-${step.id}` : undefined}
+          id={
+            step.kind === "evidence" && !omitAnchorIds.includes(step.id)
+              ? `evidence-${step.id}`
+              : undefined
+          }
         >
           <span class="source-trace__role">{ROLE_LABELS[step.kind][lang]}</span>
           {step.href ? (

@@ -11,9 +11,11 @@ import type { Language } from "@/data/site";
 interface Props {
   surface: string;
   lang: Language;
+  /** Source-to-surface chains are staged on /verify; pages may omit them. */
+  traces?: boolean;
 }
 
-const { surface, lang } = Astro.props;
+const { surface, lang, traces = true } = Astro.props;
 const entries = getIntegrityEntriesForSurface(surface);
 const products = (await getPublicProducts()).map((product) => ({
   slug: product.data.slug,
@@ -89,7 +91,7 @@ const LABELS = {
         );
       })}
     </div>
-    {claims.length > 0 && (
+    {traces && claims.length > 0 && (
       <div class="integrity-lens__traces">
         {claims.map((resolved) => (
           <SourceTrace
