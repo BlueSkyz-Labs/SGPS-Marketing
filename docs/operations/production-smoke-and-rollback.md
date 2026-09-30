@@ -25,8 +25,12 @@ guessing.
    `X-Content-Type-Options: nosniff`, `X-Frame-Options: DENY`,
    `Referrer-Policy`, `Permissions-Policy`.
 3. Record the outcome in a post-merge read-back ledger under `docs/evidence/`
-   (declared revision + smoke result + host), which
-   `pnpm check:deployment-evidence` validates in CI.
+   with the **full 40-character deployed Git revision**, smoke result and
+   canonical host read-back.
+4. Certify that exact served revision explicitly:
+   `pnpm check:deployment-evidence -- <ledger-path> --expected-sha <40-character-served-sha>`.
+   The no-argument CI invocation validates historical ledger structure only
+   and reports `current revision NOT_VERIFIED`; it is never current-runtime proof.
 
 ## 3. Observability (deliberately minimal)
 
@@ -54,7 +58,8 @@ broken routes, security-relevant regression) and a fix cannot land quickly:
    good version → _Rollback / redeploy that version_.
    (Equivalent: re-run Workers Builds on the last known good `main` commit.)
 2. Immediately re-run §2 post-deploy verification against the rolled-back
-   revision and record the ledger entry (`pnpm check:deployment-evidence`).
+   revision, record the full-SHA ledger entry, and certify it with
+   `pnpm check:deployment-evidence -- <ledger-path> --expected-sha <40-character-served-sha>`.
 3. Open an issue or PR describing the incident, the rolled-back revision and
    the forward-fix plan; the fix follows the normal gates. No direct pushes to
    `main`, no bypassing protection.
