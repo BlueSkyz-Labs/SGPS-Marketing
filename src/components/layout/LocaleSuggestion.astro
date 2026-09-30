@@ -4,7 +4,11 @@
  *
  * Renders nothing server-side: with JavaScript disabled the banner is simply
  * absent. The external script builds the region; this file owns its styling.
- * Fixed at the bottom so inserting it never shifts layout.
+ * Placement (Experience v6 S5): an in-flow strip directly under the header,
+ * never a fixed/absolute overlay, so it can never cover first-viewport content
+ * such as the hero or its call to action. It is a compact single band; the
+ * one-time push it causes is bounded by its own height and it is removed by
+ * either action.
  */
 ---
 
@@ -16,30 +20,24 @@
 
 <style is:global>
   .locale-suggestion {
-    position: fixed;
-    inset: auto 1rem 1rem 1rem;
-    z-index: 40;
+    position: relative;
     display: flex;
     flex-wrap: wrap;
     align-items: center;
     justify-content: space-between;
-    gap: 0.75rem 1rem;
-    max-width: 40rem;
-    margin-inline: auto;
-    padding: 0.75rem 1rem;
-    border: 1px solid var(--border-subtle);
-    border-radius: var(--radius-card, 0.75rem);
+    gap: 0.25rem 1rem;
+    box-sizing: border-box;
+    width: 100%;
+    padding: 0.5rem 1rem;
+    border-bottom: 1px solid var(--border-subtle);
     background: var(--surface-raised);
     color: var(--text-primary);
-    box-shadow: 0 12px 32px -12px rgba(11, 16, 32, 0.35);
-    transition:
-      opacity 200ms ease-out,
-      transform 200ms ease-out;
+    transition: opacity 200ms ease-out;
   }
 
   .locale-suggestion__text {
     margin: 0;
-    font-size: 0.95rem;
+    font-size: 0.9rem;
     font-weight: 600;
   }
 
@@ -81,7 +79,6 @@
   @starting-style {
     .locale-suggestion {
       opacity: 0;
-      transform: translateY(0.5rem);
     }
   }
 
@@ -93,7 +90,7 @@
 
   @media (forced-colors: active) {
     .locale-suggestion {
-      border-color: CanvasText;
+      border-bottom-color: CanvasText;
     }
   }
 </style>

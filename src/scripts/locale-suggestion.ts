@@ -82,5 +82,8 @@ export function initLocaleSuggestion(): void {
 
   actions.append(accept, keep);
   region.append(text, actions);
-  document.body.prepend(region);
+  // In-flow, directly under the header: it never overlays page content.
+  const header = document.querySelector("body > header");
+  if (header) header.after(region);
+  else document.body.prepend(region);
 }

@@ -97,17 +97,25 @@ test("the only storage key is blueskyz.ui.language, reads and writes guarded", (
   assert.match(SCRIPT, /catch \{\s*return;/);
 });
 
-test("banner is external-script only, fixed, accessible and reduced-motion safe", () => {
+test("banner is external-script only, in-flow (never an overlay), accessible and reduced-motion safe", () => {
   assert.doesNotMatch(HOST, /is:inline/);
   assert.match(HOST, /<script>\s*import \{ initLocaleSuggestion \}/);
   assert.match(LAYOUT, /<LocaleSuggestion \/>/);
   assert.match(SCRIPT, /setAttribute\("role", "region"\)/);
   assert.match(SCRIPT, /setAttribute\("aria-label", copy\.question\)/);
-  assert.match(HOST, /position: fixed/);
+  // S5 placement: an in-flow strip under the header, never a fixed/sticky/
+  // absolute overlay that could cover first-viewport content.
+  assert.doesNotMatch(HOST, /position:\s*(?:fixed|sticky|absolute)/);
+  assert.match(SCRIPT, /header\.after\(region\)/);
   assert.match(HOST, /min-height: 44px/);
   assert.match(HOST, /prefers-reduced-motion: reduce[\s\S]*transition: none/);
   assert.match(HOST, /var\(--surface-raised\)/);
   assert.doesNotMatch(HOST, /background:\s*(?:white|#fff)/i);
+});
+
+test("negative proof: an overlay placement is detected by the placement audit", () => {
+  const overlay = "position: fixed; inset: auto 1rem 1rem 1rem;";
+  assert.match(overlay, /position:\s*(?:fixed|sticky|absolute)/);
 });
 
 test("dismiss stores the CURRENT language via the existing key", () => {
