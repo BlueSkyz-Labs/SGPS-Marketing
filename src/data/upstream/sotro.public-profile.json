@@ -5,7 +5,9 @@
     "availability": "Committed production config (wrangler.jsonc env.production.vars) is PUBLIC_EXPOSURE_LEVEL=L0_INTERNAL, SELF_REGISTRATION_ENABLED=false, PAID_ORDERS_ENABLED=false; ADR-024 says L0_INTERNAL permits neither self-registration nor new paid orders and that promotion is adjacent and evidence-bound. So the product must not be described as publicly available, open for signup, or paid. The literal state is private, but the website enum rejects 'private' for a public listing; 'preview' is the least committal listing-compatible value and, with publicLabel 'In development', must be read as a look at a product under development, not as open access. Do not upgrade to public, invite-only or waitlist until exposure is promoted with evidence (no waitlist or invite flow exists in committed config).",
     "paid": "Paid Go-Live is not approved; PAID_ORDERS_ENABLED=false in committed production config, so no price, plan or purchase claim may be published.",
     "capabilities": "Only behaviour that is merged on main and has code plus a test in this repo. Reminder templates are copy-only (component header: no automatic sending); no claim is made that the app opens Zalo or SMS for the user.",
-    "signInUrl": "Committed production APP_BASE_URL is https://sotro.blueskyzlabs.com and src/app/router.tsx serves /login on the main (non-admin, non-super) host. This is a sign-in page for existing users; it is not evidence that signup is open."
+    "signInUrl": "Committed production APP_BASE_URL is https://sotro.blueskyzlabs.com and src/app/router.tsx serves /login on the main (non-admin, non-super) host. This is a sign-in page for existing users; it is not evidence that signup is open.",
+    "listing": "Owner 2026-09-30: Sổ Trọ is the portfolio flagship and the first product planned for Go-Live, so it stays listed (public, hero, first) rather than hidden. Listing it is not a claim of open access: availability/publicLabel above still govern what a visitor can do.",
+    "nativeApps": "Owner 2026-09-30: native Android and iOS apps are planned after the web core is complete and will sync with the same workspace. No native project exists in this repo yet, so both are 'in-development' with no store link, and platforms stays ['web']."
   },
   "_sources": [
     "wrangler.jsonc",
@@ -54,7 +56,18 @@
   "platforms": ["web"],
   "appAccess": {
     "signInUrl": "https://sotro.blueskyzlabs.com/login",
-    "_source": "wrangler.jsonc env.production.vars.APP_BASE_URL + src/app/router.tsx (/login route)"
+    "_source": "wrangler.jsonc env.production.vars.APP_BASE_URL + src/app/router.tsx (/login route)",
+    "android": {
+      "state": "in-development"
+    },
+    "ios": {
+      "state": "in-development"
+    }
+  },
+  "listing": {
+    "public": true,
+    "featuredTier": "hero",
+    "displayOrder": 1
   },
   "paid": {
     "status": "closed",

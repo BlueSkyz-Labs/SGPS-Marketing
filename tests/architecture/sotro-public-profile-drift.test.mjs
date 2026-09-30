@@ -6,8 +6,10 @@
  * (`src/data/upstream/`) and its `sotro.yaml` record must mirror it. Any public claim changed
  * here without changing the upstream first fails this test: change the upstream, then re-vendor.
  *
- * Deliberately not asserted: `appAccess.android|ios` (the profile makes no mobile claim; the
- * existing app-access contract owns those markers) and the record's localized zh copy.
+ * Also mirrored: native `appAccess.android|ios` state/store link (Owner 2026-09-30: native apps
+ * follow the web core and sync with it; in development until a build ships) and the flagship
+ * listing (`public`, `featuredTier`, `displayOrder`). Deliberately not asserted: the record's
+ * localized zh copy.
  */
 import assert from "node:assert/strict";
 import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
@@ -61,6 +63,16 @@ function block(text, key, indent) {
   return m ?? "";
 }
 
+/** `{ state, storeUrl }` of a native app under appAccess, or null when absent. */
+function nativeApp(access, os) {
+  const body = block(access, os, 2);
+  if (!body) return null;
+  const app = { state: /^ {4}state:[ \t]*(\S+)/m.exec(body)?.[1] ?? null };
+  const store = /^ {4}storeUrl:[ \t]*(\S+)/m.exec(body)?.[1];
+  if (store) app.storeUrl = store;
+  return app;
+}
+
 export function readRecord(text) {
   const vi = block(text, "vi", 2);
   const access = block(text, "appAccess", 0);
@@ -73,6 +85,11 @@ export function readRecord(text) {
     viJobs: list(vi, "jobs", 4),
     viCapabilities: list(vi, "capabilities", 4),
     signInUrl: /^ {2}signInUrl:[ \t]*(\S+)/m.exec(access)?.[1] ?? null,
+    android: nativeApp(access, "android"),
+    ios: nativeApp(access, "ios"),
+    public: scalar(text, "public"),
+    featuredTier: scalar(text, "featuredTier"),
+    displayOrder: scalar(text, "displayOrder"),
     sourceRevision: scalar(text, "sourceRevision"),
   };
 }
@@ -108,6 +125,15 @@ export function driftViolations(recordText, profile, readme) {
   );
   eq("capabilities (vi)", rec.viCapabilities, profile.i18n.vi.capabilities);
   eq("appAccess.signInUrl", rec.signInUrl, profile.appAccess.signInUrl);
+  for (const os of ["android", "ios"])
+    eq(`appAccess.${os}`, rec[os], profile.appAccess[os] ?? null);
+  eq("listing.public", rec.public, String(profile.listing.public));
+  eq("listing.featuredTier", rec.featuredTier, profile.listing.featuredTier);
+  eq(
+    "listing.displayOrder",
+    rec.displayOrder,
+    String(profile.listing.displayOrder),
+  );
   eq(
     "sourceRevision vs snapshot README",
     rec.sourceRevision,
@@ -198,6 +224,20 @@ test("negative proof: changing any mirrored claim is detected", () => {
     "appAccess.signInUrl": record.replace(
       "sotro.blueskyzlabs.com/login",
       "sotro.blueskyzlabs.com/signup",
+    ),
+    "appAccess.android": record.replace(
+      "  android:\n    state: in-development\n",
+      "  android:\n    state: available\n    storeUrl: https://play.google.com/store/apps/x\n",
+    ),
+    "appAccess.ios": record.replace("  ios:\n    state: in-development\n", ""),
+    "listing.public": record.replace(/^public: true$/m, "public: false"),
+    "listing.featuredTier": record.replace(
+      /^featuredTier: hero$/m,
+      "featuredTier: standard",
+    ),
+    "listing.displayOrder": record.replace(
+      /^displayOrder: 1$/m,
+      "displayOrder: 2",
     ),
     sourceRevision: record.replace(
       /^sourceRevision: .*$/m,

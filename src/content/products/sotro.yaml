@@ -22,10 +22,8 @@ primaryAction:
   href: https://blueskyzlabs.com/en/products/sotro/
 # Sign-in link mirrors the upstream public profile (appAccess.signInUrl; ADR 0006 product
 # subdomain). It is a sign-in page for existing users, not evidence that signup is open.
-# Native apps: the upstream profile lists platforms ["web"] only and makes no mobile claim;
-# the android/ios in-development markers below are retained only because
-# tests/architecture/app-access-contract.test.mjs (Owner 2026-09-28) still requires them.
-# OWNER DECISION pending: drop them here and in that test, or keep.
+# Native apps mirror the upstream profile (Owner 2026-09-30): Android/iOS follow the web core
+# and sync with the same workspace; in development, no store link, until a native build ships.
 appAccess:
   signInUrl: https://sotro.blueskyzlabs.com/login
   android:
@@ -50,7 +48,7 @@ displayOrder: 1
 public: true
 # Sotro revision of the vendored public profile (src/data/upstream/README.md). PENDING:
 # re-pin to the Sotro main squash SHA once the upstream PR merges.
-sourceRevision: 82d799449b278da2c27ea5985aec258b7f2da8dd
+sourceRevision: cffb4167141242928d60e950dd436aa792a0dc65
 lastReviewedAt: 2026-09-30
 # Localized copy: faithful translations of the English claims above; the
 # English record stays canonical for claim/proof binding. Native VI/ZH review
