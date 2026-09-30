@@ -53,13 +53,13 @@ lastReviewedAt: 2026-09-27
 # is an Owner feedback checkpoint (plan v5 W3.4).
 i18n:
   vi:
-    shortDescription: "Cuốn nhật ký ưu tiên lưu cục bộ cho những suy ngẫm và kỷ niệm riêng tư được viết ra."
+    shortDescription: "Cuốn nhật ký ưu tiên lưu ngay trên máy, dành cho những suy nghĩ và kỷ niệm riêng tư bạn viết ra."
     jobs:
-      - "Viết những suy ngẫm riêng tư theo nhịp của riêng bạn"
-      - "Xem lại các trang nhật ký và kỷ niệm cá nhân"
+      - "Viết ra những suy nghĩ riêng tư, theo nhịp của bạn"
+      - "Đọc lại nhật ký và kỷ niệm của mình"
     capabilities:
       - "Viết nhật ký ưu tiên lưu cục bộ trong Personal Vault riêng tư"
-      - "Người dùng tự xuất các suy ngẫm ra máy của mình"
+      - "Bạn tự xuất bài viết ra máy của mình"
       - "Lưu trữ trong Vault riêng tư với ranh giới khôi phục rõ ràng"
     primaryActionLabel: "Xem trước Sổ Tâm"
   zh:

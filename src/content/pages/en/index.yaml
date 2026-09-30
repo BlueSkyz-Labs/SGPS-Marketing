@@ -21,7 +21,7 @@ sections:
         summary: Real value. Real change.
   trust:
     heading: Trust
-    intro: Product maturity stays explicit. Privacy, security, and support paths are first-class routes — not slogans.
+    intro: Every product shows its real stage. Privacy, security and support each have their own page — not slogans.
     links:
       - label: Privacy
         href: /en/privacy/
@@ -36,7 +36,7 @@ sections:
     founder_title: Founder & CEO
   nextstep:
     heading: Next step
-    intro: No public products are published yet. Learn who we are, or use the security reporting path when you need a working trust channel.
+    intro: No product is publicly released yet. Learn who we are, or use the security reporting path if you need a channel that works today.
     primaryCta: About BlueSkyz
     primaryHref: /en/about/
     secondaryCta: Security
