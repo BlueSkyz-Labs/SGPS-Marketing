@@ -16,7 +16,7 @@ test.describe("app access", () => {
     }) => {
       await page.goto(`/vi/products/${slug}/`);
       const block = page.locator("[data-app-access]");
-      await expect(block.getByRole("heading")).toHaveText("Truy cập");
+      await expect(block.getByRole("heading")).toHaveText("Truy cập ứng dụng");
       for (const key of ["android", "ios"]) {
         const app = block.locator(`[data-mobile-app="${key}"]`);
         await expect(app).toHaveAttribute(
