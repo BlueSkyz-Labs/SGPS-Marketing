@@ -2,7 +2,6 @@
 import HorizonField from "@/components/experience/HorizonField.astro";
 import ButtonLink from "@/components/ui/ButtonLink.astro";
 import SailReveal from "@/components/motion/SailReveal.astro";
-import Reveal from "@/components/ui/Reveal.astro";
 import { SITE, SHARED_LABELS, labelFor, type Language } from "@/data/site";
 import { emptyRegistryPrimaryCta, emptyRegistrySecondaryCta } from "@/lib/act";
 import { resolveLifecycleCta } from "@/lib/lifecycle-cta";
@@ -94,10 +93,9 @@ const secondary = flagship
       <HorizonField />
     </div>
   </div>
-  <Reveal
-    as="div"
-    class="relative mx-auto grid w-full max-w-7xl gap-10 px-4 py-16 sm:px-6 sm:py-24 lg:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)] lg:items-center lg:px-8"
-  >
+  <!-- Plain container, not the rise wrapper: the LCP headline lives inside it and must
+       not animate or move, so no ancestor may carry the 400 ms rise either. -->
+  <div class="relative mx-auto grid w-full max-w-7xl gap-10 px-4 py-16 sm:px-6 sm:py-24 lg:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)] lg:items-center lg:px-8">
     <div class="hero-content" data-hero>
       {flagship && cta ? (
         <p class="hero-product flex flex-wrap items-center gap-3">
@@ -195,5 +193,5 @@ const secondary = flagship
       <SailReveal handoff />
       <span class="hero-seam"></span>
     </div>
-  </Reveal>
+  </div>
 </section>
