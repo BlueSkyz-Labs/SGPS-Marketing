@@ -1,6 +1,7 @@
 ---
 import Header from "@/components/layout/Header.astro";
 import Footer from "@/components/layout/Footer.astro";
+import LocaleSuggestion from "@/components/layout/LocaleSuggestion.astro";
 import CommandNavigator from "@/components/experience/CommandNavigator.astro";
 import JourneyBar from "@/components/experience/JourneyBar.astro";
 import IntegrityLens from "@/components/integrity/IntegrityLens.astro";
@@ -137,6 +138,7 @@ const robotsNoindex = noindex || isNonProductionSiteUrl(SITE.url);
     </a>
     <Header scene={scene} />
     <CommandNavigator />
+    <LocaleSuggestion />
     <script>
       import { initAnalyticsBridge } from "@/scripts/analytics-bridge";
 
