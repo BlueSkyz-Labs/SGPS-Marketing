@@ -62,7 +62,11 @@ const primaryLink = NAV[0]!;
       </button>
       <LanguageSwitcher placement="header" />
       <ThemeToggle lang={lang} variant="popover" />
-      <ButtonLink href={primaryCta.href} variant="primary">
+      <ButtonLink
+        href={primaryCta.href}
+        variant="primary"
+        aria-current={isActive(primaryCta.href) ? "page" : undefined}
+      >
         {primaryCta.label}
       </ButtonLink>
     </nav>
