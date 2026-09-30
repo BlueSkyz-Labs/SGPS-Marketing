@@ -11,11 +11,14 @@ import test from "node:test";
 const LOCALES = ["en", "vi", "zh", "zh-hant"];
 const read = (path) => readFileSync(path, "utf8");
 
-test("hero product statements resolve to registry fields, not authored strings", () => {
+test("hero flagship statements resolve to registry fields; the H1 is the site promise", () => {
   const hero = read("src/components/sections/Hero.astro");
   assert.match(hero, /productCopy\(flagship\.data,\s*lang\)/);
-  assert.match(hero, /copy\.jobs\[0\]/);
-  assert.match(hero, /copy\.shortDescription/);
+  // Experience v6 S2 (Owner 2026-10-01): H1 = the existing site proposition,
+  // not the registry job line.
+  assert.match(hero, /SITE\.proposition/);
+  assert.doesNotMatch(hero, /copy\.jobs\[0\]/);
+  assert.match(hero, /copy\??\.shortDescription/);
   assert.match(hero, /flagship\.data\.name/);
   assert.match(hero, /resolveLifecycleCta/);
   // Only the company fallback (empty registry) may carry authored sentences,
