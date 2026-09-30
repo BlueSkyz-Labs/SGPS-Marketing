@@ -7,7 +7,7 @@ import {
   validateCraftStory,
 } from "../../src/lib/craft-stories.ts";
 
-const LANGS = ["en", "vi", "zh"];
+const LANGS = ["en", "vi", "zh", "zh-hant"];
 const SUBSTANTIVE = ["problem", "designChoice", "constraint", "implementation"];
 
 test("C4-B craft story data: every authored story passes the contract", () => {

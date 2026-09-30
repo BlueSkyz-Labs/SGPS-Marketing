@@ -24,33 +24,59 @@ const JOURNEY: Record<string, JourneyStep[]> = {
         en: "Check product status",
         vi: "Kiểm tra trạng thái sản phẩm",
         zh: "查看产品状态",
+        "zh-hant": "檢視產品狀態",
       },
     },
     {
       segment: "decision-room",
-      label: { en: "Decision Room", vi: "Phòng Quyết định", zh: "决策室" },
+      label: {
+        en: "Decision Room",
+        vi: "Phòng Quyết định",
+        zh: "决策室",
+        "zh-hant": "決策室",
+      },
     },
     {
       segment: "about",
-      label: { en: "About BlueSkyz", vi: "Về BlueSkyz", zh: "关于 BlueSkyz" },
+      label: {
+        en: "About BlueSkyz",
+        vi: "Về BlueSkyz",
+        zh: "关于 BlueSkyz",
+        "zh-hant": "關於 BlueSkyz",
+      },
     },
     {
       segment: "security",
-      label: { en: "Security", vi: "Bảo mật", zh: "安全" },
+      label: { en: "Security", vi: "Bảo mật", zh: "安全", "zh-hant": "安全" },
     },
   ],
   products: [
     {
       segment: "decision-room",
-      label: { en: "Decision Room", vi: "Phòng Quyết định", zh: "决策室" },
+      label: {
+        en: "Decision Room",
+        vi: "Phòng Quyết định",
+        zh: "决策室",
+        "zh-hant": "決策室",
+      },
     },
     {
       segment: "about",
-      label: { en: "About BlueSkyz", vi: "Về BlueSkyz", zh: "关于 BlueSkyz" },
+      label: {
+        en: "About BlueSkyz",
+        vi: "Về BlueSkyz",
+        zh: "关于 BlueSkyz",
+        "zh-hant": "關於 BlueSkyz",
+      },
     },
     {
       segment: "contact",
-      label: { en: "Contact", vi: "Liên hệ", zh: "联系我们" },
+      label: {
+        en: "Contact",
+        vi: "Liên hệ",
+        zh: "联系我们",
+        "zh-hant": "聯絡我們",
+      },
     },
   ],
   about: [
@@ -60,42 +86,67 @@ const JOURNEY: Record<string, JourneyStep[]> = {
         en: "Product status",
         vi: "Trạng thái sản phẩm",
         zh: "产品状态",
+        "zh-hant": "產品狀態",
       },
     },
     {
       segment: "contact",
-      label: { en: "Contact", vi: "Liên hệ", zh: "联系我们" },
+      label: {
+        en: "Contact",
+        vi: "Liên hệ",
+        zh: "联系我们",
+        "zh-hant": "聯絡我們",
+      },
     },
   ],
   contact: [
-    { segment: "support", label: { en: "Support", vi: "Hỗ trợ", zh: "支持" } },
+    {
+      segment: "support",
+      label: { en: "Support", vi: "Hỗ trợ", zh: "支持", "zh-hant": "支援" },
+    },
     {
       segment: "security",
-      label: { en: "Security", vi: "Bảo mật", zh: "安全" },
+      label: { en: "Security", vi: "Bảo mật", zh: "安全", "zh-hant": "安全" },
     },
   ],
   support: [
     {
       segment: "contact",
-      label: { en: "Contact", vi: "Liên hệ", zh: "联系我们" },
+      label: {
+        en: "Contact",
+        vi: "Liên hệ",
+        zh: "联系我们",
+        "zh-hant": "聯絡我們",
+      },
     },
     {
       segment: "security",
-      label: { en: "Security", vi: "Bảo mật", zh: "安全" },
+      label: { en: "Security", vi: "Bảo mật", zh: "安全", "zh-hant": "安全" },
     },
   ],
   privacy: [
     {
       segment: "security",
-      label: { en: "Security", vi: "Bảo mật", zh: "安全" },
+      label: { en: "Security", vi: "Bảo mật", zh: "安全", "zh-hant": "安全" },
     },
-    { segment: "support", label: { en: "Support", vi: "Hỗ trợ", zh: "支持" } },
+    {
+      segment: "support",
+      label: { en: "Support", vi: "Hỗ trợ", zh: "支持", "zh-hant": "支援" },
+    },
   ],
   security: [
-    { segment: "support", label: { en: "Support", vi: "Hỗ trợ", zh: "支持" } },
+    {
+      segment: "support",
+      label: { en: "Support", vi: "Hỗ trợ", zh: "支持", "zh-hant": "支援" },
+    },
     {
       segment: "privacy",
-      label: { en: "Privacy", vi: "Quyền riêng tư", zh: "隐私" },
+      label: {
+        en: "Privacy",
+        vi: "Quyền riêng tư",
+        zh: "隐私",
+        "zh-hant": "隱私",
+      },
     },
   ],
 };
@@ -123,7 +174,10 @@ export function getJourneyActions(
 export function routeKeyFromPath(pathOrHref: string): string {
   const parts = pathOrHref.split("/").filter(Boolean);
   const withoutLang =
-    parts[0] === "en" || parts[0] === "vi" || parts[0] === "zh"
+    parts[0] === "en" ||
+    parts[0] === "vi" ||
+    parts[0] === "zh" ||
+    parts[0] === "zh-hant"
       ? parts.slice(1)
       : parts;
   return withoutLang.join("/");

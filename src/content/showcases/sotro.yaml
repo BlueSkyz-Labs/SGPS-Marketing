@@ -4,6 +4,7 @@
 # tenant, payment or identity data. Phone screens: 390x844 CSS px at 2x,
 # cropped above the bottom navigation bar; desktop screens: 1440x900 CSS px.
 # Wording below describes only what each screen shows at that revision.
+# zh-hant text: machine-assisted (OpenCC s2twp), pending native review.
 product: sotro
 capture:
   kind: ui-screenshot
@@ -47,14 +48,17 @@ screens:
       en: Today, at a glance
       vi: Hôm nay cần làm gì
       zh: 今天要做什么
+      zh-hant: 今天要做什麼
     caption:
       en: The home screen shows only what needs remembering today, and what is still unpaid this month.
       vi: Màn hình chính chỉ đưa ra việc cần nhớ hôm nay và khoản còn chưa thu trong tháng.
       zh: 首页只列出今天需要记住的事项，以及本月尚未收取的款项。
+      zh-hant: 首頁只列出今天需要記住的事項，以及本月尚未收取的款項。
     alt:
       en: Sổ Trọ phone home screen titled “Hôm nay cần làm gì?” with an unpaid-this-month card.
       vi: Màn hình chính Sổ Trọ trên điện thoại với tiêu đề “Hôm nay cần làm gì?” và thẻ còn chưa thu tháng này.
       zh: Sổ Trọ 手机首页，标题为“Hôm nay cần làm gì?”，并显示本月未收款卡片。
+      zh-hant: Sổ Trọ 手機首頁，標題為「Hôm nay cần làm gì?」，並顯示本月未收款卡片。
   - id: utilities
     surface: phone
     src: /products/sotro/showcase/op-03-utilities.webp
@@ -64,14 +68,17 @@ screens:
       en: Meter readings, room by room
       vi: Ghi điện nước từng phòng
       zh: 逐间记录水电
+      zh-hant: 逐間記錄水電
     caption:
       en: Pick an occupied room, enter this month’s readings, then move straight on to the next room.
       vi: Chọn phòng đang thuê, nhập chỉ số tháng này rồi chuyển thẳng sang phòng kế tiếp.
       zh: 选择在租房间，录入本月读数，然后直接进入下一间。
+      zh-hant: 選擇在租房間，輸入本月讀數，然後直接進入下一間。
     alt:
       en: Sổ Trọ phone screen “Nhập điện nước” for entering monthly electricity and water readings.
       vi: Màn hình “Nhập điện nước” trên điện thoại để ghi chỉ số điện nước hằng tháng.
       zh: Sổ Trọ 手机“Nhập điện nước”页面，用于录入每月水电读数。
+      zh-hant: Sổ Trọ 手機「Nhập điện nước」頁面，用於輸入每月水電讀數。
   - id: collect
     surface: phone
     src: /products/sotro/showcase/op-02-payments.webp
@@ -81,14 +88,17 @@ screens:
       en: Collect with a clear head
       vi: Thu tiền rõ ràng
       zh: 收款清清楚楚
+      zh-hant: 收款清清楚楚
     caption:
       en: See who still owes, confirm the amount first, then record what was received. The calendar shows solar and lunar dates.
       vi: Xem ai còn nợ, chốt số tiền trước rồi mới ghi nhận đã thu. Lịch hiển thị cả ngày dương và ngày âm.
       zh: 查看谁还欠款，先确认金额再记录已收。日历同时显示公历和农历日期。
+      zh-hant: 檢視誰還欠款，先確認金額再記錄已收。日曆同時顯示公曆和農曆日期。
     alt:
       en: Sổ Trọ phone screen “Thu tiền” with a solar and lunar calendar strip and payment status counts.
       vi: Màn hình “Thu tiền” trên điện thoại với dải lịch âm dương và số phòng theo trạng thái thu.
       zh: Sổ Trọ 手机“Thu tiền”页面，含公历农历日期条与收款状态统计。
+      zh-hant: Sổ Trọ 手機「Thu tiền」頁面，含公曆農曆日期條與收款狀態統計。
   - id: rooms
     surface: phone
     src: /products/sotro/showcase/op-04-rooms.webp
@@ -98,14 +108,17 @@ screens:
       en: Empty rooms stand out
       vi: Phòng trống hiện rõ
       zh: 空房一目了然
+      zh-hant: 空房一目瞭然
     caption:
       en: Vacant rooms are listed first, with a nudge to take a holding deposit early.
       vi: Phòng trống được đưa lên đầu, kèm lời nhắc nhận cọc giữ chỗ sớm.
       zh: 空房排在最前，并提醒尽早收取订金留房。
+      zh-hant: 空房排在最前，並提醒儘早收取訂金留房。
     alt:
       en: Sổ Trọ phone screen “Phòng trọ” listing vacant rooms with a deposit reminder.
       vi: Màn hình “Phòng trọ” trên điện thoại liệt kê phòng trống kèm lời nhắc nhận cọc.
       zh: Sổ Trọ 手机“Phòng trọ”页面，列出空房并提醒收取订金。
+      zh-hant: Sổ Trọ 手機「Phòng trọ」頁面，列出空房並提醒收取訂金。
   - id: pair
     surface: phone
     src: /products/sotro/showcase/op-00-pair.webp
@@ -115,14 +128,17 @@ screens:
       en: Pair a phone once
       vi: Kết nối điện thoại một lần
       zh: 手机只需配对一次
+      zh-hant: 手機只需配對一次
     caption:
       en: A family member opens the link the owner prepared and taps once — no account or password to type.
       vi: Người nhà mở liên kết chủ trọ đã chuẩn bị và bấm một lần, không phải nhập tài khoản hay mật khẩu.
       zh: 家人打开房东准备好的链接，点一下即可，无需输入账号或密码。
+      zh-hant: 家人開啟房東準備好的連結，點一下即可，無需輸入賬號或密碼。
     alt:
       en: Sổ Trọ phone screen “Kết nối với Sổ Trọ” with a single “connect this phone” button.
       vi: Màn hình “Kết nối với Sổ Trọ” trên điện thoại với một nút “Kết nối điện thoại này”.
       zh: Sổ Trọ 手机“Kết nối với Sổ Trọ”页面，只有一个“连接此手机”按钮。
+      zh-hant: Sổ Trọ 手機「Kết nối với Sổ Trọ」頁面，只有一個「連線此手機」按鈕。
   - id: candlelight
     surface: phone
     src: /products/sotro/showcase/op-05-candlelight.webp
@@ -132,14 +148,17 @@ screens:
       en: Gentler at night
       vi: Dịu mắt về đêm
       zh: 夜间更柔和
+      zh-hant: 夜間更柔和
     caption:
       en: Candlelight mode warms the display automatically from 9 pm, and can be switched on or off.
       vi: Chế độ đèn nến tự làm ấm màn hình từ 9 giờ tối, có thể bật hoặc tắt.
       zh: 烛光模式在晚上 9 点后自动让屏幕变暖，也可手动开关。
+      zh-hant: 燭光模式在晚上 9 點後自動讓螢幕變暖，也可手動開關。
     alt:
       en: Sổ Trọ phone home screen in the warm, dark candlelight display.
       vi: Màn hình chính Sổ Trọ ở chế độ đèn nến tối, tông ấm.
       zh: Sổ Trọ 手机首页的暖色深色烛光显示。
+      zh-hant: Sổ Trọ 手機首頁的暖色深色燭光顯示。
   - id: property
     surface: desktop
     src: /products/sotro/showcase/mgr-01-property.webp
@@ -149,14 +168,17 @@ screens:
       en: Buildings and rooms
       vi: Dãy trọ và phòng
       zh: 楼栋与房间
+      zh-hant: 樓棟與房間
     caption:
       en: On a computer, the owner sees occupancy, vacant rooms and what needs handling, then manages rooms, meters and tariffs.
       vi: Trên máy tính, chủ trọ thấy số phòng đang thuê, phòng trống, việc cần xử lý, rồi quản lý phòng, công tơ và biểu giá.
       zh: 在电脑上，房东可查看入住、空房与待处理事项，并管理房间、电表与价目。
+      zh-hant: 在電腦上，房東可檢視入住、空房與待處理事項，並管理房間、電錶與價目。
     alt:
       en: Sổ Trọ owner console “Dãy trọ & phòng” showing occupancy badges for a sample building.
       vi: Khu quản trị Sổ Trọ, trang “Dãy trọ & phòng” với các nhãn tình trạng phòng của một dãy trọ mẫu.
       zh: Sổ Trọ 房东后台“Dãy trọ & phòng”页面，显示示例楼栋的入住标签。
+      zh-hant: Sổ Trọ 房東後臺「Dãy trọ & phòng」頁面，顯示示例樓棟的入住標籤。
   - id: owner-collect
     surface: desktop
     src: /products/sotro/showcase/mgr-02-payments.webp
@@ -166,14 +188,17 @@ screens:
       en: Collections for the whole building
       vi: Thu tiền cả dãy
       zh: 整栋收款
+      zh-hant: 整棟收款
     caption:
       en: The owner console shows the same collection status as the family’s phones, grouped by paid, due and overdue.
       vi: Khu quản trị hiển thị cùng tình trạng thu tiền như trên điện thoại người nhà, chia theo đã thu đủ, đến hạn và quá hạn.
       zh: 后台显示与家人手机相同的收款状态，按已收齐、到期与逾期分组。
+      zh-hant: 後臺顯示與家人手機相同的收款狀態，按已收齊、到期與逾期分組。
     alt:
       en: Sổ Trọ owner console “Thu tiền” with paid, due and overdue counts.
       vi: Khu quản trị Sổ Trọ, trang “Thu tiền” với số phòng đã thu đủ, đến hạn và quá hạn.
       zh: Sổ Trọ 后台“Thu tiền”页面，显示已收齐、到期与逾期数量。
+      zh-hant: Sổ Trọ 後臺「Thu tiền」頁面，顯示已收齊、到期與逾期數量。
   - id: family
     surface: desktop
     src: /products/sotro/showcase/mgr-03-devices.webp
@@ -183,14 +208,17 @@ screens:
       en: Family and devices
       vi: Gia đình và thiết bị
       zh: 家人与设备
+      zh-hant: 家人與裝置
     caption:
       en: The owner decides which family member uses which paired phone. Parents never have to remember an account, password or code.
       vi: Chủ trọ quyết định người nhà nào dùng điện thoại đã ghép nào. Ba Mẹ không phải nhớ tài khoản, mật khẩu hay mã.
       zh: 房东决定哪位家人使用哪台已配对手机。父母无需记住账号、密码或代码。
+      zh-hant: 房東決定哪位家人使用哪臺已配對手機。父母無需記住賬號、密碼或程式碼。
     alt:
       en: Sổ Trọ owner console “Gia đình & thiết bị” with family member cards for Ba and Mẹ.
       vi: Khu quản trị Sổ Trọ, trang “Gia đình & thiết bị” với thẻ người nhà Ba và Mẹ.
       zh: Sổ Trọ 后台“Gia đình & thiết bị”页面，显示“Ba”和“Mẹ”家人卡片。
+      zh-hant: Sổ Trọ 後臺「Gia đình & thiết bị」頁面，顯示「Ba」和「Mẹ」家人卡片。
   - id: setup
     surface: desktop
     src: /products/sotro/showcase/mgr-04-onboarding.webp
@@ -200,24 +228,29 @@ screens:
       en: Set up in four steps
       vi: Khởi tạo trong 4 bước
       zh: 四步完成设置
+      zh-hant: 四步完成設定
     caption:
       en: "A guided setup: building details, rooms, electricity and water prices, done."
       vi: "Thiết lập có hướng dẫn: thông tin dãy trọ, tạo phòng, giá điện nước, hoàn tất."
       zh: 引导式设置：楼栋信息、房间、水电价格，完成。
+      zh-hant: 引導式設定：樓棟資訊、房間、水電價格，完成。
     alt:
       en: Sổ Trọ owner console setup wizard “Khởi tạo dãy trọ mới”, step 1 of 4.
       vi: Trình khởi tạo “Khởi tạo dãy trọ mới” trong khu quản trị Sổ Trọ, bước 1/4.
       zh: Sổ Trọ 后台设置向导“Khởi tạo dãy trọ mới”，第 1/4 步。
+      zh-hant: Sổ Trọ 後臺設定嚮導「Khởi tạo dãy trọ mới」，第 1/4 步。
 
 guide:
   title:
     en: Getting started with Sổ Trọ
     vi: Bắt đầu với Sổ Trọ
     zh: Sổ Trọ 入门指南
+    zh-hant: Sổ Trọ 入門指南
   intro:
     en: "Sổ Trọ has two sides: the owner sets things up on a computer, and family members do the daily work on a paired phone. These steps follow the screens of the current development build."
     vi: "Sổ Trọ có hai phía: chủ trọ thiết lập trên máy tính, người nhà làm việc hằng ngày trên điện thoại đã ghép. Các bước dưới đây theo đúng màn hình của bản đang phát triển."
     zh: Sổ Trọ 分两端：房东在电脑上设置，家人在已配对的手机上处理日常事务。以下步骤按照当前开发版本的界面编写。
+    zh-hant: Sổ Trọ 分兩端：房東在電腦上設定，家人在已配對的手機上處理日常事務。以下步驟按照當前開發版本的介面編寫。
   steps:
     - id: create-building
       screen: setup
@@ -226,10 +259,12 @@ guide:
         en: Create your building
         vi: Tạo dãy trọ
         zh: 创建楼栋
+        zh-hant: 建立樓棟
       body:
         en: "Sign in to the owner console and follow the four-step setup: name and address, the list of rooms, starting electricity and water prices, then finish."
         vi: "Đăng nhập khu quản trị và làm theo 4 bước: tên và địa chỉ dãy trọ, danh sách phòng, giá điện nước ban đầu, rồi hoàn tất."
         zh: 登录房东后台，按四步完成设置：名称与地址、房间列表、初始水电价格，然后完成。
+        zh-hant: 登入房東後臺，按四步完成設定：名稱與地址、房間列表、初始水電價格，然後完成。
     - id: check-rooms
       screen: property
       role: owner
@@ -237,10 +272,12 @@ guide:
         en: Check rooms, meters and tariffs
         vi: Kiểm tra phòng, công tơ, biểu giá
         zh: 核对房间、电表与价目
+        zh-hant: 核對房間、電錶與價目
       body:
         en: Under “Dãy trọ & phòng”, review the room map, meters and price table. The badges show occupied rooms, vacant rooms and what needs handling.
         vi: Trong “Dãy trọ & phòng”, xem sơ đồ phòng, công tơ và biểu giá. Các nhãn cho biết phòng đang thuê, phòng trống và việc cần xử lý.
         zh: 在“Dãy trọ & phòng”中查看房间图、电表和价目表。标签显示在租、空房及待处理事项。
+        zh-hant: 在「Dãy trọ & phòng」中檢視房間圖、電錶和價目表。標籤顯示在租、空房及待處理事項。
     - id: add-family
       screen: family
       role: owner
@@ -248,10 +285,12 @@ guide:
         en: Prepare a phone for each family member
         vi: Chuẩn bị điện thoại cho người nhà
         zh: 为每位家人准备手机
+        zh-hant: 為每位家人準備手機
       body:
         en: Under “Gia đình & thiết bị”, set up each family member who will use Sổ Trọ day to day and create a pairing code or link for their phone.
         vi: Trong “Gia đình & thiết bị”, thiết lập từng người nhà sẽ dùng Sổ Trọ hằng ngày và tạo mã hoặc liên kết ghép nối cho điện thoại của họ.
         zh: 在“Gia đình & thiết bị”中设置每位日常使用 Sổ Trọ 的家人，并为其手机创建配对码或链接。
+        zh-hant: 在「Gia đình & thiết bị」中設定每位日常使用 Sổ Trọ 的家人，併為其手機建立配對碼或連結。
     - id: pair-phone
       screen: pair
       role: family
@@ -259,10 +298,12 @@ guide:
         en: Connect the phone
         vi: Kết nối điện thoại
         zh: 连接手机
+        zh-hant: 連線手機
       body:
         en: The family member opens the link on their own phone and taps “Kết nối điện thoại này”. If the code has expired, the owner simply creates a new one.
         vi: Người nhà mở liên kết trên điện thoại của mình và bấm “Kết nối điện thoại này”. Nếu mã đã hết hạn, chủ trọ chỉ cần tạo mã mới.
         zh: 家人在自己的手机上打开链接并点击“Kết nối điện thoại này”。如配对码过期，房东重新创建即可。
+        zh-hant: 家人在自己的手機上開啟連結並點選「Kết nối điện thoại này」。如配對碼過期，房東重新建立即可。
     - id: daily
       screen: today
       role: family
@@ -270,10 +311,12 @@ guide:
         en: Start each day on the home screen
         vi: Mỗi ngày bắt đầu từ màn hình chính
         zh: 每天从首页开始
+        zh-hant: 每天從首頁開始
       body:
         en: The home screen lists only what needs doing today. Finished items disappear on their own.
         vi: Màn hình chính chỉ liệt kê việc cần làm hôm nay. Làm xong, việc sẽ tự biến mất.
         zh: 首页只列出今天要做的事，完成后会自动消失。
+        zh-hant: 首頁只列出今天要做的事，完成後會自動消失。
     - id: meters
       screen: utilities
       role: family
@@ -281,10 +324,12 @@ guide:
         en: Record meter readings at month end
         vi: Ghi điện nước cuối tháng
         zh: 月底记录水电
+        zh-hant: 月底記錄水電
       body:
         en: Open “Điện nước”, choose an occupied room and enter the readings. After saving, Sổ Trọ can take you straight to the next room. The screen also offers to prepare for working offline.
         vi: Mở “Điện nước”, chọn phòng đang thuê và nhập chỉ số. Lưu xong, Sổ Trọ có thể chuyển thẳng sang phòng kế tiếp. Màn hình cũng cho phép chuẩn bị để làm việc khi không có mạng.
         zh: 打开“Điện nước”，选择在租房间并录入读数。保存后可直接进入下一间。该页面还可预先准备离线工作。
+        zh-hant: 開啟「Điện nước」，選擇在租房間並輸入讀數。儲存後可直接進入下一間。該頁面還可預先準備離線工作。
     - id: collect-rent
       screen: collect
       role: family
@@ -292,10 +337,12 @@ guide:
         en: Collect rent
         vi: Thu tiền phòng
         zh: 收取房租
+        zh-hant: 收取房租
       body:
         en: Open “Thu tiền” to see who still owes. Confirm the amount first, then record what was received. Opening the screen does not close anything out by itself.
         vi: Mở “Thu tiền” để xem ai còn nợ. Chốt số tiền trước rồi mới ghi nhận đã thu; chỉ mở xem thì Sổ Trọ không tự chốt.
         zh: 打开“Thu tiền”查看谁还欠款。先确认金额再记录已收；仅打开查看不会自动结账。
+        zh-hant: 開啟「Thu tiền」檢視誰還欠款。先確認金額再記錄已收；僅開啟檢視不會自動結賬。
     - id: review
       screen: owner-collect
       role: owner
@@ -303,7 +350,9 @@ guide:
         en: Follow along from the owner console
         vi: Theo dõi từ khu quản trị
         zh: 在后台同步查看
+        zh-hant: 在後臺同步檢視
       body:
         en: The owner sees the same collection status on a computer, grouped by paid, due and overdue.
         vi: Chủ trọ thấy cùng tình trạng thu tiền trên máy tính, chia theo đã thu đủ, đến hạn và quá hạn.
         zh: 房东在电脑上看到同样的收款状态，按已收齐、到期与逾期分组。
+        zh-hant: 房東在電腦上看到同樣的收款狀態，按已收齊、到期與逾期分組。

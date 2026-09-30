@@ -10,11 +10,12 @@ interface Props {
 const { lang = "en" } = Astro.props;
 
 const STATUS_LABELS: Record<TrustState, Record<Language, string>> = {
-  available: { en: "Available", vi: "Có sẵn", zh: "可用" },
+  available: { en: "Available", vi: "Có sẵn", zh: "可用", "zh-hant": "可用" },
   "not-published": {
     en: "Not published yet",
     vi: "Chưa công bố",
     zh: "尚未公布",
+    "zh-hant": "尚未公布",
   },
 };
 
@@ -29,12 +30,14 @@ const OPEN_LABEL: Record<Language, string> = {
   en: "Open",
   vi: "Mở",
   zh: "打开",
+  "zh-hant": "開啟",
 };
 
 const COMPARE_LABEL: Record<Language, string> = {
   en: "Compare in the Decision Room",
   vi: "So sánh trong Phòng Quyết định",
   zh: "在决策室中比较",
+  "zh-hant": "在決策室中比較",
 };
 ---
 

@@ -15,7 +15,7 @@ test("privacy truth discloses opt-in preference storage", () => {
     assert.match(source, /lựa chọn ngôn ngữ và giao diện/);
     assert.match(source, /选择语言或主题/);
   }
-  for (const locale of ["en", "vi", "zh"]) {
+  for (const locale of ["en", "vi", "zh", "zh-hant"]) {
     const page = read(`src/pages/${locale}/privacy.astro`);
     const content = read(`src/content/pages/${locale}/privacy.yaml`);
     assert.doesNotMatch(

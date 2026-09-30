@@ -25,6 +25,9 @@ const ROUTES = [
   "/zh/",
   "/zh/products/sotro/",
   "/zh/products/sotam/",
+  "/zh-hant/",
+  "/zh-hant/products/sotro/",
+  "/zh-hant/products/sotam/",
 ] as const;
 
 for (const route of ROUTES) {
@@ -102,6 +105,8 @@ const TARGET_ROUTES = [
   "/en/products/sotro/",
   "/vi/products/sotro/",
   "/zh/products/sotro/",
+  "/zh-hant/",
+  "/zh-hant/products/sotro/",
 ] as const;
 
 for (const route of TARGET_ROUTES) {

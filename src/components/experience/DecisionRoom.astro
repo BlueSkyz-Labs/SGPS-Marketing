@@ -56,12 +56,24 @@ const COPY = {
     count: "已对比 {n}/{max} 项",
     full: "对比栏最多容纳 {max} 项。",
   },
+  "zh-hant": {
+    heading: "決策室",
+    lede: "將最多四項公開事實並列對照 — 有來源的聲明、信任路徑，以及確保其嚴謹的邊界說明。不作結論，不提建議。",
+    add: "對比",
+    remove: "移除",
+    reset: "清空對比",
+    boardTitle: "對比欄",
+    empty: "尚未選擇任何專案。請在下方選擇最多四項。",
+    source: "檢視來源",
+    count: "已對比 {n}/{max} 項",
+    full: "對比欄最多容納 {max} 項。",
+  },
 } as const;
 
 const KIND_LABELS = {
-  claim: { en: "Claim", vi: "Tuyên bố", zh: "声明" },
-  trust: { en: "Trust", vi: "Tin cậy", zh: "信任" },
-  product: { en: "Product", vi: "Sản phẩm", zh: "产品" },
+  claim: { en: "Claim", vi: "Tuyên bố", zh: "声明", "zh-hant": "聲明" },
+  trust: { en: "Trust", vi: "Tin cậy", zh: "信任", "zh-hant": "信任" },
+  product: { en: "Product", vi: "Sản phẩm", zh: "产品", "zh-hant": "產品" },
 } as const;
 
 /** C4-E Task 3 — atelier controls copy. */
@@ -203,6 +215,51 @@ const ATELIER_COPY = {
       "evidence-backed": "有证据支持",
       "trust-signals": "信任信号",
       "product-truth": "产品事实",
+    },
+  },
+  "zh-hant": {
+    heading: "按目標排列",
+    lede: "按你正在做的事情對已發布條目分組。條目僅作列舉，不按優劣排序。",
+    goal: "目標",
+    none: "不選擇 — 按來源順序",
+    constraints: "縮小範圍",
+    reset: "重置排列",
+    grouped: "已排列 {n} 項",
+    cleared: "已恢復來源順序。",
+    noneMatch: "沒有已發布條目符合該選擇。",
+    goals: {
+      explore: "探索",
+      evaluate: "評估",
+      verify: "核實",
+      architecture: "架構",
+      "work-with-blueskyz": "與 BlueSkyz 合作",
+    },
+    constraintsLabels: {
+      technical: "技術",
+      trust: "信任",
+      availability: "可用性",
+    },
+    handoff: {
+      select: "加入檔案",
+      empty: "尚未選擇。請勾選你想要的條目，檔案只會包含這些條目。",
+      action: "開啟包含 {n} 個所選條目的檔案",
+      report: "有 {n} 個選擇無法加入檔案。",
+    },
+    reasons: {
+      "in-scope": "列出原因：它是符合該目標的已發布條目。",
+      "carries-source": "列出原因：它附有已發布的來源。",
+      "states-limits": "列出原因：它說明了自身未確立的內容。",
+      "trust-surface": "列出原因：它發布在信任介面上。",
+      "product-fact": "列出原因：它是已發布的產品事實。",
+    },
+    groups: {
+      "starting-points": "起點",
+      "open-questions": "待解問題",
+      "sourced-facts": "有來源的事實",
+      "stated-limits": "已聲明的限制",
+      "evidence-backed": "有證據支援",
+      "trust-signals": "信任訊號",
+      "product-truth": "產品事實",
     },
   },
 } as const;

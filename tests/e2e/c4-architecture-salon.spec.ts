@@ -1,6 +1,6 @@
 import { expect, test } from "@playwright/test";
 
-const LANGS = ["en", "vi", "zh"] as const;
+const LANGS = ["en", "vi", "zh", "zh-hant"] as const;
 const LENSES = ["system", "data", "trust", "recovery", "evidence"];
 
 test.describe("C4-D architecture salon", () => {

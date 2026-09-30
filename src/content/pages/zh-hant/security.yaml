@@ -1,0 +1,18 @@
+# zh-Hant copy: machine-assisted (OpenCC s2twp), pending native review.
+lang: zh-hant
+slug: security
+title: 安全
+description: BlueSkyz Labs 安全報告與漏洞揭露政策。
+sections:
+  hero:
+    heading: 安全
+  intro: 我們高度重視安全，歡迎負責任的揭露。
+  reporting:
+    heading: 如何報告
+    content: 請透過 GitHub 私有漏洞報告提交安全問題。
+    cta: 開啟 GitHub Advisory
+    href: https://github.com/BlueSkyz-Labs/SGPS-Marketing/security/advisories/new
+  disclosure:
+    heading: 揭露政策
+    content: 我們遵循負責任的揭露作法。請在公開揭露前給予合理的修復時間。
+  note: 本網站為靜態企業網站，不包含使用者帳戶或敏感資料儲存。

@@ -3,7 +3,7 @@ import test from "node:test";
 import { existsSync, readFileSync } from "node:fs";
 import { EDITIONS } from "../../src/data/editions.ts";
 
-const LANGS = ["en", "vi", "zh"];
+const LANGS = ["en", "vi", "zh", "zh-hant"];
 const SEO = "src/lib/seo.ts";
 const SITEMAP = "src/pages/sitemap.xml.ts";
 

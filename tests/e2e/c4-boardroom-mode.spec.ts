@@ -1,6 +1,6 @@
 import { expect, test } from "@playwright/test";
 
-const LANGS = ["en", "vi", "zh"] as const;
+const LANGS = ["en", "vi", "zh", "zh-hant"] as const;
 const VIEWPORTS = [
   { width: 1440, height: 900 },
   { width: 1024, height: 768 },

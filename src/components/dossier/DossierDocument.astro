@@ -64,6 +64,16 @@ const LABELS: Record<
     source: "来源",
     sourceValue: "本站已发布的界面",
   },
+  "zh-hant": {
+    title: "公開檔案",
+    note: "由公開來源生成。以下每條均已在本站發布，並連結至其來源。",
+    scope: "已發布條目",
+    language: "語言",
+    reviewed: "已記錄的複核時間",
+    unknown: "未發布條目不在此處暗示。",
+    source: "來源",
+    sourceValue: "本站已發布的介面",
+  },
 };
 
 const labels = LABELS[lang];
@@ -83,6 +93,7 @@ const SECTION_LABELS: Record<
   en: { claims: "Claims", evidence: "Evidence", boundaries: "Boundaries" },
   vi: { claims: "Tuyên bố", evidence: "Bằng chứng", boundaries: "Ranh giới" },
   zh: { claims: "声明", evidence: "证据", boundaries: "边界" },
+  "zh-hant": { claims: "聲明", evidence: "證據", boundaries: "邊界" },
 };
 
 const bySection = (section: (typeof SECTION_ORDER)[number]): DossierEntry[] =>

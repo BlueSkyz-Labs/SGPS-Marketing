@@ -90,7 +90,7 @@ test("the empty state states the publication rule in every language with locale 
 });
 
 test("the empty state is mounted only behind the empty-registry condition", () => {
-  for (const lang of ["en", "vi", "zh"]) {
+  for (const lang of ["en", "vi", "zh", "zh-hant"]) {
     const listing = readFileSync(
       join(ROOT, `src/pages/${lang}/products/index.astro`),
       "utf8",

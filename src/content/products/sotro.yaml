@@ -74,3 +74,14 @@ i18n:
       - "收据，以及在记录已收款项之前单独的一步确认"
       - "可选的、礼貌的 Zalo/短信风格提醒消息，供复制使用；不会自动发送"
     primaryActionLabel: "预览 Sổ Trọ"
+  # zh-Hant copy: machine-assisted (OpenCC s2twp), pending native review.
+  zh-hant:
+    shortDescription: "面向越南房東的數位筆記本：房間、應收租金、可信的歷史記錄與今日待辦。"
+    jobs:
+      - "檢視本月尚未收取的款項以及今天需要處理的事項"
+      - "維護可靠的房間、租客、表計讀數與每月費用記錄"
+    capabilities:
+      - "開發範圍：可追溯的水電費用與租賃記錄"
+      - "開發範圍：可審計的收據與人工確認的付款狀態"
+      - "可選的 Zalo/簡訊模板：複製後自行打開發送，不會自動傳送"
+    primaryActionLabel: "預覽 Sổ Trọ"

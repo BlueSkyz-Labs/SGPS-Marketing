@@ -170,7 +170,7 @@ export function initDecisionAtelier(room: HTMLElement): void {
     text.replace("{n}", String(n));
 
   const asItem = (element: HTMLElement): DecisionItem => {
-    const placeholder = { en: "", vi: "", zh: "" };
+    const placeholder = { en: "", vi: "", zh: "", "zh-hant": "" };
     return {
       id: element.getAttribute("data-decision-item") ?? "",
       kind: (element.getAttribute("data-item-kind") ?? "claim") as DecisionKind,
@@ -387,6 +387,7 @@ export function initAtelierHandoff(room: HTMLElement): void {
 function readLanguage(): Language {
   const tag = (document.documentElement.lang || "en").toLowerCase();
   if (tag.startsWith("vi")) return "vi";
+  if (/^zh-(?:hant|tw|hk|mo)(?:-|$)/.test(tag)) return "zh-hant";
   if (tag.startsWith("zh")) return "zh";
   return "en";
 }

@@ -1,0 +1,37 @@
+# zh-Hant copy: machine-assisted (OpenCC s2twp), pending native review.
+lang: zh-hant
+slug: index
+title: BlueSkyz Labs
+description: 我們打造智慧化產品，賦能個人並提升工作方式。
+sections:
+  hero:
+    heading: 智慧。提升。影響。
+    subheading: 我們打造智慧化產品，賦能個人並提升工作方式。
+    supporting: 更高的視角，成就更明亮的明天。
+  onewhouse:
+    heading: 同一團隊
+    intro: 清晰構建。從容擴展。我們不圍繞單一品類，而是圍繞一種思維方式。
+    principles:
+      - name: 智慧
+        summary: 深度思考。智慧解決方案。
+      - name: 提升
+        summary: 更佳視角。更大影響。
+      - name: 信任
+        summary: 公開聲明。可驗證證據。
+      - name: 影響
+        summary: 真實價值。真實改變。
+  trust:
+    heading: 信任
+    intro: 產品成熟度始終明確。隱私、安全與支援均為正式通道——而非口號。
+    links:
+      - label: 隱私
+        href: /zh-hant/privacy/
+      - label: 安全
+        href: /zh-hant/security/
+      - label: 支援
+        href: /zh-hant/support/
+  about:
+    heading: 關於 BlueSkyz
+    content: 我們打造智慧化產品，賦能個人並提升工作方式。更高的視角，成就更明亮的明天。
+    founder_name: Tony Nguyen
+    founder_title: 創辦人兼執行長

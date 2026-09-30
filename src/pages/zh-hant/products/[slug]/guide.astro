@@ -1,0 +1,26 @@
+---
+// zh-Hant copy: machine-assisted (OpenCC s2twp), pending native review.
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import ProductGuide from "@/components/product/ProductGuide.astro";
+import { getGuideProducts } from "@/lib/showcases";
+
+export async function getStaticPaths() {
+  return (await getGuideProducts()).map(({ product, showcase }) => ({
+    params: { slug: product.data.slug },
+    props: { product, showcase: showcase.data },
+  }));
+}
+
+const { product, showcase } = Astro.props;
+const guide = showcase.guide!;
+---
+
+<BaseLayout
+  title={`${guide.title["zh-hant"]} — BlueSkyz Labs`}
+  description={guide.intro["zh-hant"].slice(0, 200)}
+  path={`/zh-hant/products/${product.data.slug}/guide/`}
+  ogImage={showcase.screens[0]?.src}
+  scene="product"
+>
+  <ProductGuide product={product} showcase={showcase} lang="zh-hant" />
+</BaseLayout>

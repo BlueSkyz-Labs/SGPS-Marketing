@@ -39,11 +39,11 @@ function listCount(section, key) {
 
 const files = readdirSync(DIR).filter((f) => f.endsWith(".yaml"));
 
-test("every public product carries mirrored vi and zh copy", () => {
+test("every public product carries mirrored vi, zh and zh-hant copy", () => {
   for (const file of files) {
     const p = parse(file);
     if (!p.isPublic) continue;
-    for (const lang of ["vi", "zh"]) {
+    for (const lang of ["vi", "zh", "zh-hant"]) {
       const section = localeSection(p.block, lang);
       assert.ok(section, `${file}: missing i18n.${lang}`);
       assert.match(section, /shortDescription: \S/, `${file} ${lang}`);

@@ -55,6 +55,14 @@ const LABELS: Record<
     noscript:
       "交互式编写需要 JavaScript。所有已发布条目及其来源链接仍列于下方，无 JavaScript 时依然可访问。",
   },
+  "zh-hant": {
+    heading: "編寫公開檔案",
+    lede: "選擇已發布條目以組裝會議檢視。頁面不傳送任何資料，也不儲存任何內容。",
+    select: "已發布條目",
+    compose: "預覽",
+    noscript:
+      "互動式編寫需要 JavaScript。所有已發布條目及其來源連結仍列於下方，無 JavaScript 時依然可訪問。",
+  },
 };
 
 const labels = LABELS[lang];
@@ -75,6 +83,7 @@ const SECTION_LABELS: Record<
   en: { claims: "Claims", evidence: "Evidence", boundaries: "Boundaries" },
   vi: { claims: "Tuyên bố", evidence: "Bằng chứng", boundaries: "Ranh giới" },
   zh: { claims: "声明", evidence: "证据", boundaries: "边界" },
+  "zh-hant": { claims: "聲明", evidence: "證據", boundaries: "邊界" },
 };
 const bySection = (section: (typeof SECTIONS)[number]): DossierEntry[] =>
   catalog.entries.filter((entry) => entry.section === section);

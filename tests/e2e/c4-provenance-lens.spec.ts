@@ -1,6 +1,6 @@
 import { expect, test } from "@playwright/test";
 
-const LANGS = ["en", "vi", "zh"] as const;
+const LANGS = ["en", "vi", "zh", "zh-hant"] as const;
 const SUBJECT = "privacy-no-tracking-on-this-site";
 
 test.describe("C4-D provenance lens", () => {

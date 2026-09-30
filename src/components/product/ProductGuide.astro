@@ -54,6 +54,16 @@ const COPY = {
     done: "日常流程就是这样。有问题或建议？",
     support: "联系支持",
   },
+  "zh-hant": {
+    back: `返回 ${product.data.name}`,
+    status: "開發中——正式推出前步驟可能會有變化。",
+    disclosure: `介面截圖來自開發版本（修訂 ${revision}），使用示例演示資料。`,
+    owner: "房東 · 電腦",
+    family: "家人 · 手機",
+    step: "步驟",
+    done: "日常流程就是這樣。有問題或建議？",
+    support: "聯絡支援",
+  },
 } as const satisfies Record<Language, Record<string, string>>;
 const t = COPY[lang];
 const signInUrl = product.data.appAccess?.signInUrl;

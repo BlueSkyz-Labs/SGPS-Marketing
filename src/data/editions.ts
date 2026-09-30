@@ -16,11 +16,14 @@ export const EDITIONS: readonly EditionRecord[] = [
       en: "Trust Foundations",
       vi: "Nền tảng tin cậy",
       zh: "信任基石",
+      "zh-hant": "信任基石",
     },
     deck: {
       en: "Three public statements about how this site handles security reporting, tracking, and product proof — each one linked to the evidence already published behind it.",
       vi: "Ba tuyên bố công khai về cách site này xử lý báo cáo an ninh, theo dõi và bằng chứng sản phẩm — mỗi tuyên bố đều dẫn tới bằng chứng đã công bố.",
       zh: "关于本站如何处理安全报告、追踪与产品证明的三项公开陈述 — 每项都链接到已发布的证据。",
+      "zh-hant":
+        "關於本站如何處理安全報告、追蹤與產品證明的三項公開陳述 — 每項都連結到已發布的證據。",
     },
     sources: [
       { kind: "claim", id: "security-reporting-is-private" },
@@ -31,6 +34,7 @@ export const EDITIONS: readonly EditionRecord[] = [
       en: "Collected from statements already published on this site. This edition adds no new claim of its own.",
       vi: "Tuyển từ các tuyên bố đã công bố trên site. Tuyển tập này không thêm tuyên bố mới.",
       zh: "选自本站已发布的陈述。本选集不新增任何声明。",
+      "zh-hant": "選自本站已發布的陳述。本選集不新增任何聲明。",
     },
     published: "2026-09-23",
   },

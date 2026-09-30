@@ -9,7 +9,12 @@ interface Props {
 }
 
 const { lifecycle, lang } = Astro.props;
-const heading = { en: "Lifecycle", vi: "Vòng đời", zh: "生命周期" }[lang];
+const heading = {
+  en: "Lifecycle",
+  vi: "Vòng đời",
+  zh: "生命周期",
+  "zh-hant": "生命週期",
+}[lang];
 ---
 
 <section class="product-ladder" aria-label={heading}>

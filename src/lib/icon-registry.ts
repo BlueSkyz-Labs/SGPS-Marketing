@@ -31,6 +31,14 @@ export const ICON_REGISTRY: Readonly<Record<string, IconDefinition>> =
     close: Object.freeze({
       paths: Object.freeze(["M6 6l12 12", "M18 6 6 18"]),
     }),
+    globe: Object.freeze({
+      paths: Object.freeze([
+        "M12 4a8 8 0 1 0 0 16 8 8 0 0 0 0-16Z",
+        "M4 12h16",
+        "M12 4c2.2 2.2 3.3 4.9 3.3 8s-1.1 5.8-3.3 8",
+        "M12 4C9.8 6.2 8.7 8.9 8.7 12s1.1 5.8 3.3 8",
+      ]),
+    }),
     external: Object.freeze({
       paths: Object.freeze(["M14 5h5v5", "M19 5l-8 8", "M18 14v5H5V6h5"]),
     }),

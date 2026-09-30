@@ -12,7 +12,7 @@ import { CLAIMS } from "../../src/data/claims.ts";
  * the same public subject id.
  */
 
-const LANGS = ["en", "vi", "zh"];
+const LANGS = ["en", "vi", "zh", "zh-hant"];
 const SUBJECTS = [
   "security-reporting-is-private",
   "privacy-no-tracking-on-this-site",
