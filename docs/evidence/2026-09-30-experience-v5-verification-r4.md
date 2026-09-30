@@ -33,6 +33,15 @@ About 525 ms of FCP is the chooser plus the redirect. `/en/` itself is in line w
 - The 2500 ms ceiling must not be loosened.
 - First-time visitors who land on `/` pay about 500 ms on simulated slow 4G. Whether to fix that (for example by an edge redirect) is a product decision, not made here.
 
+## Correction to r3 (F-34): the cue list was incomplete
+
+r3 recorded that the active language item is identified by the pill fill, a shadow and label brightness, and left WCAG 1.4.11 undecided. That list missed the **flag badge**: `LanguageSwitcher.astro` renders a 20 px flag inside the active item only.
+
+- **Measured** (headless Chromium, `/en/`): flag badge 20 px wide on the active item and 0 px on idle items in OS dark, explicit `data-theme=dark` and explicit `data-theme=light`; a screenshot in dark shows the EN item with a flag inside the pill and VI and ZH as text only.
+- **Contrast of the flag against the active pill.** Dark (`#1e293b`): EN white cross 14.63:1 (its navy field is 1.01:1, so it merges with the pill); VI yellow star 9.74:1 and red field 2.97:1; ZH yellow stars 10.94:1 and red field 3.09:1. Light (`#ffffff`): VI red 4.93:1, ZH red 4.74:1, EN navy 14.76:1.
+- **Reading.** The selected state is identified by the presence of a coloured flag whose identifying parts are at least 3:1 against the pill in both themes, plus `aria-current="page"`; it is not carried by the 1.22:1 pill fill. On this evidence F-34 is **not a defect**. The judgement that this satisfies WCAG 1.4.11 stays an expert call: multi-colour flags are not a standard contrast case, and nothing here is real-user evidence.
+- **Guard added.** `tests/architecture/language-switcher-state-cue.test.mjs` fails if the flag stops being active-only, if the idle collapse is lost, or if `aria-current` goes, with negative proofs.
+
 ## Pull requests at exact heads
 
 | PR   | State                                                                                                                                                                                                                                                                                                                                                                                   |
