@@ -62,3 +62,14 @@ i18n:
       - "A 阶段重点：经筛选的核心内容与基于 FSRS 的记忆复习"
       - "A 阶段重点：私有学习数据，支持导出与恢复"
     primaryActionLabel: "预览 FluentArc"
+  # zh-Hant copy: machine-assisted (OpenCC s2twp), pending native review.
+  zh-hant:
+    shortDescription: "以瀏覽器擴充功能為先、本地優先的方式，從真實工作和經過篩選的核心內容中學習職場英語。"
+    jobs:
+      - "將工作中遇到的英語轉化為可複用的職場表達"
+      - "透過回憶與應用練習職場與 IT 英語"
+    capabilities:
+      - "A 階段重點：本地瀏覽器擴展采集與理解"
+      - "A 階段重點：經篩選的核心內容與基於 FSRS 的記憶複習"
+      - "A 階段重點：私有學習資料，支援匯出與恢復"
+    primaryActionLabel: "預覽 FluentArc"

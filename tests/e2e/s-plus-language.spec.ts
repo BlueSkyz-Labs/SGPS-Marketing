@@ -1,9 +1,21 @@
-import { expect, test } from "@playwright/test";
+import { expect, test, type Page } from "@playwright/test";
+
+/** The options live in a native popover: open the visible header trigger. */
+async function openSwitcher(page: Page) {
+  await page.locator("header [data-language-trigger]:visible").first().click();
+  const panel = page.locator("header [data-language-panel]:popover-open");
+  await expect(panel).toBeVisible();
+  // Let the 170ms entrance transition finish so the options are stable targets.
+  await panel.evaluate((element) =>
+    Promise.all(element.getAnimations().map((animation) => animation.finished)),
+  );
+}
 
 test("language switch keeps real links with route context on /en/about/", async ({
   page,
 }) => {
   await page.goto("/en/about/");
+  await openSwitcher(page);
   const switcher = page.getByRole("navigation", { name: "Language" }).first();
   const viLink = switcher.getByRole("link", { name: "Tiếng Việt" });
   await expect(viLink).toHaveAttribute("href", "/vi/about/");
@@ -16,6 +28,7 @@ test("switching navigates for real and preserves route context", async ({
   page,
 }) => {
   await page.goto("/en/about/");
+  await openSwitcher(page);
   await page
     .getByRole("navigation", { name: "Language" })
     .first()
@@ -35,6 +48,7 @@ test("reduced motion keeps ordinary navigation", async ({ browser }) => {
   const context = await browser.newContext({ reducedMotion: "reduce" });
   const page = await context.newPage();
   await page.goto("/en/about/");
+  await openSwitcher(page);
   await page
     .getByRole("navigation", { name: "Language" })
     .first()
@@ -68,12 +82,18 @@ test("switching works without JavaScript (ordinary links)", async ({
   const context = await browser.newContext({ javaScriptEnabled: false });
   const page = await context.newPage();
   await page.goto("/en/about/");
-  await page
+  await openSwitcher(page);
+  const link = page
     .getByRole("navigation", { name: "Language" })
     .first()
-    .getByRole("link", { name: "Tiếng Việt" })
-    .click();
-  await page.waitForURL("**/vi/about/");
+    .getByRole("link", { name: "Tiếng Việt" });
+  await expect(link).toHaveAttribute("href", "/vi/about/");
+  // Ordinary anchor navigation is the authority; do not let the click action
+  // observe the cross-document transition it triggers (see c2-product-continuity).
+  await Promise.all([
+    page.waitForURL("**/vi/about/"),
+    link.click({ noWaitAfter: true }),
+  ]);
   await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
   await context.close();
 });
@@ -93,4 +113,7 @@ test("hreflang alternates stay reciprocal after switching", async ({
   const map = new Map(alternates as Array<[string, string]>);
   expect(map.get("en")?.endsWith("/en/support/")).toBe(true);
   expect(map.get("vi")?.endsWith("/vi/support/")).toBe(true);
+  expect(map.get("zh-Hans")?.endsWith("/zh/support/")).toBe(true);
+  expect(map.get("zh-Hant")?.endsWith("/zh-hant/support/")).toBe(true);
+  expect(map.get("x-default")?.endsWith("/en/support/")).toBe(true);
 });

@@ -1,0 +1,10 @@
+# zh-Hant copy: machine-assisted (OpenCC s2twp), pending native review.
+lang: zh-hant
+slug: support
+title: 支援
+description: 取得 BlueSkyz Labs 產品與服務的協助。
+sections:
+  hero:
+    heading: 支援
+  intro: 各產品頁提供針對該產品的支援連結。
+  corporate_note: 如需企業支援諮詢，請使用聯絡表單。

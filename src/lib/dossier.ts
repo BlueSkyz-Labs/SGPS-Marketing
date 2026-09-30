@@ -13,7 +13,7 @@ import { getPublicProvenance } from "./provenance-lens.ts";
  * no storage. The same request always compiles to the same dossier.
  */
 
-export type Language = "en" | "vi" | "zh";
+export type Language = "en" | "vi" | "zh" | "zh-hant";
 
 export const DOSSIER_SECTIONS = ["claims", "evidence", "boundaries"] as const;
 
@@ -60,7 +60,7 @@ export interface CompiledDossier {
   complete: boolean;
 }
 
-const LANGUAGE_KEYS: readonly Language[] = ["en", "vi", "zh"];
+const LANGUAGE_KEYS: readonly Language[] = ["en", "vi", "zh", "zh-hant"];
 
 const REQUEST_KEYS: Record<DossierSection, keyof DossierRequest> = {
   claims: "claimIds",
@@ -73,6 +73,7 @@ interface LocalizedLike {
   en: string;
   vi: string;
   zh: string;
+  "zh-hant": string;
 }
 
 function pick(localized: LocalizedLike, lang: Language): string {

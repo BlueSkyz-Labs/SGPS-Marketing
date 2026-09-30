@@ -12,6 +12,7 @@ interface Props {
 const { lang = "en" } = Astro.props;
 const isVi = lang === "vi";
 const isZh = lang === "zh";
+const isZhHant = lang === "zh-hant";
 
 const hasPublicProducts = (await getPublicProducts()).length > 0;
 const emptyPrimary = emptyRegistryPrimaryCta(SITE.contactEmail, lang);
@@ -27,7 +28,9 @@ const emptySecondary = emptyRegistrySecondaryCta(SITE.contactEmail, lang);
       ? "Bắt đầu từ điều bạn cần"
       : isZh
         ? "从您需要的开始"
-        : "Start with what you need"}
+        : isZhHant
+          ? "從您需要的開始"
+          : "Start with what you need"}
   </h2>
   <p class="mt-4 max-w-2xl text-lg text-[var(--text-secondary)] text-pretty">
     {hasPublicProducts
@@ -35,18 +38,24 @@ const emptySecondary = emptyRegistrySecondaryCta(SITE.contactEmail, lang);
         ? "Khám phá sản phẩm khi chúng sẵn sàng đánh giá, hoặc liên hệ BlueSkyz khi bạn có một vấn đề cụ thể đáng giải quyết."
         : isZh
           ? "当产品准备好接受评估时探索它们，或在您有具体问题需要解决时联系 BlueSkyz。"
-          : "Explore products when they are ready to evaluate, or contact BlueSkyz when you have a concrete problem worth solving."
+          : isZhHant
+            ? "當產品準備好接受評估時探索它們，或在您有具體問題需要解決時聯絡 BlueSkyz。"
+            : "Explore products when they are ready to evaluate, or contact BlueSkyz when you have a concrete problem worth solving."
       : SITE.contactEmail
         ? isVi
           ? "Chưa có sản phẩm công khai nào được công bố. Liên hệ BlueSkyz khi bạn có một vấn đề cụ thể đáng giải quyết, hoặc tìm hiểu chúng tôi là ai."
           : isZh
             ? "尚未发布任何公开产品。当您有具体问题需要解决时联系 BlueSkyz，或了解我们是谁。"
-            : "No public products are published yet. Contact BlueSkyz when you have a concrete problem worth solving, or learn who we are."
+            : isZhHant
+              ? "尚未發布任何公開產品。當您有具體問題需要解決時聯絡 BlueSkyz，或了解我們是誰。"
+              : "No public products are published yet. Contact BlueSkyz when you have a concrete problem worth solving, or learn who we are."
         : isVi
           ? "Chưa có sản phẩm công khai nào được công bố. Tìm hiểu chúng tôi là ai, hoặc sử dụng đường dẫn báo cáo bảo mật khi bạn cần một kênh tin cậy hoạt động."
           : isZh
             ? "尚未发布任何公开产品。了解我们是谁，或在需要可靠信任渠道时使用安全报告途径。"
-            : "No public products are published yet. Learn who we are, or use the security reporting path when you need a working trust channel."}
+            : isZhHant
+              ? "尚未發布任何公開產品。了解我們是誰，或在需要可靠信任管道時使用安全報告途徑。"
+              : "No public products are published yet. Learn who we are, or use the security reporting path when you need a working trust channel."}
   </p>
   <div class="mt-8 flex flex-wrap gap-3">
     {hasPublicProducts ? (

@@ -16,7 +16,7 @@ import {
  * at itself is not evidence.
  */
 
-export type Language = "en" | "vi" | "zh";
+export type Language = "en" | "vi" | "zh" | "zh-hant";
 
 export interface ProvenanceSourceRef {
   id: string;
@@ -42,6 +42,7 @@ interface LocalizedLike {
   en: string;
   vi: string;
   zh: string;
+  "zh-hant": string;
 }
 
 /** Assurance vocabulary no provenance chain may ever imply. */
@@ -57,7 +58,7 @@ const FORBIDDEN_ASSURANCE = [
   "soc 2",
 ];
 
-const LANGUAGE_KEYS: readonly Language[] = ["en", "vi", "zh"];
+const LANGUAGE_KEYS: readonly Language[] = ["en", "vi", "zh", "zh-hant"];
 
 function pick(localized: LocalizedLike, lang: Language): string {
   return localized[lang] ?? localized.en;
@@ -161,7 +162,12 @@ function ownSurfaceRoutes(surface: string): Set<string> {
   const routes = new Set<string>();
   const evidence = EVIDENCE_INDEX.get(`ev-${surface}-route`);
   if (!evidence) return routes;
-  for (const href of [evidence.href.en, evidence.href.vi, evidence.href.zh]) {
+  for (const href of [
+    evidence.href.en,
+    evidence.href.vi,
+    evidence.href.zh,
+    evidence.href["zh-hant"],
+  ]) {
     const path = normalizeOwnPath(href);
     if (path) routes.add(path);
   }

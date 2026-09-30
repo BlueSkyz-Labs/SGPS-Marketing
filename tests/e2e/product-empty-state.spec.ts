@@ -55,7 +55,7 @@ test.describe("published registry listing", () => {
   test("localized cards avoid English copy and duplicate profile actions", async ({
     page,
   }) => {
-    for (const lang of ["en", "vi", "zh"] as const) {
+    for (const lang of ["en", "vi", "zh", "zh-hant"] as const) {
       await page.goto(`/${lang}/products/`);
       for (const card of await page.locator("[data-product-card]").all()) {
         const cardText = (await card.innerText()).toLowerCase();

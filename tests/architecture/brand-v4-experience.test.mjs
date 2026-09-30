@@ -110,10 +110,10 @@ test("v4 principle matrix is four official cards, trilingual, and reflow-safe", 
 
   const site = readFileSync("src/data/site.ts", "utf8");
   const label = site.match(/brandPrinciples:\s*\{([\s\S]*?),\s*\}/)?.[1] ?? "";
-  for (const locale of ["en", "vi", "zh"]) {
+  for (const locale of ["en", "vi", "zh", "zh-hant"]) {
     assert.match(
       label,
-      new RegExp(`\\b${locale}:\\s*"`),
+      new RegExp(`(?:\\b${locale}|"${locale}"):\\s*"`),
       `SHARED_LABELS.brandPrinciples must carry ${locale}`,
     );
   }

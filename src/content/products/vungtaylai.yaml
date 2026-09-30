@@ -61,3 +61,14 @@ i18n:
       - "开发目标：以信心为先的作答与误解反馈"
       - "开发目标：支持离线的学习进度与复习"
     primaryActionLabel: "预览 Vững Tay Lái"
+  # zh-Hant copy: machine-assisted (OpenCC s2twp), pending native review.
+  zh-hant:
+    shortDescription: "以越南語為先的 Web/PWA 學習體驗，面向 B 類駕照的知識、理解與考試練習。"
+    jobs:
+      - "在清晰的來源背景下準備越南 B 類駕駛知識"
+      - "練習題目、識別誤解並複習難點概念"
+    capabilities:
+      - "開發目標：附來源的課程與 B 類練習模式"
+      - "開發目標：以信心為先的作答與誤解反饋"
+      - "開發目標：支援離線的學習進度與複習"
+    primaryActionLabel: "預覽 Vững Tay Lái"

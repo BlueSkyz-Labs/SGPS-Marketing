@@ -3,7 +3,7 @@ import test from "node:test";
 import { EDITIONS, getEdition } from "../../src/data/editions.ts";
 import { resolveEdition } from "../../src/lib/editions.ts";
 
-const LANGS = ["en", "vi", "zh"];
+const LANGS = ["en", "vi", "zh", "zh-hant"];
 // Authored dates are Asia/Ho_Chi_Minh dates. Compute the site's calendar day from a fixed
 // +07:00 offset so the check is identical on a UTC CI runner and on a UTC+7 workstation.
 const SITE_OFFSET_MS = 7 * 60 * 60 * 1000;

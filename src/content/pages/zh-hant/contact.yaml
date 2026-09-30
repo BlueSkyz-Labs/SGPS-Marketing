@@ -1,0 +1,10 @@
+# zh-Hant copy: machine-assisted (OpenCC s2twp), pending native review.
+lang: zh-hant
+slug: contact
+title: 聯絡我們
+description: 就商務合作、安全問題或一般諮詢聯絡我們。
+sections:
+  hero:
+    heading: 聯絡我們
+  intro: 商務合作、安全報告或一般諮詢，請與我們聯絡。
+  email_note: 目前暫未提供郵件聯絡方式。如需緊急事項，請使用安全報告通道。

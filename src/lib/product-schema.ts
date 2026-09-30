@@ -217,11 +217,15 @@ export const productSchema = z
     sourceRevision: z.string().regex(/^[0-9a-f]{7,40}$/),
     lastReviewedAt: z.coerce.date(),
     i18n: z
-      .object({ vi: localeCopy.optional(), zh: localeCopy.optional() })
+      .object({
+        vi: localeCopy.optional(),
+        zh: localeCopy.optional(),
+        "zh-hant": localeCopy.optional(),
+      })
       .optional(),
   })
   .superRefine((value, ctx) => {
-    for (const lang of ["vi", "zh"] as const) {
+    for (const lang of ["vi", "zh", "zh-hant"] as const) {
       const copy = value.i18n?.[lang];
       if (!copy) continue;
       if (copy.jobs.length !== value.jobs.length) {

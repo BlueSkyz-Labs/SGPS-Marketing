@@ -1,6 +1,6 @@
 import { expect, test } from "@playwright/test";
 
-const LANGS = ["en", "vi", "zh"] as const;
+const LANGS = ["en", "vi", "zh", "zh-hant"] as const;
 const SECTIONS = ["claims", "evidence", "boundaries"];
 
 test.describe("C4-C printable dossier document", () => {
