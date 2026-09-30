@@ -20,19 +20,19 @@ export type StaticPageKey =
 export const PAGE_META: Record<Language, Record<StaticPageKey, PageMeta>> = {
   vi: {
     home: {
-      title: "BlueSkyz Labs | Sổ Trọ, Sổ Tâm – đang phát triển",
+      title: "BlueSkyz Labs | Sổ Trọ và Sổ Tâm, đang phát triển",
       description:
         "BlueSkyz Labs đang xây dựng Sổ Trọ, sổ tay điện tử cho chủ trọ ở Việt Nam, và Sổ Tâm, cuốn nhật ký riêng tư ưu tiên lưu trên máy. Cả hai đang phát triển.",
     },
     about: {
       title: "Giới thiệu",
       description:
-        "BlueSkyz Labs xây dựng các sản phẩm phần mềm. Xem chúng tôi đang làm gì và bằng chứng công khai đứng sau những điều chúng tôi nói, để bạn tự kiểm chứng.",
+        "BlueSkyz Labs đang làm Sổ Trọ và Sổ Tâm. Tìm hiểu cách chúng tôi làm việc và tự kiểm chứng từng điều chúng tôi nói qua nguồn công khai.",
     },
     contact: {
       title: "Liên hệ",
       description:
-        "Cách liên hệ BlueSkyz Labs: hiện có kênh báo cáo lỗ hổng bảo mật riêng tư; hộp thư kinh doanh sẽ được đăng tại đây khi được công bố.",
+        "Cách liên hệ BlueSkyz Labs: báo lỗ hổng bảo mật riêng tư qua GitHub. Hộp thư cho hợp tác và câu hỏi chung sẽ được đăng tại đây khi sẵn sàng.",
     },
     privacy: {
       title: "Quyền riêng tư",
@@ -42,7 +42,7 @@ export const PAGE_META: Record<Language, Record<StaticPageKey, PageMeta>> = {
     support: {
       title: "Hỗ trợ",
       description:
-        "Cách nhận trợ giúp: mỗi sản phẩm ghi kênh hỗ trợ riêng ngay trên trang của sản phẩm. Hiện chưa công bố hộp thư hỗ trợ chung.",
+        "Cách nhận trợ giúp cho Sổ Trọ và Sổ Tâm. Hiện chưa có hộp thư hỗ trợ chung; kênh báo cáo bảo mật riêng tư chỉ dành cho lỗ hổng bảo mật.",
     },
   },
   en: {
@@ -69,7 +69,7 @@ export const PAGE_META: Record<Language, Record<StaticPageKey, PageMeta>> = {
     support: {
       title: "Support",
       description:
-        "Where to get help: each product lists its own support route on its page. No general support mailbox has been published yet.",
+        "How to get help with Sổ Trọ and Sổ Tâm. No general support mailbox has been published yet; private security reporting is for vulnerabilities only.",
     },
   },
   zh: {
@@ -96,7 +96,7 @@ export const PAGE_META: Record<Language, Record<StaticPageKey, PageMeta>> = {
     support: {
       title: "帮助与支持",
       description:
-        "如何获得帮助：每款产品在自己的页面列出专属支持入口；目前尚未公布通用支持邮箱。安全漏洞请走私密报告通道，而非支持渠道。",
+        "如何获得 Sổ Trọ 与 Sổ Tâm 的帮助：目前尚未公布通用支持邮箱。安全漏洞请走私密报告通道，而非支持渠道。",
     },
   },
   "zh-hant": {
@@ -123,7 +123,7 @@ export const PAGE_META: Record<Language, Record<StaticPageKey, PageMeta>> = {
     support: {
       title: "協助與支援",
       description:
-        "如何取得協助：每項產品在自己的頁面列出專屬支援管道；目前尚未公布通用支援信箱。資安漏洞請走私密通報管道，而非支援管道。",
+        "如何取得 Sổ Trọ 與 Sổ Tâm 的協助：目前尚未公布通用支援信箱。資安漏洞請走私密通報管道，而非支援管道。",
     },
   },
 };
@@ -156,7 +156,7 @@ export const PRODUCT_META: Record<string, Record<Language, PageMeta>> = {
     vi: {
       title: "Sổ Tâm – nhật ký riêng tư",
       description:
-        "Sổ Tâm là cuốn nhật ký ưu tiên lưu trên máy, để bạn viết ra suy nghĩ riêng tư và giữ lại kỷ niệm. Bạn tự xuất bài viết ra máy. Đang phát triển.",
+        "Sổ Tâm là cuốn nhật ký ưu tiên lưu trên máy, để bạn ghi lại suy nghĩ riêng tư và giữ kỷ niệm. Bạn có thể tự xuất bài viết ra máy. Đang phát triển.",
     },
     en: {
       title: "Sổ Tâm: a private, local-first journal",
