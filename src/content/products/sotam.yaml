@@ -53,33 +53,33 @@ lastReviewedAt: 2026-09-27
 # is an Owner feedback checkpoint (plan v5 W3.4).
 i18n:
   vi:
-    shortDescription: "Cuốn nhật ký ưu tiên lưu ngay trên máy, dành cho những suy nghĩ và kỷ niệm riêng tư bạn viết ra."
+    shortDescription: "Cuốn nhật ký ưu tiên lưu trên máy của bạn, để viết ra suy nghĩ riêng tư và giữ lại kỷ niệm."
     jobs:
       - "Viết ra những suy nghĩ riêng tư, theo nhịp của bạn"
       - "Đọc lại nhật ký và kỷ niệm của mình"
     capabilities:
-      - "Viết nhật ký ưu tiên lưu cục bộ trong Personal Vault riêng tư"
+      - "Viết nhật ký, ưu tiên lưu trên máy, trong Personal Vault riêng tư"
       - "Bạn tự xuất bài viết ra máy của mình"
-      - "Lưu trữ trong Vault riêng tư với ranh giới khôi phục rõ ràng"
+      - "Lưu trong Vault riêng tư, có nêu rõ giới hạn của việc khôi phục"
     primaryActionLabel: "Xem trước Sổ Tâm"
   zh:
-    shortDescription: "本地优先的日记，用于记录私密的书面反思与个人回忆。"
+    shortDescription: "本地优先的日记，用来写下私密的所思所想，留住个人回忆。"
     jobs:
-      - "按自己的节奏书写私密反思"
-      - "回顾日记条目与个人回忆"
+      - "按自己的节奏，写下私密的所思所想"
+      - "翻看自己的日记与回忆"
     capabilities:
-      - "在私有 Personal Vault 中以本地优先方式书写日记"
-      - "由用户控制的本地反思导出"
-      - "私有 Vault 存储，具备明确的恢复边界"
+      - "在私有的 Personal Vault 中，以本地优先的方式写日记"
+      - "由你自行把日记导出并保存到本地"
+      - "私有 Vault 存储，并明确说明恢复的边界"
     primaryActionLabel: "预览 Sổ Tâm"
   # zh-Hant copy: machine-assisted (OpenCC s2twp), pending native review.
   zh-hant:
-    shortDescription: "本地優先的日記，用於記錄私密的書面反思與個人回憶。"
+    shortDescription: "本機優先的日記，用來寫下私密的所思所想，留住個人回憶。"
     jobs:
-      - "按自己的節奏書寫私密反思"
-      - "回顧日記條目與個人回憶"
+      - "按自己的節奏，寫下私密的所思所想"
+      - "翻閱自己的日記與回憶"
     capabilities:
-      - "在私有 Personal Vault 中以本地優先方式書寫日記"
-      - "由使用者控制的本地反思匯出"
-      - "私有 Vault 儲存，具備明確的恢復邊界"
+      - "在私有的 Personal Vault 中，以本機優先的方式寫日記"
+      - "由你自行將日記匯出並儲存到本機"
+      - "私有 Vault 儲存，並明確說明復原的範圍"
     primaryActionLabel: "預覽 Sổ Tâm"
