@@ -1,0 +1,92 @@
+{
+  "schema": "sotro-public-profile/1",
+  "_contract": "Single source of truth for what the BlueSkyz Labs portfolio website may publicly say about Sổ Trọ. The SGPS-Marketing repo (src/content/products/sotro.yaml) vendors a snapshot of this file pinned to an exact Sotro main revision and fails its own tests on drift. To change any public claim, change this file FIRST (via a reviewed Sotro PR), then re-vendor it in SGPS-Marketing at the new exact revision. Fields prefixed with an underscore are documentation for maintainers and must not be rendered publicly. Guard: tests/unit/public-profile.test.ts.",
+  "_rationale": {
+    "availability": "Committed production config (wrangler.jsonc env.production.vars) is PUBLIC_EXPOSURE_LEVEL=L0_INTERNAL, SELF_REGISTRATION_ENABLED=false, PAID_ORDERS_ENABLED=false; ADR-024 says L0_INTERNAL permits neither self-registration nor new paid orders and that promotion is adjacent and evidence-bound. So the product must not be described as publicly available, open for signup, or paid. The literal state is private, but the website enum rejects 'private' for a public listing; 'preview' is the least committal listing-compatible value and, with publicLabel 'In development', must be read as a look at a product under development, not as open access. Do not upgrade to public, invite-only or waitlist until exposure is promoted with evidence (no waitlist or invite flow exists in committed config).",
+    "paid": "Paid Go-Live is not approved; PAID_ORDERS_ENABLED=false in committed production config, so no price, plan or purchase claim may be published.",
+    "capabilities": "Only behaviour that is merged on main and has code plus a test in this repo. Reminder templates are copy-only (component header: no automatic sending); no claim is made that the app opens Zalo or SMS for the user.",
+    "signInUrl": "Committed production APP_BASE_URL is https://sotro.blueskyzlabs.com and src/app/router.tsx serves /login on the main (non-admin, non-super) host. This is a sign-in page for existing users; it is not evidence that signup is open.",
+    "listing": "Owner 2026-09-30: Sổ Trọ is the portfolio flagship and the first product planned for Go-Live, so it stays listed (public, hero, first) rather than hidden. Listing it is not a claim of open access: availability/publicLabel above still govern what a visitor can do.",
+    "nativeApps": "Owner 2026-09-30: native Android and iOS apps are planned after the web core is complete and will sync with the same workspace. No native project exists in this repo yet, so both are 'in-development' with no store link, and platforms stays ['web']."
+  },
+  "_sources": [
+    "wrangler.jsonc",
+    "docs/architecture/ADR-024_GO_LIVE_EXPOSURE_LADDER.md",
+    "src/app/router.tsx"
+  ],
+  "slug": "sotro",
+  "name": "Sổ Trọ",
+  "lifecycle": "development",
+  "availability": "preview",
+  "publicLabel": "In development",
+  "audience": ["professional", "business"],
+  "jobs": [
+    "See what remains unpaid this month and what needs attention today",
+    "Maintain dependable room, tenant, meter, and monthly charge records"
+  ],
+  "capabilities": [
+    {
+      "text": "Utility charges from meter readings, with a readable tiered-electricity breakdown",
+      "evidence": [
+        "src/shared/utils/utility-calc.ts",
+        "src/server/modules/meter-usage.ts",
+        "tests/unit/utility-calc.test.ts",
+        "tests/unit/meter-usage-reset-baseline.test.ts"
+      ]
+    },
+    {
+      "text": "Receipts, and a separate confirmation step before received money is recorded",
+      "evidence": [
+        "src/app/components/ui/FinancialConfirmation.tsx",
+        "src/app/components/shared/ReceiptCardCanvas.tsx",
+        "src/app/pages/operator/Payments.tsx",
+        "tests/unit/financial-confirmation-ui.test.tsx",
+        "tests/unit/luxury-receipt-atelier.test.tsx"
+      ]
+    },
+    {
+      "text": "Optional polite Zalo/SMS-style reminder messages to copy; nothing is sent automatically",
+      "evidence": [
+        "src/app/components/shared/GentleReminderModal.tsx",
+        "src/app/utils/zalo-templates.ts",
+        "tests/unit/zalo-templates.test.ts"
+      ]
+    }
+  ],
+  "platforms": ["web"],
+  "appAccess": {
+    "signInUrl": "https://sotro.blueskyzlabs.com/login",
+    "_source": "wrangler.jsonc env.production.vars.APP_BASE_URL + src/app/router.tsx (/login route)",
+    "android": {
+      "state": "in-development"
+    },
+    "ios": {
+      "state": "in-development"
+    }
+  },
+  "listing": {
+    "public": true,
+    "featuredTier": "hero",
+    "displayOrder": 1
+  },
+  "paid": {
+    "status": "closed",
+    "reason": "Paid Go-Live not approved; Paid Orders disabled in committed production config"
+  },
+  "pricing": null,
+  "supportEmail": null,
+  "i18n": {
+    "vi": {
+      "jobs": [
+        "Xem tháng này còn ai chưa đóng tiền và hôm nay cần lo việc gì",
+        "Ghi lại phòng, người thuê, số điện nước và các khoản thu hằng tháng cho gọn, cho chắc"
+      ],
+      "capabilities": [
+        "Tính tiền điện nước từ số đọc công tơ, có giải thích rõ từng bậc giá điện",
+        "Biên nhận, và một bước xác nhận riêng trước khi ghi nhận tiền đã nhận",
+        "Mẫu tin nhắn nhắc lịch sự kiểu Zalo/SMS để sao chép; không tự động gửi"
+      ]
+    }
+  },
+  "claimsReviewedAt": "2026-09-30"
+}
