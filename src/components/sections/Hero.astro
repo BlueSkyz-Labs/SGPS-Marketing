@@ -131,6 +131,14 @@ const secondary = flagship
             lang={lang}
             priority
             sizes="9rem"
+            smallSrc={
+              flagship.data.slug === "sotro"
+                ? {
+                    src: "/products/sotro/showcase/op-01-home-288.webp",
+                    width: 288,
+                  }
+                : undefined
+            }
             class="hero-flagship__capture"
           />
           <div class="hero-flagship__body">
