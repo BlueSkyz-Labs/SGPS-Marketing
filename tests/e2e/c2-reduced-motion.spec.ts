@@ -18,8 +18,8 @@ for (const reducedMotion of ["reduce", "no-preference"] as const) {
       await page.goto("/en/");
       const h1 = page.locator("#hero-title");
       await expect(h1).toBeVisible();
-      await expect(h1).toContainText(/Intelligence|Trí tuệ/i);
-      await expect(h1).toContainText(/Impact|Tác động/i);
+      // Experience v6 S1: registry-backed promise, one primary + one quiet link.
+      await expect(h1).toContainText(/See what remains unpaid|Intelligence/i);
 
       const actions = page.locator(".hero-actions a");
       await expect(actions).toHaveCount(2);
@@ -66,6 +66,8 @@ test("the hero carries the same content with motion enabled", async ({
 }) => {
   await page.emulateMedia({ reducedMotion: "no-preference" });
   await page.goto("/en/");
-  await expect(page.locator("#hero-title")).toContainText(/Impact|Tác động/i);
+  await expect(page.locator("#hero-title")).toContainText(
+    /See what remains unpaid|Intelligence/i,
+  );
   await expect(page.locator(".hero-actions a")).toHaveCount(2);
 });

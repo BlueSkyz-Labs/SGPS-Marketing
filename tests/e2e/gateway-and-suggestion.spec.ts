@@ -172,12 +172,20 @@ for (const scheme of ["light", "dark"] as const) {
       expect(intersects(box, cta)).toBe(false);
       for (const rect of content) expect(intersects(box, rect)).toBe(false);
 
-      // Negative proof: the previous bottom-fixed overlay placement is caught
-      // by the very same predicate.
+      // Negative proof: a fixed overlay (the previous placement style) laid
+      // over first-viewport content is caught by the very same predicate.
+      // Taking the strip out of flow first lets the page reflow, then the
+      // overlay is anchored to real content so the proof does not depend on
+      // how tall the home composition is.
       await banner.evaluate((el) => {
         el.style.cssText =
-          "position:fixed;left:16px;right:16px;bottom:16px;z-index:40";
+          "position:fixed;left:16px;right:16px;top:0;z-index:40";
       });
+      const reflowed = await firstViewportContent(page);
+      expect(reflowed.length).toBeGreaterThan(0);
+      await banner.evaluate((el, top) => {
+        el.style.top = `${top}px`;
+      }, reflowed[0].y);
       const overlaid = (await banner.boundingBox())!;
       const hits = (await firstViewportContent(page)).filter((rect) =>
         intersects(overlaid, rect),

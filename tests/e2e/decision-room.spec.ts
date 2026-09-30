@@ -117,17 +117,22 @@ test.describe("decision room", () => {
     expect(requests).toEqual([]);
   });
 
-  test("trust surfaces deep-link into the room", async ({ page }) => {
+  test("the home no longer hosts trust deep-links; the room stays reachable", async ({
+    page,
+  }) => {
+    // Experience v6 S1 removed the Trust ledger cards (and their per-card
+    // "Compare in the Decision Room" hooks) from the home; S3 re-stages them on
+    // /verify. The room keeps its own routes: the products journey bar and the
+    // command navigator still lead to it.
     await page.goto("/en/");
-    const hook = page.locator("[data-decision-hook]").first();
-    await expect(hook).toBeVisible();
-    const href = await hook.getAttribute("href");
-    expect(href).toMatch(/^\/en\/decision-room\/#room-item-trust-/);
-    await hook.click();
-    await expect(page).toHaveURL(/\/en\/decision-room\/#room-item-trust-/);
-    await page.waitForLoadState("load");
-    const targetId = new URL(href!, page.url()).hash;
-    await expect(page.locator(targetId)).toBeInViewport();
+    await expect(page.locator("[data-decision-hook]")).toHaveCount(0);
+    await page.goto("/en/products/");
+    const link = page
+      .locator("[data-journey-bar] a")
+      .filter({ hasText: "Decision Room" });
+    await expect(link).toBeVisible();
+    await link.click();
+    await expect(page).toHaveURL(/\/en\/decision-room\/$/);
   });
 
   test("VI room is localized", async ({ page }) => {
@@ -150,7 +155,7 @@ test.describe("decision room", () => {
       [
         "/zh/",
         "BlueSkyz Labs",
-        "智能。提升。影响。",
+        "查看本月尚未收取的款项以及今天需要处理的事项",
         "智能。提升。影响。我们打造智能化产品，赋能个人并提升工作方式。",
       ],
       [
