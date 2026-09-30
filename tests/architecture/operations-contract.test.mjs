@@ -91,8 +91,8 @@ test("production smoke covers each actually published language", () => {
     "root gateway must expose the published zh-Hans route",
   );
   assert.ok(
-    smoke.includes("localeRoutePattern()"),
-    "sitemap gate must use the locale list derived from i18n.ts",
+    smoke.includes("isLocalizedCanonicalRoute(loc, site)"),
+    "sitemap gate must bind localized routes to the exact smoke origin",
   );
   assert.ok(
     smoke.includes('get("/zh-hant/")') &&
@@ -102,28 +102,40 @@ test("production smoke covers each actually published language", () => {
 });
 
 test("smoke locale list is derived from i18n.ts and gates the sitemap", async () => {
-  const { SUPPORTED_LANGUAGES, localeRoutePattern } =
+  const { SUPPORTED_LANGUAGES, isLocalizedCanonicalRoute } =
     await import("../../scripts/smoke-locales.mjs");
   assert.deepEqual(
     [...SUPPORTED_LANGUAGES],
     ["en", "vi", "zh", "zh-hant"],
     "smoke locales must equal SUPPORTED_LANGUAGES in src/lib/i18n.ts",
   );
-  const pattern = localeRoutePattern();
+
+  const site = "https://blueskyzlabs.com";
   for (const locale of SUPPORTED_LANGUAGES) {
     assert.ok(
-      pattern.test(`https://blueskyzlabs.com/${locale}/products/`),
-      `sitemap gate must accept /${locale}/`,
+      isLocalizedCanonicalRoute(`${site}/${locale}/products/`, site),
+      `sitemap gate must accept /${locale}/ on the canonical origin`,
     );
   }
-  // Negative proofs: unsupported or malformed locale segments must still fail.
+
+  // Negative proofs: unsupported/malformed locales, alternate origins and
+  // non-canonical query/fragment variants must fail.
   for (const bad of [
     "https://blueskyzlabs.com/fr/",
     "https://blueskyzlabs.com/zh-hans/",
     "https://blueskyzlabs.com/zh-hant-x/",
     "https://blueskyzlabs.com/xx/en/",
     "https://blueskyzlabs.com/",
+    "https://evil.example/en/products/",
+    "http://blueskyzlabs.com/en/products/",
+    "https://www.blueskyzlabs.com/en/products/",
+    "https://blueskyzlabs.com/en/products/?redirect=evil",
+    "https://blueskyzlabs.com/en/products/#fragment",
   ]) {
-    assert.equal(pattern.test(bad), false, `${bad} must be rejected`);
+    assert.equal(
+      isLocalizedCanonicalRoute(bad, site),
+      false,
+      `${bad} must be rejected`,
+    );
   }
 });
