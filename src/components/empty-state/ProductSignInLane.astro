@@ -1,0 +1,49 @@
+---
+import { EMPTY_STATE_COPY } from "@/data/empty-state-copy";
+import { labelFor, SHARED_LABELS, type Language } from "@/data/site";
+import { getPublicProducts } from "@/lib/products";
+
+/**
+ * Contact lane: product sign-in links come only from the registry
+ * (`appAccess.signInUrl`). A product without a recorded sign-in is omitted,
+ * and the whole lane disappears when no product records one.
+ */
+interface Props {
+  lang: Language;
+}
+
+const { lang } = Astro.props;
+const links = (await getPublicProducts()).flatMap((product) =>
+  product.data.appAccess?.signInUrl
+    ? [{ name: product.data.name, href: product.data.appAccess.signInUrl }]
+    : [],
+);
+---
+
+{links.length > 0 ? (
+  <li
+    class="flex min-w-0 flex-col rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-raised)] p-6"
+    data-contact-lane="product-sign-in"
+  >
+    <h2 class="text-lg font-semibold tracking-tight">
+      {labelFor(EMPTY_STATE_COPY.signInHeading, lang)}
+    </h2>
+    <p class="mt-2 flex-1 text-sm leading-relaxed text-[var(--text-secondary)]">
+      {labelFor(EMPTY_STATE_COPY.signInBody, lang)}
+    </p>
+    <ul class="mt-5 flex flex-wrap gap-3">
+      {links.map((link) => (
+        <li>
+          <a
+            href={link.href}
+            rel="noopener noreferrer"
+            data-contact-signin
+            class="inline-flex min-h-11 items-center rounded-lg border border-[var(--border-subtle)] px-4 text-sm font-semibold text-[var(--text-primary)] no-underline transition-colors hover:border-[var(--action-primary)] focus-visible:ring-2 focus-visible:ring-[var(--brand-cobalt)] focus-visible:outline-none"
+          >
+            {labelFor(SHARED_LABELS.signIn, lang)} · {link.name}
+          </a>
+        </li>
+      ))}
+    </ul>
+  </li>
+) : null}

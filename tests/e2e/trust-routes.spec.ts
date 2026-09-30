@@ -65,9 +65,11 @@ test("/security/ exposes private vulnerability reporting CTA", async ({
   );
 });
 
-test("/en/about/ shows approved founder title", async ({ page }) => {
+test("/en/about/ omits the founder line until the Owner confirms it (E-26)", async ({
+  page,
+}) => {
   await page.goto("/en/about/");
-  await expect(page.getByText(/Tony Nguyen — Founder & CEO/i)).toBeVisible();
+  await expect(page.locator("main")).not.toContainText(/tony nguyen|founder/i);
 });
 
 for (const [from, to] of LEGACY_REDIRECTS) {
