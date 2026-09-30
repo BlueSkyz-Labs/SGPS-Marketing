@@ -74,10 +74,14 @@ for (const locale of LOCALES) {
     }) => {
       await page.goto(`/${locale.lang}/verify/`);
       await expect(
-        page.locator(`footer nav a[href="/${locale.lang}/verify/"]`),
+        page.locator(
+          `footer a.footer-nav-link[href="/${locale.lang}/verify/"]`,
+        ),
       ).toHaveCount(1);
       await expect(
-        page.locator(`main a[href="/${locale.lang}/products/"]`),
+        page.locator(
+          `main a[href="/${locale.lang}/products/"] >> visible=true`,
+        ),
       ).toHaveCount(1);
     });
 
