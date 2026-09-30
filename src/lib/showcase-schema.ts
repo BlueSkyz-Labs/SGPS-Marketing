@@ -46,7 +46,8 @@ const screen = z.object({
 });
 
 const captionTrack = z.object({
-  lang: z.enum(["en", "vi", "zh"]),
+  /** BCP-47 subtitle language; Chinese is split by script. */
+  lang: z.enum(["en", "vi", "zh-Hans", "zh-Hant"]),
   label: z.string().min(1).max(40),
   src: assetPath("vtt"),
 });

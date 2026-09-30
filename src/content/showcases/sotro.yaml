@@ -30,6 +30,12 @@ video:
     - lang: vi
       label: Tiếng Việt
       src: /products/sotro/showcase/intro.vi.vtt
+    - lang: zh-Hans
+      label: 简体中文
+      src: /products/sotro/showcase/intro.zh-hans.vtt
+    - lang: zh-Hant
+      label: 繁體中文
+      src: /products/sotro/showcase/intro.zh-hant.vtt
 
 screens:
   - id: today

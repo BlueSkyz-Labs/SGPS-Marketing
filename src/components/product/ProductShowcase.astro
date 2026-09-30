@@ -62,13 +62,18 @@ const guideHref = showcase.guide
   ? `/${lang}/products/${showcase.product}/guide/`
   : null;
 // Vietnamese text is burned into the video, so the Vietnamese page shows no
-// subtitles by default; other languages default to their own or English track.
-const defaultTrack =
-  lang === "vi"
-    ? null
-    : (showcase.video?.captions.find((track) => track.lang === lang) ??
-      showcase.video?.captions.find((track) => track.lang === "en") ??
-      null);
+// subtitles by default; other pages default to their own script, else English.
+const PAGE_TRACK: Record<Language, string | null> = {
+  en: "en",
+  vi: null,
+  zh: "zh-Hans",
+};
+const wanted = PAGE_TRACK[lang];
+const defaultTrack = wanted
+  ? (showcase.video?.captions.find((track) => track.lang === wanted) ??
+    showcase.video?.captions.find((track) => track.lang === "en") ??
+    null)
+  : null;
 ---
 
 <section
