@@ -2,15 +2,15 @@
 
 Byte-for-byte snapshots of the canonical public profile each product repository owns. The website mirrors them and fails on drift (`tests/architecture/sotro-public-profile-drift.test.mjs`).
 
-| Field             | Value                                                                       |
-| ----------------- | --------------------------------------------------------------------------- |
-| Snapshot file     | `sotro.public-profile.json` (schema `sotro-public-profile/1`)               |
-| Source repository | `BlueSkyz-Labs/Sotro` (private)                                             |
-| Source path       | `docs/product/public-profile.json`                                          |
-| Upstream revision | `cffb4167141242928d60e950dd436aa792a0dc65`                                  |
-| Upstream branch   | `claude/public-product-profile-20260930` (not yet on Sotro `main`)          |
-| Date vendored     | 2026-09-30                                                                  |
-| Pin status        | PENDING: re-pin to the Sotro `main` squash SHA once the upstream PR merges. |
+| Field             | Value                                                         |
+| ----------------- | ------------------------------------------------------------- |
+| Snapshot file     | `sotro.public-profile.json` (schema `sotro-public-profile/1`) |
+| Source repository | `BlueSkyz-Labs/Sotro` (private)                               |
+| Source path       | `docs/product/public-profile.json`                            |
+| Upstream revision | `1d87c09380341360acb5f2882115ebc5cd99e687`                    |
+| Upstream branch   | `main` (squash of BlueSkyz-Labs/Sotro#1317)                   |
+| Date vendored     | 2026-09-30                                                    |
+| Pin status        | PINNED to the Sotro `main` squash SHA.                        |
 
 ## Rule
 

@@ -48,7 +48,7 @@ displayOrder: 1
 public: true
 # Sotro revision of the vendored public profile (src/data/upstream/README.md). PENDING:
 # re-pin to the Sotro main squash SHA once the upstream PR merges.
-sourceRevision: cffb4167141242928d60e950dd436aa792a0dc65
+sourceRevision: 1d87c09380341360acb5f2882115ebc5cd99e687
 lastReviewedAt: 2026-09-30
 # Localized copy: faithful translations of the English claims above; the
 # English record stays canonical for claim/proof binding. Native VI/ZH review
