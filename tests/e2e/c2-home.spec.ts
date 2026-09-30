@@ -1,4 +1,5 @@
 import { expect, test } from "@playwright/test";
+import { openVerifyLayer } from "./verify-helpers.ts";
 import { hasPublicProducts } from "./product-helpers.ts";
 
 /**
@@ -122,12 +123,23 @@ for (const viewport of VIEWPORTS) {
 test("the demoted discovery surfaces are re-homed, not deleted", async ({
   page,
 }) => {
-  // Product discovery/comparison still works: the lens and the exploration
-  // tool render on the product index, wired to the site-wide journey bar.
+  // Product discovery/comparison still works: the lens renders on the product
+  // index, wired to the site-wide journey bar, and links on to /verify.
   await page.goto("/en/products/");
   await expect(page.locator("[data-intent-control]")).toBeVisible();
-  await expect(page.locator("[data-atlas]")).toBeVisible();
   await expect(page.locator("[data-journey-bar]")).toBeVisible();
+  await expect(page.locator("[data-verify-link]")).toHaveAttribute(
+    "href",
+    "/en/verify/",
+  );
+  // Experience v6 S3: the Atlas exploration tool is re-homed on /verify (in its
+  // collapsed evidence-map layer), reachable from the products page link.
+  await page.locator("[data-verify-link]").click();
+  await expect(page).toHaveURL(/\/en\/verify\/$/);
+  await openVerifyLayer(page, "/en/verify/", "atlas");
+  await expect(page.locator("[data-atlas]")).toBeVisible();
+  await page.goto("/en/products/");
+  await expect(page.locator("[data-atlas]")).toHaveCount(0);
   // …and they are absent from the homepage narrative.
   await page.goto("/en/");
   await expect(page.locator("[data-intent-control]")).toHaveCount(0);

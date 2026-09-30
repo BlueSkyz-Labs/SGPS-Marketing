@@ -6,6 +6,8 @@ interface Props {
   variant?: "primary" | "secondary" | "on-ink";
   class?: string;
   icon?: "arrow-right" | "external" | "none";
+  /** Current-page marker for links that live inside a navigation landmark. */
+  "aria-current"?: "page" | undefined;
   /** Pass-through data-* hooks (e.g. data-hero-primary). */
   [attribute: `data-${string}`]: string | boolean | undefined;
 }
