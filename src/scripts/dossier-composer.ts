@@ -20,7 +20,6 @@ interface ComposerElements {
   counter: HTMLElement;
 }
 
-const SELECTION_PARAM = "items";
 
 function readElements(): ComposerElements | null {
   const form = document.querySelector<HTMLFormElement>("[data-dossier-form]");
