@@ -2,6 +2,7 @@ import { defineCollection } from "astro:content";
 import { glob } from "astro/loaders";
 import { z } from "astro/zod";
 import { productSchema } from "@/lib/product-schema";
+import { showcaseSchema } from "@/lib/showcase-schema";
 import path from "node:path";
 
 const products = defineCollection({
@@ -31,4 +32,12 @@ const pages = defineCollection({
   }),
 });
 
-export const collections = { products, pages };
+const showcases = defineCollection({
+  loader: glob({
+    pattern: "**/*.{yaml,yml,json}",
+    base: "./src/content/showcases",
+  }),
+  schema: showcaseSchema,
+});
+
+export const collections = { products, pages, showcases };
