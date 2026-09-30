@@ -15,6 +15,15 @@ import { E2E_PROJECTS, selectProjects } from "../../scripts/run-e2e.mjs";
 const WORKFLOW = readFileSync(".github/workflows/quality-gates.yml", "utf8");
 const PLAYWRIGHT_CONFIG = readFileSync("playwright.config.ts", "utf8");
 
+const PLAYWRIGHT_IMAGE =
+  "mcr.microsoft.com/playwright:v1.63.0-noble@sha256:eff16c30e6f3f4af0a03fa4b706120d5e9b0891c344a27d64559aff5900a4a27";
+const PLAYWRIGHT_DOWNLOAD_HOST_VARS = [
+  "PLAYWRIGHT_DOWNLOAD_HOST",
+  "PLAYWRIGHT_CHROMIUM_DOWNLOAD_HOST",
+  "PLAYWRIGHT_FIREFOX_DOWNLOAD_HOST",
+  "PLAYWRIGHT_WEBKIT_DOWNLOAD_HOST",
+];
+
 // The text of one top-level job, from its key to the next job key.
 function jobBlock(workflow, id) {
   const start = workflow.indexOf(`\n  ${id}:\n`);
@@ -58,6 +67,27 @@ function auditBrowserAssurance(workflow) {
   }
   if (!/run:\s*pnpm test:e2e\s*$/m.test(shards)) {
     problems.push("shards must run pnpm test:e2e");
+  }
+
+  if (!shards.includes(`image: ${PLAYWRIGHT_IMAGE}`)) {
+    problems.push("browser shards must use the approved digest-pinned Playwright image");
+  }
+  if (!shards.includes("options: --user 1001")) {
+    problems.push("browser shards must not run the Playwright image as root");
+  }
+  if (!shards.includes("PLAYWRIGHT_BROWSERS_PATH: /ms-playwright")) {
+    problems.push("browser shards must use the browsers bundled in the pinned image");
+  }
+  if (/playwright\s+install(?:\s|$)/m.test(shards)) {
+    problems.push("browser shards must not download Playwright browsers at runtime");
+  }
+  for (const variable of PLAYWRIGHT_DOWNLOAD_HOST_VARS) {
+    if (workflow.includes(variable)) {
+      problems.push(`workflow must not set ${variable}`);
+    }
+  }
+  if (!shards.includes("Verify digest-pinned Playwright runtime")) {
+    problems.push("browser shards must launch-test the bundled runtime before E2E");
   }
 
   if (!/run:\s*pnpm lighthouse\s*$/m.test(lighthouse)) {
@@ -105,6 +135,48 @@ test("negative proof: narrowing the shard list is caught", () => {
   assert.ok(
     auditBrowserAssurance(mutated).some((problem) =>
       problem.includes("webkit"),
+    ),
+  );
+});
+
+test("negative proof: unpinned Playwright runtime or download-host override is caught", () => {
+  const tagOnly = WORKFLOW.replace(
+    PLAYWRIGHT_IMAGE,
+    "mcr.microsoft.com/playwright:v1.63.0-noble",
+  );
+  assert.notEqual(tagOnly, WORKFLOW);
+  assert.ok(
+    auditBrowserAssurance(tagOnly).some((problem) =>
+      problem.includes("digest-pinned Playwright image"),
+    ),
+  );
+
+  const redirected = WORKFLOW.replace(
+    "      PLAYWRIGHT_BROWSERS_PATH: /ms-playwright",
+    [
+      "      PLAYWRIGHT_BROWSERS_PATH: /ms-playwright",
+      "      PLAYWRIGHT_DOWNLOAD_HOST: https://evil.invalid",
+    ].join("\n"),
+  );
+  assert.notEqual(redirected, WORKFLOW);
+  assert.ok(
+    auditBrowserAssurance(redirected).some((problem) =>
+      problem.includes("PLAYWRIGHT_DOWNLOAD_HOST"),
+    ),
+  );
+
+  const runtimeDownload = WORKFLOW.replace(
+    "      - name: Verify digest-pinned Playwright runtime",
+    [
+      "      - name: Unapproved runtime download",
+      "        run: pnpm exec playwright install chromium",
+      "      - name: Verify digest-pinned Playwright runtime",
+    ].join("\n"),
+  );
+  assert.notEqual(runtimeDownload, WORKFLOW);
+  assert.ok(
+    auditBrowserAssurance(runtimeDownload).some((problem) =>
+      problem.includes("must not download Playwright browsers"),
     ),
   );
 });
