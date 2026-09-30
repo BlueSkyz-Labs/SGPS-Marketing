@@ -42,7 +42,9 @@ const PAYMENT_MARKERS = [
   /\bemvco\b/i,
 ];
 
-const PUBLIC_SOURCE_EXTENSION = /\.(?:astro|ts|tsx|js|mjs|yaml|yml|json)$/i;
+const PUBLIC_SOURCE_EXTENSION = /\.(?:astro|ts|tsx|js|mjs|cjs|html|css|svg|xml|txt|yaml|yml|json|webmanifest)$/i;
+const PUBLIC_SOURCE_SPECIAL_FILES = new Set(["public/_headers", "public/_redirects"]);
+export const PAYMENT_RUNTIME_ROOTS = ["src", "public"];
 const REQUIRED_GUARD = "tests/architecture/no-payment-authority.test.mjs";
 
 function git(args, options = {}) {
