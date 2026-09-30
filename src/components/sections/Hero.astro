@@ -1,6 +1,7 @@
 ---
 import HorizonField from "@/components/experience/HorizonField.astro";
 import ButtonLink from "@/components/ui/ButtonLink.astro";
+import SailReveal from "@/components/motion/SailReveal.astro";
 import Reveal from "@/components/ui/Reveal.astro";
 import { SITE, SHARED_LABELS, labelFor, type Language } from "@/data/site";
 import { emptyRegistryPrimaryCta, emptyRegistrySecondaryCta } from "@/lib/act";
@@ -191,6 +192,7 @@ const secondary = flagship
           fetchpriority="low"
         />
       </picture>
+      <SailReveal handoff />
       <span class="hero-seam"></span>
     </div>
   </Reveal>
