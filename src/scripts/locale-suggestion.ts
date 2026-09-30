@@ -28,10 +28,48 @@ function persist(language: Language): void {
   }
 }
 
+function bind(
+  region: HTMLElement,
+  target: Language,
+  page: Language,
+  accept: HTMLElement,
+  keep: HTMLElement,
+): void {
+  accept.addEventListener("click", () => persist(target));
+  keep.addEventListener("click", () => {
+    persist(page);
+    region.remove();
+    document.getElementById("main-content")?.focus({ preventScroll: true });
+  });
+}
+
+/**
+ * The strip is normally inserted before first paint by
+ * public/locale-suggestion-early.js (no layout shift). This function attaches
+ * its interactions, and builds the strip itself only when the early script did
+ * not run (the same decision, the same DOM).
+ */
 export function initLocaleSuggestion(): void {
-  if (document.querySelector("[data-locale-suggestion]")) return;
   const page = explicitPathLanguage(window.location.pathname);
   if (!page) return;
+
+  const existing = document.querySelector<HTMLElement>(
+    "[data-locale-suggestion]",
+  );
+  if (existing) {
+    const target = existing.getAttribute("data-locale-suggestion") as Language;
+    const accept = existing.querySelector<HTMLElement>(
+      ".locale-suggestion__accept",
+    );
+    const keep = existing.querySelector<HTMLElement>(
+      ".locale-suggestion__keep",
+    );
+    if (accept && keep && !existing.hasAttribute("data-bound")) {
+      existing.setAttribute("data-bound", "");
+      bind(existing, target, page, accept, keep);
+    }
+    return;
+  }
 
   let stored: string | null;
   try {

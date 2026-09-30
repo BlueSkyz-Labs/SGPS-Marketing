@@ -188,3 +188,63 @@ for (const scheme of ["light", "dark"] as const) {
     }
   });
 }
+
+/** Sum of layout-shift entries (no recent input) observed from navigation. */
+async function observeShifts(page: Page) {
+  await page.addInitScript(() => {
+    const w = window as unknown as { __cls: number };
+    w.__cls = 0;
+    new PerformanceObserver((list) => {
+      for (const entry of list.getEntries() as unknown as {
+        value: number;
+        hadRecentInput: boolean;
+      }[])
+        if (!entry.hadRecentInput) w.__cls += entry.value;
+    }).observe({ type: "layout-shift", buffered: true });
+  });
+}
+const shifts = (page: Page) =>
+  page.evaluate(() => (window as unknown as { __cls: number }).__cls);
+
+for (const [width, height] of [
+  [390, 844],
+  [1440, 900],
+] as const) {
+  test(`locale suggestion causes no layout shift (${width}x${height})`, async ({
+    browser,
+  }) => {
+    const context = await browser.newContext({
+      locale: "vi-VN",
+      viewport: { width, height },
+    });
+    try {
+      const page = await context.newPage();
+      await observeShifts(page);
+      await page.goto("/en/", { waitUntil: "load" });
+      await expect(page.locator("[data-locale-suggestion]")).toBeVisible();
+      // Let fonts, images and any late insertion settle.
+      await page.waitForTimeout(1500);
+      expect(await shifts(page)).toBeLessThan(0.01);
+
+      // Negative proof: inserting the same strip in flow AFTER first paint
+      // (the previous behaviour) is measured as a real shift by this probe.
+      await page.evaluate(
+        () =>
+          new Promise<void>((resolve) =>
+            requestAnimationFrame(() => requestAnimationFrame(() => resolve())),
+          ),
+      );
+      const before = await shifts(page);
+      await page.evaluate(() => {
+        const strip = document.querySelector("[data-locale-suggestion]")!;
+        const late = strip.cloneNode(true) as HTMLElement;
+        late.removeAttribute("data-locale-suggestion");
+        strip.after(late);
+      });
+      await page.waitForTimeout(500);
+      expect((await shifts(page)) - before).toBeGreaterThan(0.01);
+    } finally {
+      await context.close();
+    }
+  });
+}

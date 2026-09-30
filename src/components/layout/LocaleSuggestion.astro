@@ -3,7 +3,8 @@
  * Locale suggestion host (ADR 0009, no-cookie variant).
  *
  * Renders nothing server-side: with JavaScript disabled the banner is simply
- * absent. The external script builds the region; this file owns its styling.
+ * absent. public/locale-suggestion-early.js builds the region before first
+ * paint, the bundled script binds it; this file owns its styling.
  * Placement (Experience v6 S5): an in-flow strip directly under the header,
  * never a fixed/absolute overlay, so it can never cover first-viewport content
  * such as the hero or its call to action. It is a compact single band; the
@@ -12,6 +13,12 @@
  */
 ---
 
+<!--
+  Synchronous same-origin script (CSP script-src 'self', like theme-init.js):
+  decides and inserts the strip before first paint so it causes no layout
+  shift. The bundled module script below attaches the interactions.
+-->
+<script is:inline src="/locale-suggestion-early.js"></script>
 <script>
   import { initLocaleSuggestion } from "@/scripts/locale-suggestion";
 
