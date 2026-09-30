@@ -37,7 +37,7 @@ test.describe("app access", () => {
     });
   }
 
-  for (const lang of ["en", "vi", "zh"]) {
+  for (const lang of ["en", "vi", "zh", "zh-hant"]) {
     for (const slug of PUBLISHED) {
       test(`${lang}/${slug}: profile primary CTA opens sign-in, not itself`, async ({
         page,

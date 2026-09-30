@@ -74,6 +74,7 @@ test("resolvable proof requires explicit capability binding", async () => {
     en: "/en/products/",
     vi: "/vi/products/",
     zh: "/zh/products/",
+    "zh-hant": "/zh-hant/products/",
   });
   assert.equal(link.truthState, "source-linked");
   assert.equal(link.boundary?.id, "bnd-privacy-collection");
@@ -81,6 +82,7 @@ test("resolvable proof requires explicit capability binding", async () => {
     en: "/en/evidence/fixture-capability-proof/",
     vi: "/vi/evidence/fixture-capability-proof/",
     zh: "/zh/evidence/fixture-capability-proof/",
+    "zh-hant": "/zh-hant/evidence/fixture-capability-proof/",
   });
 });
 

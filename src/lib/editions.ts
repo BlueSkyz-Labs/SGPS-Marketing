@@ -49,6 +49,7 @@ interface LocalizedLike {
   en: string;
   vi: string;
   zh?: string;
+  "zh-hant"?: string;
 }
 
 function pick(text: LocalizedLike, lang: string): string {

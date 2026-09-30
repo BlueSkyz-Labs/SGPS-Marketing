@@ -67,6 +67,7 @@ export function getProductProofLinks(
           en: getEvidencePassportPath("en", resolved.claim.id),
           vi: getEvidencePassportPath("vi", resolved.claim.id),
           zh: getEvidencePassportPath("zh", resolved.claim.id),
+          "zh-hant": getEvidencePassportPath("zh-hant", resolved.claim.id),
         },
       });
     }

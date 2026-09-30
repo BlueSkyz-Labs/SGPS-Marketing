@@ -1,6 +1,6 @@
 import { expect, test } from "@playwright/test";
 
-const LANGS = ["en", "vi", "zh"] as const;
+const LANGS = ["en", "vi", "zh", "zh-hant"] as const;
 const STORY = "private-security-reporting";
 const SECTIONS = [
   "problem",

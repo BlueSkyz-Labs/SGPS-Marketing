@@ -211,13 +211,24 @@ export interface ClaimTraceStep {
 }
 
 const SURFACE_LABELS: Record<string, LocalizedText> = {
-  security: { en: "Security surface", vi: "Bề mặt Bảo mật", zh: "安全层面" },
+  security: {
+    en: "Security surface",
+    vi: "Bề mặt Bảo mật",
+    zh: "安全层面",
+    "zh-hant": "安全層面",
+  },
   privacy: {
     en: "Privacy surface",
     vi: "Bề mặt Quyền riêng tư",
     zh: "隐私层面",
+    "zh-hant": "隱私層面",
   },
-  products: { en: "Products surface", vi: "Bề mặt Sản phẩm", zh: "产品层面" },
+  products: {
+    en: "Products surface",
+    vi: "Bề mặt Sản phẩm",
+    zh: "产品层面",
+    "zh-hant": "產品層面",
+  },
 };
 
 /**
@@ -267,6 +278,7 @@ export function getClaimTrace(
       en: resolved.claim.surface,
       vi: resolved.claim.surface,
       zh: resolved.claim.surface,
+      "zh-hant": resolved.claim.surface,
     },
     href: surfaceRoute?.href,
   });

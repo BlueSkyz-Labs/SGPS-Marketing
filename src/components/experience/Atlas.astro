@@ -15,17 +15,30 @@ interface Props {
 const { lang = "en" } = Astro.props;
 const isVi = lang === "vi";
 const isZh = lang === "zh";
+const isZhHant = lang === "zh-hant";
 
 const products = await getPublicProducts();
 const { nodes, edges } = buildAtlasModel(lang, products);
 
 const kindLabels: Record<AtlasNodeKind, string> = {
-  brand: isVi ? "Thương hiệu" : isZh ? "品牌" : "Brand",
-  principle: isVi ? "Nguyên tắc" : isZh ? "原则" : "Principle",
-  trust: isVi ? "Tin cậy" : isZh ? "信任" : "Trust",
-  claim: isVi ? "Tuyên bố" : isZh ? "声明" : "Claim",
-  evidence: isVi ? "Bằng chứng" : isZh ? "证据" : "Evidence",
-  product: isVi ? "Sản phẩm" : isZh ? "产品" : "Product",
+  brand: isVi ? "Thương hiệu" : isZh ? "品牌" : isZhHant ? "品牌" : "Brand",
+  principle: isVi
+    ? "Nguyên tắc"
+    : isZh
+      ? "原则"
+      : isZhHant
+        ? "原則"
+        : "Principle",
+  trust: isVi ? "Tin cậy" : isZh ? "信任" : isZhHant ? "信任" : "Trust",
+  claim: isVi ? "Tuyên bố" : isZh ? "声明" : isZhHant ? "聲明" : "Claim",
+  evidence: isVi
+    ? "Bằng chứng"
+    : isZh
+      ? "证据"
+      : isZhHant
+        ? "證據"
+        : "Evidence",
+  product: isVi ? "Sản phẩm" : isZh ? "产品" : isZhHant ? "產品" : "Product",
 };
 
 const heading = "BlueSkyz Atlas";
@@ -33,32 +46,48 @@ const eyebrow = isVi
   ? "Chòm sao bằng chứng"
   : isZh
     ? "证据星图"
-    : "Evidence constellation";
+    : isZhHant
+      ? "證據星圖"
+      : "Evidence constellation";
 const lede = isVi
   ? "Sơ đồ hóa từ chính những nguồn trang này công bố: thương hiệu mẹ, các nguyên tắc, những bề mặt tin cậy có thể xác minh, và các tuyên bố công khai cùng bằng chứng mà chúng dẫn chiếu. Nút sản phẩm chỉ xuất hiện khi sản phẩm thật được công bố."
   : isZh
     ? "依据本站发布的信息制图：主品牌、其原则、可验证的信任层面，以及公开声明与其引用的证据。产品节点仅在真实产品发布后出现。"
-    : "Mapped from the same sources this site publishes: the masterbrand, its principles, verifiable trust surfaces, and the public claims with the evidence they cite. Product nodes appear only when real products are public.";
+    : isZhHant
+      ? "依據本站發布的資訊製圖：主品牌、其原則、可驗證的信任層面，以及公開聲明與其引用的證據。產品節點僅在真實產品發布後出現。"
+      : "Mapped from the same sources this site publishes: the masterbrand, its principles, verifiable trust surfaces, and the public claims with the evidence they cite. Product nodes appear only when real products are public.";
 const indexHint = isVi
   ? "Di chuột hoặc chuyển tiêu điểm vào một mục để làm nổi bật nút tương ứng trên chòm sao."
   : isZh
     ? "将指针悬停或聚焦在条目上，即可在星图中突出显示对应节点。"
-    : "Hover or focus an entry to light its node in the constellation.";
+    : isZhHant
+      ? "將游標懸停或聚焦在條目上，即可在星圖中突出顯示對應節點。"
+      : "Hover or focus an entry to light its node in the constellation.";
 
 const emptyLabel = isVi
   ? "Chưa có sản phẩm công khai nào được công bố."
   : isZh
     ? "目前尚未发布任何公开产品。"
-    : "No public products are published yet.";
+    : isZhHant
+      ? "目前尚未發布任何公開產品。"
+      : "No public products are published yet.";
 
 const groupTitles = {
-  house: isVi ? "Ngôi nhà" : isZh ? "品牌之家" : "The house",
+  house: isVi
+    ? "Ngôi nhà"
+    : isZh
+      ? "品牌之家"
+      : isZhHant
+        ? "品牌之家"
+        : "The house",
   proof: isVi
     ? "Tin cậy & bằng chứng"
     : isZh
       ? "信任与证据"
-      : "Trust & evidence",
-  products: isVi ? "Sản phẩm" : isZh ? "产品" : "Products",
+      : isZhHant
+        ? "信任與證據"
+        : "Trust & evidence",
+  products: isVi ? "Sản phẩm" : isZh ? "产品" : isZhHant ? "產品" : "Products",
 };
 
 // Editorial reference codes: claims and evidence carry short footnote-style

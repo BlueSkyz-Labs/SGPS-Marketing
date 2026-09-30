@@ -13,11 +13,21 @@ interface Props {
 const { lang = "en" } = Astro.props;
 
 const taglineLead = labelFor(
-  { en: SITE.taglineLead, vi: "Trí tuệ. Nâng tầm.", zh: "智能。提升。" },
+  {
+    en: SITE.taglineLead,
+    vi: "Trí tuệ. Nâng tầm.",
+    zh: "智能。提升。",
+    "zh-hant": "智慧。提升。",
+  },
   lang,
 );
 const taglineAccent = labelFor(
-  { en: SITE.taglineAccent, vi: "Tác động.", zh: "影响。" },
+  {
+    en: SITE.taglineAccent,
+    vi: "Tác động.",
+    zh: "影响。",
+    "zh-hant": "影響。",
+  },
   lang,
 );
 const proposition = labelFor(
@@ -25,6 +35,7 @@ const proposition = labelFor(
     en: SITE.proposition,
     vi: "Chúng tôi xây dựng những sản phẩm thông minh để trao quyền cho con người và nâng tầm cách công việc được thực hiện.",
     zh: "我们打造智能化产品，赋能个人并提升工作方式。",
+    "zh-hant": "我們打造智慧化產品，賦能個人並提升工作方式。",
   },
   lang,
 );
@@ -33,6 +44,7 @@ const supporting = labelFor(
     en: SITE.supporting,
     vi: "Một góc nhìn cao hơn kiến tạo một ngày mai rạng rỡ.",
     zh: "更高的视角，成就更明亮的明天。",
+    "zh-hant": "更高的視角，成就更明亮的明天。",
   },
   lang,
 );

@@ -16,31 +16,37 @@ const ROUTE_ALIASES: Record<string, Record<Language, string[]>> = {
     en: ["products", "public registry", "product status"],
     vi: ["sản phẩm", "trạng thái sản phẩm"],
     zh: ["产品", "公开目录", "产品状态"],
+    "zh-hant": ["產品", "公開目錄", "產品狀態"],
   },
   about: {
     en: ["about", "company", "founder"],
     vi: ["về blueskyz", "công ty"],
     zh: ["关于", "公司", "创始人"],
+    "zh-hant": ["關於", "公司", "創辦人"],
   },
   contact: {
     en: ["contact", "reach out"],
     vi: ["liên hệ"],
     zh: ["联系", "联系我们"],
+    "zh-hant": ["聯絡", "聯絡我們"],
   },
   support: {
     en: ["support", "help", "recourse"],
     vi: ["hỗ trợ", "giúp đỡ"],
     zh: ["支持", "帮助", "补救"],
+    "zh-hant": ["支援", "協助", "補救"],
   },
   privacy: {
     en: ["privacy", "data"],
     vi: ["quyền riêng tư", "dữ liệu"],
     zh: ["隐私", "数据"],
+    "zh-hant": ["隱私", "資料"],
   },
   security: {
     en: ["security", "vulnerability", "report an issue"],
     vi: ["bảo mật", "lỗ hổng"],
     zh: ["安全", "漏洞", "报告问题"],
+    "zh-hant": ["安全", "漏洞", "報告問題"],
   },
 };
 

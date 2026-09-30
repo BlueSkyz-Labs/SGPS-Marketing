@@ -1,0 +1,65 @@
+---
+// zh-Hant copy: machine-assisted (OpenCC s2twp), pending native review.
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Container from "@/components/layout/Container.astro";
+import PageHeader from "@/components/layout/PageHeader.astro";
+import { SITE } from "@/data/site";
+
+const hasBusinessEmail = Boolean(SITE.contactEmail);
+---
+
+<BaseLayout
+  title="支援"
+  description="BlueSkyz Labs 的支援途徑與可操作求助：目前可用的、尚未公布的內容，以及如何聯絡我們。"
+  path="/zh-hant/support/"
+>
+  <section class="py-16 lg:py-24">
+    <Container>
+      <PageHeader
+        eyebrow="支援"
+        title="誠實坦誠的協助"
+        lede="各產品的支援入口將在核實後顯示在產品資料頁。通用支援狀態見下方；報告安全漏洞僅用於漏洞揭露。"
+      />
+      {hasBusinessEmail ? (
+        <p class="mt-8 max-w-2xl text-[var(--text-secondary)]">
+          Email{" "}
+          <a
+            href={`mailto:${SITE.contactEmail}`}
+            class="inline-flex min-h-11 items-center font-semibold text-[var(--action-primary)] no-underline hover:underline"
+          >
+            {SITE.contactEmail}
+          </a>{" "}
+          可提供一般產品支援，直至發布針對產品的支援通道。
+        </p>
+      ) : (
+        <p class="mt-8 max-w-2xl text-[var(--text-secondary)]">
+          通用產品支援郵箱尚未核實。請僅使用已在經驗證的產品資料頁上公布的
+          專用支援入口。安全漏洞報告僅用於疑似安全問題，不接受一般客戶支援請求。
+        </p>
+      )}
+      <div class="mt-10 flex flex-wrap gap-3">
+        <a
+          href="/zh-hant/security/"
+          class="inline-flex min-h-11 items-center rounded-lg border border-[var(--border-subtle)] bg-[var(--surface-raised)] px-5 text-sm font-semibold text-[var(--text-primary)] no-underline transition-colors hover:border-[var(--action-primary)]"
+        >
+          報告安全漏洞
+        </a>
+        {hasBusinessEmail ? (
+          <a
+            href="/zh-hant/contact/"
+            class="inline-flex min-h-11 items-center rounded-lg border border-[var(--border-subtle)] bg-[var(--surface-raised)] px-5 text-sm font-semibold text-[var(--text-primary)] no-underline transition-colors hover:border-[var(--action-primary)]"
+          >
+            聯絡 BlueSkyz
+          </a>
+        ) : (
+          <a
+            href="/zh-hant/about/"
+            class="inline-flex min-h-11 items-center rounded-lg border border-[var(--border-subtle)] bg-[var(--surface-raised)] px-5 text-sm font-semibold text-[var(--text-primary)] no-underline transition-colors hover:border-[var(--action-primary)]"
+          >
+            關於 BlueSkyz
+          </a>
+        )}
+      </div>
+    </Container>
+  </section>
+</BaseLayout>

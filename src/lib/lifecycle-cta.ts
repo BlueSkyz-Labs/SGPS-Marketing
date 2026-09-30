@@ -44,13 +44,14 @@ export const LIFECYCLE_CTA_VERB_LABELS: Record<
   LifecycleCtaVerb,
   LocalizedLabel
 > = {
-  learn: { en: "Learn", vi: "Tìm hiểu", zh: "了解" },
+  learn: { en: "Learn", vi: "Tìm hiểu", zh: "了解", "zh-hant": "了解" },
   "view-development-status": {
     en: "View development status",
     vi: "Xem trạng thái phát triển",
     zh: "查看开发状态",
+    "zh-hant": "檢視開發狀態",
   },
-  try: { en: "Try", vi: "Dùng thử", zh: "试用" },
+  try: { en: "Try", vi: "Dùng thử", zh: "试用", "zh-hant": "試用" },
 };
 
 /** Lifecycles that are, by definition, not yet public. */

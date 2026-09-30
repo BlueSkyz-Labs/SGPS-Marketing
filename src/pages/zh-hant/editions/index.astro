@@ -1,0 +1,25 @@
+---
+// zh-Hant copy: machine-assisted (OpenCC s2twp), pending native review.
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Container from "@/components/layout/Container.astro";
+import PageHeader from "@/components/layout/PageHeader.astro";
+import EditionIndex from "@/components/editorial/EditionIndex.astro";
+---
+
+<BaseLayout
+  title="選集"
+  description="本站已發布陳述的精選集合，每一項都連結到其背後的證據。"
+  path="/zh-hant/editions/"
+>
+  <section class="py-16 lg:py-24">
+    <Container>
+      <PageHeader
+        title="已發布選集"
+        lede="本站已發布陳述的精選集合。每個選集都連結到每一項背後的證據；不新增本站尚未發布的任何內容。"
+      />
+      <div class="mt-12">
+        <EditionIndex lang="zh-hant" />
+      </div>
+    </Container>
+  </section>
+</BaseLayout>

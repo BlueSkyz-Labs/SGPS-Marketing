@@ -57,6 +57,7 @@ export function buildDecisionItems(
         en: firstEvidence.label.en,
         vi: firstEvidence.label.vi,
         zh: firstEvidence.label.zh,
+        "zh-hant": firstEvidence.label["zh-hant"],
       };
     }
   }
@@ -75,11 +76,17 @@ export function buildDecisionItems(
     items.push({
       id: `product:${product.slug}`,
       kind: "product",
-      label: { en: product.name, vi: product.name, zh: product.name },
+      label: {
+        en: product.name,
+        vi: product.name,
+        zh: product.name,
+        "zh-hant": product.name,
+      },
       evidenceHref: {
         en: getProductProfilePath("en", product.slug),
         vi: getProductProfilePath("vi", product.slug),
         zh: getProductProfilePath("zh", product.slug),
+        "zh-hant": getProductProfilePath("zh-hant", product.slug),
       },
     });
   }

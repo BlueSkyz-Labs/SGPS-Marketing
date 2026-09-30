@@ -224,7 +224,7 @@ test("negative proof: a development product can never map to Try", () => {
   // origin, so only the recorded lifecycle/availability can withhold Try.
   for (const lifecycle of ["concept", "prototype", "development"]) {
     for (const availability of ALL_AVAILABILITIES) {
-      for (const lang of ["en", "vi", "zh"]) {
+      for (const lang of ["en", "vi", "zh", "zh-hant"]) {
         const cta = resolveLifecycleCta(
           ctaProduct({
             lifecycle,
@@ -378,7 +378,7 @@ test("non-Try destinations stay on the localized recorded-status page", () => {
     ],
   ];
   for (const [lifecycle, availability, href] of cases) {
-    for (const lang of ["en", "vi", "zh"]) {
+    for (const lang of ["en", "vi", "zh", "zh-hant"]) {
       const cta = resolveLifecycleCta(
         ctaProduct({ lifecycle, availability, primaryActionHref: href }),
         lang,
@@ -398,7 +398,7 @@ test("CTA verb vocabulary is bounded and fully localized", () => {
   ]);
   for (const verb of LIFECYCLE_CTA_VERBS) {
     const label = LIFECYCLE_CTA_VERB_LABELS[verb];
-    for (const lang of ["en", "vi", "zh"]) {
+    for (const lang of ["en", "vi", "zh", "zh-hant"]) {
       assert.ok(label[lang].trim().length > 0, `${verb}/${lang}`);
     }
     assert.notEqual(label.vi, label.en, `${verb} must be translated for vi`);

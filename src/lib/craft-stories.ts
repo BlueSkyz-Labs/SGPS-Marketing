@@ -15,6 +15,7 @@ export interface LocalizedText {
   en: string;
   vi: string;
   zh?: string;
+  "zh-hant"?: string;
 }
 
 export type CraftStorySection =

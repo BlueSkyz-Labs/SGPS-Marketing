@@ -14,7 +14,7 @@ test("product profile route is statically wired for public entries", () => {
 });
 
 test("localized product-profile primary CTAs use the app sign-in destination", () => {
-  for (const lang of ["en", "vi", "zh"]) {
+  for (const lang of ["en", "vi", "zh", "zh-hant"]) {
     const source = readFileSync(
       `src/pages/${lang}/products/[slug].astro`,
       "utf8",
@@ -41,7 +41,7 @@ test("lifecycle CTA verbs are authored once in src/lib/lifecycle-cta.ts", () => 
   const surfaces = [
     ["ProductCard", "src/components/product/ProductCard.astro"],
     ["FlagshipTheatre", "src/components/product/FlagshipTheatre.astro"],
-    ...["en", "vi", "zh"].map((lang) => [
+    ...["en", "vi", "zh", "zh-hant"].map((lang) => [
       `${lang} profile`,
       `src/pages/${lang}/products/[slug].astro`,
     ]),
@@ -69,7 +69,7 @@ test("sitemap emits product profile URLs from data.slug", () => {
 });
 
 test("public profiles do not offer private repository links as accessible proof", () => {
-  for (const lang of ["en", "vi", "zh"]) {
+  for (const lang of ["en", "vi", "zh", "zh-hant"]) {
     const source = readFileSync(
       `src/pages/${lang}/products/[slug].astro`,
       "utf8",

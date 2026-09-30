@@ -74,7 +74,11 @@ for (const route of ROUTES) {
  * 4.5:1 small-text floor. It is deliberately stricter than the surface scan
  * above (which allows 3:1 for large text).
  */
-const CHOICE_ROUTES = ["/en/products/", "/vi/products/sotro/"];
+const CHOICE_ROUTES = [
+  "/en/products/",
+  "/vi/products/sotro/",
+  "/zh-hant/products/",
+];
 
 interface ChoiceContrast {
   lang: string;
@@ -85,7 +89,24 @@ interface ChoiceContrast {
   ratio: number;
 }
 
+/**
+ * The switcher is a trigger plus a popover panel. The trigger draws on the
+ * header surface (read from the scene's own `--surface-primary`); every option
+ * label — endonym, English name and check mark — draws on the panel surface.
+ * The panel must be open to be rendered, so open it first.
+ */
 async function languageChoiceContrast(page: import("@playwright/test").Page) {
+  // Below the md breakpoint the switcher sits inside the header "Menu"
+  // disclosure; open it first, as a visitor would (no-op on desktop).
+  const menu = page.locator("header details:not([open]) > summary");
+  if (await menu.isVisible()) await menu.click();
+  await page.locator("header [data-language-trigger]:visible").first().click();
+  const panel = page.locator("header [data-language-panel]:popover-open");
+  await expect(panel).toBeVisible();
+  // Let the 170ms entrance transition settle before sampling colours.
+  await panel.evaluate((element) =>
+    Promise.all(element.getAnimations().map((animation) => animation.finished)),
+  );
   return page.evaluate((): ChoiceContrast[] => {
     const channel = (v: number) => {
       const c = v / 255;
@@ -109,26 +130,83 @@ async function languageChoiceContrast(page: import("@playwright/test").Page) {
       const root = getComputedStyle(document.documentElement).backgroundColor;
       return { c: parse(root), value: root };
     };
+    const ratioOf = (
+      fgColor: string,
+      bg: { r: number; g: number; b: number },
+    ) => {
+      const fg = lum(parse(fgColor));
+      return (Math.max(fg, lum(bg)) + 0.05) / (Math.min(fg, lum(bg)) + 0.05);
+    };
 
     const results: ChoiceContrast[] = [];
+
+    // Trigger on the header surface (the scene re-points --surface-primary).
+    const header = document.querySelector("header");
+    for (const trigger of document.querySelectorAll(
+      "header [data-language-trigger]",
+    )) {
+      const box = trigger.getBoundingClientRect();
+      if (!box.width || !box.height || !header) continue;
+      const surface = getComputedStyle(header)
+        .getPropertyValue("--surface-primary")
+        .trim();
+      const bg = parse(surface || getComputedStyle(header).backgroundColor);
+      const color = getComputedStyle(trigger).color;
+      results.push({
+        lang: "trigger",
+        state: "idle",
+        text: trigger.textContent?.trim() ?? "",
+        color,
+        background: surface,
+        ratio: Number(ratioOf(color, bg).toFixed(2)),
+      });
+    }
+
     for (const el of document.querySelectorAll("[data-language-choice]")) {
       const box = el.getBoundingClientRect();
       if (!box.width || !box.height) continue;
-      const style = getComputedStyle(el);
-      const label =
-        el.querySelector(".lang-toggle-code")?.textContent?.trim() ?? "";
-      const fg = lum(parse(style.color));
+      const state =
+        el.getAttribute("aria-current") === "page" ? "active" : "idle";
       const { c: bg, value: bgValue } = background(el);
-      const ratio =
-        (Math.max(fg, lum(bg)) + 0.05) / (Math.min(fg, lum(bg)) + 0.05);
-      results.push({
-        lang: el.getAttribute("data-language-choice") ?? "?",
-        state: el.getAttribute("aria-current") === "page" ? "active" : "idle",
-        text: label,
-        color: style.color,
-        background: bgValue,
-        ratio: Number(ratio.toFixed(2)),
-      });
+      // A current row tints its own background; measure against that.
+      const rowBg = parse(getComputedStyle(el).backgroundColor);
+      const effective =
+        rowBg.a > 0
+          ? {
+              r: Math.round(rowBg.r * rowBg.a + bg.r * (1 - rowBg.a)),
+              g: Math.round(rowBg.g * rowBg.a + bg.g * (1 - rowBg.a)),
+              b: Math.round(rowBg.b * rowBg.a + bg.b * (1 - rowBg.a)),
+            }
+          : bg;
+      for (const [selector, kind] of [
+        [".lang-option__native", "native"],
+        [".lang-option__english", "english"],
+      ] as const) {
+        const label = el.querySelector(selector);
+        if (!label) continue;
+        const color = getComputedStyle(label).color;
+        results.push({
+          lang: `${el.getAttribute("data-language-choice") ?? "?"}/${kind}`,
+          state,
+          text: label.textContent?.trim() ?? "",
+          color,
+          background: bgValue,
+          ratio: Number(ratioOf(color, effective).toFixed(2)),
+        });
+      }
+      const check = el.querySelector(".lang-option__check svg");
+      if (check) {
+        const color = getComputedStyle(check).color;
+        results.push({
+          lang: `${el.getAttribute("data-language-choice") ?? "?"}/check`,
+          state,
+          text: "check",
+          color,
+          background: bgValue,
+          // Non-text UI graphics only need 3:1 (WCAG 1.4.11), asserted below.
+          ratio: Number(ratioOf(color, effective).toFixed(2)),
+        });
+      }
     }
     return results;
   });
@@ -161,11 +239,16 @@ for (const config of [
         `${route} must render language choices`,
       ).toBeGreaterThan(0);
       for (const result of results) {
+        const floor = result.text === "check" ? 3 : 4.5;
         expect(
           result.ratio,
           `${route} ${config.name}: "${result.text}" (${result.lang}, ${result.state}) ${result.color} on ${result.background}`,
-        ).toBeGreaterThanOrEqual(4.5);
+        ).toBeGreaterThanOrEqual(floor);
       }
+      // The trigger, four endonyms, their English names and one check mark.
+      expect(results.some((r) => r.lang === "trigger")).toBe(true);
+      expect(results.filter((r) => r.lang.endsWith("/native"))).toHaveLength(4);
+      expect(results.filter((r) => r.text === "check")).toHaveLength(1);
     }
   });
 }

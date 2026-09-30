@@ -22,6 +22,7 @@ const localized = (max: number) =>
     en: z.string().min(1).max(max),
     vi: z.string().min(1).max(max),
     zh: z.string().min(1).max(max),
+    "zh-hant": z.string().min(1).max(max),
   });
 
 const assetPath = (extensions: string) =>

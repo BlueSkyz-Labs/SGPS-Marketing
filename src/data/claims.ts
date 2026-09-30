@@ -19,6 +19,7 @@ export interface LocalizedStatement {
   en: string;
   vi: string;
   zh: string;
+  "zh-hant": string;
 }
 
 export interface ProductClaimBinding {
@@ -77,6 +78,8 @@ export const CLAIMS: readonly PublicClaim[] = [
       en: "Security reports reach the maintainers through a private GitHub channel, never through a public issue.",
       vi: "Báo cáo bảo mật đến người bảo trì qua kênh GitHub riêng tư, không bao giờ qua issue công khai.",
       zh: "安全报告通过 GitHub 私有渠道送达维护者，绝不会通过公开 issue 提出。",
+      "zh-hant":
+        "安全報告透過 GitHub 私有管道送達維護者，絕不會透過公開 issue 提出。",
     },
     evidenceIds: ["ev-security-advisory", "ev-security-route"],
     boundaryId: "bnd-security-reporting",
@@ -90,6 +93,8 @@ export const CLAIMS: readonly PublicClaim[] = [
       en: "This site sets no cookies. It stores explicitly selected language and theme preferences in this browser, without tracking or profiling.",
       vi: "Trang này không đặt cookie. Trang chỉ lưu lựa chọn ngôn ngữ và giao diện do khách truy cập chủ động chọn trong trình duyệt, không theo dõi hay lập hồ sơ.",
       zh: "本站不设置 Cookie；仅在访客明确选择语言或主题时于浏览器本地保存偏好，不进行跟踪或行为画像。",
+      "zh-hant":
+        "本站不設定 Cookie；僅在訪客明確選擇語言或主題時於瀏覽器本地儲存偏好，不進行跟蹤或行為畫像。",
     },
     evidenceIds: ["ev-privacy-route", "ev-security-route"],
     boundaryId: "bnd-privacy-collection",
@@ -103,6 +108,7 @@ export const CLAIMS: readonly PublicClaim[] = [
       en: "A product appears in the public registry only when its public evidence is ready to verify.",
       vi: "Sản phẩm chỉ xuất hiện trong danh mục công khai khi bằng chứng công khai của nó sẵn sàng để xác minh.",
       zh: "产品仅在其公开证据可核验时才会出现在公开登记表中。",
+      "zh-hant": "產品僅在其公開證據可核驗時才會出現在公開登記表中。",
     },
     evidenceIds: ["ev-products-route"],
   },

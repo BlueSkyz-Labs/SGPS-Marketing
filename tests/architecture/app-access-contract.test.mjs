@@ -82,7 +82,7 @@ test("negative proof: a foreign or retired sign-in host is rejected", () => {
 });
 
 test("the profile pages mount the app access block in every locale", () => {
-  for (const lang of ["en", "vi", "zh"]) {
+  for (const lang of ["en", "vi", "zh", "zh-hant"]) {
     const page = readFileSync(
       `src/pages/${lang}/products/[slug].astro`,
       "utf8",

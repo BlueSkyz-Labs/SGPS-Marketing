@@ -9,7 +9,7 @@ const sitemap = readFileSync("src/pages/sitemap.xml.ts", "utf8");
 
 test("published locale paths have reciprocal hreflang targets", () => {
   const supported = new Set(i18n.SUPPORTED_LANGUAGES);
-  assert.deepEqual([...supported], ["en", "vi", "zh"]);
+  assert.deepEqual([...supported], ["en", "vi", "zh", "zh-hant"]);
 
   for (const path of seo.PUBLIC_STATIC_PATHS) {
     const links = seo.hreflangLinks(path, "https://blueskyzlabs.com");
@@ -20,7 +20,7 @@ test("published locale paths have reciprocal hreflang targets", () => {
     );
     assert.deepEqual(
       links.map((link) => link.hreflang),
-      ["en", "vi", "zh-Hans"],
+      ["en", "vi", "zh-Hans", "zh-Hant"],
       `${path} must expose one stable hreflang per locale`,
     );
     assert.equal(
@@ -37,7 +37,13 @@ test("published locale paths have reciprocal hreflang targets", () => {
 });
 
 test("BaseLayout emits complete locale-safe SEO metadata", () => {
-  assert.match(layout, /<html lang=\{currentLang\} dir="ltr">/);
+  assert.match(layout, /<html lang=\{htmlLang\} dir="ltr">/);
+  assert.match(
+    layout,
+    /htmlLang = currentLang === "zh-hant" \? "zh-Hant" : currentLang/,
+    'Traditional Chinese pages must declare <html lang="zh-Hant">',
+  );
+  assert.match(layout, /"zh-hant": "zh_TW"/);
   assert.match(layout, /rel="canonical"/);
   assert.match(layout, /hreflang="x-default"/);
   assert.match(layout, /og:url/);
@@ -122,7 +128,7 @@ test("HSTS preload remains deferred in live contract evidence", () => {
 test("social locale and skip link reflect the published language", () => {
   assert.match(
     layout,
-    /OG_LOCALES\s*=\s*\{\s*en:\s*"en_US",\s*vi:\s*"vi_VN",\s*zh:\s*"zh_CN"/,
+    /OG_LOCALES\s*=\s*\{\s*en:\s*"en_US",\s*vi:\s*"vi_VN",\s*zh:\s*"zh_CN",\s*"zh-hant":\s*"zh_TW"/,
   );
   assert.match(layout, /ogAlternates\.map/);
   assert.match(layout, /locale !== ogLocale/);

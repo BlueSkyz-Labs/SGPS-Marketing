@@ -5,7 +5,7 @@ import test from "node:test";
 const COMPONENT = "src/components/product/ProductLadder.astro";
 const COPY = "src/lib/product-copy.ts";
 const SCHEMA = "src/lib/product-schema.ts";
-const ROUTES = ["en", "vi", "zh"].map((lang) => ({
+const ROUTES = ["en", "vi", "zh", "zh-hant"].map((lang) => ({
   lang,
   path: `src/pages/${lang}/products/[slug].astro`,
 }));

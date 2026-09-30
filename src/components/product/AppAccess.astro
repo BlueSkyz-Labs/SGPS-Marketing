@@ -19,15 +19,26 @@ interface Props {
 const { appAccess, productName, lang, showSignIn = true } = Astro.props;
 
 const LABELS = {
-  heading: { en: "Use the app", vi: "Truy cập ứng dụng", zh: "使用应用" },
-  signIn: { en: "Sign in", vi: "Đăng nhập", zh: "登录" },
+  heading: {
+    en: "Use the app",
+    vi: "Truy cập ứng dụng",
+    zh: "使用应用",
+    "zh-hant": "使用應用程式",
+  },
+  signIn: { en: "Sign in", vi: "Đăng nhập", zh: "登录", "zh-hant": "登入" },
   signInHint: {
     en: "Opens the web app sign-in page",
     vi: "Mở thẳng trang đăng nhập của ứng dụng web",
     zh: "直接打开网页应用的登录页面",
+    "zh-hant": "直接開啟網頁應用程式的登入頁面",
   },
-  inDevelopment: { en: "In development", vi: "Đang phát triển", zh: "开发中" },
-  getOn: { en: "Get it on", vi: "Tải trên", zh: "下载于" },
+  inDevelopment: {
+    en: "In development",
+    vi: "Đang phát triển",
+    zh: "开发中",
+    "zh-hant": "開發中",
+  },
+  getOn: { en: "Get it on", vi: "Tải trên", zh: "下载于", "zh-hant": "下載於" },
 } as const;
 
 const STORES = [
