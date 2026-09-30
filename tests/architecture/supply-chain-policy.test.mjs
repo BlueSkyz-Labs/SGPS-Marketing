@@ -44,7 +44,8 @@ test("GitHub source assurance is pinned and least privilege", () => {
   );
   assert.deepEqual(
     runnerLabels,
-    ["ubuntu-24.04", "ubuntu-24.04"],
+    // Quality Gates, Browser shard (matrix), Lighthouse CI, Browser Assurance.
+    ["ubuntu-24.04", "ubuntu-24.04", "ubuntu-24.04", "ubuntu-24.04"],
     "source-assurance jobs must pin an explicit Ubuntu major/minor runner label instead of mutable ubuntu-latest",
   );
   assert.doesNotMatch(workflow, /runs-on:\s*ubuntu-latest/);
@@ -71,19 +72,24 @@ test("GitHub source assurance is pinned and least privilege", () => {
   ];
   assert.equal(
     exactHeadRefs.length,
-    2,
-    "both jobs must checkout the exact PR head or push SHA",
+    3,
+    "every job that checks out code (Quality Gates, the browser shards, Lighthouse) must use the exact PR head or push SHA",
   );
   assert.equal(
     [...workflow.matchAll(/persist-credentials:\s*false/g)].length,
-    2,
+    3,
     "source-assurance checkout must not persist GitHub credentials",
   );
 
-  const browserJob = workflow.split("\n  browser-assurance:")[1] ?? "";
+  // Browser assurance is sharded per engine. Each shard must build, install
+  // its own runtime and then run the repository Playwright matrix slice; the
+  // shard list itself is locked to E2E_PROJECTS by browser-assurance-matrix.
+  const browserJob = (workflow.split("\n  browser-shards:")[1] ?? "").split(
+    "\n  lighthouse:",
+  )[0];
   const buildIndex = browserJob.indexOf("run: pnpm build");
   const installIndex = browserJob.indexOf(
-    "pnpm exec playwright install --with-deps chromium firefox webkit",
+    'pnpm exec playwright install --with-deps "$SHARD_BROWSER"',
   );
   const playwrightIndex = browserJob.indexOf("run: pnpm test:e2e");
   assert.ok(
@@ -92,7 +98,7 @@ test("GitHub source assurance is pinned and least privilege", () => {
   );
   assert.ok(
     installIndex > buildIndex,
-    "browser assurance must install Chromium, Firefox and WebKit after the build",
+    "each browser shard must install its Playwright runtime after the build",
   );
   assert.ok(
     playwrightIndex > installIndex,
