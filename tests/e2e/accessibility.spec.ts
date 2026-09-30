@@ -13,6 +13,7 @@ const ROUTES = [
   "/en/support/",
   "/en/privacy/",
   "/en/security/",
+  "/en/verify/",
   "/vi/",
   "/vi/products/",
   "/vi/products/sotro/",
@@ -22,12 +23,15 @@ const ROUTES = [
   "/vi/support/",
   "/vi/privacy/",
   "/vi/security/",
+  "/vi/verify/",
   "/zh/",
+  "/zh/verify/",
   "/zh/products/sotro/",
   "/zh/products/sotam/",
   "/zh-hant/",
   "/zh-hant/products/sotro/",
   "/zh-hant/products/sotam/",
+  "/zh-hant/verify/",
 ] as const;
 
 for (const route of ROUTES) {
@@ -99,6 +103,7 @@ test("mobile menu disclosure is keyboard operable", async ({ page }) => {
  * and reports every offender with its text and measured box.
  */
 const TARGET_ROUTES = [
+  "/en/verify/",
   "/en/",
   "/vi/",
   "/zh/",

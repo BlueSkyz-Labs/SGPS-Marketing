@@ -31,10 +31,7 @@ test.describe("executive-to-evidence reading depth", () => {
     const band = page.locator("[data-trust-band]");
     await expect(band).toBeVisible();
     await expect(band.getByRole("link")).toHaveCount(1);
-    await expect(band.getByRole("link")).toHaveAttribute(
-      "href",
-      "/en/security/",
-    );
+    await expect(band.getByRole("link")).toHaveAttribute("href", "/en/verify/");
   });
 
   test("print output keeps the evidence readable (chromium)", async ({

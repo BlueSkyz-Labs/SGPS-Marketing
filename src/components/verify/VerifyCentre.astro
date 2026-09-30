@@ -1,0 +1,224 @@
+---
+/**
+ * Experience v6 S3 — the verification centre (/{locale}/verify/).
+ *
+ * Presentation only: every claim, evidence reference, trust lane, Atlas node
+ * and Decision Room fact is consumed from the existing canonical components.
+ * Nothing here authors or strengthens a claim. The front layer is plain
+ * language (what we claim, what backs it, how to check yourself); the Atlas,
+ * source-to-surface traces and per-page evidence sit in native <details>
+ * disclosures, collapsed by default and complete without JavaScript.
+ */
+import Container from "@/components/layout/Container.astro";
+import PageHeader from "@/components/layout/PageHeader.astro";
+import TrustLedger from "@/components/experience/TrustLedger.astro";
+import Atlas from "@/components/experience/Atlas.astro";
+import EvidenceTeaser from "@/components/integrity/EvidenceTeaser.astro";
+import IntegrityLens from "@/components/integrity/IntegrityLens.astro";
+import DeepLinkOpener from "@/components/verify/DeepLinkOpener.astro";
+import SourceTrace from "@/components/integrity/SourceTrace.astro";
+import { getClaimTrace, getPublicClaims } from "@/lib/claims";
+import { getPublicProducts } from "@/lib/products";
+import type { Language } from "@/data/site";
+
+interface Props {
+  lang: Language;
+}
+
+const { lang } = Astro.props;
+
+const products = (await getPublicProducts()).map((product) => ({
+  slug: product.data.slug,
+  name: product.data.name,
+}));
+const claims = getPublicClaims(products);
+
+// Claims can share evidence; emit each evidence anchor id once per page (first
+// claim wins) so deep links stay unique and resolvable.
+const seenEvidence = new Set<string>();
+const omitAnchorsByClaim = new Map<string, string[]>();
+for (const resolved of claims) {
+  const omit: string[] = [];
+  for (const step of getClaimTrace(resolved.claim.id, products) ?? []) {
+    if (step.kind !== "evidence") continue;
+    if (seenEvidence.has(step.id)) omit.push(step.id);
+    else seenEvidence.add(step.id);
+  }
+  omitAnchorsByClaim.set(resolved.claim.id, omit);
+}
+
+const COPY = {
+  en: {
+    eyebrow: "Verify",
+    title: "Trust you can verify",
+    lede: "Privacy, security, and support paths are first-class routes — not slogans.",
+    claim: "What we claim",
+    backs: "What backs it",
+    check: "How to check yourself",
+    compare: "Compare in the Decision Room",
+    more: "More ways to look",
+    map: "Evidence map",
+    trace: "Source to surface",
+    pages: "Evidence by page",
+    products: "Products",
+  },
+  vi: {
+    eyebrow: "Xác minh",
+    title: "Tin cậy bạn có thể xác minh",
+    lede: "Đường dẫn đến quyền riêng tư, bảo mật và hỗ trợ là những tuyến đường hạng nhất — không phải khẩu hiệu.",
+    claim: "Chúng tôi tuyên bố gì",
+    backs: "Điều gì làm căn cứ",
+    check: "Tự kiểm tra",
+    compare: "So sánh trong Phòng Quyết định",
+    more: "Thêm cách xem",
+    map: "Bản đồ bằng chứng",
+    trace: "Từ nguồn đến bề mặt",
+    pages: "Bằng chứng theo trang",
+    products: "Sản phẩm",
+  },
+  zh: {
+    eyebrow: "核验",
+    title: "您可以核实的信任",
+    lede: "隐私、安全与支持均为正式通道 — 而非口号。",
+    claim: "我们的声明",
+    backs: "依据是什么",
+    check: "自行核查",
+    compare: "在决策室中比较",
+    more: "更多查看方式",
+    map: "证据星图",
+    trace: "从来源到公开层面",
+    pages: "按页面查看证据",
+    products: "产品",
+  },
+  "zh-hant": {
+    eyebrow: "核驗",
+    title: "您可以核實的信任",
+    lede: "隱私、安全與支援均為正式通道 — 而非口號。",
+    claim: "我們的聲明",
+    backs: "依據是什麼",
+    check: "自行核查",
+    compare: "在決策室中比較",
+    more: "更多查看方式",
+    map: "證據星圖",
+    trace: "從來源到公開層面",
+    pages: "依頁面檢視證據",
+    products: "產品",
+  },
+} as const;
+
+const c = COPY[lang];
+---
+
+<section class="py-16 lg:py-24" data-verify-centre>
+  <Container>
+    <PageHeader eyebrow={c.eyebrow} title={c.title} lede={c.lede} />
+
+    <div class="mt-12 max-w-3xl">
+      <h2 class="text-xl font-semibold tracking-tight sm:text-2xl">
+        {c.claim}
+      </h2>
+      <div class="mt-4">
+        <EvidenceTeaser lang={lang} />
+      </div>
+    </div>
+
+    <div class="mt-12 max-w-3xl">
+      <h2 class="text-xl font-semibold tracking-tight sm:text-2xl">
+        {c.backs}
+      </h2>
+      <TrustLedger lang={lang} compare={false} />
+    </div>
+
+    <div class="mt-12 max-w-3xl">
+      <h2 class="text-xl font-semibold tracking-tight sm:text-2xl">
+        {c.check}
+      </h2>
+      <a
+        href={`/${lang}/decision-room/`}
+        class="mt-3 inline-flex min-h-11 items-center text-sm font-semibold text-[var(--action-primary)] underline underline-offset-4 hover:no-underline"
+        data-verify-room
+      >
+        {c.compare} →
+      </a>
+    </div>
+
+    <div class="mt-12 max-w-3xl" data-verify-layers>
+      <h2 class="text-xl font-semibold tracking-tight sm:text-2xl">{c.more}</h2>
+      <div class="mt-4 flex flex-col gap-3">
+        <details class="verify-layer" data-verify-layer="atlas">
+          <summary class="verify-layer__summary">{c.map}</summary>
+          <div class="verify-layer__body">
+            <Atlas lang={lang} />
+          </div>
+        </details>
+        {claims.length > 0 ? (
+          <details class="verify-layer" data-verify-layer="trace">
+            <summary class="verify-layer__summary">{c.trace}</summary>
+            <div class="verify-layer__body">
+              {claims.map((resolved) => (
+                <SourceTrace
+                  claimId={resolved.claim.id}
+                  lang={lang}
+                  products={products}
+                  omitAnchorIds={
+                    omitAnchorsByClaim.get(resolved.claim.id) ?? []
+                  }
+                />
+              ))}
+            </div>
+          </details>
+        ) : null}
+        <details class="verify-layer" data-verify-layer="pages">
+          <summary class="verify-layer__summary">{c.pages}</summary>
+          <div class="verify-layer__body">
+            <IntegrityLens surface="products" lang={lang} />
+          </div>
+        </details>
+      </div>
+    </div>
+
+    <p class="mt-12">
+      <a
+        href={`/${lang}/products/`}
+        class="inline-flex min-h-11 items-center text-sm font-semibold text-[var(--action-primary)] underline underline-offset-4 hover:no-underline"
+      >
+        {c.products} →
+      </a>
+    </p>
+  </Container>
+</section>
+
+<DeepLinkOpener />
+
+<style>
+  .verify-layer {
+    border: 1px solid var(--border-subtle);
+    border-radius: 0.75rem;
+    background: var(--surface-raised);
+  }
+
+  .verify-layer__summary {
+    display: flex;
+    align-items: center;
+    min-height: 2.75rem;
+    padding: 0.5rem 1.25rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    cursor: pointer;
+  }
+
+  .verify-layer__summary:focus-visible {
+    outline: 2px solid var(--action-primary);
+    outline-offset: 2px;
+  }
+
+  .verify-layer__body {
+    padding: 0 1.25rem 1.25rem;
+    min-width: 0;
+  }
+
+  .verify-layer__body :global(.atlas-section) {
+    padding-block: 1rem;
+    border-bottom: 0;
+  }
+</style>
