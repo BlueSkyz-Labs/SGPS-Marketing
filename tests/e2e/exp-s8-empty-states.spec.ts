@@ -8,6 +8,20 @@ const FOUNDER = /Tony Nguyen|Founder|\bCEO\b|Nhà sáng lập|创始人|創辦�
 
 const words = (text: string) => text.trim().split(/\s+/).filter(Boolean).length;
 
+// The plan budgets are English words. Vietnamese separates every syllable with
+// a space (about 1.6x the English token count) and Chinese has no spaces, so
+// those locales are measured in their own unit against a scaled budget.
+function size(lang: string, text: string) {
+  return lang === "zh" || lang === "zh-hant"
+    ? text.replace(/\s/g, "").length
+    : words(text);
+}
+function budget(lang: string, englishWords: number) {
+  if (lang === "vi") return Math.round(englishWords * 1.6);
+  if (lang === "zh" || lang === "zh-hant") return englishWords * 2;
+  return englishWords;
+}
+
 for (const lang of LOCALES) {
   test.describe(`S8 empty states /${lang}/`, () => {
     test("contact: one primary action to a real route, no invented mailbox", async ({
@@ -16,7 +30,9 @@ for (const lang of LOCALES) {
       await page.goto(`/${lang}/contact/`);
       const main = page.locator("main");
       const text = await main.innerText();
-      expect(words(text), "contact visible words").toBeLessThanOrEqual(100);
+      expect(size(lang, text), "contact visible size").toBeLessThanOrEqual(
+        budget(lang, 100),
+      );
       expect(text).not.toMatch(EMAIL);
       expect(text).not.toMatch(PHONE);
       await expect(page.locator('main a[href^="mailto:"]')).toHaveCount(0);
@@ -36,7 +52,9 @@ for (const lang of LOCALES) {
     test("about: at most 150 words, no founder line", async ({ page }) => {
       await page.goto(`/${lang}/about/`);
       const text = await page.locator("main").innerText();
-      expect(words(text), "about visible words").toBeLessThanOrEqual(150);
+      expect(size(lang, text), "about visible size").toBeLessThanOrEqual(
+        budget(lang, 150),
+      );
       expect(text).not.toMatch(FOUNDER);
       expect(text).not.toMatch(EMAIL);
     });
