@@ -11,17 +11,21 @@ jobs:
   - See what remains unpaid this month and what needs attention today
   - Maintain dependable room, tenant, meter, and monthly charge records
 capabilities:
-  - "Development scope: traceable utility charges and rental records"
-  - "Development scope: auditable receipts and human-confirmed payment states"
-  - Optional copy-and-open Zalo/SMS message templates, not automatic sending
+  - Utility charges from meter readings, with a readable tiered-electricity breakdown
+  - Receipts, and a separate confirmation step before received money is recorded
+  - Optional polite Zalo/SMS-style reminder messages to copy; nothing is sent automatically
 platforms:
   - web
 primaryAction:
   type: preview
   label: Preview Sổ Trọ
   href: https://blueskyzlabs.com/en/products/sotro/
-# Owner 2026-09-28: direct sign-in link (ADR 0006 product subdomain; read back
-# 2026-09-28: served SPA bundle routes /login; HTTP 200). Native apps stay in development until store-listed.
+# Sign-in link mirrors the upstream public profile (appAccess.signInUrl; ADR 0006 product
+# subdomain). It is a sign-in page for existing users, not evidence that signup is open.
+# Native apps: the upstream profile lists platforms ["web"] only and makes no mobile claim;
+# the android/ios in-development markers below are retained only because
+# tests/architecture/app-access-contract.test.mjs (Owner 2026-09-28) still requires them.
+# OWNER DECISION pending: drop them here and in that test, or keep.
 appAccess:
   signInUrl: https://sotro.blueskyzlabs.com/login
   android:
@@ -44,8 +48,10 @@ endorsement: A BlueSkyz Labs product
 featuredTier: hero
 displayOrder: 1
 public: true
-sourceRevision: dafe6752ceb10b2aac38fb085caa114748ca3e2e
-lastReviewedAt: 2026-09-27
+# Sotro revision of the vendored public profile (src/data/upstream/README.md). PENDING:
+# re-pin to the Sotro main squash SHA once the upstream PR merges.
+sourceRevision: 82d799449b278da2c27ea5985aec258b7f2da8dd
+lastReviewedAt: 2026-09-30
 # Localized copy: faithful translations of the English claims above; the
 # English record stays canonical for claim/proof binding. Native VI/ZH review
 # is an Owner feedback checkpoint (plan v5 W3.4).
@@ -56,9 +62,9 @@ i18n:
       - "Xem tháng này còn ai chưa đóng tiền và hôm nay cần lo việc gì"
       - "Ghi lại phòng, người thuê, số điện nước và các khoản thu hằng tháng cho gọn, cho chắc"
     capabilities:
-      - "Phạm vi phát triển: tiền điện nước và hồ sơ thuê phòng có thể truy vết"
-      - "Phạm vi phát triển: biên nhận có thể đối chiếu, trạng thái thanh toán do chính người dùng xác nhận"
-      - "Mẫu tin nhắn Zalo/SMS tùy chọn: sao chép rồi tự mở để gửi, không tự động gửi"
+      - "Tính tiền điện nước từ số đọc công tơ, có giải thích rõ từng bậc giá điện"
+      - "Biên nhận, và một bước xác nhận riêng trước khi ghi nhận tiền đã nhận"
+      - "Mẫu tin nhắn nhắc lịch sự kiểu Zalo/SMS để sao chép; không tự động gửi"
     primaryActionLabel: "Xem trước Sổ Trọ"
   zh:
     shortDescription: "面向越南房东的数字笔记本：房间、应收租金、可信的历史记录与今日待办。"
@@ -66,7 +72,7 @@ i18n:
       - "查看本月尚未收取的款项以及今天需要处理的事项"
       - "维护可靠的房间、租客、表计读数与每月费用记录"
     capabilities:
-      - "开发范围：可追溯的水电费用与租赁记录"
-      - "开发范围：可审计的收据与人工确认的付款状态"
-      - "可选的 Zalo/短信模板：复制后自行打开发送，不会自动发送"
+      - "根据表计读数计算水电费用，并清楚说明阶梯电价的各档明细"
+      - "收据，以及在记录已收款项之前单独的一步确认"
+      - "可选的、礼貌的 Zalo/短信风格提醒消息，供复制使用；不会自动发送"
     primaryActionLabel: "预览 Sổ Trọ"
