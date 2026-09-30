@@ -1,0 +1,99 @@
+---
+/**
+ * Locale suggestion host (ADR 0009, no-cookie variant).
+ *
+ * Renders nothing server-side: with JavaScript disabled the banner is simply
+ * absent. The external script builds the region; this file owns its styling.
+ * Fixed at the bottom so inserting it never shifts layout.
+ */
+---
+
+<script>
+  import { initLocaleSuggestion } from "@/scripts/locale-suggestion";
+
+  initLocaleSuggestion();
+</script>
+
+<style is:global>
+  .locale-suggestion {
+    position: fixed;
+    inset: auto 1rem 1rem 1rem;
+    z-index: 40;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem 1rem;
+    max-width: 40rem;
+    margin-inline: auto;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-card, 0.75rem);
+    background: var(--surface-raised);
+    color: var(--text-primary);
+    box-shadow: 0 12px 32px -12px rgba(11, 16, 32, 0.35);
+    transition:
+      opacity 200ms ease-out,
+      transform 200ms ease-out;
+  }
+
+  .locale-suggestion__text {
+    margin: 0;
+    font-size: 0.95rem;
+    font-weight: 600;
+  }
+
+  .locale-suggestion__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .locale-suggestion__button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 44px;
+    min-height: 44px;
+    padding: 0 1rem;
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-sm, 0.5rem);
+    background: transparent;
+    color: var(--text-primary);
+    font: inherit;
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  .locale-suggestion__accept {
+    border-color: var(--action-fill);
+    background: var(--action-fill);
+    color: #ffffff;
+  }
+
+  .locale-suggestion__button:focus-visible {
+    outline: 3px solid var(--focus-ring);
+    outline-offset: 2px;
+  }
+
+  @starting-style {
+    .locale-suggestion {
+      opacity: 0;
+      transform: translateY(0.5rem);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .locale-suggestion {
+      transition: none;
+    }
+  }
+
+  @media (forced-colors: active) {
+    .locale-suggestion {
+      border-color: CanvasText;
+    }
+  }
+</style>
