@@ -2,27 +2,31 @@
 /**
  * Promotion assurance state - offline, deterministic, read-only.
  *
- * Models three independent assurance stages so a PASS in one stage can never
- * be read as a PASS in another (plan Task 4):
+ * Models independent assurance stages so a PASS in one stage can never be
+ * read as a PASS in another:
  *
- *   source       package.json scripts plus the CI Quality Gates workflow
- *                actually enforce the offline source gates.
- *   deployment   scripts/deploy-workers.mjs runs validate:public-truth
- *                before build and carries no plaintext secret material.
- *   public-truth scripts/validate-public-truth.mjs exists and
- *                src/data/site.ts holds no fabricated owner facts.
+ *   source               package.json scripts plus GitHub Quality Gates enforce
+ *                        the offline source gates.
+ *   deployment-contract  scripts/deploy-workers.mjs is a valid one-shot/recovery
+ *                        source contract: public truth before build, no secrets.
+ *   provider-deployment  authoritative Cloudflare Workers Builds configuration.
+ *                        This offline script cannot read it, so it is always
+ *                        NOT_VERIFIED here and must be independently read back.
+ *   public-truth         source contains the validator and no fabricated owner
+ *                        facts; absent owner facts stay BLOCKED_OWNER_FACT.
  *
  * Status vocabulary:
- *   PASS                every requirement of that stage holds.
+ *   PASS                every offline requirement of that stage holds.
  *   FAIL                a requirement is broken or a fact is fabricated.
- *   BLOCKED_OWNER_FACT  a required owner-supplied fact is absent. Never
- *                       FAIL (nothing is broken) and never PASS (nothing
- *                       is proven): the owner must supply the fact.
+ *   BLOCKED_OWNER_FACT  required owner-supplied fact is absent.
+ *   NOT_VERIFIED        the authoritative external/provider boundary cannot be
+ *                       proven by this offline source checker. Never PASS.
  *
  * Stage authority:
- *   source        repository source + .github/workflows/quality-gates.yml
- *   deployment    scripts/deploy-workers.mjs (the supported deploy path)
- *   public-truth  scripts/validate-public-truth.mjs + src/data/site.ts
+ *   source               repository source + .github/workflows/quality-gates.yml
+ *   deployment-contract  scripts/deploy-workers.mjs (one-shot/recovery contract)
+ *   provider-deployment  Cloudflare Workers Builds provider configuration
+ *   public-truth         scripts/validate-public-truth.mjs + src/data/site.ts
  *
  * Two requirement shapes need a note:
  *   - `install` is satisfied by a frozen-lockfile install step in CI or by
@@ -44,9 +48,15 @@ export const STATUS = {
   PASS: "PASS",
   FAIL: "FAIL",
   BLOCKED_OWNER_FACT: "BLOCKED_OWNER_FACT",
+  NOT_VERIFIED: "NOT_VERIFIED",
 };
 
-export const STAGES = ["source", "deployment", "public-truth"];
+export const STAGES = [
+  "source",
+  "deployment-contract",
+  "provider-deployment",
+  "public-truth",
+];
 
 /** Offline source gates that CI must run on every candidate. */
 export const CI_ENFORCED_SCRIPTS = [
@@ -114,6 +124,10 @@ function blockedOwnerFact(stage, subject, detail, fix) {
   return finding(STATUS.BLOCKED_OWNER_FACT, stage, subject, detail, fix);
 }
 
+function notVerified(stage, subject, detail, fix) {
+  return finding(STATUS.NOT_VERIFIED, stage, subject, detail, fix);
+}
+
 function escapeRegExp(value) {
   return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
@@ -123,17 +137,22 @@ function invokesScript(workflow, name) {
   return new RegExp(`pnpm\\s+${escapeRegExp(name)}(?![\\w:-])`).test(workflow);
 }
 
-/** FAIL wins over BLOCKED_OWNER_FACT; PASS only when nothing is reported. */
+/** FAIL wins; blocked owner facts and provider unknowns stay distinct from PASS. */
 export function stageResult(stage, findings) {
   const failed = findings.some((item) => item.status === STATUS.FAIL);
   const blocked = findings.some(
     (item) => item.status === STATUS.BLOCKED_OWNER_FACT,
+  );
+  const unknown = findings.some(
+    (item) => item.status === STATUS.NOT_VERIFIED,
   );
   let status = STATUS.PASS;
   if (failed) {
     status = STATUS.FAIL;
   } else if (blocked) {
     status = STATUS.BLOCKED_OWNER_FACT;
+  } else if (unknown) {
+    status = STATUS.NOT_VERIFIED;
   }
   return { stage, status, findings };
 }
@@ -190,13 +209,13 @@ export function evaluateDeployment({ deployScript = "" } = {}) {
   if (deployScript.trim() === "") {
     findings.push(
       fail(
-        "deployment",
+        "deployment-contract",
         DEPLOY_SCRIPT,
         "deploy script is missing or empty",
         "restore scripts/deploy-workers.mjs",
       ),
     );
-    return stageResult("deployment", findings);
+    return stageResult("deployment-contract", findings);
   }
 
   const truthIndex = deployScript.search(TRUTH_INVOCATION);
@@ -205,7 +224,7 @@ export function evaluateDeployment({ deployScript = "" } = {}) {
   if (truthIndex === -1) {
     findings.push(
       fail(
-        "deployment",
+        "deployment-contract",
         DEPLOY_SCRIPT,
         "validate:public-truth is not run before deploy",
         "run `pnpm validate:public-truth` before build in the deploy script",
@@ -214,7 +233,7 @@ export function evaluateDeployment({ deployScript = "" } = {}) {
   } else if (buildIndex === -1) {
     findings.push(
       fail(
-        "deployment",
+        "deployment-contract",
         DEPLOY_SCRIPT,
         "no build step exists to order public-truth before",
         "run `pnpm build` after validate:public-truth in the deploy script",
@@ -223,7 +242,7 @@ export function evaluateDeployment({ deployScript = "" } = {}) {
   } else if (truthIndex > buildIndex) {
     findings.push(
       fail(
-        "deployment",
+        "deployment-contract",
         DEPLOY_SCRIPT,
         "validate:public-truth runs after build",
         "move validate:public-truth ahead of build in the deploy script",
@@ -235,7 +254,7 @@ export function evaluateDeployment({ deployScript = "" } = {}) {
     if (pattern.test(deployScript)) {
       findings.push(
         fail(
-          "deployment",
+          "deployment-contract",
           DEPLOY_SCRIPT,
           `plaintext secret material detected (${kind})`,
           "read the value from provider/CI secret storage instead",
@@ -244,7 +263,23 @@ export function evaluateDeployment({ deployScript = "" } = {}) {
     }
   }
 
-  return stageResult("deployment", findings);
+  return stageResult("deployment-contract", findings);
+}
+
+/**
+ * Cloudflare Workers Builds is the authoritative deployment control plane.
+ * This source-only checker deliberately performs no network/provider calls, so
+ * current stored trigger/build/deploy configuration cannot be PASS here.
+ */
+export function evaluateProviderDeployment() {
+  return stageResult("provider-deployment", [
+    notVerified(
+      "provider-deployment",
+      "Cloudflare Workers Builds",
+      "authoritative provider branch/build/deploy configuration is not read back by this offline source checker",
+      "independently read back the current provider configuration and exact deployed revision; track freshness under issue #369",
+    ),
+  ]);
 }
 
 /**
@@ -382,16 +417,23 @@ export function evaluatePromotionState({ root = process.cwd() } = {}) {
     packageFindings,
   );
 
-  const deployment = evaluateDeployment({
+  const deploymentContract = evaluateDeployment({
     deployScript: readText(DEPLOY_SCRIPT) ?? "",
   });
+
+  const providerDeployment = evaluateProviderDeployment();
 
   const publicTruth = evaluatePublicTruth({
     siteSource: readText(SITE_DATA) ?? "",
     truthScriptPresent: readText(TRUTH_SCRIPT) !== null,
   });
 
-  const stages = [source, deployment, publicTruth];
+  const stages = [
+    source,
+    deploymentContract,
+    providerDeployment,
+    publicTruth,
+  ];
   const findings = stages.flatMap((stage) => stage.findings);
   const exitCode = findings.some((item) => item.status === STATUS.FAIL) ? 1 : 0;
 
@@ -411,15 +453,19 @@ export function formatSummary(state) {
   const tally = [
     `${counts[STATUS.PASS] ?? 0} PASS`,
     `${counts[STATUS.BLOCKED_OWNER_FACT] ?? 0} BLOCKED_OWNER_FACT`,
+    `${counts[STATUS.NOT_VERIFIED] ?? 0} NOT_VERIFIED`,
     `${counts[STATUS.FAIL] ?? 0} FAIL`,
   ].join(", ");
-  const verdict = state.exitCode === 0 ? "no FAIL" : "FAIL";
+  const verdict = state.exitCode === 0 ? "offline checks non-failing" : "FAIL";
   const lines = [`Promotion assurance state — ${state.root}`];
 
   for (const stage of state.stages) {
     lines.push(`${stage.stage.padEnd(13)} ${stage.status}`);
   }
   lines.push(`Promotion assurance: ${verdict} — ${tally}`);
+  lines.push(
+    "Authoritative Cloudflare provider deployment/runtime is never implied by this offline result.",
+  );
 
   return lines.join("\n");
 }
