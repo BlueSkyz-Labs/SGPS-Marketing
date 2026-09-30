@@ -31,6 +31,7 @@ const COPY = {
     videoNote:
       "Silent video with Vietnamese on-screen text; English subtitles are available in the player.",
     phone: "On a family member’s phone",
+    phoneRail: "Phone screens — scroll sideways or use the arrow keys",
     desktop: "On the owner’s computer",
     guide: "Read the getting-started guide",
   },
@@ -42,6 +43,7 @@ const COPY = {
     videoNote:
       "Video không có tiếng, chữ tiếng Việt hiển thị trên hình; có phụ đề tiếng Anh trong trình phát.",
     phone: "Trên điện thoại của người nhà",
+    phoneRail: "Màn hình điện thoại — vuốt ngang hoặc dùng phím mũi tên",
     desktop: "Trên máy tính của chủ trọ",
     guide: "Xem hướng dẫn bắt đầu",
   },
@@ -52,6 +54,7 @@ const COPY = {
     video: "快速介绍",
     videoNote: "无声视频，画面内为越南语文字；播放器中提供英文字幕。",
     phone: "家人的手机上",
+    phoneRail: "手机界面——左右滑动或使用方向键",
     desktop: "房东的电脑上",
     guide: "阅读入门指南",
   },
@@ -140,7 +143,12 @@ const defaultTrack = wanted
   {phones.length > 0 ? (
     <div class="mt-10">
       <h3 class="showcase__label">{t.phone}</h3>
-      <ul class="showcase__rail" role="list">
+      <ul
+        class="showcase__rail"
+        role="list"
+        tabindex="0"
+        aria-label={t.phoneRail}
+      >
         {phones.map((item, index) => (
           <li class="showcase__phone view-rise" style={`--i:${index}`}>
             <figure class="m-0">
