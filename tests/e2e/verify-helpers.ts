@@ -14,4 +14,6 @@ export async function openVerifyLayer(
   await page.goto(path);
   const details = page.locator(`details[data-verify-layer="${layer}"]`);
   await details.locator("summary").first().click();
+  // Park the pointer so hover-driven Atlas emphasis does not leak into tests.
+  await page.mouse.move(0, 0);
 }

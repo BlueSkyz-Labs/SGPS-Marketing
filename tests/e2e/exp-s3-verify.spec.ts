@@ -1,3 +1,4 @@
+import AxeBuilder from "@axe-core/playwright";
 import { expect, test } from "@playwright/test";
 import { openVerifyLayer } from "./verify-helpers.ts";
 
@@ -73,7 +74,7 @@ for (const locale of LOCALES) {
     }) => {
       await page.goto(`/${locale.lang}/verify/`);
       await expect(
-        page.locator(`footer a[href="/${locale.lang}/verify/"]`),
+        page.locator(`footer nav a[href="/${locale.lang}/verify/"]`),
       ).toHaveCount(1);
       await expect(
         page.locator(`main a[href="/${locale.lang}/products/"]`),
@@ -137,4 +138,22 @@ test("the moved routes stay reachable", async ({ request }) => {
     const response = await request.get(path);
     expect(response.status(), path).toBe(200);
   }
+});
+
+test("axe: 0 serious/critical on /en/verify/ with every layer open", async ({
+  page,
+}) => {
+  await page.goto("/en/verify/");
+  await page.evaluate(() =>
+    document
+      .querySelectorAll("details")
+      .forEach((el) => ((el as HTMLDetailsElement).open = true)),
+  );
+  const results = await new AxeBuilder({ page })
+    .withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"])
+    .analyze();
+  const serious = results.violations.filter((v) =>
+    ["critical", "serious"].includes(v.impact ?? ""),
+  );
+  expect(serious.map((v) => `${v.id}: ${v.nodes.length}`)).toEqual([]);
 });
