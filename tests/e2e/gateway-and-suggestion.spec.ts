@@ -221,6 +221,18 @@ for (const [width, height] of [
       const page = await context.newPage();
       await observeShifts(page);
       await page.goto("/en/", { waitUntil: "load" });
+      // The Layout Instability API exists only in Chromium engines; WebKit and
+      // Firefox report no entries at all, so a CLS number there proves nothing.
+      // The chromium and mobile-chromium projects enforce this contract.
+      const layoutShiftSupported = await page.evaluate(() =>
+        (PerformanceObserver.supportedEntryTypes ?? []).includes(
+          "layout-shift",
+        ),
+      );
+      test.skip(
+        !layoutShiftSupported,
+        "Layout Instability API not implemented in this engine: NOT VERIFIED here",
+      );
       await expect(page.locator("[data-locale-suggestion]")).toBeVisible();
       // Let fonts, images and any late insertion settle.
       await page.waitForTimeout(1500);
