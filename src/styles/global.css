@@ -1522,6 +1522,9 @@ h3 {
 [data-theme="dark"] .c2-product-house,
 [data-theme="dark"] main > section:not(.hero-plane):nth-of-type(even) {
   background: var(--surface-band);
+  /* Explicit text colour: the banded surface never relies on colour inherited
+     from the root, so the section pairs text and surface in one rule. */
+  color: var(--text-primary);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -1542,5 +1545,6 @@ h3 {
     main
     > section:not(.hero-plane):nth-of-type(even) {
     background: var(--surface-band);
+    color: var(--text-primary);
   }
 }
