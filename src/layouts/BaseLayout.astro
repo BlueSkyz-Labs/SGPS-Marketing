@@ -45,9 +45,16 @@ const {
 
 const fullTitle = title.includes(SITE.name) ? title : `${title} · ${SITE.name}`;
 const currentLang = getLanguageFromPath(path);
+/** Traditional Chinese is routed as `zh-hant` but tagged with its BCP-47 script subtag. */
+const htmlLang = currentLang === "zh-hant" ? "zh-Hant" : currentLang;
 /** Social-card locale format is language_TERRITORY; this is presentation
  * metadata, never a market, residency or jurisdiction decision. */
-const OG_LOCALES = { en: "en_US", vi: "vi_VN", zh: "zh_CN" } as const;
+const OG_LOCALES = {
+  en: "en_US",
+  vi: "vi_VN",
+  zh: "zh_CN",
+  "zh-hant": "zh_TW",
+} as const;
 const ogLocale = OG_LOCALES[currentLang];
 const ogAlternates = Object.values(OG_LOCALES).filter(
   (locale) => locale !== ogLocale,
@@ -64,7 +71,7 @@ const robotsNoindex = noindex || isNonProductionSiteUrl(SITE.url);
 ---
 
 <!doctype html>
-<html lang={currentLang} dir="ltr">
+<html lang={htmlLang} dir="ltr">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width" />
@@ -124,7 +131,9 @@ const robotsNoindex = noindex || isNonProductionSiteUrl(SITE.url);
         ? "Chuyển đến nội dung chính"
         : currentLang === "zh"
           ? "跳转到主要内容"
-          : "Skip to main content"}
+          : currentLang === "zh-hant"
+            ? "跳到主要內容"
+            : "Skip to main content"}
     </a>
     <Header scene={scene} />
     <CommandNavigator />

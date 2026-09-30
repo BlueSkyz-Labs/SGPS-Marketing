@@ -106,12 +106,12 @@ test.describe("C4-E decision to dossier handoff", () => {
 
   test("the handoff copy is localized", async ({ page }) => {
     const texts: Record<string, string> = {};
-    for (const lang of ["en", "vi", "zh"]) {
+    for (const lang of ["en", "vi", "zh", "zh-hant"]) {
       await page.goto(`/${lang}/decision-room/`);
       texts[lang] =
         (await page.locator("[data-atelier-handoff-empty]").textContent()) ??
         "";
     }
-    expect(new Set(Object.values(texts)).size).toBe(3);
+    expect(new Set(Object.values(texts)).size).toBe(4);
   });
 });

@@ -57,6 +57,15 @@ test("Accept-Language zh-TW/zh-HK/zh-MO/zh-Hant maps to Traditional-or-zh", () =
   }
 });
 
+test("negative: Simplified tags and non-Chinese countries never resolve to zh-hant", () => {
+  for (const tag of ["zh-Hans-TW", "zh-Hans-HK", "zh-CN", "zh-SG"]) {
+    assert.notEqual(lang({ acceptLanguage: tag }, WITH_HANT), "zh-hant", tag);
+  }
+  for (const country of ["CN", "SG", "US", "VN", "JP"]) {
+    assert.notEqual(lang({ country }, WITH_HANT), "zh-hant", country);
+  }
+});
+
 test("Accept-Language zh, zh-CN, zh-Hans -> zh; en-* -> en; vi-VN -> vi", () => {
   for (const tag of ["zh", "zh-CN", "zh-Hans", "zh-SG"]) {
     assert.equal(lang({ acceptLanguage: tag }, WITH_HANT), "zh", tag);

@@ -19,7 +19,14 @@ const entries = EDITIONS.map((edition) => resolveEdition(edition, lang)).filter(
   (edition) => edition.sources.length > 0,
 );
 
-const label = lang === "vi" ? "Tuyển tập" : lang === "zh" ? "选集" : "Editions";
+const label =
+  lang === "vi"
+    ? "Tuyển tập"
+    : lang === "zh"
+      ? "选集"
+      : lang === "zh-hant"
+        ? "選集"
+        : "Editions";
 ---
 
 {entries.length > 0 && (

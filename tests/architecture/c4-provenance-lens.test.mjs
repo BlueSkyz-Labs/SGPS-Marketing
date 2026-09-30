@@ -8,7 +8,7 @@ import {
 } from "../../src/lib/provenance-lens.ts";
 
 const CLAIM = "security-reporting-is-private";
-const LANGS = ["en", "vi", "zh"];
+const LANGS = ["en", "vi", "zh", "zh-hant"];
 
 test("the canonical sources really carry what this lens filters", () => {
   const claim = CLAIMS.find((entry) => entry.id === CLAIM);

@@ -1,6 +1,7 @@
 ---
+import type { Language } from "@/lib/i18n";
 interface Props {
-  lang?: "en" | "vi" | "zh";
+  lang?: Language;
   /** Extra classes for the wrapper (e.g. vertical spacing inside the mobile menu). */
   class?: string;
 }
@@ -11,6 +12,7 @@ const L = {
   en: { label: "Theme", system: "System", light: "Light", dark: "Dark" },
   vi: { label: "Giao diện", system: "Tự động", light: "Sáng", dark: "Tối" },
   zh: { label: "主题", system: "跟随系统", light: "浅色", dark: "深色" },
+  "zh-hant": { label: "主題", system: "跟隨系統", light: "淺色", dark: "深色" },
 }[lang];
 
 const base =

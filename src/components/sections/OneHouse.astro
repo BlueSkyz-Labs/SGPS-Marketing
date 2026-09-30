@@ -9,6 +9,7 @@ interface Props {
 const { lang = "en" } = Astro.props;
 const isVi = lang === "vi";
 const isZh = lang === "zh";
+const isZhHant = lang === "zh-hant";
 const concepts = isVi
   ? [
       "Rõ ràng",
@@ -18,7 +19,14 @@ const concepts = isVi
     ]
   : isZh
     ? ["清晰", "人为主导", "有目的的智能", "设计即信任"]
-    : ["Clarity", "Human agency", "Purposeful intelligence", "Trust by design"];
+    : isZhHant
+      ? ["清晰", "人為主導", "有目的的智慧", "設計即信任"]
+      : [
+          "Clarity",
+          "Human agency",
+          "Purposeful intelligence",
+          "Trust by design",
+        ];
 ---
 
 <section
@@ -29,8 +37,16 @@ const concepts = isVi
   <div class="c2-one-house__intro">
     <Folio
       ordinal="01"
-      label={isVi ? "Chương" : isZh ? "章节" : "Chapter"}
-      context={isVi ? "Một nhà" : isZh ? "一个团队" : "One house"}
+      label={isVi ? "Chương" : isZh ? "章节" : isZhHant ? "章節" : "Chapter"}
+      context={
+        isVi
+          ? "Một nhà"
+          : isZh
+            ? "一个团队"
+            : isZhHant
+              ? "一個團隊"
+              : "One house"
+      }
     />
     <h2
       id="house-title"
@@ -40,14 +56,18 @@ const concepts = isVi
         ? "Một nhà — một cách suy nghĩ"
         : isZh
           ? "一个团队 — 一种思维方式"
-          : "One house — a way of thinking"}
+          : isZhHant
+            ? "一個團隊 — 一種思維方式"
+            : "One house — a way of thinking"}
     </h2>
     <p class="c4-type-reading mt-4 max-w-2xl text-[var(--text-secondary)] text-pretty">
       {isVi
         ? "Chúng tôi không xây dựng xung quanh một danh mục. Chúng tôi xây dựng xung quanh một cách suy nghĩ."
         : isZh
           ? "我们不围绕单一品类构建。我们围绕一种思维方式构建。"
-          : "We don’t build around one category. We build around a way of thinking."}
+          : isZhHant
+            ? "我們不圍繞單一品類構建。我們圍繞一種思維方式構建。"
+            : "We don’t build around one category. We build around a way of thinking."}
     </p>
   </div>
 

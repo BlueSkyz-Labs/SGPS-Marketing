@@ -1,0 +1,61 @@
+---
+// zh-Hant copy: machine-assisted (OpenCC s2twp), pending native review.
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Container from "@/components/layout/Container.astro";
+import PageHeader from "@/components/layout/PageHeader.astro";
+import SafeAction from "@/components/integrity/SafeAction.astro";
+import { SITE, SECURITY_ADVISORY_URL } from "@/data/site";
+
+const hasBusinessEmail = Boolean(SITE.contactEmail);
+---
+
+<BaseLayout
+  title="聯絡我們"
+  description="就商務、安全或一般諮詢聯絡 BlueSkyz Labs。"
+  path="/zh-hant/contact/"
+>
+  <section class="py-16 lg:py-24">
+    <Container>
+      <PageHeader
+        eyebrow="聯絡我們"
+        title="為您匹配正確的通道"
+        lede="請根據您的需求選擇合適的通道聯絡 BlueSkyz。郵箱地址將在 BlueSkyz 公布後顯示於此。"
+      />
+      <ul class="mt-12 grid gap-4 sm:grid-cols-2">
+        <li class="flex min-w-0 flex-col rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-raised)] p-6">
+          <h2 class="text-lg font-semibold tracking-tight">安全</h2>
+          <p class="mt-2 flex-1 text-sm leading-relaxed text-[var(--text-secondary)]">
+            如發現疑似安全漏洞，請透過 GitHub 私密通道報告。
+          </p>
+          <div class="mt-5">
+            <SafeAction
+              href={SECURITY_ADVISORY_URL}
+              label="開啟私有漏洞報告"
+              boundary="private-reporting"
+              lang="zh-hant"
+            />
+          </div>
+        </li>
+        <li class="flex flex-col rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-raised)] p-6">
+          <h2 class="text-lg font-semibold tracking-tight">商務 / 一般諮詢</h2>
+          <p class="mt-2 flex-1 text-sm leading-relaxed text-[var(--text-secondary)]">
+            {hasBusinessEmail ? (
+              <>
+                Email{" "}
+                <a
+                  href={`mailto:${SITE.contactEmail}`}
+                  class="inline-flex min-h-11 items-center font-semibold text-[var(--action-primary)] no-underline hover:underline"
+                >
+                  {SITE.contactEmail}
+                </a>{" "}
+                用於商務諮詢。
+              </>
+            ) : (
+              "商務聯絡郵箱尚未核實。您可以在「關於我們」檢視已公開的資訊。私密安全報告僅用於揭露疑似漏洞，不是商務或一般諮詢通道。"
+            )}
+          </p>
+        </li>
+      </ul>
+    </Container>
+  </section>
+</BaseLayout>

@@ -43,6 +43,7 @@ export function buildPublicSgpsManifest(
           en: getEvidencePassportPath("en", claim.id),
           vi: getEvidencePassportPath("vi", claim.id),
           zh: getEvidencePassportPath("zh", claim.id),
+          "zh-hant": getEvidencePassportPath("zh-hant", claim.id),
         },
         evidenceIds: [...claim.evidenceIds]
           .filter((id) => PUBLIC_MANIFEST_EVIDENCE_ID_PATTERN.test(id))

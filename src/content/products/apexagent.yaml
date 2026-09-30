@@ -62,3 +62,14 @@ i18n:
       - "由服务器中介的工具与凭据边界"
       - "多账户与付费功能已在规划中，尚未发布"
     primaryActionLabel: "了解 ApexAgent"
+  # zh-Hant copy: machine-assisted (OpenCC s2twp), pending native review.
+  zh-hant:
+    shortDescription: "私有、單一所有者的 Web/PWA AI 工作流工作區；更廣泛的多帳戶範圍仍在開發中。"
+    jobs:
+      - "在明確的人工監督下協調多步驟工作"
+      - "檢視智慧體活動並從中斷的工作流中恢復"
+    capabilities:
+      - "私有的所有者範圍工作流工作區"
+      - "由伺服器中介的工具與憑據邊界"
+      - "多帳戶與付費功能已在規劃中，尚未發布"
+    primaryActionLabel: "了解 ApexAgent"

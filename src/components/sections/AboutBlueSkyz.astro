@@ -7,6 +7,7 @@ interface Props {
 const { lang = "en" } = Astro.props;
 const isVi = lang === "vi";
 const isZh = lang === "zh";
+const isZhHant = lang === "zh-hant";
 ---
 
 <section
@@ -18,20 +19,30 @@ const isZh = lang === "zh";
     id="about-title"
     class="text-3xl font-semibold tracking-tight text-balance sm:text-4xl"
   >
-    {isVi ? "Về BlueSkyz" : isZh ? "关于 BlueSkyz" : "About BlueSkyz"}
+    {isVi
+      ? "Về BlueSkyz"
+      : isZh
+        ? "关于 BlueSkyz"
+        : isZhHant
+          ? "關於 BlueSkyz"
+          : "About BlueSkyz"}
   </h2>
   <p class="mt-4 max-w-2xl text-lg text-[var(--text-secondary)] text-pretty">
     {isVi
       ? "Chúng tôi xây dựng những sản phẩm thông minh để trao quyền cho con người và nâng tầm cách công việc được thực hiện. Một góc nhìn cao hơn xây dựng một ngày mai tươi sáng hơn."
       : isZh
         ? "我们打造智能化产品，赋能个人并提升工作方式。更高的视角，成就更明亮的明天。"
-        : `${SITE.proposition} ${SITE.supporting}`}
+        : isZhHant
+          ? "我們打造智慧化產品，賦能個人並提升工作方式。更高的視角，成就更明亮的明天。"
+          : `${SITE.proposition} ${SITE.supporting}`}
   </p>
   <p class="mt-6 text-sm font-medium text-[var(--text-muted)]">
     {isVi
       ? "Tony Nguyen — Nhà sáng lập & Giám đốc điều hành"
       : isZh
         ? "Tony Nguyen — 创始人兼首席执行官"
-        : "Tony Nguyen — Founder & CEO"}
+        : isZhHant
+          ? "Tony Nguyen — 創辦人兼執行長"
+          : "Tony Nguyen — Founder & CEO"}
   </p>
 </section>

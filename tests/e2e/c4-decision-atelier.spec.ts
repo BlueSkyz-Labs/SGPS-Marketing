@@ -219,7 +219,7 @@ test.describe("C4-E atelier reasons", () => {
 
   test("reasons are localized and reset removes them", async ({ page }) => {
     const texts: Record<string, string> = {};
-    for (const lang of ["en", "vi", "zh"]) {
+    for (const lang of ["en", "vi", "zh", "zh-hant"]) {
       await page.goto(`/${lang}/decision-room/`);
       await page.locator("[data-atelier-goal]").selectOption("verify");
       const first = page.locator("[data-atelier-reason-text]").first();
@@ -228,7 +228,7 @@ test.describe("C4-E atelier reasons", () => {
       await page.locator("[data-atelier-reset]").click();
       await expect(page.locator("[data-atelier-reason-text]")).toHaveCount(0);
     }
-    expect(new Set(Object.values(texts)).size).toBe(3);
+    expect(new Set(Object.values(texts)).size).toBe(4);
   });
 
   test("a reason states the matching dimension, not the item's merits", async ({

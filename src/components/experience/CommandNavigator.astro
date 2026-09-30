@@ -6,28 +6,57 @@ import { getLanguageFromPath } from "@/lib/i18n";
 const lang = getLanguageFromPath(Astro.url.pathname);
 const isVi = lang === "vi";
 const isZh = lang === "zh";
+const isZhHant = lang === "zh-hant";
 const items = buildNavigatorIndex(lang, await getPublicProducts());
 
 const KIND_LABELS: Record<string, string> = {
-  route: isVi ? "Trang" : isZh ? "页面" : "Page",
-  trust: isVi ? "Tin cậy" : isZh ? "信任" : "Trust",
-  product: isVi ? "Sản phẩm" : isZh ? "产品" : "Product",
-  evidence: isVi ? "Bằng chứng" : isZh ? "证据" : "Evidence",
+  route: isVi ? "Trang" : isZh ? "页面" : isZhHant ? "頁面" : "Page",
+  trust: isVi ? "Tin cậy" : isZh ? "信任" : isZhHant ? "信任" : "Trust",
+  product: isVi ? "Sản phẩm" : isZh ? "产品" : isZhHant ? "產品" : "Product",
+  evidence: isVi
+    ? "Bằng chứng"
+    : isZh
+      ? "证据"
+      : isZhHant
+        ? "證據"
+        : "Evidence",
 };
 
 const navLabel = isVi
   ? "Điều hướng nhanh"
   : isZh
     ? "快速导航"
-    : "Quick navigation";
-const placeholder = isVi ? "Tìm trang…" : isZh ? "搜索页面…" : "Search pages…";
+    : isZhHant
+      ? "快速導覽"
+      : "Quick navigation";
+const placeholder = isVi
+  ? "Tìm trang…"
+  : isZh
+    ? "搜索页面…"
+    : isZhHant
+      ? "搜尋頁面…"
+      : "Search pages…";
 const emptyLabel = isVi
   ? "Không tìm thấy mục phù hợp."
   : isZh
     ? "未找到匹配的目的地。"
-    : "No matching destinations.";
-const resultTemplate = isVi ? "%n kết quả" : isZh ? "%n 个结果" : "%n results";
-const resultNone = isVi ? "Không có kết quả" : isZh ? "无结果" : "No results";
+    : isZhHant
+      ? "未找到匹配的目的地。"
+      : "No matching destinations.";
+const resultTemplate = isVi
+  ? "%n kết quả"
+  : isZh
+    ? "%n 个结果"
+    : isZhHant
+      ? "%n 個結果"
+      : "%n results";
+const resultNone = isVi
+  ? "Không có kết quả"
+  : isZh
+    ? "无结果"
+    : isZhHant
+      ? "無結果"
+      : "No results";
 ---
 
 <dialog class="command-navigator" aria-label={navLabel} data-command-navigator>

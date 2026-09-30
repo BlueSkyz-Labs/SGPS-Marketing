@@ -1,0 +1,18 @@
+# zh-Hant copy: machine-assisted (OpenCC s2twp), pending native review.
+lang: zh-hant
+slug: privacy
+title: 隱私
+description: BlueSkyz Labs 企業網站資料處理隱私政策。
+sections:
+  hero:
+    heading: 隱私
+  intro: 本頁面說明 BlueSkyz Labs 企業網站的資料處理作法。
+  collection:
+    heading: 我們收集的內容
+    content: 我們僅收集營運本網站及改善訪客體驗所需的最少資料。我們不會向第三方出售個人資料。
+  usage:
+    heading: 我們如何使用資料
+    content: 請求後設資料僅用於網站交付與安全。本站未啟用訪客分析資料傳輸；訪客明確選擇的語言或主題偏好僅儲存在本地瀏覽器。當您選擇語言時，我們會設定唯一的第一方 Cookie bsl_lang，僅記錄該選擇；首次造訪首頁時，僅即時依請求所在國家選擇語言，不會儲存該資訊。
+  contact:
+    heading: 聯絡我們
+    content: 如有隱私諮詢，請透過安全報告通道與我們聯絡。

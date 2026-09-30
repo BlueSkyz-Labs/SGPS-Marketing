@@ -1,18 +1,22 @@
 ---
+import type { Language } from "@/lib/i18n";
 import { EXPERIENCE_STAGES } from "@/data/experience";
 
 interface Props {
-  lang?: "en" | "vi" | "zh";
+  lang?: Language;
 }
 
 const { lang = "en" } = Astro.props;
 const isVi = lang === "vi";
 const isZh = lang === "zh";
+const isZhHant = lang === "zh-hant";
 const navLabel = isVi
   ? "Câu chuyện trang chủ"
   : isZh
     ? "首页故事"
-    : "Homepage story";
+    : isZhHant
+      ? "首頁故事"
+      : "Homepage story";
 ---
 
 <nav class="experience-spine" aria-label={navLabel}>

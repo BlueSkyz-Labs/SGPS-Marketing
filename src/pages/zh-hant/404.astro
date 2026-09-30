@@ -1,0 +1,32 @@
+---
+// zh-Hant copy: machine-assisted (OpenCC s2twp), pending native review.
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Container from "@/components/layout/Container.astro";
+import ButtonLink from "@/components/ui/ButtonLink.astro";
+import PageHeader from "@/components/layout/PageHeader.astro";
+---
+
+<BaseLayout
+  title="未找到頁面"
+  description="您請求的頁面無法找到。"
+  path="/zh-hant/404/"
+  noindex={true}
+>
+  <section class="py-20 lg:py-28">
+    <Container>
+      <PageHeader
+        eyebrow="404"
+        title="未找到頁面"
+        lede="您請求的頁面不存在或已被遷移。以下為可用路徑。"
+      />
+      <div class="mt-10 flex flex-wrap gap-3">
+        <ButtonLink href="/zh-hant/" variant="primary">
+          返回首頁
+        </ButtonLink>
+        <ButtonLink href="/zh-hant/products/" variant="secondary">
+          瀏覽產品
+        </ButtonLink>
+      </div>
+    </Container>
+  </section>
+</BaseLayout>

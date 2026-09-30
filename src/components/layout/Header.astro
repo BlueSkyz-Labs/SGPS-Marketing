@@ -71,7 +71,7 @@ const primaryCta = hasPublicProducts
           {item.label}
         </a>
       ))}
-      <LanguageSwitcher />
+      <LanguageSwitcher placement="header" />
       <ThemeToggle lang={lang} />
       <ButtonLink href={primaryCta.href} variant="primary">
         {primaryCta.label}
@@ -105,7 +105,7 @@ const primaryCta = hasPublicProducts
               {item.label}
             </a>
           ))}
-          <LanguageSwitcher />
+          <LanguageSwitcher placement="menu" />
           <ThemeToggle lang={lang} />
           <ButtonLink href={primaryCta.href} class="w-full">
             {primaryCta.label}

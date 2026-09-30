@@ -11,6 +11,7 @@ const HOME_LABELS: Record<Language, string> = {
   en: "Home",
   vi: "Trang chủ",
   zh: "首页",
+  "zh-hant": "首頁",
 };
 
 /**
@@ -23,11 +24,13 @@ const DECLARED_ROUTE_LABELS: Record<string, Record<Language, string>> = {
     en: "Decision Room",
     vi: "Phòng Quyết định",
     zh: "决策室",
+    "zh-hant": "決策室",
   },
   evidence: {
     en: "Evidence passport",
     vi: "Hộ chiếu bằng chứng",
     zh: "证据档案",
+    "zh-hant": "證據檔案",
   },
 };
 
@@ -62,7 +65,9 @@ export function getBreadcrumbTrail(lang: Language, pathname: string): Crumb[] {
 
   if (!name) {
     // Evidence passports carry the claim's own declared label.
-    const evidence = /^\/(en|vi|zh)\/evidence\/([a-z0-9-]+)$/.exec(target);
+    const evidence = /^\/(en|vi|zh-hant|zh)\/evidence\/([a-z0-9-]+)$/.exec(
+      target,
+    );
     if (evidence) name = DECLARED_ROUTE_LABELS.evidence?.[lang];
   }
   if (!name) return [];

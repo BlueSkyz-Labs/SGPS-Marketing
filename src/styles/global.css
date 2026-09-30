@@ -1456,3 +1456,26 @@ h3 {
     display: block;
   }
 }
+
+/* Scroll-driven entrance for showcase and guide media (GOLIVE W5). Pure CSS,
+   only where supported and only when the visitor allows motion. */
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .view-rise {
+      animation: view-rise linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 55%;
+    }
+  }
+}
+
+@keyframes view-rise {
+  from {
+    opacity: 0;
+    transform: translateY(28px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}

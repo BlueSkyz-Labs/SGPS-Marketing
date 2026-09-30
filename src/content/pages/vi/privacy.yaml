@@ -1,17 +1,17 @@
 lang: vi
 slug: privacy
 title: Quyền riêng tư
-description: Chính sách quyền riêng tư của BlueSkyz Labs cho các thực hành dữ liệu trên trang web doanh nghiệp.
+description: Cách trang web BlueSkyz Labs xử lý dữ liệu của bạn.
 sections:
   hero:
     heading: Quyền riêng tư
-  intro: Trang này ghi lại các thực hành dữ liệu trên trang web doanh nghiệp của BlueSkyz Labs.
+  intro: Trang này nói rõ cách trang web của BlueSkyz Labs xử lý dữ liệu.
   collection:
-    heading: Chúng tôi thu thập gì
-    content: Chúng tôi thu thập dữ liệu tối thiểu cần thiết để vận hành trang web này và cải thiện trải nghiệm của khách truy cập. Chúng tôi không bán dữ liệu cá nhân cho bên thứ ba.
+    heading: Chúng tôi thu thập những gì
+    content: Chúng tôi chỉ thu thập lượng dữ liệu tối thiểu để vận hành trang web và cải thiện trải nghiệm cho người truy cập. Chúng tôi không bán dữ liệu cá nhân cho bên thứ ba.
   usage:
-    heading: Chúng tôi sử dụng dữ liệu như thế nào
-    content: Dữ liệu yêu cầu phục vụ phân phối website và bảo mật. Chưa bật truyền dữ liệu phân tích khách truy cập; lựa chọn ngôn ngữ hoặc giao diện chủ động chỉ được lưu trong trình duyệt. Khi bạn chọn ngôn ngữ, chúng tôi đặt một cookie bên thứ nhất duy nhất, bsl_lang, chỉ chứa lựa chọn đó; ở lần đầu vào trang chủ, quốc gia của bạn (từ yêu cầu) chỉ được dùng tức thời để chọn ngôn ngữ và không được lưu.
+    heading: Chúng tôi dùng dữ liệu ra sao
+    content: Thông tin kỹ thuật của mỗi lượt truy cập chỉ dùng để chạy trang web và giữ an toàn cho trang. Chúng tôi chưa bật công cụ thống kê lượt truy cập; ngôn ngữ hoặc giao diện bạn tự chọn chỉ được lưu trong trình duyệt của bạn. Khi bạn chọn ngôn ngữ, chúng tôi đặt một cookie bên thứ nhất duy nhất, bsl_lang, chỉ chứa lựa chọn đó; ở lần đầu vào trang chủ, quốc gia của bạn (từ yêu cầu) chỉ được dùng tức thời để chọn ngôn ngữ và không được lưu.
   contact:
     heading: Liên hệ
-    content: Đối với các thắc mắc về quyền riêng tư, vui lòng liên hệ với chúng tôi qua đường dẫn báo cáo bảo mật.
+    content: Nếu có câu hỏi về quyền riêng tư, vui lòng liên hệ chúng tôi qua đường dẫn báo cáo bảo mật.

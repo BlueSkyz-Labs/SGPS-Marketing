@@ -199,8 +199,10 @@ jobs:
           pnpm --version
       - name: Install frozen dependency graph
         run: pnpm install --frozen-lockfile
-      - name: Lighthouse CI
+      - name: Lighthouse CI (desktop)
         run: pnpm lighthouse
+      - name: Lighthouse CI (mobile routes)
+        run: pnpm exec lhci autorun --config=./lighthouserc.mobile.json
 
   # The single required check. It stays named "Browser Assurance" so the
   # branch ruleset keeps working, and it fails closed: every shard and

@@ -120,8 +120,10 @@ test("without JavaScript System still follows OS preference", async ({
         () => getComputedStyle(document.documentElement).colorScheme,
       ),
     ).toBe("dark");
+    // The switcher options live in a native popover (closed without JS), so
+    // assert the real links are present in the server HTML.
     await expect(
-      page.getByRole("link", { name: "Tiếng Việt" }).first(),
+      page.locator('[data-language-choice="vi"]').first(),
     ).toBeAttached();
   } finally {
     await context.close();

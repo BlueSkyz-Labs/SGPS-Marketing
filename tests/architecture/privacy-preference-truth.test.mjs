@@ -15,7 +15,7 @@ test("privacy truth discloses opt-in preference storage", () => {
     assert.match(source, /lựa chọn ngôn ngữ và giao diện/);
     assert.match(source, /选择语言或主题/);
   }
-  for (const locale of ["en", "vi", "zh"]) {
+  for (const locale of ["en", "vi", "zh", "zh-hant"]) {
     const page = read(`src/pages/${locale}/privacy.astro`);
     const content = read(`src/content/pages/${locale}/privacy.yaml`);
     assert.doesNotMatch(
@@ -35,4 +35,29 @@ test("Chinese privacy navigation stays on the matching locale", () => {
     assert.match(privacy, new RegExp(`href="/zh/${route}/"`));
     assert.doesNotMatch(privacy, new RegExp(`href="/en/${route}/"`));
   }
+});
+
+test("every locale privacy page and claim discloses the bsl_lang cookie and non-stored country use", () => {
+  for (const locale of ["en", "vi", "zh", "zh-hant"]) {
+    const content = read(`src/content/pages/${locale}/privacy.yaml`);
+    assert.match(
+      content,
+      /bsl_lang/,
+      `${locale} privacy copy names the cookie`,
+    );
+  }
+  for (const path of ["src/data/claims.ts", "src/data/integrity.ts"]) {
+    const source = read(path);
+    assert.doesNotMatch(source, /sets no cookies/i);
+    assert.equal(
+      (source.match(/bsl_lang/g) ?? []).length,
+      4,
+      `${path}: en/vi/zh/zh-hant claims name the cookie`,
+    );
+    assert.match(source, /"zh-hant":/);
+  }
+});
+
+test("negative proof: copy lacking the cookie disclosure would be detected", () => {
+  assert.doesNotMatch("僅儲存在本地瀏覽器。", /bsl_lang/);
 });

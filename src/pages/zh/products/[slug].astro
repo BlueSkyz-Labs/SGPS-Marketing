@@ -9,6 +9,8 @@ import ButtonLink from "@/components/ui/ButtonLink.astro";
 import { productCopy, proofCaptionForKind } from "@/lib/product-copy";
 import { resolveLifecycleCta } from "@/lib/lifecycle-cta";
 import AppAccess from "@/components/product/AppAccess.astro";
+import ProductShowcase from "@/components/product/ProductShowcase.astro";
+import { getShowcase } from "@/lib/showcases";
 import { getPublicProducts } from "@/lib/products";
 import { safeJsonLd, productJsonLd } from "@/lib/seo";
 import { labelFor, SHARED_LABELS, SITE } from "@/data/site";
@@ -30,6 +32,7 @@ const { data } = product;
 const media = data.proof.media;
 const copy = productCopy(data, "zh");
 const capabilities = copy.capabilities;
+const showcase = (await getShowcase(data.slug))?.data ?? null;
 
 // Plan v5 W3.2 — this page already *is* the recorded status surface, so the
 // mapper only adds an action when it yields an eligible first-party Try
@@ -136,6 +139,7 @@ const productStructuredData = productJsonLd(
               alt=""
               class="w-full h-full object-contain"
               loading="eager"
+              fetchpriority="low"
               decoding="async"
               width="128"
               height="128"
@@ -321,6 +325,16 @@ const productStructuredData = productJsonLd(
             ))}
           </div>
         </section>
+      ) : null}
+
+      <!-- Real screens of the running app (GOLIVE W5) -->
+
+      {showcase ? (
+        <ProductShowcase
+          showcase={showcase}
+          lang="zh"
+          productName={data.name}
+        />
       ) : null}
 
       <!-- Proof artifact: brand identity artwork on the ink stage, captioned as artwork -->

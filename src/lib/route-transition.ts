@@ -7,7 +7,7 @@
  *   root                 the document cross-fade, declared by `@view-transition
  *                        { navigation: auto }` in the global sheet;
  *   product-{card,media}-<slug>   product continuity, owned by product-transition;
- *   language-{en,vi}     the locale pair, owned here.
+ *   language-{en,vi,zh,zh-hant}    the locale pair, owned here.
  *
  * Two rules make the names safe:
  *
@@ -18,9 +18,14 @@
  *     cross-document View Transition support ignores it. Nothing here gates
  *     navigation: the transition is decoration, never a precondition.
  */
-export type TransitionLanguage = "en" | "vi" | "zh";
+export type TransitionLanguage = "en" | "vi" | "zh" | "zh-hant";
 
-const SUPPORTED_LANGUAGES: readonly TransitionLanguage[] = ["en", "vi", "zh"];
+const SUPPORTED_LANGUAGES: readonly TransitionLanguage[] = [
+  "en",
+  "vi",
+  "zh",
+  "zh-hant",
+];
 
 /**
  * Stable name for one locale entry of the language switcher. The same two names

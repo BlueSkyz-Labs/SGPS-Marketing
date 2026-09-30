@@ -1,256 +1,442 @@
 ---
+/**
+ * Language switcher — compact trigger + native Popover panel.
+ *
+ * The trigger (globe + short code) is a real <button popovertarget>, and the
+ * panel is a `popover` element, so the disclosure opens, light-dismisses and
+ * closes on Escape with no JavaScript and under `script-src 'self'`. Every row
+ * is a plain <a href hreflang lang> to the same page in that language. The
+ * current row carries `aria-current="page"` AND a visible check mark.
+ */
+import BlueSkyzIcon from "@/components/icon/BlueSkyzIcon.astro";
 import {
   SUPPORTED_LANGUAGES,
   LANGUAGES,
   getAlternatePath,
   getLanguageFromPath,
+  type Language,
 } from "@/lib/i18n";
 import { languageTransitionStyle } from "@/lib/route-transition";
 
 interface Props {
+  /** `dark` sits on the always-ink footer; `light` follows the header scene. */
   variant?: "light" | "dark";
+  /** Unique per rendered instance: it names the popover and its anchor. */
+  placement?: "header" | "menu" | "footer";
 }
 
-const { variant = "light" } = Astro.props;
+const { variant = "light", placement = "header" } = Astro.props;
 const currentPath = Astro.url.pathname;
 const currentLang = getLanguageFromPath(currentPath);
+const current = LANGUAGES[currentLang];
 
-const NATIVE_NAMES = {
-  en: "English",
-  vi: "Tiếng Việt",
-  zh: "中文",
-} as const;
-
-const GROUP_LABEL: Record<string, string> = {
+const GROUP_LABEL: Record<Language, string> = {
   en: "Language",
   vi: "Ngôn ngữ",
   zh: "语言",
+  "zh-hant": "語言",
 };
-const aria = GROUP_LABEL[currentLang] ?? GROUP_LABEL.en;
-const CODE: Record<string, string> = { en: "EN", vi: "VI", zh: "ZH" };
-
-const isDark = variant === "dark";
+const groupLabel = GROUP_LABEL[currentLang];
+const panelId = `lang-panel-${placement}`;
+const anchor = `--lang-anchor-${placement}`;
+// WCAG 2.5.3: the accessible name contains the visible short code.
+const triggerName = `${current.shortLabel} · ${groupLabel}: ${current.label}`;
 ---
 
-<nav
-  aria-label={aria}
-  data-language-switcher
+<div
   class:list={[
-    "lang-toggle-shell",
-    isDark ? "lang-toggle-shell--dark" : "lang-toggle-shell--light",
+    "lang-switch",
+    `lang-switch--${variant}`,
+    `lang-switch--${placement}`,
   ]}
+  data-language-switcher
+  data-current-language={currentLang}
 >
-  {SUPPORTED_LANGUAGES.map((lang) => {
-    const isActive = currentLang === lang;
-    return (
-      <a
-        href={getAlternatePath(currentPath, lang)}
-        data-language-choice={lang}
-        hreflang={LANGUAGES[lang].hreflang}
-        aria-current={isActive ? "page" : undefined}
-        aria-label={`${CODE[lang]} — ${NATIVE_NAMES[lang as keyof typeof NATIVE_NAMES]}`}
-        title={NATIVE_NAMES[lang as keyof typeof NATIVE_NAMES]}
-        style={languageTransitionStyle(lang)}
-        class:list={[
-          "lang-toggle-item",
-          isActive ? "lang-toggle-item--active" : "lang-toggle-item--idle",
-        ]}
-      >
-        <span
-          class:list={[
-            "lang-toggle-flag",
-            isActive ? "lang-toggle-flag--visible" : "lang-toggle-flag--hidden",
-          ]}
-          aria-hidden="true"
-        >
-          <img
-            src={`/brand/blueskyz/flags/${lang}.svg`}
-            alt=""
-            width="20"
-            height="20"
-            loading="eager"
-            decoding="async"
-          />
-        </span>
-        <span class="lang-toggle-code">{CODE[lang]}</span>
-      </a>
-    );
-  })}
-</nav>
+  <button
+    type="button"
+    class="lang-switch__trigger"
+    popovertarget={panelId}
+    aria-label={triggerName}
+    aria-expanded="false"
+    data-language-trigger
+    style={`anchor-name: ${anchor}`}
+  >
+    <BlueSkyzIcon name="globe" class="h-5 w-5 shrink-0" />
+    <span class="lang-switch__code" lang={current.hreflang}>
+      {current.shortLabel}
+    </span>
+    <span class="lang-switch__chevron" aria-hidden="true">
+      <BlueSkyzIcon name="chevron-down" class="h-3.5 w-3.5" />
+    </span>
+  </button>
+
+  <nav
+    id={panelId}
+    popover="auto"
+    class="lang-panel"
+    aria-label={groupLabel}
+    data-language-panel
+    style={`position-anchor: ${anchor}`}
+  >
+    <ul class="lang-panel__list" role="list">
+      {SUPPORTED_LANGUAGES.map((lang) => {
+        const config = LANGUAGES[lang];
+        const isActive = currentLang === lang;
+        const showEnglish = config.englishLabel !== config.label;
+        return (
+          <li>
+            <a
+              href={getAlternatePath(currentPath, lang)}
+              data-language-choice={lang}
+              hreflang={config.hreflang}
+              lang={config.hreflang}
+              aria-current={isActive ? "page" : undefined}
+              style={languageTransitionStyle(lang)}
+              class:list={[
+                "lang-option",
+                isActive ? "lang-option--current" : "lang-option--idle",
+              ]}
+            >
+              <span class="lang-option__text">
+                <span class="lang-option__native">{config.label}</span>
+                {showEnglish ? (
+                  <span class="lang-option__english" lang="en">
+                    {config.englishLabel}
+                  </span>
+                ) : null}
+              </span>
+              <span class="lang-option__check" aria-hidden="true">
+                {isActive ? (
+                  <BlueSkyzIcon name="check" class="h-5 w-5" />
+                ) : null}
+              </span>
+            </a>
+          </li>
+        );
+      })}
+    </ul>
+  </nav>
+</div>
 
 <style>
-  /* ─── Shell ─────────────────────────────────────────────────────────── */
-  .lang-toggle-shell {
+  /* ─── Root ──────────────────────────────────────────────────────────── */
+  .lang-switch {
     display: inline-flex;
-    align-items: center;
-    gap: 2px;
-    padding: 3px;
-    border-radius: 999px;
-    /* Neumorphic inset cavity — carved-in look */
-    box-shadow:
-      inset 2px 2px 5px rgba(11, 16, 32, 0.12),
-      inset -2px -2px 4px rgba(255, 255, 255, 0.72);
+    align-self: flex-start;
   }
 
-  .lang-toggle-shell--light {
-    /* F-21: the header sits on the ink hero, where the ambient text tokens */
-    /* are re-pointed at porcelain, so the switcher owns its palette. */
-    --lang-shell-bg: var(--brand-porcelain, #f7f8fa);
-    --lang-pill-bg: #ffffff;
-    --lang-pill-fg: var(--brand-ink, #0b1020);
-    --lang-idle-fg: #475569;
-    --lang-idle-hover-fg: var(--brand-ink, #0b1020);
-    background: var(--lang-shell-bg);
-    border: 1px solid rgba(11, 16, 32, 0.08);
-  }
-
-  /* Dark cavity: the active pill steps one tone lighter than the shell. */
-  :global([data-theme="dark"]) .lang-toggle-shell--light {
-    --lang-shell-bg: #0f172a;
-    --lang-pill-bg: #1e293b;
-    --lang-pill-fg: #ffffff;
-    --lang-idle-fg: #cbd5e1;
-    --lang-idle-hover-fg: #ffffff;
-    border-color: rgba(255, 255, 255, 0.12);
-    box-shadow:
-      inset 2px 2px 5px rgba(0, 0, 0, 0.3),
-      inset -2px -2px 4px rgba(255, 255, 255, 0.05);
-  }
-
-  @media (prefers-color-scheme: dark) {
-    :global(:root:not([data-theme="light"])) .lang-toggle-shell--light {
-      --lang-shell-bg: #0f172a;
-      --lang-pill-bg: #1e293b;
-      --lang-pill-fg: #ffffff;
-      --lang-idle-fg: #cbd5e1;
-      --lang-idle-hover-fg: #ffffff;
-      border-color: rgba(255, 255, 255, 0.12);
-      box-shadow:
-        inset 2px 2px 5px rgba(0, 0, 0, 0.3),
-        inset -2px -2px 4px rgba(255, 255, 255, 0.05);
-    }
-  }
-
-  .lang-toggle-shell--dark {
-    background: rgba(255, 255, 255, 0.08);
-    box-shadow:
-      inset 2px 2px 5px rgba(0, 0, 0, 0.3),
-      inset -2px -2px 4px rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.12);
-  }
-
-  /* ─── Item ───────────────────────────────────────────────────────────── */
-  .lang-toggle-item {
+  /* ─── Trigger ───────────────────────────────────────────────────────── */
+  /* The trigger draws directly on the header (or footer) surface, so it reads
+     that surface's own ambient tokens. The panel below is a separate surface
+     in the top layer and owns its palette. */
+  .lang-switch__trigger {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 5px;
+    gap: 0.375rem;
     min-width: 44px;
     min-height: 44px;
-    padding: 0 10px;
-    border-radius: 999px;
-    font-size: 0.75rem;
+    padding: 0 0.625rem;
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-sm, 0.5rem);
+    background: transparent;
+    color: var(--text-primary);
+    font: inherit;
+    font-size: 0.8125rem;
     font-weight: 700;
-    letter-spacing: 0.06em;
-    text-decoration: none;
+    letter-spacing: 0.04em;
+    line-height: 1;
+    cursor: pointer;
     transition:
-      background 180ms
-        var(--motion-ease-standard, cubic-bezier(0.22, 1, 0.36, 1)),
-      box-shadow 180ms
-        var(--motion-ease-standard, cubic-bezier(0.22, 1, 0.36, 1)),
-      color 120ms ease;
-    white-space: nowrap;
+      background-color 150ms var(--motion-ease-standard, ease),
+      border-color 150ms var(--motion-ease-standard, ease);
   }
 
-  /* Active pill — floats with convex neumorphic shadow */
-  .lang-toggle-shell--light .lang-toggle-item--active {
-    background: var(--lang-pill-bg);
-    color: var(--lang-pill-fg);
-    box-shadow:
-      2px 2px 6px rgba(11, 16, 32, 0.14),
-      -1px -1px 4px rgba(255, 255, 255, 0.9);
-  }
-
-  .lang-toggle-shell--dark .lang-toggle-item--active {
-    background: rgba(255, 255, 255, 0.14);
-    color: var(--brand-porcelain, #f7f8fa);
-    box-shadow:
-      2px 2px 6px rgba(0, 0, 0, 0.35),
-      -1px -1px 3px rgba(255, 255, 255, 0.06);
-  }
-
-  /* Idle — transparent, palette-owned text */
-  .lang-toggle-shell--light .lang-toggle-item--idle {
-    background: transparent;
-    color: var(--lang-idle-fg);
-  }
-
-  .lang-toggle-shell--dark .lang-toggle-item--idle {
-    background: transparent;
-    color: rgba(247, 248, 250, 0.6);
-  }
-
-  .lang-toggle-shell--light .lang-toggle-item--idle:hover {
-    color: var(--lang-idle-hover-fg);
-  }
-
-  .lang-toggle-shell--dark .lang-toggle-item--idle:hover {
+  .lang-switch--dark .lang-switch__trigger {
+    border-color: rgba(247, 248, 250, 0.28);
     color: var(--brand-porcelain, #f7f8fa);
   }
 
-  /* ─── Flag badge ─────────────────────────────────────────────────────── */
-  .lang-toggle-flag {
+  .lang-switch__trigger:hover,
+  .lang-switch__trigger:where([aria-expanded="true"]) {
+    background: color-mix(in srgb, currentColor 9%, transparent);
+    border-color: color-mix(in srgb, currentColor 45%, transparent);
+  }
+
+  .lang-switch__trigger:focus-visible {
+    outline: 3px solid var(--focus-ring, #1d4ed8);
+    outline-offset: 2px;
+  }
+
+  .lang-switch--dark .lang-switch__trigger:focus-visible {
+    outline-color: #3b82f6;
+  }
+
+  .lang-switch__chevron {
     display: inline-flex;
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    overflow: hidden;
     flex-shrink: 0;
-    box-shadow: 0 1px 3px rgba(11, 16, 32, 0.2);
+    opacity: 0.7;
+    transition: transform 160ms var(--motion-ease-standard, ease);
   }
 
-  .lang-toggle-flag img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: 50%;
+  .lang-switch__trigger:where([aria-expanded="true"]) .lang-switch__chevron {
+    transform: rotate(180deg);
   }
 
-  .lang-toggle-flag--hidden {
-    width: 0;
-    opacity: 0;
-    overflow: hidden;
-    pointer-events: none;
-    transform: scale(0.6);
-    transition:
-      width 180ms var(--motion-ease-standard, cubic-bezier(0.22, 1, 0.36, 1)),
-      opacity 150ms ease,
-      transform 180ms
-        var(--motion-ease-standard, cubic-bezier(0.22, 1, 0.36, 1));
-  }
-
-  .lang-toggle-flag--visible {
-    width: 20px;
-    opacity: 1;
-    transform: scale(1);
-    transition:
-      width 180ms var(--motion-ease-standard, cubic-bezier(0.22, 1, 0.36, 1)),
-      opacity 150ms ease,
-      transform 180ms
-        var(--motion-ease-standard, cubic-bezier(0.22, 1, 0.36, 1));
-  }
-
-  /* ─── Code text ──────────────────────────────────────────────────────── */
-  .lang-toggle-code {
+  .lang-switch__code {
     font-variant-numeric: tabular-nums;
+    min-width: 1.25ch;
+    text-align: center;
   }
 
-  /* ─── Reduced motion ─────────────────────────────────────────────────── */
+  /* ─── Panel ─────────────────────────────────────────────────────────── */
+  /* Owned palette: the header re-points --text-*, --border-subtle and
+     --surface-subtle on the ink scene, which would put porcelain text on this
+     light surface. --surface-raised is theme-aware and not re-pointed. */
+  .lang-panel {
+    --lang-fg: #0b1020;
+    --lang-fg-muted: #475569;
+    --lang-line: #cbd5e1;
+    --lang-hover: #f1f5f9;
+    --lang-current-bg: rgba(29, 78, 216, 0.09);
+    --lang-accent: #1d4ed8;
+    --lang-shadow:
+      0 1px 2px rgba(11, 16, 32, 0.06), 0 18px 44px -12px rgba(11, 16, 32, 0.28);
+
+    /* Reset the UA popover box, then size it. */
+    position: fixed;
+    inset: auto;
+    margin: 0;
+    padding: 0.375rem;
+    width: min(19rem, calc(100vw - 1.5rem));
+    overflow: visible;
+    border: 1px solid var(--lang-line);
+    border-radius: var(--radius-card, 0.75rem);
+    background: var(--surface-raised, #ffffff);
+    color: var(--lang-fg);
+    box-shadow: var(--lang-shadow);
+
+    /* Entrance: opacity + a short rise, driven by transitions only. */
+    opacity: 0;
+    transform: translateY(-0.375rem) scale(0.98);
+    transform-origin: top right;
+    transition:
+      opacity 170ms var(--motion-ease-standard, ease),
+      transform 170ms var(--motion-ease-standard, ease),
+      overlay 170ms allow-discrete,
+      display 170ms allow-discrete;
+  }
+
+  :global([data-theme="dark"]) .lang-panel {
+    --lang-fg: #ffffff;
+    --lang-fg-muted: #94a3b8;
+    --lang-line: #334155;
+    --lang-hover: rgba(255, 255, 255, 0.08);
+    --lang-current-bg: rgba(59, 130, 246, 0.18);
+    --lang-accent: #3b82f6;
+    --lang-shadow:
+      0 1px 2px rgba(0, 0, 0, 0.4), 0 22px 48px -12px rgba(0, 0, 0, 0.7);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :global(:root:not([data-theme="light"])) .lang-panel {
+      --lang-fg: #ffffff;
+      --lang-fg-muted: #94a3b8;
+      --lang-line: #334155;
+      --lang-hover: rgba(255, 255, 255, 0.08);
+      --lang-current-bg: rgba(59, 130, 246, 0.18);
+      --lang-accent: #3b82f6;
+      --lang-shadow:
+        0 1px 2px rgba(0, 0, 0, 0.4), 0 22px 48px -12px rgba(0, 0, 0, 0.7);
+    }
+  }
+
+  .lang-panel:popover-open {
+    opacity: 1;
+    transform: none;
+  }
+
+  @starting-style {
+    .lang-panel:popover-open {
+      opacity: 0;
+      transform: translateY(-0.375rem) scale(0.98);
+    }
+  }
+
+  /* ADR 0012: the header is the sole translucent surface, so the panel is a
+     solid raised surface with a soft shadow instead of a blur material. */
+
+  /* Anchor the panel under (or above, in the footer) its trigger. Without
+     anchor positioning the popover stays a centred, fully usable panel. */
+  @supports (anchor-name: --lang-probe) {
+    .lang-panel {
+      top: calc(anchor(bottom) + 0.5rem);
+      right: anchor(right);
+      position-try-fallbacks:
+        flip-block,
+        flip-inline,
+        flip-block flip-inline;
+    }
+
+    .lang-switch--footer .lang-panel {
+      top: auto;
+      bottom: calc(anchor(top) + 0.5rem);
+      left: anchor(left);
+      right: auto;
+      transform-origin: bottom left;
+    }
+  }
+
+  /* Phones: a bottom sheet is easier to reach than a corner popover. */
+  @media (max-width: 40rem) {
+    .lang-panel,
+    .lang-switch--footer .lang-panel {
+      inset: auto 0.75rem 0.75rem 0.75rem;
+      position-try-fallbacks: none;
+      width: auto;
+      transform-origin: bottom center;
+      transform: translateY(0.75rem);
+    }
+
+    .lang-panel::backdrop {
+      background: rgba(11, 16, 32, 0);
+      transition:
+        background-color 170ms var(--motion-ease-standard, ease),
+        overlay 170ms allow-discrete,
+        display 170ms allow-discrete;
+    }
+
+    .lang-panel:popover-open::backdrop {
+      background: rgba(11, 16, 32, 0.45);
+    }
+
+    @starting-style {
+      .lang-panel:popover-open::backdrop {
+        background: rgba(11, 16, 32, 0);
+      }
+
+      .lang-panel:popover-open {
+        transform: translateY(0.75rem);
+      }
+    }
+  }
+
+  /* Engines without the Popover API render the list inline instead. */
+  @supports not selector(:popover-open) {
+    .lang-switch {
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .lang-switch__trigger {
+      display: none;
+    }
+
+    .lang-panel {
+      position: static;
+      width: auto;
+      opacity: 1;
+      transform: none;
+      box-shadow: none;
+    }
+  }
+
   @media (prefers-reduced-motion: reduce) {
-    .lang-toggle-item,
-    .lang-toggle-flag--hidden,
-    .lang-toggle-flag--visible {
+    .lang-panel,
+    .lang-panel::backdrop,
+    .lang-switch__trigger,
+    .lang-switch__chevron {
       transition: none !important;
+    }
+  }
+
+  /* ─── Rows ──────────────────────────────────────────────────────────── */
+  .lang-panel__list {
+    display: grid;
+    gap: 0.125rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .lang-option {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 0.75rem;
+    min-height: 3.25rem;
+    padding: 0.5rem 0.75rem;
+    border-radius: calc(var(--radius-card, 0.75rem) - 0.25rem);
+    color: var(--lang-fg);
+    text-decoration: none;
+    transition: background-color 120ms var(--motion-ease-standard, ease);
+  }
+
+  /* Neutralise the header's tactile nav-link lift inside the panel. */
+  .lang-option:hover,
+  .lang-option:focus-visible {
+    transform: none;
+    text-shadow: none;
+    background: var(--lang-hover);
+  }
+
+  .lang-option:focus-visible {
+    outline: 3px solid var(--lang-accent);
+    outline-offset: -3px;
+  }
+
+  .lang-option--current {
+    background: var(--lang-current-bg);
+  }
+
+  .lang-option--current:hover,
+  .lang-option--current:focus-visible {
+    background: var(--lang-current-bg);
+  }
+
+  .lang-option__text {
+    display: grid;
+    gap: 0.125rem;
+    min-width: 0;
+  }
+
+  .lang-option__native {
+    font-size: 0.975rem;
+    font-weight: 600;
+    line-height: 1.25;
+  }
+
+  .lang-option--current .lang-option__native {
+    font-weight: 700;
+  }
+
+  .lang-option__english {
+    color: var(--lang-fg-muted);
+    font-size: 0.78rem;
+    line-height: 1.25;
+  }
+
+  .lang-option__check {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.5rem;
+    height: 1.5rem;
+    color: var(--lang-accent);
+  }
+
+  .lang-option__check :global(svg) {
+    stroke-width: 2.25;
+  }
+
+  @media (forced-colors: active) {
+    .lang-panel {
+      border-color: CanvasText;
+    }
+
+    .lang-option--current {
+      outline: 2px solid Highlight;
+      outline-offset: -2px;
     }
   }
 </style>
@@ -270,4 +456,23 @@ const isDark = variant === "dark";
       // Preference persistence is best-effort; navigation remains functional.
     }
   });
+
+  // Progressive enhancement only: the popover opens and closes without this.
+  // `toggle` does not bubble, so listen in the capture phase and keep the
+  // trigger's aria-expanded truthful for engines that do not reflect it.
+  document.addEventListener(
+    "toggle",
+    (event) => {
+      const panel = event.target;
+      if (!(panel instanceof HTMLElement)) return;
+      if (!panel.hasAttribute("data-language-panel")) return;
+      const open = (event as ToggleEvent).newState === "open";
+      for (const trigger of document.querySelectorAll(
+        `[data-language-trigger][popovertarget="${panel.id}"]`,
+      )) {
+        trigger.setAttribute("aria-expanded", String(open));
+      }
+    },
+    true,
+  );
 </script>

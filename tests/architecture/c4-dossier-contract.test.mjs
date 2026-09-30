@@ -151,7 +151,7 @@ test("sections are filtered by request and unknown section names are ignored", (
 });
 
 test("every localized language resolves and an unknown language falls back to en", () => {
-  for (const lang of ["en", "vi", "zh"]) {
+  for (const lang of ["en", "vi", "zh", "zh-hant"]) {
     const dossier = compilePublicDossier({ lang, evidenceIds: [EVIDENCE_ID] });
     assert.ok(dossier.entries[0].label.length > 0, `${lang} must localize`);
   }
@@ -236,7 +236,7 @@ test("dossier sources render known canonical and unknown states from the shipped
 // provenance route instead of to a route the dossier would have to invent.
 // ---------------------------------------------------------------------------
 
-const LANGS = ["en", "vi", "zh"];
+const LANGS = ["en", "vi", "zh", "zh-hant"];
 
 test("#240 every published claim links to its canonical provenance route", () => {
   for (const lang of LANGS) {

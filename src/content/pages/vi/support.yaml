@@ -1,9 +1,9 @@
 lang: vi
 slug: support
 title: Hỗ trợ
-description: Nhận trợ giúp về các sản phẩm và dịch vụ của BlueSkyz Labs.
+description: Nhận trợ giúp về sản phẩm và dịch vụ của BlueSkyz Labs.
 sections:
   hero:
     heading: Hỗ trợ
-  intro: Liên kết hỗ trợ riêng cho từng sản phẩm có sẵn trên trang của sản phẩm đó.
-  corporate_note: Đối với các yêu cầu hỗ trợ doanh nghiệp, vui lòng sử dụng biểu mẫu liên hệ.
+  intro: Mỗi sản phẩm có đường dẫn hỗ trợ riêng ngay trên trang của sản phẩm đó.
+  corporate_note: Với yêu cầu hỗ trợ dành cho doanh nghiệp, vui lòng xem trang Liên hệ.

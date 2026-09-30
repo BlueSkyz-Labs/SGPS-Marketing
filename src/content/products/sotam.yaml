@@ -53,13 +53,13 @@ lastReviewedAt: 2026-09-27
 # is an Owner feedback checkpoint (plan v5 W3.4).
 i18n:
   vi:
-    shortDescription: "Cuốn nhật ký ưu tiên lưu cục bộ cho những suy ngẫm và kỷ niệm riêng tư được viết ra."
+    shortDescription: "Cuốn nhật ký ưu tiên lưu ngay trên máy, dành cho những suy nghĩ và kỷ niệm riêng tư bạn viết ra."
     jobs:
-      - "Viết những suy ngẫm riêng tư theo nhịp của riêng bạn"
-      - "Xem lại các trang nhật ký và kỷ niệm cá nhân"
+      - "Viết ra những suy nghĩ riêng tư, theo nhịp của bạn"
+      - "Đọc lại nhật ký và kỷ niệm của mình"
     capabilities:
       - "Viết nhật ký ưu tiên lưu cục bộ trong Personal Vault riêng tư"
-      - "Người dùng tự xuất các suy ngẫm ra máy của mình"
+      - "Bạn tự xuất bài viết ra máy của mình"
       - "Lưu trữ trong Vault riêng tư với ranh giới khôi phục rõ ràng"
     primaryActionLabel: "Xem trước Sổ Tâm"
   zh:
@@ -72,3 +72,14 @@ i18n:
       - "由用户控制的本地反思导出"
       - "私有 Vault 存储，具备明确的恢复边界"
     primaryActionLabel: "预览 Sổ Tâm"
+  # zh-Hant copy: machine-assisted (OpenCC s2twp), pending native review.
+  zh-hant:
+    shortDescription: "本地優先的日記，用於記錄私密的書面反思與個人回憶。"
+    jobs:
+      - "按自己的節奏書寫私密反思"
+      - "回顧日記條目與個人回憶"
+    capabilities:
+      - "在私有 Personal Vault 中以本地優先方式書寫日記"
+      - "由使用者控制的本地反思匯出"
+      - "私有 Vault 儲存，具備明確的恢復邊界"
+    primaryActionLabel: "預覽 Sổ Tâm"

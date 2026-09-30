@@ -141,21 +141,29 @@ const SWITCHER = join(
 );
 
 function declarationColor(source, selector) {
-  const index = source.indexOf(selector);
-  if (index < 0) return null;
-  const block = source.slice(index, source.indexOf("}", index));
-  return block.match(/color:\s*([^;]+);/)?.[1]?.trim() ?? null;
+  const escaped = selector.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const block = source.match(
+    new RegExp(`(?:^|\\n)\\s*${escaped}\\s*\\{([^}]*)\\}`),
+  )?.[1];
+  return block?.match(/(?:^|[\s;{])color:\s*([^;]+);/)?.[1]?.trim() ?? null;
 }
 
+// The trigger draws on the header surface and may read that surface's ambient
+// tokens; the popover panel is its own surface, so every label colour inside it
+// must come from the switcher's owned `--lang-*` palette.
 export function ambientTokenLabelOffenders(source) {
   const offenders = [];
   for (const selector of [
-    ".lang-toggle-shell--light .lang-toggle-item--active",
-    ".lang-toggle-shell--light .lang-toggle-item--idle",
+    ".lang-panel",
+    ".lang-option",
+    ".lang-option__english",
+    ".lang-option__check",
   ]) {
     const color = declarationColor(source, selector);
-    const owned = /var\(--lang-(?:pill|idle)-fg\)/.test(color ?? "");
-    const ambient = /var\(--text-(?:primary|muted)\)/.test(color ?? "");
+    const owned = /var\(--lang-(?:fg|fg-muted|accent)\)/.test(color ?? "");
+    const ambient = /var\(--text-(?:primary|secondary|muted)\)/.test(
+      color ?? "",
+    );
     if (!owned || ambient) {
       offenders.push(`${selector}: ${color ?? "missing color"}`);
     }
@@ -166,29 +174,30 @@ export function ambientTokenLabelOffenders(source) {
 test("language switcher owns its palette instead of reading the page context", () => {
   const switcher = readFileSync(SWITCHER, "utf8");
   assert.deepEqual(ambientTokenLabelOffenders(switcher), []);
-  assert.match(switcher, /--lang-pill-fg:/, "the palette must be declared");
+  assert.match(switcher, /--lang-fg:/, "the palette must be declared");
   assert.match(
     switcher,
-    /:global\(\[data-theme="dark"\]\) \.lang-toggle-shell--light/,
-    "explicit dark theme must keep a dark switcher cavity",
+    /:global\(\[data-theme="dark"\]\) \.lang-panel/,
+    "explicit dark theme must keep a dark switcher panel",
   );
   assert.match(
     switcher,
-    /prefers-color-scheme: dark\)[\s\S]*?:global\(:root:not\(\[data-theme="light"\]\)\) \.lang-toggle-shell--light/,
-    "OS dark (without a pinned theme) must keep a dark switcher cavity",
+    /prefers-color-scheme: dark\)[\s\S]*?:global\(:root:not\(\[data-theme="light"\]\)\) \.lang-panel/,
+    "OS dark (without a pinned theme) must keep a dark switcher panel",
   );
   // Accessible name must contain the visible code (WCAG 2.5.3 label in name).
-  assert.match(switcher, /aria-label=\{`\$\{CODE\[lang\]\}/);
+  assert.match(switcher, /const triggerName = `\$\{current\.shortLabel\}/);
+  assert.match(switcher, /aria-label=\{triggerName\}/);
 });
 
 test("RED: the ambient-token regression is detected", () => {
   const switcher = readFileSync(SWITCHER, "utf8");
   const mutated = switcher.replace(
-    "color: var(--lang-pill-fg);",
-    "color: var(--text-primary);",
+    /(\.lang-option\s*\{[^}]*?)color:\s*var\(--lang-fg\);/,
+    "$1color: var(--text-primary);",
   );
   assert.notEqual(mutated, switcher, "mutation must apply");
   assert.deepEqual(ambientTokenLabelOffenders(mutated), [
-    ".lang-toggle-shell--light .lang-toggle-item--active: var(--text-primary)",
+    ".lang-option: var(--text-primary)",
   ]);
 });

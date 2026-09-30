@@ -55,7 +55,7 @@ test("integrity entries reference only public, localized facts (v3 S+5)", () => 
     assert.match(summary[0], /en: "/, "summary needs EN");
     assert.match(summary[0], /vi: "/, "summary needs VI");
   }
-  const hrefs = [...block.matchAll(/href: \{ ([^}]+) \}/g)];
+  const hrefs = [...block.matchAll(/href: \{\s*([^}]+?)\s*\}/g)];
   assert.ok(hrefs.length >= ids.length, "every entry needs evidence hrefs");
   for (const href of hrefs) {
     const pairs = [...href[1].matchAll(/(en|vi): ("[^"]+"|[A-Z][A-Z0-9_]+)/g)];
@@ -143,8 +143,8 @@ test("provenance search derives from public data only and transmits no query", (
   // The navigator event carries action/kind only — never the typed query.
   assert.doesNotMatch(script, /detail:[^}]*query/is);
   assert.match(component, /command-navigator__kind/);
-  assert.match(component, /evidence: isVi \? "Bằng chứng"/);
-  assert.match(component, /isZh \? "证据" : "Evidence"/);
+  assert.match(component, /evidence:\s*isVi\s*\?\s*"Bằng chứng"/);
+  assert.match(component, /isZh\s*\?\s*"证据"\s*:\s*isZhHant\s*\?\s*"證據"/);
 });
 
 /* ------------------------------------------------------------------ */
