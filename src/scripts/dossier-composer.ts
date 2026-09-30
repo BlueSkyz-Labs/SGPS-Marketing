@@ -1,4 +1,5 @@
 import type { Language } from "../lib/i18n";
+import { parseDossierUrlState } from "../lib/dossier-url-state";
 
 /**
  * C4-C Task 2 — local dossier composer.
@@ -41,13 +42,8 @@ function allowlistedIds(form: HTMLFormElement): Set<string> {
   return ids;
 }
 
-function requestedIds(): string[] {
-  const raw = new URLSearchParams(window.location.search).get(SELECTION_PARAM);
-  if (!raw) return [];
-  return raw
-    .split(",")
-    .map((value) => value.trim())
-    .filter((value) => value.length > 0);
+function requestedIds(): { ids: string[]; oversized: boolean } {
+  return parseDossierUrlState(window.location.search);
 }
 
 function entryTemplate(id: string): HTMLTemplateElement | null {
@@ -75,16 +71,18 @@ function render(elements: ComposerElements): void {
 
 function applyUrlState(elements: ComposerElements): void {
   const allowed = allowlistedIds(elements.form);
-  const requested = requestedIds();
+  const request = requestedIds();
   const accepted: string[] = [];
   const rejected: string[] = [];
 
-  for (const id of requested) {
-    if (allowed.has(id)) {
-      accepted.push(id);
-    } else {
-      // Fail closed: an id outside the rendered allowlist is reported, never composed.
-      rejected.push(id);
+  if (!request.oversized) {
+    for (const id of request.ids) {
+      if (allowed.has(id)) {
+        accepted.push(id);
+      } else {
+        // Fail closed: an id outside the rendered allowlist is reported, never composed.
+        rejected.push(id);
+      }
     }
   }
 
@@ -95,12 +93,25 @@ function applyUrlState(elements: ComposerElements): void {
   }
 
   elements.unknown.replaceChildren();
-  for (const id of rejected) {
+  if (request.oversized) {
     const item = document.createElement("li");
-    item.textContent = id;
+    const template = document.querySelector<HTMLTemplateElement>(
+      "template[data-dossier-oversized]",
+    );
+    item.textContent =
+      (template?.content.textContent ?? "").trim() || "Selection request rejected.";
     elements.unknown.append(item);
+  } else {
+    for (const id of rejected) {
+      const item = document.createElement("li");
+      item.textContent = id;
+      elements.unknown.append(item);
+    }
   }
-  elements.unknown.toggleAttribute("hidden", rejected.length === 0);
+  elements.unknown.toggleAttribute(
+    "hidden",
+    !request.oversized && rejected.length === 0,
+  );
 }
 
 export function initDossierComposer(): void {
