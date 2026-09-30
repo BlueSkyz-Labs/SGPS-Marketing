@@ -12,7 +12,7 @@ const hasBusinessEmail = Boolean(SITE.contactEmail);
 
 <BaseLayout
   title="Quyền riêng tư"
-  description="Cách BlueSkyz Labs xử lý dữ liệu: không cookie, chỉ lưu lựa chọn ngôn ngữ và giao diện chủ động, không theo dõi."
+  description="Cách BlueSkyz Labs xử lý dữ liệu: một cookie chọn ngôn ngữ, chỉ lưu lựa chọn ngôn ngữ và giao diện chủ động, không theo dõi."
   path="/vi/privacy/"
   surface="privacy"
 >
@@ -30,9 +30,12 @@ const hasBusinessEmail = Boolean(SITE.contactEmail);
           </dt>
           <dd class="mt-2 text-sm leading-relaxed text-[var(--text-secondary)]">
             Trang này không yêu cầu tài khoản, biểu mẫu hoặc cookie theo dõi cho
-            việc duyệt web cơ bản. Nhật ký yêu cầu của máy chủ web và CDN tiêu
-            chuẩn có thể ghi lại dữ liệu kết nối kỹ thuật như địa chỉ IP, user
-            agent và URL được yêu cầu.
+            việc duyệt web cơ bản. Khi bạn chọn ngôn ngữ, trang đặt một cookie
+            bên thứ nhất, bsl_lang, chỉ chứa lựa chọn đó tối đa một năm; ở lần
+            đầu vào trang chủ, quốc gia của bạn (theo yêu cầu gửi đến) chỉ được
+            dùng tức thời để chọn ngôn ngữ và chúng tôi không lưu. Nhật ký yêu
+            cầu của máy chủ web và CDN tiêu chuẩn có thể ghi lại dữ liệu kết nối
+            kỹ thuật như địa chỉ IP, user agent và URL được yêu cầu.
           </dd>
         </div>
         <div class="rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-raised)] p-6">

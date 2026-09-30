@@ -32,12 +32,21 @@ const title = "BlueSkyz Labs";
     </main>
     <script>
       import { LANGUAGE_STORAGE_KEY, resolveInitialLanguage } from "@/lib/i18n";
+      import { readLanguageCookieValue } from "@/lib/language-cookie";
+      import { initLanguageChoice } from "@/scripts/language-choice";
 
-      let stored: string | null = null;
-      try {
-        stored = window.localStorage.getItem(LANGUAGE_STORAGE_KEY);
-      } catch {
-        // First visit can still resolve from browser preference.
+      initLanguageChoice();
+
+      // Fallback path only (no-JS-edge-miss / Worker unavailable): the edge
+      // Worker normally redirects `/` before this page is ever served.
+      // Explicit cookie choice first, then localStorage, then the browser.
+      let stored: string | null = readLanguageCookieValue(document.cookie);
+      if (stored === null) {
+        try {
+          stored = window.localStorage.getItem(LANGUAGE_STORAGE_KEY);
+        } catch {
+          // First visit can still resolve from browser preference.
+        }
       }
 
       const browserLanguages = navigator.languages?.length

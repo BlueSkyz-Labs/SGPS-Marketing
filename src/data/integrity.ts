@@ -70,9 +70,9 @@ export const SECURITY_BOUNDARY: BoundaryStatement = {
 export const PRIVACY_BOUNDARY: BoundaryStatement = {
   id: "bnd-privacy-collection",
   claim: {
-    en: "This site sets no cookies. It stores explicitly selected language and theme preferences in this browser, without tracking or profiling.",
-    vi: "Trang này không đặt cookie. Trang chỉ lưu lựa chọn ngôn ngữ và giao diện do khách truy cập chủ động chọn trong trình duyệt, không theo dõi hay lập hồ sơ.",
-    zh: "本站不设置 Cookie；仅在访客明确选择语言或主题时于浏览器本地保存偏好，不进行跟踪或行为画像。",
+    en: "This site sets one first-party cookie, bsl_lang, only when you choose a language, and stores explicitly selected language and theme preferences in this browser. Your country is used in-flight to pick an initial language and is not stored. There is no tracking or profiling.",
+    vi: "Trang này chỉ đặt một cookie bên thứ nhất, bsl_lang, khi bạn chọn ngôn ngữ, và lưu lựa chọn ngôn ngữ và giao diện do khách truy cập chủ động chọn trong trình duyệt. Quốc gia của bạn chỉ được dùng tức thời để chọn ngôn ngữ ban đầu và không được lưu. Không theo dõi hay lập hồ sơ.",
+    zh: "本站仅在您选择语言时设置一个第一方 Cookie（bsl_lang），并在访客明确选择语言或主题时于浏览器本地保存偏好；国家信息仅即时用于选择初始语言，不会存储；不进行跟踪或行为画像。",
   },
   doesNotImply: {
     en: "It does not establish that no data at all is processed: serving any website still requires infrastructure to handle network-level metadata such as IP addresses and request headers.",

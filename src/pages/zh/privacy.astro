@@ -12,7 +12,7 @@ const hasBusinessEmail = Boolean(SITE.contactEmail);
 
 <BaseLayout
   title="隐私"
-  description="BlueSkyz Labs 隐私实践：不设置 Cookie，仅保存明确选择的语言与主题偏好，不跟踪或建立访客画像。"
+  description="BlueSkyz Labs 隐私实践：仅设置一个语言选择 Cookie，仅保存明确选择的语言与主题偏好，不跟踪或建立访客画像。"
   path="/zh/privacy/"
   surface="privacy"
 >
@@ -27,8 +27,11 @@ const hasBusinessEmail = Boolean(SITE.contactEmail);
         <div class="rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-raised)] p-6">
           <dt class="text-sm font-semibold tracking-tight">收集内容</dt>
           <dd class="mt-2 text-sm leading-relaxed text-[var(--text-secondary)]">
-            本站基本浏览无需账户、表单或跟踪 Cookie。标准 Web 服务器与 CDN
-            请求日志可能记录技术连接数据，例如 IP 地址、用户代理与请求 URL。
+            本站基本浏览无需账户、表单或跟踪
+            Cookie。当您选择语言时，本站会设置一个第一方
+            Cookie（bsl_lang），仅记录该选择，最长保留一年；首次访问首页时，仅即时根据请求所在国家选择语言，我们不会存储该信息。标准
+            Web 服务器与 CDN 请求日志可能记录技术连接数据，例如 IP
+            地址、用户代理与请求 URL。
           </dd>
         </div>
         <div class="rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-raised)] p-6">

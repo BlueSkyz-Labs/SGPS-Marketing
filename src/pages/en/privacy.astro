@@ -12,7 +12,7 @@ const hasBusinessEmail = Boolean(SITE.contactEmail);
 
 <BaseLayout
   title="Privacy"
-  description="How BlueSkyz Labs handles data: no cookies, explicitly chosen language and theme preferences, and no tracking or profiling."
+  description="How BlueSkyz Labs handles data: one language-choice cookie, explicitly chosen language and theme preferences, and no tracking or profiling."
   path="/en/privacy/"
   surface="privacy"
 >
@@ -30,7 +30,11 @@ const hasBusinessEmail = Boolean(SITE.contactEmail);
           </dt>
           <dd class="mt-2 text-sm leading-relaxed text-[var(--text-secondary)]">
             This site does not require accounts, forms, or tracking cookies for
-            basic browsing. Standard web server and CDN request logs may record
+            basic browsing. When you choose a language it sets one first-party
+            cookie, bsl_lang, that holds only that choice for up to a year; on
+            your first visit to the home page your country, as reported with the
+            request, is used only in that moment to pick a language and is not
+            stored by us. Standard web server and CDN request logs may record
             technical connection data such as IP address, user agent, and
             requested URL.
           </dd>
