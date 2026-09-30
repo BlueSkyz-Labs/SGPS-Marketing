@@ -1,6 +1,7 @@
 ---
 // zh-Hant copy: machine-assisted (OpenCC s2twp), pending native review.
 import BaseLayout from "@/layouts/BaseLayout.astro";
+import { PAGE_META } from "@/data/page-meta";
 import Container from "@/components/layout/Container.astro";
 import PageHeader from "@/components/layout/PageHeader.astro";
 import SafeAction from "@/components/integrity/SafeAction.astro";
@@ -13,8 +14,8 @@ const hasBusinessEmail = Boolean(SITE.contactEmail);
 ---
 
 <BaseLayout
-  title="聯絡我們"
-  description="就商務、安全或一般諮詢聯絡 BlueSkyz Labs。"
+  title={PAGE_META["zh-hant"]["contact"].title}
+  description={PAGE_META["zh-hant"]["contact"].description}
   path="/zh-hant/contact/"
 >
   <section class="py-16 lg:py-24">

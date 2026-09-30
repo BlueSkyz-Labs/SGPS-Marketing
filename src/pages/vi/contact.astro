@@ -1,5 +1,6 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
+import { PAGE_META } from "@/data/page-meta";
 import Container from "@/components/layout/Container.astro";
 import PageHeader from "@/components/layout/PageHeader.astro";
 import SafeAction from "@/components/integrity/SafeAction.astro";
@@ -12,8 +13,8 @@ const hasBusinessEmail = Boolean(SITE.contactEmail);
 ---
 
 <BaseLayout
-  title="Liên hệ"
-  description="Liên hệ BlueSkyz Labs cho kinh doanh, bảo mật hoặc thông tin chung."
+  title={PAGE_META["vi"]["contact"].title}
+  description={PAGE_META["vi"]["contact"].description}
   path="/vi/contact/"
 >
   <section class="py-16 lg:py-24">

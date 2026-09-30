@@ -1,14 +1,14 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
+import { PAGE_META } from "@/data/page-meta";
 import Container from "@/components/layout/Container.astro";
 import PageHeader from "@/components/layout/PageHeader.astro";
 import AboutComposition from "@/components/empty-state/AboutComposition.astro";
-import { SITE } from "@/data/site";
 ---
 
 <BaseLayout
-  title="Về BlueSkyz"
-  description={`Về BlueSkyz Labs — ${SITE.proposition}`}
+  title={PAGE_META["vi"]["about"].title}
+  description={PAGE_META["vi"]["about"].description}
   path="/vi/about/"
 >
   <section class="py-16 lg:py-24">

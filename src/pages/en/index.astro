@@ -1,5 +1,6 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
+import { PAGE_META } from "@/data/page-meta";
 import Container from "@/components/layout/Container.astro";
 import Hero from "@/components/sections/Hero.astro";
 import FlagshipTheatre from "@/components/product/FlagshipTheatre.astro";
@@ -7,7 +8,6 @@ import ProductHouse from "@/components/product/ProductHouse.astro";
 import ProofBand from "@/components/sections/ProofBand.astro";
 import HorizonField from "@/components/experience/HorizonField.astro";
 import { getFlagshipProduct, getPublicProducts } from "@/lib/products";
-import { SITE } from "@/data/site";
 
 // Experience v6 S1 home: Hero (registry promise) → Flagship → second product
 // → one proof band. Removed from home (components kept): One House,
@@ -22,8 +22,8 @@ const flagship = await getFlagshipProduct();
 ---
 
 <BaseLayout
-  title={SITE.name}
-  description={`${SITE.taglineLead} ${SITE.taglineAccent} ${SITE.proposition}`}
+  title={PAGE_META["en"]["home"].title}
+  description={PAGE_META["en"]["home"].description}
   path="/en/"
   scene="ink"
 >

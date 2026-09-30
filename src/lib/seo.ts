@@ -24,6 +24,7 @@ export function websiteJsonLd(siteUrl: string) {
     "@type": "WebSite",
     name: "BlueSkyz Labs",
     url: siteUrl,
+    inLanguage: SUPPORTED_LANGUAGES.map((lang) => LANGUAGES[lang].hreflang),
     publisher: {
       "@type": "Organization",
       name: "BlueSkyz Labs",
@@ -69,6 +70,7 @@ export function productJsonLd(
     name: product.name,
     description: product.description,
     url: absoluteUrl(siteUrl, `/${lang}/products/${product.slug}/`),
+    inLanguage: languageTag(lang),
     // Do not invent product category/availability or OS from the masterbrand.
     // Platform evidence is owned by each product record, not a global default.
     ...(systems.length > 0 ? { operatingSystem: systems.join(", ") } : {}),
@@ -89,9 +91,28 @@ export function productJsonLd(
   };
 }
 
+/** BCP-47 tag for a routed language (`zh` is Simplified, `zh-hant` Traditional). */
+function languageTag(lang: string): string {
+  return (
+    (LANGUAGES as Record<string, { hreflang: string } | undefined>)[lang]
+      ?.hreflang ?? lang
+  );
+}
+
 export function defaultOgImagePath(): string {
   return "/social/og-default.png";
 }
+
+/**
+ * Committed pixel size of `defaultOgImagePath()` (1200x630, 1.91:1). Declared
+ * only for that image: a page that passes its own `ogImage` has no measured
+ * size here, so the layout omits width/height/alt for it instead of guessing.
+ */
+export const DEFAULT_OG_IMAGE = {
+  width: 1200,
+  height: 630,
+  alt: 'BlueSkyz Labs wordmark and the line "Intelligence. Elevated. Impact." beside a bright angular mark over the Earth seen from space',
+} as const;
 
 export function canonicalForPath(path: string, siteUrl: string): string {
   const normalized = path.startsWith("/") ? path : `/${path}`;
@@ -120,6 +141,7 @@ export const PUBLIC_STATIC_PATHS = [
   "/en/support/",
   "/en/privacy/",
   "/en/security/",
+  "/en/architecture/",
   "/en/editions/",
   "/en/dossier/",
   "/en/dossier/print/",
@@ -131,6 +153,7 @@ export const PUBLIC_STATIC_PATHS = [
   "/vi/support/",
   "/vi/privacy/",
   "/vi/security/",
+  "/vi/architecture/",
   "/vi/editions/",
   "/vi/dossier/",
   "/vi/dossier/print/",
@@ -142,6 +165,7 @@ export const PUBLIC_STATIC_PATHS = [
   "/zh/support/",
   "/zh/privacy/",
   "/zh/security/",
+  "/zh/architecture/",
   "/zh/editions/",
   "/zh/dossier/",
   "/zh/dossier/print/",
@@ -153,6 +177,7 @@ export const PUBLIC_STATIC_PATHS = [
   "/zh-hant/support/",
   "/zh-hant/privacy/",
   "/zh-hant/security/",
+  "/zh-hant/architecture/",
   "/zh-hant/editions/",
   "/zh-hant/dossier/",
   "/zh-hant/dossier/print/",

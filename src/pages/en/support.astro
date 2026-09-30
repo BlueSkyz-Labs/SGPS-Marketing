@@ -1,5 +1,6 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
+import { PAGE_META } from "@/data/page-meta";
 import Container from "@/components/layout/Container.astro";
 import PageHeader from "@/components/layout/PageHeader.astro";
 import { SITE } from "@/data/site";
@@ -8,8 +9,8 @@ const hasBusinessEmail = Boolean(SITE.contactEmail);
 ---
 
 <BaseLayout
-  title="Support"
-  description="Support paths and working recourse for BlueSkyz Labs: what is available today, what is not published yet, and how to reach us."
+  title={PAGE_META["en"]["support"].title}
+  description={PAGE_META["en"]["support"].description}
   path="/en/support/"
 >
   <section class="py-16 lg:py-24">
