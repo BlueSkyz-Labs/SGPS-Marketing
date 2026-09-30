@@ -99,11 +99,16 @@
   text-wrap: balance;
   hyphens: manual;
 }
-.type-d1,
-.hero-headline {
+.type-d1 {
   font-size: var(--type-d1);
   line-height: var(--type-d1-leading);
   letter-spacing: var(--type-d1-tracking);
+}
+/* The hero keeps its existing tracking/leading contract (cinematic-product-
+   house.css: EN -0.03em / 1.1, VI -0.015em / 1.16, guarded by
+   c3-editorial-typography.spec.ts); only face, weight and size come from here. */
+.hero-headline {
+  font-size: var(--type-d1);
 }
 .hero-headline--promise {
   font-size: var(--type-d1-promise);
@@ -115,8 +120,7 @@
 }
 
 /* Vietnamese stacks tone marks: +0.05 leading over Latin (plan section 8). */
-:lang(vi) .type-d1,
-:lang(vi) .hero-headline {
+:lang(vi) .type-d1 {
   line-height: 1.16;
   letter-spacing: -0.015em;
 }

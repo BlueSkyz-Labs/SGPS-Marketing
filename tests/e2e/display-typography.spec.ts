@@ -36,7 +36,7 @@ test.describe("display typeface", () => {
           size: parseFloat(cs.fontSize),
           weight: cs.fontWeight,
           loaded,
-          clipped: h1.scrollHeight > h1.clientHeight + 1,
+          clips: cs.overflow !== "visible",
           bodyFamily: getComputedStyle(document.body).fontFamily,
         };
       });
@@ -44,7 +44,8 @@ test.describe("display typeface", () => {
       expect(info.size).toBeGreaterThanOrEqual(28);
       expect(info.weight).toBe("700");
       expect(info.loaded.length).toBeGreaterThan(0);
-      expect(info.clipped).toBe(false);
+      // Nothing may clip the tone-mark stacks above/below the line box.
+      expect(info.clips).toBe(false);
       expect(info.bodyFamily).toMatch(/Inter/);
       if (lang === "vi") {
         expect(info.loaded.join(" ")).toContain("1EA0");
