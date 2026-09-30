@@ -31,8 +31,30 @@ test.describe("display typeface", () => {
             (f) => f.family.includes("Display Face") && f.status === "loaded",
           )
           .map((f) => f.unicodeRange);
+        // Engine-neutral coverage: Chromium serializes unicode-range in upper
+        // case ("U+1EA0-1EF9"), WebKit in lower case ("U+1ea0-1ef9"). Compare
+        // code points numerically instead of matching a string.
+        const covers = (cp: number) =>
+          loaded.some((list) =>
+            list.split(",").some((part) => {
+              const m = /^\s*U\+([0-9a-f?]+)(?:-([0-9a-f]+))?\s*$/i.exec(part);
+              if (!m) return false;
+              const lo = parseInt(m[1].replace(/\?/g, "0"), 16);
+              const hi = m[2]
+                ? parseInt(m[2], 16)
+                : parseInt(m[1].replace(/\?/g, "f"), 16);
+              return cp >= lo && cp <= hi;
+            }),
+          );
         return {
           family: cs.fontFamily,
+          // Stacked Vietnamese diacritics (U+1EA0..U+1EF9) must be covered by a
+          // loaded display face, and the exact weight + sample text must resolve.
+          viCovered: covers(0x1ea0) && covers(0x1ef9),
+          viFaceReady: document.fonts.check(
+            `${cs.fontWeight} 1em "Display Face"`,
+            "Ạ ế ộ ữ",
+          ),
           size: parseFloat(cs.fontSize),
           weight: cs.fontWeight,
           loaded,
@@ -48,7 +70,8 @@ test.describe("display typeface", () => {
       expect(info.clips).toBe(false);
       expect(info.bodyFamily).toMatch(/Inter/);
       if (lang === "vi") {
-        expect(info.loaded.join(" ")).toContain("1EA0");
+        expect(info.viCovered).toBe(true);
+        expect(info.viFaceReady).toBe(true);
       }
     });
   }
