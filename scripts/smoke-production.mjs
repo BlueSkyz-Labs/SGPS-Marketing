@@ -8,7 +8,7 @@
  * Usage:
  *   node scripts/smoke-production.mjs [--site https://blueskyzlabs.com]
  */
-import { localeRoutePattern } from "./smoke-locales.mjs";
+import { isLocalizedCanonicalRoute } from "./smoke-locales.mjs";
 
 const DEFAULT_SITE = "https://blueskyzlabs.com";
 
@@ -161,8 +161,8 @@ check("sitemap lists only canonical localized routes", async () => {
     `expected at least the 21 canonical URLs, got ${locs.length}`,
   );
   assert(
-    locs.every((loc) => localeRoutePattern().test(loc)),
-    "sitemap must only list localized canonical routes",
+    locs.every((loc) => isLocalizedCanonicalRoute(loc, site)),
+    "sitemap must only list same-origin localized canonical routes",
   );
 });
 
