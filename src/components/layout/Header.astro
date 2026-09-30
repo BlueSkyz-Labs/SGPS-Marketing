@@ -7,7 +7,6 @@ import ThemeToggle from "@/components/layout/ThemeToggle.astro";
 import ButtonLink from "@/components/ui/ButtonLink.astro";
 import { SITE, SHARED_LABELS, labelFor, getNav } from "@/data/site";
 import { emptyRegistryPrimaryCta } from "@/lib/act";
-import { getPublicProducts } from "@/lib/products";
 import { getLanguageFromPath } from "@/lib/i18n";
 import { DEFAULT_SCENE, lockupSurface, type Scene } from "@/lib/scene";
 
@@ -25,18 +24,12 @@ const NAV = getNav(lang);
 const isActive = (href: string): boolean =>
   currentPath.replace(/\/+$/, "") === href.replace(/\/+$/, "");
 
-const hasPublicProducts = (await getPublicProducts()).length > 0;
-const primaryCta = hasPublicProducts
-  ? SITE.contactEmail
-    ? {
-        href: `/${lang}/contact/`,
-        label: labelFor(SHARED_LABELS.contactUs, lang),
-      }
-    : {
-        href: `/${lang}/products/`,
-        label: labelFor(SHARED_LABELS.exploreProducts, lang),
-      }
-  : emptyRegistryPrimaryCta(SITE.contactEmail, lang);
+// Experience v6 S6 shell: one CTA with a job distinct from the Products link.
+// Contact when a real business mailbox exists, otherwise About (Act soft-land).
+const primaryCta = emptyRegistryPrimaryCta(SITE.contactEmail, lang);
+// Desktop header budget is six controls (lockup, Products, search, language,
+// theme, CTA). Every other route stays in the compact menu and the footer.
+const primaryLink = NAV[0]!;
 ---
 
 <header
@@ -50,30 +43,30 @@ const primaryCta = hasPublicProducts
       aria-label={labelFor(SHARED_LABELS.primaryNav, lang)}
       class="hidden flex-wrap items-center gap-2 md:flex"
     >
+      <a
+        href={primaryLink.href}
+        aria-current={isActive(primaryLink.href) ? "page" : undefined}
+        class="inline-flex min-h-11 items-center px-3 text-sm font-medium text-[var(--text-secondary)] no-underline hover:text-[var(--text-primary)]"
+      >
+        {primaryLink.label}
+      </a>
       <button
         type="button"
         data-command-trigger
         aria-keyshortcuts="Control+K Meta+K"
-        class="inline-flex min-h-11 items-center gap-2 rounded-lg border border-[var(--border-subtle)] px-3 text-sm font-medium text-[var(--text-secondary)] transition-colors hover:text-[var(--text-primary)]"
+        title={`${labelFor(SHARED_LABELS.search, lang)} (Ctrl / ⌘K)`}
+        class="inline-flex min-h-11 min-w-11 items-center justify-center rounded-lg border border-[var(--border-subtle)] text-[var(--text-secondary)] transition-colors hover:text-[var(--text-primary)]"
       >
         <BlueSkyzIcon name="search" class="h-4 w-4 shrink-0" />
-        {labelFor(SHARED_LABELS.search, lang)}
-        <kbd class="rounded border border-[var(--border-subtle)] bg-[var(--surface-subtle)] px-1.5 py-0.5 text-[0.65rem] font-medium">
-          Ctrl / ⌘K
-        </kbd>
+        <span class="sr-only">{labelFor(SHARED_LABELS.search, lang)}</span>
       </button>
-      {NAV.map((item) => (
-        <a
-          href={item.href}
-          aria-current={isActive(item.href) ? "page" : undefined}
-          class="inline-flex min-h-11 items-center px-3 text-sm font-medium text-[var(--text-secondary)] no-underline hover:text-[var(--text-primary)]"
-        >
-          {item.label}
-        </a>
-      ))}
       <LanguageSwitcher placement="header" />
-      <ThemeToggle lang={lang} />
-      <ButtonLink href={primaryCta.href} variant="primary">
+      <ThemeToggle lang={lang} variant="popover" />
+      <ButtonLink
+        href={primaryCta.href}
+        variant="primary"
+        aria-current={isActive(primaryCta.href) ? "page" : undefined}
+      >
         {primaryCta.label}
       </ButtonLink>
     </nav>
@@ -107,9 +100,6 @@ const primaryCta = hasPublicProducts
           ))}
           <LanguageSwitcher placement="menu" />
           <ThemeToggle lang={lang} />
-          <ButtonLink href={primaryCta.href} class="w-full">
-            {primaryCta.label}
-          </ButtonLink>
         </nav>
       </div>
     </details>
