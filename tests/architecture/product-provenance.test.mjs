@@ -18,6 +18,14 @@ const ROOT = resolve(fileURLToPath(new URL("../..", import.meta.url)));
 const SCRIPT = "scripts/check-product-provenance.mjs";
 /** A real revision of the Sotro product repository — a foreign revision, not one of ours. */
 const FOREIGN_REVISION = "b226e491517f34d49286b117e2d2634f7d47e763";
+const FAKE_FOREIGN_REVISION = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+const FIXTURE_REPOSITORIES = {
+  apexagent: "BlueSkyz-Labs/ApexAgent",
+  fluentarc: "BlueSkyz-Labs/FluentArc",
+  sotam: "BlueSkyz-Labs/sotam",
+  sotro: "BlueSkyz-Labs/Sotro",
+  vungtaylai: "BlueSkyz-Labs/VungTayLai",
+};
 const HEAD = execFileSync("git", ["rev-parse", "HEAD"], {
   cwd: ROOT,
   encoding: "utf8",
@@ -30,9 +38,47 @@ function run(root) {
   });
 }
 
-function withFixture(lines, assertion, productFile = "sotro.yaml") {
+function writeQualificationFixture(dir, revision = FOREIGN_REVISION) {
+  mkdirSync(join(dir, "docs/evidence"), { recursive: true });
+  const products = Object.fromEntries(
+    Object.entries(FIXTURE_REPOSITORIES).map(([slug, repository]) => [
+      slug,
+      {
+        repository,
+        defaultBranch: "main",
+        sourceRevision: revision,
+        checkedDefaultHead: revision,
+        relationship: "EXACT_DEFAULT_HEAD",
+      },
+    ]),
+  );
+  writeFileSync(
+    join(dir, "docs/evidence/product-source-qualification.json"),
+    JSON.stringify(
+      {
+        schemaVersion: "1.0",
+        evidenceClass: "PROVIDER_REPOSITORY_READBACK",
+        verifiedAt: "2026-09-30",
+        limitations: ["synthetic architecture-test qualification fixture"],
+        products,
+      },
+      null,
+      2,
+    ) + "\n",
+  );
+}
+
+function withFixture(
+  lines,
+  assertion,
+  productFile = "sotro.yaml",
+  { qualificationRevision = FOREIGN_REVISION, includeQualification = true } = {},
+) {
   const dir = mkdtempSync(join(tmpdir(), "product-provenance-"));
   mkdirSync(join(dir, "src/content/products"), { recursive: true });
+  if (includeQualification) {
+    writeQualificationFixture(dir, qualificationRevision);
+  }
   writeFileSync(
     join(dir, "src/content/products", productFile),
     `${lines.join("\n")}\n`,
@@ -77,7 +123,7 @@ test("an empty registry reports IDLE instead of passing by accident", () => {
   try {
     const result = run(dir);
     assert.equal(result.status, 0, result.stderr);
-    assert.match(result.stdout, /Product provenance: IDLE/);
+    assert.match(result.stdout, /Product provenance source qualification: IDLE/);
   } finally {
     rmSync(dir, { recursive: true, force: true });
   }
@@ -139,6 +185,27 @@ test("a sourceRevision that is a commit of THIS repository fails closed", () => 
     assert.equal(result.status, 1);
     assert.match(result.stderr, /is a commit of THIS repository/);
   });
+});
+
+test("negative proof: an arbitrary foreign-looking 40-hex revision is not qualified", () => {
+  withFixture(record({ revision: FAKE_FOREIGN_REVISION }), (dir) => {
+    const result = run(dir);
+    assert.equal(result.status, 1);
+    assert.match(result.stderr, /is not the qualified revision/);
+  });
+});
+
+test("a product record cannot pass when the qualification registry is missing", () => {
+  withFixture(
+    record(),
+    (dir) => {
+      const result = run(dir);
+      assert.equal(result.status, 1);
+      assert.match(result.stderr, /qualification registry is missing/);
+    },
+    "sotro.yaml",
+    { includeQualification: false },
+  );
 });
 
 test("a missing sourceRevision fails closed", () => {
