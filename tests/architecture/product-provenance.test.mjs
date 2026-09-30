@@ -203,6 +203,37 @@ test("negative proof: an arbitrary foreign-looking 40-hex revision is not qualif
   });
 });
 
+test("negative proof: EXACT_DEFAULT_HEAD cannot name a different checked head", () => {
+  const dir = mkdtempSync(join(tmpdir(), "product-provenance-"));
+  mkdirSync(join(dir, "src/content/products"), { recursive: true });
+  writeQualificationFixture(dir, FOREIGN_REVISION);
+
+  const qualificationPath = join(
+    dir,
+    "docs/evidence/product-source-qualification.json",
+  );
+  const registry = JSON.parse(readFileSync(qualificationPath, "utf8"));
+  registry.products.sotro.checkedDefaultHead =
+    "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb";
+  writeFileSync(qualificationPath, JSON.stringify(registry, null, 2) + "\n");
+
+  writeFileSync(
+    join(dir, "src/content/products/sotro.yaml"),
+    `${record().join("\n")}\n`,
+  );
+
+  try {
+    const result = run(dir);
+    assert.equal(result.status, 1);
+    assert.match(
+      result.stderr,
+      /EXACT_DEFAULT_HEAD requires sourceRevision .* to equal checkedDefaultHead/,
+    );
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
 test("a product record cannot pass when the qualification registry is missing", () => {
   withFixture(
     record(),
