@@ -5,6 +5,7 @@ import Container from "@/components/layout/Container.astro";
 import ProductStatus from "@/components/product/ProductStatus.astro";
 import ProductLadder from "@/components/product/ProductLadder.astro";
 import ProductVisual from "@/components/product/ProductVisual.astro";
+import NoCaptureStage from "@/components/empty-state/NoCaptureStage.astro";
 import ButtonLink from "@/components/ui/ButtonLink.astro";
 import { productCopy, proofCaptionForKind } from "@/lib/product-copy";
 import { resolveLifecycleCta } from "@/lib/lifecycle-cta";
@@ -216,6 +217,7 @@ const productStructuredData = productJsonLd(
         showSignIn={false}
       />
       <ProductLadder lifecycle={data.lifecycle} lang="en" />
+      {!showcase && media ? <NoCaptureStage media={media} lang="en" /> : null}
 
       <!-- Status & Platforms Bento -->
       <section class="mt-12" aria-labelledby="profile-status">
@@ -223,17 +225,9 @@ const productStructuredData = productJsonLd(
           id="profile-status"
           class="text-xs font-semibold uppercase tracking-widest text-[var(--text-muted)]"
         >
-          Status and platforms
+          Platforms and audience
         </h2>
-        <dl class="mt-4 grid gap-4 sm:grid-cols-3">
-          <div class="rounded-[var(--radius-card)] border border-[var(--border-subtle)] p-5 bg-[var(--surface-raised)] transition-[border-color,box-shadow] duration-200 hover:border-[color-mix(in_srgb,var(--brand-cobalt)_40%,var(--border-subtle))]">
-            <dt class="text-xs font-semibold uppercase tracking-wider text-[var(--text-muted)]">
-              Status
-            </dt>
-            <dd class="mt-2 text-base font-semibold text-[var(--text-primary)]">
-              {copy.statusLabel}
-            </dd>
-          </div>
+        <dl class="mt-4 grid gap-4 sm:grid-cols-2">
           <div class="rounded-[var(--radius-card)] border border-[var(--border-subtle)] p-5 bg-[var(--surface-raised)] transition-[border-color,box-shadow] duration-200 hover:border-[color-mix(in_srgb,var(--brand-cobalt)_40%,var(--border-subtle))]">
             <dt class="text-xs font-semibold uppercase tracking-wider text-[var(--text-muted)]">
               Platforms
@@ -336,7 +330,7 @@ const productStructuredData = productJsonLd(
       ) : null}
 
       <!-- Proof artifact: brand identity artwork on the ink stage, captioned as artwork -->
-      {media ? (
+      {media && showcase ? (
         <section class="mt-16" aria-labelledby="profile-proof">
           <div class="flex items-center gap-3">
             <span

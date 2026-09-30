@@ -82,10 +82,19 @@ test("flagship proof section is evidence-gated and optional", () => {
   assert.doesNotMatch(legacyHome, /FlagshipProof|FeaturedProducts/);
 });
 
-test("about page publishes approved founder title without invented biography", () => {
-  const about = readFileSync("src/pages/about.astro", "utf8");
-  assert.match(about, /Tony Nguyen — Founder/);
-  assert.doesNotMatch(about, /global offices|bank-grade|military-grade/i);
+test("about page omits the unconfirmed founder line and invents no biography", () => {
+  // Experience v6 S8 (audit E-26): founder detail publishes only when the
+  // Owner confirms it, so neither the legacy redirect nor the locale pages
+  // carry the literal.
+  for (const path of [
+    "src/pages/about.astro",
+    "src/pages/en/about.astro",
+    "src/components/empty-state/AboutComposition.astro",
+  ]) {
+    const about = readFileSync(path, "utf8");
+    assert.doesNotMatch(about, /Tony Nguyen|Founder/);
+    assert.doesNotMatch(about, /global offices|bank-grade|military-grade/i);
+  }
 });
 
 test("SECURITY.md advisory URL matches site constant", () => {
