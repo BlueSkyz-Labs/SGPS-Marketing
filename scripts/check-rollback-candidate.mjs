@@ -10,7 +10,7 @@
  *   - candidate is an exact 40-character commit;
  *   - candidate is on the current main lineage;
  *   - candidate is at/after every active security floor;
- *   - candidate's public source tree contains no Marketing payment-authority
+ *   - candidate's textual public runtime tree (src/ + public/) contains no Marketing payment-authority
  *     markers (VietQR / NAPAS / EMVCo / known payload identifiers);
  *   - the no-payment-authority regression guard exists at the candidate.
  *
@@ -78,13 +78,17 @@ function resolveDefaultMain(cwd) {
 
 function candidateFiles(candidate, cwd) {
   const output = git(
-    ["ls-tree", "-r", "--name-only", candidate, "--", "src"],
+    ["ls-tree", "-r", "--name-only", candidate, "--", ...PAYMENT_RUNTIME_ROOTS],
     { cwd },
   );
   return output
     .split("\n")
     .filter(Boolean)
-    .filter((path) => PUBLIC_SOURCE_EXTENSION.test(path));
+    .filter(
+      (path) =>
+        PUBLIC_SOURCE_EXTENSION.test(path) ||
+        PUBLIC_SOURCE_SPECIAL_FILES.has(path),
+    );
 }
 
 function fileAt(candidate, path, cwd) {
