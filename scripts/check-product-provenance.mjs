@@ -14,13 +14,16 @@
  *   2. `proof.repositoryUrl` is exactly https://github.com/BlueSkyz-Labs/<repo> for the slug's
  *      allow-listed repository — an unknown product, an unknown slug or a foreign organisation
  *      fails closed.
- *   3. `sourceRevision` is a 40-hex revision and is NOT a commit of this repository: attributing
- *      this repository's own revision to a product is the defect, not evidence.
- *   4. `proof.media` is declared, so identity/brand art is never claimed as a product screenshot.
+ *   3. `sourceRevision` is a 40-hex revision, is NOT a commit of this repository, and exactly
+ *      matches the provider-read-back qualification registry for that product.
+ *   4. The qualification registry itself records the product repository, default branch,
+ *      checked default-head revision and the bounded evidence relationship.
+ *   5. `proof.media` is declared, so identity/brand art is never claimed as a product screenshot.
  *
- * Offline by design. A foreign revision cannot be proven to exist from here, so the guard refuses
- * the cases it can decide (unknown repository, this repository's own revision, unlabelled media)
- * and reports IDLE for an empty registry instead of passing by accident.
+ * Offline by design. CI does not access private product repositories. Cross-repository existence
+ * is qualified ahead of time through a provider read-back and pinned in the protected qualification
+ * registry. This proves source identity/revision qualification only, never product capability,
+ * deployment/runtime state, payment state or Human E4.
  */
 import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
 import { execFileSync } from "node:child_process";
@@ -43,6 +46,56 @@ const PRODUCT_REPOSITORIES = {
   sotro: "Sotro",
   vungtaylai: "VungTayLai",
 };
+
+export const QUALIFICATION_FILE =
+  "docs/evidence/product-source-qualification.json";
+
+const QUALIFIED_RELATIONSHIPS = new Set([
+  "EXACT_DEFAULT_HEAD",
+  "ANCESTOR_OF_DEFAULT_HEAD",
+]);
+
+function loadQualificationRegistry() {
+  const path = join(ROOT, QUALIFICATION_FILE);
+  if (!existsSync(path)) {
+    return {
+      registry: null,
+      errors: [
+        `FAIL ${QUALIFICATION_FILE} — qualification registry is missing`,
+      ],
+    };
+  }
+
+  try {
+    const registry = JSON.parse(readFileSync(path, "utf8"));
+    const errors = [];
+    if (registry?.schemaVersion !== "1.0") {
+      errors.push(
+        `FAIL ${QUALIFICATION_FILE} — schemaVersion must be 1.0`,
+      );
+    }
+    if (registry?.evidenceClass !== "PROVIDER_REPOSITORY_READBACK") {
+      errors.push(
+        `FAIL ${QUALIFICATION_FILE} — evidenceClass must be PROVIDER_REPOSITORY_READBACK`,
+      );
+    }
+    if (
+      !registry?.products ||
+      typeof registry.products !== "object" ||
+      Array.isArray(registry.products)
+    ) {
+      errors.push(
+        `FAIL ${QUALIFICATION_FILE} — products qualification map is missing`,
+      );
+    }
+    return { registry, errors };
+  } catch {
+    return {
+      registry: null,
+      errors: [`FAIL ${QUALIFICATION_FILE} — invalid JSON`],
+    };
+  }
+}
 
 function walk(dir) {
   const out = [];
@@ -93,6 +146,13 @@ const files = walk(PRODUCTS_DIR);
 const failures = [];
 let verified = 0;
 
+let qualifications = null;
+if (files.length > 0) {
+  const loaded = loadQualificationRegistry();
+  qualifications = loaded.registry;
+  failures.push(...loaded.errors);
+}
+
 for (const file of files) {
   const source = readFileSync(file, "utf8");
   const relative = file.slice(ROOT.length + 1).replace(/\\/g, "/");
@@ -132,6 +192,44 @@ for (const file of files) {
     problems.push(
       `sourceRevision ${revision} is a commit of THIS repository — it must cite the product source, not this site`,
     );
+  }
+
+  if (
+    slug &&
+    expectedRepository &&
+    revision &&
+    /^[0-9a-f]{40}$/.test(revision) &&
+    qualifications?.products
+  ) {
+    const qualification = qualifications.products[slug];
+    const expectedQualifiedRepository = `BlueSkyz-Labs/${expectedRepository}`;
+
+    if (!qualification) {
+      problems.push(
+        `sourceRevision ${revision} has no provider-read-back qualification`,
+      );
+    } else {
+      if (qualification.repository !== expectedQualifiedRepository) {
+        problems.push(
+          `qualification repository ${qualification.repository ?? "<missing>"} is not ${expectedQualifiedRepository}`,
+        );
+      }
+      if (qualification.sourceRevision !== revision) {
+        problems.push(
+          `sourceRevision ${revision} is not the qualified revision ${qualification.sourceRevision ?? "<missing>"}`,
+        );
+      }
+      if (!/^[0-9a-f]{40}$/.test(qualification.checkedDefaultHead ?? "")) {
+        problems.push(
+          "qualification must record the full checked default-branch head",
+        );
+      }
+      if (!QUALIFIED_RELATIONSHIPS.has(qualification.relationship)) {
+        problems.push(
+          `qualification relationship ${qualification.relationship ?? "<missing>"} is not accepted`,
+        );
+      }
+    }
   }
 
   // Sổ Tâm P0 scope is explicitly audio-free (Product Truth / AGENTS / ADR).
@@ -249,16 +347,18 @@ for (const file of files) {
 if (failures.length > 0) {
   for (const line of failures) console.error(line);
   console.error(
-    `Product provenance: FAIL (${failures.length} of ${files.length} entries)`,
+    `Product provenance source qualification: FAIL (${failures.length} finding(s) across ${files.length} entries)`,
   );
   process.exit(1);
 }
 
 if (files.length === 0) {
   console.log(
-    "Product provenance: IDLE (0 published products — the guard activates on the first listing)",
+    "Product provenance source qualification: IDLE (0 product records — the guard activates on the first record)",
   );
   process.exit(0);
 }
 
-console.log(`Product provenance: PASS (${verified} entries)`);
+console.log(
+  `Product provenance source qualification: QUALIFIED (${verified} entries; capability/runtime/payment/E4 NOT_VERIFIED)`,
+);
