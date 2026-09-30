@@ -115,7 +115,11 @@ function record(overrides = {}) {
 test("the real registry satisfies provenance honestly", () => {
   const result = run(ROOT);
   assert.equal(result.status, 0, result.stderr);
-  assert.match(result.stdout, /Product provenance: PASS \(5 entries\)/);
+  assert.match(
+    result.stdout,
+    /Product provenance source qualification: QUALIFIED \(5 entries;/,
+  );
+  assert.match(result.stdout, /capability\/runtime\/payment\/E4 NOT_VERIFIED/);
 });
 
 test("an empty registry reports IDLE instead of passing by accident", () => {
@@ -133,7 +137,11 @@ test("a well-formed record citing an allow-listed repository passes", () => {
   withFixture(record(), (dir) => {
     const result = run(dir);
     assert.equal(result.status, 0, result.stderr);
-    assert.match(result.stdout, /Product provenance: PASS \(1 entries\)/);
+    assert.match(
+      result.stdout,
+      /Product provenance source qualification: QUALIFIED \(1 entries;/,
+    );
+    assert.match(result.stdout, /capability\/runtime\/payment\/E4 NOT_VERIFIED/);
   });
 });
 
@@ -258,7 +266,11 @@ test("positive control: a screenshot-kind record with matching evidence passes",
     (dir) => {
       const result = run(dir);
       assert.equal(result.status, 0, result.stderr);
-      assert.match(result.stdout, /Product provenance: PASS \(1 entries\)/);
+      assert.match(
+      result.stdout,
+      /Product provenance source qualification: QUALIFIED \(1 entries;/,
+    );
+    assert.match(result.stdout, /capability\/runtime\/payment\/E4 NOT_VERIFIED/);
     },
   );
 });
