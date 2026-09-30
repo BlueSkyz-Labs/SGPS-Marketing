@@ -6,8 +6,16 @@ interface Props {
   variant?: "primary" | "secondary" | "on-ink";
   class?: string;
   icon?: "arrow-right" | "external" | "none";
+  /** Pass-through data-* hooks (e.g. data-hero-primary). */
+  [attribute: `data-${string}`]: string | boolean | undefined;
 }
-const { href, variant = "primary", class: className = "", icon } = Astro.props;
+const {
+  href,
+  variant = "primary",
+  class: className = "",
+  icon,
+  ...attributes
+} = Astro.props;
 const isExternal = /^https?:\/\//i.test(href);
 const trailingIcon =
   icon ??
@@ -16,6 +24,7 @@ const trailingIcon =
 
 <a
   href={href}
+  {...attributes}
   rel={isExternal ? "noopener noreferrer" : undefined}
   class:list={[
     "inline-flex min-h-11 max-w-full items-center justify-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold no-underline [overflow-wrap:anywhere] transition-[background-color,border-color,transform] duration-150 focus-visible:ring-2 focus-visible:ring-[var(--brand-cobalt)] focus-visible:ring-offset-2 focus-visible:outline-none active:scale-[0.98] motion-reduce:transition-none motion-reduce:active:scale-100",

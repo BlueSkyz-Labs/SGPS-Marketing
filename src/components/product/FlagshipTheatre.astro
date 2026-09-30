@@ -37,6 +37,11 @@ interface Props {
    * while the production registry stays owner-gated and empty. */
   claims?: readonly ResolvedClaim[] | undefined;
   lang: Language;
+  /** Experience v6 S1: the hero already owns status, promise, jobs and the
+   * primary action, so the home passes `compact` and the act keeps only the
+   * name (linked through the lifecycle mapper), record-backed capabilities and
+   * the visual. Default rendering is unchanged. */
+  compact?: boolean;
 }
 
 const {
@@ -44,6 +49,7 @@ const {
   products,
   claims = getPublicClaims([...products]),
   lang,
+  compact = false,
 } = Astro.props;
 
 if (!product) {
@@ -84,23 +90,39 @@ const ctaIsExternal = cta.external || /^https?:\/\//i.test(cta.href);
 >
   <div class="grid gap-10 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:items-center">
     <div class="c2-flagship-theatre__copy">
-      <ProductStatus label={data.publicLabel} lang={lang} />
-      <p
-        class="mt-4 text-sm font-semibold uppercase tracking-[0.16em] text-[var(--brand-cobalt)]"
-        data-flagship-eyebrow
-      >
-        {labelFor(SHARED_LABELS.flagshipEyebrow, lang)}
-      </p>
+      {!compact ? (
+        <>
+          <ProductStatus label={data.publicLabel} lang={lang} />
+          <p
+            class="mt-4 text-sm font-semibold uppercase tracking-[0.16em] text-[var(--brand-cobalt)]"
+            data-flagship-eyebrow
+          >
+            {labelFor(SHARED_LABELS.flagshipEyebrow, lang)}
+          </p>
+        </>
+      ) : null}
       <h2
         id="flagship-theatre-title"
         class="mt-2 text-3xl font-semibold tracking-tight sm:text-4xl"
       >
-        {data.name}
+        {compact ? (
+          <a
+            href={cta.href}
+            rel={ctaIsExternal ? "noopener noreferrer" : undefined}
+            class="inline-flex min-h-11 items-center text-inherit no-underline hover:underline"
+          >
+            {data.name}
+          </a>
+        ) : (
+          data.name
+        )}
       </h2>
-      <p class="mt-4 max-w-xl text-lg text-[var(--text-secondary)]">
-        {copy.shortDescription}
-      </p>
-      {copy.jobs.length > 0 ? (
+      {!compact ? (
+        <p class="mt-4 max-w-xl text-lg text-[var(--text-secondary)]">
+          {copy.shortDescription}
+        </p>
+      ) : null}
+      {!compact && copy.jobs.length > 0 ? (
         <div class="mt-6">
           <h3 class="text-sm font-semibold text-[var(--text-primary)]">
             {labelFor(SHARED_LABELS.jobsHeading, lang)}
@@ -141,24 +163,26 @@ const ctaIsExternal = cta.external || /^https?:\/\//i.test(cta.href);
           </div>
         </div>
       ) : null}
-      <div class="mt-8 flex flex-wrap items-center gap-3">
-        <a
-          href={cta.href}
-          rel={ctaIsExternal ? "noopener noreferrer" : undefined}
-          data-product-cta={cta.verb}
-          class="inline-flex min-h-11 max-w-full items-center justify-center rounded-[var(--radius-sm)] bg-[var(--action-fill)] px-4 py-2.5 font-medium text-white no-underline hover:bg-[var(--action-primary-hover)] sm:px-5"
-        >
-          {cta.label}
-        </a>
-        {showProfileCta ? (
+      {!compact ? (
+        <div class="mt-8 flex flex-wrap items-center gap-3">
           <a
-            href={profileHref}
-            class="inline-flex min-h-11 max-w-full items-center justify-center rounded-[var(--radius-sm)] border border-[var(--border-subtle)] px-4 py-2.5 font-medium text-[var(--text-primary)] no-underline hover:bg-[var(--bg-subtle)] sm:px-5"
+            href={cta.href}
+            rel={ctaIsExternal ? "noopener noreferrer" : undefined}
+            data-product-cta={cta.verb}
+            class="inline-flex min-h-11 max-w-full items-center justify-center rounded-[var(--radius-sm)] bg-[var(--action-fill)] px-4 py-2.5 font-medium text-white no-underline hover:bg-[var(--action-primary-hover)] sm:px-5"
           >
-            {viewProfileLabel}
+            {cta.label}
           </a>
-        ) : null}
-      </div>
+          {showProfileCta ? (
+            <a
+              href={profileHref}
+              class="inline-flex min-h-11 max-w-full items-center justify-center rounded-[var(--radius-sm)] border border-[var(--border-subtle)] px-4 py-2.5 font-medium text-[var(--text-primary)] no-underline hover:bg-[var(--bg-subtle)] sm:px-5"
+            >
+              {viewProfileLabel}
+            </a>
+          ) : null}
+        </div>
+      ) : null}
     </div>
     {media ? (
       <div class="c2-flagship-theatre__backlight">

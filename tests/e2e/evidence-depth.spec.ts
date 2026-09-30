@@ -20,18 +20,21 @@ test.describe("executive-to-evidence reading depth", () => {
     await expect(evidenceLink).toBeVisible();
   });
 
-  test("trust ledger rows expose evidence through the same control", async ({
+  test("the home keeps one quiet proof link instead of ledger rows", async ({
     page,
   }) => {
+    // Experience v6 S1: the home proof band is a heading, one line and one link;
+    // the ledger rows and their evidence disclosures return on /verify (S3).
+    // Evidence disclosure stays covered on /security/ and /privacy/ above/below.
     await page.goto("/en/");
-    const ledger = page.locator("[data-trust-ledger]");
-    await expect(ledger).toBeVisible();
-    const firstRow = ledger.locator("[data-trust-surface]").first();
-    await expect(firstRow.locator(".evidence-details__summary")).toBeVisible();
-    await firstRow.getByText("See the evidence").click();
-    await expect(
-      firstRow.locator(".evidence-details__list a").first(),
-    ).toBeVisible();
+    await expect(page.locator("[data-trust-ledger]")).toHaveCount(0);
+    const band = page.locator("[data-trust-band]");
+    await expect(band).toBeVisible();
+    await expect(band.getByRole("link")).toHaveCount(1);
+    await expect(band.getByRole("link")).toHaveAttribute(
+      "href",
+      "/en/security/",
+    );
   });
 
   test("print output keeps the evidence readable (chromium)", async ({

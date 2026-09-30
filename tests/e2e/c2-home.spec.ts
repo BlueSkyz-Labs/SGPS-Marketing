@@ -55,29 +55,24 @@ for (const viewport of VIEWPORTS) {
         expect(links).toBeGreaterThan(2);
       });
 
-      test(`${locale.path} presents One House as plain-language editorial philosophy`, async ({
+      test(`${locale.path} no longer carries the One House word band or the About/next-step blocks`, async ({
         page,
       }) => {
+        // Experience v6 S1 (audit E-10): four giant principle words with no proof
+        // were removed from the home, along with the About block, the closing
+        // call-to-action band and the Next steps pill row.
         await page.goto(locale.path);
-
-        const oneHouse = page.locator("[data-one-house-editorial]");
-        await expect(oneHouse).toBeVisible();
-        await expect(oneHouse.locator("[data-one-house-concept]")).toHaveCount(
-          4,
-        );
-
-        for (const label of ONE_HOUSE_CONCEPTS[locale.lang]) {
-          await expect(
-            oneHouse.getByRole("heading", { level: 3, name: label }),
-          ).toBeVisible();
-        }
-
-        // C2 replaces the equal framework matrix on the homepage with an
-        // editorial interlude. The matrix may continue to exist elsewhere.
+        await expect(page.locator("[data-one-house-editorial]")).toHaveCount(0);
+        await expect(page.locator("[data-one-house-concept]")).toHaveCount(0);
         await expect(page.locator("[data-principle-matrix]")).toHaveCount(0);
-
-        const text = await oneHouse.textContent();
-        expect(text ?? "").not.toMatch(/every product.*AI|mọi sản phẩm.*AI/i);
+        await expect(page.locator("[data-about-blueskyz]")).toHaveCount(0);
+        await expect(page.locator("[data-final-action]")).toHaveCount(0);
+        await expect(page.locator("[data-journey-bar]")).toHaveCount(0);
+        for (const label of ONE_HOUSE_CONCEPTS[locale.lang]) {
+          await expect(page.getByRole("heading", { name: label })).toHaveCount(
+            0,
+          );
+        }
       });
 
       test(`${locale.path} does not fabricate a product when the registry is empty`, async ({

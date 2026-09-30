@@ -7,9 +7,11 @@ import { expect, test } from "@playwright/test";
  * phone composition is authored as a single column so DOM reading order never
  * depends on visual placement. Measured on the representative authority surface
  * (`[data-one-house-editorial]`) at the widths the plan names.
+ * Experience v6 S1 retargeted the measured surface to the flagship act's grid
+ * (`[data-flagship-theatre] > div`) because the One House band left the home.
  */
 const ROUTES = ["/en/", "/vi/"] as const;
-const SECTION = "[data-one-house-editorial]";
+const SECTION = "[data-flagship-theatre] > div";
 
 const trackCount = (el: Element): number =>
   getComputedStyle(el)
@@ -63,8 +65,9 @@ test.describe("C4-A editorial grid", () => {
       const order = await page
         .locator(`${SECTION} > *`)
         .evaluateAll((els) => els.map((el) => el.tagName.toLowerCase()));
+      // Copy column first, visual second: reading order never depends on placement.
       expect(order[0]).toBe("div");
-      expect(order[1]).toBe("ol");
+      expect(order[1]).toBe("div");
     });
   }
 });

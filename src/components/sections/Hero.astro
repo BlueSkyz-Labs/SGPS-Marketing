@@ -1,17 +1,47 @@
 ---
-import BrandLockup from "@/components/brand/BrandLockup.astro";
 import HorizonField from "@/components/experience/HorizonField.astro";
 import ButtonLink from "@/components/ui/ButtonLink.astro";
 import Reveal from "@/components/ui/Reveal.astro";
 import { SITE, SHARED_LABELS, labelFor, type Language } from "@/data/site";
 import { emptyRegistryPrimaryCta, emptyRegistrySecondaryCta } from "@/lib/act";
+import { resolveLifecycleCta } from "@/lib/lifecycle-cta";
+import { productCopy } from "@/lib/product-copy";
+import { getProductIconPath } from "@/lib/product-routes";
 import { getPublicProducts } from "@/lib/products";
 
+/**
+ * Experience v6 S1 — the hero states one concrete thing from the registry.
+ *
+ * Every product statement is a record field, localized through
+ * `productCopy`: the H1 is the flagship's first recorded job, the supporting
+ * line is its `shortDescription`, the status chip is its `publicLabel`, and the
+ * one primary action is `resolveLifecycleCta` (no authored verb). With no
+ * public flagship the hero falls back to the company tagline and the honest
+ * empty-registry Act path, so nothing is invented.
+ */
 interface Props {
   lang?: Language;
 }
 const { lang = "en" } = Astro.props;
 
+const products = await getPublicProducts();
+const flagship =
+  products.find((product) => product.data.featuredTier === "hero") ?? null;
+const copy = flagship ? productCopy(flagship.data, lang) : null;
+const headline = copy ? (copy.jobs[0] ?? copy.shortDescription) : null;
+const cta = flagship
+  ? resolveLifecycleCta(
+      {
+        slug: flagship.data.slug,
+        lifecycle: flagship.data.lifecycle,
+        availability: flagship.data.availability,
+        primaryActionHref: flagship.data.primaryAction.href,
+      },
+      lang,
+    )
+  : null;
+
+// Company-level fallback (no public flagship): tagline once, no slogan stack.
 const taglineLead = labelFor(
   {
     en: SITE.taglineLead,
@@ -39,24 +69,18 @@ const proposition = labelFor(
   },
   lang,
 );
-const supporting = labelFor(
-  {
-    en: SITE.supporting,
-    vi: "Một góc nhìn cao hơn kiến tạo một ngày mai rạng rỡ.",
-    zh: "更高的视角，成就更明亮的明天。",
-    "zh-hant": "更高的視角，成就更明亮的明天。",
-  },
-  lang,
-);
 const exploreProducts = labelFor(SHARED_LABELS.exploreProducts, lang);
-const aboutBlueSkyz = labelFor(SHARED_LABELS.aboutBlueSkyz, lang);
 const productsHref = `/${lang}/products/`;
-const aboutHref = `/${lang}/about/`;
-
-const products = await getPublicProducts();
-const hasPublicProducts = products.length > 0;
 const emptyPrimary = emptyRegistryPrimaryCta(SITE.contactEmail, lang);
 const emptySecondary = emptyRegistrySecondaryCta(SITE.contactEmail, lang);
+const supportingLine = copy
+  ? copy.jobs[0]
+    ? copy.shortDescription
+    : null
+  : proposition;
+const secondary = flagship
+  ? { href: productsHref, label: exploreProducts }
+  : emptySecondary;
 ---
 
 <section
@@ -73,41 +97,74 @@ const emptySecondary = emptyRegistrySecondaryCta(SITE.contactEmail, lang);
     as="div"
     class="relative mx-auto grid w-full max-w-7xl gap-10 px-4 py-16 sm:px-6 sm:py-24 lg:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)] lg:items-center lg:px-8"
   >
-    <div class="hero-content">
-      <BrandLockup size="hero" surface="ink" />
+    <div class="hero-content" data-hero>
+      {flagship && cta ? (
+        <p class="hero-product flex flex-wrap items-center gap-3">
+          <img
+            class="size-11 rounded-xl"
+            src={getProductIconPath(flagship.data.slug)}
+            alt=""
+            width="44"
+            height="44"
+            decoding="async"
+          />
+          <span class="text-lg font-semibold text-[var(--brand-porcelain)]">
+            {flagship.data.name}
+          </span>
+          <span
+            data-product-status={flagship.data.publicLabel}
+            class="inline-flex rounded-full border border-white/30 px-3 py-1 text-xs font-semibold tracking-wide text-[var(--brand-porcelain)]"
+          >
+            {copy?.statusLabel}
+          </span>
+        </p>
+      ) : null}
       <h1
         id="hero-title"
-        class="hero-headline mt-8 max-w-[11ch] text-4xl font-semibold tracking-tight text-[var(--brand-porcelain)] sm:text-5xl lg:text-7xl"
+        class:list={[
+          "hero-headline text-[var(--brand-porcelain)] font-semibold tracking-tight",
+          cta
+            ? "hero-headline--promise mt-6 max-w-[22ch] text-3xl text-balance sm:text-4xl lg:text-5xl"
+            : "mt-2 max-w-[11ch] text-4xl sm:text-5xl lg:text-7xl",
+        ]}
       >
-        <span class="block">{taglineLead}</span>
-        <span class="mt-1 block text-[var(--brand-cobalt)]">
-          {taglineAccent}
-        </span>
-      </h1>
-      <p class="hero-tagline mt-5 max-w-xl text-lg leading-relaxed text-[color-mix(in_srgb,var(--brand-porcelain)_82%,transparent)]">
-        {proposition}
-      </p>
-      <p class="hero-supporting mt-3 max-w-xl text-sm leading-relaxed text-[color-mix(in_srgb,var(--brand-porcelain)_68%,transparent)]">
-        {supporting}
-      </p>
-      <div class="hero-actions">
-        {hasPublicProducts ? (
-          <>
-            <ButtonLink href={productsHref}>{exploreProducts}</ButtonLink>
-            <ButtonLink href={aboutHref} variant="on-ink">
-              {aboutBlueSkyz}
-            </ButtonLink>
-          </>
+        {headline ? (
+          headline
         ) : (
           <>
-            <ButtonLink href={emptyPrimary.href}>
-              {emptyPrimary.label}
-            </ButtonLink>
-            <ButtonLink href={emptySecondary.href} variant="on-ink">
-              {emptySecondary.label}
-            </ButtonLink>
+            <span class="block">{taglineLead}</span>
+            <span class="mt-1 block text-[var(--brand-cobalt)]">
+              {taglineAccent}
+            </span>
           </>
         )}
+      </h1>
+      {supportingLine ? (
+        <p class="hero-tagline mt-5 max-w-xl text-lg leading-relaxed text-[color-mix(in_srgb,var(--brand-porcelain)_82%,transparent)]">
+          {supportingLine}
+        </p>
+      ) : null}
+      <div class="hero-actions">
+        {cta ? (
+          <ButtonLink
+            href={cta.href}
+            data-product-cta={cta.verb}
+            data-hero-primary
+          >
+            {cta.label}
+          </ButtonLink>
+        ) : (
+          <ButtonLink href={emptyPrimary.href} data-hero-primary>
+            {emptyPrimary.label}
+          </ButtonLink>
+        )}
+        <a
+          href={secondary.href}
+          data-hero-secondary
+          class="inline-flex min-h-11 items-center text-sm font-semibold text-[var(--brand-porcelain)] underline underline-offset-4 hover:no-underline"
+        >
+          {secondary.label}
+        </a>
       </div>
     </div>
     <div class="hero-visual" aria-hidden="true">
