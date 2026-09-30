@@ -5,9 +5,11 @@ import type { Language } from "@/data/site";
 
 interface Props {
   lang?: Language;
+  /** false: omit the per-lane Decision Room link (one entry point instead). */
+  compare?: boolean;
 }
 
-const { lang = "en" } = Astro.props;
+const { lang = "en", compare = true } = Astro.props;
 
 const STATUS_LABELS: Record<TrustState, Record<Language, string>> = {
   available: { en: "Available", vi: "Có sẵn", zh: "可用", "zh-hant": "可用" },
@@ -69,13 +71,15 @@ const COMPARE_LABEL: Record<Language, string> = {
             ]}
             lang={lang}
           />
-          <a
-            href={`/${lang}/decision-room/#room-item-trust-${entry.id}`}
-            class="inline-flex min-h-11 items-center text-sm font-medium text-[var(--action-primary)] underline-offset-2 hover:underline"
-            data-decision-hook={`trust:${entry.id}`}
-          >
-            {COMPARE_LABEL[lang]} →
-          </a>
+          {compare && (
+            <a
+              href={`/${lang}/decision-room/#room-item-trust-${entry.id}`}
+              class="inline-flex min-h-11 items-center text-sm font-medium text-[var(--action-primary)] underline-offset-2 hover:underline"
+              data-decision-hook={`trust:${entry.id}`}
+            >
+              {COMPARE_LABEL[lang]} →
+            </a>
+          )}
         </div>
       </div>
     </li>

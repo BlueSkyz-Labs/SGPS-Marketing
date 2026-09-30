@@ -37,6 +37,10 @@ for (const scenario of CASES) {
     await page.goto(scenario.missing);
     await expect(page.locator("h1")).toHaveCount(1);
     for (const link of scenario.links) {
+      // Each recovery link is asserted on the 404 page itself. Previously the
+      // loop stayed on the last followed page, so later links were only found
+      // by accident on /products/ (via its integrity lens).
+      await page.goto(scenario.missing);
       const anchor = page.locator(`main a[href="${link.href}"]`).first();
       await expect(anchor).toBeVisible();
       const response = await page.goto(link.href);
