@@ -56,6 +56,27 @@ test.describe("C4-C dossier composer", () => {
     await expect(page.locator("[data-dossier-counter]")).toHaveText("1");
   });
 
+  test("oversized URL state fails closed with one bounded notice", async ({
+    page,
+  }) => {
+    const oversized = Array.from(
+      { length: 80 },
+      (_, index) => `unknown-${index}`,
+    ).join(",");
+    await page.goto(`/en/dossier/?items=${oversized}`);
+
+    await expect(page.locator("[data-dossier-counter]")).toHaveText("0");
+    await expect(page.locator("[data-dossier-preview]")).toHaveAttribute(
+      "data-empty",
+      "",
+    );
+
+    const unknown = page.locator("[data-dossier-unknown]");
+    await expect(unknown).toBeVisible();
+    await expect(unknown.locator("li")).toHaveCount(1);
+    await expect(unknown).toContainText("URL selection was too large");
+  });
+
   test("a reload without parameters returns the safe default", async ({
     page,
   }) => {
