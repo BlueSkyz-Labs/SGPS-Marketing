@@ -9,6 +9,11 @@ import type { ShowcaseSchema } from "@/lib/showcase-schema";
  * screen can never appear without saying where it came from. Motion is pure
  * CSS (scroll-driven where supported) and is disabled for reduced motion; no
  * client script is shipped.
+ *
+ * Mobile LCP (the hero text above this section) is guarded by Lighthouse, so
+ * the section stays off its critical path: styles are inlined instead of a
+ * render-blocking stylesheet (CSP allows inline styles, not scripts), and the
+ * section skips layout and paint until it nears the viewport.
  */
 interface Props {
   showcase: ShowcaseSchema;
@@ -238,7 +243,19 @@ const defaultTrack = wanted
   ) : null}
 </section>
 
-<style>
+<style is:inline>
+  /* Below the fold: skip layout and paint until near the viewport. The
+     placeholder heights are the measured section heights (2848 px mobile,
+     4615 px desktop) so the scrollbar does not jump. */
+  .showcase {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 2850px;
+  }
+  @media (min-width: 64rem) {
+    .showcase {
+      contain-intrinsic-size: auto 4600px;
+    }
+  }
   .showcase__eyebrow {
     display: inline-flex;
     align-items: center;
