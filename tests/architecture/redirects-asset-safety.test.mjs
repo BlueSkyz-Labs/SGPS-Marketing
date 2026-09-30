@@ -107,21 +107,21 @@ test("legacy page redirects still exist and target the localized routes", () => 
   assert.equal(bySource.get("/products/")?.destination, "/en/products/");
   assert.equal(bySource.get("/products/")?.status, "301");
   const slugRule = bySource.get("/products/:slug/");
-  assert.equal(slugRule?.destination, "/en/products/:slug/");
+  // Same destination as the old greedy rule: not every legacy slug has a
+  // localized profile page, so a slug-preserving target would 404.
+  assert.equal(slugRule?.destination, "/en/products/");
   assert.equal(slugRule?.status, "301");
-  assert.equal(
-    bySource.get("/products/:slug")?.destination,
-    "/en/products/:slug/",
-  );
+  assert.equal(bySource.get("/products/:slug")?.destination, "/en/products/");
 
   for (const [from, to] of [
     ["/products/", "/en/products/"],
-    ["/products/sotro/", "/en/products/sotro/"],
-    ["/products/sotro", "/en/products/sotro/"],
+    ["/products/sotro/", "/en/products/"],
+    ["/products/sotro", "/en/products/"],
+    ["/products/apexagent/", "/en/products/"],
   ]) {
     const hit = matches(rules, from)[0];
     assert.ok(hit, `${from} must be redirected`);
-    assert.equal(hit.destination.replace(":slug", "sotro"), to);
+    assert.equal(hit.destination, to);
   }
 });
 
@@ -140,7 +140,7 @@ test("negative proof: the old greedy /products/* rule is detected", () => {
     );
   }
   const fixed = parseRedirects(
-    "/products/:slug/ /en/products/:slug/ 301\n/products/:slug /en/products/:slug/ 301\n",
+    "/products/:slug/ /en/products/ 301\n/products/:slug /en/products/ 301\n",
   );
   assert.equal(matches(fixed, "/products/sotro/icon.png").length, 0);
   assert.equal(matches(fixed, "/products/sotro/").length, 1);

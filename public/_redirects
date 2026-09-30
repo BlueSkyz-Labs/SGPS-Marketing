@@ -16,5 +16,5 @@
 /security/ /en/security/ 301
 /support/ /en/support/ 301
 /products/ /en/products/ 301
-/products/:slug/ /en/products/:slug/ 301
-/products/:slug /en/products/:slug/ 301
+/products/:slug/ /en/products/ 301
+/products/:slug /en/products/ 301
