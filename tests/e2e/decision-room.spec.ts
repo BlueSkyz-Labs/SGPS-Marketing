@@ -103,6 +103,9 @@ test.describe("decision room", () => {
 
   test("comparison makes no network requests after load", async ({ page }) => {
     await page.goto(EN);
+    // Chromium fetches the favicon lazily after `load`; let page-load traffic
+    // settle so only requests caused by the interaction below are counted.
+    await page.waitForLoadState("networkidle");
     const requests: string[] = [];
     page.on("request", (request) => {
       requests.push(request.url());
