@@ -1,0 +1,95 @@
+---
+import { getEntry } from "astro:content";
+import ButtonLink from "@/components/ui/ButtonLink.astro";
+import { EMPTY_STATE_COPY } from "@/data/empty-state-copy";
+import { labelFor, SHARED_LABELS, type Language } from "@/data/site";
+import { getPublicProducts } from "@/lib/products";
+import { productCopy } from "@/lib/product-copy";
+
+/**
+ * Experience v6 S8 — About, composed only from existing authored data:
+ * registry products (`productCopy`) and the `principles` block of the locale's
+ * `src/content/pages/{lang}/about.yaml`. The yaml `founder_*` fields are not
+ * read: founder detail is an Owner-confirmation item (audit E-26) and an
+ * absent fact is omitted, never padded.
+ */
+interface Props {
+  lang: Language;
+}
+
+interface Principles {
+  heading?: string;
+  intro?: string;
+  items?: { name: string; summary: string }[];
+}
+
+const { lang } = Astro.props;
+const page = await getEntry("pages", `${lang}-about`);
+const principles = (page?.data.sections?.principles ?? {}) as Principles;
+const products = (await getPublicProducts()).map((product) => ({
+  slug: product.data.slug,
+  name: product.data.name,
+  description: productCopy(product.data, lang).shortDescription,
+}));
+---
+
+<div class="mt-12 grid gap-10 md:grid-cols-2 md:gap-14" data-about-composition>
+  {products.length > 0 ? (
+    <section aria-labelledby="about-make">
+      <h2
+        id="about-make"
+        class="text-xs font-semibold tracking-[0.18em] text-[var(--text-secondary)] uppercase"
+      >
+        {labelFor(EMPTY_STATE_COPY.aboutWhatWeMake, lang)}
+      </h2>
+      <ul class="mt-4 grid gap-5">
+        {products.map((product) => (
+          <li class="border-l-2 border-[var(--border-subtle)] pl-4">
+            <a
+              href={`/${lang}/products/${product.slug}/`}
+              class="inline-flex min-h-11 items-center text-lg font-semibold tracking-tight text-[var(--text-primary)] no-underline hover:underline"
+            >
+              {product.name}
+            </a>
+            <p class="text-sm leading-relaxed text-[var(--text-secondary)]">
+              {product.description}
+            </p>
+          </li>
+        ))}
+      </ul>
+    </section>
+  ) : null}
+  {principles.items && principles.items.length > 0 ? (
+    <section aria-labelledby="about-work">
+      <h2
+        id="about-work"
+        class="text-xs font-semibold tracking-[0.18em] text-[var(--text-secondary)] uppercase"
+      >
+        {principles.heading}
+      </h2>
+      {principles.intro ? (
+        <p class="mt-4 text-sm leading-relaxed text-[var(--text-secondary)]">
+          {principles.intro}
+        </p>
+      ) : null}
+      <dl class="mt-4 grid gap-3">
+        {principles.items.map((item) => (
+          <div>
+            <dt class="text-base font-semibold text-[var(--text-primary)]">
+              {item.name}
+            </dt>
+            <dd class="text-sm text-[var(--text-secondary)]">{item.summary}</dd>
+          </div>
+        ))}
+      </dl>
+    </section>
+  ) : null}
+</div>
+<div class="mt-12 flex flex-wrap gap-3">
+  <ButtonLink href={`/${lang}/products/`}>
+    {labelFor(SHARED_LABELS.exploreProducts, lang)}
+  </ButtonLink>
+  <ButtonLink href={`/${lang}/contact/`} variant="secondary">
+    {labelFor(SHARED_LABELS.contactUs, lang)}
+  </ButtonLink>
+</div>
