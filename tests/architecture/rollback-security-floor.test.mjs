@@ -11,6 +11,7 @@ import { resolve } from "node:path";
 import test from "node:test";
 import { fileURLToPath } from "node:url";
 import {
+  PAYMENT_RUNTIME_ROOTS,
   SECURITY_FLOORS,
   paymentMarkersIn,
   qualifyRollbackCandidate,
@@ -61,6 +62,10 @@ test("D-0 VietQR removal is an explicit rollback security floor", () => {
       },
     ],
   );
+});
+
+test("rollback payment scan covers both application and direct public runtime roots", () => {
+  assert.deepEqual(PAYMENT_RUNTIME_ROOTS, ["src", "public"]);
 });
 
 test("current main is eligible for the bounded rollback source checks", () => {
