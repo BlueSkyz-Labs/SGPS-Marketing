@@ -1,14 +1,25 @@
 import { expect, test, type Page } from "@playwright/test";
 
 /** The options live in a native popover: open the visible header trigger. */
-async function openSwitcher(page: Page) {
+async function openSwitcher(page: Page, { settle = true } = {}) {
+  // Below the md breakpoint the switcher sits inside the header "Menu"
+  // disclosure; open it first, as a visitor would (no-op on desktop).
+  const menu = page.locator("header details:not([open]) > summary");
+  if (await menu.isVisible()) await menu.click();
   await page.locator("header [data-language-trigger]:visible").first().click();
   const panel = page.locator("header [data-language-panel]:popover-open");
   await expect(panel).toBeVisible();
   // Let the 170ms entrance transition finish so the options are stable targets.
-  await panel.evaluate((element) =>
-    Promise.all(element.getAnimations().map((animation) => animation.finished)),
-  );
+  // A JavaScript-disabled context cannot evaluate this in every engine
+  // (Firefox hangs), so no-JS callers use reduced motion instead: the panel
+  // then has no transition to wait for.
+  if (settle) {
+    await panel.evaluate((element) =>
+      Promise.all(
+        element.getAnimations().map((animation) => animation.finished),
+      ),
+    );
+  }
 }
 
 test("language switch keeps real links with route context on /en/about/", async ({
@@ -79,10 +90,13 @@ test("view transitions are CSS-only with a reduced-motion override", async ({
 test("switching works without JavaScript (ordinary links)", async ({
   browser,
 }) => {
-  const context = await browser.newContext({ javaScriptEnabled: false });
+  const context = await browser.newContext({
+    javaScriptEnabled: false,
+    reducedMotion: "reduce",
+  });
   const page = await context.newPage();
   await page.goto("/en/about/");
-  await openSwitcher(page);
+  await openSwitcher(page, { settle: false });
   const link = page
     .getByRole("navigation", { name: "Language" })
     .first()

@@ -96,6 +96,10 @@ interface ChoiceContrast {
  * The panel must be open to be rendered, so open it first.
  */
 async function languageChoiceContrast(page: import("@playwright/test").Page) {
+  // Below the md breakpoint the switcher sits inside the header "Menu"
+  // disclosure; open it first, as a visitor would (no-op on desktop).
+  const menu = page.locator("header details:not([open]) > summary");
+  if (await menu.isVisible()) await menu.click();
   await page.locator("header [data-language-trigger]:visible").first().click();
   const panel = page.locator("header [data-language-panel]:popover-open");
   await expect(panel).toBeVisible();

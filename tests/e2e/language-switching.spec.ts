@@ -4,7 +4,18 @@ import { test, expect, type Page } from "@playwright/test";
 const headerTrigger = (page: Page) =>
   page.locator("header [data-language-trigger]:visible").first();
 
+/**
+ * Below the md breakpoint the header switcher lives inside the "Menu"
+ * disclosure, so open it first, as a visitor would. No-op on desktop, where
+ * the disclosure is hidden.
+ */
+async function revealHeaderSwitcher(page: Page) {
+  const menu = page.locator("header details:not([open]) > summary");
+  if (await menu.isVisible()) await menu.click();
+}
+
 async function openHeaderSwitcher(page: Page) {
+  await revealHeaderSwitcher(page);
   await headerTrigger(page).click();
   const panel = page.locator("header [data-language-panel]:popover-open");
   await expect(panel).toBeVisible();
@@ -48,6 +59,7 @@ test("switcher reaches Traditional Chinese on the same page and remembers it", a
     )
     .toBe("zh-hant");
   // The trigger now shows the compact Traditional code.
+  await revealHeaderSwitcher(page);
   await expect(headerTrigger(page)).toContainText("繁");
 });
 
@@ -87,17 +99,21 @@ test("the popover opens and closes with pointer and keyboard, without JS", async
   try {
     const page = await context.newPage();
     await page.goto("/en/");
-    const panel = page.locator("header [data-language-panel]").first();
-    await expect(panel).toBeHidden();
+    // Desktop and mobile-menu instances both exist; assert on whichever
+    // panel is actually open rather than on the first instance in the DOM.
+    const panel = page.locator("header [data-language-panel]:popover-open");
+    await expect(panel).toHaveCount(0);
+    await revealHeaderSwitcher(page);
     await headerTrigger(page).click();
     await expect(panel).toBeVisible();
     await page.keyboard.press("Escape");
-    await expect(panel).toBeHidden();
+    await expect(panel).toHaveCount(0);
+    await revealHeaderSwitcher(page);
     await headerTrigger(page).click();
     await expect(panel).toBeVisible();
     // Light dismiss: a click outside closes it.
     await page.mouse.click(5, 400);
-    await expect(panel).toBeHidden();
+    await expect(panel).toHaveCount(0);
   } finally {
     await context.close();
   }
@@ -107,6 +123,7 @@ test("keyboard: Enter opens, Tab reaches the options, Escape restores focus", as
   page,
 }) => {
   await page.goto("/en/");
+  await revealHeaderSwitcher(page);
   await headerTrigger(page).focus();
   await page.keyboard.press("Enter");
   const panel = page.locator("header [data-language-panel]:popover-open");
