@@ -35,7 +35,7 @@
  *   - `validate:public-truth` depends on owner-supplied facts, so it is
  *     required on a promotion path (the deploy script) rather than as a
  *     source-assurance CI step. The deploy ordering is asserted by the
- *     deployment stage below.
+ *     deployment-contract stage below; provider deployment stays separate.
  *
  * Usage: node scripts/check-promotion-state.mjs [--root <path>]
  * Exit:  1 only when a stage reports FAIL; otherwise 0.
