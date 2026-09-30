@@ -20,10 +20,26 @@ export function loadSupportedLanguages() {
 }
 
 export const SUPPORTED_LANGUAGES = loadSupportedLanguages();
-// Longest-first so alternation never shadows zh-hant with zh (en|vi|zh|zh-hant).
-export function localeRoutePattern(languages = SUPPORTED_LANGUAGES) {
-  const alternation = [...languages]
-    .sort((a, b) => b.length - a.length)
-    .join("|");
-  return new RegExp(`^https?://[^/]+/(${alternation})/`);
+
+export function isLocalizedCanonicalRoute(
+  candidate,
+  site,
+  languages = SUPPORTED_LANGUAGES,
+) {
+  try {
+    const expected = new URL(site);
+    const actual = new URL(candidate);
+    if (actual.origin !== expected.origin) return false;
+    if (actual.search || actual.hash) return false;
+
+    const segments = actual.pathname.split("/").filter(Boolean);
+    const locale = segments[0];
+    return (
+      typeof locale === "string" &&
+      languages.includes(locale) &&
+      actual.pathname.startsWith(`/${locale}/`)
+    );
+  } catch {
+    return false;
+  }
 }
