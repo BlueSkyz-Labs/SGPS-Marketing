@@ -8,6 +8,8 @@
  * Usage:
  *   node scripts/smoke-production.mjs [--site https://blueskyzlabs.com]
  */
+import { isLocalizedCanonicalRoute } from "./smoke-locales.mjs";
+
 const DEFAULT_SITE = "https://blueskyzlabs.com";
 
 function resolveSite() {
@@ -60,6 +62,11 @@ check("VI home responds 200 with the localized hero", async () => {
 
 check("zh-Hans home responds 200", async () => {
   const response = await get("/zh/");
+  assert(response.status === 200, `status ${response.status}`);
+});
+
+check("zh-Hant home responds 200", async () => {
+  const response = await get("/zh-hant/");
   assert(response.status === 200, `status ${response.status}`);
 });
 
@@ -130,8 +137,9 @@ check("root serves the bounded language gateway", async () => {
   assert(
     html.includes('data-language-choice="vi"') &&
       html.includes('data-language-choice="en"') &&
-      html.includes('data-language-choice="zh"'),
-    "root gateway must expose explicit VI/EN/zh choices",
+      html.includes('data-language-choice="zh"') &&
+      html.includes('data-language-choice="zh-hant"'),
+    "root gateway must expose explicit VI/EN/zh/zh-hant choices",
   );
 });
 
@@ -153,8 +161,8 @@ check("sitemap lists only canonical localized routes", async () => {
     `expected at least the 21 canonical URLs, got ${locs.length}`,
   );
   assert(
-    locs.every((loc) => /\/(en|vi|zh)\//.test(loc)),
-    "sitemap must only list localized canonical routes",
+    locs.every((loc) => isLocalizedCanonicalRoute(loc, site)),
+    "sitemap must only list same-origin localized canonical routes",
   );
 });
 
