@@ -16,7 +16,13 @@ const { lang } = Astro.props;
 
 const LABELS: Record<
   Language,
-  { heading: string; empty: string; unknown: string; invalidRequest: string; note: string }
+  {
+    heading: string;
+    empty: string;
+    unknown: string;
+    invalidRequest: string;
+    note: string;
+  }
 > = {
   en: {
     heading: "Preview",
