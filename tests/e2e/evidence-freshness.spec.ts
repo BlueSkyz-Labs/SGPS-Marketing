@@ -1,4 +1,5 @@
 import { expect, test } from "@playwright/test";
+import { openVerifyLayer } from "./verify-helpers.ts";
 
 test.describe("authored evidence freshness", () => {
   test("reviewed surfaces show the authored review date", async ({ page }) => {
@@ -20,7 +21,7 @@ test.describe("authored evidence freshness", () => {
   });
 
   test("no date is invented when metadata is absent", async ({ page }) => {
-    await page.goto("/en/products/");
+    await openVerifyLayer(page, "/en/verify/", "pages");
     const lens = page.locator('[data-integrity-lens][data-surface="products"]');
     await lens
       .locator("details")

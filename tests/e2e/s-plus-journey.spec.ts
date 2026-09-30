@@ -68,7 +68,7 @@ test("primary nav marks the current page with aria-current", async ({
   await page.goto("/en/about/");
   const primary = page.getByRole("navigation", { name: "Primary" });
   await expect(
-    primary.getByRole("link", { name: "About", exact: true }),
+    primary.getByRole("link", { name: "About BlueSkyz", exact: true }),
   ).toHaveAttribute("aria-current", "page");
   await expect(
     primary.getByRole("link", { name: "Products", exact: true }),
