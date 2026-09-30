@@ -51,14 +51,14 @@ lastReviewedAt: 2026-09-27
 # is an Owner feedback checkpoint (plan v5 W3.4).
 i18n:
   vi:
-    shortDescription: "Sổ tay số cho chủ nhà trọ tại Việt Nam: phòng, tiền thuê còn nợ, lịch sử đáng tin cậy và việc cần làm hôm nay."
+    shortDescription: "Sổ tay điện tử cho chủ nhà trọ ở Việt Nam: phòng, tiền phòng còn thiếu, lịch sử ghi chép đáng tin cậy và việc cần làm hôm nay."
     jobs:
-      - "Xem khoản nào chưa thu trong tháng và việc gì cần xử lý hôm nay"
-      - "Lưu giữ hồ sơ phòng, người thuê, chỉ số đồng hồ và phí hằng tháng một cách đáng tin cậy"
+      - "Xem tháng này còn ai chưa đóng tiền và hôm nay cần lo việc gì"
+      - "Ghi lại phòng, người thuê, số điện nước và các khoản thu hằng tháng cho gọn, cho chắc"
     capabilities:
-      - "Phạm vi phát triển: phí điện nước và hồ sơ thuê trọ có thể truy vết"
-      - "Phạm vi phát triển: biên nhận có thể kiểm tra và trạng thái thanh toán do con người xác nhận"
-      - "Mẫu tin nhắn Zalo/SMS tuỳ chọn để sao chép rồi tự mở, không tự động gửi"
+      - "Phạm vi phát triển: tiền điện nước và hồ sơ thuê phòng có thể truy vết"
+      - "Phạm vi phát triển: biên nhận có thể đối chiếu, trạng thái thanh toán do chính người dùng xác nhận"
+      - "Mẫu tin nhắn Zalo/SMS tùy chọn: sao chép rồi tự mở để gửi, không tự động gửi"
     primaryActionLabel: "Xem trước Sổ Trọ"
   zh:
     shortDescription: "面向越南房东的数字笔记本：房间、应收租金、可信的历史记录与今日待办。"
