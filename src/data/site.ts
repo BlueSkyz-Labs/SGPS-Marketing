@@ -102,6 +102,13 @@ export const SHARED_LABELS = {
   footerNav: { en: "Footer", vi: "Chân trang", zh: "页脚导航" },
   nextSteps: { en: "Next steps", vi: "Bước tiếp theo", zh: "下一步" },
   houseIndex: { en: "House index", vi: "Mục lục ngôi nhà", zh: "网站目录" },
+  // Accessible name for the One House principle matrix — the four principles
+  // render as cards, so the list needs a locale-aware label of its own.
+  brandPrinciples: {
+    en: "Brand principles",
+    vi: "Nguyên tắc thương hiệu",
+    zh: "品牌原则",
+  },
   platforms: { en: "Platforms", vi: "Nền tảng", zh: "平台" },
 } as const satisfies Record<string, LocalizedLabel>;
 
