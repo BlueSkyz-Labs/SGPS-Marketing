@@ -3,7 +3,10 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
 import Container from "@/components/layout/Container.astro";
 import PageHeader from "@/components/layout/PageHeader.astro";
 import SafeAction from "@/components/integrity/SafeAction.astro";
-import { SITE, SECURITY_ADVISORY_URL } from "@/data/site";
+import ProductSignInLane from "@/components/empty-state/ProductSignInLane.astro";
+import BusinessRouteState from "@/components/empty-state/BusinessRouteState.astro";
+import { EMPTY_STATE_COPY } from "@/data/empty-state-copy";
+import { SITE, SECURITY_ADVISORY_URL, labelFor } from "@/data/site";
 
 const hasBusinessEmail = Boolean(SITE.contactEmail);
 ---
@@ -18,7 +21,7 @@ const hasBusinessEmail = Boolean(SITE.contactEmail);
       <PageHeader
         eyebrow="Contact"
         title="Reach the right lane"
-        lede="Reach BlueSkyz through the lane that matches your need. Email addresses appear here when BlueSkyz publishes them."
+        lede={labelFor(EMPTY_STATE_COPY.contactLede, "en")}
       />
       <ul class="mt-12 grid gap-4 sm:grid-cols-2">
         <li class="flex min-w-0 flex-col rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-raised)] p-6">
@@ -36,12 +39,13 @@ const hasBusinessEmail = Boolean(SITE.contactEmail);
             />
           </div>
         </li>
-        <li class="flex flex-col rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-raised)] p-6">
-          <h2 class="text-lg font-semibold tracking-tight">
-            Business / general
-          </h2>
-          <p class="mt-2 flex-1 text-sm leading-relaxed text-[var(--text-secondary)]">
-            {hasBusinessEmail ? (
+        <ProductSignInLane lang="en" />
+        {hasBusinessEmail ? (
+          <li class="flex min-w-0 flex-col rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-raised)] p-6 sm:col-span-2">
+            <h2 class="text-lg font-semibold tracking-tight">
+              Business / general
+            </h2>
+            <p class="mt-2 flex-1 text-sm leading-relaxed text-[var(--text-secondary)]">
               <>
                 Email{" "}
                 <a
@@ -52,11 +56,15 @@ const hasBusinessEmail = Boolean(SITE.contactEmail);
                 </a>{" "}
                 for business inquiries.
               </>
-            ) : (
-              "A business email has not yet been verified. See About for published information. Private security reporting is exclusively for suspected vulnerabilities, not business or general enquiries."
-            )}
-          </p>
-        </li>
+            </p>
+          </li>
+        ) : (
+          <BusinessRouteState
+            lang="en"
+            heading="Business / general"
+            boundary="Private security reporting is exclusively for suspected vulnerabilities, not business or general enquiries."
+          />
+        )}
       </ul>
     </Container>
   </section>
