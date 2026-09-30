@@ -135,6 +135,19 @@ test.describe("C3-A Mobile Cinematic Composition", () => {
           width: viewport.width,
           height: viewport.height,
         });
+        // This spec audits scene composition, not language inference: seed the
+        // explicit choice (ADR 0009 key) so the transient locale suggestion is
+        // not the topmost element over the scene copy on a cross-locale route.
+        await page.addInitScript(
+          (language) => {
+            try {
+              window.localStorage.setItem("blueskyz.ui.language", language);
+            } catch {
+              // storage unavailable: the suggestion also stays absent.
+            }
+          },
+          route.split("/")[1] ?? "en",
+        );
         await page.goto(route);
         const report = await composition(page);
 
