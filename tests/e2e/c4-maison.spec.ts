@@ -14,7 +14,9 @@ for (const lang of ["en", "vi"] as const) {
     await page.goto(`/${lang}/`);
     await expect(page.locator("[data-maison-index]")).toHaveCount(0);
     await expect(
-      page.getByRole("navigation", { name: /House index|Mục lục ngôi nhà/ }),
+      page.getByRole("navigation", {
+        name: /House index|Mục lục ngôi nhà|Site index|Mục lục trang/,
+      }),
     ).toHaveCount(0);
   });
 

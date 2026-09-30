@@ -20,19 +20,19 @@ const products = (await getPublicProducts()).map((product) => ({
   name: product.data.name,
 }));
 const passport = getEvidencePassport(id ?? "", products);
-const title = passport ? `證據檔案：${passport.claim["zh-hant"]}` : "證據檔案";
+const title = passport ? `證據：${passport.claim["zh-hant"]}` : "證據";
 ---
 
 <BaseLayout
   title={title}
-  description={passport?.claim["zh-hant"] ?? "證據檔案"}
+  description={passport?.claim["zh-hant"] ?? "這項說法的證據"}
   path={`/zh-hant/evidence/${id}/`}
 >
   <section class="py-16 lg:py-24">
     <Container>
       <div class="max-w-3xl">
         <h1 class="evidence-passport__page-title" data-passport-page-title>
-          證據檔案
+          這項說法的證據
         </h1>
         <EvidencePassport id={id ?? ""} lang="zh-hant" products={products} />
       </div>

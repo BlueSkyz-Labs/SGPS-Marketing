@@ -9,6 +9,9 @@ import { getPublicProducts } from "@/lib/products";
 import IntentControl from "@/components/experience/IntentControl.astro";
 
 const products = await getPublicProducts();
+const allInDevelopment =
+  products.length > 0 &&
+  products.every((product) => product.data.lifecycle === "development");
 const emptyDescription = products.length
   ? "以真實狀態與證據探索 BlueSkyz Labs 產品。"
   : "產品僅在具備可核驗的公開證據時發布。";
@@ -23,8 +26,14 @@ const emptyDescription = products.length
   <section class="py-16 lg:py-20">
     <Container>
       <PageHeader
-        title="可供核驗的產品"
-        lede="產品將在可評估時展示於此。我們只發布您可以核驗的內容。"
+        title="我們的產品"
+        lede={
+          products.length === 0
+            ? "產品將在可評估時展示於此。我們只發布您可以核驗的內容。"
+            : allInDevelopment
+              ? "這裡的每項產品都還在開發中。每個頁面都註明產品狀態與依據。"
+              : "每個頁面都註明產品狀態與依據。"
+        }
       />
       {products.length === 0 ? (
         <div class="mt-12">
@@ -36,7 +45,7 @@ const emptyDescription = products.length
             id="published-products"
             class="text-xs font-semibold tracking-[0.18em] text-[var(--text-secondary)] uppercase"
           >
-            已發布的產品
+            {allInDevelopment ? "開發中" : "產品"}
           </h2>
           <div class="mt-6 grid gap-4 md:grid-cols-2">
             {products.map((product) => (
