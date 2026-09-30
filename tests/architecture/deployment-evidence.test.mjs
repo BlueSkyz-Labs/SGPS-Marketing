@@ -90,9 +90,9 @@ test("exact certification passes only when full ledger and expected SHA match", 
     const result = runCli([file, "--expected-sha", DEPLOYED_SHA]);
 
     assert.equal(result.status, 0, result.stdout + result.stderr);
-    assert.match(
+    assert.ok(
+      result.stdout.includes(`Deployment evidence: PASS (${DEPLOYED_SHA})`),
       result.stdout,
-      new RegExp(`Deployment evidence: PASS \\\(${DEPLOYED_SHA}\\\)`),
     );
   } finally {
     rmSync(dir, { recursive: true, force: true });
