@@ -292,6 +292,26 @@ test.describe("C3-A Editorial Typography — 200% text zoom", () => {
     }
   });
 
+  test("320px: the VI and ZH homepages reflow at 200% text", async ({
+    page,
+  }) => {
+    // The EN ladder above is the measured contract; trilingual parity means the
+    // VI and ZH homepages must satisfy the same 320px + 200% text condition, not
+    // only the 390px one covered by text-zoom.spec.ts.
+    await page.setViewportSize({ width: 320, height: 720 });
+    for (const route of ["/vi/", "/zh/"]) {
+      await page.goto(route);
+      await page.evaluate(() => {
+        document.documentElement.style.fontSize = "200%";
+      });
+      const result = await withNodes(page, await settledOverflow(page));
+      expect(
+        result.overflow,
+        describe(`${route} 200% zoom overflow`, result),
+      ).toBeLessThanOrEqual(1);
+    }
+  });
+
   test("text-spacing override is respected", async ({ page }) => {
     await page.setViewportSize({ width: 390, height: 844 });
     await page.goto("/en/");
@@ -331,6 +351,75 @@ test.describe("C3-A Editorial Typography — display hierarchy", () => {
       });
     expect(h1Styles.fontWeight).toBeGreaterThanOrEqual(500);
     expect(h1Styles.fontSize).toBeGreaterThanOrEqual(24);
+  });
+});
+
+test.describe("C3-A Editorial Typography — hero display type", () => {
+  /**
+   * Display tracking/leading are em-based, so assert the *ratios* (never px):
+   * a fluid font size must not fail the contract. VI carries stacked tone marks,
+   * so it is set looser and taller than EN while staying inside the display band.
+   */
+  async function heroType(page: Page) {
+    return page.locator("#hero-title").evaluate((el) => {
+      const computed = getComputedStyle(el);
+      const size = Number.parseFloat(computed.fontSize);
+      return {
+        tracking: Number.parseFloat(computed.letterSpacing) / size,
+        leading: Number.parseFloat(computed.lineHeight) / size,
+      };
+    });
+  }
+
+  test("VI tracking and leading are looser than EN, both stay display-tight", async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await page.goto("/en/");
+    const en = await heroType(page);
+    await page.goto("/vi/");
+    const vi = await heroType(page);
+
+    expect(en.tracking, JSON.stringify(en)).toBeCloseTo(-0.03, 2);
+    expect(en.leading, JSON.stringify(en)).toBeCloseTo(1.1, 2);
+    expect(vi.tracking, JSON.stringify(vi)).toBeCloseTo(-0.015, 2);
+    expect(vi.leading, JSON.stringify(vi)).toBeCloseTo(1.16, 2);
+    expect(vi.tracking).toBeGreaterThan(en.tracking);
+    expect(vi.tracking).toBeLessThan(0);
+    expect(vi.leading).toBeGreaterThan(en.leading);
+    expect(vi.leading).toBeLessThan(1.3);
+  });
+
+  test("320px at 200% text: the VI headline keeps every stack inside its box", async ({
+    page,
+  }) => {
+    // Tight display tracking is where Vietnamese diacritics collide; the locale
+    // rule must leave the heading box intact (no clipped marks), the same
+    // condition c4-optical-type.spec.ts guards for the house h2 at 100%.
+    await page.setViewportSize({ width: 320, height: 720 });
+    await page.goto("/vi/");
+    await page.evaluate(() => {
+      document.documentElement.style.fontSize = "200%";
+    });
+    const box = await page.locator("#hero-title").evaluate((el) => {
+      const computed = getComputedStyle(el);
+      return {
+        horizontal:
+          el.scrollWidth > el.clientWidth + 1 &&
+          computed.overflowX === "hidden",
+        vertical:
+          el.scrollHeight > el.clientHeight + 1 &&
+          computed.overflowY === "hidden",
+        tracking: computed.letterSpacing,
+        lineHeight: computed.lineHeight,
+      };
+    });
+    expect(box.horizontal, `heading box clips: ${JSON.stringify(box)}`).toBe(
+      false,
+    );
+    expect(box.vertical, `heading box clips: ${JSON.stringify(box)}`).toBe(
+      false,
+    );
   });
 });
 
