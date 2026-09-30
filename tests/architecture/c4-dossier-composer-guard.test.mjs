@@ -12,6 +12,7 @@ import { existsSync, readFileSync } from "node:fs";
 import { test } from "node:test";
 
 const MODULE = "src/scripts/dossier-composer.ts";
+const URL_STATE = "src/lib/dossier-url-state.ts";
 
 const FORBIDDEN = [
   ["fetch(", "network request"],
@@ -66,17 +67,28 @@ test("the composer reads only allowlisted public ids from the URL", () => {
     /item\.textContent/,
     "rejected URL state must remain text-only",
   );
-  // state may arrive only through validated query parameters
+  // URL parsing lives in a small pure module; the DOM composer only consumes
+  // its bounded result.
+  const urlState = readFileSync(URL_STATE, "utf8");
   assert.match(
-    source,
-    /URLSearchParams|searchParams/,
-    "selection must be read from validated URL parameters",
+    urlState,
+    /URLSearchParams/,
+    "selection must be parsed from URLSearchParams",
   );
-  assert.equal(
-    /history\.(pushState|replaceState)/.test(source) &&
-      !/URLSearchParams|searchParams/.test(source),
-    false,
-    "URL state must be parsed, never trusted",
+  assert.match(
+    urlState,
+    /MAX_DOSSIER_URL_VALUE_CHARS/,
+    "raw query value must be length-bounded before DOM rendering",
+  );
+  assert.match(
+    urlState,
+    /MAX_DOSSIER_URL_ITEMS/,
+    "query token count must be bounded before DOM rendering",
+  );
+  assert.doesNotMatch(
+    source + urlState,
+    /history\.(pushState|replaceState)/,
+    "dossier URL state is read-only and must never rewrite navigation state",
   );
 });
 
