@@ -1,6 +1,7 @@
 import type { APIRoute } from "astro";
 import { SITE } from "@/data/site";
 import { getPublicProducts } from "@/lib/products";
+import { getGuideProducts } from "@/lib/showcases";
 import { absoluteUrl, PUBLIC_STATIC_PATHS } from "@/lib/seo";
 import { getEvidencePassportIds } from "@/lib/claims";
 import { EDITIONS } from "@/data/editions";
@@ -18,6 +19,9 @@ export const GET: APIRoute = async () => {
     slug: product.data.slug,
     name: product.data.name,
   }));
+  const guideSlugs = (await getGuideProducts()).map(
+    ({ product }) => product.data.slug,
+  );
   const evidenceIds = getEvidencePassportIds(products);
   const locs = isNonProductionSiteUrl(SITE.url)
     ? []
@@ -26,6 +30,11 @@ export const GET: APIRoute = async () => {
         ...SUPPORTED_LANGUAGES.flatMap((lang) =>
           products.map((product) =>
             absoluteUrl(SITE.url, `/${lang}/products/${product.slug}/`),
+          ),
+        ),
+        ...SUPPORTED_LANGUAGES.flatMap((lang) =>
+          guideSlugs.map((slug) =>
+            absoluteUrl(SITE.url, `/${lang}/products/${slug}/guide/`),
           ),
         ),
         ...SUPPORTED_LANGUAGES.flatMap((lang) =>

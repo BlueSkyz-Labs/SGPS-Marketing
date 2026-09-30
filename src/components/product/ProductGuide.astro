@@ -1,0 +1,234 @@
+---
+import type { CollectionEntry } from "astro:content";
+import type { Language } from "@/lib/i18n";
+import type { ShowcaseSchema } from "@/lib/showcase-schema";
+import Container from "@/components/layout/Container.astro";
+import ButtonLink from "@/components/ui/ButtonLink.astro";
+import { labelFor, SHARED_LABELS } from "@/data/site";
+
+/**
+ * GOLIVE W5 — onboarding guide built only from the product's recorded real
+ * screens. Each step names who does it (owner on a computer, or a family
+ * member on a paired phone) and shows the exact screen it refers to.
+ */
+interface Props {
+  product: CollectionEntry<"products">;
+  showcase: ShowcaseSchema;
+  lang: Language;
+}
+
+const { product, showcase, lang } = Astro.props;
+const guide = showcase.guide!;
+const screens = new Map(showcase.screens.map((item) => [item.id, item]));
+const revision = showcase.capture.sourceRevision.slice(0, 7);
+const productHref = `/${lang}/products/${product.data.slug}/`;
+
+const COPY = {
+  en: {
+    back: `Back to ${product.data.name}`,
+    status: "In development — steps may change before release.",
+    disclosure: `Screens captured from a development build (revision ${revision}) with illustrative demo data.`,
+    owner: "Owner · computer",
+    family: "Family · phone",
+    step: "Step",
+    done: "That’s the daily loop. Questions or feedback?",
+    support: "Contact support",
+  },
+  vi: {
+    back: `Quay lại ${product.data.name}`,
+    status: "Đang phát triển — các bước có thể thay đổi trước khi phát hành.",
+    disclosure: `Màn hình chụp từ bản đang phát triển (phiên bản ${revision}) với dữ liệu minh hoạ.`,
+    owner: "Chủ trọ · máy tính",
+    family: "Người nhà · điện thoại",
+    step: "Bước",
+    done: "Vậy là xong vòng việc hằng ngày. Cần hỏi thêm hoặc góp ý?",
+    support: "Liên hệ hỗ trợ",
+  },
+  zh: {
+    back: `返回 ${product.data.name}`,
+    status: "开发中——正式发布前步骤可能会有变化。",
+    disclosure: `界面截图来自开发版本（修订 ${revision}），使用示例演示数据。`,
+    owner: "房东 · 电脑",
+    family: "家人 · 手机",
+    step: "步骤",
+    done: "日常流程就是这样。有问题或建议？",
+    support: "联系支持",
+  },
+} as const satisfies Record<Language, Record<string, string>>;
+const t = COPY[lang];
+const signInUrl = product.data.appAccess?.signInUrl;
+---
+
+<article class="guide py-12 sm:py-16" data-product-guide={product.data.slug}>
+  <Container>
+    <a class="guide__back" href={productHref}>
+      <span aria-hidden="true">←</span>
+      {t.back}
+    </a>
+    <header class="mt-6 max-w-3xl">
+      <p class="guide__status">{t.status}</p>
+      <h1 class="mt-3 text-3xl sm:text-4xl lg:text-5xl font-semibold tracking-tight text-[var(--text-primary)]">
+        {guide.title[lang]}
+      </h1>
+      <p class="mt-5 text-lg leading-relaxed text-[var(--text-secondary)]">
+        {guide.intro[lang]}
+      </p>
+      <p class="mt-3 text-sm text-[var(--text-muted)]" data-showcase-disclosure>
+        {t.disclosure}
+      </p>
+    </header>
+
+    <ol class="guide__steps" role="list">
+      {guide.steps.map((step, index) => {
+        const shot = screens.get(step.screen)!;
+        return (
+          <li
+            class="guide__step"
+            data-surface={shot.surface}
+            id={`step-${step.id}`}
+          >
+            <div class="guide__text">
+              <p class="guide__meta">
+                <span class="guide__num">
+                  {t.step} {index + 1}
+                </span>
+                <span class="guide__role" data-role={step.role}>
+                  {step.role === "owner" ? t.owner : t.family}
+                </span>
+              </p>
+              <h2 class="mt-3 text-xl sm:text-2xl font-semibold tracking-tight text-[var(--text-primary)]">
+                {step.title[lang]}
+              </h2>
+              <p class="mt-3 text-base leading-relaxed text-[var(--text-secondary)]">
+                {step.body[lang]}
+              </p>
+            </div>
+            <figure class="guide__shot view-rise m-0">
+              <img
+                src={shot.src}
+                alt={shot.alt[lang]}
+                width={shot.width}
+                height={shot.height}
+                loading={index < 1 ? "eager" : "lazy"}
+                decoding="async"
+              />
+            </figure>
+          </li>
+        );
+      })}
+    </ol>
+
+    <footer class="guide__footer">
+      <p class="text-lg font-semibold text-[var(--text-primary)]">{t.done}</p>
+      <div class="mt-5 flex flex-wrap gap-3">
+        {signInUrl ? (
+          <ButtonLink href={signInUrl}>
+            {labelFor(SHARED_LABELS.signIn, lang)} · {product.data.name}
+          </ButtonLink>
+        ) : null}
+        <ButtonLink href={`/${lang}/support/`} variant="secondary">
+          {t.support}
+        </ButtonLink>
+      </div>
+    </footer>
+  </Container>
+</article>
+
+<style>
+  .guide__back {
+    display: inline-flex;
+    min-height: 2.75rem;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--action-primary);
+    text-decoration: none;
+  }
+  .guide__back:hover {
+    text-decoration: underline;
+  }
+  .guide__status {
+    display: inline-block;
+    border-radius: 999px;
+    border: 1px solid var(--border-subtle);
+    background: var(--surface-raised);
+    padding: 0.25rem 0.75rem;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+  }
+  .guide__steps {
+    margin: 3.5rem 0 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    gap: 4rem;
+    counter-reset: none;
+  }
+  .guide__step {
+    display: grid;
+    gap: 1.5rem;
+    align-items: center;
+  }
+  @media (min-width: 48rem) {
+    .guide__step {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: 3rem;
+    }
+    .guide__step[data-surface="phone"] {
+      grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+    }
+    .guide__step:nth-child(even) .guide__text {
+      order: 2;
+    }
+  }
+  .guide__meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .guide__num {
+    color: var(--badge-ink, var(--text-secondary));
+  }
+  .guide__role {
+    border-radius: 999px;
+    padding: 0.125rem 0.625rem;
+    border: 1px solid var(--border-subtle);
+    color: var(--text-secondary);
+  }
+  .guide__role[data-role="owner"] {
+    border-color: color-mix(
+      in srgb,
+      var(--brand-cobalt) 45%,
+      var(--border-subtle)
+    );
+  }
+  .guide__shot img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 0.875rem;
+    border: 1px solid var(--border-subtle);
+    box-shadow: 0 24px 48px -28px color-mix(in srgb, #0b1020 50%, transparent);
+  }
+  .guide__step[data-surface="phone"] .guide__shot {
+    max-width: 19rem;
+    justify-self: center;
+  }
+  .guide__step[data-surface="phone"] .guide__shot img {
+    border-radius: 1.75rem;
+    border-width: 6px;
+    border-color: color-mix(in srgb, var(--text-primary) 12%, transparent);
+  }
+  .guide__footer {
+    margin-top: 5rem;
+    border-top: 1px solid var(--border-subtle);
+    padding-top: 2.5rem;
+  }
+</style>
