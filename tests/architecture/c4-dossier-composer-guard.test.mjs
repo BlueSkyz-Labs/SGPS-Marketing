@@ -56,6 +56,16 @@ test("the composer never transmits, persists or loads remote code", () => {
 
 test("the composer reads only allowlisted public ids from the URL", () => {
   const source = readFileSync(MODULE, "utf8");
+  assert.match(
+    source,
+    /parseDossierUrlState/,
+    "attacker-controlled query state must pass through the bounded parser",
+  );
+  assert.match(
+    source,
+    /item\.textContent/,
+    "rejected URL state must remain text-only",
+  );
   // state may arrive only through validated query parameters
   assert.match(
     source,
