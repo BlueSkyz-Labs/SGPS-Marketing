@@ -58,6 +58,14 @@
   --brand-porcelain: #f7f8fa;
   --brand-cobalt: #2564ff;
   --surface-primary: var(--brand-porcelain);
+  /* Alternate section band: identical to the page in light, one step lifted in
+     dark so sections separate by surface instead of hairlines alone. */
+  --surface-band: var(--brand-porcelain);
+  /* Grid contract (Experience v6 S6): every shell and section container shares
+     one max width and one gutter scale, so header, hero, sections and footer
+     start on the same left edge at every viewport. */
+  --site-max: 1320px;
+  --site-gutter: 1.25rem;
   /* Frosted header surface: the same scene token at 82% so a translucent
      surface can never drift away from the scene's text colour. */
   --surface-primary-glass: rgba(247, 248, 250, 0.82);
@@ -140,6 +148,7 @@
   --surface-primary: var(--brand-ink);
   --surface-primary-glass: rgba(11, 16, 32, 0.82);
   --surface-subtle: #0f172a;
+  --surface-band: #0d1426;
   --surface-inverse: var(--brand-porcelain);
   --surface-raised: #0f172a;
   --text-primary: #ffffff;
@@ -167,6 +176,7 @@
     --surface-primary: var(--brand-ink);
     --surface-primary-glass: rgba(11, 16, 32, 0.82);
     --surface-subtle: #0f172a;
+    --surface-band: #0d1426;
     --surface-inverse: var(--brand-porcelain);
     --surface-raised: #0f172a;
     --text-primary: #ffffff;
@@ -181,6 +191,25 @@
     --action-fill: #2564ff;
     --action-primary-hover: #1d4ed8;
   }
+}
+
+@media (min-width: 640px) {
+  :root {
+    --site-gutter: 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  :root {
+    --site-gutter: 2rem;
+  }
+}
+
+.site-container {
+  width: 100%;
+  max-width: var(--site-max);
+  margin-inline: auto;
+  padding-inline: var(--site-gutter);
 }
 
 /* Specular hairline border: subtle top highlight, degrades gracefully. */
@@ -305,11 +334,10 @@ body {
       color-mix(in srgb, var(--brand-cobalt) 28%, transparent),
       transparent 70%
     ),
-    linear-gradient(
-      90deg,
-      transparent 48%,
-      color-mix(in srgb, var(--brand-cobalt) 18%, transparent) 62%,
-      transparent 76%
+    radial-gradient(
+      30rem 20rem at 50% 100%,
+      color-mix(in srgb, var(--brand-cobalt) 12%, transparent),
+      transparent 72%
     );
 }
 
@@ -880,9 +908,9 @@ summary {
 /* v3 Wave 2 — integrity lens, evidence depth, bilingual mirror. */
 .integrity-lens,
 .bilingual-mirror {
-  max-width: 72rem;
+  max-width: var(--site-max);
   margin: 0 auto;
-  padding: 2.5rem 1.5rem;
+  padding: 2.5rem var(--site-gutter);
   border-top: 1px solid var(--border-subtle);
 }
 .integrity-lens__title,
@@ -1344,11 +1372,7 @@ html[data-intent] [data-journey-bar] li[data-evidence-first="true"] a {
   transform: translateY(-1px);
 }
 .decision-room__add[aria-pressed="true"] {
-  background: color-mix(
-    in srgb,
-    var(--brand-cobalt) 10%,
-    var(--surface-raised)
-  );
+  background: color-mix(in srgb, var(--brand-cobalt) 5%, var(--surface-raised));
   box-shadow: inset 0 0 0 1px var(--action-primary);
 }
 
@@ -1478,5 +1502,50 @@ h3 {
   to {
     opacity: 1;
     transform: none;
+  }
+}
+
+/* Experience v6 S6 — dark composed as its own stage/surface system.
+   The hero is a deeper stage than the page; alternate sections sit on a lifted
+   band; no vertical light band crosses the hero on narrow screens. */
+[data-theme="dark"] .hero-plane--ink {
+  background:
+    radial-gradient(
+      60rem 34rem at 82% 40%,
+      color-mix(in srgb, var(--brand-cobalt) 30%, transparent),
+      transparent 64%
+    ),
+    linear-gradient(165deg, #0a1124 0%, #060a16 55%, #04060d 100%);
+  box-shadow: inset 0 -1px 0
+    color-mix(in srgb, var(--brand-cobalt) 38%, transparent);
+}
+
+[data-theme="dark"] .c2-product-house,
+[data-theme="dark"] main > section:not(.hero-plane):nth-of-type(even) {
+  background: var(--surface-band);
+  /* Explicit text colour: the banded surface never relies on colour inherited
+     from the root, so the section pairs text and surface in one rule. */
+  color: var(--text-primary);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .hero-plane--ink {
+    background:
+      radial-gradient(
+        60rem 34rem at 82% 40%,
+        color-mix(in srgb, var(--brand-cobalt) 30%, transparent),
+        transparent 64%
+      ),
+      linear-gradient(165deg, #0a1124 0%, #060a16 55%, #04060d 100%);
+    box-shadow: inset 0 -1px 0
+      color-mix(in srgb, var(--brand-cobalt) 38%, transparent);
+  }
+
+  :root:not([data-theme="light"]) .c2-product-house,
+  :root:not([data-theme="light"])
+    main
+    > section:not(.hero-plane):nth-of-type(even) {
+    background: var(--surface-band);
+    color: var(--text-primary);
   }
 }
