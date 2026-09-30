@@ -51,7 +51,7 @@ lastReviewedAt: 2026-09-27
 # is an Owner feedback checkpoint (plan v5 W3.4).
 i18n:
   vi:
-    shortDescription: "Cuốn sổ số cho chủ nhà trọ ở Việt Nam: phòng, tiền phòng còn thiếu, lịch sử ghi chép đáng tin cậy và việc cần làm hôm nay."
+    shortDescription: "Sổ tay điện tử cho chủ nhà trọ ở Việt Nam: phòng, tiền phòng còn thiếu, lịch sử ghi chép đáng tin cậy và việc cần làm hôm nay."
     jobs:
       - "Xem tháng này còn ai chưa đóng tiền và hôm nay cần lo việc gì"
       - "Ghi lại phòng, người thuê, số điện nước và các khoản thu hằng tháng cho gọn, cho chắc"
