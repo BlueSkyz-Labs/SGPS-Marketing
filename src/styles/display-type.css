@@ -80,9 +80,11 @@
   --type-d1-tracking: -0.02em;
   /* VALIDATED in S4 screenshots: a sentence-length promise in the ~540 px hero
      column at the full d1 72 px wrapped to five lines on /vi/ at 1440 px, so
-     the promise variant caps at 3.5rem (56 px). Short display statements keep
-     d1. */
-  --type-d1-promise: clamp(2.25rem, 1.55rem + 2.6vw, 3.5rem);
+     the promise variant caps at 3.5rem (56 px). Its 390 px floor is 1.75rem
+     (28 px, the display minimum): at 36 px the same sentence took 5 (EN) to 7
+     (VI) lines and pushed the flagship CTA below the 844 px fold. Short display
+     statements keep d1. */
+  --type-d1-promise: clamp(1.75rem, 1.05rem + 2.6vw, 3.5rem);
   --type-d2: clamp(1.75rem, 1.3rem + 1.8vw, 2.75rem);
   --type-d2-leading: 1.15;
   --type-d2-tracking: -0.015em;
