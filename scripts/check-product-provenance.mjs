@@ -228,6 +228,13 @@ for (const file of files) {
         problems.push(
           `qualification relationship ${qualification.relationship ?? "<missing>"} is not accepted`,
         );
+      } else if (
+        qualification.relationship === "EXACT_DEFAULT_HEAD" &&
+        qualification.checkedDefaultHead !== revision
+      ) {
+        problems.push(
+          `qualification relationship EXACT_DEFAULT_HEAD requires sourceRevision ${revision} to equal checkedDefaultHead ${qualification.checkedDefaultHead ?? "<missing>"}`,
+        );
       }
     }
   }
