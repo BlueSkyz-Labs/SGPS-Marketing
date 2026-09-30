@@ -58,9 +58,9 @@ i18n:
       - "Viết ra những suy nghĩ riêng tư, theo nhịp của bạn"
       - "Đọc lại nhật ký và kỷ niệm của mình"
     capabilities:
-      - "Viết nhật ký, ưu tiên lưu trên máy, trong Personal Vault riêng tư"
+      - "Viết nhật ký trong Personal Vault riêng tư, ưu tiên lưu trên máy"
       - "Bạn tự xuất bài viết ra máy của mình"
-      - "Lưu trong Vault riêng tư, có nêu rõ giới hạn của việc khôi phục"
+      - "Lưu trong Vault riêng tư, với giới hạn khôi phục được nêu rõ"
     primaryActionLabel: "Xem trước Sổ Tâm"
   zh:
     shortDescription: "本地优先的日记，用来写下私密的所思所想，留住个人回忆。"

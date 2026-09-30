@@ -55,7 +55,7 @@ lastReviewedAt: 2026-09-30
 # is an Owner feedback checkpoint (plan v5 W3.4).
 i18n:
   vi:
-    shortDescription: "Sổ tay điện tử cho chủ trọ ở Việt Nam: nắm phòng, tiền phòng chưa thu, sổ sách rõ ràng và việc cần làm hôm nay."
+    shortDescription: "Sổ tay điện tử cho chủ trọ ở Việt Nam: nắm phòng, khoản tiền chưa thu, sổ sách rõ ràng và việc cần làm hôm nay."
     jobs:
       - "Xem tháng này còn ai chưa đóng tiền và hôm nay cần lo việc gì"
       - "Ghi lại phòng, người thuê, số điện nước và các khoản thu hằng tháng cho gọn, cho chắc"
