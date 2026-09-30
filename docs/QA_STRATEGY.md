@@ -44,7 +44,7 @@ Full Playwright matrix and Lighthouse are promotion/preview evidence, not every-
 - **Quality Gates** — frozen install, dependency vulnerability audit, architecture contracts (`test:architecture`), typecheck, lint, format, static build, then the assurance gates in order: `check:client-budget`, `check:static-links`, `check:publishability`, `check:integrity-firewall`, `verify:git-evidence`, `check:promotion-state`, `check:deployment-evidence`, `check:product-provenance`.
 - **Browser Assurance** — the repository E4 Playwright/axe matrix across Chromium, Firefox, WebKit/Safari-class and mobile Chromium, followed by Lighthouse CI after `Quality Gates` succeeds.
 
-The checkout uses `fetch-depth: 0` so `verify:git-evidence` can resolve every cited revision to a real commit object and prove it is reachable from the candidate (no SHA-shaped strings, no squash-orphaned revisions). `check:promotion-state` reports `source`, `deployment` and `public-truth` with `PASS | FAIL | BLOCKED_OWNER_FACT`: an absent owner fact (contact/security email) is blocked, never a failure and never a pass. `check:deployment-evidence` validates the newest post-merge read-back ledger (declared revision + smoke `PASS` + host mention). `check:product-provenance` fails closed if a listed product cites a `sourceRevision` that does not resolve; an empty registry reports `IDLE`, not a silent pass.
+The checkout uses `fetch-depth: 0` so `verify:git-evidence` can resolve every cited revision to a real commit object and prove it is reachable from the candidate (no SHA-shaped strings, no squash-orphaned revisions). `check:promotion-state` reports four distinct boundaries: `source`, `deployment-contract`, `provider-deployment` and `public-truth`. The repository one-shot deploy script may earn `deployment-contract PASS`, but authoritative Cloudflare Workers Builds is always `provider-deployment NOT_VERIFIED` in this offline checker until independently read back; an absent owner fact remains `BLOCKED_OWNER_FACT`, never PASS. `check:deployment-evidence` validates the newest post-merge read-back ledger (declared revision + smoke `PASS` + host mention). `check:product-provenance` fails closed if a listed product cites a `sourceRevision` that does not resolve; an empty registry reports `IDLE`, not a silent pass.
 
 #### C2 contract suites (inside `test:architecture`)
 
@@ -105,6 +105,8 @@ branch: main
 command: pnpm install --frozen-lockfile && pnpm validate:public-truth && pnpm build && pnpm check:client-budget && pnpm check:static-links
 preview branches: enabled
 ```
+
+This block is the **required target configuration**, not source proof of the live provider state. Current Cloudflare branch/build/deploy settings must be independently read back and kept fresh (see #369); `check:promotion-state` cannot certify them from repository source.
 
 Preview builds may omit `validate:public-truth` when production-only email variables are intentionally absent, but must still build and pass static gates (`check:client-budget`, `check:static-links`).
 
