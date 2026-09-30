@@ -29,7 +29,7 @@ const COPY = {
     disclosure: `Captured from a development build (revision ${revision}, ${capturedOn}) with illustrative demo data — no real tenants, payments or personal data.`,
     video: "Quick introduction",
     videoNote:
-      "Silent video with Vietnamese on-screen text; English subtitles are available in the player.",
+      "Silent video with Vietnamese on-screen text; subtitles in English, Vietnamese and Chinese are available in the player.",
     phone: "On a family member’s phone",
     phoneRail: "Phone screens — scroll sideways or use the arrow keys",
     desktop: "On the owner’s computer",
@@ -41,7 +41,7 @@ const COPY = {
     disclosure: `Ảnh chụp từ bản đang phát triển (phiên bản ${revision}, ${capturedOn}) với dữ liệu minh hoạ — không có người thuê, khoản thu hay dữ liệu cá nhân thật.`,
     video: "Giới thiệu nhanh",
     videoNote:
-      "Video không có tiếng, chữ tiếng Việt hiển thị trên hình; có phụ đề tiếng Anh trong trình phát.",
+      "Video không có tiếng, chữ tiếng Việt hiển thị trên hình; trình phát có phụ đề tiếng Anh, tiếng Việt và tiếng Trung.",
     phone: "Trên điện thoại của người nhà",
     phoneRail: "Màn hình điện thoại — vuốt ngang hoặc dùng phím mũi tên",
     desktop: "Trên máy tính của chủ trọ",
@@ -52,11 +52,24 @@ const COPY = {
     heading: `${productName} 实际使用`,
     disclosure: `截图来自开发版本（修订 ${revision}，${capturedOn}），使用示例演示数据——不含真实租客、付款或个人数据。`,
     video: "快速介绍",
-    videoNote: "无声视频，画面内为越南语文字；播放器中提供英文字幕。",
+    videoNote:
+      "无声视频，画面内为越南语文字；播放器中提供英文、越南语及中文字幕。",
     phone: "家人的手机上",
     phoneRail: "手机界面——左右滑动或使用方向键",
     desktop: "房东的电脑上",
     guide: "阅读入门指南",
+  },
+  "zh-hant": {
+    eyebrow: "真實介面",
+    heading: `${productName} 實際使用`,
+    disclosure: `截圖來自開發版本（修訂 ${revision}，${capturedOn}），使用示例演示資料——不含真實租客、付款或個人資料。`,
+    video: "快速介紹",
+    videoNote:
+      "無聲影片，畫面內為越南語文字；播放器中提供英文、越南語及中文字幕。",
+    phone: "家人的手機上",
+    phoneRail: "手機介面——左右滑動或使用方向鍵",
+    desktop: "房東的電腦上",
+    guide: "閱讀入門指南",
   },
 } as const satisfies Record<Language, Record<string, string>>;
 
@@ -70,6 +83,7 @@ const PAGE_TRACK: Record<Language, string | null> = {
   en: "en",
   vi: null,
   zh: "zh-Hans",
+  "zh-hant": "zh-Hant",
 };
 const wanted = PAGE_TRACK[lang];
 const defaultTrack = wanted
