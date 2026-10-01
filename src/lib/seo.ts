@@ -138,7 +138,7 @@ export const DEFAULT_OG_IMAGE = {
  */
 export const DEFAULT_OG_IMAGE_ALT: Record<Language, string> = {
   en: DEFAULT_OG_IMAGE.alt,
-  vi: 'Chữ BlueSkyz Labs và dòng "Trí tuệ. Nâng tầm. Tác động." bên cạnh một biểu tượng góc cạnh sáng trên nền Trái Đất nhìn từ vũ trụ',
+  vi: 'Chữ BlueSkyz Labs và khẩu hiệu "Trí tuệ. Nâng tầm. Tác động." cạnh biểu tượng góc cạnh phát sáng, nền là Trái Đất nhìn từ vũ trụ',
   zh: "BlueSkyz Labs 字标与标语“智能。提升。影响。”，旁边是明亮的棱角标志，背景为从太空俯瞰的地球",
   "zh-hant":
     "BlueSkyz Labs 字標與標語「智慧。提升。影響。」，旁邊是明亮的稜角標誌，背景為從太空俯瞰的地球",

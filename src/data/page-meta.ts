@@ -35,12 +35,12 @@ export const PAGE_META: Record<Language, Record<StaticPageKey, PageMeta>> = {
         "Cách liên hệ BlueSkyz Labs: báo lỗ hổng bảo mật riêng tư qua GitHub. Hộp thư cho hợp tác và câu hỏi chung sẽ được đăng tại đây khi sẵn sàng.",
     },
     privacy: {
-      title: "Quyền riêng tư: không cookie, chỉ lưu ngôn ngữ và giao diện",
+      title: "Quyền riêng tư: không dùng cookie, chỉ lưu ngôn ngữ và giao diện",
       description:
         "Trang web này không đặt cookie và chỉ lưu ngôn ngữ, giao diện do bạn chọn trong trình duyệt. Xem chúng tôi thu thập gì và không thu thập gì.",
     },
     support: {
-      title: "Hỗ trợ: cách nhận trợ giúp",
+      title: "Hỗ trợ: cách được trợ giúp",
       description:
         "Cách nhận trợ giúp cho Sổ Trọ và Sổ Tâm. Hiện chưa có hộp thư hỗ trợ chung; kênh báo cáo bảo mật riêng tư chỉ dành cho lỗ hổng bảo mật.",
     },
