@@ -134,7 +134,7 @@ export const PRODUCT_META: Record<string, Record<Language, PageMeta>> = {
     vi: {
       title: "Sổ Trọ – sổ tay điện tử cho chủ trọ",
       description:
-        "Sổ Trọ giúp chủ trọ nắm phòng, tiền phòng chưa thu, tiền điện nước theo chỉ số công tơ và biên nhận. Đang phát triển; ảnh chụp từ bản thử, dữ liệu minh hoạ.",
+        "Sổ Trọ giúp chủ trọ nắm phòng, khoản tiền chưa thu, tiền điện nước theo chỉ số công tơ và biên nhận. Đang phát triển; ảnh chụp từ bản thử, dữ liệu minh hoạ.",
     },
     en: {
       title: "Sổ Trọ: a digital notebook for landlords",
