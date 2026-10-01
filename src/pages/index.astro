@@ -6,15 +6,23 @@ import {
   canonicalForPath,
   defaultOgImagePath,
   hreflangLinks,
+  organizationJsonLd,
+  safeJsonLd,
+  websiteJsonLd,
   xDefaultPath,
 } from "@/lib/seo";
 import { isNonProductionSiteUrl } from "@/lib/truth";
 
 // Language gateway: indexable and the home cluster's x-default (Owner
 // decision F16, 2026-10-01). Single all-locale title and description.
-const title = "BlueSkyz Labs | Sổ Trọ và Sổ Tâm";
+// English-first and single-language: the page is a language selector, so the
+// title says so and the description names the four languages by endonym.
+const title = "BlueSkyz Labs | Choose your language";
 const description =
-  "BlueSkyz Labs builds Sổ Trọ and Sổ Tâm, both in development. Chọn ngôn ngữ · Choose your language.";
+  "Choose a language for BlueSkyz Labs, which is building Sổ Trọ and Sổ Tâm, both in development: English, Tiếng Việt, 简体中文 or 繁體中文.";
+// Google reads the site name from WebSite markup on the domain root, so the
+// gateway carries the same Organization and WebSite JSON-LD as every page.
+const structuredData = [organizationJsonLd(SITE.url), websiteJsonLd(SITE.url)];
 const canonical = canonicalForPath("/", SITE.url);
 // Brand Kit v4 website Open Graph card (1200x630), same committed asset as every
 // BaseLayout page, so a shared gateway link carries the kit card.
@@ -77,6 +85,13 @@ const robotsNoindex = isNonProductionSiteUrl(SITE.url);
       media="(prefers-color-scheme: dark)"
     />
     <title>{title}</title>
+    {structuredData.map((data) => (
+      <script
+        is:inline
+        type="application/ld+json"
+        set:html={safeJsonLd(data)}
+      ></script>
+    ))}
     <!--
       Static gateway (ADR 0009): all styling is inline so the first paint is
       already branded and scheme-correct with no stylesheet, font or script

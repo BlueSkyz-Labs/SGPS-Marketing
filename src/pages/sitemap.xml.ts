@@ -2,7 +2,7 @@ import type { APIRoute } from "astro";
 import { SITE } from "@/data/site";
 import { getPublicProducts } from "@/lib/products";
 import { getGuideProducts } from "@/lib/showcases";
-import { absoluteUrl, PUBLIC_STATIC_PATHS } from "@/lib/seo";
+import { absoluteUrl, isNoindexPath, PUBLIC_STATIC_PATHS } from "@/lib/seo";
 import { getEvidencePassportIds } from "@/lib/claims";
 import { EDITIONS } from "@/data/editions";
 import { SUPPORTED_LANGUAGES } from "@/lib/i18n";
@@ -28,7 +28,9 @@ export const GET: APIRoute = async () => {
     : [
         // Language gateway (Owner decision F16, 2026-10-01): indexable.
         absoluteUrl(SITE.url, "/"),
-        ...PUBLIC_STATIC_PATHS.map((path) => absoluteUrl(SITE.url, path)),
+        ...PUBLIC_STATIC_PATHS.filter((path) => !isNoindexPath(path)).map(
+          (path) => absoluteUrl(SITE.url, path),
+        ),
         ...SUPPORTED_LANGUAGES.flatMap((lang) =>
           products.map((product) =>
             absoluteUrl(SITE.url, `/${lang}/products/${product.slug}/`),
