@@ -88,7 +88,7 @@ test.describe("evidence passport", () => {
   }) => {
     await page.goto(ZH);
     const passport = page.locator(`[data-evidence-passport="${ID}"]`);
-    await expect(page.locator("html")).toHaveAttribute("lang", "zh");
+    await expect(page.locator("html")).toHaveAttribute("lang", "zh-Hans");
     await expect(page).toHaveTitle(/证据：/);
     await expect(page.locator('meta[name="description"]')).toHaveAttribute(
       "content",

@@ -32,9 +32,9 @@ test.describe("C3-C trilingual parity", () => {
     }) => {
       await page.goto(route);
       await expect(page).toHaveURL(route);
-      // html lang must be zh.
+      // html lang must be zh-Hans (script subtag matches hreflang).
       const lang = await page.locator("html").getAttribute("lang");
-      expect(lang).toBe("zh");
+      expect(lang).toBe("zh-Hans");
       // A zh page must expose at least one CJK heading and no EN-only nav CTA.
       const cjk = await page
         .locator("main h1, main h2")

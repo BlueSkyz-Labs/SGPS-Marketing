@@ -182,7 +182,7 @@ test.describe("decision room", () => {
       [ZH, "比较声明", "比较声明", "并排比较最多四条公开声明。不下结论。"],
     ] as const) {
       await page.goto(path);
-      await expect(page.locator("html")).toHaveAttribute("lang", "zh");
+      await expect(page.locator("html")).toHaveAttribute("lang", "zh-Hans");
       await expect(page).toHaveTitle(new RegExp(title));
       await expect(page.getByRole("heading", { level: 1 })).toContainText(
         heading,

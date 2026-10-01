@@ -60,8 +60,16 @@ const {
  * names the brand (home) is used as authored. */
 const fullTitle = title.includes(SITE.name) ? title : `${title} | ${SITE.name}`;
 const currentLang = getLanguageFromPath(path);
-/** Traditional Chinese is routed as `zh-hant` but tagged with its BCP-47 script subtag. */
-const htmlLang = currentLang === "zh-hant" ? "zh-Hant" : currentLang;
+/** Chinese locales are routed as `zh` / `zh-hant` but tagged with their BCP-47
+ * script subtag (matches hreflang). CSS `:lang(zh)` matches both. */
+const htmlLang =
+  currentLang === "zh-hant"
+    ? "zh-Hant"
+    : currentLang === "zh"
+      ? "zh-Hans"
+      : currentLang;
+/** 404 pages are noindex and carry no alternates or site-level entities. */
+const isNotFoundPage = /\/404\/?$/.test(path);
 /** Social-card locale format is language_TERRITORY; this is presentation
  * metadata, never a market, residency or jurisdiction decision. */
 const OG_LOCALES = {
@@ -79,10 +87,9 @@ const ogImageUrl = absoluteUrl(SITE.url, ogImage);
 /** Pixel size and alt are only known for the committed default card. */
 const ogImageMeta = ogImage === defaultOgImagePath() ? DEFAULT_OG_IMAGE : null;
 const ogImageAlt = DEFAULT_OG_IMAGE_ALT[currentLang];
-const structuredData: Record<string, unknown>[] = [
-  organizationJsonLd(SITE.url),
-  websiteJsonLd(SITE.url),
-];
+const structuredData: Record<string, unknown>[] = isNotFoundPage
+  ? []
+  : [organizationJsonLd(SITE.url), websiteJsonLd(SITE.url)];
 const breadcrumb = breadcrumbJsonLd(currentLang, path, SITE.url);
 if (breadcrumb) structuredData.push(breadcrumb);
 const robotsNoindex = noindex || isNonProductionSiteUrl(SITE.url);
@@ -128,14 +135,18 @@ const robotsContent =
     <meta name="description" content={description} />
     <title>{fullTitle}</title>
     <link rel="canonical" href={canonical} />
-    {hreflangLinks(path, SITE.url).map((link) => (
-      <link rel="alternate" hreflang={link.hreflang} href={link.href} />
-    ))}
-    <link
-      rel="alternate"
-      hreflang="x-default"
-      href={canonicalForPath(xDefaultPath(path), SITE.url)}
-    />
+    {isNotFoundPage
+      ? null
+      : hreflangLinks(path, SITE.url).map((link) => (
+          <link rel="alternate" hreflang={link.hreflang} href={link.href} />
+        ))}
+    {isNotFoundPage ? null : (
+      <link
+        rel="alternate"
+        hreflang="x-default"
+        href={canonicalForPath(xDefaultPath(path), SITE.url)}
+      />
+    )}
     {robotsNoindex ? <meta name="robots" content={robotsContent} /> : null}
     <meta property="og:type" content="website" />
     <meta property="og:locale" content={ogLocale} />
