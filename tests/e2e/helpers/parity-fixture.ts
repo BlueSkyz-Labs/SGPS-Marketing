@@ -107,6 +107,16 @@ export async function startFixtureServer(): Promise<{
       : "";
   return {
     origin,
-    close: () => new Promise<void>((ok) => server.close(() => ok())),
+    close: () =>
+      new Promise<void>((ok) => {
+        server.close(() => ok());
+        // Chromium (notably under mobile emulation) opens speculative
+        // preconnect sockets that never send a request. `server.close()` alone
+        // waits for them until Node's headers/request timeouts (60s+), which
+        // blows the 30s test budget even though the page assertions passed.
+        // Nothing is mid-response here (every reply is a synchronous
+        // `res.end`), so dropping the remaining sockets is safe.
+        server.closeAllConnections();
+      }),
   };
 }

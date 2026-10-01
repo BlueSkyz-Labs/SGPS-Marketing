@@ -251,3 +251,35 @@ test("the mark is decorative and cites its brand source", () => {
   assert.match(SAIL, /horizontal-flat-dark\.svg/);
   assert.match(SAIL, /brand\/ is untouched/);
 });
+
+const DISPLAY_CSS = readFileSync("src/styles/display-type.css", "utf8");
+
+export function hasLcpMotionLock(css) {
+  const body = stripComments(css);
+  const rule = body.match(
+    /(\.hero-headline,\s*\.hero-headline \*,\s*\.hero-headline::before,\s*\.hero-headline::after)\s*\{([^}]*)\}/,
+  )?.[2];
+  return Boolean(
+    rule &&
+    /animation:\s*none\s*!important/.test(rule) &&
+    /transition:\s*none\s*!important/.test(rule),
+  );
+}
+
+test("the hero headline subtree has transitions and animations removed, not shortened", () => {
+  assert.equal(hasLcpMotionLock(DISPLAY_CSS), true);
+});
+
+test("negative proof: dropping or weakening the LCP motion lock is rejected", () => {
+  assert.equal(
+    hasLcpMotionLock(
+      DISPLAY_CSS.replace("transition: none !important;", "transition: none;"),
+    ),
+    false,
+  );
+  assert.equal(
+    hasLcpMotionLock(DISPLAY_CSS.replace(".hero-headline *,", "")),
+    false,
+  );
+  assert.equal(hasLcpMotionLock(""), false);
+});
