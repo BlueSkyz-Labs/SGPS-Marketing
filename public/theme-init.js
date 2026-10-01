@@ -10,6 +10,8 @@ try {
 
 /**
  * Engine-aware font preload. No storage writes and no remote access.
+ * Order matters: the display face (hero H1, the LCP element) is requested
+ * first so the 74 KB Inter Latin transfer cannot queue ahead of it.
  */
 try {
   const ua = navigator.userAgent ?? "";
@@ -18,14 +20,20 @@ try {
   if (sharesFontPreloadCache) {
     const lang = document.documentElement.lang || "en";
     const subsets = lang === "vi" ? ["latin", "vietnamese"] : ["latin"];
-    for (const subset of subsets) {
+    const preload = (href) => {
       const link = document.createElement("link");
       link.rel = "preload";
       link.as = "font";
       link.type = "font/woff2";
       link.crossOrigin = "anonymous";
-      link.href = `/fonts/inter-${subset}-opsz-v5.3.0.woff2`;
+      link.href = href;
       document.head.appendChild(link);
+    };
+    for (const subset of subsets) {
+      preload(`/fonts/plus-jakarta-sans-${subset}-700-v5.3.0.woff2`);
+    }
+    for (const subset of subsets) {
+      preload(`/fonts/inter-${subset}-opsz-v5.3.0.woff2`);
     }
   }
 } catch {

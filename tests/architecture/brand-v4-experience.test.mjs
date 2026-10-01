@@ -11,7 +11,10 @@ test("v4 hero uses the supplied website artwork and flat lockup", () => {
   // longer required IN the hero. Brand fidelity still means the v4 lockup, the
   // ink plane and the tagline contract — and the removed framed card must not
   // come back.
-  assert.match(hero, /BrandLockup/);
+  // Experience v6 S1: the header already carries the lockup, so the hero must
+  // not repeat it (audit E-05). The lockup contract is still asserted below on
+  // the BrandLockup component itself.
+  assert.doesNotMatch(hero, /BrandLockup/);
   assert.match(hero, /HorizonField/);
   assert.match(hero, /hero-plane--ink/);
   assert.doesNotMatch(hero, /hero-art-frame|brandAssets\.hero/);

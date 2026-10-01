@@ -13,9 +13,9 @@ import { expect, test } from "@playwright/test";
  * level-2 label itself while the published registry is non-empty.
  */
 const LOCALES = [
-  { route: "/en/products/", heading: "Published products" },
-  { route: "/vi/products/", heading: "Sản phẩm đã công bố" },
-  { route: "/zh/products/", heading: "已发布的产品" },
+  { route: "/en/products/", heading: "In development" },
+  { route: "/vi/products/", heading: "Đang phát triển" },
+  { route: "/zh/products/", heading: "开发中" },
 ] as const;
 
 for (const { route, heading } of LOCALES) {

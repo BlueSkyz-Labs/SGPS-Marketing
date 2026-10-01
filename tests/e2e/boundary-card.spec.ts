@@ -1,12 +1,12 @@
 import { expect, test } from "@playwright/test";
 
 const EN = {
-  establishes: "What this establishes",
-  notEstablishes: "What this does not establish",
+  establishes: "What this covers",
+  notEstablishes: "What this does not cover",
 };
 const VI = {
-  establishes: "Điều được xác lập",
-  notEstablishes: "Điều không được xác lập",
+  establishes: "Phạm vi áp dụng",
+  notEstablishes: "Ngoài phạm vi",
 };
 
 test.describe("boundary cards on trust routes", () => {

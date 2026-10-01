@@ -1,0 +1,56 @@
+---
+import type { Language } from "@/data/site";
+
+/**
+ * Experience v6 S1 — one compact proof band on the home: the existing Trust
+ * heading and line, one quiet link. `Trust.astro` (ledger cards, evidence
+ * teasers, Decision Room links) keeps its component and routes; S3 re-stages
+ * it on /verify, which this band links to.
+ */
+interface Props {
+  lang?: Language;
+}
+const { lang = "en" } = Astro.props;
+const isVi = lang === "vi";
+const isZh = lang === "zh";
+const isZhHant = lang === "zh-hant";
+---
+
+<section
+  class="reveal-planes border-b border-[var(--border-subtle)] py-12 lg:py-16"
+  data-reveal="plane"
+  aria-labelledby="trust-title"
+  data-trust-band
+>
+  <h2 id="trust-title" class="type-d2 text-balance">
+    {isVi
+      ? "Tin cậy bạn có thể xác minh"
+      : isZh
+        ? "您可以核实的信任"
+        : isZhHant
+          ? "您可以核實的信任"
+          : "Trust you can verify"}
+  </h2>
+  <p class="mt-3 max-w-2xl text-[var(--text-secondary)] text-pretty">
+    {isVi
+      ? "Đường dẫn đến quyền riêng tư, bảo mật và hỗ trợ là những tuyến đường hạng nhất — không phải khẩu hiệu."
+      : isZh
+        ? "隐私、安全与支持均为正式通道 — 而非口号。"
+        : isZhHant
+          ? "隱私、安全與支援均為正式通道 — 而非口號。"
+          : "Privacy, security, and support paths are first-class routes — not slogans."}
+  </p>
+  <a
+    href={`/${lang}/verify/`}
+    class="mt-4 inline-flex min-h-11 items-center text-sm font-semibold text-[var(--action-primary)] underline underline-offset-4 hover:no-underline"
+  >
+    {isVi
+      ? "Cách chúng tôi xác minh"
+      : isZh
+        ? "我们如何核验"
+        : isZhHant
+          ? "我們如何核驗"
+          : "How we verify"}{" "}
+    →
+  </a>
+</section>

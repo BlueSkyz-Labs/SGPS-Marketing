@@ -14,14 +14,15 @@ const LOCALES = ["en", "vi"];
 const homePath = (lang) => `src/pages/${lang}/index.astro`;
 
 /** Act components in the order the C2 design requires. */
-const ACT_ORDER = [
-  "Hero",
-  "FlagshipTheatre",
-  "ProductHouse",
+const ACT_ORDER = ["Hero", "FlagshipTheatre", "ProductHouse", "ProofBand"];
+
+/** Experience v6 S1: removed from the home (components stay in the repo). */
+const REMOVED_FROM_HOME = [
   "OneHouse",
   "Trust",
   "AboutBlueSkyz",
   "NextStep",
+  "MaisonIndex",
 ];
 
 /** Power-user surfaces that must no longer lead the homepage. */
@@ -45,7 +46,7 @@ function importedComponents(source) {
   );
 }
 
-test("both locales render the six acts in the approved order", () => {
+test("both locales render the S1 acts in the approved order", () => {
   for (const lang of LOCALES) {
     const source = readFileSync(homePath(lang), "utf8");
     const rendered = renderedComponents(source);
@@ -53,8 +54,14 @@ test("both locales render the six acts in the approved order", () => {
     assert.deepEqual(
       actSequence,
       ACT_ORDER,
-      `${lang} homepage act order drifted from the C2 contract`,
+      `${lang} homepage act order drifted from the S1 contract`,
     );
+    for (const removed of REMOVED_FROM_HOME) {
+      assert.ok(
+        !rendered.includes(removed),
+        `${lang} homepage must not render ${removed} (Experience v6 S1)`,
+      );
+    }
   }
 });
 
@@ -100,6 +107,19 @@ test("the flagship act consumes the product record instead of authoring facts", 
   assert.match(theatre, /data-product-cta=\{cta\.verb\}/);
   assert.match(theatre, /data\.publicLabel/);
   assert.match(theatre, /data\.primaryAction/);
+  // Experience v6 S2: the home hero states the brand promise (SITE.proposition)
+  // and presents the flagship from the same record (shortDescription, status
+  // chip, the one lifecycle-mapped action) with a labelled real capture; the
+  // home mounts the flagship act in its compact form.
+  const hero = readFileSync("src/components/sections/Hero.astro", "utf8");
+  assert.match(hero, /productCopy\(flagship\.data,\s*lang\)/);
+  assert.match(hero, /SITE\.proposition/);
+  assert.match(hero, /<FlagshipCapture/);
+  assert.match(hero, /copy\??\.shortDescription/);
+  assert.match(hero, /copy\??\.statusLabel/);
+  assert.match(hero, /resolveLifecycleCta/);
+  assert.match(hero, /data-product-cta=\{cta\.verb\}/);
+  assert.match(theatre, /compact\s*=\s*false/);
   assert.match(house, /data\.featuredTier/);
   // No invented product identity in the cinematic layer.
   assert.doesNotMatch(theatre, /\bLorem\b|placeholder product/i);
@@ -109,7 +129,8 @@ test("the flagship act consumes the product record instead of authoring facts", 
 test("localized homepages show the flagship once and continue with other products", () => {
   for (const lang of LOCALES) {
     const source = readFileSync(homePath(lang), "utf8");
-    assert.match(source, /<FlagshipTheatre product=\{flagship\}/, lang);
+    assert.match(source, /<FlagshipTheatre\s+product=\{flagship\}/, lang);
+    assert.match(source, /<FlagshipTheatre[^>]*\bcompact\b/s, lang);
     assert.match(
       source,
       new RegExp(

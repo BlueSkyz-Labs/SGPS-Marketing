@@ -21,16 +21,16 @@ const HOME_LABELS: Record<Language, string> = {
  */
 const DECLARED_ROUTE_LABELS: Record<string, Record<Language, string>> = {
   "decision-room": {
-    en: "Decision Room",
-    vi: "Phòng Quyết định",
-    zh: "决策室",
-    "zh-hant": "決策室",
+    en: "Compare the evidence",
+    vi: "So sánh bằng chứng",
+    zh: "对比证据",
+    "zh-hant": "對照證據",
   },
   evidence: {
-    en: "Evidence passport",
-    vi: "Hộ chiếu bằng chứng",
-    zh: "证据档案",
-    "zh-hant": "證據檔案",
+    en: "Evidence for this claim",
+    vi: "Bằng chứng cho nhận định này",
+    zh: "这条说法的证据",
+    "zh-hant": "這項說法的證據",
   },
 };
 
@@ -78,13 +78,7 @@ export function getBreadcrumbTrail(lang: Language, pathname: string): Crumb[] {
   ];
 }
 
-export function breadcrumbJsonLd(
-  lang: Language,
-  pathname: string,
-  siteUrl: string,
-) {
-  const trail = getBreadcrumbTrail(lang, pathname);
-  if (trail.length === 0) return null;
+function breadcrumbListJsonLd(trail: Crumb[], siteUrl: string) {
   return {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
@@ -95,4 +89,49 @@ export function breadcrumbJsonLd(
       item: canonicalForPath(crumb.path, siteUrl),
     })),
   } as const;
+}
+
+export function breadcrumbJsonLd(
+  lang: Language,
+  pathname: string,
+  siteUrl: string,
+) {
+  const trail = getBreadcrumbTrail(lang, pathname);
+  if (trail.length === 0) return null;
+  return breadcrumbListJsonLd(trail, siteUrl);
+}
+
+/**
+ * Trail for a product profile (Home > Products > product) and, when
+ * `guideName` is given, its guide (… > guide). Home and Products reuse the
+ * declared labels; the product name comes from the registry record and the
+ * guide name from the guide's own title. Fail-closed like the rest of this
+ * module: no declared Products label, no trail.
+ */
+export function getProductBreadcrumbTrail(
+  lang: Language,
+  slug: string,
+  productName: string,
+  guideName?: string,
+): Crumb[] {
+  const products = getBreadcrumbTrail(lang, `/${lang}/products/`);
+  if (products.length === 0) return [];
+  const productPath = `/${lang}/products/${slug}/`;
+  return [
+    ...products,
+    { name: productName, path: productPath },
+    ...(guideName ? [{ name: guideName, path: `${productPath}guide/` }] : []),
+  ];
+}
+
+export function productBreadcrumbJsonLd(
+  lang: Language,
+  slug: string,
+  productName: string,
+  siteUrl: string,
+  guideName?: string,
+) {
+  const trail = getProductBreadcrumbTrail(lang, slug, productName, guideName);
+  if (trail.length === 0) return null;
+  return breadcrumbListJsonLd(trail, siteUrl);
 }

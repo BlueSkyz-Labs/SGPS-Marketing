@@ -101,7 +101,51 @@ test("production smoke covers each actually published language", () => {
     "root gateway must expose the published zh-Hans route",
   );
   assert.ok(
-    smoke.includes("en|vi|zh"),
-    "sitemap gate must accept only published EN/VI/zh routes",
+    smoke.includes("isLocalizedCanonicalRoute(loc, site)"),
+    "sitemap gate must bind localized routes to the exact smoke origin",
   );
+  assert.ok(
+    smoke.includes('get("/zh-hant/")') &&
+      smoke.includes('data-language-choice="zh-hant"'),
+    "smoke must cover the published zh-Hant home and gateway choice",
+  );
+});
+
+test("smoke locale list is derived from i18n.ts and gates the sitemap", async () => {
+  const { SUPPORTED_LANGUAGES, isLocalizedCanonicalRoute } =
+    await import("../../scripts/smoke-locales.mjs");
+  assert.deepEqual(
+    [...SUPPORTED_LANGUAGES],
+    ["en", "vi", "zh", "zh-hant"],
+    "smoke locales must equal SUPPORTED_LANGUAGES in src/lib/i18n.ts",
+  );
+
+  const site = "https://blueskyzlabs.com";
+  for (const locale of SUPPORTED_LANGUAGES) {
+    assert.ok(
+      isLocalizedCanonicalRoute(`${site}/${locale}/products/`, site),
+      `sitemap gate must accept /${locale}/ on the canonical origin`,
+    );
+  }
+
+  // Negative proofs: unsupported/malformed locales, alternate origins and
+  // non-canonical query/fragment variants must fail.
+  for (const bad of [
+    "https://blueskyzlabs.com/fr/",
+    "https://blueskyzlabs.com/zh-hans/",
+    "https://blueskyzlabs.com/zh-hant-x/",
+    "https://blueskyzlabs.com/xx/en/",
+    "https://blueskyzlabs.com/",
+    "https://evil.example/en/products/",
+    "http://blueskyzlabs.com/en/products/",
+    "https://www.blueskyzlabs.com/en/products/",
+    "https://blueskyzlabs.com/en/products/?redirect=evil",
+    "https://blueskyzlabs.com/en/products/#fragment",
+  ]) {
+    assert.equal(
+      isLocalizedCanonicalRoute(bad, site),
+      false,
+      `${bad} must be rejected`,
+    );
+  }
 });

@@ -19,7 +19,10 @@ guessing.
    The smoke suite checks, at minimum: EN/VI/zh-Hans home 200, canonical pages,
    legacy redirects, the branded 404 on every fallback path, the evidence
    passport surface, published-locale sitemap and no-JS language gateway, `/.well-known/sgps.json` (schema 1.0) and
-   `/.well-known/security.txt` (Contact + Expires).
+   `/.well-known/security.txt` (Contact + Expires). It also fetches every locale home, products index and product
+   page, and requires each same-origin asset they reference to return 200 with no
+   redirect and a matching content-type; and it asserts the CSP directives, COOP,
+   CORP, nosniff and `/_astro/*` immutable caching declared in `public/_headers`.
 2. Spot-check the edge header set (`curl -sI https://blueskyzlabs.com/en/`):
    HSTS, CSP (`script-src 'self'`, `frame-ancestors 'none'`),
    `X-Content-Type-Options: nosniff`, `X-Frame-Options: DENY`,

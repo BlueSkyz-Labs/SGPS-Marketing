@@ -1,11 +1,14 @@
 import { expect, test } from "@playwright/test";
 import { hasPublicProducts } from "./product-helpers.ts";
+import { openVerifyLayer } from "./verify-helpers.ts";
 
 const TRACE = '[data-source-trace="security-reporting-is-private"]';
 
 test.describe("source-to-surface trace", () => {
-  test("deterministic step order on the security surface", async ({ page }) => {
-    await page.goto("/en/security/");
+  test("deterministic step order on /verify (security claim)", async ({
+    page,
+  }) => {
+    await openVerifyLayer(page, "/en/verify/", "trace");
     const trace = page.locator(TRACE);
     await trace.scrollIntoViewIfNeeded();
     await expect(trace).toBeVisible();
@@ -48,7 +51,7 @@ test.describe("source-to-surface trace", () => {
   });
 
   test("trace avoids internal governance vocabulary", async ({ page }) => {
-    await page.goto("/en/security/");
+    await openVerifyLayer(page, "/en/verify/", "trace");
     const trace = page.locator(TRACE);
     await trace.scrollIntoViewIfNeeded();
     const text = await trace.innerText();
@@ -56,23 +59,23 @@ test.describe("source-to-surface trace", () => {
   });
 
   test("VI trace is localized", async ({ page }) => {
-    await page.goto("/vi/security/");
+    await openVerifyLayer(page, "/vi/verify/", "trace");
     const trace = page.locator(TRACE);
     await trace.scrollIntoViewIfNeeded();
     await expect(trace.locator('[data-trace-step="claim"]')).toContainText(
       "Tuyên bố",
     );
     await expect(trace.locator('[data-trace-step="boundary"]')).toContainText(
-      "Ranh giới",
+      "Giới hạn",
     );
     await expect(trace.locator('[data-trace-step="surface"]')).toContainText(
-      "Bề mặt",
+      "Trang",
     );
   });
 
   test("320px keeps the trace readable", async ({ page }) => {
     await page.setViewportSize({ width: 320, height: 900 });
-    await page.goto("/en/security/");
+    await openVerifyLayer(page, "/en/verify/", "trace");
     const trace = page.locator(TRACE);
     await trace.scrollIntoViewIfNeeded();
     await expect(trace).toBeVisible();
@@ -89,7 +92,7 @@ test.describe("source-to-surface trace", () => {
     browserName,
   }) => {
     test.skip(browserName !== "chromium", "print verified on chromium");
-    await page.goto("/en/security/");
+    await openVerifyLayer(page, "/en/verify/", "trace");
     const trace = page.locator(TRACE);
     await trace.scrollIntoViewIfNeeded();
     await page.emulateMedia({ media: "print" });
@@ -101,7 +104,7 @@ test.describe("source trace without JavaScript", () => {
   test.use({ javaScriptEnabled: false });
 
   test("trace renders statically", async ({ page }) => {
-    await page.goto("/en/security/");
+    await openVerifyLayer(page, "/en/verify/", "trace");
     const trace = page.locator(TRACE);
     await trace.scrollIntoViewIfNeeded();
     await expect(trace).toBeVisible();
@@ -116,7 +119,7 @@ test("print keeps the trace readable (chromium)", async ({
     testInfo.project.name !== "chromium",
     "print probe is chromium-only",
   );
-  await page.goto("/en/security/");
+  await openVerifyLayer(page, "/en/verify/", "trace");
   const trace = page.locator(TRACE);
   await trace.scrollIntoViewIfNeeded();
   await page.emulateMedia({ media: "print" });
