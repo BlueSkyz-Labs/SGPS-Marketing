@@ -132,10 +132,12 @@
   animation: none !important;
   transition: none !important;
 }
-/* From 640 px up the S4 promise scale is unchanged (36 px -> 56 px cap). */
+/* From 640 px up the promise steps down (Owner 2026-10-01: same wording,
+   visually shorter): 32 px -> 45 px cap (still above the 44 px d2), so the H1 holds 3-4 lines at 1440 and
+   4 at 1024 and the flagship card, capture and CTA stay in the first screen. */
 @media (min-width: 640px) {
   .hero-headline--promise {
-    font-size: clamp(2.25rem, 1.55rem + 2.6vw, 3.5rem);
+    font-size: clamp(2rem, 1.2rem + 2vw, 2.8125rem);
   }
 }
 .type-d2 {

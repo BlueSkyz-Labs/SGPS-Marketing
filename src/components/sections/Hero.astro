@@ -6,7 +6,10 @@ import { SITE, SHARED_LABELS, labelFor, type Language } from "@/data/site";
 import { emptyRegistryPrimaryCta, emptyRegistrySecondaryCta } from "@/lib/act";
 import { resolveLifecycleCta } from "@/lib/lifecycle-cta";
 import { productCopy } from "@/lib/product-copy";
-import { getProductIconThumbPath } from "@/lib/product-routes";
+import {
+  getProductIconThumbPath,
+  getProductProfilePath,
+} from "@/lib/product-routes";
 import { getPublicProducts } from "@/lib/products";
 import FlagshipCapture from "@/components/product/FlagshipCapture.astro";
 
@@ -71,6 +74,18 @@ const proposition = labelFor(
   },
   lang,
 );
+// Product line under the H1 (Owner 2026-10-01): names both public products,
+// each linking to its profile. Strings pending orchestrator VI review.
+const PRODUCT_LINE: Record<Language, { a: string; b: string }> = {
+  en: { a: " for landlords. ", b: ", a private journal." },
+  vi: { a: " cho chủ trọ. ", b: " — nhật ký riêng tư." },
+  zh: { a: " 面向房东；", b: " 是私密日记。" },
+  "zh-hant": { a: " 為房東而做；", b: " 是私密日記。" },
+};
+const lineFirst = products.find((product) => product.data.slug === "sotro");
+const lineSecond = products.find((product) => product.data.slug === "sotam");
+const productLine =
+  flagship && lineFirst && lineSecond ? PRODUCT_LINE[lang] : null;
 const exploreProducts = labelFor(SHARED_LABELS.exploreProducts, lang);
 const productsHref = `/${lang}/products/`;
 const emptyPrimary = emptyRegistryPrimaryCta(SITE.contactEmail, lang);
@@ -95,14 +110,14 @@ const secondary = flagship
   </div>
   <!-- Plain container, not the rise wrapper: the LCP headline lives inside it and must
        not animate or move, so no ancestor may carry the 400 ms rise either. -->
-  <div class="site-container relative grid gap-10 py-10 sm:py-16 lg:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)] lg:items-center">
+  <div class="site-container relative grid gap-10 py-10 sm:py-16 lg:grid-cols-[minmax(0,1.3fr)_minmax(0,0.7fr)] lg:items-center lg:py-8">
     <div class="hero-content" data-hero>
       <h1
         id="hero-title"
         class:list={[
           "hero-headline text-[var(--brand-porcelain)] font-semibold tracking-tight",
           flagship
-            ? "hero-headline--promise max-w-[24ch] text-3xl text-balance sm:text-4xl lg:text-[2.5rem]"
+            ? "hero-headline--promise max-w-[24ch] text-balance sm:max-w-[32ch] lg:max-w-[40ch]"
             : "mt-2 max-w-[11ch] text-4xl sm:text-5xl lg:text-7xl",
         ]}
       >
@@ -122,55 +137,80 @@ const secondary = flagship
           {supportingLine}
         </p>
       ) : null}
+      {productLine && lineFirst && lineSecond ? (
+        <p
+          class="hero-product-line mt-3 flex max-w-xl flex-wrap items-center text-base leading-relaxed text-[color-mix(in_srgb,var(--brand-porcelain)_82%,transparent)]"
+          data-hero-product-line
+        >
+          <a
+            href={getProductProfilePath(lang, lineFirst.data.slug)}
+            class="inline-flex min-h-11 items-center font-semibold text-[var(--brand-porcelain)] underline underline-offset-4 hover:no-underline"
+          >
+            {lineFirst.data.name}
+          </a>
+          <span class="whitespace-pre-wrap">{productLine.a}</span>
+          <a
+            href={getProductProfilePath(lang, lineSecond.data.slug)}
+            class="inline-flex min-h-11 items-center font-semibold text-[var(--brand-porcelain)] underline underline-offset-4 hover:no-underline"
+          >
+            {lineSecond.data.name}
+          </a>
+          <span class="whitespace-pre-wrap">{productLine.b}</span>
+        </p>
+      ) : null}
       {flagship && cta ? (
-        <div class="hero-flagship mt-8" data-hero-flagship>
-          <FlagshipCapture
-            slug={flagship.data.slug}
-            screen="today"
-            lang={lang}
-            priority
-            sizes="9rem"
-            smallSrc={
-              flagship.data.slug === "sotro"
-                ? {
-                    src: "/products/sotro/showcase/op-01-home-288.webp",
-                    width: 288,
-                  }
-                : undefined
-            }
-            class="hero-flagship__capture"
-          />
-          <div class="hero-flagship__body">
-            <p class="hero-product flex flex-wrap items-center gap-x-3 gap-y-2">
-              <img
-                class="size-9 rounded-lg"
-                src={getProductIconThumbPath(flagship.data.slug)}
-                alt=""
-                width="36"
-                height="36"
-                decoding="async"
-              />
-              <span class="text-lg font-semibold text-[var(--brand-porcelain)]">
-                {flagship.data.name}
-              </span>
-              <span
-                data-product-status={flagship.data.publicLabel}
-                class="inline-flex rounded-full border border-white/30 px-3 py-1 text-xs font-semibold tracking-wide text-[var(--brand-porcelain)]"
-              >
-                {copy?.statusLabel}
-              </span>
-            </p>
-            <p class="hero-tagline mt-3 text-base leading-relaxed text-[color-mix(in_srgb,var(--brand-porcelain)_82%,transparent)]">
-              {copy?.shortDescription}
-            </p>
-            <div class="mt-4">
-              <ButtonLink
-                href={cta.href}
-                data-product-cta={cta.verb}
-                data-hero-primary
-              >
-                {cta.label}
-              </ButtonLink>
+        <div class="hero-flagship mt-6" data-hero-flagship>
+          <div class="hero-flagship__card">
+            <FlagshipCapture
+              slug={flagship.data.slug}
+              screen="today"
+              lang={lang}
+              priority
+              sizes="(min-width: 34rem) 16.25rem, 15rem"
+              smallSrc={
+                flagship.data.slug === "sotro"
+                  ? {
+                      src: "/products/sotro/showcase/op-01-home-288.webp",
+                      width: 288,
+                    }
+                  : undefined
+              }
+              class="hero-flagship__capture"
+            />
+            <div class="hero-flagship__body">
+              <p class="hero-product flex flex-wrap items-center gap-x-3 gap-y-2">
+                <img
+                  class="size-9 rounded-lg"
+                  src={getProductIconThumbPath(flagship.data.slug)}
+                  alt=""
+                  width="36"
+                  height="36"
+                  decoding="async"
+                />
+                <span class="text-lg font-semibold text-[var(--brand-porcelain)]">
+                  {flagship.data.name}
+                </span>
+                <span
+                  data-product-status={flagship.data.publicLabel}
+                  class="inline-flex rounded-full border border-white/30 px-3 py-1 text-xs font-semibold tracking-wide text-[var(--brand-porcelain)]"
+                >
+                  {copy?.statusLabel}
+                </span>
+              </p>
+              <p class="hero-tagline mt-3 text-base leading-relaxed text-[color-mix(in_srgb,var(--brand-porcelain)_82%,transparent)]">
+                {copy?.shortDescription}
+              </p>
+              <div class="mt-4">
+                <ButtonLink
+                  href={cta.href}
+                  data-product-cta={cta.verb}
+                  data-hero-primary
+                  class="hero-flagship__cta"
+                  aria-label={`${cta.label}: ${flagship.data.name}`}
+                >
+                  {cta.label}
+                </ButtonLink>
+              </div>
             </div>
           </div>
         </div>
@@ -221,25 +261,56 @@ const secondary = flagship
 </section>
 
 <style>
+  /* Container query: the card lays out by its own width, not the viewport, so
+     it works in a phone column and in the wide desktop column alike. */
   .hero-flagship {
+    container-type: inline-size;
+    container-name: hero-flagship;
+    max-width: 44rem;
+  }
+  .hero-flagship__card {
     display: grid;
-    grid-template-columns: 9rem minmax(0, 1fr);
-    gap: 1.25rem;
-    align-items: start;
-    max-width: 34rem;
+    grid-template-columns: minmax(0, 1fr);
+    justify-items: center;
+    gap: 1rem;
     padding: 1rem;
     border: 1px solid
       color-mix(in srgb, var(--brand-porcelain) 18%, transparent);
     border-radius: var(--radius-lg);
     background: color-mix(in srgb, var(--brand-ink) 72%, transparent);
   }
+  .hero-flagship__body {
+    min-width: 0;
+    width: 100%;
+  }
   .hero-flagship :global(.hero-flagship__capture) {
-    /* Reserve the slot before the image arrives (CLS 0). */
-    aspect-ratio: 780 / 1440;
-    width: 9rem;
+    /* Stacked: text and CTA first, then the capture. */
+    order: 2;
+    width: 15rem;
+    max-width: 100%;
   }
   .hero-flagship :global(.flagship-capture__image) {
+    /* Reserve the slot before the image arrives (CLS 0). */
     aspect-ratio: 780 / 1440;
     object-fit: cover;
+  }
+  /* The CTA is never allowed to break inside a word. */
+  .hero-flagship :global(.hero-flagship__cta) {
+    overflow-wrap: normal;
+    word-break: normal;
+    hyphens: none;
+    text-align: center;
+  }
+  @container hero-flagship (min-width: 34rem) {
+    .hero-flagship__card {
+      grid-template-columns: 16.25rem minmax(0, 1fr);
+      justify-items: stretch;
+      align-items: start;
+      gap: 1.5rem;
+    }
+    .hero-flagship :global(.hero-flagship__capture) {
+      order: 0;
+      width: 16.25rem;
+    }
   }
 </style>
