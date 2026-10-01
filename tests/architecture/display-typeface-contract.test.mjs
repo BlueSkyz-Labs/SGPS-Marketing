@@ -150,13 +150,26 @@ test("display face is applied to h1/h2 display headings only", () => {
   checkNoCulturalNames(css);
 });
 
-test("display face is not preloaded and never reaches CJK", () => {
+/** Display preload must exist, be engine-gated, and precede the Inter loop. */
+function checkDisplayPreload(layoutSrc, bootstrap) {
   assert.doesNotMatch(
-    read("src/layouts/BaseLayout.astro"),
+    layoutSrc,
     /plus-jakarta-sans/,
-    "LCP must not depend on the display face",
+    "font preloads live in theme-init.js (engine-aware), not in the HTML",
   );
-  assert.doesNotMatch(read("public/theme-init.js"), /plus-jakarta/);
+  assert.match(bootstrap, /AppleWebKit/, "preload must stay engine-gated");
+  const display = bootstrap.indexOf("plus-jakarta-sans-${subset}-700-v5.3.0");
+  const inter = bootstrap.indexOf("inter-${subset}-opsz-v5.3.0");
+  assert.ok(display > -1, "display face (LCP H1) must be preloaded");
+  assert.ok(inter > -1, "Inter preload must remain");
+  assert.ok(display < inter, "display preload must precede Inter");
+}
+
+test("display face is preloaded first (measured LCP evidence) and never reaches CJK", () => {
+  checkDisplayPreload(
+    read("src/layouts/BaseLayout.astro"),
+    read("public/theme-init.js"),
+  );
   const cjk =
     css
       .replace(/\/\*[\s\S]*?\*\//g, "")
@@ -167,6 +180,20 @@ test("display face is not preloaded and never reaches CJK", () => {
 });
 
 test("negative proof: each blocking check turns RED on a broken invariant", () => {
+  // Display preload removed, or moved after Inter.
+  const boot = read("public/theme-init.js");
+  const layoutSrc = read("src/layouts/BaseLayout.astro");
+  assert.throws(() =>
+    checkDisplayPreload(layoutSrc, boot.replaceAll("plus-jakarta-sans-", "x-")),
+  );
+  const D = "plus-jakarta-sans-${subset}-700-v5.3.0";
+  const I = "inter-${subset}-opsz-v5.3.0";
+  assert.throws(() =>
+    checkDisplayPreload(
+      layoutSrc,
+      boot.replace(D, "@@").replace(I, D).replace("@@", I),
+    ),
+  );
   // Oversized font file.
   assert.throws(() => checkBytes(() => 60_000));
   // Missing font-display: swap.
