@@ -69,6 +69,17 @@ function render(elements: ComposerElements): string[] {
     elements.preview.append(template.content.cloneNode(true));
   }
   elements.counter.textContent = String(selected.length);
+  // Present exists only while there is something to present: at 0 selections
+  // the control is hidden and the deck is told to close.
+  const present = document.querySelector<HTMLElement>("[data-dossier-present]");
+  if (present) {
+    present.hidden = selected.length === 0;
+    // Read by the deck on start-up, so script order never matters.
+    present.dataset.selectedIds = selected.join(",");
+  }
+  document.dispatchEvent(
+    new CustomEvent("boardroom:set", { detail: { ids: selected } }),
+  );
   elements.preview.toggleAttribute("data-empty", selected.length === 0);
   return selected;
 }
@@ -125,6 +136,15 @@ export function initDossierComposer(): void {
 
   applyUrlState(elements);
   render(elements);
+
+  document
+    .querySelector("[data-dossier-present]")
+    ?.addEventListener("click", () =>
+      document.dispatchEvent(new CustomEvent("boardroom:open")),
+    );
+  document.addEventListener("boardroom:closed", () =>
+    document.querySelector<HTMLElement>("[data-dossier-present]")?.focus(),
+  );
 
   elements.form.addEventListener("change", () => {
     // Replace, never push: Back must leave the page, not step through ticks.

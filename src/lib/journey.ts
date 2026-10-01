@@ -23,10 +23,10 @@ const JOURNEY: Record<string, JourneyStep[]> = {
     {
       segment: "decision-room",
       label: {
-        en: "Compare the evidence",
-        vi: "So sánh bằng chứng",
-        zh: "对比证据",
-        "zh-hant": "對照證據",
+        en: "Compare claims",
+        vi: "So sánh tuyên bố",
+        zh: "比较声明",
+        "zh-hant": "比較聲明",
       },
     },
     {

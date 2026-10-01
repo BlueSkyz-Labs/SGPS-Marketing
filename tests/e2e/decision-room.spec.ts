@@ -20,7 +20,12 @@ test.describe("decision room", () => {
         items.nth(index).getByRole("button", { name: "Compare" }),
       ).toBeVisible();
     }
-    const text = await room.innerText();
+    // v8 dec-2: the lede itself says "Nothing is ranked or recommended";
+    // everything else must still carry no score, ranking or recommendation.
+    const text = (await room.innerText()).replace(
+      "Nothing is ranked or recommended.",
+      "",
+    );
     expect(text).not.toMatch(/score|ranking|recommend/i);
   });
 
@@ -139,7 +144,7 @@ test.describe("decision room", () => {
     await page.goto("/en/products/");
     const link = page
       .locator("[data-journey-bar] a")
-      .filter({ hasText: "Compare the evidence" });
+      .filter({ hasText: "Compare claims" });
     await expect(link).toBeVisible();
     await link.click();
     await expect(page).toHaveURL(/\/en\/decision-room\/$/);
@@ -174,12 +179,7 @@ test.describe("decision room", () => {
         "关于 BlueSkyz Labs",
         "BlueSkyz Labs 打造软件产品。了解我们目前在做什么，以及我们所说内容背后的公开依据，方便你自行核实。",
       ],
-      [
-        ZH,
-        "对比证据",
-        "对比证据",
-        "将最多四项公开事实并列对照 — 有来源的声明、信任路径，以及确保其严谨的边界说明。不作结论，不提建议。",
-      ],
+      [ZH, "比较声明", "比较声明", "并排比较最多四条公开声明。不下结论。"],
     ] as const) {
       await page.goto(path);
       await expect(page.locator("html")).toHaveAttribute("lang", "zh");

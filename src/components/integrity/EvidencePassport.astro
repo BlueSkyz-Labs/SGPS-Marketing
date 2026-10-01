@@ -16,6 +16,8 @@ interface Props {
 
 const { id, lang, products, claimAs = "h2" } = Astro.props;
 const ClaimHeading = claimAs;
+// Never skip a level: under an H1 claim the sources heading is an H2.
+const SourcesHeading = claimAs === "h1" ? "h2" : "h3";
 const passport = getEvidencePassport(id, products);
 
 const LABELS = {
@@ -71,7 +73,9 @@ const labels = LABELS[lang];
       <p class="integrity-lens__legend">{SOURCE_LINKED_LEGEND[lang]}</p>
     ) : null}
     <div class="evidence-passport__sources">
-      <h3 class="evidence-passport__sources-title">{labels.sources}</h3>
+      <SourcesHeading class="evidence-passport__sources-title">
+        {labels.sources}
+      </SourcesHeading>
       <ul>
         {passport.evidence.map((ref) => (
           <li id={`evidence-${ref.id}`}>

@@ -13,10 +13,10 @@ const LANGS = ["en", "vi", "zh", "zh-hant"];
 const read = (p) => readFileSync(p, "utf8");
 
 const DECISION_ROOM_TITLE = {
-  en: "Compare the evidence",
-  vi: "So sánh bằng chứng",
-  zh: "对比证据",
-  "zh-hant": "對照證據",
+  en: "Compare claims",
+  vi: "So sánh tuyên bố",
+  zh: "比较声明",
+  "zh-hant": "比較聲明",
 };
 
 const titleOf = (src) => src.match(/<BaseLayout\s+title="([^"]+)"/)?.[1];
@@ -33,7 +33,7 @@ test("decision-room <title> uses the public name in every locale", () => {
 
 test("negative proof: a legacy decision-room title is detected", () => {
   const legacy = read("src/pages/en/decision-room.astro").replace(
-    "Compare the evidence",
+    "Compare claims",
     "Decision Room",
   );
   assert.notEqual(titleOf(legacy), DECISION_ROOM_TITLE.en);
