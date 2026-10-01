@@ -21,7 +21,6 @@ const LABELS: Record<
     empty: string;
     unknown: string;
     invalidRequest: string;
-    note: string;
   }
 > = {
   en: {
@@ -30,7 +29,6 @@ const LABELS: Record<
       "Nothing selected yet. Choose published items above to assemble the view.",
     unknown: "Requested items that are not published were ignored",
     invalidRequest: "The requested selection was too large and was ignored.",
-    note: "Generated from public source truth. Presentation only — the items and their sources appear exactly as published.",
   },
   vi: {
     heading: "Xem trước",
@@ -38,21 +36,18 @@ const LABELS: Record<
       "Chưa chọn mục nào. Hãy chọn các mục đã công bố ở trên để dựng bản xem trước.",
     unknown: "Các mục được yêu cầu nhưng chưa công bố đã bị bỏ qua",
     invalidRequest: "Yêu cầu lựa chọn quá lớn nên đã bị bỏ qua.",
-    note: "Được tạo từ nguồn công khai đã công bố. Chỉ là cách trình bày — các mục và nguồn của chúng xuất hiện đúng như đã công bố.",
   },
   zh: {
     heading: "预览",
     empty: "尚未选择任何条目。请在上方选择已发布条目以组装视图。",
     unknown: "请求但未发布的条目已被忽略",
     invalidRequest: "请求的选择内容过大，已被忽略。",
-    note: "由公开来源生成。仅为呈现方式 — 条目及其来源与已发布内容完全一致。",
   },
   "zh-hant": {
     heading: "預覽",
     empty: "尚未選擇任何條目。請在上方選擇已發布條目以組裝檢視。",
     unknown: "請求但未發布的條目已被忽略",
     invalidRequest: "請求的選擇內容過大，已被忽略。",
-    note: "由公開來源生成。僅為呈現方式 — 條目及其來源與已發布內容完全一致。",
   },
 };
 
@@ -66,7 +61,6 @@ const labels = LABELS[lang];
       0
     </span>
   </h3>
-  <p class="c4-dossier__note">{labels.note}</p>
   <ul class="c4-dossier__preview-list" data-dossier-preview data-empty></ul>
   <p class="c4-dossier__empty">{labels.empty}</p>
   <div class="c4-dossier__unknown-block" data-dossier-unknown-block hidden>

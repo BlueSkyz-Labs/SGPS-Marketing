@@ -24,113 +24,86 @@ import {
  */
 interface Props {
   lens: PublicLens;
+  /** Only the parts this lens adds beyond the diagram and earlier lenses. */
   nodes: PublicArchitectureNode[];
+  /** Only the connections not already drawn. */
   edges: PublicArchitectureEdge[];
+  /** Distinct trust-boundary labels (trust lens only). */
+  boundaries?: string[];
   lang: Language;
   verifyHref?: string;
 }
 
-const { lens, nodes, edges, lang, verifyHref } = Astro.props;
+const { lens, nodes, edges, boundaries = [], lang, verifyHref } = Astro.props;
 const copy = ARCHITECTURE_COPY[lang];
 const lensCopy = copy.lenses[lens];
 const labelOf = (id: string) => humanNode(lang, id).label;
 ---
 
-<section
+<details
   class="c4-salon__lens"
   id={`lens-${lens}`}
   data-architecture-lens={lens}
-  aria-labelledby={`lens-${lens}-heading`}
 >
-  <h2 class="c4-salon__lens-heading" id={`lens-${lens}-heading`}>
+  <summary class="c4-salon__lens-summary" id={`lens-${lens}-heading`}>
     {lensCopy.heading}
-  </h2>
-  <p class="c4-salon__lens-intro">{lensCopy.intro}</p>
+  </summary>
+  <div class="c4-salon__lens-body">
+    <p class="c4-salon__lens-intro">{lensCopy.intro}</p>
 
-  <h3 class="c4-salon__subheading">{copy.parts}</h3>
-  <ul class="c4-salon__nodes">
-    {nodes.map((node) => {
-      const human = humanNode(lang, node.id);
-      return (
-        <li class="c4-salon__node" data-architecture-node={node.id}>
-          <span class="c4-salon__node-kind">{humanKind(lang, node.kind)}</span>
-          <span class="c4-salon__node-label">{human.label}</span>
-          <span class="c4-salon__node-blurb">{human.blurb}</span>
-          {node.boundary && (
-            <span class="c4-salon__node-boundary">
-              {humanBoundary(lang, node.boundary)}
-            </span>
-          )}
-        </li>
-      );
-    })}
-  </ul>
+    {nodes.length > 0 && (
+      <ul class="c4-salon__nodes">
+        {nodes.map((node) => {
+          const human = humanNode(lang, node.id);
+          return (
+            <li class="c4-salon__node" data-architecture-node={node.id}>
+              <span class="c4-salon__node-kind">
+                {humanKind(lang, node.kind)}
+              </span>
+              <span class="c4-salon__node-label">{human.label}</span>
+              <span class="c4-salon__node-blurb">{human.blurb}</span>
+              {node.boundary && (
+                <span class="c4-salon__node-boundary">
+                  {humanBoundary(lang, node.boundary)}
+                </span>
+              )}
+            </li>
+          );
+        })}
+      </ul>
+    )}
 
-  {edges.length > 0 && (
-    <>
-      <h3 class="c4-salon__subheading">{copy.connections}</h3>
-      <ol class="c4-salon__flow" data-architecture-diagram>
+    {boundaries.length > 0 && (
+      <ul class="c4-salon__nodes">
+        {boundaries.map((slug) => (
+          <li class="c4-salon__node-boundary">{humanBoundary(lang, slug)}</li>
+        ))}
+      </ul>
+    )}
+
+    {edges.length > 0 && (
+      <ol class="c4-salon__flow">
         {edges.map((edge) => (
           <li class="c4-salon__edge" data-architecture-edge={edge.id}>
-            <span class="c4-salon__chip" data-diagram-node>
-              {labelOf(edge.from)}
-            </span>
+            <span class="c4-salon__chip">{labelOf(edge.from)}</span>
             <span class="c4-salon__arrow">
               <span class="c4-salon__arrow-label">
                 {humanEdge(lang, edge.type)}
               </span>
-              <span class="c4-salon__arrow-line" aria-hidden="true" />
+              <span class="c4-salon__arrow-line" aria-hidden="true"></span>
             </span>
-            <span class="c4-salon__chip" data-diagram-node>
-              {labelOf(edge.to)}
-            </span>
+            <span class="c4-salon__chip">{labelOf(edge.to)}</span>
           </li>
         ))}
       </ol>
-    </>
-  )}
+    )}
 
-  {verifyHref && (
-    <p class="c4-salon__more">
-      <a class="c4-salon__link" href={verifyHref}>
-        {copy.verifyLink}
-      </a>
-    </p>
-  )}
-
-  <details class="c4-salon__technical" data-architecture-technical>
-    <summary class="c4-salon__technical-summary">
-      {copy.technical.summary}
-    </summary>
-    <div class="c4-salon__technical-body">
-      <p>{copy.technical.hint}</p>
-      <h4>{copy.technical.parts}</h4>
-      <ul>
-        {nodes.map((node) => (
-          <li>
-            <code>{node.id}</code> · <code>{node.kind}</code>
-            {node.boundary && (
-              <>
-                {" "}
-                · <code>{node.boundary}</code>
-              </>
-            )}
-          </li>
-        ))}
-      </ul>
-      {edges.length > 0 && (
-        <>
-          <h4>{copy.technical.connections}</h4>
-          <ul>
-            {edges.map((edge) => (
-              <li>
-                <code>{edge.from}</code> <code>{edge.type}</code>{" "}
-                <code>{edge.to}</code>
-              </li>
-            ))}
-          </ul>
-        </>
-      )}
-    </div>
-  </details>
-</section>
+    {verifyHref && (
+      <p class="c4-salon__more">
+        <a class="c4-salon__link" href={verifyHref}>
+          {copy.verifyLink}
+        </a>
+      </p>
+    )}
+  </div>
+</details>

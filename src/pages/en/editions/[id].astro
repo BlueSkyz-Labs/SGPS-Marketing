@@ -3,6 +3,9 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
 import Container from "@/components/layout/Container.astro";
 import EditionStory from "@/components/editorial/EditionStory.astro";
 import { EDITIONS } from "@/data/editions";
+import { editionBreadcrumbJsonLd } from "@/lib/breadcrumbs";
+import { safeJsonLd } from "@/lib/seo";
+import { SITE } from "@/data/site";
 import { resolveEdition } from "@/lib/editions";
 
 export function getStaticPaths() {
@@ -14,6 +17,7 @@ export function getStaticPaths() {
 
 const { edition } = Astro.props;
 const view = resolveEdition(edition, "en");
+const breadcrumb = editionBreadcrumbJsonLd("en", view.id, view.title, SITE.url);
 ---
 
 <BaseLayout
@@ -21,6 +25,12 @@ const view = resolveEdition(edition, "en");
   description={view.deck}
   path={`/en/editions/${view.id}/`}
 >
+  {breadcrumb ? (
+    <script
+      type="application/ld+json"
+      set:html={safeJsonLd(breadcrumb)}
+    ></script>
+  ) : null}
   <section class="py-16 lg:py-24">
     <Container>
       <EditionStory edition={edition} lang="en" />

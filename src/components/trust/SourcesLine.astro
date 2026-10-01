@@ -1,0 +1,107 @@
+---
+/**
+ * v8 W5a: one inline "Sources: a · b" line for a published claim.
+ *
+ * Presentation only. Hrefs and the review date resolve from the canonical
+ * claim passport (claims.ts / integrity.ts); the visible labels are passed by
+ * the page from the copy deck. Each source link carries the stable evidence
+ * anchor (`#evidence-<id>`) so existing deep links keep resolving, unless the
+ * page has already emitted that anchor for an earlier claim.
+ */
+import { getEvidencePassport } from "@/lib/claims";
+import { getPublicProducts } from "@/lib/products";
+import { formatDisplayDate } from "@/lib/display-date";
+import type { SourceRef } from "@/data/trust-copy";
+import type { Language } from "@/data/site";
+
+interface Props {
+  lang: Language;
+  claimId: string;
+  label: string;
+  sources: readonly SourceRef[];
+  /** Show "Reviewed <date>" from the claim's review record. */
+  reviewedLabel?: string | undefined;
+  omitAnchorIds?: readonly string[] | undefined;
+  class?: string | undefined;
+}
+
+const {
+  lang,
+  claimId,
+  label,
+  sources,
+  reviewedLabel,
+  omitAnchorIds = [],
+  class: className,
+} = Astro.props;
+
+const products = (await getPublicProducts()).map((product) => ({
+  slug: product.data.slug,
+  name: product.data.name,
+}));
+const passport = getEvidencePassport(claimId, products);
+const refs = new Map((passport?.evidence ?? []).map((ref) => [ref.id, ref]));
+const items = sources.flatMap((source) => {
+  const ref = refs.get(source.id);
+  return ref ? [{ ...source, href: ref.href[lang] }] : [];
+});
+const reviewedOn = reviewedLabel ? passport?.reviewedOn : undefined;
+---
+
+{items.length > 0 ? (
+  <p class:list={["sources-line", className]} data-sources-line>
+    <span class="sources-line__label">{label}</span>{" "}
+    {items.map((item, index) => (
+      <>
+        {index > 0 ? <span aria-hidden="true"> · </span> : null}
+        <a
+          href={item.href}
+          id={
+            omitAnchorIds.includes(item.id) ? undefined : `evidence-${item.id}`
+          }
+          data-trace-step={
+            omitAnchorIds.includes(item.id) ? undefined : "evidence"
+          }
+          rel={
+            /^https?:\/\//i.test(item.href) ? "noopener noreferrer" : undefined
+          }
+          class="sources-line__link"
+        >
+          {item.label}
+        </a>
+      </>
+    ))}
+    {reviewedOn ? (
+      <>
+        {". "}
+        {reviewedLabel}{" "}
+        <time datetime={reviewedOn}>{formatDisplayDate(reviewedOn, lang)}</time>
+        {"."}
+      </>
+    ) : null}
+  </p>
+) : null}
+
+<style>
+  .sources-line {
+    margin: 0;
+    font-size: 0.875rem;
+    line-height: 1.6;
+    color: var(--text-muted);
+  }
+
+  .sources-line__link {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.75rem;
+    font-weight: 600;
+    color: var(--action-primary);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    overflow-wrap: anywhere;
+  }
+
+  .sources-line__link:hover {
+    text-decoration: none;
+  }
+</style>

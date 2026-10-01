@@ -23,10 +23,10 @@ const JOURNEY: Record<string, JourneyStep[]> = {
     {
       segment: "decision-room",
       label: {
-        en: "Compare the evidence",
-        vi: "So sánh bằng chứng",
-        zh: "对比证据",
-        "zh-hant": "對照證據",
+        en: "Compare claims",
+        vi: "So sánh tuyên bố",
+        zh: "比较声明",
+        "zh-hant": "比較聲明",
       },
     },
     {
@@ -91,31 +91,6 @@ const JOURNEY: Record<string, JourneyStep[]> = {
     {
       segment: "security",
       label: { en: "Security", vi: "Bảo mật", zh: "安全", "zh-hant": "安全" },
-    },
-  ],
-  privacy: [
-    {
-      segment: "security",
-      label: { en: "Security", vi: "Bảo mật", zh: "安全", "zh-hant": "安全" },
-    },
-    {
-      segment: "support",
-      label: { en: "Support", vi: "Hỗ trợ", zh: "支持", "zh-hant": "支援" },
-    },
-  ],
-  security: [
-    {
-      segment: "support",
-      label: { en: "Support", vi: "Hỗ trợ", zh: "支持", "zh-hant": "支援" },
-    },
-    {
-      segment: "privacy",
-      label: {
-        en: "Privacy",
-        vi: "Quyền riêng tư",
-        zh: "隐私",
-        "zh-hant": "隱私",
-      },
     },
   ],
 };

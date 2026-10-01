@@ -1,0 +1,85 @@
+---
+/**
+ * v8 W5a: the /security/ page body (deck rows sec-1..7).
+ * One lede, one action, what we do not offer, why private + limit, sources.
+ * The page's claim anchor wraps the header so `#claim-…` deep links land at
+ * the top of the page.
+ */
+import Container from "@/components/layout/Container.astro";
+import PageHeader from "@/components/layout/PageHeader.astro";
+import SafeAction from "@/components/integrity/SafeAction.astro";
+import SourcesLine from "@/components/trust/SourcesLine.astro";
+import { getClaimAnchor } from "@/lib/claims";
+import { SECURITY_COPY } from "@/data/trust-copy";
+import { SITE, SECURITY_ADVISORY_URL, type Language } from "@/data/site";
+
+interface Props {
+  lang: Language;
+}
+
+const { lang } = Astro.props;
+const c = SECURITY_COPY[lang];
+const CLAIM_ID = "security-reporting-is-private";
+---
+
+<section class="py-16 lg:py-24" data-trust-page="security">
+  <Container>
+    <div
+      id={getClaimAnchor(CLAIM_ID)}
+      data-integrity-entry
+      class="scroll-mt-24"
+    >
+      <PageHeader title={c.title} lede={c.lede} />
+    </div>
+    {SITE.securityEmail ? (
+      <p class="mt-8 max-w-3xl text-[var(--text-secondary)]">
+        {c.emailLabel}{" "}
+        <a
+          href={`mailto:${SITE.securityEmail}`}
+          class="inline-flex min-h-11 items-center font-semibold text-[var(--action-primary)] no-underline hover:underline"
+        >
+          {SITE.securityEmail}
+        </a>
+        .
+      </p>
+    ) : null}
+    <div class="mt-8 max-w-3xl">
+      <SafeAction
+        href={SECURITY_ADVISORY_URL}
+        label={c.cta}
+        boundary="private-reporting"
+        lang={lang}
+        note={c.note}
+        fit
+      />
+    </div>
+    <div class="mt-10 grid max-w-3xl gap-4 text-[var(--text-secondary)]">
+      <p data-security-offer>
+        <strong class="font-semibold text-[var(--text-primary)]">
+          {c.offerLead}
+        </strong>{" "}
+        {c.offerBody}
+      </p>
+      <p>
+        <strong class="font-semibold text-[var(--text-primary)]">
+          {c.whyLabel}
+        </strong>{" "}
+        {c.whyBody}
+        <br />
+        <strong class="font-semibold text-[var(--text-primary)]">
+          {c.limitLabel}
+        </strong>{" "}
+        {c.limitBody}
+      </p>
+    </div>
+    <div class="mt-6 max-w-3xl">
+      <SourcesLine
+        lang={lang}
+        claimId={CLAIM_ID}
+        label={c.sourcesLabel}
+        sources={c.sources}
+        reviewedLabel={c.reviewed}
+      />
+    </div>
+  </Container>
+</section>

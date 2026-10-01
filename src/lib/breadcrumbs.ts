@@ -21,10 +21,10 @@ const HOME_LABELS: Record<Language, string> = {
  */
 const DECLARED_ROUTE_LABELS: Record<string, Record<Language, string>> = {
   "decision-room": {
-    en: "Compare the evidence",
-    vi: "So sánh bằng chứng",
-    zh: "对比证据",
-    "zh-hant": "對照證據",
+    en: "Compare claims",
+    vi: "So sánh tuyên bố",
+    zh: "比较声明",
+    "zh-hant": "比較聲明",
   },
   evidence: {
     en: "Evidence for this claim",
@@ -134,4 +134,23 @@ export function productBreadcrumbJsonLd(
   const trail = getProductBreadcrumbTrail(lang, slug, productName, guideName);
   if (trail.length === 0) return null;
   return breadcrumbListJsonLd(trail, siteUrl);
+}
+
+/**
+ * Trail for one collection page (Home > Collections > collection). Home and
+ * Collections reuse the declared labels; the collection name is its own
+ * authored title. Fail-closed like the rest of this module.
+ */
+export function editionBreadcrumbJsonLd(
+  lang: Language,
+  id: string,
+  editionTitle: string,
+  siteUrl: string,
+) {
+  const index = getBreadcrumbTrail(lang, `/${lang}/editions/`);
+  if (index.length === 0) return null;
+  return breadcrumbListJsonLd(
+    [...index, { name: editionTitle, path: `/${lang}/editions/${id}/` }],
+    siteUrl,
+  );
 }
