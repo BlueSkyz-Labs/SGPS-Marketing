@@ -164,3 +164,42 @@ test("negative proof: a size mismatch is caught", () => {
     actual,
   );
 });
+
+// v8 hotfix: phone captures render at most 24rem, so each one ships a 480w
+// derivative (`<name>-480.webp`) that ShowcaseGroup offers through srcset.
+// Without it the 780px masters compete with the LCP text's fonts on mobile.
+function phoneDerivativeProblems(text, fileExists = existsSync) {
+  const blocks = text.split(/^\s+- id:\s*/m).slice(1);
+  const problems = [];
+  for (const block of blocks) {
+    if (!/^\s+surface:\s*phone\s*$/m.test(block)) continue;
+    const src = block.match(/^\s+src:\s*(\S+\.webp)\s*$/m)?.[1];
+    if (!src) continue;
+    const small = src.replace(/\.webp$/, "-480.webp");
+    if (!fileExists(`public${small}`)) problems.push(`${small} is missing`);
+    else if (webpSize(`public${small}`).width !== 480) {
+      problems.push(`${small} is not 480px wide`);
+    }
+  }
+  return problems;
+}
+
+test("every phone capture has a 480w derivative offered via srcset", () => {
+  for (const { name, text } of records()) {
+    assert.deepEqual(phoneDerivativeProblems(text), [], name);
+  }
+  const group = readFileSync(
+    "src/components/product/ShowcaseGroup.astro",
+    "utf8",
+  );
+  assert.match(group, /srcset=\{`\$\{phoneSmallSrc\(item\.src\)\} 480w/);
+  assert.match(group, /sizes=\{PHONE_SIZES\}/);
+});
+
+test("negative proof: a phone capture without a 480w derivative is caught", () => {
+  const { text } = records().find(({ text: t }) => /surface:\s*phone/.test(t));
+  const problems = phoneDerivativeProblems(text, (path) =>
+    path.endsWith("-480.webp") ? false : existsSync(path),
+  );
+  assert.ok(problems.length > 0, "a missing derivative must be reported");
+});
