@@ -290,6 +290,8 @@ export function getClaimTrace(
 export interface EvidencePassportModel {
   id: string;
   claim: LocalizedText;
+  /** EN/VI short <title> label; the page body keeps the full claim. */
+  titleLabel?: { en: string; vi: string } | undefined;
   state: TruthState;
   evidence: EvidenceReference[];
   boundaryId?: string | undefined;
@@ -315,6 +317,7 @@ export function getEvidencePassport(
   return {
     id: resolved.claim.id,
     claim: resolved.claim.statement,
+    titleLabel: resolved.claim.titleLabel,
     state: resolved.truthState,
     evidence: resolved.evidence,
     boundaryId: resolved.boundaryId,
