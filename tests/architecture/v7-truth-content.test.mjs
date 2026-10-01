@@ -195,6 +195,14 @@ test("D-03: trace, atlas, provenance and dossier refer to claims by label", () =
     read("src/lib/dossier.ts"),
     /claimShortLabel\(boundedClaim, lang\)/,
   );
+  assert.match(
+    read("src/components/integrity/IntegrityLens.astro"),
+    /showBoundary=\{boundaries\}/,
+  );
+  assert.match(
+    read("src/components/integrity/SourceTrace.astro"),
+    /showBoundary \|\| step\.kind !== "boundary"/,
+  );
   const composer = read("src/components/dossier/DossierComposer.astro");
   assert.doesNotMatch(
     composer,
@@ -209,7 +217,9 @@ test("D-03: trace, atlas, provenance and dossier refer to claims by label", () =
         `${lang}/${file} shows its own boundary card; the lens must not repeat it`,
       );
     }
-    assert.match(
+    // Deep links need the trace's evidence anchors on privacy: the trace stays
+    // and only drops its boundary step (the page has its own boundary card).
+    assert.doesNotMatch(
       read(`src/pages/${lang}/privacy.astro`),
       /lensTraces=\{false\}/,
     );
