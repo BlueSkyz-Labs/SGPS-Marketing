@@ -144,3 +144,20 @@ for (const route of TARGET_ROUTES) {
     expect(offenders, offenders.join("\n")).toEqual([]);
   });
 }
+
+// axe reports aria-label on a role-less <div> as `incomplete` (needs review),
+// never as a violation, so the violation-only gate above cannot see it.
+for (const route of ["/en/products/", "/vi/products/", "/zh/", "/zh-hant/"]) {
+  test(`axe has no aria-prohibited-attr (incl. needs-review) on ${route}`, async ({
+    page,
+  }) => {
+    await page.emulateMedia({ reducedMotion: "reduce" });
+    await page.goto(route, { waitUntil: "networkidle" });
+    const results = await new AxeBuilder({ page })
+      .withRules(["aria-prohibited-attr"])
+      .analyze();
+    expect(
+      [...results.violations, ...results.incomplete].map((r) => r.id),
+    ).toEqual([]);
+  });
+}
