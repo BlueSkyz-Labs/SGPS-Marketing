@@ -197,10 +197,10 @@ const PRINCIPLE_DIMENSIONS: Record<
       "zh-hant": "將安全與隱私視為核心路徑，而非事後補充。",
     },
     people: {
-      en: "Working recourse paths when something goes wrong.",
-      vi: "Các đường dẫn khắc phục thực sự khi có vấn đề.",
-      zh: "出现问题时具备可用的补救路径。",
-      "zh-hant": "出現問題時具備可用的補救路徑。",
+      en: "No general support mailbox has been published yet. Security reporting is for vulnerabilities only.",
+      vi: "Hiện chưa có hộp thư hỗ trợ chung. Kênh báo cáo bảo mật chỉ dành cho lỗ hổng bảo mật.",
+      zh: "目前尚未公布通用支持邮箱。安全漏洞报告仅用于漏洞。",
+      "zh-hant": "目前尚未公布通用支援信箱。資安通報僅用於漏洞。",
     },
     evidence: {
       en: "Reportable channels and public routes you can check today.",

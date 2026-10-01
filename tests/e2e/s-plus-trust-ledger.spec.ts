@@ -24,7 +24,7 @@ const LOCALES = [
     heading: "Tin cậy bạn có thể xác minh",
     link: "Cách chúng tôi xác minh",
   },
-  { lang: "zh", heading: "您可以核实的信任", link: "我们如何核验" },
+  { lang: "zh", heading: "你可以核实的信任", link: "我们如何核验" },
   { lang: "zh-hant", heading: "您可以核實的信任", link: "我們如何核驗" },
 ] as const;
 

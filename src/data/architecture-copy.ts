@@ -393,11 +393,11 @@ export const ARCHITECTURE_COPY: Record<Language, ArchitectureCopy> = {
       },
       "system.sgps-marketing": {
         label: "本网站",
-        blurb: "您正在阅读的 BlueSkyz Labs 公开网站。",
+        blurb: "你正在阅读的 BlueSkyz Labs 公开网站。",
       },
       "component.astro-static-site": {
         label: "静态网站页面",
-        blurb: "发送到您浏览器的现成页面。",
+        blurb: "发送到你浏览器的现成页面。",
       },
       "component.public-truth-gate": {
         label: "构建时的说法检查",

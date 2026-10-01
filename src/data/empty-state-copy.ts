@@ -56,16 +56,4 @@ export const EMPTY_STATE_COPY = {
     zh: "当前阶段",
     "zh-hant": "目前階段",
   },
-  ladderNext: {
-    en: "Next in the ladder",
-    vi: "Giai đoạn kế tiếp",
-    zh: "下一阶段",
-    "zh-hant": "下一階段",
-  },
-  ladderAll: {
-    en: "All stages",
-    vi: "Tất cả giai đoạn",
-    zh: "全部阶段",
-    "zh-hant": "全部階段",
-  },
 } as const satisfies Record<string, LocalizedLabel>;

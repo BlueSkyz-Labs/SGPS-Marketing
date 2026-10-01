@@ -1,5 +1,6 @@
 ---
 import { resolveEdition, type EditionRecord } from "@/lib/editions";
+import { formatDisplayDate } from "@/lib/display-date";
 import type { Language } from "@/lib/i18n";
 
 /**
@@ -33,7 +34,10 @@ const labels = LABELS[lang];
   <h1 class="c4-edition__title">{view.title}</h1>
   <p class="c4-edition__deck">{view.deck}</p>
   <p class="c4-edition__published">
-    {labels.published}: <time datetime={view.published}>{view.published}</time>
+    {labels.published}:{" "}
+    <time datetime={view.published}>
+      {formatDisplayDate(view.published, lang)}
+    </time>
   </p>
   {view.note && (
     <p class="c4-edition__note">

@@ -17,6 +17,7 @@ const hasBusinessEmail = Boolean(SITE.contactEmail);
   description={PAGE_META["zh-hant"]["privacy"].description}
   path="/zh-hant/privacy/"
   surface="privacy"
+  lensBoundaries={false}
 >
   <section class="py-16 lg:py-24">
     <Container>
@@ -29,7 +30,7 @@ const hasBusinessEmail = Boolean(SITE.contactEmail);
         <div class="rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-raised)] p-6">
           <dt class="text-sm font-semibold tracking-tight">收集內容</dt>
           <dd class="mt-2 text-sm leading-relaxed text-[var(--text-secondary)]">
-            本站基本瀏覽無需帳戶、表單或跟蹤 Cookie。標準 Web 伺服器與 CDN
+            本站基本瀏覽無需帳戶、表單或追蹤 Cookie。標準 Web 伺服器與 CDN
             請求日誌可能記錄技術連線資料，例如 IP 地址、使用者代理與請求 URL。
           </dd>
         </div>
