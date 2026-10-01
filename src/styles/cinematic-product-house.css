@@ -136,32 +136,6 @@
   }
 }
 
-.hero-visual-glow {
-  position: absolute;
-  inset: 6% 10%;
-  border-radius: 50%;
-  background: radial-gradient(
-    closest-side,
-    color-mix(in srgb, var(--brand-cobalt) 46%, transparent),
-    transparent 72%
-  );
-  filter: blur(30px);
-  opacity: 0.9;
-  animation: hero-glow-pulse 7s var(--motion-ease-standard) infinite;
-}
-
-/* Ambient breath for the hero glow (mockup: dynamic mark). Perpetual by design;
-   the e2e settle treats infinite-iteration animations as non-blocking. */
-@keyframes hero-glow-pulse {
-  0%,
-  100% {
-    opacity: 0.72;
-  }
-  50% {
-    opacity: 1;
-  }
-}
-
 /* The <picture> is a shrink-to-fit grid item; give it a definite box so the
    mark's slot is reserved before the responsive source loads (CLS). */
 .hero-visual > picture {
@@ -221,13 +195,8 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .hero-mark,
-  .hero-visual-glow {
+  .hero-mark {
     filter: none;
-  }
-  .hero-visual-glow {
-    animation: none;
-    opacity: 0.9;
   }
   .hero-visual-sheen {
     opacity: 0.4;

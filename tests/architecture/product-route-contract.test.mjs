@@ -105,7 +105,9 @@ test("root is the bounded DEC-019 language gateway, not a locale content duplica
   assert.match(root, /resolveInitialLanguage/);
   assert.match(root, /LANGUAGE_STORAGE_KEY/);
   assert.match(root, /window\.location\.replace/);
-  assert.match(root, /noindex, follow/);
+  // Owner decision F16 (2026-10-01): the gateway is indexable.
+  assert.doesNotMatch(root, /noindex, follow/);
+  assert.match(root, /rel="canonical"/);
 });
 
 test("public products without locale profile routes are caught (non-vacuity)", () => {

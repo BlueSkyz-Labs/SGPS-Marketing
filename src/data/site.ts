@@ -43,16 +43,16 @@ export const SHARED_LABELS = {
     "zh-hant": "旗艦產品",
   },
   jobsHeading: {
-    en: "What it helps people do",
-    vi: "Việc sản phẩm hỗ trợ",
-    zh: "可完成的工作",
-    "zh-hant": "可完成的工作",
+    en: "What it helps you do",
+    vi: "Giúp bạn làm gì",
+    zh: "能帮你做什么",
+    "zh-hant": "能幫你做什麼",
   },
   scopeHeading: {
-    en: "Development scope",
-    vi: "Phạm vi phát triển",
-    zh: "开发范围",
-    "zh-hant": "開發範圍",
+    en: "What we're building",
+    vi: "Đang xây dựng những gì",
+    zh: "正在开发的内容",
+    "zh-hant": "開發中的內容",
   },
   search: { en: "Search", vi: "Tìm", zh: "搜索", "zh-hant": "搜尋" },
   searchPages: {
@@ -145,8 +145,8 @@ export const SHARED_LABELS = {
     "zh-hant": "下一步",
   },
   houseIndex: {
-    en: "House index",
-    vi: "Mục lục ngôi nhà",
+    en: "Site index",
+    vi: "Mục lục trang",
     zh: "网站目录",
     "zh-hant": "網站目錄",
   },
@@ -181,6 +181,7 @@ interface NavLabels {
   privacy: string;
   security: string;
   architecture: string;
+  verify: string;
 }
 
 const NAV_LABELS: Record<Language, NavLabels> = {
@@ -192,6 +193,7 @@ const NAV_LABELS: Record<Language, NavLabels> = {
     privacy: "Privacy",
     security: "Security",
     architecture: "Architecture",
+    verify: "Verify",
   },
   vi: {
     products: "Sản phẩm",
@@ -201,6 +203,7 @@ const NAV_LABELS: Record<Language, NavLabels> = {
     privacy: "Quyền riêng tư",
     security: "Bảo mật",
     architecture: "Kiến trúc",
+    verify: "Xác minh",
   },
   zh: {
     products: "产品",
@@ -210,6 +213,7 @@ const NAV_LABELS: Record<Language, NavLabels> = {
     privacy: "隐私",
     security: "安全",
     architecture: "架构",
+    verify: "核实",
   },
   "zh-hant": {
     products: "產品",
@@ -219,6 +223,7 @@ const NAV_LABELS: Record<Language, NavLabels> = {
     privacy: "隱私",
     security: "安全",
     architecture: "架構",
+    verify: "查證",
   },
 };
 
@@ -240,6 +245,7 @@ export function getFooterLinks(lang: Language): NavItem[] {
     { label: l.support, href: `/${lang}/support/` },
     { label: l.privacy, href: `/${lang}/privacy/` },
     { label: l.security, href: `/${lang}/security/` },
+    { label: l.verify, href: `/${lang}/verify/` },
     { label: l.architecture, href: `/${lang}/architecture/` },
   ];
 }

@@ -7,41 +7,28 @@ const LOCALES = [
 
 for (const locale of LOCALES) {
   test.describe(locale.path, () => {
-    test("About section exists with factual content", async ({ page }) => {
+    test("home carries no About block, founder line or closing CTA band", async ({
+      page,
+    }) => {
+      // Experience v6 S1 (audit E-05/E-24): the About block repeated the tagline
+      // and the closing band repeated the hero action. The founder line is an
+      // Owner-confirmation item (E-26) and is not printed on the home.
       await page.goto(locale.path);
-      const about = page.locator("[data-about-blueskyz]");
-      await expect(about).toBeVisible();
-      // Semantic heading exists
-      await expect(about.getByRole("heading", { level: 2 })).toBeVisible();
-      // Founder attribution present (factual)
-      const text = await about.textContent();
-      expect(text).toMatch(/tony nguyen/i);
-      // No fabricated claims
-      expect(text).not.toMatch(/\d+\s*(employees?|staff|team members?)/i);
-      expect(text).not.toMatch(/offices? in/i);
-      expect(text).not.toMatch(/customers?|clients?/i);
+      await expect(page.locator("[data-about-blueskyz]")).toHaveCount(0);
+      await expect(page.locator("[data-final-action]")).toHaveCount(0);
+      await expect(page.locator("main")).not.toContainText(/tony nguyen/i);
     });
 
-    test("Final action section has at most 2 CTAs", async ({ page }) => {
+    test("the hero action has a valid internal destination", async ({
+      page,
+    }) => {
       await page.goto(locale.path);
-      const finalAction = page.locator("[data-final-action]");
-      await expect(finalAction).toBeVisible();
-      const links = finalAction.getByRole("link");
-      const count = await links.count();
-      expect(count).toBeGreaterThanOrEqual(1);
-      expect(count).toBeLessThanOrEqual(2);
-    });
-
-    test("Final CTAs have valid internal destinations", async ({ page }) => {
-      await page.goto(locale.path);
-      const finalAction = page.locator("[data-final-action]");
-      const links = finalAction.getByRole("link");
-      const count = await links.count();
-      for (let i = 0; i < count; i++) {
-        const href = await links.nth(i).getAttribute("href");
-        expect(href).toBeTruthy();
-        expect(href).toMatch(/^\//);
-      }
+      const primary = page.locator("[data-hero-primary]");
+      await expect(primary).toHaveCount(1);
+      expect(await primary.getAttribute("href")).toMatch(/^\//);
+      const secondary = page.locator("[data-hero-secondary]");
+      await expect(secondary).toHaveCount(1);
+      expect(await secondary.getAttribute("href")).toMatch(/^\//);
     });
 
     test("Closing horizon is decorative and hidden from AT", async ({

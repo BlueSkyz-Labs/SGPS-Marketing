@@ -1,6 +1,7 @@
 ---
 // zh-Hant copy: machine-assisted (OpenCC s2twp), pending native review.
 import BaseLayout from "@/layouts/BaseLayout.astro";
+import { PAGE_META } from "@/data/page-meta";
 import Container from "@/components/layout/Container.astro";
 import PageHeader from "@/components/layout/PageHeader.astro";
 import BoundaryCard from "@/components/integrity/BoundaryCard.astro";
@@ -12,8 +13,8 @@ const hasBusinessEmail = Boolean(SITE.contactEmail);
 ---
 
 <BaseLayout
-  title="隱私"
-  description="BlueSkyz Labs 隱私作法：不設定 Cookie，僅儲存明確選擇的語言與主題偏好，不跟蹤或建立訪客畫像。"
+  title={PAGE_META["zh-hant"]["privacy"].title}
+  description={PAGE_META["zh-hant"]["privacy"].description}
   path="/zh-hant/privacy/"
   surface="privacy"
 >

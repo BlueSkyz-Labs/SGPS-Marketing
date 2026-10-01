@@ -11,20 +11,20 @@ const { boundary, lang } = Astro.props;
 
 const LABELS = {
   en: {
-    establishes: "What this establishes",
-    notEstablishes: "What this does not establish",
+    establishes: "What this covers",
+    notEstablishes: "What this does not cover",
   },
   vi: {
-    establishes: "Điều được xác lập",
-    notEstablishes: "Điều không được xác lập",
+    establishes: "Phạm vi áp dụng",
+    notEstablishes: "Ngoài phạm vi",
   },
   zh: {
-    establishes: "本项确立的内容",
-    notEstablishes: "本项不确立的内容",
+    establishes: "涵盖范围",
+    notEstablishes: "不涵盖范围",
   },
   "zh-hant": {
-    establishes: "本項確立的內容",
-    notEstablishes: "本項不確立的內容",
+    establishes: "涵蓋範圍",
+    notEstablishes: "不涵蓋範圍",
   },
 } as const;
 ---

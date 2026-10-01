@@ -46,19 +46,16 @@ async function ratioOf(page: Page, selector: string) {
   }, selector);
 }
 
-test("flagship CTA carries white text on the action fill in dark", async ({
+test("hero primary CTA carries white text on its fill in dark", async ({
   page,
 }) => {
   await page.goto("/en/", { waitUntil: "networkidle" });
   await page.evaluate(() => document.fonts.ready);
-  const measured = await ratioOf(
-    page,
-    "[data-flagship-theatre] a.bg-\\[var\\(--action-fill\\)\\]",
-  );
-  expect(measured, "flagship CTA must exist").not.toBeNull();
+  const measured = await ratioOf(page, "[data-hero-primary]");
+  expect(measured, "hero primary CTA must exist").not.toBeNull();
   expect(
     measured!.ratio,
-    `flagship CTA ${measured!.color} on ${measured!.background}`,
+    `hero primary CTA ${measured!.color} on ${measured!.background}`,
   ).toBeGreaterThanOrEqual(4.5);
 });
 

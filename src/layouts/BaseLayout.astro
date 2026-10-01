@@ -9,13 +9,15 @@ import { SITE } from "@/data/site";
 import {
   absoluteUrl,
   canonicalForPath,
+  DEFAULT_OG_IMAGE,
   defaultOgImagePath,
   hreflangLinks,
+  xDefaultPath,
   organizationJsonLd,
   safeJsonLd,
   websiteJsonLd,
 } from "@/lib/seo";
-import { getAlternatePath, getLanguageFromPath } from "@/lib/i18n";
+import { getLanguageFromPath } from "@/lib/i18n";
 import { breadcrumbJsonLd } from "@/lib/breadcrumbs";
 import { isNonProductionSiteUrl } from "@/lib/truth";
 import { DEFAULT_SCENE, type Scene } from "@/lib/scene";
@@ -30,6 +32,8 @@ interface Props {
   noindex?: boolean;
   /** Stable integrity surface id; the lens renders only for modeled surfaces. */
   surface?: string;
+  /** false: the lens omits its source-to-surface chains (see /verify). */
+  lensTraces?: boolean;
   /** Authored scene marker consumed by the global header (C3-A Task 4). */
   scene?: Scene;
 }
@@ -41,10 +45,13 @@ const {
   ogImage = defaultOgImagePath(),
   noindex = false,
   surface,
+  lensTraces = true,
   scene = DEFAULT_SCENE,
 } = Astro.props;
 
-const fullTitle = title.includes(SITE.name) ? title : `${title} · ${SITE.name}`;
+/** One separator, descriptor first, brand last. A descriptor that already
+ * names the brand (home) is used as authored. */
+const fullTitle = title.includes(SITE.name) ? title : `${title} | ${SITE.name}`;
 const currentLang = getLanguageFromPath(path);
 /** Traditional Chinese is routed as `zh-hant` but tagged with its BCP-47 script subtag. */
 const htmlLang = currentLang === "zh-hant" ? "zh-Hant" : currentLang;
@@ -62,6 +69,8 @@ const ogAlternates = Object.values(OG_LOCALES).filter(
 );
 const canonical = canonicalForPath(path, SITE.url);
 const ogImageUrl = absoluteUrl(SITE.url, ogImage);
+/** Pixel size and alt are only known for the committed default card. */
+const ogImageMeta = ogImage === defaultOgImagePath() ? DEFAULT_OG_IMAGE : null;
 const structuredData: Record<string, unknown>[] = [
   organizationJsonLd(SITE.url),
   websiteJsonLd(SITE.url),
@@ -75,7 +84,7 @@ const robotsNoindex = noindex || isNonProductionSiteUrl(SITE.url);
 <html lang={htmlLang} dir="ltr">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <script is:inline src="/theme-init.js"></script>
     <!-- Fonts are not preloaded from the HTML: measured 2026-09-29, a
          spec-correct font preload (`crossorigin`) makes WebKit download every
@@ -101,7 +110,7 @@ const robotsNoindex = noindex || isNonProductionSiteUrl(SITE.url);
     <link
       rel="alternate"
       hreflang="x-default"
-      href={canonicalForPath(getAlternatePath(path, "en"), SITE.url)}
+      href={canonicalForPath(xDefaultPath(path), SITE.url)}
     />
     {robotsNoindex ? <meta name="robots" content="noindex, nofollow" /> : null}
     <meta property="og:type" content="website" />
@@ -114,10 +123,20 @@ const robotsNoindex = noindex || isNonProductionSiteUrl(SITE.url);
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
     <meta property="og:image" content={ogImageUrl} />
+    {ogImageMeta ? (
+      <>
+        <meta property="og:image:width" content={String(ogImageMeta.width)} />
+        <meta property="og:image:height" content={String(ogImageMeta.height)} />
+        <meta property="og:image:alt" content={ogImageMeta.alt} />
+      </>
+    ) : null}
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={fullTitle} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImageUrl} />
+    {ogImageMeta ? (
+      <meta name="twitter:image:alt" content={ogImageMeta.alt} />
+    ) : null}
     {structuredData.map((data) => (
       <script
         is:inline
@@ -156,7 +175,13 @@ const robotsNoindex = noindex || isNonProductionSiteUrl(SITE.url);
     </script>
     <main id="main-content" class="flex-1" tabindex="-1">
       <slot />
-      {surface ? <IntegrityLens surface={surface} lang={currentLang} /> : null}
+      {surface ? (
+        <IntegrityLens
+          surface={surface}
+          lang={currentLang}
+          traces={lensTraces}
+        />
+      ) : null}
       <JourneyBar />
     </main>
     <Footer />

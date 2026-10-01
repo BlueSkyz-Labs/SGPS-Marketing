@@ -3,6 +3,10 @@
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import ProductGuide from "@/components/product/ProductGuide.astro";
 import { getGuideProducts } from "@/lib/showcases";
+import { guideMeta } from "@/data/page-meta";
+import { productBreadcrumbJsonLd } from "@/lib/breadcrumbs";
+import { safeJsonLd } from "@/lib/seo";
+import { SITE } from "@/data/site";
 
 export async function getStaticPaths() {
   return (await getGuideProducts()).map(({ product, showcase }) => ({
@@ -13,14 +17,30 @@ export async function getStaticPaths() {
 
 const { product, showcase } = Astro.props;
 const guide = showcase.guide!;
+const meta = guideMeta(product.data.slug, "zh-hant", {
+  title: guide.title["zh-hant"],
+  description: guide.intro["zh-hant"].slice(0, 200),
+});
+const breadcrumbStructuredData = productBreadcrumbJsonLd(
+  "zh-hant",
+  product.data.slug,
+  product.data.name,
+  SITE.url,
+  guide.title["zh-hant"],
+);
 ---
 
 <BaseLayout
-  title={`${guide.title["zh-hant"]} — BlueSkyz Labs`}
-  description={guide.intro["zh-hant"].slice(0, 200)}
+  title={meta.title}
+  description={meta.description}
   path={`/zh-hant/products/${product.data.slug}/guide/`}
-  ogImage={showcase.screens[0]?.src}
   scene="product"
 >
+  {breadcrumbStructuredData ? (
+    <script
+      type="application/ld+json"
+      set:html={safeJsonLd(breadcrumbStructuredData)}
+    ></script>
+  ) : null}
   <ProductGuide product={product} showcase={showcase} lang="zh-hant" />
 </BaseLayout>
