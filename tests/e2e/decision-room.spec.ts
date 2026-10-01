@@ -83,22 +83,32 @@ test.describe("decision room", () => {
     );
   });
 
-  test("reset clears the workspace and state never persists across reloads", async ({
+  test("reset clears the workspace; the comparison lives only in the URL, never in storage", async ({
     page,
   }) => {
     await page.goto(EN);
     const room = page.locator(ROOM);
     await room.locator("[data-decision-add]").nth(0).click();
+    // The selection is carried by the address bar (replaceState), so a reload
+    // restores exactly it - and nothing is written to storage or cookies.
     await page.reload();
-    await expect(room.locator("[data-decision-board]")).toBeHidden();
-    await expect(room.locator("[data-decision-empty-state]")).toBeVisible();
-    await room.locator("[data-decision-add]").nth(0).click();
+    await expect(room.locator("[data-decision-board]")).toBeVisible();
+    const storage = await page.evaluate(() => ({
+      local: window.localStorage.length,
+      session: window.sessionStorage.length,
+      cookies: document.cookie,
+    }));
+    expect(storage).toEqual({ local: 0, session: 0, cookies: "" });
     await room.locator("[data-decision-reset]").click();
     await expect(room.locator("[data-decision-board]")).toBeHidden();
     await expect(room.locator("[data-decision-add]").nth(0)).toHaveAttribute(
       "aria-pressed",
       "false",
     );
+    expect(new URL(page.url()).search).toBe("");
+    await page.reload();
+    await expect(room.locator("[data-decision-board]")).toBeHidden();
+    await expect(room.locator("[data-decision-empty-state]")).toBeVisible();
   });
 
   test("comparison makes no network requests after load", async ({ page }) => {
@@ -167,7 +177,7 @@ test.describe("decision room", () => {
       [
         ZH,
         "对比证据",
-        "依据来源作判断，不替你下结论",
+        "对比证据",
         "将最多四项公开事实并列对照 — 有来源的声明、信任路径，以及确保其严谨的边界说明。不作结论，不提建议。",
       ],
     ] as const) {
