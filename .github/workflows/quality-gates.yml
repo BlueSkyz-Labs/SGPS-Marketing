@@ -35,10 +35,6 @@ jobs:
         uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
         with:
           node-version: 24.20.0
-      - name: Activate project package manager
-        run: |
-          corepack enable
-          pnpm --version
       - name: Merge policy (protected paths need the owner-approved label)
         # Auto-merge lands a PR once required checks pass, so this required job
         # also holds governance, supply-chain, deployment and gate roots until
@@ -58,6 +54,10 @@ jobs:
             cp scripts/check-merge-policy.mjs "${policy}"
           fi
           node "${policy}" --base "${BASE_SHA}" --head "${HEAD_SHA}"
+      - name: Activate project package manager
+        run: |
+          corepack enable
+          pnpm --version
       - name: Install frozen dependency graph
         run: pnpm install --frozen-lockfile
       - name: Dependency vulnerability audit
@@ -116,6 +116,11 @@ jobs:
     needs: quality-gates
     runs-on: ubuntu-24.04
     timeout-minutes: 45
+    container:
+      image: mcr.microsoft.com/playwright:v1.63.0-noble@sha256:eff16c30e6f3f4af0a03fa4b706120d5e9b0891c344a27d64559aff5900a4a27
+      options: --user 1001
+    env:
+      PLAYWRIGHT_BROWSERS_PATH: /ms-playwright
     strategy:
       fail-fast: false
       matrix:
@@ -147,28 +152,19 @@ jobs:
         run: pnpm install --frozen-lockfile
       - name: Build browser test artifact
         run: pnpm build
-      - name: Install Playwright runtime
-        timeout-minutes: 10
+      - name: Verify digest-pinned Playwright runtime
         env:
           SHARD_BROWSER: ${{ matrix.browser }}
         run: |
-          set -e
-          installed=0
-          for attempt in 1 2 3; do
-            if pnpm exec playwright install --with-deps "$SHARD_BROWSER"; then
-              installed=1
-              break
-            fi
-            echo "Attempt $attempt failed; waiting 20s before retry..."
-            sleep 20
-          done
-          if [ "$installed" != "1" ]; then
-            echo "Playwright runtime installation failed after 3 attempts" >&2
+          set -euo pipefail
+          if env | grep -Eq '^PLAYWRIGHT_(DOWNLOAD_HOST|CHROMIUM_DOWNLOAD_HOST|FIREFOX_DOWNLOAD_HOST|WEBKIT_DOWNLOAD_HOST)='; then
+            echo "Unapproved Playwright browser download-host override detected" >&2
             exit 1
           fi
+          test "$PLAYWRIGHT_BROWSERS_PATH" = "/ms-playwright"
           node -e "require('@playwright/test')[process.env.SHARD_BROWSER].launch()
             .then((browser)=>browser.close())
-            .then(()=>console.log(process.env.SHARD_BROWSER+' runtime launched successfully'))
+            .then(()=>console.log(process.env.SHARD_BROWSER+' digest-pinned runtime launched successfully'))
             .catch((error)=>{console.error(error);process.exit(1);});"
       - name: Playwright and axe assurance
         env:
