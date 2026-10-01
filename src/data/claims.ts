@@ -34,6 +34,11 @@ export interface PublicClaim {
   kind: ClaimKind;
   surface: string;
   statement: LocalizedStatement;
+  /**
+   * Short label used only for the EN/VI evidence page <title> (SEO length).
+   * Derived from, and never a replacement for, the full `statement`.
+   */
+  titleLabel?: { en: string; vi: string } | undefined;
   evidenceIds: string[];
   boundaryId?: string | undefined;
   reviewId?: string | undefined;
@@ -81,6 +86,10 @@ export const CLAIMS: readonly PublicClaim[] = [
       "zh-hant":
         "安全報告透過 GitHub 私有管道送達維護者，絕不會透過公開 issue 提出。",
     },
+    titleLabel: {
+      en: "Security reports go through a private GitHub channel",
+      vi: "Báo cáo bảo mật qua kênh GitHub riêng tư",
+    },
     evidenceIds: ["ev-security-advisory", "ev-security-route"],
     boundaryId: "bnd-security-reporting",
     reviewId: "security-private-reporting",
@@ -96,6 +105,10 @@ export const CLAIMS: readonly PublicClaim[] = [
       "zh-hant":
         "本站不設定 Cookie；僅在訪客明確選擇語言或主題時於瀏覽器本地儲存偏好，不進行跟蹤或行為畫像。",
     },
+    titleLabel: {
+      en: "No cookies; only chosen language and theme are stored",
+      vi: "Không đặt cookie; chỉ lưu ngôn ngữ và giao diện đã chọn",
+    },
     evidenceIds: ["ev-privacy-route", "ev-security-route"],
     boundaryId: "bnd-privacy-collection",
     reviewId: "privacy-data-practices",
@@ -109,6 +122,10 @@ export const CLAIMS: readonly PublicClaim[] = [
       vi: "Sản phẩm chỉ xuất hiện trong danh mục công khai khi bằng chứng công khai của nó sẵn sàng để xác minh.",
       zh: "产品仅在其公开证据可核验时才会出现在公开登记表中。",
       "zh-hant": "產品僅在其公開證據可核驗時才會出現在公開登記表中。",
+    },
+    titleLabel: {
+      en: "Registry lists only products with verifiable evidence",
+      vi: "Danh mục chỉ công bố sản phẩm có bằng chứng xác minh được",
     },
     evidenceIds: ["ev-products-route"],
   },

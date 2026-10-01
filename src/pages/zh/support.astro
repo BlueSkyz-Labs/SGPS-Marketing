@@ -1,5 +1,6 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
+import { PAGE_META } from "@/data/page-meta";
 import Container from "@/components/layout/Container.astro";
 import PageHeader from "@/components/layout/PageHeader.astro";
 import { SITE } from "@/data/site";
@@ -8,16 +9,20 @@ const hasBusinessEmail = Boolean(SITE.contactEmail);
 ---
 
 <BaseLayout
-  title="支持"
-  description="BlueSkyz Labs 的支持途径与可操作求助：当前可用的、尚未公布的内容，以及如何联系我们。"
+  title={PAGE_META["zh"]["support"].title}
+  description={PAGE_META["zh"]["support"].description}
   path="/zh/support/"
 >
   <section class="py-16 lg:py-24">
     <Container>
       <PageHeader
         eyebrow="支持"
-        title="诚实坦诚的帮助"
-        lede="各产品的支持入口将在核实后显示在产品资料页。通用支持状态见下方；报告安全漏洞仅用于漏洞披露。"
+        title="如何获得帮助"
+        lede={
+          hasBusinessEmail
+            ? "安全漏洞报告仅用于漏洞。"
+            : "目前尚未公布通用支持邮箱。安全漏洞报告仅用于漏洞。"
+        }
       />
       {hasBusinessEmail ? (
         <p class="mt-8 max-w-2xl text-[var(--text-secondary)]">

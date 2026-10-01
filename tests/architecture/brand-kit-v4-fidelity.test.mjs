@@ -110,22 +110,22 @@ const PAIRS = [
     `${KIT}/03_ICONS/02_BRAND_PRINCIPLES/${icon}.svg`,
     `public/brand/blueskyz/v4/principles/${principle}.svg`,
   ]),
-  ...["apexagent", "fluentarc", "sotam", "sotro", "vungtaylai"].flatMap(
-    (product) => [
-      [
-        `${KIT}/03_ICONS/03_PRODUCT_ICONS/${product}.svg`,
-        `public/brand/blueskyz/v4/products/${product}.svg`,
-      ],
-      [
-        `${KIT}/06_PRODUCT_BRANDS/01_LOCKUPS_SVG/${product}_endorsed_lockup_dark.svg`,
-        `public/brand/blueskyz/v4/products/${product}_endorsed_lockup_dark.svg`,
-      ],
-      [
-        `${KIT}/06_PRODUCT_BRANDS/01_LOCKUPS_SVG/${product}_endorsed_lockup_light.svg`,
-        `public/brand/blueskyz/v4/products/${product}_endorsed_lockup_light.svg`,
-      ],
+  // Sổ Trọ is a recorded Owner DEVIATION (red-book app icon, 2026-10-01):
+  // its product assets are guarded by sotro-redbook-icon.test.mjs instead.
+  ...["apexagent", "fluentarc", "sotam", "vungtaylai"].flatMap((product) => [
+    [
+      `${KIT}/03_ICONS/03_PRODUCT_ICONS/${product}.svg`,
+      `public/brand/blueskyz/v4/products/${product}.svg`,
     ],
-  ),
+    [
+      `${KIT}/06_PRODUCT_BRANDS/01_LOCKUPS_SVG/${product}_endorsed_lockup_dark.svg`,
+      `public/brand/blueskyz/v4/products/${product}_endorsed_lockup_dark.svg`,
+    ],
+    [
+      `${KIT}/06_PRODUCT_BRANDS/01_LOCKUPS_SVG/${product}_endorsed_lockup_light.svg`,
+      `public/brand/blueskyz/v4/products/${product}_endorsed_lockup_light.svg`,
+    ],
+  ]),
   ...[`tokens.css`, `tokens.json`, `tokens.dtcg.json`].map((file) => [
     `${KIT}/07_DESIGN_TOKENS/${file}`,
     `public/brand/blueskyz/v4/tokens/${file}`,

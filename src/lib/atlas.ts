@@ -50,7 +50,7 @@ export function buildAtlasModel(
       id,
       kind: "principle",
       label: principle.name[lang],
-      href: "#house-title",
+      href: `/${lang}/#house-title`,
     });
     edges.push({ from: "brand", to: id });
   }

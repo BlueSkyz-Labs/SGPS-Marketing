@@ -1,4 +1,11 @@
-import { test, expect } from "@playwright/test";
+import { test, expect, type Page } from "@playwright/test";
+
+// S6: on desktop the three-way group lives behind one compact header trigger
+// (native popover); the compact menu still shows the group inline.
+async function openThemeGroup(page: Page): Promise<void> {
+  const trigger = page.locator("header [data-theme-trigger]:visible");
+  if (await trigger.count()) await trigger.click();
+}
 
 test("theme storage is opt-in and the chosen mode survives navigation", async ({
   page,
@@ -7,6 +14,7 @@ test("theme storage is opt-in and the chosen mode survives navigation", async ({
   // A compact viewport exposes the control inside the native mobile disclosure.
   const mobileMenu = page.locator("header details > summary");
   if (await mobileMenu.isVisible()) await mobileMenu.click();
+  await openThemeGroup(page);
   const theme = page.getByRole("group", { name: "Theme" });
   const system = theme.getByRole("button", { name: "System" });
   await expect(system).toHaveAttribute("aria-pressed", "true");
@@ -22,6 +30,7 @@ test("theme storage is opt-in and the chosen mode survives navigation", async ({
 
   await page.goto("/vi/");
   if (await mobileMenu.isVisible()) await mobileMenu.click();
+  await openThemeGroup(page);
   await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
   await expect(
     page.getByRole("group", { name: "Giao diện" }).getByRole("button", {
@@ -57,6 +66,7 @@ test("explicit Light overrides OS-dark, System restores it without tracking", as
   try {
     const page = await context.newPage();
     await page.goto("/en/");
+    await openThemeGroup(page);
     const theme = page.getByRole("group", { name: "Theme" });
     await expect(page.locator("html")).not.toHaveAttribute(
       "data-theme",
@@ -84,6 +94,7 @@ test("explicit Light overrides OS-dark, System restores it without tracking", as
       await page.evaluate(() => localStorage.getItem("blueskyz-theme")),
     ).toBe("light");
 
+    await openThemeGroup(page);
     await page
       .getByRole("group", { name: "Theme" })
       .getByRole("button", { name: "System" })

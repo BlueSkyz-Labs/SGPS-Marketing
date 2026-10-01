@@ -12,12 +12,6 @@ const FOOTER_LINKS = getFooterLinks(lang);
 
 const taglineLead = isVi ? "Trí tuệ. Nâng tầm." : SITE.taglineLead;
 const taglineAccent = isVi ? "Tác động." : SITE.taglineAccent;
-const proposition = isVi
-  ? "Chúng tôi xây dựng những sản phẩm thông minh để trao quyền cho con người và nâng tầm cách công việc được thực hiện."
-  : SITE.proposition;
-const motto = isVi
-  ? "Xây dựng với sự rõ ràng. Mở rộng với sự tự tin."
-  : SITE.motto;
 
 // C4-A S6 — colophon: identity + language only. Every public trust/security
 // route already exists exactly once in the footer navigation; repeating them
@@ -62,12 +56,6 @@ const languageName = isVi
               {taglineAccent}
             </span>
           </span>
-        </p>
-        <p class="max-w-2xl text-sm text-[color-mix(in_srgb,var(--brand-porcelain)_72%,white)]">
-          {proposition}
-        </p>
-        <p class="text-xs tracking-[0.12em] text-[color-mix(in_srgb,var(--brand-porcelain)_58%,white)] uppercase">
-          {motto}
         </p>
       </div>
     </div>
