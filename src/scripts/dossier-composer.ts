@@ -1,5 +1,8 @@
 import type { Language } from "../lib/i18n";
-import { parseDossierSearch } from "../lib/dossier-url-state";
+import {
+  parseDossierSearch,
+  writeSelectionToUrl,
+} from "../lib/dossier-url-state";
 
 /**
  * C4-C Task 2 — local dossier composer.
@@ -52,7 +55,7 @@ function entryTemplate(id: string): HTMLTemplateElement | null {
   );
 }
 
-function render(elements: ComposerElements): void {
+function render(elements: ComposerElements): string[] {
   const selected = [
     ...elements.form.querySelectorAll<HTMLInputElement>("[data-dossier-item]"),
   ]
@@ -67,6 +70,7 @@ function render(elements: ComposerElements): void {
   }
   elements.counter.textContent = String(selected.length);
   elements.preview.toggleAttribute("data-empty", selected.length === 0);
+  return selected;
 }
 
 function applyUrlState(elements: ComposerElements): void {
@@ -107,10 +111,12 @@ function applyUrlState(elements: ComposerElements): void {
       elements.unknown.append(item);
     }
   }
-  elements.unknown.toggleAttribute(
-    "hidden",
-    requested.status !== "rejected" && rejected.length === 0,
-  );
+  const hideUnknown = requested.status !== "rejected" && rejected.length === 0;
+  elements.unknown.toggleAttribute("hidden", hideUnknown);
+  // The heading lives in the wrapper; it must follow the list, never outlive it.
+  elements.unknown
+    .closest<HTMLElement>("[data-dossier-unknown-block]")
+    ?.toggleAttribute("hidden", hideUnknown);
 }
 
 export function initDossierComposer(): void {
@@ -120,7 +126,10 @@ export function initDossierComposer(): void {
   applyUrlState(elements);
   render(elements);
 
-  elements.form.addEventListener("change", () => render(elements));
+  elements.form.addEventListener("change", () => {
+    // Replace, never push: Back must leave the page, not step through ticks.
+    writeSelectionToUrl(window, SELECTION_PARAM, render(elements));
+  });
   elements.form.addEventListener("submit", (event) => {
     // Composition is local: the form must never navigate or transmit.
     event.preventDefault();
