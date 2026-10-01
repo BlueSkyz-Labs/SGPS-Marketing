@@ -124,6 +124,8 @@ export function initDecisionRoom(root: ParentNode = document): void {
       selected.clear();
       announce(template(msgCount, 0, max));
       render();
+      // The reset button hides itself; keep keyboard focus on the board.
+      addButtons[0]?.focus();
     });
   }
 
@@ -219,7 +221,7 @@ export function initDecisionAtelier(room: HTMLElement): void {
         .map((box) => box.value),
     });
 
-    let shown = 0;
+    const shownIds = new Set<string>();
     for (const group of arrangement.groups) {
       // A <template>'s children live in its content fragment, so read that;
       // textContent on the template element itself comes back empty.
@@ -259,7 +261,7 @@ export function initDecisionAtelier(room: HTMLElement): void {
           reason.textContent = reasonText;
           element.prepend(reason);
         }
-        shown += 1;
+        shownIds.add(item.id);
       }
     }
 
@@ -273,6 +275,7 @@ export function initDecisionAtelier(room: HTMLElement): void {
     }
 
     if (announce) {
+      const shown = shownIds.size;
       status.textContent =
         shown === 0 ? message("none") : fill(message("grouped"), shown);
     }
