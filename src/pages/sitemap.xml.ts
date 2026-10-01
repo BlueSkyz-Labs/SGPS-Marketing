@@ -26,6 +26,8 @@ export const GET: APIRoute = async () => {
   const locs = isNonProductionSiteUrl(SITE.url)
     ? []
     : [
+        // Language gateway (Owner decision F16, 2026-10-01): indexable.
+        absoluteUrl(SITE.url, "/"),
         ...PUBLIC_STATIC_PATHS.map((path) => absoluteUrl(SITE.url, path)),
         ...SUPPORTED_LANGUAGES.flatMap((lang) =>
           products.map((product) =>

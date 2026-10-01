@@ -1,20 +1,17 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
+import { PAGE_META } from "@/data/page-meta";
 import Container from "@/components/layout/Container.astro";
 import Hero from "@/components/sections/Hero.astro";
 import FlagshipTheatre from "@/components/product/FlagshipTheatre.astro";
 import ProductHouse from "@/components/product/ProductHouse.astro";
-import OneHouse from "@/components/sections/OneHouse.astro";
-import Trust from "@/components/sections/Trust.astro";
-import AboutBlueSkyz from "@/components/sections/AboutBlueSkyz.astro";
-import NextStep from "@/components/sections/NextStep.astro";
+import ProofBand from "@/components/sections/ProofBand.astro";
 import HorizonField from "@/components/experience/HorizonField.astro";
 import { getFlagshipProduct, getPublicProducts } from "@/lib/products";
-import { SITE } from "@/data/site";
 
-// C2 six-act homepage: Hero → Flagship Theatre → Product House → One House →
-// Trust → About → Next Step. Power-user surfaces (ExperienceSpine, IntentLens,
-// Atlas) keep their routes/components but no longer lead the homepage.
+// Experience v6 S1 home: Hero (registry promise) → Flagship → second product
+// → one proof band. Removed from home (components kept): One House,
+// About, Next step, House index, Trust cards.
 const products = await getPublicProducts();
 /** Public refs the proof selector binds against (slug + name only). */
 const productRefs = products.map((product) => ({
@@ -25,19 +22,21 @@ const flagship = await getFlagshipProduct();
 ---
 
 <BaseLayout
-  title={SITE.name}
-  description="智能。提升。影响。我们打造智能化产品，赋能个人并提升工作方式。"
+  title={PAGE_META["zh"]["home"].title}
+  description={PAGE_META["zh"]["home"].description}
   path="/zh/"
   scene="ink"
 >
   <Hero lang="zh" />
   <Container>
-    <FlagshipTheatre product={flagship} products={productRefs} lang="zh" />
-    <ProductHouse products={products} lang="zh" mode="continuation" />
-    <OneHouse lang="zh" />
-    <Trust lang="zh" />
-    <AboutBlueSkyz lang="zh" />
-    <NextStep lang="zh" />
+    <FlagshipTheatre
+      product={flagship}
+      products={productRefs}
+      lang="zh"
+      compact
+    />
+    <ProductHouse products={products} lang="zh" mode="continuation" compact />
+    <ProofBand lang="zh" />
   </Container>
   <HorizonField
     class="c2-closing-signature"

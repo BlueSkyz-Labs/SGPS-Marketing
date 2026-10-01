@@ -1,15 +1,20 @@
 import { test, expect } from "@playwright/test";
+import { hasPublicProducts } from "./product-helpers.ts";
 
 test.describe("Smoke — Astro foundation", () => {
   test("home page loads the BlueSkyz Labs proposition", async ({ page }) => {
     const response = await page.goto("/en/", { waitUntil: "domcontentloaded" });
     expect(response, "navigation response").not.toBeNull();
     expect(response!.status(), "HTTP status").toBeLessThan(400);
+    // Experience v6 S2: the H1 is the brand promise (site proposition); the
+    // brand tagline is stated once, in the footer.
     await expect(page.getByRole("heading", { level: 1 })).toContainText(
-      "Intelligence. Elevated.",
+      hasPublicProducts
+        ? "We build intelligent products that empower people"
+        : "Intelligence. Elevated.",
     );
-    await expect(page.getByRole("heading", { level: 1 })).toContainText(
-      "Impact.",
+    await expect(page.getByRole("contentinfo")).toContainText(
+      "Intelligence. Elevated.",
     );
     await expect(page.locator("main#main-content")).toBeVisible();
   });
@@ -29,7 +34,10 @@ test.describe("Smoke — Astro foundation", () => {
     await page.goto("/vi/");
     await expect(page.locator("html")).toHaveAttribute("lang", "vi");
     await expect(page.getByRole("heading", { level: 1 })).toContainText(
-      /Trí tuệ|Nâng tầm|Tác động/,
+      hasPublicProducts
+        ? /Chúng tôi xây dựng những sản phẩm thông minh/
+        : /Trí tuệ|Nâng tầm|Tác động/,
     );
+    await expect(page.getByRole("contentinfo")).toContainText(/Trí tuệ/);
   });
 });

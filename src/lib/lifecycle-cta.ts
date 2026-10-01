@@ -49,7 +49,7 @@ export const LIFECYCLE_CTA_VERB_LABELS: Record<
     en: "View development status",
     vi: "Xem trạng thái phát triển",
     zh: "查看开发状态",
-    "zh-hant": "檢視開發狀態",
+    "zh-hant": "查看開發狀態",
   },
   try: { en: "Try", vi: "Dùng thử", zh: "试用", "zh-hant": "試用" },
 };

@@ -1,29 +1,20 @@
 import { expect, test } from "@playwright/test";
 
 /**
- * S+ / C2 — One House section.
+ * Experience v6 S1 — One House word band removed from the home.
  *
- * C2 redesign approved: the homepage One House section is now an editorial
- * interlude (`data-one-house-editorial`) rather than a framework matrix.
- * The principle matrix (`data-principle-matrix`) is no longer on the homepage;
- * it may exist on dedicated surfaces. These tests reflect the C2-approved
- * editorial treatment while preserving equivalent truth invariants.
- *
- * Invariants preserved:
- *  - Four plain-language philosophy concepts, EN and VI parity
- *  - No hover-only critical information (all concepts visible without interaction)
- *  - No fabricated assurance claims (certs, scores, grades)
- *  - No horizontal overflow at 320px
- *  - Full content available without JavaScript
+ * History: S+ / C2 rendered four plain-language principle words
+ * (`data-one-house-editorial`). The audit (E-10) found them to be large type
+ * with no proof, so S1 removed the band. The invariants that still apply to
+ * the home are kept below: no unsupported assurance claims, no hover-only
+ * critical information, no horizontal overflow at 320px and full content
+ * without JavaScript.
  */
-
-const EN_CONCEPTS = [
+const REMOVED_CONCEPTS = [
   "Clarity",
   "Human agency",
   "Purposeful intelligence",
   "Trust by design",
-];
-const VI_CONCEPTS = [
   "Rõ ràng",
   "Con người giữ quyền chủ động",
   "Trí tuệ có mục đích",
@@ -40,73 +31,34 @@ const FORBIDDEN = [
   /maturity score/i,
 ];
 
-test("every concept is present in the editorial section on /en/", async ({
-  page,
-}) => {
-  await page.goto("/en/");
-  const oneHouse = page.locator("[data-one-house-editorial]");
-  await expect(oneHouse).toBeVisible();
-  await expect(oneHouse.locator("[data-one-house-concept]")).toHaveCount(4);
-  for (const concept of EN_CONCEPTS) {
-    await expect(
-      oneHouse.getByRole("heading", { level: 3, name: concept }),
-    ).toBeVisible();
-  }
-  // C2: principle matrix removed from homepage per approved design
-  await expect(page.locator("[data-principle-matrix]")).toHaveCount(0);
-});
+for (const path of ["/en/", "/vi/"]) {
+  test(`${path} no longer renders the One House band or its concept words`, async ({
+    page,
+  }) => {
+    await page.goto(path);
+    await expect(page.locator("[data-one-house-editorial]")).toHaveCount(0);
+    await expect(page.locator("[data-principle-matrix]")).toHaveCount(0);
+    for (const concept of REMOVED_CONCEPTS) {
+      await expect(
+        page.getByRole("heading", { level: 3, name: concept }),
+      ).toHaveCount(0);
+    }
+  });
+}
 
-test("every concept is present in the editorial section on /vi/ (parity)", async ({
-  page,
-}) => {
-  await page.goto("/vi/");
-  const oneHouse = page.locator("[data-one-house-editorial]");
-  await expect(oneHouse).toBeVisible();
-  await expect(oneHouse.locator("[data-one-house-concept]")).toHaveCount(4);
-  for (const concept of VI_CONCEPTS) {
-    await expect(
-      oneHouse.getByRole("heading", { level: 3, name: concept }),
-    ).toBeVisible();
-  }
-  // C2: principle matrix removed from homepage per approved design
-  await expect(page.locator("[data-principle-matrix]")).toHaveCount(0);
-});
-
-test("no hover-only critical information in the One House section", async ({
-  page,
-}) => {
+test("home copy avoids unsupported assurance claims", async ({ page }) => {
   await page.goto("/en/");
-  const oneHouse = page.locator("[data-one-house-editorial]");
-  await expect(oneHouse).toBeVisible();
-  // All four concept items must be directly visible without hover/interaction
-  const concepts = oneHouse.locator("[data-one-house-concept]");
-  const count = await concepts.count();
-  expect(count).toBe(4);
-  for (let i = 0; i < count; i++) {
-    await expect(concepts.nth(i)).toBeVisible();
-  }
-});
-
-test("One House editorial copy avoids unsupported assurance claims", async ({
-  page,
-}) => {
-  await page.goto("/en/");
-  const oneHouse = page.locator("[data-one-house-editorial]");
-  await expect(oneHouse).toBeVisible();
-  const text = await oneHouse.innerText();
+  const text = await page.locator("main").innerText();
   for (const pattern of FORBIDDEN) {
     expect(text).not.toMatch(pattern);
   }
-  // Must not imply every product uses AI or the same technology stack
   expect(text).not.toMatch(/every product.*AI|all products.*AI/i);
 });
 
-test("320px keeps no horizontal overflow with the One House section", async ({
-  page,
-}) => {
+test("320px keeps no horizontal overflow on the home", async ({ page }) => {
   await page.setViewportSize({ width: 320, height: 720 });
   await page.goto("/en/");
-  await expect(page.locator("[data-one-house-editorial]")).toBeVisible();
+  await expect(page.locator("#hero-title")).toBeVisible();
   expect(
     await page.evaluate(
       () =>
@@ -116,20 +68,14 @@ test("320px keeps no horizontal overflow with the One House section", async ({
   ).toBe(false);
 });
 
-test("One House editorial renders fully without JavaScript", async ({
+test("home renders its hero, flagship and proof band without JavaScript", async ({
   browser,
 }) => {
   const context = await browser.newContext({ javaScriptEnabled: false });
   const page = await context.newPage();
   await page.goto("/en/");
-  const oneHouse = page.locator("[data-one-house-editorial]");
-  await expect(oneHouse).toBeVisible();
-  // All four concepts must be present in static HTML without JS
-  await expect(oneHouse.locator("[data-one-house-concept]")).toHaveCount(4);
-  for (const concept of EN_CONCEPTS) {
-    await expect(
-      oneHouse.getByRole("heading", { level: 3, name: concept }),
-    ).toBeVisible();
-  }
+  await expect(page.locator("#hero-title")).toBeVisible();
+  await expect(page.locator("[data-flagship-theatre]")).toBeVisible();
+  await expect(page.locator("[data-trust-band]")).toBeVisible();
   await context.close();
 });
