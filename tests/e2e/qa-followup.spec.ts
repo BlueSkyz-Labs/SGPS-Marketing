@@ -110,7 +110,10 @@ test.describe("compact menu closes with Escape and outside press", () => {
     const details = page.locator("header details");
     await details.locator("summary").click();
     await expect(details).toHaveAttribute("open", "");
-    await details.locator(":scope > div").click({ position: { x: 4, y: 4 } });
+    // Press the panel's left padding, clear of its rounded corners. Firefox's
+    // actionability check reported the hero for a (4,4) corner press even
+    // when elementFromPoint returns the panel there (see the hit-target test).
+    await details.locator(":scope > div").click({ position: { x: 6, y: 20 } });
     await expect(details).toHaveAttribute("open", "");
     await page.mouse.click(10, 700);
     await expect(details).not.toHaveAttribute("open", "");
@@ -128,6 +131,40 @@ test.describe("compact menu closes with Escape and outside press", () => {
     await page.keyboard.press("Escape");
     await expect(panel).toBeHidden();
     await expect(details).toHaveAttribute("open", "");
+  });
+
+  test("the open panel and every menu item are the topmost hit target", async ({
+    page,
+  }) => {
+    await page.goto("/en/");
+    const details = page.locator("header details");
+    await details.locator("summary").click();
+    await expect(details).toHaveAttribute("open", "");
+    const covered = await details.evaluate((el) => {
+      const panel = el.querySelector(":scope > div");
+      if (!panel) return ["panel missing"];
+      const targets = [panel, ...panel.querySelectorAll("a, button")];
+      const misses: string[] = [];
+      for (const target of targets) {
+        const r = target.getBoundingClientRect();
+        // Closed popover content (e.g. the language list) has no box.
+        if (r.width === 0 || r.height === 0) continue;
+        const points = [
+          [r.left + r.width / 2, r.top + r.height / 2],
+          [r.left + 6, r.top + 6],
+        ];
+        for (const [x, y] of points) {
+          const hit = document.elementFromPoint(x!, y!);
+          if (!hit || !panel.contains(hit)) {
+            misses.push(
+              `${target.textContent?.trim().slice(0, 30)} @${Math.round(x!)},${Math.round(y!)} -> ${hit?.tagName}.${hit?.className}`,
+            );
+          }
+        }
+      }
+      return misses;
+    });
+    expect(covered, covered.join("\n")).toEqual([]);
   });
 
   test("without JavaScript the menu still opens natively", async ({
