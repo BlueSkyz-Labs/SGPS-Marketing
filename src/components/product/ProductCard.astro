@@ -3,7 +3,7 @@ import type { CollectionEntry } from "astro:content";
 import { SHARED_LABELS, labelFor, type Language } from "@/data/site";
 import {
   getProductProfilePath,
-  getProductIconPath,
+  getProductIconThumbPath,
 } from "@/lib/product-routes";
 import { platformLabel, productCopy } from "@/lib/product-copy";
 import { resolveLifecycleCta } from "@/lib/lifecycle-cta";
@@ -20,7 +20,7 @@ const { data } = product;
 const profileHref = getProductProfilePath(lang, data.slug);
 const copy = productCopy(data, lang);
 const profileLabel = labelFor(SHARED_LABELS.viewProfile, lang);
-const iconHref = getProductIconPath(data.slug);
+const iconHref = getProductIconThumbPath(data.slug);
 // Single source for the card's action verb + destination (plan v5 W3.2).
 const cta = resolveLifecycleCta(
   {

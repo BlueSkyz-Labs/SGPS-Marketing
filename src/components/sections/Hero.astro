@@ -6,7 +6,7 @@ import { SITE, SHARED_LABELS, labelFor, type Language } from "@/data/site";
 import { emptyRegistryPrimaryCta, emptyRegistrySecondaryCta } from "@/lib/act";
 import { resolveLifecycleCta } from "@/lib/lifecycle-cta";
 import { productCopy } from "@/lib/product-copy";
-import { getProductIconPath } from "@/lib/product-routes";
+import { getProductIconThumbPath } from "@/lib/product-routes";
 import { getPublicProducts } from "@/lib/products";
 import FlagshipCapture from "@/components/product/FlagshipCapture.astro";
 
@@ -144,7 +144,7 @@ const secondary = flagship
             <p class="hero-product flex flex-wrap items-center gap-x-3 gap-y-2">
               <img
                 class="size-9 rounded-lg"
-                src={getProductIconPath(flagship.data.slug)}
+                src={getProductIconThumbPath(flagship.data.slug)}
                 alt=""
                 width="36"
                 height="36"

@@ -203,6 +203,14 @@ const ctaIsExternal = cta.external || /^https?:\/\//i.test(cta.href);
             screen="owner-collect"
             lang={lang}
             sizes="(min-width: 1024px) 34rem, 92vw"
+            smallSrc={
+              data.slug === "sotro"
+                ? {
+                    src: "/products/sotro/showcase/mgr-02-payments-768.webp",
+                    width: 768,
+                  }
+                : undefined
+            }
           />
         </div>
       </div>
