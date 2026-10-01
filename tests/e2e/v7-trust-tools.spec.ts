@@ -90,14 +90,14 @@ test.describe("v7 dossier and security components use the authored scale", () =>
 });
 
 test.describe("v7 decision room", () => {
-  test("one name: H1 and title are 'Compare the evidence' in four locales (D-10)", async ({
+  test("one name: H1 and title are 'Compare claims' in four locales (D-10, v8 dec-1)", async ({
     page,
   }) => {
     for (const [lang, name] of [
-      ["en", "Compare the evidence"],
-      ["vi", "So sánh bằng chứng"],
-      ["zh", "对比证据"],
-      ["zh-hant", "對照證據"],
+      ["en", "Compare claims"],
+      ["vi", "So sánh tuyên bố"],
+      ["zh", "比较声明"],
+      ["zh-hant", "比較聲明"],
     ] as const) {
       await page.goto(`/${lang}/decision-room/`);
       await expect(page).toHaveTitle(new RegExp(name));
@@ -197,23 +197,8 @@ test.describe("v7 decision room", () => {
     await expect(room.locator("[data-decision-empty-state]")).toBeVisible();
     await room.locator("[data-decision-add]").first().click();
     await expect(room.locator("[data-decision-empty-state]")).toBeHidden();
-    // the remaining empty line is scoped under its own "Include in a dossier" title
-    await expect(room.locator(".decision-room__handoff-title")).toHaveText(
-      "Include in a dossier",
-    );
-  });
-
-  test("reset unticks every dossier item (B-10)", async ({ page }) => {
-    await page.goto("/en/decision-room/");
-    const ticks = page.locator("[data-atelier-item-select]");
-    await ticks.nth(0).check();
-    await ticks.nth(1).check();
-    await expect(page.locator("[data-atelier-handoff-link]")).toBeVisible();
-    await page.locator("[data-atelier-reset]").click();
-    await expect(
-      page.locator("[data-atelier-item-select]:checked"),
-    ).toHaveCount(0);
-    await expect(page.locator("[data-atelier-handoff-link]")).toBeHidden();
+    // v8: there is one empty message and no second "dossier" empty line
+    await expect(room.locator("[data-atelier-handoff-empty]")).toHaveCount(0);
   });
 
   test("comparison is written to the URL, bounded and allowlisted (B-06)", async ({

@@ -35,7 +35,7 @@ export function initDecisionRoom(root: ParentNode = document): void {
   }
   room.setAttribute("data-decision-ready", "");
   initDecisionAtelier(room);
-  initAtelierHandoff(room);
+  const refreshHandoff = initAtelierHandoff(room, () => [...selected]);
 
   const board = room.querySelector("[data-decision-board]");
   const empty = room.querySelector("[data-decision-empty-state]");
@@ -102,6 +102,7 @@ export function initDecisionRoom(root: ParentNode = document): void {
     if (reset instanceof HTMLElement) {
       reset.hidden = selected.size === 0;
     }
+    refreshHandoff();
   };
 
   const persist = (): void => {
@@ -377,14 +378,6 @@ export function initDecisionAtelier(room: HTMLElement): void {
     }
     apply(true);
     persistArrangement();
-    // Reset means reset: also clear every "Include in a dossier" tick, and let
-    // the handoff recompute from what is now (not) checked.
-    for (const tick of room.querySelectorAll<HTMLInputElement>(
-      "[data-atelier-item-select]:checked",
-    )) {
-      tick.checked = false;
-      tick.dispatchEvent(new Event("change", { bubbles: true }));
-    }
   });
 
   apply(false);
@@ -397,11 +390,13 @@ export function initDecisionAtelier(room: HTMLElement): void {
  * plan is recomputed from what is checked right now, and the destination is an
  * ordinary same-origin link the browser follows only when they click it.
  */
-export function initAtelierHandoff(room: HTMLElement): void {
+export function initAtelierHandoff(
+  room: HTMLElement,
+  getSelected: () => string[],
+): () => void {
   const link = room.querySelector<HTMLAnchorElement>(
     "[data-atelier-handoff-link]",
   );
-  const empty = room.querySelector<HTMLElement>("[data-atelier-handoff-empty]");
   const report = room.querySelector<HTMLElement>(
     "[data-atelier-handoff-report]",
   );
@@ -411,29 +406,22 @@ export function initAtelierHandoff(room: HTMLElement): void {
   const reportTemplate = room.querySelector<HTMLTemplateElement>(
     "template[data-atelier-handoff-report]",
   );
-  if (!link || !empty || !report || !actionTemplate || !reportTemplate) return;
+  if (!link || !report || !actionTemplate || !reportTemplate) return () => {};
 
   const actionCopy = (actionTemplate.content.textContent ?? "").trim();
   const reportCopy = (reportTemplate.content.textContent ?? "").trim();
   const lang = readLanguage();
 
   const render = (): void => {
-    const selected = Array.from(
-      room.querySelectorAll<HTMLInputElement>(
-        "[data-atelier-item-select]:checked",
-      ),
-    ).map((input) => input.value);
-    const plan = planDossierHandoff(selected, lang);
+    const plan = planDossierHandoff(getSelected(), lang);
 
     if (plan.href !== null && plan.itemIds.length > 0) {
       link.setAttribute("href", plan.href);
       link.textContent = actionCopy.replace("{n}", String(plan.itemIds.length));
       link.hidden = false;
-      empty.hidden = true;
     } else {
       link.removeAttribute("href");
       link.hidden = true;
-      empty.hidden = false;
     }
 
     if (plan.rejected.length > 0) {
@@ -448,17 +436,7 @@ export function initAtelierHandoff(room: HTMLElement): void {
     }
   };
 
-  const itemInputs = Array.from(
-    room.querySelectorAll<HTMLInputElement>("[data-atelier-item-select]"),
-  );
-  for (const input of itemInputs) {
-    // Firefox can restore native checkbox state across reloads. The handoff is
-    // intentionally ephemeral, so discard that browser-restored state before
-    // the first render rather than allowing it to become a hidden selection.
-    input.checked = false;
-    input.addEventListener("change", render);
-  }
-  render();
+  return render;
 }
 
 /** The document's language, restricted to the locales the site publishes. */

@@ -4,7 +4,12 @@ import {
   getPublicArchitectureView,
 } from "@/lib/public-architecture";
 import type { Language } from "@/lib/i18n";
-import { ARCHITECTURE_COPY } from "@/data/architecture-copy";
+import {
+  ARCHITECTURE_COPY,
+  humanEdge,
+  humanNode,
+} from "@/data/architecture-copy";
+import { formatDisplayDate } from "@/lib/display-date";
 import ArchitectureLens from "@/components/architecture/ArchitectureLens.astro";
 
 /**
@@ -32,40 +37,136 @@ const views = PUBLIC_LENSES.map((lens) => ({
 }));
 const lastVerified = views[0]?.view.lastVerified ?? null;
 const lastVerifiedText = lastVerified
-  ? new Intl.DateTimeFormat(lang, {
-      dateStyle: "long",
-      timeZone: "UTC",
-    }).format(new Date(`${lastVerified}T00:00:00Z`))
+  ? formatDisplayDate(lastVerified, lang)
   : null;
+const [verifiedBefore = "", verifiedAfter = ""] =
+  copy.lastVerified.split("{date}");
+
+/**
+ * The one diagram: the website, the three parts it contains and the outside
+ * services it relies on, each drawn once. The lens sections below list only
+ * what this diagram does not already show.
+ */
+const trust = views.find(({ lens }) => lens === "trust")!.view;
+const rootNode = trust.nodes.find((node) => node.kind === "System")!;
+const innerNodes = trust.nodes.filter((node) => node.kind === "Component");
+const outsideNodes = trust.nodes.filter(
+  (node) => node.kind === "ExternalDependency",
+);
+const assurer = trust.edges.find((edge) => edge.type === "assures");
+const labelOf = (id: string) => humanNode(lang, id).label;
+const uniqueBy = <T extends { id: string }>(items: T[]): T[] => [
+  ...new Map(items.map((item) => [item.id, item])).values(),
+];
+const allNodes = uniqueBy(views.flatMap(({ view }) => view.nodes));
+const allEdges = uniqueBy(views.flatMap(({ view }) => view.edges));
+
+// Cumulative "already shown" bookkeeping: each part is described once.
+const shownNodes = new Set(trust.nodes.map((node) => node.id));
+const shownEdges = new Set(trust.edges.map((edge) => edge.id));
+const lensViews = views.map(({ lens, view }) => {
+  const newNodes = view.nodes.filter((node) => !shownNodes.has(node.id));
+  const newEdges = view.edges.filter((edge) => !shownEdges.has(edge.id));
+  newNodes.forEach((node) => shownNodes.add(node.id));
+  newEdges.forEach((edge) => shownEdges.add(edge.id));
+  const boundaries =
+    lens === "trust"
+      ? [
+          ...new Set(
+            view.nodes.flatMap((node) =>
+              node.boundary ? [node.boundary] : [],
+            ),
+          ),
+        ]
+      : [];
+  return { lens, newNodes, newEdges, boundaries };
+});
 ---
 
 <section class="c4-salon" data-architecture-salon>
-  <nav class="c4-salon__nav" aria-label={copy.nav}>
-    <ul class="c4-salon__nav-list">
-      {views.map(({ lens }) => (
-        <li class="c4-salon__nav-item">
-          <a class="c4-salon__nav-link" href={`#lens-${lens}`}>
-            {copy.lenses[lens].nav}
-          </a>
-        </li>
-      ))}
-    </ul>
-  </nav>
+  <h2 class="c4-salon__subheading">{copy.connections}</h2>
+  <div class="c4-salon__diagram" data-architecture-diagram>
+    <div class="c4-salon__system" data-architecture-node={rootNode.id}>
+      <p class="c4-salon__system-label">{labelOf(rootNode.id)}</p>
+      <ul class="c4-salon__parts">
+        {innerNodes.map((node) => (
+          <li class="c4-salon__part" data-architecture-node={node.id}>
+            <span class="c4-salon__chip" data-diagram-node>
+              {labelOf(node.id)}
+            </span>
+            {assurer && assurer.from === node.id && (
+              <span class="c4-salon__part-note">
+                {humanEdge(lang, assurer.type)}
+              </span>
+            )}
+          </li>
+        ))}
+      </ul>
+    </div>
+    <div class="c4-salon__outside">
+      <p class="c4-salon__outside-label">{humanEdge(lang, "depends_on")}</p>
+      <ul class="c4-salon__parts">
+        {outsideNodes.map((node) => (
+          <li class="c4-salon__part" data-architecture-node={node.id}>
+            <span class="c4-salon__chip" data-diagram-node>
+              {labelOf(node.id)}
+            </span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </div>
 
-  {views.map(({ lens, view }) => (
-    <ArchitectureLens
-      lens={lens}
-      nodes={view.nodes}
-      edges={view.edges}
-      lang={lang}
-      {...(lens === "evidence" ? { verifyHref } : {})}
-    />
-  ))}
+  <div class="c4-salon__lenses">
+    {lensViews.map(({ lens, newNodes, newEdges, boundaries }) => (
+      <ArchitectureLens
+        lens={lens}
+        nodes={newNodes}
+        edges={newEdges}
+        boundaries={boundaries}
+        lang={lang}
+        {...(lens === "evidence" ? { verifyHref } : {})}
+      />
+    ))}
+  </div>
+
+  <details class="c4-salon__technical" data-architecture-technical>
+    <summary class="c4-salon__technical-summary">
+      {copy.technical.summary}
+    </summary>
+    <div class="c4-salon__technical-body">
+      <p>{copy.technical.hint}</p>
+      <h3>{copy.technical.parts}</h3>
+      <ul>
+        {allNodes.map((node) => (
+          <li>
+            <code>{node.id}</code> · <code>{node.kind}</code>
+            {node.boundary && (
+              <>
+                {" "}
+                · <code>{node.boundary}</code>
+              </>
+            )}
+          </li>
+        ))}
+      </ul>
+      <h3>{copy.technical.connections}</h3>
+      <ul>
+        {allEdges.map((edge) => (
+          <li>
+            <code>{edge.from}</code> <code>{edge.type}</code>{" "}
+            <code>{edge.to}</code>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </details>
 
   {lastVerified && (
     <p class="c4-salon__source">
-      {copy.lastVerified}:{" "}
+      {verifiedBefore}
       <time datetime={lastVerified}>{lastVerifiedText}</time>
+      {verifiedAfter}
     </p>
   )}
 </section>
@@ -86,9 +187,17 @@ const lastVerifiedText = lastVerified
   const requested = new URLSearchParams(window.location.search).get("lens");
   if (requested && allowed.has(requested)) {
     const target = document.getElementById(`lens-${requested}`);
-    if (target) {
+    if (target instanceof HTMLDetailsElement) {
+      target.open = true;
       target.setAttribute("tabindex", "-1");
       target.focus({ preventScroll: false });
     }
   }
+  // An in-page link to a lens opens it.
+  const openFromHash = () => {
+    const target = document.getElementById(window.location.hash.slice(1));
+    if (target instanceof HTMLDetailsElement) target.open = true;
+  };
+  window.addEventListener("hashchange", openFromHash);
+  openFromHash();
 </script>
