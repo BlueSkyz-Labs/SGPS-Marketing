@@ -356,10 +356,10 @@ export const MISSIONS: Mission[] = [
       {
         path: "/decision-room/",
         label: {
-          en: "Decision Room",
-          vi: "Phòng Quyết định",
-          zh: "决策室",
-          "zh-hant": "決策室",
+          en: "Compare the evidence",
+          vi: "So sánh bằng chứng",
+          zh: "对比证据",
+          "zh-hant": "對照證據",
         },
         evidenceFirst: true,
       },
@@ -462,10 +462,10 @@ export const MISSIONS: Mission[] = [
       {
         path: "/decision-room/",
         label: {
-          en: "Decision Room",
-          vi: "Phòng Quyết định",
-          zh: "决策室",
-          "zh-hant": "決策室",
+          en: "Compare the evidence",
+          vi: "So sánh bằng chứng",
+          zh: "对比证据",
+          "zh-hant": "對照證據",
         },
         evidenceFirst: true,
       },

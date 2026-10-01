@@ -20,15 +20,14 @@ const hasBusinessEmail = Boolean(SITE.contactEmail);
     <Container>
       <PageHeader
         eyebrow="Liên hệ"
-        title="Đi đúng kênh bạn cần"
+        title="Liên hệ BlueSkyz"
         lede={labelFor(EMPTY_STATE_COPY.contactLede, "vi")}
       />
       <ul class="mt-12 grid gap-4 sm:grid-cols-2">
         <li class="flex min-w-0 flex-col rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-raised)] p-6">
           <h2 class="text-lg font-semibold tracking-tight">Bảo mật</h2>
           <p class="mt-2 flex-1 text-sm leading-relaxed text-[var(--text-secondary)]">
-            Nếu phát hiện lỗ hổng nghi vấn, hãy sử dụng kênh báo cáo riêng tư
-            trên GitHub.
+            Nếu bạn nghi ngờ có lỗ hổng bảo mật, hãy báo riêng qua GitHub.
           </p>
           <div class="mt-5">
             <SafeAction
@@ -62,7 +61,7 @@ const hasBusinessEmail = Boolean(SITE.contactEmail);
           <BusinessRouteState
             lang="vi"
             heading="Kinh doanh / chung"
-            boundary="Kênh báo cáo bảo mật riêng tư chỉ dành cho lỗ hổng nghi vấn, không phải kênh liên hệ kinh doanh hoặc hỗ trợ thông thường."
+            boundary="Hợp tác và câu hỏi chung. Kênh báo cáo bảo mật riêng tư chỉ dành cho lỗ hổng bảo mật, không dùng cho hợp tác hay hỗ trợ thông thường."
           />
         )}
       </ul>

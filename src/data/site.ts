@@ -145,8 +145,8 @@ export const SHARED_LABELS = {
     "zh-hant": "下一步",
   },
   houseIndex: {
-    en: "House index",
-    vi: "Mục lục ngôi nhà",
+    en: "Site index",
+    vi: "Mục lục trang",
     zh: "网站目录",
     "zh-hant": "網站目錄",
   },
@@ -213,7 +213,7 @@ const NAV_LABELS: Record<Language, NavLabels> = {
     privacy: "隐私",
     security: "安全",
     architecture: "架构",
-    verify: "核验",
+    verify: "核实",
   },
   "zh-hant": {
     products: "產品",
@@ -223,7 +223,7 @@ const NAV_LABELS: Record<Language, NavLabels> = {
     privacy: "隱私",
     security: "安全",
     architecture: "架構",
-    verify: "核驗",
+    verify: "查證",
   },
 };
 
