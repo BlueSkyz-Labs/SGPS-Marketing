@@ -67,6 +67,14 @@ const LABELS: Record<
 
 const labels = LABELS[lang];
 
+// Existing localized string (same wording the comparison page already uses).
+const SOURCE_LABEL: Record<Language, string> = {
+  en: "View source",
+  vi: "Xem nguồn",
+  zh: "查看来源",
+  "zh-hant": "檢視來源",
+};
+
 // The allowlist is the canonical public set, resolved fail-closed by the compiler.
 const catalog = compilePublicDossier({
   lang,
@@ -114,8 +122,12 @@ const bySection = (section: (typeof SECTIONS)[number]): DossierEntry[] =>
                   <span class="c4-dossier__item-label">{entry.label}</span>
                 </label>
                 {entry.href && (
-                  <a class="c4-dossier__source" href={entry.href}>
-                    {entry.label}
+                  <a
+                    class="c4-dossier__source"
+                    href={entry.href}
+                    aria-label={`${SOURCE_LABEL[lang]}: ${entry.label}`}
+                  >
+                    {SOURCE_LABEL[lang]} →
                   </a>
                 )}
               </li>
