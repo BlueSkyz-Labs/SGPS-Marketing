@@ -107,13 +107,15 @@ test("the flagship act consumes the product record instead of authoring facts", 
   assert.match(theatre, /data-product-cta=\{cta\.verb\}/);
   assert.match(theatre, /data\.publicLabel/);
   assert.match(theatre, /data\.primaryAction/);
-  // Experience v6 S1: the home hero owns the promise from the same record
-  // (first job, shortDescription, status chip, the one lifecycle-mapped action)
-  // and the home mounts the flagship in its compact form.
+  // Experience v6 S2: the home hero states the brand promise (SITE.proposition)
+  // and presents the flagship from the same record (shortDescription, status
+  // chip, the one lifecycle-mapped action) with a labelled real capture; the
+  // home mounts the flagship act in its compact form.
   const hero = readFileSync("src/components/sections/Hero.astro", "utf8");
   assert.match(hero, /productCopy\(flagship\.data,\s*lang\)/);
-  assert.match(hero, /copy\.jobs\[0\]/);
-  assert.match(hero, /copy\.shortDescription/);
+  assert.match(hero, /SITE\.proposition/);
+  assert.match(hero, /<FlagshipCapture/);
+  assert.match(hero, /copy\??\.shortDescription/);
   assert.match(hero, /copy\??\.statusLabel/);
   assert.match(hero, /resolveLifecycleCta/);
   assert.match(hero, /data-product-cta=\{cta\.verb\}/);

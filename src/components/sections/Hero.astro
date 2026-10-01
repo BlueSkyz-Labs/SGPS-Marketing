@@ -8,16 +8,19 @@ import { resolveLifecycleCta } from "@/lib/lifecycle-cta";
 import { productCopy } from "@/lib/product-copy";
 import { getProductIconPath } from "@/lib/product-routes";
 import { getPublicProducts } from "@/lib/products";
+import FlagshipCapture from "@/components/product/FlagshipCapture.astro";
 
 /**
- * Experience v6 S1 — the hero states one concrete thing from the registry.
+ * Experience v6 S2 — brand + flagship hero (Owner 2026-10-01).
  *
- * Every product statement is a record field, localized through
- * `productCopy`: the H1 is the flagship's first recorded job, the supporting
- * line is its `shortDescription`, the status chip is its `publicLabel`, and the
- * one primary action is `resolveLifecycleCta` (no authored verb). With no
- * public flagship the hero falls back to the company tagline and the honest
- * empty-registry Act path, so nothing is invented.
+ * The H1 is BlueSkyz's one-line promise, the existing localized
+ * `SITE.proposition`. Immediately below it the flagship is presented with a
+ * real, labelled capture of the app (`FlagshipCapture`, from the product's
+ * showcase record), its name and status chip, its registry one-line
+ * description (`productCopy`) and the one primary action, which is
+ * `resolveLifecycleCta` (no authored verb). With no public flagship the hero
+ * falls back to the company tagline and the honest empty-registry Act path, so
+ * nothing is invented.
  */
 interface Props {
   lang?: Language;
@@ -28,7 +31,6 @@ const products = await getPublicProducts();
 const flagship =
   products.find((product) => product.data.featuredTier === "hero") ?? null;
 const copy = flagship ? productCopy(flagship.data, lang) : null;
-const headline = copy ? (copy.jobs[0] ?? copy.shortDescription) : null;
 const cta = flagship
   ? resolveLifecycleCta(
       {
@@ -73,11 +75,9 @@ const exploreProducts = labelFor(SHARED_LABELS.exploreProducts, lang);
 const productsHref = `/${lang}/products/`;
 const emptyPrimary = emptyRegistryPrimaryCta(SITE.contactEmail, lang);
 const emptySecondary = emptyRegistrySecondaryCta(SITE.contactEmail, lang);
-const supportingLine = copy
-  ? copy.jobs[0]
-    ? copy.shortDescription
-    : null
-  : proposition;
+// Flagship present: the proposition is the H1 and carries the promise alone.
+// Fallback: tagline H1 plus the proposition as the one supporting sentence.
+const supportingLine = flagship ? null : proposition;
 const secondary = flagship
   ? { href: productsHref, label: exploreProducts }
   : emptySecondary;
@@ -95,41 +95,20 @@ const secondary = flagship
   </div>
   <Reveal
     as="div"
-    class="site-container relative grid gap-10 py-16 sm:py-24 lg:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)] lg:items-center"
+    class="site-container relative grid gap-10 py-10 sm:py-16 lg:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)] lg:items-center"
   >
     <div class="hero-content" data-hero>
-      {flagship && cta ? (
-        <p class="hero-product flex flex-wrap items-center gap-3">
-          <img
-            class="size-11 rounded-xl"
-            src={getProductIconPath(flagship.data.slug)}
-            alt=""
-            width="44"
-            height="44"
-            decoding="async"
-          />
-          <span class="text-lg font-semibold text-[var(--brand-porcelain)]">
-            {flagship.data.name}
-          </span>
-          <span
-            data-product-status={flagship.data.publicLabel}
-            class="inline-flex rounded-full border border-white/30 px-3 py-1 text-xs font-semibold tracking-wide text-[var(--brand-porcelain)]"
-          >
-            {copy?.statusLabel}
-          </span>
-        </p>
-      ) : null}
       <h1
         id="hero-title"
         class:list={[
           "hero-headline text-[var(--brand-porcelain)] font-semibold tracking-tight",
-          cta
-            ? "hero-headline--promise mt-6 max-w-[22ch] text-3xl text-balance sm:text-4xl lg:text-5xl"
+          flagship
+            ? "hero-headline--promise max-w-[24ch] text-3xl text-balance sm:text-4xl lg:text-[2.5rem]"
             : "mt-2 max-w-[11ch] text-4xl sm:text-5xl lg:text-7xl",
         ]}
       >
-        {headline ? (
-          headline
+        {flagship ? (
+          proposition
         ) : (
           <>
             <span class="block">{taglineLead}</span>
@@ -144,20 +123,65 @@ const secondary = flagship
           {supportingLine}
         </p>
       ) : null}
+      {flagship && cta ? (
+        <div class="hero-flagship mt-8" data-hero-flagship>
+          <FlagshipCapture
+            slug={flagship.data.slug}
+            screen="today"
+            lang={lang}
+            priority
+            sizes="9rem"
+            smallSrc={
+              flagship.data.slug === "sotro"
+                ? {
+                    src: "/products/sotro/showcase/op-01-home-288.webp",
+                    width: 288,
+                  }
+                : undefined
+            }
+            class="hero-flagship__capture"
+          />
+          <div class="hero-flagship__body">
+            <p class="hero-product flex flex-wrap items-center gap-x-3 gap-y-2">
+              <img
+                class="size-9 rounded-lg"
+                src={getProductIconPath(flagship.data.slug)}
+                alt=""
+                width="36"
+                height="36"
+                decoding="async"
+              />
+              <span class="text-lg font-semibold text-[var(--brand-porcelain)]">
+                {flagship.data.name}
+              </span>
+              <span
+                data-product-status={flagship.data.publicLabel}
+                class="inline-flex rounded-full border border-white/30 px-3 py-1 text-xs font-semibold tracking-wide text-[var(--brand-porcelain)]"
+              >
+                {copy?.statusLabel}
+              </span>
+            </p>
+            <p class="hero-tagline mt-3 text-base leading-relaxed text-[color-mix(in_srgb,var(--brand-porcelain)_82%,transparent)]">
+              {copy?.shortDescription}
+            </p>
+            <div class="mt-4">
+              <ButtonLink
+                href={cta.href}
+                data-product-cta={cta.verb}
+                data-hero-primary
+              >
+                {cta.label}
+              </ButtonLink>
+            </div>
+          </div>
+        </div>
+      ) : null}
       <div class="hero-actions">
-        {cta ? (
-          <ButtonLink
-            href={cta.href}
-            data-product-cta={cta.verb}
-            data-hero-primary
-          >
-            {cta.label}
-          </ButtonLink>
-        ) : (
+        {!(flagship && cta) ? (
           <ButtonLink href={emptyPrimary.href} data-hero-primary>
             {emptyPrimary.label}
           </ButtonLink>
-        )}
+        ) : null}
         <a
           href={secondary.href}
           data-hero-secondary
@@ -195,3 +219,27 @@ const secondary = flagship
     </div>
   </Reveal>
 </section>
+
+<style>
+  .hero-flagship {
+    display: grid;
+    grid-template-columns: 9rem minmax(0, 1fr);
+    gap: 1.25rem;
+    align-items: start;
+    max-width: 34rem;
+    padding: 1rem;
+    border: 1px solid
+      color-mix(in srgb, var(--brand-porcelain) 18%, transparent);
+    border-radius: var(--radius-lg);
+    background: color-mix(in srgb, var(--brand-ink) 72%, transparent);
+  }
+  .hero-flagship :global(.hero-flagship__capture) {
+    /* Reserve the slot before the image arrives (CLS 0). */
+    aspect-ratio: 780 / 1440;
+    width: 9rem;
+  }
+  .hero-flagship :global(.flagship-capture__image) {
+    aspect-ratio: 780 / 1440;
+    object-fit: cover;
+  }
+</style>

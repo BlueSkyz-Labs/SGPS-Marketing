@@ -223,27 +223,26 @@ test.describe("C2 Flagship Theatre — fixture-backed (product present)", () => 
   }
 });
 
-test.describe("public flagship artwork presentation", () => {
+test.describe("public flagship capture presentation (Experience v6 S2)", () => {
   for (const locale of [
     {
       lang: "en",
       path: "/en/",
-      caption:
-        "Brand identity artwork — not a screenshot of the running application.",
+      label: /^Capture of the app in development · sample data/,
     },
     {
       lang: "vi",
       path: "/vi/",
-      caption:
-        "Hình ảnh nhận diện thương hiệu — không phải ảnh chụp giao diện ứng dụng.",
+      label: /^Ảnh chụp ứng dụng đang phát triển · dữ liệu mẫu/,
     },
+    { lang: "zh", path: "/zh/", label: /^开发中应用的截图 · 示例数据/ },
     {
-      lang: "zh",
-      path: "/zh/",
-      caption: "品牌视觉素材，并非应用运行界面的截图。",
+      lang: "zh-hant",
+      path: "/zh-hant/",
+      label: /^開發中應用程式的截圖 · 範例資料/,
     },
   ]) {
-    test(`${locale.lang}: homepage shows Sổ Trọ identity art without app chrome`, async ({
+    test(`${locale.lang}: homepage shows a labelled real Sổ Trọ capture, no app chrome, no identity art`, async ({
       page,
     }) => {
       test.skip(!hasPublicProducts, "No published hero product is available");
@@ -258,7 +257,14 @@ test.describe("public flagship artwork presentation", () => {
       await expect(
         theatre.locator(".c2-flagship-theatre__window-controls"),
       ).toHaveCount(0);
-      await expect(theatre.locator("figcaption")).toHaveText(locale.caption);
+      const capture = theatre.locator("[data-flagship-capture]");
+      await expect(capture).toHaveCount(1);
+      await expect(capture.locator("figcaption")).toHaveText(locale.label);
+      await expect(capture.locator("img")).toHaveAttribute(
+        "src",
+        /\/products\/sotro\/showcase\/[a-z0-9-]+\.webp$/,
+      );
+      await expect(theatre.locator('img[src*="identity"]')).toHaveCount(0);
     });
   }
 });

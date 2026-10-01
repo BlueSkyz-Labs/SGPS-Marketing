@@ -14,7 +14,7 @@ const ROOT = "/en/";
 const CRITICAL = [
   {
     selector: "#hero-title",
-    text: /See what remains unpaid|Intelligence|Trí tuệ/i,
+    text: /We build intelligent products|Intelligence|Trí tuệ/i,
   },
   { selector: ".hero-actions", text: /./ },
 ];

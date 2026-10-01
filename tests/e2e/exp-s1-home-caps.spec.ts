@@ -84,7 +84,7 @@ for (const lang of ["en", "vi", "zh", "zh-hant"]) {
   });
 }
 
-test("the hero text is the mobile LCP element and paints without animation", async ({
+test("the mobile LCP element is in the hero (H1 text or the capture) and paints without animation", async ({
   page,
 }) => {
   await page.setViewportSize({ width: 390, height: 844 });
@@ -105,7 +105,7 @@ test("the hero text is the mobile LCP element and paints without animation", asy
   const lcp = await page.evaluate(
     () => (window as unknown as { __lcp: string }).__lcp,
   );
-  expect(lcp).toMatch(/\|hero$/);
+  expect(lcp).toMatch(/^(H1|P|IMG)\|hero$/);
   const animated = await page
     .locator("[data-hero] h1")
     .evaluate((h1) => getComputedStyle(h1).animationName);
