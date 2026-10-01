@@ -834,22 +834,10 @@ html[data-intent="evaluate-product"] [data-journey-bar] a[href$="/products/"] {
     box-shadow 150ms var(--motion-ease-standard, ease);
 }
 
-/* reveal.css contract: no infinite loops. The drift settles after one pass. */
-[data-fidelity-tier="cinematic"] .horizon-field__line {
-  animation: horizon-drift 6s ease-in-out 1 both;
-}
-
-@keyframes horizon-drift {
-  0%,
-  100% {
-    opacity: 0.85;
-    transform: translateX(0);
-  }
-  50% {
-    opacity: 0.5;
-    transform: translateX(2px);
-  }
-}
+/* The horizon lines are decorative and stay still. Two motion contracts meet
+   here: reveal.css forbids infinite loops, and the cinematic fidelity contract
+   forbids long one-shot animations (>= 2s) that are not ambient loops. A
+   decorative drift satisfies neither, so it is removed (v7 B-22). */
 
 /* Every enabled control that acts like a button signals it. Tailwind v4
    preflight resets buttons to cursor:default. */

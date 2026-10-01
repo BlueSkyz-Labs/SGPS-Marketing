@@ -89,6 +89,9 @@ test("B-16/B-18/B-19: current, pointer and pressed states are authored", () => {
 
 test("B-22: no infinite animation in global or reveal css; negative proof", () => {
   assert.deepEqual(infiniteAnimations(globalCss), []);
+  // The decorative horizon drift is gone, not merely shortened: a long
+  // one-shot animation would break the cinematic fidelity contract.
+  assert.doesNotMatch(globalCss, /animation:\s*horizon-drift/);
   assert.deepEqual(infiniteAnimations(read("src/styles/reveal.css")), []);
   assert.equal(
     infiniteAnimations(".a { animation: drift 6s ease-in-out infinite; }")
