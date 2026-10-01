@@ -5,6 +5,7 @@ import {
   type DossierEntry,
   type Language,
 } from "@/lib/dossier";
+import { formatDisplayDate } from "@/lib/display-date";
 
 /**
  * C4-C Task 3 — printable dossier document.
@@ -140,7 +141,9 @@ const bySection = (section: (typeof SECTION_ORDER)[number]): DossierEntry[] =>
             {entry.freshness && (
               <p class="c4-dossier-document__freshness">
                 {labels.reviewed}:{" "}
-                <time datetime={entry.freshness}>{entry.freshness}</time>
+                <time datetime={entry.freshness}>
+                  {formatDisplayDate(entry.freshness, lang)}
+                </time>
               </p>
             )}
           </li>

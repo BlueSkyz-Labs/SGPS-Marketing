@@ -1,4 +1,5 @@
 ---
+import { formatDisplayDate } from "@/lib/display-date";
 import { compilePublicDossier, type Language } from "@/lib/dossier";
 
 /**
@@ -179,7 +180,9 @@ const sectionLabels: Record<string, string> = {
 
           {entry.freshness && (
             <p class="c4-boardroom__freshness">
-              <time datetime={entry.freshness}>{entry.freshness}</time>
+              <time datetime={entry.freshness}>
+                {formatDisplayDate(entry.freshness, lang)}
+              </time>
             </p>
           )}
         </article>

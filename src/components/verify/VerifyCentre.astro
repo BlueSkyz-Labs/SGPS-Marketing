@@ -19,6 +19,7 @@ import DeepLinkOpener from "@/components/verify/DeepLinkOpener.astro";
 import SourceTrace from "@/components/integrity/SourceTrace.astro";
 import { getClaimTrace, getPublicClaims } from "@/lib/claims";
 import { getPublicProducts } from "@/lib/products";
+import { SOURCE_LINKED_LEGEND } from "@/data/integrity";
 import type { Language } from "@/data/site";
 
 interface Props {
@@ -117,6 +118,12 @@ const c = COPY[lang];
       <h2 class="text-xl font-semibold tracking-tight sm:text-2xl">
         {c.claim}
       </h2>
+      <p
+        class="mt-3 text-sm text-[var(--text-muted)]"
+        data-source-linked-legend
+      >
+        {SOURCE_LINKED_LEGEND[lang]}
+      </p>
       <div class="mt-4">
         <EvidenceTeaser lang={lang} />
       </div>
@@ -171,7 +178,12 @@ const c = COPY[lang];
         <details class="verify-layer" data-verify-layer="pages">
           <summary class="verify-layer__summary">{c.pages}</summary>
           <div class="verify-layer__body">
-            <IntegrityLens surface="products" lang={lang} traces={false} />
+            <IntegrityLens
+              surface="products"
+              lang={lang}
+              traces={false}
+              legend={false}
+            />
           </div>
         </details>
       </div>

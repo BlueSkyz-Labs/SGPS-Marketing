@@ -17,7 +17,11 @@ test.describe("authored evidence freshness", () => {
         (el as HTMLDetailsElement).open = true;
       });
     await expect(review).toBeVisible();
-    await expect(review).toHaveText(/2026-09-12/);
+    await expect(review).toHaveText(/September 12, 2026/);
+    await expect(review.locator("time")).toHaveAttribute(
+      "datetime",
+      "2026-09-12",
+    );
   });
 
   test("no date is invented when metadata is absent", async ({ page }) => {
@@ -64,6 +68,6 @@ test.describe("authored evidence freshness", () => {
           '[data-integrity-lens][data-surface="security"] [data-evidence-review]',
         )
         .first(),
-    ).toHaveText(/Đã xem xét: 2026-09-12/);
+    ).toHaveText(/Đã xem xét: 12 tháng 9, 2026/);
   });
 });
