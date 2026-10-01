@@ -123,18 +123,16 @@ for (const viewport of VIEWPORTS) {
 test("the demoted discovery surfaces are re-homed, not deleted", async ({
   page,
 }) => {
-  // Product discovery/comparison still works: the lens renders on the product
-  // index, wired to the site-wide journey bar, and links on to /verify.
+  // v8 W4: the product index has no intent chips; its Next-steps row links on
+  // to /verify.
   await page.goto("/en/products/");
-  await expect(page.locator("[data-intent-control]")).toBeVisible();
+  await expect(page.locator("[data-intent-control]")).toHaveCount(0);
   await expect(page.locator("[data-journey-bar]")).toBeVisible();
-  await expect(page.locator("[data-verify-link]")).toHaveAttribute(
-    "href",
-    "/en/verify/",
-  );
+  const verifyLink = page.locator('[data-journey-bar] a[href="/en/verify/"]');
+  await expect(verifyLink).toBeVisible();
   // Experience v6 S3: the Atlas exploration tool is re-homed on /verify (in its
   // collapsed evidence-map layer), reachable from the products page link.
-  await page.locator("[data-verify-link]").click();
+  await verifyLink.click();
   await expect(page).toHaveURL(/\/en\/verify\/$/);
   await openVerifyLayer(page, "/en/verify/", "atlas");
   await expect(page.locator("[data-atlas]")).toBeVisible();

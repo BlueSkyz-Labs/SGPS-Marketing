@@ -32,26 +32,6 @@ const telemetry = (page: Page) =>
         .__telemetry,
   );
 
-test("intent selection emits a validated intent_selected event", async ({
-  page,
-}) => {
-  await page.goto("/en/products/");
-  await page.locator("[data-intent-control]").waitFor();
-  await instrument(page);
-  await page
-    .locator("[data-intent-control]")
-    .getByRole("button", { name: "Verify trust" })
-    .click();
-  await expect
-    .poll(async () => JSON.stringify(await telemetry(page)))
-    .toContain('"intent_selected"');
-  const events = await telemetry(page);
-  expect(events[0]).toMatchObject({
-    name: "intent_selected",
-    properties: { intent: "verify-trust" },
-  });
-});
-
 test("command navigator open and result activation emit typed events", async ({
   page,
 }) => {
@@ -134,28 +114,6 @@ test("free-text search input never enters telemetry", async ({ page }) => {
   await page.waitForTimeout(300);
   const events = await telemetry(page);
   expect(JSON.stringify(events)).not.toContain("supersecret-value");
-});
-
-test("duplicate events inside the dedupe window collapse", async ({ page }) => {
-  await page.goto("/en/products/");
-  await page.locator("[data-intent-control]").waitFor();
-  await instrument(page);
-  // Three rapid toggles (press, unpress, press) executed in a single task so
-  // the dedupe window is exercised deterministically regardless of CI load.
-  await page.evaluate(() => {
-    const verify = document.querySelector(
-      '[data-intent-control] button[data-intent="verify-trust"]',
-    );
-    if (verify instanceof HTMLButtonElement) {
-      verify.click();
-      verify.click();
-      verify.click();
-    }
-  });
-  const events = (await telemetry(page)).filter(
-    (event) => event.name === "intent_selected",
-  );
-  expect(events).toHaveLength(1);
 });
 
 test("navigation succeeds even when a telemetry listener throws", async ({
