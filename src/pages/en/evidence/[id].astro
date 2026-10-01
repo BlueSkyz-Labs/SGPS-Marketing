@@ -32,10 +32,15 @@ const title = passport
   <section class="py-16 lg:py-24">
     <Container>
       <div class="max-w-3xl">
-        <h1 class="evidence-passport__page-title" data-passport-page-title>
+        <p class="evidence-passport__page-title" data-passport-page-title>
           Evidence for this claim
-        </h1>
-        <EvidencePassport id={id ?? ""} lang="en" products={products} />
+        </p>
+        <EvidencePassport
+          id={id ?? ""}
+          lang="en"
+          products={products}
+          claimAs="h1"
+        />
       </div>
     </Container>
   </section>

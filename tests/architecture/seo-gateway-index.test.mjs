@@ -13,9 +13,9 @@ const gateway = readFileSync("src/pages/index.astro", "utf8");
 const layout = readFileSync("src/layouts/BaseLayout.astro", "utf8");
 const sitemap = readFileSync("src/pages/sitemap.xml.ts", "utf8");
 
-const TITLE = "BlueSkyz Labs | Sổ Trọ và Sổ Tâm";
+const TITLE = "BlueSkyz Labs | Choose your language";
 const DESCRIPTION =
-  "BlueSkyz Labs builds Sổ Trọ and Sổ Tâm, both in development. Chọn ngôn ngữ · Choose your language.";
+  "Choose a language for BlueSkyz Labs, which is building Sổ Trọ and Sổ Tâm, both in development: English, Tiếng Việt, 简体中文 or 繁體中文.";
 
 const gatewayIsIndexable = (src) =>
   !/content="noindex, follow"/.test(src) &&

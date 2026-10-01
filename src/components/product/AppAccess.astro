@@ -25,7 +25,12 @@ const LABELS = {
     zh: "访问入口",
     "zh-hant": "存取方式",
   },
-  signIn: { en: "Sign in", vi: "Đăng nhập", zh: "登录", "zh-hant": "登入" },
+  signIn: {
+    en: "Sign in (existing users)",
+    vi: "Đăng nhập (người dùng hiện có)",
+    zh: "登录（现有用户）",
+    "zh-hant": "登入（現有使用者）",
+  },
   signInHint: {
     en: "Opens the web app sign-in page",
     vi: "Mở thẳng trang đăng nhập của ứng dụng web",
@@ -128,12 +133,7 @@ const headingId = "profile-app-access";
     text-decoration: none;
   }
   .app-access__signin {
-    border-color: transparent;
-    background: var(--brand-cobalt);
-    color: #ffffff;
-  }
-  .app-access__signin .app-access__hint {
-    color: color-mix(in srgb, #ffffff 82%, transparent);
+    border-color: var(--border-strong, var(--border-subtle));
   }
   .app-access__signin:focus-visible,
   .app-access__store:focus-visible {

@@ -1,6 +1,8 @@
 ---
 import { getEvidencePassport, getClaimAnchor } from "@/lib/claims";
+import { formatDisplayDate } from "@/lib/display-date";
 import TruthState from "./TruthState.astro";
+import { SOURCE_LINKED_LEGEND } from "@/data/integrity";
 import BoundaryCard from "./BoundaryCard.astro";
 import type { Language } from "@/data/site";
 
@@ -8,9 +10,12 @@ interface Props {
   id: string;
   lang: Language;
   products: { slug: string; name: string }[];
+  /** The evidence page makes the claim its document title (the one H1). */
+  claimAs?: "h1" | "h2";
 }
 
-const { id, lang, products } = Astro.props;
+const { id, lang, products, claimAs = "h2" } = Astro.props;
+const ClaimHeading = claimAs;
 const passport = getEvidencePassport(id, products);
 
 const LABELS = {
@@ -45,18 +50,26 @@ const labels = LABELS[lang];
 
 {passport ? (
   <article class="evidence-passport" data-evidence-passport={passport.id}>
-    <h2 id={getClaimAnchor(passport.id)} class="evidence-passport__claim">
+    <ClaimHeading
+      id={getClaimAnchor(passport.id)}
+      class="evidence-passport__claim"
+    >
       {passport.claim[lang]}
-    </h2>
+    </ClaimHeading>
     <p class="evidence-passport__meta">
       <TruthState state={passport.state} lang={lang} />
       {passport.reviewedOn ? (
         <span class="evidence-passport__review" data-passport-review>
           {labels.reviewed}:{" "}
-          <time datetime={passport.reviewedOn}>{passport.reviewedOn}</time>
+          <time datetime={passport.reviewedOn}>
+            {formatDisplayDate(passport.reviewedOn, lang)}
+          </time>
         </span>
       ) : null}
     </p>
+    {passport.state === "source-linked" ? (
+      <p class="integrity-lens__legend">{SOURCE_LINKED_LEGEND[lang]}</p>
+    ) : null}
     <div class="evidence-passport__sources">
       <h3 class="evidence-passport__sources-title">{labels.sources}</h3>
       <ul>

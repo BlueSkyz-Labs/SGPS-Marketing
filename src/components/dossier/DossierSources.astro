@@ -1,5 +1,6 @@
 ---
 import { CLAIMS } from "@/data/claims";
+import { formatDisplayDate } from "@/lib/display-date";
 import { getPublicProvenance } from "@/lib/provenance-lens";
 import type { Language } from "@/lib/dossier";
 
@@ -61,7 +62,7 @@ const resolved = entries.map((entry) => ({
   {resolved.map(({ id, statement, provenance }) =>
     provenance && !provenance.unknown ? (
       <article data-dossier-source={id}>
-        <h3>{provenance.statement}</h3>
+        <h3>{provenance.statementLabel ?? provenance.statement}</h3>
         {provenance.sourceRefs.length > 0 && (
           <div data-dossier-source-group>
             <h4>{labels.sources}</h4>
@@ -79,7 +80,9 @@ const resolved = entries.map((entry) => ({
         {provenance.freshness && (
           <p data-dossier-freshness={provenance.freshness}>
             {labels.freshness}:{" "}
-            <time datetime={provenance.freshness}>{provenance.freshness}</time>
+            <time datetime={provenance.freshness}>
+              {formatDisplayDate(provenance.freshness, lang)}
+            </time>
           </p>
         )}
       </article>

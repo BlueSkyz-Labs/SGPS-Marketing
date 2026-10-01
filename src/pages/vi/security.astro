@@ -13,10 +13,11 @@ const craftStory = getCraftStory("private-security-reporting");
 ---
 
 <BaseLayout
-  title="Bảo mật"
+  title="Bảo mật: báo cáo lỗ hổng riêng tư"
   description="Báo cáo lỗ hổng riêng tư đến BlueSkyz Labs qua GitHub Security Advisories, với bằng chứng công khai và ranh giới có thể xác minh."
   path="/vi/security/"
   surface="security"
+  lensBoundaries={false}
   lensTraces={false}
 >
   <section class="py-16 lg:py-24">
@@ -49,10 +50,6 @@ const craftStory = getCraftStory("private-security-reporting");
       <div class="mt-10 max-w-2xl">
         <BoundaryCard boundary={SECURITY_BOUNDARY} lang="vi" />
       </div>
-      <p class="mt-6 max-w-2xl text-sm text-[var(--text-muted)]">
-        Không công bố huy hiệu bug-bounty, SLA hoặc chứng nhận nào khi chưa có
-        bằng chứng xác minh.
-      </p>
       <div class="mt-12 max-w-3xl">
         <BilingualMirror lang="vi" />
       </div>
