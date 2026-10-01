@@ -68,7 +68,7 @@ test("routes without a declared label fail closed", () => {
 test("evidence passports reuse the declared artifact label", () => {
   const trail = getBreadcrumbTrail("en", "/en/evidence/trust-you-can-verify/");
   assert.equal(trail.length, 2);
-  assert.equal(trail[1].name, "Evidence passport");
+  assert.equal(trail[1].name, "Evidence for this claim");
 });
 
 test("JSON-LD is a well-formed BreadcrumbList with canonical URLs", () => {

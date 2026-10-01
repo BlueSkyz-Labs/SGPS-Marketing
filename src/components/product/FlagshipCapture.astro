@@ -1,0 +1,122 @@
+---
+import type { Language } from "@/lib/i18n";
+import { getShowcase } from "@/lib/showcases";
+
+/**
+ * Experience v6 S2 — a real capture of the running app, always labelled.
+ *
+ * The image is one screen already published in the product's showcase record
+ * (`src/content/showcases/<slug>.yaml`): alt text, dimensions, capture
+ * revision, date and data class all come from that record. The visible label
+ * states that it is a capture of the app in development with sample data, so a
+ * screen can never appear without saying where it came from. Identity artwork
+ * is never routed through this component (and gets no device chrome).
+ * Without a recorded showcase/screen the component renders nothing.
+ */
+interface Props {
+  slug: string;
+  /** Showcase screen id (`today` phone, `owner-collect` desktop). */
+  screen: string;
+  lang: Language;
+  /** Above-the-fold capture: eager + fetchpriority high. Default lazy. */
+  priority?: boolean;
+  /** CSS `sizes` for the rendered width. */
+  sizes: string;
+  /**
+   * Optional smaller derivative of the same capture (`url width`), offered as
+   * a `srcset` candidate so a small slot never downloads the full-size file
+   * ahead of the LCP text's font. Same pixels, only resized; `src` stays the
+   * recorded showcase asset.
+   */
+  smallSrc?: { src: string; width: number } | undefined;
+  class?: string;
+}
+
+const {
+  slug,
+  screen,
+  lang,
+  priority = false,
+  sizes,
+  smallSrc,
+  class: className = "",
+} = Astro.props;
+
+const showcase = await getShowcase(slug);
+const item = showcase?.data.screens.find(
+  (entry: { id: string }) => entry.id === screen,
+);
+const capture = showcase?.data.capture;
+if (!item || !capture) {
+  return null;
+}
+const revision = capture.sourceRevision.slice(0, 7);
+const capturedOn = capture.capturedAt.toISOString().slice(0, 10);
+
+const LABEL: Record<Language, string> = {
+  en: "Capture of the app in development · sample data",
+  vi: "Ảnh chụp ứng dụng đang phát triển · dữ liệu mẫu",
+  zh: "开发中应用的截图 · 示例数据",
+  "zh-hant": "開發中應用程式的截圖 · 範例資料",
+};
+const label = LABEL[lang];
+const provenance = `${revision} · ${capturedOn}`;
+---
+
+<figure
+  class:list={["flagship-capture", className]}
+  data-flagship-capture
+  data-capture-surface={item.surface}
+  data-capture-revision={revision}
+>
+  <img
+    class="flagship-capture__image"
+    src={item.src}
+    srcset={
+      smallSrc
+        ? `${smallSrc.src} ${smallSrc.width}w, ${item.src} ${item.width}w`
+        : undefined
+    }
+    alt={item.alt[lang]}
+    width={item.width}
+    height={item.height}
+    sizes={sizes}
+    decoding="async"
+    loading={priority ? "eager" : "lazy"}
+    fetchpriority={priority ? "high" : "auto"}
+    data-capture-src={item.src}
+    data-lcp-candidate={priority ? "" : undefined}
+  />
+  <figcaption class="flagship-capture__label">
+    {label}
+    <span class="flagship-capture__provenance">{provenance}</span>
+  </figcaption>
+</figure>
+
+<style>
+  .flagship-capture {
+    margin: 0;
+    min-width: 0;
+  }
+  .flagship-capture__image {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: var(--radius-md);
+    border: 1px solid
+      color-mix(in srgb, var(--brand-porcelain) 22%, transparent);
+    background: var(--brand-ink);
+    opacity: 1;
+  }
+  .flagship-capture__label {
+    margin-top: 0.5rem;
+    font-size: 0.75rem;
+    line-height: 1.35;
+    color: color-mix(in srgb, var(--brand-porcelain) 82%, transparent);
+  }
+  .flagship-capture__provenance {
+    display: block;
+    opacity: 0.85;
+    font-variant-numeric: tabular-nums;
+  }
+</style>

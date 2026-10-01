@@ -14,14 +14,7 @@ const { eyebrow, title, lede } = Astro.props;
       {eyebrow}
     </p>
   ) : null}
-  <h1
-    class:list={[
-      "text-4xl font-semibold tracking-tight text-balance sm:text-5xl",
-      eyebrow && "mt-3",
-    ]}
-  >
-    {title}
-  </h1>
+  <h1 class:list={["type-d2 text-balance", eyebrow && "mt-3"]}>{title}</h1>
   {lede ? (
     <p class="mt-5 text-lg text-[var(--text-secondary)] text-pretty">{lede}</p>
   ) : null}

@@ -1,35 +1,25 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
+import { PAGE_META } from "@/data/page-meta";
 import Container from "@/components/layout/Container.astro";
 import PageHeader from "@/components/layout/PageHeader.astro";
+import AboutComposition from "@/components/empty-state/AboutComposition.astro";
 import { SITE } from "@/data/site";
 ---
 
 <BaseLayout
-  title="About"
-  description={`About BlueSkyz Labs — ${SITE.proposition}`}
+  title={PAGE_META["en"]["about"].title}
+  description={PAGE_META["en"]["about"].description}
   path="/en/about/"
 >
   <section class="py-16 lg:py-24">
     <Container>
       <PageHeader
         eyebrow="About"
-        title="Who we are"
-        lede={`${SITE.proposition} ${SITE.supporting}`}
+        title="About BlueSkyz Labs"
+        lede={`${SITE.proposition} We are building Sổ Trọ, a notebook for landlords, and Sổ Tâm, a private journal. Both are in development.`}
       />
-      <div class="mt-12 max-w-2xl rounded-xl border border-[var(--border-subtle)] border-l-[3px] border-l-[color-mix(in_srgb,var(--brand-cobalt)_60%,var(--border-subtle))] bg-[var(--surface-raised)] p-6">
-        <p class="text-[0.65rem] font-semibold tracking-[0.14em] text-[var(--text-muted)] uppercase">
-          Note
-        </p>
-        <p class="mt-2 text-sm font-semibold tracking-tight text-[var(--text-primary)]">
-          Tony Nguyen — Founder &amp; CEO
-        </p>
-        <p class="mt-3 text-sm leading-[1.65] text-[var(--text-secondary)]">
-          This page stays company-led. Founder detail publishes only when
-          approved for the public site — nothing here is written ahead of that
-          approval.
-        </p>
-      </div>
+      <AboutComposition lang="en" />
     </Container>
   </section>
 </BaseLayout>
