@@ -35,24 +35,27 @@ test("Sổ Trọ audience label reads Landlords in every locale", () => {
   }
 });
 
-test("every product profile page renders audience through the shared helper", () => {
-  for (const p of [
-    "src/pages/products/[slug].astro",
-    "src/pages/en/products/[slug].astro",
-    "src/pages/vi/products/[slug].astro",
-    "src/pages/zh/products/[slug].astro",
-    "src/pages/zh-hant/products/[slug].astro",
-  ]) {
-    const s = readFileSync(p, "utf8");
-    assert.match(s, /audienceText\(/, p);
-    assert.doesNotMatch(s, /AUDIENCE_LABELS\[a\]/, p);
+// v8 W3 (OG-3): the visible Audience row is dropped from the locale profile
+// pages; the derived label conflicted with the record's `audience`. The legacy
+// redirect page keeps the shared helper.
+const LOCALE_PROFILES = ["en", "vi", "zh", "zh-hant"].map(
+  (lang) => `src/pages/${lang}/products/[slug].astro`,
+);
+const rendersAudience = (s) =>
+  /audienceText\(|AUDIENCE_LABELS|適用對象|適用物件/.test(s);
+
+test("locale product profile pages render no audience row", () => {
+  for (const p of LOCALE_PROFILES) {
+    assert.equal(rendersAudience(readFileSync(p, "utf8")), false, p);
   }
+  const legacy = readFileSync("src/pages/products/[slug].astro", "utf8");
+  assert.match(legacy, /audienceText\(/);
+  assert.doesNotMatch(legacy, /AUDIENCE_LABELS\[a\]/);
 });
 
-test("zh-Hant audience row label is 適用對象, not 適用物件", () => {
-  const s = readFileSync("src/pages/zh-hant/products/[slug].astro", "utf8");
-  assert.ok(s.includes("適用對象"));
-  assert.ok(!s.includes("適用物件"));
+test("negative proof: a visible audience row is detected", () => {
+  const s = readFileSync(LOCALE_PROFILES[0], "utf8");
+  assert.equal(rendersAudience(`${s}\n{audienceText(a, b, c, "en")}`), true);
 });
 
 test("negative proof: the legacy professional/business audience is detected", () => {

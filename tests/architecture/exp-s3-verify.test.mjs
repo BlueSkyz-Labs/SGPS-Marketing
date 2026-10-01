@@ -80,7 +80,17 @@ test("products index and security carry no inlined Atlas/trace/ledger; products 
   for (const lang of LOCALES) {
     const products = read(`src/pages/${lang}/products/index.astro`);
     assert.ok(!inlinesEvidence(products), `${lang} products inlines evidence`);
-    assert.ok(linksToVerify(products), `${lang} products must link /verify`);
+    // v8 W4: the link lives in the products Next-steps row (journey.ts).
+    const journey = read("src/lib/journey.ts");
+    const productsRow = journey.slice(
+      journey.indexOf("  products: ["),
+      journey.indexOf("  about: ["),
+    );
+    assert.match(
+      productsRow,
+      /segment: "verify"/,
+      `${lang} products Next steps must link /verify`,
+    );
     assert.doesNotMatch(products, /surface="products"/);
     assert.ok(
       inlinesEvidence(

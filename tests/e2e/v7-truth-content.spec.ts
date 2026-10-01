@@ -273,26 +273,27 @@ const SIGN_IN_LABEL: Record<(typeof LOCALES)[number], string> = {
 };
 
 for (const lang of LOCALES) {
-  test(`/${lang}/products/sotro/ demotes sign-in and leads with the guide`, async ({
+  test(`/${lang}/products/sotro/ demotes sign-in to a text link below the primary action`, async ({
     page,
   }) => {
+    // v8 W3: the primary action is "See the screens"; sign-in is a plain
+    // text link with a qualified label, never a filled button.
     await page.goto(`/${lang}/products/sotro/`);
-    const signIn = page.getByRole("link", { name: SIGN_IN_LABEL[lang] });
+    const signIn = page.locator("[data-app-signin]");
     await expect(signIn).toHaveCount(1);
-    const guide = page.locator("[data-product-guide-cta]");
-    await expect(guide).toHaveCount(1);
-    const [signInBg, guideBg] = await Promise.all([
+    const primary = page.locator("[data-primary-action]");
+    await expect(primary).toHaveCount(1);
+    const [signInBg, primaryBg] = await Promise.all([
       signIn.evaluate((el) => getComputedStyle(el).backgroundColor),
-      guide.evaluate((el) => getComputedStyle(el).backgroundColor),
+      primary.evaluate((el) => getComputedStyle(el).backgroundColor),
     ]);
-    // Primary is the filled cobalt action; sign-in is the raised secondary.
-    expect(signInBg).not.toBe(guideBg);
-    // The guide action comes first in the header.
-    const order = await guide.evaluate(
-      (el, id) =>
-        el.compareDocumentPosition(document.querySelector(id) as Element) &
-        Node.DOCUMENT_POSITION_FOLLOWING,
-      `a[href^="https://sotro"]`,
+    expect(signInBg).not.toBe(primaryBg);
+    expect(signInBg).toBe("rgba(0, 0, 0, 0)");
+    const order = await primary.evaluate(
+      (el) =>
+        el.compareDocumentPosition(
+          document.querySelector("[data-app-signin]") as Element,
+        ) & Node.DOCUMENT_POSITION_FOLLOWING,
     );
     expect(order).toBeTruthy();
   });

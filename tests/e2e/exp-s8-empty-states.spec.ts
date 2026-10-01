@@ -59,15 +59,16 @@ for (const lang of LOCALES) {
       expect(text).not.toMatch(EMAIL);
     });
 
-    test("product without captures shows identity art, no device frame, status once", async ({
+    test("product without captures shows no artwork, no device frame, status once", async ({
       page,
     }) => {
       await page.goto(`/${lang}/products/sotam/`);
       const stage = page.locator("[data-no-capture]");
       await expect(stage).toHaveCount(1);
-      await expect(
-        stage.locator('[data-media-kind="identity-art"]'),
-      ).toHaveCount(1);
+      // v8 W3 (OG-3): the Sổ Tâm artwork carries an unconfirmed tagline, so no
+      // artwork renders; only the status-honest line remains.
+      await expect(stage.locator("img, [data-media-kind]")).toHaveCount(0);
+      await expect(page.locator("[data-product-visual]")).toHaveCount(0);
       await expect(
         page.locator(".showcase__device, .showcase__phone"),
       ).toHaveCount(0);
