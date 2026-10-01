@@ -156,10 +156,10 @@ export function proofCaptionForKind(
 
 const PLATFORM_LABELS: Record<string, Record<Language, string>> = {
   web: {
-    en: "Web / PWA",
-    vi: "Web / PWA",
-    zh: "Web / PWA",
-    "zh-hant": "Web / PWA",
+    en: "Web",
+    vi: "Web",
+    zh: "网页",
+    "zh-hant": "網頁",
   },
   "browser-extension": {
     en: "Browser extension",

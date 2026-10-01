@@ -93,24 +93,29 @@ export const SHARED_LABELS = {
     zh: "精选产品",
     "zh-hant": "精選產品",
   },
-  featuredBody: {
-    en: "Explore products in development. Availability and supporting material are described individually.",
-    vi: "Khám phá các sản phẩm đang phát triển. Trạng thái và tư liệu tham khảo được ghi rõ cho từng sản phẩm.",
-    zh: "探索开发中的产品。每款产品均分别说明其状态与参考资料。",
-    "zh-hant": "探索開發中的產品。每款產品均分別說明其狀態與參考資料。",
-  },
   continuationHeading: {
-    en: "The rest of the house, in development",
-    vi: "Những sản phẩm khác đang được phát triển",
-    zh: "其他正在开发的产品",
-    "zh-hant": "其他正在開發的產品",
+    en: "Also in development",
+    vi: "Cũng đang phát triển",
+    zh: "同样在开发中",
+    "zh-hant": "同樣在開發中",
   },
-  continuationBody: {
-    en: "Each product shows its recorded stage — concept, prototype or development — its platform and an honest next step.",
-    vi: "Mỗi sản phẩm hiển thị đúng giai đoạn đã ghi nhận — ý tưởng, nguyên mẫu hay phát triển — cùng nền tảng và bước tiếp theo trung thực.",
-    zh: "每款产品均标明其记录的阶段（概念、原型或开发）、平台以及如实的下一步。",
-    "zh-hant":
-      "每款產品均標明其記錄的階段（概念、原型或開發）、平台以及如實的下一步。",
+  trustHeading: {
+    en: "Check what we say",
+    vi: "Kiểm chứng điều chúng tôi nói",
+    zh: "核实我们所说的",
+    "zh-hant": "查證我們所說的",
+  },
+  trustBody: {
+    en: "Our public claims link to the sources behind them.",
+    vi: "Các tuyên bố công khai của chúng tôi đều dẫn tới nguồn đã công bố.",
+    zh: "我们的公开声明都链接到其依据来源。",
+    "zh-hant": "我們的公開聲明都連結到其依據來源。",
+  },
+  trustCta: {
+    en: "Check our claims →",
+    vi: "Xem các tuyên bố →",
+    zh: "查看依据 →",
+    "zh-hant": "查看依據 →",
   },
   viewProfile: {
     en: "View profile",

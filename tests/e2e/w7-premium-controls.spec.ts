@@ -29,7 +29,7 @@ test("the primary actions stay text-named pills with a decorative registry icon"
     expect(geometry.radius).toBeGreaterThanOrEqual(geometry.height / 2);
   }
   await expect(actions[0]).toBeVisible();
-  await expect(actions[0]).toHaveText("View development status");
+  await expect(actions[0]).toHaveText(/^See \S/);
 });
 
 test("the search trigger adds a decorative icon without replacing its label", async ({

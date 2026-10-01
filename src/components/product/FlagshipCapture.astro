@@ -62,10 +62,10 @@ const revision = capture.sourceRevision.slice(0, 7);
 const capturedOn = capture.capturedAt.toISOString().slice(0, 10);
 
 const LABEL: Record<Language, string> = {
-  en: "Capture of the app in development · sample data",
-  vi: "Ảnh chụp ứng dụng đang phát triển · dữ liệu mẫu",
-  zh: "开发中应用的截图 · 示例数据",
-  "zh-hant": "開發中應用程式的截圖 · 範例資料",
+  en: "Development build · sample data",
+  vi: "Bản đang phát triển · dữ liệu mẫu",
+  zh: "开发版本 · 示例数据",
+  "zh-hant": "開發版本 · 範例資料",
 };
 const label = LABEL[lang];
 ---
