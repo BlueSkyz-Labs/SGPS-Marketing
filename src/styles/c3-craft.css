@@ -222,6 +222,11 @@ main details > summary:active {
   background-color: var(--surface-primary-glass);
   /* Specular bottom hairline: light-catching on the ink surface. */
   border-bottom-color: rgba(255, 255, 255, 0.1);
+  /* The compact menu panel (z-20) must paint and hit-test above the hero,
+     which is its own stacking context (isolate) later in the DOM. A
+     non-positioned header left the panel under the hero in Firefox. */
+  position: relative;
+  z-index: 50;
 }
 
 @media (min-width: 768px) and (min-height: 560px) {

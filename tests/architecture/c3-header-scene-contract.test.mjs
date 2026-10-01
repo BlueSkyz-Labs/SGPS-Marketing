@@ -129,3 +129,41 @@ test("the sticky header surface is authored in the craft layer, not in a dropped
     "forced-colors mode must keep the hairline visible",
   );
 });
+
+// The compact menu panel lives inside the header. The hero is an isolated
+// stacking context later in the DOM, so a non-positioned header at compact
+// widths let the hero paint and hit-test above the open panel (Firefox).
+export const headerStacksAboveMain = (css) => {
+  const base = css.match(/(?:^|\n)\.header-glass\s*\{([^}]*)\}/);
+  if (!base) return false;
+  const z = base[1].match(/z-index:\s*(\d+)/);
+  return (
+    /position:\s*(relative|sticky)/.test(base[1]) &&
+    Boolean(z && Number(z[1]) > 0)
+  );
+};
+
+test("the header is a positioned stacking context at every width", () => {
+  assert.equal(
+    headerStacksAboveMain(read(CRAFT_CSS)),
+    true,
+    "the base .header-glass rule (outside any media query) must set position and a positive z-index",
+  );
+});
+
+test("negative proof: a base header rule without position/z-index is rejected", () => {
+  assert.equal(
+    headerStacksAboveMain(".header-glass {\n  background-color: red;\n}"),
+    false,
+  );
+  assert.equal(
+    headerStacksAboveMain(".header-glass {\n  position: relative;\n}"),
+    false,
+  );
+  assert.equal(
+    headerStacksAboveMain(
+      ".header-glass {\n  position: relative;\n  z-index: 50;\n}",
+    ),
+    true,
+  );
+});
