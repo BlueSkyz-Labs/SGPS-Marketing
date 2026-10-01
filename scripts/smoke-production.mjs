@@ -142,9 +142,15 @@ check("root serves the bounded language gateway", async () => {
   const response = await get("/");
   assert(response.status === 200, `status ${response.status}`);
   const html = await response.text();
+    // Owner 2026-10-01 (F16): the gateway is the indexable x-default language
+  // selector, so production must not mark it noindex and it is self-canonical.
   assert(
-    /<meta\s+name="robots"\s+content="noindex, follow"/i.test(html),
-    "root gateway must stay out of the canonical search index",
+    !/<meta\s+name="robots"[^>]*noindex/i.test(html),
+    "root gateway must be indexable as the x-default language selector",
+  );
+  assert(
+    /<link\s+rel="canonical"\s+href="https:\/\/[^"]+\/"/i.test(html),
+    "root gateway must declare its own canonical URL",
   );
   assert(
     html.includes('data-language-choice="vi"') &&
