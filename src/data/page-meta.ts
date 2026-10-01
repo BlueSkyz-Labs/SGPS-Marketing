@@ -30,17 +30,17 @@ export const PAGE_META: Record<Language, Record<StaticPageKey, PageMeta>> = {
         "BlueSkyz Labs đang làm Sổ Trọ và Sổ Tâm. Tìm hiểu cách chúng tôi làm việc và tự kiểm chứng từng điều chúng tôi nói qua nguồn công khai.",
     },
     contact: {
-      title: "Liên hệ",
+      title: "Liên hệ: báo cáo bảo mật riêng tư",
       description:
         "Cách liên hệ BlueSkyz Labs: báo lỗ hổng bảo mật riêng tư qua GitHub. Hộp thư cho hợp tác và câu hỏi chung sẽ được đăng tại đây khi sẵn sàng.",
     },
     privacy: {
-      title: "Quyền riêng tư",
+      title: "Quyền riêng tư: không dùng cookie, chỉ lưu ngôn ngữ và giao diện",
       description:
         "Trang web này không đặt cookie và chỉ lưu ngôn ngữ, giao diện do bạn chọn trong trình duyệt. Xem chúng tôi thu thập gì và không thu thập gì.",
     },
     support: {
-      title: "Hỗ trợ",
+      title: "Hỗ trợ: cách được trợ giúp",
       description:
         "Cách nhận trợ giúp cho Sổ Trọ và Sổ Tâm. Hiện chưa có hộp thư hỗ trợ chung; kênh báo cáo bảo mật riêng tư chỉ dành cho lỗ hổng bảo mật.",
     },
@@ -57,17 +57,17 @@ export const PAGE_META: Record<Language, Record<StaticPageKey, PageMeta>> = {
         "BlueSkyz Labs builds software products. See what we are building now and the public evidence behind what we say, so you can check it yourself.",
     },
     contact: {
-      title: "Contact",
+      title: "Contact us: private security reports",
       description:
         "How to reach BlueSkyz Labs: private vulnerability reporting for security issues today, and a business mailbox once one is published.",
     },
     privacy: {
-      title: "Privacy",
+      title: "Privacy: no cookies, only your language and theme",
       description:
         "This site sets no cookies and stores only the language and theme you choose, in your browser. See what we collect and what we do not.",
     },
     support: {
-      title: "Support",
+      title: "Support: how to get help",
       description:
         "How to get help with Sổ Trọ and Sổ Tâm. No general support mailbox has been published yet; private security reporting is for vulnerabilities only.",
     },
@@ -84,17 +84,17 @@ export const PAGE_META: Record<Language, Record<StaticPageKey, PageMeta>> = {
         "BlueSkyz Labs 打造软件产品。了解我们目前在做什么，以及我们所说内容背后的公开依据，方便你自行核实。",
     },
     contact: {
-      title: "联系我们",
+      title: "联系我们：私密安全报告",
       description:
         "如何联系 BlueSkyz Labs：目前可通过私密漏洞报告通道反馈安全问题；商务邮箱公布后将在此列出。",
     },
     privacy: {
-      title: "隐私",
+      title: "隐私：不设置 Cookie，仅保存语言与主题",
       description:
         "本站不设置 Cookie，仅在你的浏览器中保存你主动选择的语言与主题。了解我们收集什么、不收集什么。",
     },
     support: {
-      title: "帮助与支持",
+      title: "帮助与支持：如何获得帮助",
       description:
         "如何获得 Sổ Trọ 与 Sổ Tâm 的帮助：目前尚未公布通用支持邮箱。安全漏洞请走私密报告通道，而非支持渠道。",
     },
@@ -111,17 +111,17 @@ export const PAGE_META: Record<Language, Record<StaticPageKey, PageMeta>> = {
         "BlueSkyz Labs 打造軟體產品。了解我們目前在做什麼，以及我們所說內容背後的公開依據，方便你自行查證。",
     },
     contact: {
-      title: "聯絡我們",
+      title: "聯絡我們：私密資安通報",
       description:
         "如何聯絡 BlueSkyz Labs：目前可透過私密漏洞通報管道回報資安問題；商務電子信箱公布後將在此列出。",
     },
     privacy: {
-      title: "隱私權",
+      title: "隱私權：不設定 Cookie，只儲存語言與主題",
       description:
         "本站不設定 Cookie，只在你的瀏覽器中儲存你主動選擇的語言與主題。了解我們蒐集什麼、不蒐集什麼。",
     },
     support: {
-      title: "協助與支援",
+      title: "協助與支援：如何取得協助",
       description:
         "如何取得 Sổ Trọ 與 Sổ Tâm 的協助：目前尚未公布通用支援信箱。資安漏洞請走私密通報管道，而非支援管道。",
     },
