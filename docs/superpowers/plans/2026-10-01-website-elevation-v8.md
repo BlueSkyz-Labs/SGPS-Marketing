@@ -82,7 +82,7 @@ It does not cover Firefox/WebKit, real devices, field Core Web Vitals, productio
 **NOT VERIFIED:**
 
 - Firefox and WebKit.
-- Lighthouse on the integration head. The perf worker on `perf/lcp-headroom` owns that check; main is red on `/vi/` mobile LCP of about 2.56 s.
+- Lighthouse on the integration head. #413 owns that check (see W0); main is red on `/vi/` mobile LCP of about 2.56 s.
 - Reveal motion frames.
 - Real print preview.
 - Production headers.
@@ -216,8 +216,8 @@ Each wave lands as **one PR**, sized ≤ 400 changed lines excluding snapshots, 
 
 **Goal.** Main is green and #407, #411 and #412 are merged.
 
-1. The perf PR from `perf/lcp-headroom` (the `/vi/` mobile LCP regression from #410) goes green and merges.
-2. Update the #407 and #411 branches from main (merge commit, no rebase) and let auto-merge land them.
+1. #413 (`perf/lcp-410-regression`) goes green and merges. It fixes the `/vi/` mobile LCP regression from #410 by adding a 480w hero-capture candidate and merging the three shell scripts into one module entry. Lab medians on 9 interleaved runs: `/en/` 2432→2141 ms, `/vi/` 2403→2218 ms.
+2. Update the #407, #411 and #412 branches from main (merge commit, no rebase) and let auto-merge land them.
 3. #412 will then conflict in `src/pages/zh/security.astro`. Resolve it by taking #412's `title="安全：私下报告漏洞"` and **#407's** description with `你` (not `您`), and keep `lensBoundaries={false}` from #407.
 4. Post-merge, run `node scripts/smoke-production.mjs` against the Workers preview if it is reachable. Production stays behind Access until the Owner flips it.
 
@@ -551,7 +551,7 @@ Runs **after** W2–W5 merge, because it touches shared CSS.
 
 ### W9: Performance headroom
 
-**Owns:** whatever the perf root-cause touches. It is coordinated with `perf/lcp-headroom` and must not duplicate it.
+**Owns:** whatever the perf root-cause touches. It is coordinated with #413 and must not duplicate it. After #413, the remaining floor is the font chain at about 2.1 s.
 
 **Goal.** `/en/` and `/vi/` mobile LCP ≤ 2 300 ms (lab, CI config), so that the 2 500 ms budget is no longer marginal and PRs stop flaking red.
 
@@ -766,7 +766,7 @@ W0 (frontier) ──┬─> W1 (copy foundation) ──┬─> W2 (home) ──�
                 ├─> W5a (verify/security/privacy) ──────────────────┤
                 ├─> W5b (dossier/decision/arch/evidence/editions) ──┤
                 ├─> W8 (SEO; W8.6 is a separate protected PR) ──────┤
-                └─> W9 (perf; starts with the in-flight perf PR) ───┤
+                └─> W9 (perf; builds on #413) ────────────────────┤
                                                                     v
                                          W6 (design system) ─> W7 (localization) ─> W10 (gardening) ─> W11 (verify)
 W12 (assets): whenever Owner input arrives; never blocks W11.
