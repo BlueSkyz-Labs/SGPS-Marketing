@@ -1,5 +1,6 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
+import { PAGE_META } from "@/data/page-meta";
 import Container from "@/components/layout/Container.astro";
 import PageHeader from "@/components/layout/PageHeader.astro";
 import { SITE } from "@/data/site";
@@ -8,8 +9,8 @@ const hasBusinessEmail = Boolean(SITE.contactEmail);
 ---
 
 <BaseLayout
-  title="支持"
-  description="BlueSkyz Labs 的支持途径与可操作求助：当前可用的、尚未公布的内容，以及如何联系我们。"
+  title={PAGE_META["zh"]["support"].title}
+  description={PAGE_META["zh"]["support"].description}
   path="/zh/support/"
 >
   <section class="py-16 lg:py-24">
