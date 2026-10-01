@@ -368,7 +368,10 @@ test("footer-linked indexable /architecture/ routes are in the sitemap set", () 
   }
 });
 
-test("sitemap does not fabricate lastmod", () => {
+test("sitemap never derives lastmod from build time", () => {
+  // v8 W8 (SEO-10): lastmod now comes from git per route (see
+  // seo-v7-technical.test.mjs); it must never be the build clock.
   const sitemap = readFileSync("src/pages/sitemap.xml.ts", "utf8");
-  assert.doesNotMatch(sitemap, /lastmod/);
+  assert.doesNotMatch(sitemap, /new Date|Date\.now/);
+  assert.match(sitemap, /lastmodForPath/);
 });
