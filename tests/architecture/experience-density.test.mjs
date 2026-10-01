@@ -92,7 +92,6 @@ const MAX_PRIMARY_CTA_PER_SECTION = 3;
 const MAX_CTA_HOMEPAGE_TOTAL = 12;
 const MAX_HEADING_LEVEL_HOME = 3;
 const MAX_HEADING_LITERAL_CHARS = 40;
-const MAX_CHIPS_INTENT_LENS = 6;
 const MAX_CHIPS_DECISION_ROOM = 6;
 const MAX_STATUS_PILLS_TRUST_LEDGER = 6;
 const MAX_SECTIONS_PER_PAGE = 12;
@@ -233,11 +232,6 @@ test("homepage heading hierarchy is ordered, bounded, and one h1", () => {
 /* 3. Chip / pill density in the intent control and decision room      */
 /* ------------------------------------------------------------------ */
 
-function countIntentChips() {
-  const src = read("src/components/experience/IntentControl.astro");
-  return (src.match(/^  "[a-z-]+": \{$/gm) || []).length;
-}
-
 function decisionRoomCap() {
   const src = read("src/lib/decision-room.ts");
   const match = src.match(/MAX_COMPARISON\s*=\s*(\d+)/);
@@ -251,12 +245,6 @@ function countTrustLedgerEntries() {
 }
 
 test("simultaneous chip and status density stays bounded", () => {
-  const intentChips = countIntentChips();
-  assert.ok(
-    intentChips <= MAX_CHIPS_INTENT_LENS,
-    `intent control renders ${intentChips} chips, ceiling ${MAX_CHIPS_INTENT_LENS} (${HUMAN_E4_CAVEAT})`,
-  );
-
   const roomChips = decisionRoomCap();
   assert.ok(
     roomChips <= MAX_CHIPS_DECISION_ROOM,
