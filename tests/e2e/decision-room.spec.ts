@@ -129,7 +129,7 @@ test.describe("decision room", () => {
     await page.goto("/en/products/");
     const link = page
       .locator("[data-journey-bar] a")
-      .filter({ hasText: "Decision Room" });
+      .filter({ hasText: "Compare the evidence" });
     await expect(link).toBeVisible();
     await link.click();
     await expect(page).toHaveURL(/\/en\/decision-room\/$/);
@@ -155,13 +155,13 @@ test.describe("decision room", () => {
       [
         "/zh/",
         "BlueSkyz Labs",
-        "查看本月尚未收取的款项以及今天需要处理的事项",
+        "我们打造智能化产品，赋能个人并提升工作方式。",
         "智能。提升。影响。我们打造智能化产品，赋能个人并提升工作方式。",
       ],
       [
         "/zh/about/",
         "关于我们",
-        "我们是谁",
+        "关于 BlueSkyz Labs",
         "关于 BlueSkyz Labs — 我们打造智能化产品，赋能个人并提升工作方式。",
       ],
       [

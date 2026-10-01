@@ -55,10 +55,10 @@ const teasers = getEvidencePassportIds(products)
   .filter((passport): passport is EvidencePassportModel => passport !== null);
 
 const LABELS = {
-  en: { more: "See the evidence", passport: "Evidence passport" },
-  vi: { more: "Xem bằng chứng", passport: "Hộ chiếu bằng chứng" },
-  zh: { more: "查看证据", passport: "证据档案" },
-  "zh-hant": { more: "檢視證據", passport: "證據檔案" },
+  en: { more: "See the evidence", passport: "Evidence for this claim" },
+  vi: { more: "Xem bằng chứng", passport: "Bằng chứng cho nhận định này" },
+  zh: { more: "查看证据", passport: "这条说法的证据" },
+  "zh-hant": { more: "檢視證據", passport: "這項說法的證據" },
 } as const;
 
 const labels = LABELS[lang];

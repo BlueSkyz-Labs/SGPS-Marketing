@@ -3,6 +3,7 @@ import type { CollectionEntry } from "astro:content";
 import { SHARED_LABELS, labelFor, type Language } from "@/data/site";
 import { getProductProfilePath } from "@/lib/product-routes";
 import ProductStatus from "@/components/product/ProductStatus.astro";
+import FlagshipCapture from "@/components/product/FlagshipCapture.astro";
 import ProductVisual from "@/components/product/ProductVisual.astro";
 import ProductProofLink from "@/components/integrity/ProductProofLink.astro";
 import { productCopy, proofCaptionForKind } from "@/lib/product-copy";
@@ -12,6 +13,7 @@ import {
   type PublicProductRef,
   type ResolvedClaim,
 } from "@/lib/claims";
+import { getShowcase } from "@/lib/showcases";
 import { productTransitionStyle } from "@/lib/product-transition";
 
 /**
@@ -20,6 +22,10 @@ import { productTransitionStyle } from "@/lib/product-transition";
  * product truth of its own: every visible fact comes from the record. With
  * `product === null` it renders nothing — the homepage falls back honestly
  * rather than fabricating a product moment.
+ *
+ * Experience v6 S2: on the home (`compact`) the act shows a real, labelled
+ * capture of the running app from the product's showcase record instead of
+ * identity artwork; the default (profile/fixture) rendering is unchanged.
  *
  * Wave 2 Task 2.2 — cinematic presentation frame:
  *   The record's brand-identity artwork is shown inside decorative browser
@@ -72,6 +78,11 @@ const cta = resolveLifecycleCta(
   },
   lang,
 );
+const hasCapture =
+  compact &&
+  (await getShowcase(data.slug))?.data.screens.some(
+    (screen: { id: string }) => screen.id === "owner-collect",
+  );
 const showProfileCta = cta.href !== profileHref;
 const ctaIsExternal = cta.external || /^https?:\/\//i.test(cta.href);
 
@@ -101,10 +112,7 @@ const ctaIsExternal = cta.external || /^https?:\/\//i.test(cta.href);
           </p>
         </>
       ) : null}
-      <h2
-        id="flagship-theatre-title"
-        class="mt-2 text-3xl font-semibold tracking-tight sm:text-4xl"
-      >
+      <h2 id="flagship-theatre-title" class="type-d2 mt-2">
         {compact ? (
           <a
             href={cta.href}
@@ -184,7 +192,21 @@ const ctaIsExternal = cta.external || /^https?:\/\//i.test(cta.href);
         </div>
       ) : null}
     </div>
-    {media ? (
+    {hasCapture ? (
+      <div class="c2-flagship-theatre__backlight">
+        <div
+          class="c2-flagship-theatre__ink-stage c2-flagship-theatre__capture-stage"
+          data-flagship-ink-stage
+        >
+          <FlagshipCapture
+            slug={data.slug}
+            screen="owner-collect"
+            lang={lang}
+            sizes="(min-width: 1024px) 34rem, 92vw"
+          />
+        </div>
+      </div>
+    ) : media ? (
       <div class="c2-flagship-theatre__backlight">
         <figure
           class="c2-flagship-theatre__ink-stage m-0"
@@ -248,6 +270,10 @@ const ctaIsExternal = cta.external || /^https?:\/\//i.test(cta.href);
     border: 0;
     border-radius: 0;
     background: transparent;
+  }
+
+  .c2-flagship-theatre__capture-stage {
+    padding: 0.75rem 0.75rem 1rem;
   }
 
   .c2-flagship-theatre__ink-stage figcaption {

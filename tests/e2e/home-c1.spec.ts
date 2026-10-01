@@ -5,11 +5,11 @@ test("homepage explains BlueSkyz and rejects old positioning", async ({
   page,
 }) => {
   await page.goto("/en/");
-  // Experience v6 S1: concrete registry promise in the H1, the brand tagline
-  // once in the footer, one primary action plus one quiet link in the hero.
+  // Experience v6 S2: the brand promise in the H1, the flagship directly
+  // below it, the brand tagline once in the footer, one primary action plus one quiet link in the hero.
   await expect(page.getByRole("heading", { level: 1 })).toContainText(
     hasPublicProducts
-      ? /See what remains unpaid/i
+      ? /We build intelligent products/i
       : /Intelligence\.\s*Elevated\./i,
   );
   await expect(page.getByRole("contentinfo")).toContainText(

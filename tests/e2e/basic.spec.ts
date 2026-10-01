@@ -6,11 +6,11 @@ test.describe("Smoke — Astro foundation", () => {
     const response = await page.goto("/en/", { waitUntil: "domcontentloaded" });
     expect(response, "navigation response").not.toBeNull();
     expect(response!.status(), "HTTP status").toBeLessThan(400);
-    // Experience v6 S1: the H1 is the flagship's first recorded job; the brand
-    // tagline is stated once, in the footer.
+    // Experience v6 S2: the H1 is the brand promise (site proposition); the
+    // brand tagline is stated once, in the footer.
     await expect(page.getByRole("heading", { level: 1 })).toContainText(
       hasPublicProducts
-        ? "See what remains unpaid this month"
+        ? "We build intelligent products that empower people"
         : "Intelligence. Elevated.",
     );
     await expect(page.getByRole("contentinfo")).toContainText(
@@ -34,7 +34,9 @@ test.describe("Smoke — Astro foundation", () => {
     await page.goto("/vi/");
     await expect(page.locator("html")).toHaveAttribute("lang", "vi");
     await expect(page.getByRole("heading", { level: 1 })).toContainText(
-      hasPublicProducts ? /chưa đóng tiền/ : /Trí tuệ|Nâng tầm|Tác động/,
+      hasPublicProducts
+        ? /Chúng tôi xây dựng những sản phẩm thông minh/
+        : /Trí tuệ|Nâng tầm|Tác động/,
     );
     await expect(page.getByRole("contentinfo")).toContainText(/Trí tuệ/);
   });

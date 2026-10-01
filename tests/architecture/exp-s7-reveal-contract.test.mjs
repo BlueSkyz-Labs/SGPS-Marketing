@@ -221,7 +221,7 @@ test("the hero headline (LCP) is never an animation target", () => {
   assert.doesNotMatch(h1, /reveal|data-reveal|sail|data-motion/);
   // No ancestor of the H1 may animate either: the headline would move with it.
   assert.doesNotMatch(HERO, /<Reveal\b|class:list=\{\[\s*"reveal"|\breveal\b"/);
-  assert.match(HERO, /<div\s+class="relative mx-auto grid/);
+  assert.match(HERO, /<div\s+class="site-container relative grid/);
   assert.equal(targetsLcp(`${CSS}\n.hero-headline { opacity: 0; }`), true);
   assert.equal(targetsLcp(`${CSS}\nh1 { animation: a 1s; }`), true);
 });

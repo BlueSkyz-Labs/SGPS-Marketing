@@ -30,6 +30,8 @@ interface Props {
   noindex?: boolean;
   /** Stable integrity surface id; the lens renders only for modeled surfaces. */
   surface?: string;
+  /** false: the lens omits its source-to-surface chains (see /verify). */
+  lensTraces?: boolean;
   /** Authored scene marker consumed by the global header (C3-A Task 4). */
   scene?: Scene;
 }
@@ -41,6 +43,7 @@ const {
   ogImage = defaultOgImagePath(),
   noindex = false,
   surface,
+  lensTraces = true,
   scene = DEFAULT_SCENE,
 } = Astro.props;
 
@@ -156,7 +159,13 @@ const robotsNoindex = noindex || isNonProductionSiteUrl(SITE.url);
     </script>
     <main id="main-content" class="flex-1" tabindex="-1">
       <slot />
-      {surface ? <IntegrityLens surface={surface} lang={currentLang} /> : null}
+      {surface ? (
+        <IntegrityLens
+          surface={surface}
+          lang={currentLang}
+          traces={lensTraces}
+        />
+      ) : null}
       <JourneyBar />
     </main>
     <Footer />

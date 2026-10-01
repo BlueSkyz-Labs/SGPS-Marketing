@@ -41,7 +41,7 @@ test("homepage renders hero proposition", async ({ page }) => {
   await expect(page.locator("html")).toHaveAttribute("lang", "en");
   await expect(page.getByRole("heading", { level: 1 })).toContainText(
     hasPublicProducts
-      ? /See what remains unpaid/
+      ? /We build intelligent products/
       : /Intelligence|Elevated|Impact/,
   );
   await expect(page.getByRole("contentinfo")).toContainText(

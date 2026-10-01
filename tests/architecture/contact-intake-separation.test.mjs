@@ -3,9 +3,10 @@ import { readFileSync } from "node:fs";
 import test from "node:test";
 
 const cases = [
-  { lang: "en", boundary: "not business or general enquiries" },
-  { lang: "vi", boundary: "không phải kênh liên hệ kinh doanh" },
-  { lang: "zh", boundary: "不是商务或一般咨询通道" },
+  { lang: "en", boundary: "is only for suspected vulnerabilities" },
+  { lang: "vi", boundary: "không dùng cho hợp tác hay hỗ trợ thông thường" },
+  { lang: "zh", boundary: "不接收商务或一般咨询" },
+  { lang: "zh-hant", boundary: "不受理商務或一般諮詢" },
 ];
 
 for (const { lang, boundary } of cases) {
@@ -27,8 +28,8 @@ for (const { lang, boundary } of cases) {
 test("mutated security fallback fails", () => {
   const source = readFileSync("src/pages/en/contact.astro", "utf8");
   const altered = source.replace(
-    "not business or general enquiries",
-    "for business and general enquiries",
+    "is only for suspected vulnerabilities",
+    "is for business and general enquiries",
   );
   assert.ok(source.includes(cases[0].boundary));
   assert.ok(!altered.includes(cases[0].boundary));
