@@ -30,7 +30,7 @@ for (const locale of LOCALES) {
       const response = await page.goto(`/${locale.lang}/verify/`);
       expect(response?.status()).toBe(200);
       await expect(page.locator("h1")).toHaveCount(1);
-      await expect(page).toHaveTitle(new RegExp(`^${locale.label} · `));
+      await expect(page).toHaveTitle(new RegExp(`^${locale.label} \\| `));
       const canonical = await page
         .locator('link[rel="canonical"]')
         .getAttribute("href");

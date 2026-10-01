@@ -1,13 +1,14 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
+import { PAGE_META } from "@/data/page-meta";
 import Container from "@/components/layout/Container.astro";
 import PageHeader from "@/components/layout/PageHeader.astro";
 import AboutComposition from "@/components/empty-state/AboutComposition.astro";
 ---
 
 <BaseLayout
-  title="关于我们"
-  description="关于 BlueSkyz Labs — 我们打造智能化产品，赋能个人并提升工作方式。"
+  title={PAGE_META["zh"]["about"].title}
+  description={PAGE_META["zh"]["about"].description}
   path="/zh/about/"
 >
   <section class="py-16 lg:py-24">
