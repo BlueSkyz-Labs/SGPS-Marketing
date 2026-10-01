@@ -30,6 +30,10 @@ const JOURNEY: Record<string, JourneyStep[]> = {
       },
     },
     {
+      segment: "verify",
+      label: { en: "Verify", vi: "Xác minh", zh: "核实", "zh-hant": "查證" },
+    },
+    {
       segment: "about",
       label: {
         en: "About BlueSkyz",
