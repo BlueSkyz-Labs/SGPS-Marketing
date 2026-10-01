@@ -112,6 +112,24 @@ test("home titles name the brand once and carry a descriptor", () => {
   }
 });
 
+// Same-meaning Traditional conversion is fine, but a zh and zh-hant PAGE_META
+// title must not be byte-identical unless the glyphs are script-neutral and
+// the page is not authored here (those are reviewed from built output).
+const duplicateLocaleTitles = (zh, zhHant) =>
+  Object.keys(zh).filter((id) => zh[id].title === zhHant[id]?.title);
+
+test("zh and zh-hant authored page titles are distinct", () => {
+  assert.deepEqual(
+    duplicateLocaleTitles(PAGE_META.zh, PAGE_META["zh-hant"]),
+    [],
+  );
+});
+
+test("negative proof: identical zh/zh-hant titles are detected", () => {
+  const same = { home: { title: "BlueSkyz Labs | Sổ Trọ、Sổ Tâm" } };
+  assert.deepEqual(duplicateLocaleTitles(same, same), ["home"]);
+});
+
 test("negative proof: mixed separators and repeated brand are rejected", () => {
   assert.equal(hasSingleSeparator("Products · BlueSkyz Labs"), false);
   assert.equal(hasSingleSeparator("Sổ Trọ — BlueSkyz Labs"), false);

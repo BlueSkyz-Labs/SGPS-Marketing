@@ -1256,6 +1256,9 @@ summary {
   padding-left: 0.625rem;
 }
 .decision-room__source {
+  display: inline-flex;
+  align-items: center;
+  min-height: 1.5rem; /* WCAG 2.5.8 target size */
   font-size: 0.875rem;
   font-weight: 600;
   color: var(--action-primary);
