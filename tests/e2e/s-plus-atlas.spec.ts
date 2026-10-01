@@ -79,8 +79,13 @@ test("atlas node links resolve to real destinations", async ({ page }) => {
   expect(
     await atlas.locator("[data-atlas-node] a[href='/en/privacy/']").count(),
   ).toBeGreaterThanOrEqual(1);
+  // The principle nodes point at the home page's "Elevation" anchor. A bare
+  // "#house-title" does not exist on /verify, so it must be the full route.
   await expect(
-    atlas.locator("[data-atlas-node] a[href='#house-title']").first(),
+    atlas.locator("[data-atlas-node] a[href='#house-title']"),
+  ).toHaveCount(0);
+  await expect(
+    atlas.locator("[data-atlas-node] a[href='/en/#house-title']").first(),
   ).toHaveCount(1);
 });
 
