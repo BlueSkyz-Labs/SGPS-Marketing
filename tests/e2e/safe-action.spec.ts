@@ -5,9 +5,9 @@ const ADVISORY_URL =
 
 test.describe("safe action preflight on external trust actions", () => {
   for (const [route, context] of [
-    ["/en/security/", /Opens GitHub private vulnerability reporting/i],
+    ["/en/security/", /Only maintainers can see reports/i],
     ["/en/contact/", /Opens GitHub private vulnerability reporting/i],
-    ["/vi/security/", /báo cáo lỗ hổng riêng tư trên GitHub/i],
+    ["/vi/security/", /Chỉ người bảo trì xem được/i],
     ["/vi/contact/", /báo cáo lỗ hổng riêng tư trên GitHub/i],
   ] as const) {
     test(`${route} shows destination context for private reporting`, async ({
@@ -39,7 +39,7 @@ test.describe("safe action preflight on external trust actions", () => {
     const link = page.locator('[data-safe-action="private-reporting"] a');
     await link.focus();
     await expect(link).toBeFocused();
-    await expect(link).toHaveText(/Open private vulnerability reporting/);
+    await expect(link).toHaveText(/Report a vulnerability/);
   });
 });
 

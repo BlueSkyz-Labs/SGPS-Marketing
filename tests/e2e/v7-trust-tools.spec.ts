@@ -10,7 +10,7 @@ const ROOM = "[data-decision-room]";
 
 test.describe("v7 dossier and security components use the authored scale", () => {
   test("headings are not browser-default 40px/400 (A-03)", async ({ page }) => {
-    for (const path of ["/en/dossier/", "/en/security/"]) {
+    for (const path of ["/en/dossier/", "/en/verify/"]) {
       await page.goto(path);
       const sizes = await page
         .locator("main h2, main h3")

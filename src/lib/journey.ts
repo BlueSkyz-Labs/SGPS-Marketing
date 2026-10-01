@@ -93,31 +93,6 @@ const JOURNEY: Record<string, JourneyStep[]> = {
       label: { en: "Security", vi: "Bảo mật", zh: "安全", "zh-hant": "安全" },
     },
   ],
-  privacy: [
-    {
-      segment: "security",
-      label: { en: "Security", vi: "Bảo mật", zh: "安全", "zh-hant": "安全" },
-    },
-    {
-      segment: "support",
-      label: { en: "Support", vi: "Hỗ trợ", zh: "支持", "zh-hant": "支援" },
-    },
-  ],
-  security: [
-    {
-      segment: "support",
-      label: { en: "Support", vi: "Hỗ trợ", zh: "支持", "zh-hant": "支援" },
-    },
-    {
-      segment: "privacy",
-      label: {
-        en: "Privacy",
-        vi: "Quyền riêng tư",
-        zh: "隐私",
-        "zh-hant": "隱私",
-      },
-    },
-  ],
 };
 
 export function getJourneyActions(

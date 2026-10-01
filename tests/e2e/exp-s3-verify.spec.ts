@@ -58,7 +58,7 @@ for (const locale of LOCALES) {
         `/${locale.lang}/decision-room/`,
       );
       // Node codes and the source-to-surface chain stay in collapsed layers.
-      for (const layer of ["atlas", "trace", "pages"]) {
+      for (const layer of ["atlas"]) {
         const details = page.locator(`details[data-verify-layer="${layer}"]`);
         await expect(details).toHaveCount(1);
         expect(
@@ -66,7 +66,7 @@ for (const locale of LOCALES) {
         ).toBe(false);
       }
       await expect(page.locator("[data-atlas]")).toBeHidden();
-      await expect(page.locator("[data-source-trace]").first()).toBeHidden();
+      await expect(page.locator("[data-source-trace]")).toHaveCount(0);
       const front = await page.locator("main").innerText();
       expect(front).not.toMatch(/\b[CE][1-9]\b/);
     });
@@ -87,16 +87,9 @@ for (const locale of LOCALES) {
       ).toHaveCount(1);
     });
 
-    test("the technical layers open with a click and hold the moved content", async ({
-      page,
-    }) => {
+    test("the claim map opens with a click", async ({ page }) => {
       await openVerifyLayer(page, `/${locale.lang}/verify/`, "atlas");
       await expect(page.locator("[data-atlas]")).toBeVisible();
-      await page
-        .locator('details[data-verify-layer="trace"] summary')
-        .first()
-        .click();
-      await expect(page.locator("[data-source-trace]").first()).toBeVisible();
     });
 
     test("/products/ holds the copy cap and carries one quiet link to /verify", async ({
@@ -119,15 +112,13 @@ for (const locale of LOCALES) {
       ).toHaveCount(1);
     });
 
-    test("/security/ no longer inlines the source-to-surface chain", async ({
+    test("/security/ shows one sources line and no trace or lens", async ({
       page,
     }) => {
       await page.goto(`/${locale.lang}/security/`);
       await expect(page.locator("[data-source-trace]")).toHaveCount(0);
-      // Evidence disclosure itself stays on the security page.
-      await expect(
-        page.locator('[data-integrity-lens][data-surface="security"]'),
-      ).toBeVisible();
+      await expect(page.locator("[data-integrity-lens]")).toHaveCount(0);
+      await expect(page.locator("[data-sources-line]")).toHaveCount(1);
     });
   });
 }
