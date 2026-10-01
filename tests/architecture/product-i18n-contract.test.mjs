@@ -89,3 +89,18 @@ test("negative proof: localized out-of-scope claims are detected", () => {
   assert.ok(outOfScopeHits("vungtaylai.yaml", "cảnh báo va chạm").length > 0);
   assert.deepEqual(outOfScopeHits("sotam.yaml", "Nhật ký viết tay"), []);
 });
+
+test("zh-hant Sổ Trọ copy states no claim absent from the English record (drift fix)", () => {
+  const { block } = parse("sotro.yaml");
+  const zhHant = localeSection(block, "zh-hant");
+  assert.ok(zhHant, "sotro.yaml: missing i18n.zh-hant");
+  // Negative proof: the drifted claims and the leaked heading prefix must stay out.
+  for (const banned of ["可追溯", "可審計", "開發範圍："]) {
+    assert.ok(
+      !zhHant.includes(banned),
+      `sotro.yaml zh-hant must not contain "${banned}" (not in the English record)`,
+    );
+  }
+  // Positive proof: the honesty claim "nothing is sent automatically" survives.
+  assert.match(zhHant, /不會自動傳送/);
+});

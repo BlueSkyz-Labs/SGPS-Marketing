@@ -1,17 +1,49 @@
 ---
-import BrandLockup from "@/components/brand/BrandLockup.astro";
 import HorizonField from "@/components/experience/HorizonField.astro";
 import ButtonLink from "@/components/ui/ButtonLink.astro";
-import Reveal from "@/components/ui/Reveal.astro";
+import SailReveal from "@/components/motion/SailReveal.astro";
 import { SITE, SHARED_LABELS, labelFor, type Language } from "@/data/site";
 import { emptyRegistryPrimaryCta, emptyRegistrySecondaryCta } from "@/lib/act";
+import { resolveLifecycleCta } from "@/lib/lifecycle-cta";
+import { productCopy } from "@/lib/product-copy";
+import { getProductIconPath } from "@/lib/product-routes";
 import { getPublicProducts } from "@/lib/products";
+import FlagshipCapture from "@/components/product/FlagshipCapture.astro";
 
+/**
+ * Experience v6 S2 — brand + flagship hero (Owner 2026-10-01).
+ *
+ * The H1 is BlueSkyz's one-line promise, the existing localized
+ * `SITE.proposition`. Immediately below it the flagship is presented with a
+ * real, labelled capture of the app (`FlagshipCapture`, from the product's
+ * showcase record), its name and status chip, its registry one-line
+ * description (`productCopy`) and the one primary action, which is
+ * `resolveLifecycleCta` (no authored verb). With no public flagship the hero
+ * falls back to the company tagline and the honest empty-registry Act path, so
+ * nothing is invented.
+ */
 interface Props {
   lang?: Language;
 }
 const { lang = "en" } = Astro.props;
 
+const products = await getPublicProducts();
+const flagship =
+  products.find((product) => product.data.featuredTier === "hero") ?? null;
+const copy = flagship ? productCopy(flagship.data, lang) : null;
+const cta = flagship
+  ? resolveLifecycleCta(
+      {
+        slug: flagship.data.slug,
+        lifecycle: flagship.data.lifecycle,
+        availability: flagship.data.availability,
+        primaryActionHref: flagship.data.primaryAction.href,
+      },
+      lang,
+    )
+  : null;
+
+// Company-level fallback (no public flagship): tagline once, no slogan stack.
 const taglineLead = labelFor(
   {
     en: SITE.taglineLead,
@@ -39,24 +71,16 @@ const proposition = labelFor(
   },
   lang,
 );
-const supporting = labelFor(
-  {
-    en: SITE.supporting,
-    vi: "Một góc nhìn cao hơn kiến tạo một ngày mai rạng rỡ.",
-    zh: "更高的视角，成就更明亮的明天。",
-    "zh-hant": "更高的視角，成就更明亮的明天。",
-  },
-  lang,
-);
 const exploreProducts = labelFor(SHARED_LABELS.exploreProducts, lang);
-const aboutBlueSkyz = labelFor(SHARED_LABELS.aboutBlueSkyz, lang);
 const productsHref = `/${lang}/products/`;
-const aboutHref = `/${lang}/about/`;
-
-const products = await getPublicProducts();
-const hasPublicProducts = products.length > 0;
 const emptyPrimary = emptyRegistryPrimaryCta(SITE.contactEmail, lang);
 const emptySecondary = emptyRegistrySecondaryCta(SITE.contactEmail, lang);
+// Flagship present: the proposition is the H1 and carries the promise alone.
+// Fallback: tagline H1 plus the proposition as the one supporting sentence.
+const supportingLine = flagship ? null : proposition;
+const secondary = flagship
+  ? { href: productsHref, label: exploreProducts }
+  : emptySecondary;
 ---
 
 <section
@@ -69,45 +93,101 @@ const emptySecondary = emptyRegistrySecondaryCta(SITE.contactEmail, lang);
       <HorizonField />
     </div>
   </div>
-  <Reveal
-    as="div"
-    class="relative mx-auto grid w-full max-w-7xl gap-10 px-4 py-16 sm:px-6 sm:py-24 lg:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)] lg:items-center lg:px-8"
-  >
-    <div class="hero-content">
-      <BrandLockup size="hero" surface="ink" />
+  <!-- Plain container, not the rise wrapper: the LCP headline lives inside it and must
+       not animate or move, so no ancestor may carry the 400 ms rise either. -->
+  <div class="site-container relative grid gap-10 py-10 sm:py-16 lg:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)] lg:items-center">
+    <div class="hero-content" data-hero>
       <h1
         id="hero-title"
-        class="hero-headline mt-8 max-w-[11ch] text-4xl font-semibold tracking-tight text-[var(--brand-porcelain)] sm:text-5xl lg:text-7xl"
+        class:list={[
+          "hero-headline text-[var(--brand-porcelain)] font-semibold tracking-tight",
+          flagship
+            ? "hero-headline--promise max-w-[24ch] text-3xl text-balance sm:text-4xl lg:text-[2.5rem]"
+            : "mt-2 max-w-[11ch] text-4xl sm:text-5xl lg:text-7xl",
+        ]}
       >
-        <span class="block">{taglineLead}</span>
-        <span class="mt-1 block text-[var(--brand-cobalt)]">
-          {taglineAccent}
-        </span>
-      </h1>
-      <p class="hero-tagline mt-5 max-w-xl text-lg leading-relaxed text-[color-mix(in_srgb,var(--brand-porcelain)_82%,transparent)]">
-        {proposition}
-      </p>
-      <p class="hero-supporting mt-3 max-w-xl text-sm leading-relaxed text-[color-mix(in_srgb,var(--brand-porcelain)_68%,transparent)]">
-        {supporting}
-      </p>
-      <div class="hero-actions">
-        {hasPublicProducts ? (
-          <>
-            <ButtonLink href={productsHref}>{exploreProducts}</ButtonLink>
-            <ButtonLink href={aboutHref} variant="on-ink">
-              {aboutBlueSkyz}
-            </ButtonLink>
-          </>
+        {flagship ? (
+          proposition
         ) : (
           <>
-            <ButtonLink href={emptyPrimary.href}>
-              {emptyPrimary.label}
-            </ButtonLink>
-            <ButtonLink href={emptySecondary.href} variant="on-ink">
-              {emptySecondary.label}
-            </ButtonLink>
+            <span class="block">{taglineLead}</span>
+            <span class="mt-1 block text-[var(--brand-cobalt)]">
+              {taglineAccent}
+            </span>
           </>
         )}
+      </h1>
+      {supportingLine ? (
+        <p class="hero-tagline mt-5 max-w-xl text-lg leading-relaxed text-[color-mix(in_srgb,var(--brand-porcelain)_82%,transparent)]">
+          {supportingLine}
+        </p>
+      ) : null}
+      {flagship && cta ? (
+        <div class="hero-flagship mt-8" data-hero-flagship>
+          <FlagshipCapture
+            slug={flagship.data.slug}
+            screen="today"
+            lang={lang}
+            priority
+            sizes="9rem"
+            smallSrc={
+              flagship.data.slug === "sotro"
+                ? {
+                    src: "/products/sotro/showcase/op-01-home-288.webp",
+                    width: 288,
+                  }
+                : undefined
+            }
+            class="hero-flagship__capture"
+          />
+          <div class="hero-flagship__body">
+            <p class="hero-product flex flex-wrap items-center gap-x-3 gap-y-2">
+              <img
+                class="size-9 rounded-lg"
+                src={getProductIconPath(flagship.data.slug)}
+                alt=""
+                width="36"
+                height="36"
+                decoding="async"
+              />
+              <span class="text-lg font-semibold text-[var(--brand-porcelain)]">
+                {flagship.data.name}
+              </span>
+              <span
+                data-product-status={flagship.data.publicLabel}
+                class="inline-flex rounded-full border border-white/30 px-3 py-1 text-xs font-semibold tracking-wide text-[var(--brand-porcelain)]"
+              >
+                {copy?.statusLabel}
+              </span>
+            </p>
+            <p class="hero-tagline mt-3 text-base leading-relaxed text-[color-mix(in_srgb,var(--brand-porcelain)_82%,transparent)]">
+              {copy?.shortDescription}
+            </p>
+            <div class="mt-4">
+              <ButtonLink
+                href={cta.href}
+                data-product-cta={cta.verb}
+                data-hero-primary
+              >
+                {cta.label}
+              </ButtonLink>
+            </div>
+          </div>
+        </div>
+      ) : null}
+      <div class="hero-actions">
+        {!(flagship && cta) ? (
+          <ButtonLink href={emptyPrimary.href} data-hero-primary>
+            {emptyPrimary.label}
+          </ButtonLink>
+        ) : null}
+        <a
+          href={secondary.href}
+          data-hero-secondary
+          class="inline-flex min-h-11 items-center text-sm font-semibold text-[var(--brand-porcelain)] underline underline-offset-4 hover:no-underline"
+        >
+          {secondary.label}
+        </a>
       </div>
     </div>
     <div class="hero-visual" aria-hidden="true">
@@ -134,7 +214,32 @@ const emptySecondary = emptyRegistrySecondaryCta(SITE.contactEmail, lang);
           fetchpriority="low"
         />
       </picture>
+      <SailReveal handoff />
       <span class="hero-seam"></span>
     </div>
-  </Reveal>
+  </div>
 </section>
+
+<style>
+  .hero-flagship {
+    display: grid;
+    grid-template-columns: 9rem minmax(0, 1fr);
+    gap: 1.25rem;
+    align-items: start;
+    max-width: 34rem;
+    padding: 1rem;
+    border: 1px solid
+      color-mix(in srgb, var(--brand-porcelain) 18%, transparent);
+    border-radius: var(--radius-lg);
+    background: color-mix(in srgb, var(--brand-ink) 72%, transparent);
+  }
+  .hero-flagship :global(.hero-flagship__capture) {
+    /* Reserve the slot before the image arrives (CLS 0). */
+    aspect-ratio: 780 / 1440;
+    width: 9rem;
+  }
+  .hero-flagship :global(.flagship-capture__image) {
+    aspect-ratio: 780 / 1440;
+    object-fit: cover;
+  }
+</style>

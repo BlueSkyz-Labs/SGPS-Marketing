@@ -232,14 +232,17 @@ test("complete critical content without JavaScript", async ({ browser }) => {
     );
   }
   await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
-  await expect(page.locator("[data-atlas]")).toBeVisible();
+  // Atlas moved to /verify (S3); the product index keeps one quiet link to it.
+  await expect(page.locator("[data-verify-link]")).toBeVisible();
   await expect(page.locator("[data-journey-bar] a").first()).toBeVisible();
 
   // Homepage narrative surface: every act is readable without scripting.
   await page.goto("/en/");
   await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
   await expect(page.locator("[data-product-house]")).toBeVisible();
-  await expect(page.locator("[data-journey-bar] a").first()).toBeVisible();
+  await expect(page.locator("[data-hero-primary]")).toBeVisible();
+  // Experience v6 S1: the home has no Next steps pill row.
+  await expect(page.locator("[data-journey-bar]")).toHaveCount(0);
   await context.close();
 });
 

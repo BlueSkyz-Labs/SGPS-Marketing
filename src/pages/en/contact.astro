@@ -1,31 +1,35 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
+import { PAGE_META } from "@/data/page-meta";
 import Container from "@/components/layout/Container.astro";
 import PageHeader from "@/components/layout/PageHeader.astro";
 import SafeAction from "@/components/integrity/SafeAction.astro";
-import { SITE, SECURITY_ADVISORY_URL } from "@/data/site";
+import ProductSignInLane from "@/components/empty-state/ProductSignInLane.astro";
+import BusinessRouteState from "@/components/empty-state/BusinessRouteState.astro";
+import { EMPTY_STATE_COPY } from "@/data/empty-state-copy";
+import { SITE, SECURITY_ADVISORY_URL, labelFor } from "@/data/site";
 
 const hasBusinessEmail = Boolean(SITE.contactEmail);
 ---
 
 <BaseLayout
-  title="Contact"
-  description="Contact BlueSkyz Labs for business, security, or general inquiries."
+  title={PAGE_META["en"]["contact"].title}
+  description={PAGE_META["en"]["contact"].description}
   path="/en/contact/"
 >
   <section class="py-16 lg:py-24">
     <Container>
       <PageHeader
         eyebrow="Contact"
-        title="Reach the right lane"
-        lede="Reach BlueSkyz through the lane that matches your need. Email addresses appear here when BlueSkyz publishes them."
+        title="Contact"
+        lede={labelFor(EMPTY_STATE_COPY.contactLede, "en")}
       />
       <ul class="mt-12 grid gap-4 sm:grid-cols-2">
         <li class="flex min-w-0 flex-col rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-raised)] p-6">
           <h2 class="text-lg font-semibold tracking-tight">Security</h2>
           <p class="mt-2 flex-1 text-sm leading-relaxed text-[var(--text-secondary)]">
-            Use GitHub private vulnerability reporting for suspected security
-            vulnerabilities.
+            If you think you have found a security vulnerability, report it
+            privately through GitHub.
           </p>
           <div class="mt-5">
             <SafeAction
@@ -36,12 +40,13 @@ const hasBusinessEmail = Boolean(SITE.contactEmail);
             />
           </div>
         </li>
-        <li class="flex flex-col rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-raised)] p-6">
-          <h2 class="text-lg font-semibold tracking-tight">
-            Business / general
-          </h2>
-          <p class="mt-2 flex-1 text-sm leading-relaxed text-[var(--text-secondary)]">
-            {hasBusinessEmail ? (
+        <ProductSignInLane lang="en" />
+        {hasBusinessEmail ? (
+          <li class="flex min-w-0 flex-col rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-raised)] p-6 sm:col-span-2">
+            <h2 class="text-lg font-semibold tracking-tight">
+              Business / general
+            </h2>
+            <p class="mt-2 flex-1 text-sm leading-relaxed text-[var(--text-secondary)]">
               <>
                 Email{" "}
                 <a
@@ -52,11 +57,15 @@ const hasBusinessEmail = Boolean(SITE.contactEmail);
                 </a>{" "}
                 for business inquiries.
               </>
-            ) : (
-              "A business email has not yet been verified. See About for published information. Private security reporting is exclusively for suspected vulnerabilities, not business or general enquiries."
-            )}
-          </p>
-        </li>
+            </p>
+          </li>
+        ) : (
+          <BusinessRouteState
+            lang="en"
+            heading="Business / general"
+            boundary="Business and general enquiries. Private security reporting is only for suspected vulnerabilities."
+          />
+        )}
       </ul>
     </Container>
   </section>

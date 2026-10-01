@@ -1,0 +1,23 @@
+---
+/**
+ * Progressive enhancement for /verify deep links: a hash that targets an
+ * element inside a collapsed layer (#evidence-…, #claim-…) opens that layer.
+ * The layers remain native <details>; without JavaScript they still open by
+ * click, and Chromium opens them on fragment navigation natively.
+ */
+---
+
+<script>
+  function openLayerForHash(): void {
+    const id = decodeURIComponent(window.location.hash.slice(1));
+    if (!id) return;
+    const target = document.getElementById(id);
+    const layer = target?.closest("details");
+    if (target && layer && !layer.open) {
+      layer.open = true;
+      target.scrollIntoView();
+    }
+  }
+  openLayerForHash();
+  window.addEventListener("hashchange", openLayerForHash);
+</script>

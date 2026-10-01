@@ -100,6 +100,7 @@ const ctaIsExternal = cta.external || /^https?:\/\//i.test(cta.href);
   <!-- Platform Chips (only platforms the record actually declares) -->
   <div
     class="mt-4 flex flex-wrap items-center gap-2"
+    role="group"
     aria-label={labelFor(SHARED_LABELS.platforms, lang)}
   >
     {data.platforms?.map((platform: string) => (

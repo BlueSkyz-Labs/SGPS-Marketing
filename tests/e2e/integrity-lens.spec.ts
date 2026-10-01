@@ -1,4 +1,5 @@
 import { expect, test } from "@playwright/test";
+import { openVerifyLayer } from "./verify-helpers.ts";
 
 test.describe("SGPS integrity lens", () => {
   test("/en/security/ shows a modeled lens with truthful content", async ({
@@ -35,10 +36,10 @@ test.describe("SGPS integrity lens", () => {
     );
   });
 
-  test("/en/products/ lens reports the populated registry state", async ({
+  test("/en/verify/ products lens reports the populated registry state", async ({
     page,
   }) => {
-    await page.goto("/en/products/");
+    await openVerifyLayer(page, "/en/verify/", "pages");
     const lens = page.locator('[data-integrity-lens][data-surface="products"]');
     await expect(lens).toBeVisible();
     // Published products override the stale empty-registry entry; its reason remains in products-integrity-summary.test.mjs.

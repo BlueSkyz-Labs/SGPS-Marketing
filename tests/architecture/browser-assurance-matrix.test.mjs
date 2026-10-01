@@ -60,6 +60,25 @@ function auditBrowserAssurance(workflow) {
     problems.push("shards must run pnpm test:e2e");
   }
 
+  // Pre-go-live speed mode: pull requests may run a subset, but a push to
+  // main must always run the full matrix, and the PR lane must keep at least
+  // one desktop and one mobile engine.
+  if (
+    !/RUN_SHARD:\s*\$\{\{\s*github\.event_name != 'pull_request' \|\| matrix\.pr_lane\s*\}\}/.test(
+      shards,
+    )
+  ) {
+    problems.push("RUN_SHARD must run every shard outside pull_request events");
+  }
+  for (const project of ["chromium", "mobile-chromium"]) {
+    const entry = new RegExp(
+      `-\\s*project:\\s*${project}\\n\\s*browser:\\s*\\w+\\n\\s*pr_lane:\\s*true`,
+    );
+    if (!entry.test(shards)) {
+      problems.push(`the PR lane must include ${project}`);
+    }
+  }
+
   if (!/run:\s*pnpm lighthouse\s*$/m.test(lighthouse)) {
     problems.push("the lighthouse job must run pnpm lighthouse");
   }
@@ -105,6 +124,29 @@ test("negative proof: narrowing the shard list is caught", () => {
   assert.ok(
     auditBrowserAssurance(mutated).some((problem) =>
       problem.includes("webkit"),
+    ),
+  );
+});
+
+test("negative proof: skipping engines on main or emptying the PR lane is caught", () => {
+  const prOnly = WORKFLOW.replace(
+    "github.event_name != 'pull_request' || matrix.pr_lane",
+    "matrix.pr_lane",
+  );
+  assert.notEqual(prOnly, WORKFLOW);
+  assert.ok(
+    auditBrowserAssurance(prOnly).some((problem) =>
+      problem.includes("outside pull_request"),
+    ),
+  );
+  const noMobile = WORKFLOW.replace(
+    /(project: mobile-chromium\n {12}browser: chromium\n {12}pr_lane: )true/,
+    "$1false",
+  );
+  assert.notEqual(noMobile, WORKFLOW);
+  assert.ok(
+    auditBrowserAssurance(noMobile).some((problem) =>
+      problem.includes("mobile-chromium"),
     ),
   );
 });
