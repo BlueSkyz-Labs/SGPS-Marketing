@@ -9,12 +9,18 @@ export function safeJsonLd(data: unknown): string {
   return JSON.stringify(data).replace(/</g, "\\u003c");
 }
 
+/** Committed 512x512 square BlueSkyz mark under `public/`. */
+export const ORGANIZATION_LOGO_PATH = "/icons/icon-512x512.png";
+
 export function organizationJsonLd(siteUrl: string) {
   return {
     "@context": "https://schema.org",
     "@type": "Organization",
     name: "BlueSkyz Labs",
     url: siteUrl,
+    // Square BlueSkyz mark (Owner decision F11, 2026-10-01). No sameAs and no
+    // contactPoint: those stay absent until the Owner supplies real profiles.
+    logo: absoluteUrl(siteUrl, ORGANIZATION_LOGO_PATH),
   } as const;
 }
 
@@ -129,6 +135,19 @@ export function hreflangLinks(path: string, siteUrl: string): HreflangLink[] {
     hreflang: LANGUAGES[lang].hreflang,
     href: canonicalForPath(getAlternatePath(path, lang), siteUrl),
   }));
+}
+
+/**
+ * Owner decision F16 (2026-10-01): the language gateway `/` is indexable and
+ * is the `x-default` of the home cluster only (the gateway and the four
+ * localized homes). Every other page keeps its English counterpart.
+ */
+export function isHomeClusterPath(path: string): boolean {
+  return path === "/" || /^\/(en|vi|zh-hant|zh)\/$/.test(path);
+}
+
+export function xDefaultPath(path: string): string {
+  return isHomeClusterPath(path) ? "/" : getAlternatePath(path, "en");
 }
 
 // v3 G4 — Decision Room is a static public route in both locales.

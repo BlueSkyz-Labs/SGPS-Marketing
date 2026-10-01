@@ -91,8 +91,14 @@ test("gateway first paint needs no external stylesheet or script (no dark flash)
   expect(head).toMatch(/name="color-scheme" content="light dark"/);
   expect(head).not.toMatch(/<link[^>]+rel="stylesheet"/);
   expect(head).not.toMatch(/<script/);
-  // Search-engine contract unchanged: noindex gateway, no cookie, no hreflang.
-  expect(head).toMatch(/name="robots" content="noindex, follow"/);
+  // Owner decision F16 (2026-10-01): indexable gateway with a self canonical,
+  // one all-locale title and the home cluster's hreflang set. The local test
+  // origin is non-production, so the shared non-prod gate still adds noindex.
+  expect(head).toContain("<title>BlueSkyz Labs | Sổ Trọ và Sổ Tâm</title>");
+  expect(head).toMatch(/rel="canonical" href="[^"]+\/"/);
+  expect(head).toMatch(/hreflang="x-default" href="[^"]+\/"/);
+  expect(head).toMatch(/hreflang="zh-Hant" href="[^"]+\/zh-hant\/"/);
+  expect(head).not.toMatch(/noindex, follow/);
 });
 
 test("gateway with the redirect script blocked still paints dark at first paint", async ({

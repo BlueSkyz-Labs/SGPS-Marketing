@@ -1,5 +1,16 @@
 ---
-const title = "BlueSkyz Labs";
+import { SITE } from "@/data/site";
+import { canonicalForPath, hreflangLinks, xDefaultPath } from "@/lib/seo";
+import { isNonProductionSiteUrl } from "@/lib/truth";
+
+// Language gateway: indexable and the home cluster's x-default (Owner
+// decision F16, 2026-10-01). Single all-locale title and description.
+const title = "BlueSkyz Labs | Sổ Trọ và Sổ Tâm";
+const description =
+  "BlueSkyz Labs builds Sổ Trọ and Sổ Tâm, both in development. Chọn ngôn ngữ · Choose your language.";
+const canonical = canonicalForPath("/", SITE.url);
+// Non-production origins (preview, workers.dev, localhost) stay out of search.
+const robotsNoindex = isNonProductionSiteUrl(SITE.url);
 ---
 
 <!doctype html>
@@ -7,7 +18,17 @@ const title = "BlueSkyz Labs";
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="robots" content="noindex, follow" />
+    {robotsNoindex ? <meta name="robots" content="noindex, nofollow" /> : null}
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    {hreflangLinks("/", SITE.url).map((link) => (
+      <link rel="alternate" hreflang={link.hreflang} href={link.href} />
+    ))}
+    <link
+      rel="alternate"
+      hreflang="x-default"
+      href={canonicalForPath(xDefaultPath("/"), SITE.url)}
+    />
     <meta name="color-scheme" content="light dark" />
     <meta
       name="theme-color"
