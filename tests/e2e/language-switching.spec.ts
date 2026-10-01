@@ -166,6 +166,18 @@ test("hreflang links present on all pages", async ({ page }) => {
   await expect(page.locator('link[hreflang="x-default"]')).toBeAttached();
 });
 
+test("home cluster x-default points to the language gateway", async ({
+  page,
+}) => {
+  for (const home of ["/en/", "/vi/", "/zh/", "/zh-hant/"]) {
+    await page.goto(home);
+    await expect(page.locator('link[hreflang="x-default"]')).toHaveAttribute(
+      "href",
+      /^https?:\/\/[^/]+\/$/,
+    );
+  }
+});
+
 test("x-default points to en", async ({ page }) => {
   await page.goto("/vi/about/");
   const xDefault = page.locator('link[hreflang="x-default"]');

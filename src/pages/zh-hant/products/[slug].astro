@@ -16,6 +16,7 @@ import { getShowcase } from "@/lib/showcases";
 import { getPublicProducts } from "@/lib/products";
 import { safeJsonLd, productJsonLd } from "@/lib/seo";
 import { productBreadcrumbJsonLd } from "@/lib/breadcrumbs";
+import { audienceText } from "@/lib/product-audience";
 import { productMeta } from "@/data/page-meta";
 import { labelFor, SHARED_LABELS, SITE } from "@/data/site";
 
@@ -247,7 +248,7 @@ const breadcrumbStructuredData = productBreadcrumbJsonLd(
           id="profile-status"
           class="text-xs font-semibold uppercase tracking-widest text-[var(--text-muted)]"
         >
-          平台與適用物件
+          平台與適用對象
         </h2>
         <dl class="mt-4 grid gap-4 sm:grid-cols-2">
           <div class="rounded-[var(--radius-card)] border border-[var(--border-subtle)] p-5 bg-[var(--surface-raised)] transition-[border-color,box-shadow] duration-200 hover:border-[color-mix(in_srgb,var(--brand-cobalt)_40%,var(--border-subtle))]">
@@ -262,12 +263,15 @@ const breadcrumbStructuredData = productBreadcrumbJsonLd(
           </div>
           <div class="rounded-[var(--radius-card)] border border-[var(--border-subtle)] p-5 bg-[var(--surface-raised)] transition-[border-color,box-shadow] duration-200 hover:border-[color-mix(in_srgb,var(--brand-cobalt)_40%,var(--border-subtle))]">
             <dt class="text-xs font-semibold uppercase tracking-wider text-[var(--text-muted)]">
-              適用物件
+              適用對象
             </dt>
             <dd class="mt-2 text-base font-semibold text-[var(--text-primary)]">
-              {data.audience
-                .map((a: string) => AUDIENCE_LABELS[a] ?? a)
-                .join(", ")}
+              {audienceText(
+                data.slug,
+                data.audience,
+                AUDIENCE_LABELS,
+                "zh-hant",
+              )}
             </dd>
           </div>
         </dl>
@@ -318,7 +322,7 @@ const breadcrumbStructuredData = productBreadcrumbJsonLd(
             >
               {data.lifecycle === "active" || data.lifecycle === "maintenance"
                 ? "主要能力"
-                : "開發重點"}
+                : labelFor(SHARED_LABELS.scopeHeading, "zh-hant")}
             </h2>
           </div>
           <div class="mt-6 grid gap-4 sm:grid-cols-2">

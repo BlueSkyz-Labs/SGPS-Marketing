@@ -5,8 +5,7 @@ lifecycle: development
 availability: preview
 publicLabel: In development
 audience:
-  - professional
-  - business
+  - individual
 jobs:
   - See what remains unpaid this month and what needs attention today
   - Maintain dependable room, tenant, meter, and monthly charge records

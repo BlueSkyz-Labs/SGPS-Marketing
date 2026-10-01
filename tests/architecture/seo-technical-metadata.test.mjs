@@ -186,9 +186,15 @@ test("WebSite and SoftwareApplication declare inLanguage", () => {
   }
 });
 
-test("owner-gated Organization/SoftwareApplication fields stay absent", () => {
+test("Organization carries the square mark as logo; sameAs/contactPoint stay absent", () => {
   const org = organizationJsonLd("https://blueskyzlabs.com/");
-  for (const field of ["logo", "sameAs", "contactPoint"]) {
+  assert.equal(org.logo, "https://blueskyzlabs.com/icons/icon-512x512.png");
+  assert.equal(
+    existsSync(`public${new URL(org.logo).pathname}`),
+    true,
+    "logo must point at a committed public/ image",
+  );
+  for (const field of ["sameAs", "contactPoint"]) {
     assert.equal(field in org, false, field);
   }
   const app = productJsonLd(
@@ -202,6 +208,14 @@ test("owner-gated Organization/SoftwareApplication fields stay absent", () => {
     "https://blueskyzlabs.com/",
     "WebSite.url is an Owner decision (F16) and is unchanged",
   );
+});
+
+test("negative proof: a logo that is not a committed image is rejected", () => {
+  const fake = new URL(
+    "/icons/does-not-exist.png",
+    "https://blueskyzlabs.com/",
+  );
+  assert.equal(existsSync(`public${fake.pathname}`), false);
 });
 
 test("product and guide pages emit a BreadcrumbList in every locale", () => {

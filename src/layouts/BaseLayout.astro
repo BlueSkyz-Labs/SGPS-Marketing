@@ -12,11 +12,12 @@ import {
   DEFAULT_OG_IMAGE,
   defaultOgImagePath,
   hreflangLinks,
+  xDefaultPath,
   organizationJsonLd,
   safeJsonLd,
   websiteJsonLd,
 } from "@/lib/seo";
-import { getAlternatePath, getLanguageFromPath } from "@/lib/i18n";
+import { getLanguageFromPath } from "@/lib/i18n";
 import { breadcrumbJsonLd } from "@/lib/breadcrumbs";
 import { isNonProductionSiteUrl } from "@/lib/truth";
 import { DEFAULT_SCENE, type Scene } from "@/lib/scene";
@@ -109,7 +110,7 @@ const robotsNoindex = noindex || isNonProductionSiteUrl(SITE.url);
     <link
       rel="alternate"
       hreflang="x-default"
-      href={canonicalForPath(getAlternatePath(path, "en"), SITE.url)}
+      href={canonicalForPath(xDefaultPath(path), SITE.url)}
     />
     {robotsNoindex ? <meta name="robots" content="noindex, nofollow" /> : null}
     <meta property="og:type" content="website" />
