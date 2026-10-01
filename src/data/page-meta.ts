@@ -74,7 +74,7 @@ export const PAGE_META: Record<Language, Record<StaticPageKey, PageMeta>> = {
   },
   zh: {
     home: {
-      title: "BlueSkyz Labs | Sổ Trọ、Sổ Tâm",
+      title: "BlueSkyz Labs | Sổ Trọ 与 Sổ Tâm，开发中",
       description:
         "BlueSkyz Labs 正在打造两款产品：面向越南房东的电子记事本 Sổ Trọ，以及本地优先的私密日记 Sổ Tâm。两款产品均在开发中。",
     },
@@ -101,7 +101,7 @@ export const PAGE_META: Record<Language, Record<StaticPageKey, PageMeta>> = {
   },
   "zh-hant": {
     home: {
-      title: "BlueSkyz Labs | Sổ Trọ、Sổ Tâm",
+      title: "BlueSkyz Labs | Sổ Trọ 與 Sổ Tâm，開發中",
       description:
         "BlueSkyz Labs 正在打造兩項產品：給越南房東的數位記事本 Sổ Trọ，以及本機優先的私密日記 Sổ Tâm。兩項產品都還在開發中。",
     },
