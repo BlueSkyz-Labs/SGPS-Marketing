@@ -1285,42 +1285,126 @@ summary {
   opacity: 0.5;
 }
 .decision-room__empty {
-  margin-top: 1.5rem;
+  margin: 0;
   font-size: 0.9375rem;
   color: var(--text-muted);
 }
-.decision-room__board {
+/* The comparison tray sits above the items ("choose ... below") and owns its
+   space on wide screens, so adding an item never moves the page. */
+.decision-room__tray {
   margin-top: 1.5rem;
-  border-top: 1px solid var(--border-subtle);
-  padding-top: 1.25rem;
+}
+@media (min-width: 1024px) {
+  .decision-room {
+    max-width: 72rem;
+  }
+  .decision-room__tray {
+    min-height: 22rem;
+    border: 1px dashed var(--border-subtle);
+    border-radius: 0.75rem;
+    padding: 1.25rem;
+  }
+  .decision-room__tray:has(.decision-room__board:not([hidden])) {
+    border-style: solid;
+    background: var(--surface-subtle);
+  }
+}
+.decision-room__board-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 1rem;
 }
 .decision-room__board-title {
+  margin: 0;
   font-size: 1rem;
   font-weight: 600;
   color: var(--text-primary);
 }
+.decision-room__count {
+  margin: 0;
+  font-size: 0.875rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-secondary);
+}
+.decision-room__limit:not([data-active="true"]) {
+  visibility: hidden;
+}
+.decision-room__limit {
+  margin: 0.75rem 0 0;
+  border-inline-start: 3px solid var(--action-primary);
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+  color: var(--text-primary);
+  background: var(--surface-raised);
+}
 .decision-room__rows {
-  margin-top: 0.75rem;
+  margin: 0.75rem 0 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: 1fr;
+}
+@media (min-width: 1024px) {
+  /* Truly side by side: one column per compared item, up to four. */
+  .decision-room__rows {
+    grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+    align-items: stretch;
+  }
+}
+.decision-room__row {
   display: flex;
   flex-direction: column;
+  align-items: flex-start;
   gap: 0.5rem;
-}
-.decision-room__rows li {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.75rem;
-  align-items: center;
-  justify-content: space-between;
   border: 1px solid var(--border-subtle);
   border-radius: 0.5rem;
+  background: var(--surface-raised);
   padding: 0.75rem 1rem;
 }
 .decision-room__row-label {
   font-size: 0.9375rem;
+  font-weight: 600;
   color: var(--text-primary);
 }
+.decision-room__row-summary {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+}
+.decision-room__row .decision-room__remove {
+  margin-top: auto;
+}
+/* The boundary stays with its item card above; the tray compares the fact,
+   the summary and the source, which keeps the reserved height bounded. */
+.decision-room__row .decision-room__boundary {
+  display: none;
+}
+/* Below the wide breakpoint rows stay compact: label and Remove only. */
+@media (max-width: 1023.98px) {
+  .decision-room__row-summary,
+  .decision-room__row .decision-room__boundary,
+  .decision-room__row .decision-room__source {
+    display: none;
+  }
+  .decision-room__row {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .decision-room__row .decision-room__remove {
+    margin-top: 0;
+  }
+}
 .decision-room__reset {
-  margin-top: 1rem;
+  margin-inline-start: auto;
+}
+.decision-room__handoff-title {
+  margin: 0 0 0.25rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-primary);
 }
 
 /* v3 G5 — mission emphasis: reorder or emphasize only, never hide. */
@@ -1376,8 +1460,14 @@ html[data-intent] [data-journey-bar] li[data-evidence-first="true"] a {
   transform: translateY(-1px);
 }
 .decision-room__add[aria-pressed="true"] {
-  background: color-mix(in srgb, var(--brand-cobalt) 5%, var(--surface-raised));
-  box-shadow: inset 0 0 0 1px var(--action-primary);
+  background: color-mix(in srgb, var(--brand-cobalt) 8%, var(--surface-raised));
+  box-shadow: inset 0 0 0 2px var(--action-primary);
+}
+/* Pressed is shown by a check mark as well as colour (WCAG 1.4.1). */
+.decision-room__add[aria-pressed="true"]::before {
+  content: "\2713";
+  margin-inline-end: 0.5rem;
+  font-weight: 700;
 }
 
 /* Wave UI-4 — integrity lens legend. */
