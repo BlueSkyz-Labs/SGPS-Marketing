@@ -110,7 +110,10 @@ test.describe("compact menu closes with Escape and outside press", () => {
     const details = page.locator("header details");
     await details.locator("summary").click();
     await expect(details).toHaveAttribute("open", "");
-    await details.locator(":scope > div").click({ position: { x: 4, y: 4 } });
+    // Press the panel's left padding, clear of its rounded corners. Firefox's
+    // actionability check reported the hero for a (4,4) corner press even
+    // when elementFromPoint returns the panel there (see the hit-target test).
+    await details.locator(":scope > div").click({ position: { x: 6, y: 20 } });
     await expect(details).toHaveAttribute("open", "");
     await page.mouse.click(10, 700);
     await expect(details).not.toHaveAttribute("open", "");
