@@ -129,6 +129,7 @@ const ctaIsExternal = cta.external || /^https?:\/\//i.test(cta.href);
       href={cta.href}
       rel={ctaIsExternal ? "noopener noreferrer" : undefined}
       data-product-cta={cta.verb}
+      aria-label={`${cta.label}: ${data.name}`}
       class="inline-flex min-h-11 max-w-full min-w-0 items-center gap-1.5 rounded-full border border-[var(--border-subtle)] bg-transparent px-3 py-1.5 text-sm font-semibold text-[var(--text-secondary)] no-underline [overflow-wrap:anywhere] hover:text-[var(--text-primary)] hover:border-[var(--text-secondary)] active:scale-[0.98] transition-[transform,border-color,color] duration-100 ease-[var(--motion-ease-standard)]"
     >
       <span
