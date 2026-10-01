@@ -17,3 +17,4 @@ overrides:
   sharp: 0.35.4
   unifont>undici: 8.10.2
   miniflare>undici: 7.29.1
+  basic-ftp: 6.2.1
