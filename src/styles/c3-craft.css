@@ -214,12 +214,14 @@ main details > summary:active {
 
 /* ADR 0012 — the header is the sole optional translucent surface. */
 .header-glass {
+  /* Opaque by default (phones, where the header is not sticky and nothing
+     scrolls beneath it, and engines without backdrop-filter). The frosted
+     material is opt-in below, only where the header is sticky AND the engine
+     can blur: a translucent surface without blur lets text ghost through.
+     The glass token follows the scene (header[data-scene=...] re-points
+     --surface-primary), never a hard-coded theme colour: the ink scene pairs
+     an ink surface with porcelain text. */
   background-color: var(--surface-primary);
-  /* Frosted surface = the scene's own surface at 82%. It must follow the
-     scene token (header[data-scene=...] re-points --surface-primary), never a
-     hard-coded theme colour: the ink scene pairs an ink surface with porcelain
-     text, and a theme-keyed background put porcelain behind porcelain text. */
-  background-color: var(--surface-primary-glass);
   /* Specular bottom hairline: light-catching on the ink surface. */
   border-bottom-color: rgba(255, 255, 255, 0.1);
   /* The compact menu panel (z-20) must paint and hit-test above the hero,
@@ -240,7 +242,6 @@ main details > summary:active {
     .header-glass {
       background-color: var(--surface-primary-glass);
       backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
     }
   }
 }
@@ -249,14 +250,12 @@ main details > summary:active {
   .header-glass {
     background-color: var(--surface-primary);
     backdrop-filter: none;
-    -webkit-backdrop-filter: none;
   }
 }
 
 [data-fidelity-tier="static-premium"] .header-glass {
   background-color: var(--surface-primary);
   backdrop-filter: none;
-  -webkit-backdrop-filter: none;
 }
 
 @media (forced-colors: active) {
@@ -264,7 +263,6 @@ main details > summary:active {
     background-color: Canvas;
     border-bottom-color: CanvasText;
     backdrop-filter: none;
-    -webkit-backdrop-filter: none;
   }
 }
 
@@ -319,6 +317,39 @@ header details nav a:where(:hover, :focus-visible) {
     background-color var(--motion-confirmation-duration)
       var(--motion-ease-standard),
     transform var(--motion-confirmation-duration) var(--motion-ease-standard);
+}
+
+/* Current page: weight plus an underline (desktop) or an inline-start bar
+   (menu), so the state never relies on colour alone (WCAG 1.4.1). The
+   primary call-to-action pill and the language panel rows carry their own
+   current-state cues. */
+header nav a[aria-current="page"]:not([class*="rounded-full"], .lang-option) {
+  color: var(--text-primary);
+  font-weight: 700;
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.5rem;
+}
+
+header details nav a[aria-current="page"]:not(.lang-option) {
+  box-shadow: inset 3px 0 0 currentColor;
+  text-decoration: none;
+}
+
+/* Pressed state: a clear step back from hover. */
+header nav a:not(.lang-option):active,
+header button:not(:disabled):active,
+header summary:active,
+.command-navigator__list a:active {
+  opacity: 0.8;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  header nav a:not(.lang-option):active,
+  header button:not(:disabled):active,
+  header summary:active {
+    transform: translateY(0) scale(0.98);
+  }
 }
 
 /* prefers-reduced-motion: disable motion entirely (not merely shorten) */

@@ -282,7 +282,10 @@ body {
   transform: translateY(-200%);
   border-radius: 0.5rem;
   background: var(--surface-inverse);
-  color: var(--brand-porcelain);
+  /* Paired with --surface-inverse: both flip together between themes, so the
+     text must be the opposite surface (porcelain on ink, ink on porcelain). */
+  color: var(--surface-primary);
+  outline: 2px solid var(--surface-primary);
   padding: 0.75rem 1rem;
   text-decoration: none;
 }
@@ -570,7 +573,11 @@ html[data-intent="evaluate-product"] [data-journey-bar] a[href$="/products/"] {
 
 /* S+ Command Navigator (Task 9) — native dialog command palette. */
 .command-navigator {
-  width: min(92vw, 34rem);
+  /* Tailwind preflight zeroes the native dialog's margin:auto, which pinned
+     the palette to the top-left. Centre it and offset it from the top. */
+  margin: 12vh auto 0;
+  width: min(100% - 2rem, 34rem);
+  max-height: calc(100dvh - 12vh - 1rem);
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-md);
   background: var(--surface-raised);
@@ -605,7 +612,8 @@ html[data-intent="evaluate-product"] [data-journey-bar] a[href$="/products/"] {
 .command-navigator__list {
   list-style: none;
   margin: 0;
-  padding: 0;
+  /* Room for the focus ring: the list scrolls, so it would clip it. */
+  padding: 4px;
   max-height: 18rem;
   overflow-y: auto;
 }
@@ -615,10 +623,14 @@ html[data-intent="evaluate-product"] [data-journey-bar] a[href$="/products/"] {
   min-height: 2.5rem;
   align-items: center;
   border-radius: 0.5rem;
-  padding: 0 0.75rem;
+  padding: 0.5rem 0.75rem;
   font-size: 0.9375rem;
   color: var(--text-primary);
   text-decoration: none;
+}
+
+.command-navigator__list a:focus-visible {
+  outline-offset: -2px;
 }
 
 .command-navigator__list a:hover,
@@ -822,8 +834,9 @@ html[data-intent="evaluate-product"] [data-journey-bar] a[href$="/products/"] {
     box-shadow 150ms var(--motion-ease-standard, ease);
 }
 
+/* reveal.css contract: no infinite loops. The drift settles after one pass. */
 [data-fidelity-tier="cinematic"] .horizon-field__line {
-  animation: horizon-drift 6s ease-in-out infinite;
+  animation: horizon-drift 6s ease-in-out 1 both;
 }
 
 @keyframes horizon-drift {
@@ -836,6 +849,14 @@ html[data-intent="evaluate-product"] [data-journey-bar] a[href$="/products/"] {
     opacity: 0.5;
     transform: translateX(2px);
   }
+}
+
+/* Every enabled control that acts like a button signals it. Tailwind v4
+   preflight resets buttons to cursor:default. */
+button:not(:disabled),
+summary,
+[role="button"]:not([aria-disabled="true"]) {
+  cursor: pointer;
 }
 
 /* Mobile nav disclosure: hide default marker for consistent control chrome. */

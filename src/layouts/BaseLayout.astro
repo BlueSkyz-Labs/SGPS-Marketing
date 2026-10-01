@@ -86,6 +86,17 @@ const robotsNoindex = noindex || isNonProductionSiteUrl(SITE.url);
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <script is:inline src="/theme-init.js"></script>
+    <!-- Without JavaScript the theme controls cannot do anything, so they are
+         hidden. The language switcher needs no rule: its native popover opens
+         and closes without JavaScript. -->
+    <noscript>
+      <style>
+        [data-theme-trigger],
+        [role="group"]:has([data-theme-mode]) {
+          display: none !important;
+        }
+      </style>
+    </noscript>
     <!-- Fonts are not preloaded from the HTML: measured 2026-09-29, a
          spec-correct font preload (`crossorigin`) makes WebKit download every
          subset twice (177 KB vs 88 KB on /vi/) and omitting `crossorigin` makes
