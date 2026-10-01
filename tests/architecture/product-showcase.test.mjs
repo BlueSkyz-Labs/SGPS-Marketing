@@ -203,3 +203,45 @@ test("negative proof: a phone capture without a 480w derivative is caught", () =
   );
   assert.ok(problems.length > 0, "a missing derivative must be reported");
 });
+
+// v8 hotfix: Lighthouse's simulated LCP waits on every request that starts
+// before the hero text paints. The product profile therefore (a) uses the
+// 112px icon derivative in its header, (b) fetches the hidden endorsed lockup
+// variants lazily, and (c) keeps far-below phone cards out of the first
+// paint's request graph with content-visibility.
+const PROFILE_LOCALES = ["en", "vi", "zh", "zh-hant"];
+
+function profileProblems(page) {
+  const problems = [];
+  if (!/getProductIconThumbPath\(data\.slug\)/.test(page)) {
+    problems.push("header icon must use the 112px derivative");
+  }
+  if (/\/icon\.png/.test(page)) problems.push("header loads the icon master");
+  for (const m of page.matchAll(
+    /<img\s+src=\{`[^`]*lockup_(?:light|dark)\.svg`\}[^>]*?>/gs,
+  )) {
+    if (!/loading="lazy"/.test(m[0])) problems.push("lockup must be lazy");
+  }
+  return problems;
+}
+
+test("product profile keeps non-LCP requests out of the first paint", () => {
+  for (const locale of PROFILE_LOCALES) {
+    const page = readFileSync(
+      `src/pages/${locale}/products/[slug].astro`,
+      "utf8",
+    );
+    assert.deepEqual(profileProblems(page), [], locale);
+  }
+  assert.match(
+    COMPONENT,
+    /\.showcase__phone\s*\{[^}]*content-visibility:\s*auto/s,
+  );
+});
+
+test("negative proof: eager master icon and eager lockups are caught", () => {
+  const page = readFileSync("src/pages/vi/products/[slug].astro", "utf8")
+    .replace("getProductIconThumbPath(data.slug)", "`/products/x/icon.png`")
+    .replaceAll('loading="lazy"', 'loading="eager"');
+  assert.ok(profileProblems(page).length >= 2);
+});
