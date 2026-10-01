@@ -29,7 +29,7 @@ export const CRAFT_STORIES: readonly CraftStoryDraft[] = [
       },
       constraint: {
         en: "This site is static-first: it holds no intake service of its own, so the reporting path has to leave the site and say so plainly.",
-        vi: "Site này tĩnh trước: nó không có dịch vụ tiếp nhận riêng, nên đường báo cáo phải rời khỏi site và nói rõ điều đó.",
+        vi: "Trang web này tĩnh trước: nó không có dịch vụ tiếp nhận riêng, nên đường báo cáo phải rời khỏi trang web và nói rõ điều đó.",
         zh: "本站以静态为先：自身没有接收服务，因此报告路径必须离开本站，并明确说明这一点。",
         "zh-hant":
           "本站以靜態為先：自身沒有接收服務，因此報告路徑必須離開本站，並明確說明這一點。",
@@ -43,7 +43,7 @@ export const CRAFT_STORIES: readonly CraftStoryDraft[] = [
       },
       limitations: {
         en: "No bug bounty, no response time commitment and no certification are claimed. This site does not itself receive reports — it states the private channel and its boundary.",
-        vi: "Không có bug bounty, không cam kết thời gian phản hồi và không có chứng nhận nào được tuyên bố. Site này không tự tiếp nhận báo cáo — nó nêu kênh riêng và ranh giới của kênh đó.",
+        vi: "Không có bug bounty, không cam kết thời gian phản hồi và không có chứng nhận nào được tuyên bố. Trang web này không tự tiếp nhận báo cáo — nó nêu kênh riêng và ranh giới của kênh đó.",
         zh: "不声称漏洞赏金、响应时限或任何认证。本站自身不接收报告——它只说明私密渠道及其边界。",
         "zh-hant":
           "不聲稱漏洞賞金、回應時限或任何認證。本站自身不接收報告——它只說明私密管道及其邊界。",

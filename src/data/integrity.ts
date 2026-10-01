@@ -27,7 +27,7 @@ export const SOURCE_LINKED_LEGEND: LocalizedText = {
   vi: "Đã gắn nguồn nghĩa là mọi tuyên bố trên trang này đều dẫn ít nhất một nguồn công khai bạn có thể mở.",
   zh: "“已关联来源”表示本页每一项声明都至少引出一个你可打开的公开来源。",
   "zh-hant":
-    "「已關聯來源」表示本頁每一項聲明都至少引出一個您可開啟的公開來源。",
+    "「已關聯來源」表示本頁每一項聲明都至少引出一個你可開啟的公開來源。",
 };
 
 export interface EvidenceReference {
@@ -94,7 +94,7 @@ export const PRIVACY_BOUNDARY: BoundaryStatement = {
   },
   doesNotImply: {
     en: "It does not establish that no data at all is processed: serving any website still requires infrastructure to handle network-level metadata such as IP addresses and request headers.",
-    vi: "Nó không xác lập rằng không có dữ liệu nào được xử lý: mọi website vẫn cần hạ tầng xử lý siêu dữ liệu mạng như địa chỉ IP và header yêu cầu.",
+    vi: "Nó không xác lập rằng không có dữ liệu nào được xử lý: mọi trang web vẫn cần hạ tầng xử lý siêu dữ liệu mạng như địa chỉ IP và header yêu cầu.",
     zh: "这并不表示完全不会处理任何数据：提供任何网站服务仍需要基础设施处理网络层面元数据，例如 IP 地址和请求头。",
     "zh-hant":
       "這並不表示完全不會處理任何資料：提供任何網站服務仍需要基礎設施處理網路層面後設資料，例如 IP 地址和請求頭。",

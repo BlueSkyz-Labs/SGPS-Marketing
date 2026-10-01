@@ -524,11 +524,11 @@ export const ARCHITECTURE_COPY: Record<Language, ArchitectureCopy> = {
       },
       "system.sgps-marketing": {
         label: "本網站",
-        blurb: "您正在閱讀的 BlueSkyz Labs 公開網站。",
+        blurb: "你正在閱讀的 BlueSkyz Labs 公開網站。",
       },
       "component.astro-static-site": {
         label: "靜態網站頁面",
-        blurb: "傳送到您瀏覽器的現成頁面。",
+        blurb: "傳送到你瀏覽器的現成頁面。",
       },
       "component.public-truth-gate": {
         label: "建置時的說法檢查",
