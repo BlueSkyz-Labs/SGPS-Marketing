@@ -28,7 +28,10 @@ interface Props {
    * ahead of the LCP text's font. Same pixels, only resized; `src` stays the
    * recorded showcase asset.
    */
-  smallSrc?: { src: string; width: number } | undefined;
+  smallSrc?:
+    | { src: string; width: number }
+    | { src: string; width: number }[]
+    | undefined;
   class?: string;
 }
 
@@ -50,6 +53,11 @@ const capture = showcase?.data.capture;
 if (!item || !capture) {
   return null;
 }
+const smallCandidates = smallSrc
+  ? (Array.isArray(smallSrc) ? smallSrc : [smallSrc]).map(
+      (entry) => `${entry.src} ${entry.width}w`,
+    )
+  : [];
 const revision = capture.sourceRevision.slice(0, 7);
 const capturedOn = capture.capturedAt.toISOString().slice(0, 10);
 
@@ -73,8 +81,8 @@ const label = LABEL[lang];
     class="flagship-capture__image"
     src={item.src}
     srcset={
-      smallSrc
-        ? `${smallSrc.src} ${smallSrc.width}w, ${item.src} ${item.width}w`
+      smallCandidates.length > 0
+        ? [...smallCandidates, `${item.src} ${item.width}w`].join(", ")
         : undefined
     }
     alt={item.alt[lang]}
