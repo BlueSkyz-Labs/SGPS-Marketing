@@ -112,6 +112,37 @@ export function initCommandNavigator(root: ParentNode = document): void {
 
   input.addEventListener("input", () => applyFilter(input.value));
 
+  const visibleLinks = (): HTMLAnchorElement[] =>
+    items
+      .filter((item) => item instanceof HTMLElement && !item.hidden)
+      .map((item) => item.querySelector("a"))
+      .filter((link): link is HTMLAnchorElement => link !== null);
+
+  // Keyboard-first: Enter opens the first visible result, arrows move through
+  // results (links stay ordinary links; Tab still works).
+  dialog.addEventListener("keydown", (event) => {
+    const links = visibleLinks();
+    if (event.key === "Enter" && event.target === input) {
+      event.preventDefault();
+      links[0]?.click();
+      return;
+    }
+    if (event.key !== "ArrowDown" && event.key !== "ArrowUp") return;
+    if (links.length === 0) return;
+    event.preventDefault();
+    const index = links.findIndex((link) => link === document.activeElement);
+    const next =
+      event.key === "ArrowDown"
+        ? index < 0
+          ? 0
+          : Math.min(index + 1, links.length - 1)
+        : index <= 0
+          ? -1
+          : index - 1;
+    if (next < 0) input.focus();
+    else links[next]?.focus();
+  });
+
   // Backdrop click closes (the panel itself stops at the dialog element).
   dialog.addEventListener("click", (event) => {
     if (event.target === dialog) {

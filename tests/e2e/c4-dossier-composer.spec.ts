@@ -56,6 +56,78 @@ test.describe("C4-C dossier composer", () => {
     await expect(page.locator("[data-dossier-counter]")).toHaveText("1");
   });
 
+  test("oversized URL state is rejected as one bounded localized indicator", async ({
+    page,
+  }) => {
+    const oversized = "x".repeat(2049);
+    await page.goto(`/en/dossier/?items=${oversized}`);
+
+    await expect(page.locator("[data-dossier-preview]")).toHaveAttribute(
+      "data-empty",
+      "",
+    );
+    await expect(page.locator("[data-dossier-counter]")).toHaveText("0");
+
+    const unknown = page.locator("[data-dossier-unknown]");
+    await expect(unknown).toBeVisible();
+    await expect(unknown.locator("li")).toHaveCount(1);
+    await expect(unknown.locator("li")).toHaveAttribute(
+      "data-dossier-request-rejected",
+      "items-too-long",
+    );
+    await expect(unknown).toContainText(
+      "The requested selection was too large and was ignored.",
+    );
+  });
+
+  test("too many tokens fail closed instead of partially accepting valid ids", async ({
+    page,
+  }) => {
+    const tokens = Array.from({ length: 65 }, (_, index) =>
+      index === 0 ? CLAIM : `unknown-${index}`,
+    );
+    await page.goto(`/en/dossier/?items=${tokens.join(",")}`);
+
+    await expect(
+      page.locator(
+        `[data-dossier-preview] [data-dossier-entry-item="${CLAIM}"]`,
+      ),
+    ).toHaveCount(0);
+    await expect(page.locator("[data-dossier-counter]")).toHaveText("0");
+    const unknown = page.locator("[data-dossier-unknown]");
+    await expect(unknown.locator("li")).toHaveCount(1);
+    await expect(unknown.locator("li")).toHaveAttribute(
+      "data-dossier-request-rejected",
+      "too-many-items",
+    );
+  });
+
+  test("duplicate ids are deduplicated before selection/render work", async ({
+    page,
+  }) => {
+    await page.goto(`/en/dossier/?items=${CLAIM},${CLAIM},${CLAIM}`);
+    await expect(
+      page.locator(
+        `[data-dossier-preview] [data-dossier-entry-item="${CLAIM}"]`,
+      ),
+    ).toHaveCount(1);
+    await expect(page.locator("[data-dossier-counter]")).toHaveText("1");
+    await expect(page.locator("[data-dossier-unknown]")).toBeHidden();
+  });
+
+  test("selector-like unknown input is rendered only as text", async ({
+    page,
+  }) => {
+    const payload = String.raw`";][data-x=evil]\\foo`;
+    await page.goto(`/en/dossier/?items=${encodeURIComponent(payload)}`);
+
+    const unknown = page.locator("[data-dossier-unknown]");
+    await expect(unknown).toBeVisible();
+    await expect(unknown.locator("li")).toHaveCount(1);
+    await expect(unknown.locator("li")).toHaveText(payload);
+    await expect(page.locator("[data-dossier-counter]")).toHaveText("0");
+  });
+
   test("a reload without parameters returns the safe default", async ({
     page,
   }) => {

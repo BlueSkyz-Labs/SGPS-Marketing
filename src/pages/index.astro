@@ -1,6 +1,13 @@
 ---
 import { SITE } from "@/data/site";
-import { canonicalForPath, hreflangLinks, xDefaultPath } from "@/lib/seo";
+import {
+  DEFAULT_OG_IMAGE,
+  absoluteUrl,
+  canonicalForPath,
+  defaultOgImagePath,
+  hreflangLinks,
+  xDefaultPath,
+} from "@/lib/seo";
 import { isNonProductionSiteUrl } from "@/lib/truth";
 
 // Language gateway: indexable and the home cluster's x-default (Owner
@@ -9,6 +16,9 @@ const title = "BlueSkyz Labs | Sổ Trọ và Sổ Tâm";
 const description =
   "BlueSkyz Labs builds Sổ Trọ and Sổ Tâm, both in development. Chọn ngôn ngữ · Choose your language.";
 const canonical = canonicalForPath("/", SITE.url);
+// Brand Kit v4 website Open Graph card (1200x630), same committed asset as every
+// BaseLayout page, so a shared gateway link carries the kit card.
+const ogImageUrl = absoluteUrl(SITE.url, defaultOgImagePath());
 // Non-production origins (preview, workers.dev, localhost) stay out of search.
 const robotsNoindex = isNonProductionSiteUrl(SITE.url);
 ---
@@ -29,6 +39,32 @@ const robotsNoindex = isNonProductionSiteUrl(SITE.url);
       hreflang="x-default"
       href={canonicalForPath(xDefaultPath("/"), SITE.url)}
     />
+    <!-- Brand Kit v4 head contract (00_START_HERE/IMPLEMENTATION/favicon-head.html).
+         Links only: no stylesheet, font or script request, so the inline-only
+         first paint of ADR 0009 is unchanged. -->
+    <link rel="icon" href="/icons/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/icons/favicon.ico" sizes="any" />
+    <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
+    <link rel="manifest" href="/icons/site.webmanifest" />
+    <link rel="mask-icon" href="/icons/safari-pinned-tab.svg" color="#2564FF" />
+    <meta name="msapplication-config" content="/browserconfig.xml" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={SITE.name} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImageUrl} />
+    <meta property="og:image:width" content={String(DEFAULT_OG_IMAGE.width)} />
+    <meta
+      property="og:image:height"
+      content={String(DEFAULT_OG_IMAGE.height)}
+    />
+    <meta property="og:image:alt" content={DEFAULT_OG_IMAGE.alt} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImageUrl} />
+    <meta name="twitter:image:alt" content={DEFAULT_OG_IMAGE.alt} />
     <meta name="color-scheme" content="light dark" />
     <meta
       name="theme-color"
@@ -172,7 +208,7 @@ const robotsNoindex = isNonProductionSiteUrl(SITE.url);
         <img
           class="logo"
           src="/brand/blueskyz/v4/logos/horizontal-flat-light.svg"
-          alt="BlueSkyz Labs"
+          alt="BlueSkyz Labs logo"
           width="160"
           height="50"
         />
