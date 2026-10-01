@@ -46,8 +46,11 @@ test("dark is composed: band token in every dark block and a distinct hero stage
   assert.doesNotMatch(atmosphere, /linear-gradient\(\s*90deg/);
 });
 
-test("header: one CTA distinct from Products, compact theme trigger, no Explore CTA", () => {
-  assert.match(header, /emptyRegistryPrimaryCta\(SITE\.contactEmail, lang\)/);
+test("header: one Products CTA, About as the plain link, compact theme trigger", () => {
+  // Owner decision 2026-10-01 (v7 A-12).
+  assert.match(header, /const primaryCta = NAV\[0\]!;/);
+  assert.match(header, /const primaryLink = NAV\[1\]!;/);
+  assert.doesNotMatch(header, /emptyRegistryPrimaryCta/);
   assert.doesNotMatch(header, /exploreProducts/);
   assert.match(header, /variant="popover"/);
 });

@@ -278,6 +278,48 @@ export function getFooterLinks(lang: Language): NavItem[] {
   ];
 }
 
+export interface FooterGroup {
+  /** Existing site strings only (brand name, "Trust", "Evidence"). */
+  label: string;
+  links: NavItem[];
+}
+
+const FOOTER_GROUP_LABELS: Record<
+  "trust" | "evidence",
+  Record<Language, string>
+> = {
+  trust: { en: "Trust", vi: "Tin cậy", zh: "信任", "zh-hant": "信任" },
+  evidence: {
+    en: "Evidence",
+    vi: "Bằng chứng",
+    zh: "证据",
+    "zh-hant": "證據",
+  },
+};
+
+/** The footer links grouped by intent; same set and order as getFooterLinks. */
+export function getFooterGroups(lang: Language): FooterGroup[] {
+  const byPath = new Map(
+    getFooterLinks(lang).map((link) => [link.href.split("/")[2], link]),
+  );
+  const pick = (...slugs: string[]): NavItem[] =>
+    slugs.map((slug) => byPath.get(slug)!);
+  return [
+    {
+      label: SITE.name,
+      links: pick("products", "about", "contact", "support"),
+    },
+    {
+      label: FOOTER_GROUP_LABELS.trust[lang],
+      links: pick("privacy", "security", "verify", "architecture"),
+    },
+    {
+      label: FOOTER_GROUP_LABELS.evidence[lang],
+      links: pick("editions", "dossier"),
+    },
+  ];
+}
+
 /** v4 brand principles from the owner production kit (not product claims). */
 export const BRAND_PRINCIPLES = [
   {

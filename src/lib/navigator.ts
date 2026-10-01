@@ -51,7 +51,7 @@ const ROUTE_ALIASES: Record<string, Record<Language, string[]>> = {
   verify: {
     en: ["verify", "check yourself"],
     vi: ["xác minh", "cách chúng tôi xác minh"],
-    zh: ["核实", "核验", "我们如何核验"],
+    zh: ["核实", "核验", "验证", "我们如何核验"],
     "zh-hant": ["查證", "核驗", "我們如何核驗"],
   },
   architecture: {
@@ -59,6 +59,18 @@ const ROUTE_ALIASES: Record<string, Record<Language, string[]>> = {
     vi: ["kiến trúc"],
     zh: ["架构"],
     "zh-hant": ["架構"],
+  },
+  editions: {
+    en: ["collected editions", "editions"],
+    vi: ["tuyển tập"],
+    zh: ["选集", "已发布选集", "精选集合"],
+    "zh-hant": ["選集"],
+  },
+  dossier: {
+    en: ["public dossier", "dossier"],
+    vi: ["hồ sơ công khai"],
+    zh: ["公开档案", "档案"],
+    "zh-hant": ["公開檔案"],
   },
   security: {
     en: ["security", "vulnerability", "report an issue"],

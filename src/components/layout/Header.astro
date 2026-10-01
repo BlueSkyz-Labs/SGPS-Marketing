@@ -5,8 +5,7 @@ import Container from "@/components/layout/Container.astro";
 import LanguageSwitcher from "@/components/layout/LanguageSwitcher.astro";
 import ThemeToggle from "@/components/layout/ThemeToggle.astro";
 import ButtonLink from "@/components/ui/ButtonLink.astro";
-import { SITE, SHARED_LABELS, labelFor, getNav } from "@/data/site";
-import { emptyRegistryPrimaryCta } from "@/lib/act";
+import { SHARED_LABELS, labelFor, getNav } from "@/data/site";
 import { getLanguageFromPath } from "@/lib/i18n";
 import { DEFAULT_SCENE, lockupSurface, type Scene } from "@/lib/scene";
 
@@ -24,12 +23,12 @@ const NAV = getNav(lang);
 const isActive = (href: string): boolean =>
   currentPath.replace(/\/+$/, "") === href.replace(/\/+$/, "");
 
-// Experience v6 S6 shell: one CTA with a job distinct from the Products link.
-// Contact when a real business mailbox exists, otherwise About (Act soft-land).
-const primaryCta = emptyRegistryPrimaryCta(SITE.contactEmail, lang);
-// Desktop header budget is six controls (lockup, Products, search, language,
-// theme, CTA). Every other route stays in the compact menu and the footer.
-const primaryLink = NAV[0]!;
+// Owner decision 2026-10-01 (v7 A-12): the one filled CTA leads to Products;
+// About is the plain link. Desktop header budget stays six controls (lockup,
+// About, search, language, theme, CTA). Every other route stays in the
+// compact menu and the footer.
+const primaryCta = NAV[0]!;
+const primaryLink = NAV[1]!;
 ---
 
 <header
