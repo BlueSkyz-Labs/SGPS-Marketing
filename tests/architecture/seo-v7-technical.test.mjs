@@ -175,3 +175,197 @@ test("negative proof: an English alt on a non-English locale is detected", () =>
     false,
   );
 });
+
+// --- v8 W8: global SEO completion -------------------------------------------
+
+import { execFileSync } from "node:child_process";
+import {
+  gitLastmod,
+  LASTMOD_FLOOR,
+  routeSourceFiles,
+} from "../../src/lib/git-lastmod.ts";
+
+// SEO-05: Simplified Chinese declares its script subtag.
+const htmlLangOf = (src) => {
+  const m = src.match(
+    /const htmlLang =\s*currentLang === "zh-hant"\s*\?\s*"zh-Hant"\s*:\s*currentLang === "zh"\s*\?\s*"zh-Hans"\s*:\s*currentLang;/,
+  );
+  return m !== null;
+};
+
+test("layout tags /zh/ as zh-Hans and /zh-hant/ as zh-Hant", () => {
+  assert.equal(htmlLangOf(layout), true);
+});
+
+test("negative proof: a layout that emits bare zh is rejected", () => {
+  const broken = layout.replace('? "zh-Hans"', '? "zh"');
+  assert.notEqual(broken, layout);
+  assert.equal(htmlLangOf(broken), false);
+});
+
+test(":lang(zh) CSS selectors still match zh-Hans and zh-Hant (prefix match)", () => {
+  // `:lang(zh)` is a BCP-47 extended-range prefix match, so both script
+  // subtags keep the CJK display-type rules; no selector pins `lang="zh"`.
+  const css = readFileSync("src/styles/display-type.css", "utf8");
+  assert.match(css, /:lang\(zh\)/);
+  assert.doesNotMatch(css, /\[lang=["']?zh["']?\]/);
+});
+
+// SEO-06: og:locale:alternate lists all 3 other locales.
+test("og:locale:alternate is every locale except the current one", () => {
+  assert.match(layout, /Object\.values\(OG_LOCALES\)\.filter\(/);
+  assert.match(layout, /\(locale\) => locale !== ogLocale/);
+  assert.match(layout, /property="og:locale:alternate"/);
+  const map = {
+    en: "en_US",
+    vi: "vi_VN",
+    zh: "zh_CN",
+    "zh-hant": "zh_TW",
+  };
+  for (const lang of LANGS) {
+    const alts = Object.values(map).filter((l) => l !== map[lang]);
+    assert.equal(alts.length, 3);
+    assert.equal(new Set(alts).size, 3);
+    assert.equal(alts.includes(map[lang]), false);
+  }
+});
+
+test("negative proof: an alternate filter that keeps the current locale is detected", () => {
+  const broken = layout.replace(
+    /\(locale\) => locale !== ogLocale/,
+    "() => true",
+  );
+  assert.notEqual(broken, layout);
+  assert.doesNotMatch(broken, /\(locale\) => locale !== ogLocale/);
+});
+
+// SEO-12/21: noindex 404 pages carry no hreflang and no site-level JSON-LD.
+const guards404 = (src) =>
+  /const isNotFoundPage = \/\\\/404\\\/\?\$\/\.test\(path\)/.test(src) &&
+  /isNotFoundPage\s*\?\s*\[\]\s*:\s*\[organizationJsonLd/.test(src) &&
+  /\{isNotFoundPage\s*\?\s*null\s*:\s*hreflangLinks/.test(src) &&
+  /\{isNotFoundPage \? null : \(\s*<link\s+rel="alternate"\s+hreflang="x-default"/.test(
+    src,
+  );
+
+test("404 pages drop hreflang, x-default and Organization/WebSite JSON-LD", () => {
+  assert.equal(guards404(layout), true);
+  for (const file of [
+    "src/pages/404.astro",
+    "src/pages/en/404.astro",
+    "src/pages/vi/404.astro",
+    "src/pages/zh/404.astro",
+    "src/pages/zh-hant/404.astro",
+  ]) {
+    const src = readFileSync(file, "utf8");
+    assert.match(src, /noindex=\{true\}/, file);
+    const p = src.match(/path="([^"]+)"/)[1];
+    assert.match(p, /\/404\/$/, file);
+  }
+});
+
+test("negative proof: restoring site JSON-LD on 404 is rejected", () => {
+  const broken = layout.replace(
+    /isNotFoundPage\s*\?\s*\[\]\s*:\s*\[organizationJsonLd/,
+    "[organizationJsonLd",
+  );
+  assert.notEqual(broken, layout);
+  assert.equal(guards404(broken), false);
+});
+
+// SEO-10: sitemap lastmod is git-derived, omitted when inaccurate.
+const fakeGit = (shallow, date) => (args) => {
+  if (args[0] === "rev-parse") return shallow;
+  return date;
+};
+const OPTS = { today: "2026-10-01" };
+
+test("gitLastmod returns the git date for a full clone", () => {
+  assert.equal(
+    gitLastmod(["a"], { ...OPTS, run: fakeGit("false", "2026-09-15") }),
+    "2026-09-15",
+  );
+});
+
+test("gitLastmod omits lastmod for a shallow clone, future/ancient dates, errors and no files", () => {
+  assert.equal(
+    gitLastmod(["a"], { ...OPTS, run: fakeGit("true", "2026-09-15") }),
+    undefined,
+  );
+  assert.equal(
+    gitLastmod(["a"], { ...OPTS, run: fakeGit("false", "2026-10-02") }),
+    undefined,
+  );
+  assert.equal(
+    gitLastmod(["a"], { ...OPTS, run: fakeGit("false", "2026-07-31") }),
+    undefined,
+  );
+  assert.equal(
+    gitLastmod(["a"], { ...OPTS, run: fakeGit("false", "") }),
+    undefined,
+  );
+  assert.equal(
+    gitLastmod(["a"], {
+      ...OPTS,
+      run: () => {
+        throw new Error("no git");
+      },
+    }),
+    undefined,
+  );
+  assert.equal(
+    gitLastmod([], { ...OPTS, run: fakeGit("false", "2026-09-15") }),
+    undefined,
+  );
+});
+
+test("negative proof: a build-time fallback would be caught", () => {
+  // If the implementation fell back to "today" on a shallow clone this would
+  // return a date instead of undefined.
+  const v = gitLastmod(["a"], { ...OPTS, run: fakeGit("true", "2026-09-15") });
+  assert.notEqual(v, OPTS.today);
+  assert.equal(v, undefined);
+});
+
+test("routeSourceFiles maps routes to real tracked sources", () => {
+  assert.deepEqual(routeSourceFiles("/"), ["src/pages/index.astro"]);
+  assert.deepEqual(routeSourceFiles("/zh/about/"), [
+    "src/pages/zh/about.astro",
+  ]);
+  assert.deepEqual(routeSourceFiles("/en/dossier/"), [
+    "src/pages/en/dossier/index.astro",
+  ]);
+  assert.ok(
+    routeSourceFiles("/vi/products/sotro/").includes(
+      "src/content/products/sotro.yaml",
+    ),
+  );
+  assert.deepEqual(routeSourceFiles("/en/no-such-page/"), []);
+});
+
+test("real git lastmod for every sitemap static path is absent or within [floor, today]", () => {
+  const today = new Date().toISOString().slice(0, 10);
+  for (const path of PUBLIC_STATIC_PATHS.filter((p) => !isNoindexPath(p))) {
+    const d = gitLastmod(routeSourceFiles(path));
+    if (d === undefined) continue;
+    assert.match(d, /^\d{4}-\d{2}-\d{2}$/, path);
+    assert.ok(d >= LASTMOD_FLOOR && d <= today, `${path}: ${d}`);
+  }
+  // Sanity: git is usable here, so a full clone yields at least one date.
+  const shallow = execFileSync(
+    "git",
+    ["rev-parse", "--is-shallow-repository"],
+    {
+      encoding: "utf8",
+    },
+  ).trim();
+  if (shallow === "false") {
+    assert.ok(gitLastmod(routeSourceFiles("/en/about/")) !== undefined);
+  }
+});
+
+test("sitemap source emits lastmod only through the git helper", () => {
+  assert.match(sitemap, /lastmodForPath\(path\)/);
+  assert.match(sitemap, /lastmod \? \[/);
+  assert.doesNotMatch(sitemap, /new Date|Date\.now/);
+});
