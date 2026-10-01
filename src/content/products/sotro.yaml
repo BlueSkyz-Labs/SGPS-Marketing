@@ -54,7 +54,7 @@ lastReviewedAt: 2026-09-30
 # is an Owner feedback checkpoint (plan v5 W3.4).
 i18n:
   vi:
-    shortDescription: "Sổ tay điện tử cho chủ trọ ở Việt Nam: nắm phòng, khoản tiền chưa thu, sổ sách rõ ràng và việc cần làm hôm nay."
+    shortDescription: "Dành cho chủ trọ ở Việt Nam. Theo dõi phòng, tiền chưa thu và việc cần làm hôm nay."
     jobs:
       - "Xem tháng này còn ai chưa đóng tiền và hôm nay cần lo việc gì"
       - "Ghi lại phòng, người thuê, số điện nước và các khoản thu hằng tháng cho gọn, cho chắc"
@@ -64,7 +64,7 @@ i18n:
       - "Mẫu tin nhắn nhắc lịch sự kiểu Zalo/SMS để sao chép; không tự động gửi"
     primaryActionLabel: "Xem trước Sổ Trọ"
   zh:
-    shortDescription: "面向越南房东的电子记事本：房间、未收房租、清晰可靠的记录，以及今天要做的事。"
+    shortDescription: "给越南房东。记录房间、未收房租和今天要做的事。"
     jobs:
       - "本月还有哪些款项没收？今天要处理什么？"
       - "把房间、租客、水电表读数和每月费用记得清楚可靠"
@@ -75,7 +75,7 @@ i18n:
     primaryActionLabel: "预览 Sổ Trọ"
   # zh-Hant copy: machine-assisted (OpenCC s2twp), pending native review.
   zh-hant:
-    shortDescription: "給越南房東的數位記事本：房間、未收租金、清楚可靠的紀錄，以及今天要處理的事。"
+    shortDescription: "給越南房東。記錄房間、未收租金和今天要做的事。"
     jobs:
       - "本月還有哪些款項未收？今天要處理什麼？"
       - "把房間、房客、水電表度數和每月費用記得清楚可靠"
