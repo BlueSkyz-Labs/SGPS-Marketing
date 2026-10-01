@@ -182,6 +182,10 @@ interface NavLabels {
   security: string;
   architecture: string;
   verify: string;
+  /** Existing /editions page title (no new copy). */
+  editions: string;
+  /** Existing /dossier page title (no new copy). */
+  dossier: string;
 }
 
 const NAV_LABELS: Record<Language, NavLabels> = {
@@ -194,6 +198,8 @@ const NAV_LABELS: Record<Language, NavLabels> = {
     security: "Security",
     architecture: "Architecture",
     verify: "Verify",
+    editions: "Collected Editions",
+    dossier: "Public Dossier",
   },
   vi: {
     products: "Sản phẩm",
@@ -204,6 +210,8 @@ const NAV_LABELS: Record<Language, NavLabels> = {
     security: "Bảo mật",
     architecture: "Kiến trúc",
     verify: "Xác minh",
+    editions: "Tuyển tập",
+    dossier: "Hồ sơ công khai",
   },
   zh: {
     products: "产品",
@@ -214,6 +222,8 @@ const NAV_LABELS: Record<Language, NavLabels> = {
     security: "安全",
     architecture: "架构",
     verify: "核实",
+    editions: "选集",
+    dossier: "公开档案",
   },
   "zh-hant": {
     products: "產品",
@@ -224,6 +234,8 @@ const NAV_LABELS: Record<Language, NavLabels> = {
     security: "安全",
     architecture: "架構",
     verify: "查證",
+    editions: "選集",
+    dossier: "公開檔案",
   },
 };
 
@@ -247,6 +259,8 @@ export function getFooterLinks(lang: Language): NavItem[] {
     { label: l.security, href: `/${lang}/security/` },
     { label: l.verify, href: `/${lang}/verify/` },
     { label: l.architecture, href: `/${lang}/architecture/` },
+    { label: l.editions, href: `/${lang}/editions/` },
+    { label: l.dossier, href: `/${lang}/dossier/` },
   ];
 }
 
