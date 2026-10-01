@@ -32,12 +32,16 @@ test("decision-room palette label equals each locale's page title", () => {
 
 test("guide palette alias equals the product showcase's own guide link text", () => {
   const labels = record("GUIDE_LINK_TEXT");
+  // v8 W3: the showcase link is now the shorter "Read the guide"; the alias
+  // must still equal a guide link text that exists on a product surface.
   const showcase = read("src/components/product/ProductShowcase.astro");
+  const site = read("src/data/site.ts");
   for (const lang of LANGS) {
     assert.ok(labels[lang], lang);
     assert.ok(
-      showcase.includes(`"${labels[lang]}"`),
-      `${lang}: ${labels[lang]} appears in ProductShowcase`,
+      showcase.includes(`"${labels[lang]}"`) ||
+        site.includes(`"${labels[lang]}"`),
+      `${lang}: ${labels[lang]} appears in ProductShowcase or SHARED_LABELS.readGuide`,
     );
   }
 });

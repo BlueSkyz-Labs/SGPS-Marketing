@@ -118,11 +118,7 @@ test("rendered showcase and guide always carry the capture disclosure", () => {
   assert.match(COMPONENT, /data-showcase-disclosure/);
   assert.match(COMPONENT, /\{t\.disclosure\}/);
   assert.match(GUIDE, /data-showcase-disclosure/);
-  for (const phrase of [
-    "illustrative demo data",
-    "dữ liệu minh hoạ",
-    "示例演示数据",
-  ]) {
+  for (const phrase of ["sample data", "dữ liệu mẫu", "示例数据", "範例資料"]) {
     assert.ok(COMPONENT.includes(phrase), `showcase disclosure: ${phrase}`);
   }
   assert.doesNotMatch(COMPONENT, /<script\b(?![^>]*application\/ld\+json)/);

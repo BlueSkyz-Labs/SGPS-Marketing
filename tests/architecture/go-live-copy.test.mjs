@@ -47,18 +47,26 @@ test("vi Sổ Trọ description says 'khoản tiền chưa thu' within 120-160 c
   assert.ok(length >= 120 && length <= 160, `length ${length}`);
 });
 
-test("product profile capability heading uses SHARED_LABELS.scopeHeading", () => {
+// v8 W3: the two numbered card grids ("What it's for" + "What we're building")
+// became one "What it does" list; the shared scope heading stays defined for
+// other surfaces but no longer appears on a product profile.
+const profileDropsScopeHeading = (src) =>
+  !src.includes("SHARED_LABELS.scopeHeading") &&
+  src.includes("PAGE_LABELS.whatItDoes[lang]") &&
+  !/Development focus|Trọng tâm phát triển|开发重点|開發重點/.test(src);
+
+test("product profile renders one 'What it does' list instead of two headings", () => {
   assert.equal(SHARED_LABELS.scopeHeading.en, "What we're building");
   assert.equal(SHARED_LABELS.scopeHeading.vi, "Đang xây dựng những gì");
   for (const lang of LANGS) {
     const src = read(`src/pages/${lang}/products/[slug].astro`);
-    assert.ok(
-      src.includes(`labelFor(SHARED_LABELS.scopeHeading, "${lang}")`),
-      lang,
-    );
-    assert.doesNotMatch(
-      src,
-      /Development focus|Trọng tâm phát triển|开发重点|開發重點/,
+    assert.ok(profileDropsScopeHeading(src), lang);
+    // Negative proof: re-adding the scope heading is detected.
+    assert.equal(
+      profileDropsScopeHeading(
+        `${src}\n{labelFor(SHARED_LABELS.scopeHeading, "${lang}")}`,
+      ),
+      false,
       lang,
     );
   }

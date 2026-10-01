@@ -469,6 +469,13 @@ test("D-20: display dates localize per locale and keep ISO in the datetime attri
 /* D-14 (Owner 2026-10-01) — sign-in is secondary and qualified        */
 /* ------------------------------------------------------------------ */
 
+// v8 W3: on the product page sign-in is a plain text link with a qualified
+// label, below the (at most one) primary action; never a filled button.
+const signInIsTextLink = (source) =>
+  /<a[^>]*data-app-signin[\s\S]*?\{PAGE_LABELS\.signIn\[lang\]\}/.test(
+    source,
+  ) && !/<ButtonLink[^>]*href=\{data\.appAccess\.signInUrl\}/.test(source);
+
 const signInIsSecondary = (source) =>
   /variant="secondary"[^>]*>\s*\{labelFor\(SHARED_LABELS\.signInExisting/.test(
     source,
@@ -477,14 +484,14 @@ const signInIsSecondary = (source) =>
 test("D-14: product pages and the guide demote sign-in to a qualified secondary action", () => {
   for (const lang of LOCALES) {
     const page = read(`src/pages/${lang}/products/[slug].astro`);
-    assert.ok(signInIsSecondary(page), `${lang} product page`);
-    assert.match(page, /data-product-guide-cta/);
-    // Negative proof: the old primary, unqualified button fails.
+    assert.ok(signInIsTextLink(page), `${lang} product page`);
+    // Negative proof: a filled sign-in button fails.
     assert.equal(
-      signInIsSecondary(
-        page
-          .replace(' variant="secondary"', "")
-          .replace("signInExisting", "signIn"),
+      signInIsTextLink(
+        page.replace(
+          /<a([^>]*)data-app-signin/,
+          "<ButtonLink$1 href={data.appAccess.signInUrl} data-app-signin",
+        ),
       ),
       false,
     );
