@@ -60,7 +60,6 @@ const LABEL: Record<Language, string> = {
   "zh-hant": "開發中應用程式的截圖 · 範例資料",
 };
 const label = LABEL[lang];
-const provenance = `${revision} · ${capturedOn}`;
 ---
 
 <figure
@@ -68,6 +67,7 @@ const provenance = `${revision} · ${capturedOn}`;
   data-flagship-capture
   data-capture-surface={item.surface}
   data-capture-revision={revision}
+  data-capture-date={capturedOn}
 >
   <img
     class="flagship-capture__image"
@@ -89,7 +89,7 @@ const provenance = `${revision} · ${capturedOn}`;
   />
   <figcaption class="flagship-capture__label">
     {label}
-    <span class="flagship-capture__provenance">{provenance}</span>
+    <span class="flagship-capture__provenance">{capturedOn}</span>
   </figcaption>
 </figure>
 

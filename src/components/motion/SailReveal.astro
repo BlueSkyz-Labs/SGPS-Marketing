@@ -20,12 +20,19 @@ interface Props {
   class?: string;
 }
 const { handoff = false, class: className = "" } = Astro.props;
+/**
+ * Hand-off geometry: the overlay box is exactly the raster mark's box
+ * (prismatic-r4d-mark, square). The viewBox fits the flat sail onto the raster
+ * sail by its top and bottom-left tips (uniform scale 1.075), so no CSS
+ * scale/translate is needed and the overlay box never differs from the mark.
+ */
+const HANDOFF_VIEWBOX = "-2.1 2 476.3 476.3";
 ---
 
 <svg
   class:list={["sail-reveal", handoff && "sail-reveal--handoff", className]}
   data-reveal="signature"
-  viewBox="0 0 512 512"
+  viewBox={handoff ? HANDOFF_VIEWBOX : "0 0 512 512"}
   aria-hidden="true"
   focusable="false"
 >

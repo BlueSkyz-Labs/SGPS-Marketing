@@ -24,14 +24,13 @@ interface Props {
 const { showcase, lang, productName } = Astro.props;
 const phones = showcase.screens.filter((item) => item.surface === "phone");
 const desktops = showcase.screens.filter((item) => item.surface === "desktop");
-const revision = showcase.capture.sourceRevision.slice(0, 7);
 const capturedOn = showcase.capture.capturedAt.toISOString().slice(0, 10);
 
 const COPY = {
   en: {
     eyebrow: "Real screens",
     heading: `See ${productName}’s screens`,
-    disclosure: `Captured from a development build (revision ${revision}, ${capturedOn}) with illustrative demo data — no real tenants, payments or personal data.`,
+    disclosure: `Captured from a development build (${capturedOn}) with illustrative demo data — no real tenants, payments or personal data.`,
     video: "Quick introduction",
     videoNote:
       "Silent video with Vietnamese on-screen text; subtitles in English, Vietnamese and Chinese are available in the player.",
@@ -43,7 +42,7 @@ const COPY = {
   vi: {
     eyebrow: "Giao diện thật",
     heading: `Xem giao diện ${productName}`,
-    disclosure: `Ảnh chụp từ bản đang phát triển (phiên bản ${revision}, ${capturedOn}) với dữ liệu minh hoạ — không có người thuê, khoản thu hay dữ liệu cá nhân thật.`,
+    disclosure: `Ảnh chụp từ bản đang phát triển (${capturedOn}) với dữ liệu minh hoạ — không có người thuê, khoản thu hay dữ liệu cá nhân thật.`,
     video: "Giới thiệu nhanh",
     videoNote:
       "Video không có tiếng, chữ tiếng Việt hiển thị trên hình; trình phát có phụ đề tiếng Anh, tiếng Việt và tiếng Trung.",
@@ -55,7 +54,7 @@ const COPY = {
   zh: {
     eyebrow: "真实界面",
     heading: `查看 ${productName} 的实际界面`,
-    disclosure: `截图来自开发版本（修订 ${revision}，${capturedOn}），使用示例演示数据——不含真实租客、付款或个人数据。`,
+    disclosure: `截图来自开发版本（${capturedOn}），使用示例演示数据——不含真实租客、付款或个人数据。`,
     video: "快速介绍",
     videoNote:
       "无声视频，画面内为越南语文字；播放器中提供英文、越南语及中文字幕。",
@@ -67,7 +66,7 @@ const COPY = {
   "zh-hant": {
     eyebrow: "真實介面",
     heading: `看看 ${productName} 的實際畫面`,
-    disclosure: `截圖來自開發版本（修訂 ${revision}，${capturedOn}），使用示例演示資料——不含真實租客、付款或個人資料。`,
+    disclosure: `截圖來自開發版本（${capturedOn}），使用示例演示資料——不含真實租客、付款或個人資料。`,
     video: "快速介紹",
     videoNote:
       "無聲影片，畫面內為越南語文字；播放器中提供英文、越南語及中文字幕。",
