@@ -88,26 +88,24 @@ test("products index and security carry no inlined Atlas/trace/ledger; products 
       ),
       "re-adding Atlas must fail the guard",
     );
+    // v8 W5a: the security page no longer mounts the integrity lens at all.
     const security = read(`src/pages/${lang}/security.astro`);
-    assert.match(security, /lensTraces=\{false\}/, `${lang} security`);
+    assert.doesNotMatch(security, /surface=/, `${lang} security`);
     assert.ok(!security.includes("SourceTrace"));
   }
 });
 
 test("evidence capabilities are mounted on /verify, not deleted", () => {
   const centre = read("src/components/verify/VerifyCentre.astro");
-  for (const used of [
-    "Atlas",
-    "SourceTrace",
-    "TrustLedger",
-    "EvidenceTeaser",
-    "IntegrityLens",
-  ]) {
+  // v8 W5a: claims and sources render inline (SourcesLine); the duplicated
+  // trace and per-page layers are gone, the claim map stays as one disclosure.
+  for (const used of ["Atlas", "TrustLedger", "SourcesLine"]) {
     assert.match(centre, new RegExp(`import ${used}\\b`), used);
   }
   assert.match(centre, /decision-room/);
   // Layers are native disclosures: no JavaScript is needed to open them.
-  assert.equal((centre.match(/<details\s+class=/g) ?? []).length, 3);
+  assert.equal((centre.match(/<details\s+class=/g) ?? []).length, 1);
+  assert.doesNotMatch(centre, /<(SourceTrace|IntegrityLens)\b/);
   assert.doesNotMatch(centre, /<script\b/);
   for (const route of [
     "decision-room.astro",

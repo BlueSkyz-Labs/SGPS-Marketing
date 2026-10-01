@@ -209,20 +209,16 @@ test("D-03: trace, atlas, provenance and dossier refer to claims by label", () =
     /<a[^>]*c4-dossier__source[^>]*>\s*\{entry\.label\}/,
     "the composer source link must not print the entry label a second time",
   );
+  // v8 W5a: privacy and security no longer mount the integrity lens; each
+  // shows its claim once and one sources line, so there is no repeat to omit.
   for (const lang of LOCALES) {
     for (const file of ["privacy", "security"]) {
-      assert.match(
+      assert.doesNotMatch(
         read(`src/pages/${lang}/${file}.astro`),
-        /lensBoundaries=\{false\}/,
-        `${lang}/${file} shows its own boundary card; the lens must not repeat it`,
+        /surface=|lensBoundaries/,
+        `${lang}/${file} must not mount the integrity lens`,
       );
     }
-    // Deep links need the trace's evidence anchors on privacy: the trace stays
-    // and only drops its boundary step (the page has its own boundary card).
-    assert.doesNotMatch(
-      read(`src/pages/${lang}/privacy.astro`),
-      /lensTraces=\{false\}/,
-    );
   }
 });
 
@@ -259,10 +255,6 @@ test("D-12: 'Source-linked' is defined next to its first occurrence", () => {
   assert.match(integrity, /export const SOURCE_LINKED_LEGEND/);
   for (const [file, needle] of [
     [
-      "src/components/verify/VerifyCentre.astro",
-      /SOURCE_LINKED_LEGEND\[lang\]/,
-    ],
-    [
       "src/components/integrity/EvidencePassport.astro",
       /SOURCE_LINKED_LEGEND\[lang\]/,
     ],
@@ -273,14 +265,10 @@ test("D-12: 'Source-linked' is defined next to its first occurrence", () => {
   ]) {
     assert.match(read(file), needle, file);
   }
-  // On /verify the definition precedes the first state label.
+  // v8 W5a: /verify no longer shows the "Source-linked" label at all, so it
+  // carries no legend; the sources are the proof.
   const verify = read("src/components/verify/VerifyCentre.astro");
-  assert.ok(
-    verify.indexOf("SOURCE_LINKED_LEGEND[lang]") <
-      verify.indexOf("<EvidenceTeaser"),
-    "the definition must come before the claims that carry the label",
-  );
-  assert.match(verify, /legend=\{false\}/);
+  assert.doesNotMatch(verify, /SOURCE_LINKED_LEGEND|Source-linked/);
   // zh-hant uses corner brackets, not curly quotes.
   assert.doesNotMatch(integrity, /“已關聯來源”/);
 });
