@@ -28,7 +28,7 @@ test.describe("app access", () => {
         expect(await app.evaluate((el) => el.tagName)).toBe("P");
       }
       const signIn = page.getByRole("link", {
-        name: `Đăng nhập · ${NAMES[slug]}`,
+        name: `Đăng nhập (người dùng hiện có) · ${NAMES[slug]}`,
       });
       await expect(signIn).toHaveAttribute("href", SIGN_IN[slug]);
       await expect(block.locator("[data-app-signin]")).toHaveCount(0);

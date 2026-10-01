@@ -14,9 +14,10 @@ const craftStory = getCraftStory("private-security-reporting");
 
 <BaseLayout
   title="安全"
-  description="通过 GitHub Security Advisories 私下向 BlueSkyz Labs 报告漏洞，并附上您可自行核验的已发布证据与边界说明。"
+  description="通过 GitHub Security Advisories 私下向 BlueSkyz Labs 报告漏洞，并附上你可自行核验的已发布证据与边界说明。"
   path="/zh/security/"
   surface="security"
+  lensBoundaries={false}
   lensTraces={false}
 >
   <section class="py-16 lg:py-24">
@@ -49,9 +50,6 @@ const craftStory = getCraftStory("private-security-reporting");
       <div class="mt-10 max-w-2xl">
         <BoundaryCard boundary={SECURITY_BOUNDARY} lang="zh" />
       </div>
-      <p class="mt-6 max-w-2xl text-sm text-[var(--text-muted)]">
-        未经核验证据，不会发布任何漏洞赏金、服务等级协议或认证徽章。
-      </p>
       <div class="mt-12 max-w-3xl">
         <BilingualMirror lang="zh" />
       </div>

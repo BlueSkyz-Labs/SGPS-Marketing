@@ -131,14 +131,12 @@ const signInUrl = product.data.appAccess?.signInUrl;
     <footer class="guide__footer">
       <p class="text-lg font-semibold text-[var(--text-primary)]">{t.done}</p>
       <div class="mt-5 flex flex-wrap gap-3">
+        <ButtonLink href={`/${lang}/support/`}>{t.support}</ButtonLink>
         {signInUrl ? (
-          <ButtonLink href={signInUrl}>
-            {labelFor(SHARED_LABELS.signIn, lang)} · {product.data.name}
+          <ButtonLink href={signInUrl} variant="secondary">
+            {labelFor(SHARED_LABELS.signInExisting, lang)} · {product.data.name}
           </ButtonLink>
         ) : null}
-        <ButtonLink href={`/${lang}/support/`} variant="secondary">
-          {t.support}
-        </ButtonLink>
       </div>
     </footer>
   </Container>

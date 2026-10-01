@@ -207,12 +207,18 @@ const breadcrumbStructuredData = productBreadcrumbJsonLd(
               </ButtonLink>
             </span>
           ) : null}
-          {data.appAccess?.signInUrl ? (
+          {showcase?.guide ? (
             <ButtonLink
-              href={data.appAccess.signInUrl}
+              href={`/vi/products/${data.slug}/guide/`}
               class="shadow-[var(--bsl-shadow-subtle)]"
+              data-product-guide-cta
             >
-              {labelFor(SHARED_LABELS.signIn, "vi")} · {data.name}
+              {labelFor(SHARED_LABELS.readGuide, "vi")}
+            </ButtonLink>
+          ) : null}
+          {data.appAccess?.signInUrl ? (
+            <ButtonLink href={data.appAccess.signInUrl} variant="secondary">
+              {labelFor(SHARED_LABELS.signInExisting, "vi")} · {data.name}
             </ButtonLink>
           ) : null}
           {data.secondaryAction ? (

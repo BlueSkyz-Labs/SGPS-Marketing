@@ -6,6 +6,7 @@ import {
   type Language,
 } from "@/lib/dossier";
 import DossierPreview from "@/components/dossier/DossierPreview.astro";
+import { formatDisplayDate } from "@/lib/display-date";
 
 /**
  * C4-C Task 2 — dossier composer.
@@ -29,6 +30,7 @@ const LABELS: Record<
     select: string;
     compose: string;
     noscript: string;
+    source: string;
   }
 > = {
   en: {
@@ -36,6 +38,7 @@ const LABELS: Record<
     lede: "Select published items to assemble a boardroom-ready view. Nothing leaves this page and nothing is stored.",
     select: "Published items",
     compose: "Preview",
+    source: "Source",
     noscript:
       "Interactive composition needs JavaScript. Every published item and its source link is listed below and stays reachable without it.",
   },
@@ -44,6 +47,7 @@ const LABELS: Record<
     lede: "Chọn các mục đã công bố để dựng bản trình bày cho phòng họp. Không dữ liệu nào rời khỏi trang và không có gì được lưu lại.",
     select: "Mục đã công bố",
     compose: "Xem trước",
+    source: "Nguồn",
     noscript:
       "Soạn tương tác cần JavaScript. Mọi mục đã công bố và liên kết nguồn vẫn được liệt kê bên dưới và truy cập được khi không có JavaScript.",
   },
@@ -52,6 +56,7 @@ const LABELS: Record<
     lede: "选择已发布条目以组装会议视图。页面不发送任何数据，也不存储任何内容。",
     select: "已发布条目",
     compose: "预览",
+    source: "来源",
     noscript:
       "交互式编写需要 JavaScript。所有已发布条目及其来源链接仍列于下方，无 JavaScript 时依然可访问。",
   },
@@ -60,6 +65,7 @@ const LABELS: Record<
     lede: "選擇已發布條目以組裝會議檢視。頁面不傳送任何資料，也不儲存任何內容。",
     select: "已發布條目",
     compose: "預覽",
+    source: "來源",
     noscript:
       "互動式編寫需要 JavaScript。所有已發布條目及其來源連結仍列於下方，無 JavaScript 時依然可訪問。",
   },
@@ -114,8 +120,12 @@ const bySection = (section: (typeof SECTIONS)[number]): DossierEntry[] =>
                   <span class="c4-dossier__item-label">{entry.label}</span>
                 </label>
                 {entry.href && (
-                  <a class="c4-dossier__source" href={entry.href}>
-                    {entry.label}
+                  <a
+                    class="c4-dossier__source"
+                    href={entry.href}
+                    aria-label={`${labels.source}: ${entry.label}`}
+                  >
+                    {labels.source}
                   </a>
                 )}
               </li>
@@ -138,7 +148,9 @@ const bySection = (section: (typeof SECTIONS)[number]): DossierEntry[] =>
         )}
         {entry.freshness && (
           <p class="c4-dossier__entry-freshness" data-dossier-freshness>
-            {entry.freshness}
+            <time datetime={entry.freshness}>
+              {formatDisplayDate(entry.freshness, lang)}
+            </time>
           </p>
         )}
       </li>

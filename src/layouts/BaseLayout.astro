@@ -34,6 +34,8 @@ interface Props {
   surface?: string;
   /** false: the lens omits its source-to-surface chains (see /verify). */
   lensTraces?: boolean;
+  /** false: the page shows its own boundary card; the lens omits the repeat. */
+  lensBoundaries?: boolean;
   /** Authored scene marker consumed by the global header (C3-A Task 4). */
   scene?: Scene;
 }
@@ -46,6 +48,7 @@ const {
   noindex = false,
   surface,
   lensTraces = true,
+  lensBoundaries = true,
   scene = DEFAULT_SCENE,
 } = Astro.props;
 
@@ -180,6 +183,7 @@ const robotsNoindex = noindex || isNonProductionSiteUrl(SITE.url);
           surface={surface}
           lang={currentLang}
           traces={lensTraces}
+          boundaries={lensBoundaries}
         />
       ) : null}
       <JourneyBar />
