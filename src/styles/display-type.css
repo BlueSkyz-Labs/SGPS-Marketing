@@ -117,6 +117,21 @@
 .hero-headline--promise {
   font-size: var(--type-d1-promise);
 }
+/* LCP contract: the hero headline, its descendants and pseudo-elements never
+   animate or transition. The global reduced-motion floor and the fidelity-tier
+   rules give every element a 0.01 ms transition-duration with the default
+   transition-property: all, so any style change after first style (tier or
+   theme attribute, font swap) creates a CSSTransition that WebKit still reports
+   from getAnimations() on the next read. Removing the transition property
+   (not just shortening it) means none can be created. Guarded by
+   tests/architecture/exp-s7-reveal-contract.test.mjs. */
+.hero-headline,
+.hero-headline *,
+.hero-headline::before,
+.hero-headline::after {
+  animation: none !important;
+  transition: none !important;
+}
 /* From 640 px up the S4 promise scale is unchanged (36 px -> 56 px cap). */
 @media (min-width: 640px) {
   .hero-headline--promise {

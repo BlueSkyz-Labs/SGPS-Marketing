@@ -8,7 +8,19 @@
  * Usage:
  *   node scripts/smoke-production.mjs [--site https://blueskyzlabs.com]
  */
-import { isLocalizedCanonicalRoute } from "./smoke-locales.mjs";
+import { readFileSync } from "node:fs";
+import {
+  assetProblem,
+  buildHeaderExpectations,
+  extractProductPaths,
+  extractSameOriginAssetPaths,
+  htmlHeaderProblems,
+  immutableAssetHeaderProblems,
+} from "./smoke-assets.mjs";
+import {
+  SUPPORTED_LANGUAGES,
+  isLocalizedCanonicalRoute,
+} from "./smoke-locales.mjs";
 
 const DEFAULT_SITE = "https://blueskyzlabs.com";
 
@@ -130,9 +142,15 @@ check("root serves the bounded language gateway", async () => {
   const response = await get("/");
   assert(response.status === 200, `status ${response.status}`);
   const html = await response.text();
+  // Owner 2026-10-01 (F16): the gateway is the indexable x-default language
+  // selector, so production must not mark it noindex and it is self-canonical.
   assert(
-    /<meta\s+name="robots"\s+content="noindex, follow"/i.test(html),
-    "root gateway must stay out of the canonical search index",
+    !/<meta\s+name="robots"[^>]*noindex/i.test(html),
+    "root gateway must be indexable as the x-default language selector",
+  );
+  assert(
+    /<link\s+rel="canonical"\s+href="https:\/\/[^"]+\/"/i.test(html),
+    "root gateway must declare its own canonical URL",
   );
   assert(
     html.includes('data-language-choice="vi"') &&
@@ -233,6 +251,127 @@ check("critical navigation links are present on the EN home", async () => {
   for (const href of ["/en/products/", "/en/about/", "/en/contact/"]) {
     assert(html.includes(`href="${href}"`), `missing link ${href}`);
   }
+});
+
+const ASSET_CONCURRENCY = 6;
+const MAX_ASSETS = 500;
+
+async function mapBounded(items, limit, worker) {
+  const results = new Array(items.length);
+  let next = 0;
+  const lanes = Array.from(
+    { length: Math.min(limit, items.length) },
+    async () => {
+      while (next < items.length) {
+        const index = next++;
+        results[index] = await worker(items[index]);
+      }
+    },
+  );
+  await Promise.all(lanes);
+  return results;
+}
+
+async function fetchHtml(path) {
+  const response = await get(path);
+  assert(response.status === 200, `${path}: status ${response.status}`);
+  return response.text();
+}
+
+check(
+  "built pages reference only reachable same-origin assets (no redirects, right type)",
+  async () => {
+    const pages = [];
+    for (const locale of SUPPORTED_LANGUAGES) {
+      pages.push(`/${locale}/`);
+      const indexPath = `/${locale}/products/`;
+      pages.push(indexPath);
+      const productPaths = extractProductPaths(
+        await fetchHtml(indexPath),
+        locale,
+      );
+      assert(productPaths.length > 0, `${indexPath}: no product pages linked`);
+      pages.push(...productPaths);
+    }
+    const assets = new Map();
+    for (const path of [...new Set(pages)]) {
+      const html = await fetchHtml(path);
+      for (const asset of extractSameOriginAssetPaths(
+        html,
+        `${site}${path}`,
+        site,
+      )) {
+        if (!assets.has(asset)) assets.set(asset, path);
+      }
+    }
+    assert(assets.size > 0, "no same-origin assets found on any page");
+    assert(
+      assets.size <= MAX_ASSETS,
+      `asset count ${assets.size} exceeds the smoke bound ${MAX_ASSETS}`,
+    );
+    const offenders = (
+      await mapBounded([...assets.keys()], ASSET_CONCURRENCY, async (asset) => {
+        try {
+          const response = await get(asset);
+          await response.body?.cancel();
+          const problem = assetProblem({
+            pathname: new URL(asset, site).pathname,
+            status: response.status,
+            contentType: response.headers.get("content-type"),
+            location: response.headers.get("location"),
+          });
+          return problem
+            ? `${asset} (from ${assets.get(asset)}): ${problem}`
+            : null;
+        } catch (error) {
+          return `${asset}: ${error.message}`;
+        }
+      })
+    ).filter(Boolean);
+    assert(
+      offenders.length === 0,
+      `${offenders.length}/${assets.size} asset(s) unhealthy:\n  ${offenders.join("\n  ")}`,
+    );
+  },
+);
+
+const headerExpectations = buildHeaderExpectations(
+  readFileSync(new URL("../public/_headers", import.meta.url), "utf8"),
+);
+
+check(
+  "HTML routes carry the expected CSP, COOP, CORP and nosniff",
+  async () => {
+    const failures = [];
+    for (const path of ["/en/", "/vi/", "/en/products/"]) {
+      const response = await get(path);
+      assert(response.status === 200, `${path}: status ${response.status}`);
+      await response.body?.cancel();
+      for (const problem of htmlHeaderProblems(
+        (name) => response.headers.get(name),
+        headerExpectations,
+      )) {
+        failures.push(`${path}: ${problem}`);
+      }
+    }
+    assert(failures.length === 0, failures.join("; "));
+  },
+);
+
+check("hashed /_astro/ assets are served immutable", async () => {
+  const html = await fetchHtml("/en/");
+  const asset = extractSameOriginAssetPaths(html, `${site}/en/`, site).find(
+    (path) => path.startsWith("/_astro/"),
+  );
+  assert(asset, "no /_astro/ asset referenced from /en/");
+  const response = await get(asset);
+  await response.body?.cancel();
+  assert(response.status === 200, `${asset}: status ${response.status}`);
+  const problems = immutableAssetHeaderProblems(
+    (name) => response.headers.get(name),
+    headerExpectations,
+  );
+  assert(problems.length === 0, `${asset}: ${problems.join("; ")}`);
 });
 
 const commitSha = process.env.SMOKE_COMMIT_SHA ?? process.env.GITHUB_SHA;
