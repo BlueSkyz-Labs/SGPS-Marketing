@@ -31,13 +31,13 @@ const LOCALES = [
     lang: "en",
     home: "/en/",
     more: "See the evidence",
-    passport: "Evidence passport",
+    passport: "Evidence for this claim",
   },
   {
     lang: "vi",
     home: "/vi/",
     more: "Xem bằng chứng",
-    passport: "Hộ chiếu bằng chứng",
+    passport: "Bằng chứng cho nhận định này",
   },
 ] as const;
 

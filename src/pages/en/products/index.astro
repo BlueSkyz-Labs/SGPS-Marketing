@@ -8,6 +8,9 @@ import { getPublicProducts } from "@/lib/products";
 import IntentControl from "@/components/experience/IntentControl.astro";
 
 const products = await getPublicProducts();
+const allInDevelopment =
+  products.length > 0 &&
+  products.every((product) => product.data.lifecycle === "development");
 const emptyDescription = products.length
   ? "Explore BlueSkyz Labs products with truthful status and evidence."
   : "Products are published only with verifiable public evidence.";
@@ -22,8 +25,14 @@ const emptyDescription = products.length
   <section class="py-16 lg:py-20">
     <Container>
       <PageHeader
-        title="Products you can verify"
-        lede="Products appear here when they are ready to evaluate. We publish only what you can verify."
+        title="Our products"
+        lede={
+          products.length === 0
+            ? "Products appear here when they are ready to evaluate. We publish only what you can verify."
+            : allInDevelopment
+              ? "Every product here is in development. Each page states its status and what backs it."
+              : "Each product page states its status and what backs it."
+        }
       />
       {products.length === 0 ? (
         <div class="mt-12">
@@ -35,7 +44,7 @@ const emptyDescription = products.length
             id="published-products"
             class="text-xs font-semibold tracking-[0.18em] text-[var(--text-secondary)] uppercase"
           >
-            Published products
+            {allInDevelopment ? "In development" : "Products"}
           </h2>
           <div class="mt-6 grid gap-4 md:grid-cols-2">
             {products.map((product) => (

@@ -16,7 +16,7 @@ const CASES = [
     missing: "/en/no-such-page/",
     links: [
       { href: "/en/" },
-      { href: "/en/products/", heading: /Products you can verify/i },
+      { href: "/en/products/", heading: /Our products/i },
       { href: "/en/security/", heading: /Report privately/i },
     ],
   },
@@ -24,7 +24,7 @@ const CASES = [
     missing: "/vi/khong-ton-tai/",
     links: [
       { href: "/vi/" },
-      { href: "/vi/products/", heading: /Sản phẩm bạn có thể xác minh/i },
+      { href: "/vi/products/", heading: /Sản phẩm của BlueSkyz/i },
       { href: "/vi/security/", heading: /Báo cáo riêng tư/i },
     ],
   },
@@ -57,6 +57,6 @@ test("a legacy root URL recovers to its localized page", async ({ page }) => {
   await page.goto("/about/", { waitUntil: "load" });
   // Production: HTTP 301 (smoke-verified). Local/CI: meta-refresh stub, which
   // the browser follows. Either way the visitor must end on /en/about/.
-  await expect(page.locator("h1").first()).toHaveText(/Who we are/i);
+  await expect(page.locator("h1").first()).toHaveText(/About BlueSkyz Labs/i);
   expect(new URL(page.url()).pathname).toBe("/en/about/");
 });

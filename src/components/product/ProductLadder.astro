@@ -11,10 +11,10 @@ interface Props {
 
 const { lifecycle, lang } = Astro.props;
 const heading = {
-  en: "Lifecycle",
-  vi: "Vòng đời",
-  zh: "生命周期",
-  "zh-hant": "生命週期",
+  en: "Stage",
+  vi: "Giai đoạn",
+  zh: "阶段",
+  "zh-hant": "階段",
 }[lang];
 const index = LIFECYCLE_LADDER.indexOf(lifecycle);
 const next = index >= 0 ? LIFECYCLE_LADDER[index + 1] : undefined;

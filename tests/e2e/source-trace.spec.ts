@@ -66,10 +66,10 @@ test.describe("source-to-surface trace", () => {
       "Tuyên bố",
     );
     await expect(trace.locator('[data-trace-step="boundary"]')).toContainText(
-      "Ranh giới",
+      "Giới hạn",
     );
     await expect(trace.locator('[data-trace-step="surface"]')).toContainText(
-      "Bề mặt",
+      "Trang",
     );
   });
 

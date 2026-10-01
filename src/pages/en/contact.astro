@@ -21,15 +21,15 @@ const hasBusinessEmail = Boolean(SITE.contactEmail);
     <Container>
       <PageHeader
         eyebrow="Contact"
-        title="Reach the right lane"
+        title="Contact"
         lede={labelFor(EMPTY_STATE_COPY.contactLede, "en")}
       />
       <ul class="mt-12 grid gap-4 sm:grid-cols-2">
         <li class="flex min-w-0 flex-col rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-raised)] p-6">
           <h2 class="text-lg font-semibold tracking-tight">Security</h2>
           <p class="mt-2 flex-1 text-sm leading-relaxed text-[var(--text-secondary)]">
-            Use GitHub private vulnerability reporting for suspected security
-            vulnerabilities.
+            If you think you have found a security vulnerability, report it
+            privately through GitHub.
           </p>
           <div class="mt-5">
             <SafeAction
@@ -63,7 +63,7 @@ const hasBusinessEmail = Boolean(SITE.contactEmail);
           <BusinessRouteState
             lang="en"
             heading="Business / general"
-            boundary="Private security reporting is exclusively for suspected vulnerabilities, not business or general enquiries."
+            boundary="Business and general enquiries. Private security reporting is only for suspected vulnerabilities."
           />
         )}
       </ul>

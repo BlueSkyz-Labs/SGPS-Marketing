@@ -22,19 +22,19 @@ const hasBusinessEmail = Boolean(SITE.contactEmail);
     <Container>
       <PageHeader
         eyebrow="聯絡我們"
-        title="為您匹配正確的通道"
+        title="聯絡我們"
         lede={labelFor(EMPTY_STATE_COPY.contactLede, "zh-hant")}
       />
       <ul class="mt-12 grid gap-4 sm:grid-cols-2">
         <li class="flex min-w-0 flex-col rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-raised)] p-6">
           <h2 class="text-lg font-semibold tracking-tight">安全</h2>
           <p class="mt-2 flex-1 text-sm leading-relaxed text-[var(--text-secondary)]">
-            如發現疑似安全漏洞，請透過 GitHub 私密通道報告。
+            如果你懷疑發現了資安漏洞，請透過 GitHub 私密通報。
           </p>
           <div class="mt-5">
             <SafeAction
               href={SECURITY_ADVISORY_URL}
-              label="開啟私有漏洞報告"
+              label="開啟私密漏洞通報"
               boundary="private-reporting"
               lang="zh-hant"
             />
@@ -63,7 +63,7 @@ const hasBusinessEmail = Boolean(SITE.contactEmail);
           <BusinessRouteState
             lang="zh-hant"
             heading="商務 / 一般諮詢"
-            boundary="私密安全報告僅用於揭露疑似漏洞，不是商務或一般諮詢通道。"
+            boundary="私密資安通報僅用於通報疑似漏洞，不受理商務或一般諮詢。"
           />
         )}
       </ul>

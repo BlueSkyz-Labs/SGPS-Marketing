@@ -21,16 +21,16 @@ const HOME_LABELS: Record<Language, string> = {
  */
 const DECLARED_ROUTE_LABELS: Record<string, Record<Language, string>> = {
   "decision-room": {
-    en: "Decision Room",
-    vi: "Phòng Quyết định",
-    zh: "决策室",
-    "zh-hant": "決策室",
+    en: "Compare the evidence",
+    vi: "So sánh bằng chứng",
+    zh: "对比证据",
+    "zh-hant": "對照證據",
   },
   evidence: {
-    en: "Evidence passport",
-    vi: "Hộ chiếu bằng chứng",
-    zh: "证据档案",
-    "zh-hant": "證據檔案",
+    en: "Evidence for this claim",
+    vi: "Bằng chứng cho nhận định này",
+    zh: "这条说法的证据",
+    "zh-hant": "這項說法的證據",
   },
 };
 

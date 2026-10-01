@@ -17,8 +17,12 @@ const hasBusinessEmail = Boolean(SITE.contactEmail);
     <Container>
       <PageHeader
         eyebrow="Support"
-        title="Help that stays honest"
-        lede="Verified product profiles list their support paths. General support availability is stated below; security reporting is for vulnerabilities only."
+        title="How to get help"
+        lede={
+          hasBusinessEmail
+            ? "Security reporting is for vulnerabilities only."
+            : "No general support mailbox has been published yet. Security reporting is for vulnerabilities only."
+        }
       />
       {hasBusinessEmail ? (
         <p class="mt-8 max-w-2xl text-[var(--text-secondary)]">

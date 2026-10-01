@@ -8,6 +8,9 @@ import { getPublicProducts } from "@/lib/products";
 import IntentControl from "@/components/experience/IntentControl.astro";
 
 const products = await getPublicProducts();
+const allInDevelopment =
+  products.length > 0 &&
+  products.every((product) => product.data.lifecycle === "development");
 const emptyDescription = products.length
   ? "Khám phá sản phẩm BlueSkyz Labs với trạng thái và bằng chứng trung thực."
   : "Sản phẩm chỉ được công bố kèm bằng chứng công khai có thể xác minh.";
@@ -22,8 +25,14 @@ const emptyDescription = products.length
   <section class="py-16 lg:py-20">
     <Container>
       <PageHeader
-        title="Sản phẩm bạn có thể xác minh"
-        lede="Sản phẩm xuất hiện ở đây khi chúng sẵn sàng đánh giá. Chúng tôi chỉ công bố những gì bạn có thể xác minh."
+        title="Sản phẩm của BlueSkyz"
+        lede={
+          products.length === 0
+            ? "Sản phẩm xuất hiện ở đây khi chúng sẵn sàng đánh giá. Chúng tôi chỉ công bố những gì bạn có thể xác minh."
+            : allInDevelopment
+              ? "Mọi sản phẩm ở đây đều đang phát triển. Mỗi trang nói rõ trạng thái và căn cứ của sản phẩm đó."
+              : "Mỗi trang nói rõ trạng thái và căn cứ của sản phẩm đó."
+        }
       />
       {products.length === 0 ? (
         <div class="mt-12">
@@ -35,7 +44,7 @@ const emptyDescription = products.length
             id="published-products"
             class="text-xs font-semibold tracking-[0.18em] text-[var(--text-secondary)] uppercase"
           >
-            Sản phẩm đã công bố
+            {allInDevelopment ? "Đang phát triển" : "Sản phẩm"}
           </h2>
           <div class="mt-6 grid gap-4 md:grid-cols-2">
             {products.map((product) => (

@@ -17,8 +17,12 @@ const hasBusinessEmail = Boolean(SITE.contactEmail);
     <Container>
       <PageHeader
         eyebrow="Hỗ trợ"
-        title="Trợ giúp minh bạch"
-        lede="Điểm hỗ trợ cho từng sản phẩm sẽ được công bố trên trang sản phẩm tương ứng khi được xác minh. Trong thời gian chờ, hãy sử dụng các kênh bên dưới."
+        title="Nhận trợ giúp"
+        lede={
+          hasBusinessEmail
+            ? "Kênh báo cáo bảo mật chỉ dành cho lỗ hổng bảo mật."
+            : "Hiện chưa có hộp thư hỗ trợ chung. Kênh báo cáo bảo mật chỉ dành cho lỗ hổng bảo mật."
+        }
       />
       {hasBusinessEmail ? (
         <p class="mt-8 max-w-2xl text-[var(--text-secondary)]">

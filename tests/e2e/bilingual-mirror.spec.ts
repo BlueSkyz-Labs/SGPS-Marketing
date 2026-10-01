@@ -11,7 +11,7 @@ test.describe("selective bilingual mirror", () => {
     await expect(
       mirror.getByRole("heading", {
         level: 2,
-        name: "Bilingual evidence mirror",
+        name: "Same wording in two languages",
       }),
     ).toBeVisible();
     const pairs = mirror.locator("[data-mirror-pair]");
@@ -57,7 +57,7 @@ test.describe("selective bilingual mirror", () => {
     await expect(
       mirror.getByRole("heading", {
         level: 2,
-        name: "Đối chiếu bằng chứng song ngữ",
+        name: "Nguyên văn hai ngôn ngữ",
       }),
     ).toBeVisible();
     await expect(mirror.locator('[lang="en"]').first()).toContainText(
