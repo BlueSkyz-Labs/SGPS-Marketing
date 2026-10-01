@@ -38,7 +38,7 @@ test.describe("C2 Product House — fixture-backed hierarchy", () => {
     ).toContainText("Fixture Flagship");
     await expect(cards.filter({ hasText: "Fixture Flagship" })).toHaveCount(0);
     await expect(page.locator("#product-house-title")).toHaveText(
-      "The rest of the house, in development",
+      "Also in development",
     );
 
     const grid = page.locator(".grid.gap-4");
@@ -94,9 +94,7 @@ test.describe("C2 Product House — fixture-backed hierarchy", () => {
     const bodyText = await page.locator("body").textContent();
     // These EN strings must not appear on the VI page.
     expect(bodyText ?? "").not.toContain("View profile");
-    expect(bodyText ?? "").not.toContain(
-      "The rest of the house, in development",
-    );
+    expect(bodyText ?? "").not.toContain("Also in development");
   });
 
   test("fixture VI labels are localized (different from EN)", async ({
@@ -117,10 +115,9 @@ test.describe("C2 Product House — fixture-backed hierarchy", () => {
     const viVerbs = await page
       .locator("[data-product-card] [data-product-cta]")
       .evaluateAll((els) => els.map((el) => (el.textContent ?? "").trim()));
-    expect(viVerbs).toEqual([
-      "Xem trạng thái phát triển",
-      "Xem trạng thái phát triển",
-    ]);
+    // Verb + object (v8 W1): each CTA names its product.
+    expect(viVerbs).toHaveLength(2);
+    for (const verb of viVerbs) expect(verb).toMatch(/^Xem \S/);
     const status = page.locator("[data-product-status]").first();
     await expect(status).toHaveText("Đang phát triển");
     await expect(status).toHaveAttribute(
@@ -141,7 +138,7 @@ test.describe("C2 Product House — fixture-backed hierarchy", () => {
     );
     await expect(
       page.locator("[data-product-card] [data-product-cta]").first(),
-    ).toHaveText("查看开发状态");
+    ).toHaveText(/^查看 \S/);
   });
 
   test("fixture EN keeps every tier reachable through ordinary links", async ({

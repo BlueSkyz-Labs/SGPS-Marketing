@@ -152,9 +152,9 @@ const PRINCIPLE_DIMENSIONS: Record<
     },
     evidence: {
       en: "Evidence lives in tests, reviews, and versioned decisions.",
-      vi: "Bằng chứng nằm ở kiểm thử, soát xét và các quyết định được phiên bản hóa — không phải khẩu hiệu.",
-      zh: "证据存在于测试、审阅与版本化的决策之中 — 而非口号。",
-      "zh-hant": "證據存在於測試、審閱與版本化的決策之中 — 而非口號。",
+      vi: "Bằng chứng nằm ở kiểm thử, soát xét và các quyết định có phiên bản.",
+      zh: "证据存在于测试、审阅与版本化的决策之中。",
+      "zh-hant": "證據存在於測試、審閱與版本化的決策之中。",
     },
     impact: {
       en: "Compounds over time: small correct choices are cheaper to live with.",
@@ -191,10 +191,10 @@ const PRINCIPLE_DIMENSIONS: Record<
   },
   Trust: {
     product: {
-      en: "",
-      vi: "",
-      zh: "",
-      "zh-hant": "",
+      en: "The privacy and security pages state what is and is not provided.",
+      vi: "Trang quyền riêng tư và trang bảo mật nêu rõ những gì có và không có.",
+      zh: "隐私与安全页面写明提供什么、不提供什么。",
+      "zh-hant": "隱私與安全頁面寫明提供什麼、不提供什麼。",
     },
     people: {
       en: "No general support mailbox has been published yet. Security reporting is for vulnerabilities only.",
