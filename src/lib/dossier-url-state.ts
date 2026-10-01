@@ -10,10 +10,7 @@ export const DOSSIER_ITEMS_MAX_COUNT = 64;
 export const DOSSIER_ITEM_MAX_LENGTH = 128;
 
 export type DossierSelectionRejectReason =
-  | "query-too-long"
-  | "items-too-long"
-  | "too-many-items"
-  | "item-too-long";
+  "query-too-long" | "items-too-long" | "too-many-items" | "item-too-long";
 
 export type DossierSelectionParseResult =
   | { status: "ok"; ids: string[]; reason: null }

@@ -89,7 +89,9 @@ test.describe("C4-C dossier composer", () => {
     await page.goto(`/en/dossier/?items=${tokens.join(",")}`);
 
     await expect(
-      page.locator(`[data-dossier-preview] [data-dossier-entry-item="${CLAIM}"]`),
+      page.locator(
+        `[data-dossier-preview] [data-dossier-entry-item="${CLAIM}"]`,
+      ),
     ).toHaveCount(0);
     await expect(page.locator("[data-dossier-counter]")).toHaveText("0");
     const unknown = page.locator("[data-dossier-unknown]");
@@ -105,17 +107,19 @@ test.describe("C4-C dossier composer", () => {
   }) => {
     await page.goto(`/en/dossier/?items=${CLAIM},${CLAIM},${CLAIM}`);
     await expect(
-      page.locator(`[data-dossier-preview] [data-dossier-entry-item="${CLAIM}"]`),
+      page.locator(
+        `[data-dossier-preview] [data-dossier-entry-item="${CLAIM}"]`,
+      ),
     ).toHaveCount(1);
     await expect(page.locator("[data-dossier-counter]")).toHaveText("1");
     await expect(page.locator("[data-dossier-unknown]")).toBeHidden();
   });
 
-  test("selector-like unknown input is rendered only as text", async ({ page }) => {
+  test("selector-like unknown input is rendered only as text", async ({
+    page,
+  }) => {
     const payload = String.raw`";][data-x=evil]\\foo`;
-    await page.goto(
-      `/en/dossier/?items=${encodeURIComponent(payload)}`,
-    );
+    await page.goto(`/en/dossier/?items=${encodeURIComponent(payload)}`);
 
     const unknown = page.locator("[data-dossier-unknown]");
     await expect(unknown).toBeVisible();
