@@ -131,17 +131,9 @@ test("the /verify atlas names no jargon and shows no count legend", async ({
   expect(text).not.toMatch(/BlueSkyz Atlas|Public SGPS manifest|SGPS/);
   expect(text).not.toMatch(/Principle\s+\d|Trust\s+\d|Claim\s+\d|Product\s+\d/);
   await expect(page.locator(".atlas-legend")).toHaveCount(0);
-  // "Source-linked" is defined before its first occurrence.
-  const legend = page.locator("[data-source-linked-legend]");
-  await expect(legend).toContainText("Source-linked means");
-  const order = await page.evaluate(() => {
-    const def = document.querySelector("[data-source-linked-legend]");
-    const first = document.querySelector('[data-truth-state="source-linked"]');
-    return def && first
-      ? def.compareDocumentPosition(first) & Node.DOCUMENT_POSITION_FOLLOWING
-      : 0;
-  });
-  expect(order).toBeTruthy();
+  // v8 W5a: the "Source-linked" label is gone from /verify, so no legend.
+  await expect(page.locator("[data-source-linked-legend]")).toHaveCount(0);
+  expect(text).not.toMatch(/Source-linked/);
 });
 
 test("every local atlas link resolves to a real page and anchor", async ({

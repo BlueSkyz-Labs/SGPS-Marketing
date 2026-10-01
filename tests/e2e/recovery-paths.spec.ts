@@ -17,7 +17,7 @@ const CASES = [
     links: [
       { href: "/en/" },
       { href: "/en/products/", heading: /Our products/i },
-      { href: "/en/security/", heading: /Report privately/i },
+      { href: "/en/security/", heading: /^Security$/i },
     ],
   },
   {
@@ -25,7 +25,7 @@ const CASES = [
     links: [
       { href: "/vi/" },
       { href: "/vi/products/", heading: /Sản phẩm của BlueSkyz/i },
-      { href: "/vi/security/", heading: /Báo cáo riêng tư/i },
+      { href: "/vi/security/", heading: /^Bảo mật$/i },
     ],
   },
 ];
