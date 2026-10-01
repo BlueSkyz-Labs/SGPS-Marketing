@@ -101,14 +101,9 @@ test.describe("C2 Product House — fixture-backed hierarchy", () => {
     page,
   }) => {
     await page.goto(`${origin}/product-acts-vi/`);
-    await expect(
-      page.getByText("Những sản phẩm khác đang được phát triển"),
-    ).toBeVisible();
-    await expect(
-      page.getByText(
-        "Mỗi sản phẩm hiển thị đúng giai đoạn đã ghi nhận — ý tưởng, nguyên mẫu hay phát triển — cùng nền tảng và bước tiếp theo trung thực.",
-      ),
-    ).toBeVisible();
+    await expect(page.getByText("Cũng đang phát triển")).toBeVisible();
+    // v8 W1 (glo-9): the roadmap-implying continuation body is gone.
+    await expect(page.getByText("bước tiếp theo trung thực")).toHaveCount(0);
     await expect(page.getByText("Xem hồ sơ")).toHaveCount(0);
     // Every card verb is localized; no second "View profile" chip is needed
     // because the derived CTA already opens the localized profile.

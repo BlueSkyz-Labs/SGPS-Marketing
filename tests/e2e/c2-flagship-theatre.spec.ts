@@ -228,18 +228,18 @@ test.describe("public flagship capture presentation (Experience v6 S2)", () => {
     {
       lang: "en",
       path: "/en/",
-      label: /^Capture of the app in development · sample data/,
+      label: /^Development build · sample data/,
     },
     {
       lang: "vi",
       path: "/vi/",
-      label: /^Ảnh chụp ứng dụng đang phát triển · dữ liệu mẫu/,
+      label: /^Bản đang phát triển · dữ liệu mẫu/,
     },
-    { lang: "zh", path: "/zh/", label: /^开发中应用的截图 · 示例数据/ },
+    { lang: "zh", path: "/zh/", label: /^开发版本 · 示例数据/ },
     {
       lang: "zh-hant",
       path: "/zh-hant/",
-      label: /^開發中應用程式的截圖 · 範例資料/,
+      label: /^開發版本 · 範例資料/,
     },
   ]) {
     test(`${locale.lang}: homepage shows a labelled real Sổ Trọ capture, no app chrome, no identity art`, async ({
