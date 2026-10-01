@@ -169,10 +169,16 @@ const secondary = flagship
               sizes="(min-width: 34rem) 16.25rem, 15rem"
               smallSrc={
                 flagship.data.slug === "sotro"
-                  ? {
-                      src: "/products/sotro/showcase/op-01-home-288.webp",
-                      width: 288,
-                    }
+                  ? [
+                      {
+                        src: "/products/sotro/showcase/op-01-home-288.webp",
+                        width: 288,
+                      },
+                      {
+                        src: "/products/sotro/showcase/op-01-home-480.webp",
+                        width: 480,
+                      },
+                    ]
                   : undefined
               }
               class="hero-flagship__capture"

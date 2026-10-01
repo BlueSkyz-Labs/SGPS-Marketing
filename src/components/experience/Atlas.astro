@@ -41,8 +41,7 @@ const kindLabels: Record<AtlasNodeKind, string> = {
   product: isVi ? "Sản phẩm" : isZh ? "产品" : isZhHant ? "產品" : "Product",
 };
 
-const heading = "BlueSkyz Atlas";
-const eyebrow = isVi
+const heading = isVi
   ? "Bản đồ bằng chứng"
   : isZh
     ? "证据地图"
@@ -242,14 +241,6 @@ function edgePath(a: Placed, b: Placed, bend: number): string {
   return `M${a.x} ${a.y} Q${qx} ${qy} ${b.x} ${b.y}`;
 }
 
-const legendKinds = (
-  ["principle", "trust", "claim", "evidence", "product"] as AtlasNodeKind[]
-).map((kind) => ({
-  kind,
-  label: kindLabels[kind],
-  count: nodes.filter((node) => node.kind === kind).length,
-}));
-
 const groups = [
   { id: "house", title: groupTitles.house, kinds: ["brand", "principle"] },
   {
@@ -268,8 +259,7 @@ const groups = [
   class="atlas-section border-b border-[var(--border-subtle)] py-16 lg:py-20"
   aria-labelledby="atlas-title"
 >
-  <p class="atlas-eyebrow">{eyebrow}</p>
-  <h2 id="atlas-title" class="type-d2 mt-3 text-balance">
+  <h2 id="atlas-title" class="type-d2 text-balance">
     {heading}
   </h2>
   <p class="mt-4 max-w-2xl text-lg text-[var(--text-secondary)] text-pretty">
@@ -437,19 +427,6 @@ const groups = [
           })}
         </svg>
       ))}
-
-      <ul class="atlas-legend" role="list">
-        {legendKinds.map((entry) => (
-          <li class="atlas-legend__item">
-            <span
-              class={`atlas-swatch atlas-swatch--${entry.kind}`}
-              aria-hidden="true"
-            />
-            <span>{entry.label}</span>
-            <span class="atlas-legend__count">{entry.count}</span>
-          </li>
-        ))}
-      </ul>
     </div>
 
     <p class="atlas-hint">{indexHint}</p>
@@ -503,14 +480,6 @@ const groups = [
      index below follows the page theme. Static SVG/CSS only: no client JS,
      no animation on nodes; hover/focus linking uses :has() as a progressive
      enhancement and degrades to a plain, complete index. */
-  .atlas-eyebrow {
-    font-size: 0.75rem;
-    font-weight: 600;
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
-    color: var(--action-primary);
-  }
-
   .atlas-plate {
     position: relative;
     overflow: hidden;
@@ -974,27 +943,6 @@ const groups = [
     [data-atlas-i="39"]
     circle {
     filter: drop-shadow(0 0 6px var(--brand-cobalt));
-  }
-
-  .atlas-legend {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem 1.25rem;
-    margin-top: 0.75rem;
-    padding-top: 0.875rem;
-    border-top: 1px solid
-      color-mix(in srgb, var(--brand-porcelain) 10%, transparent);
-    font-size: 0.8125rem;
-    color: color-mix(in srgb, var(--brand-porcelain) 80%, transparent);
-  }
-  .atlas-legend__item {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-  }
-  .atlas-legend__count {
-    font-variant-numeric: tabular-nums;
-    color: color-mix(in srgb, var(--brand-porcelain) 55%, transparent);
   }
 
   .atlas-swatch {

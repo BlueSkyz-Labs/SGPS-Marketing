@@ -1,6 +1,7 @@
 ---
 import type { BoundaryStatement, ReviewMetadata } from "@/data/integrity";
 import type { Language } from "@/data/site";
+import { formatDisplayDate } from "@/lib/display-date";
 
 export interface EvidenceItem {
   label: string;
@@ -82,8 +83,10 @@ const labels = LABELS[lang];
     {review ? (
       <p class="evidence-details__review" data-evidence-review>
         {labels.reviewed}:{" "}
-        <time datetime={review.reviewedOn}>{review.reviewedOn}</time> —{" "}
-        {labels.sources[review.source]}
+        <time datetime={review.reviewedOn}>
+          {formatDisplayDate(review.reviewedOn, lang)}
+        </time>{" "}
+        — {labels.sources[review.source]}
       </p>
     ) : null}
     {boundary ? (

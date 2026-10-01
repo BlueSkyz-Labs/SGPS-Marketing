@@ -14,6 +14,12 @@ export interface TrustLedgerEntry {
  * S+ Verifiable Trust Ledger (Task 4).
  * Every entry must be derivable from facts already encoded by this site.
  * A missing fact is `not-published` — never a guessed assurance status.
+ *
+ * Support is `not-published` while `SITE.contactEmail` is absent: the /support
+ * page says no general support mailbox is published, so the ledger must not
+ * call the lane "available". Its summary reuses that page's own wording. This
+ * is the build-default truth; a build that publishes a mailbox is described by
+ * the /support page itself, and the ledger only ever understates.
  */
 export const TRUST_LEDGER: TrustLedgerEntry[] = [
   {
@@ -60,7 +66,7 @@ export const TRUST_LEDGER: TrustLedgerEntry[] = [
   },
   {
     id: "support",
-    state: "available",
+    state: "not-published",
     href: {
       en: "/en/support/",
       vi: "/vi/support/",
@@ -69,10 +75,10 @@ export const TRUST_LEDGER: TrustLedgerEntry[] = [
     },
     label: { en: "Support", vi: "Hỗ trợ", zh: "支持", "zh-hant": "支援" },
     summary: {
-      en: "Working help and recourse paths — real routes, not slogans.",
-      vi: "Đường dẫn trợ giúp và khắc phục đang hoạt động — tuyến đường thật, không phải khẩu hiệu.",
-      zh: "提供有效的帮助与求助途径 — 真实渠道，而非口号。",
-      "zh-hant": "提供有效的協助與求助途徑 — 真實管道，而非口號。",
+      en: "No general support mailbox has been published yet. Security reporting is for vulnerabilities only.",
+      vi: "Hiện chưa có hộp thư hỗ trợ chung. Kênh báo cáo bảo mật chỉ dành cho lỗ hổng bảo mật.",
+      zh: "目前尚未公布通用支持邮箱。安全漏洞报告仅用于漏洞。",
+      "zh-hant": "目前尚未公布通用支援信箱。資安通報僅用於漏洞。",
     },
     evidenceKind: "route",
   },

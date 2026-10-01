@@ -72,13 +72,16 @@ for (const lang of LOCALES) {
         page.locator(".showcase__device, .showcase__phone"),
       ).toHaveCount(0);
       await expect(page.locator("[data-product-status]")).toHaveCount(1);
+      // v7 D-13: the current stage only; no "next" line, no stage list.
+      await expect(page.locator("[data-product-ladder]")).toHaveCount(1);
+      await expect(page.locator("[data-product-ladder] strong")).toHaveCount(1);
       await expect(page.locator("[data-product-ladder] details")).toHaveCount(
-        1,
+        0,
       );
-      await expect(
-        page.locator("[data-product-ladder] details"),
-      ).not.toHaveAttribute("open", "");
-      await expect(page.locator("[data-product-ladder] li")).toHaveCount(8);
+      await expect(page.locator("[data-product-ladder] li")).toHaveCount(0);
+      await expect(page.locator("[data-product-ladder]")).not.toContainText(
+        /next in the ladder|giai đoạn kế tiếp|下一阶段|下一階段|all stages|tất cả giai đoạn/i,
+      );
     });
   });
 }
