@@ -53,13 +53,15 @@
   src:
     local("Arial Bold"), local("Arial-BoldMT"), local("Helvetica Bold"),
     local("Liberation Sans Bold");
-  /* Calibrated 2026-10-01 from the font files: mean advance of the display
-     face over an EN+VI sample is 0.9386 of Arial Bold (Liberation Sans Bold),
-     and its hhea ascent/descent (1.038/0.222 em) are divided by that ratio so
-     the swap keeps the same line box. */
-  size-adjust: 93.9%;
-  ascent-override: 110.6%;
-  descent-override: 23.7%;
+  /* Re-calibrated 2026-10-01 by rendering the hero promise at 56 px in both
+     faces (Chromium, Liberation Sans Bold): the display face is 1.095x (EN) and
+     1.049x (VI) the width of the previous 93.9% fallback, so the swap added a
+     wrapped line and shifted the flagship card (CLS ~0.02). 100.5% is the
+     EN/VI midpoint; hhea ascent/descent (1.038/0.222 em) are divided by it so
+     the line box is unchanged. */
+  size-adjust: 100.5%;
+  ascent-override: 103.3%;
+  descent-override: 22.1%;
   line-gap-override: 0%;
 }
 
@@ -84,7 +86,7 @@
      (28 px, the display minimum): at 36 px the same sentence took 5 (EN) to 7
      (VI) lines and pushed the flagship CTA below the 844 px fold. Short display
      statements keep d1. */
-  --type-d1-promise: clamp(1.75rem, 1.05rem + 2.6vw, 3.5rem);
+  --type-d1-promise: clamp(1.75rem, 1.05rem + 2.6vw, 2.25rem);
   --type-d2: clamp(1.75rem, 1.3rem + 1.8vw, 2.75rem);
   --type-d2-leading: 1.15;
   --type-d2-tracking: -0.015em;
@@ -114,6 +116,12 @@
 }
 .hero-headline--promise {
   font-size: var(--type-d1-promise);
+}
+/* From 640 px up the S4 promise scale is unchanged (36 px -> 56 px cap). */
+@media (min-width: 640px) {
+  .hero-headline--promise {
+    font-size: clamp(2.25rem, 1.55rem + 2.6vw, 3.5rem);
+  }
 }
 .type-d2 {
   font-size: var(--type-d2);
