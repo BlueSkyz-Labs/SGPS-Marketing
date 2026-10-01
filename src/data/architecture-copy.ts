@@ -189,12 +189,12 @@ export const ARCHITECTURE_COPY: Record<Language, ArchitectureCopy> = {
   vi: {
     title: "Kiến trúc",
     description:
-      "Trang web này được dựng và phân phối như thế nào, giải thích bằng ngôn ngữ dễ hiểu và dẫn xuất từ mô hình kiến trúc công khai của chúng tôi.",
-    lede: "Trang web này được dựng và phân phối như thế nào, giải thích bằng ngôn ngữ dễ hiểu. Mọi nội dung bên dưới đều lấy từ mô hình kiến trúc công khai của dự án.",
+      "Trang web này được xây dựng và vận hành ra sao, giải thích dễ hiểu và lấy từ mô hình kiến trúc công khai của chúng tôi.",
+    lede: "Trang web này được xây dựng và vận hành ra sao, giải thích dễ hiểu. Mọi nội dung bên dưới đều lấy từ mô hình kiến trúc công khai của dự án.",
     nav: "Các phần",
     parts: "Các thành phần",
     connections: "Chúng kết nối thế nào",
-    noConnections: "Góc nhìn này không mô tả kết nối nào giữa các thành phần.",
+    noConnections: "Phần này không mô tả kết nối nào giữa các thành phần.",
     lastVerified: "Đối chiếu gần nhất với mô hình kiến trúc",
     verifyLink: "Kiểm chứng các tuyên bố của chúng tôi tại trang Xác minh",
     technical: {
@@ -205,16 +205,16 @@ export const ARCHITECTURE_COPY: Record<Language, ArchitectureCopy> = {
     },
     lenses: {
       system: {
-        nav: "Dựng và phân phối",
-        heading: "Trang web được dựng và phân phối như thế nào",
+        nav: "Xây dựng và vận hành",
+        heading: "Trang web được xây dựng và vận hành ra sao",
         intro:
-          "Trang web là một tập hợp trang tĩnh đọc danh sách sản phẩm công khai và được phân phối từ Cloudflare. Đây là cách các thành phần khớp với nhau.",
+          "Trang web là một tập hợp trang tĩnh, đọc danh sách sản phẩm công khai và được phục vụ qua Cloudflare. Dưới đây là cách các thành phần ghép với nhau.",
       },
       data: {
         nav: "Dữ liệu",
-        heading: "Dữ liệu nào được xử lý (và không được xử lý)",
+        heading: "Trang web xử lý dữ liệu gì (và không xử lý gì)",
         intro:
-          "Tài nguyên dữ liệu duy nhất trong mô hình là danh sách sản phẩm công khai. Đăng nhập, API ứng dụng, cơ sở dữ liệu, hàng đợi, kho giao dịch, cách ly theo đơn vị thuê và kiểm soát phiên được đánh dấu là không áp dụng cho trang tĩnh này, chứ không mặc định là đạt.",
+          "Tài nguyên dữ liệu duy nhất trong mô hình là danh sách sản phẩm công khai. Đăng nhập, API ứng dụng, cơ sở dữ liệu, hàng đợi, kho giao dịch, tách biệt dữ liệu giữa các khách hàng và kiểm soát phiên được ghi rõ là không áp dụng cho trang tĩnh này, chứ không được coi là đã đáp ứng.",
       },
       trust: {
         nav: "Ranh giới tin cậy",
@@ -226,18 +226,18 @@ export const ARCHITECTURE_COPY: Record<Language, ArchitectureCopy> = {
         nav: "Khôi phục",
         heading: "Khôi phục",
         intro:
-          "Góc nhìn này cho thấy trang web đang chạy trên gì: bản triển khai chính thức và dịch vụ lưu trữ Cloudflare mà nó được triển khai tới. Mô hình không mô tả quy trình sao lưu hay khôi phục.",
+          "Phần này cho thấy trang web đang chạy trên nền tảng nào: bản triển khai chính thức và dịch vụ lưu trữ Cloudflare nơi nó được triển khai. Mô hình không mô tả quy trình sao lưu hay khôi phục.",
       },
       evidence: {
         nav: "Bằng chứng",
         heading: "Bằng chứng nằm ở đâu",
         intro:
-          "Có hai thành phần tồn tại để kiểm tra trang web: bước kiểm tra tuyên bố chạy khi trang được dựng, và các bước kiểm tra nguồn tự động trên GitHub. Bằng chứng cho từng tuyên bố nằm ở trang Xác minh.",
+          "Hai thành phần có nhiệm vụ kiểm tra trang web: bước kiểm tra tuyên bố chạy khi dựng trang, và các bước kiểm tra mã nguồn tự động trên GitHub. Bằng chứng cho từng tuyên bố nằm ở trang Xác minh.",
       },
     },
     kinds: {
       Portfolio: "Tổ chức",
-      Domain: "Khu vực",
+      Domain: "Lĩnh vực",
       System: "Trang web",
       Component: "Thành phần",
       DataResource: "Dữ liệu",
@@ -252,7 +252,7 @@ export const ARCHITECTURE_COPY: Record<Language, ArchitectureCopy> = {
       },
       "domain.corporate-web": {
         label: "Web doanh nghiệp",
-        blurb: "Khu vực web công khai mà trang web này thuộc về.",
+        blurb: "Lĩnh vực web công khai mà trang web này thuộc về.",
       },
       "system.sgps-marketing": {
         label: "Trang web này",
@@ -269,7 +269,7 @@ export const ARCHITECTURE_COPY: Record<Language, ArchitectureCopy> = {
       },
       "component.source-assurance": {
         label: "Kiểm tra nguồn tự động",
-        blurb: "Các bước kiểm tra chạy trên GitHub với quyền chỉ đọc.",
+        blurb: "Các bước kiểm tra chạy trên GitHub, chỉ có quyền đọc.",
       },
       "data.product-registry": {
         label: "Danh sách sản phẩm công khai",
@@ -279,7 +279,7 @@ export const ARCHITECTURE_COPY: Record<Language, ArchitectureCopy> = {
       "infra.cloudflare-worker": {
         label: "Lưu trữ tĩnh trên Cloudflare",
         blurb:
-          "Phân phối các tệp tĩnh của trang web từ mạng biên toàn cầu của Cloudflare.",
+          "Phục vụ các tệp tĩnh của trang web từ mạng biên toàn cầu của Cloudflare.",
       },
       "external.github": {
         label: "GitHub",
@@ -292,8 +292,7 @@ export const ARCHITECTURE_COPY: Record<Language, ArchitectureCopy> = {
       },
       "external.cloudflare": {
         label: "Cloudflare",
-        blurb:
-          "Dịch vụ bên ngoài mà trang web phụ thuộc để phân phối các trang.",
+        blurb: "Dịch vụ bên ngoài mà trang web phụ thuộc để phục vụ các trang.",
       },
       "deployment.production": {
         label: "Bản triển khai chính thức",
@@ -301,8 +300,8 @@ export const ARCHITECTURE_COPY: Record<Language, ArchitectureCopy> = {
       },
     },
     boundaries: {
-      organizational: "Bên trong tổ chức",
-      "public-internet": "Mở ra internet công cộng",
+      organizational: "Trong nội bộ tổ chức",
+      "public-internet": "Hướng ra internet công cộng",
       "github-source-build-to-cloudflare-edge":
         "Từ mã nguồn và bản dựng trên GitHub tới mạng biên của Cloudflare",
       "browser-visible-static-output": "Đầu ra tĩnh mà trình duyệt nhìn thấy",
