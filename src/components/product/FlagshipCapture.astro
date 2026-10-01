@@ -20,6 +20,10 @@ interface Props {
   lang: Language;
   /** Above-the-fold capture: eager + fetchpriority high. Default lazy. */
   priority?: boolean;
+  /** v8: eager (never lazy) but `fetchpriority="low"` so the H1 text paints first. */
+  lowPriority?: boolean;
+  /** v8: false drops the visible label when a sibling capture already carries it (deck hom-11). */
+  showLabel?: boolean;
   /** CSS `sizes` for the rendered width. */
   sizes: string;
   /**
@@ -40,6 +44,8 @@ const {
   screen,
   lang,
   priority = false,
+  lowPriority = false,
+  showLabel = true,
   sizes,
   smallSrc,
   class: className = "",
@@ -91,14 +97,16 @@ const label = LABEL[lang];
     sizes={sizes}
     decoding="async"
     loading={priority ? "eager" : "lazy"}
-    fetchpriority={priority ? "high" : "auto"}
+    fetchpriority={lowPriority ? "low" : priority ? "high" : "auto"}
     data-capture-src={item.src}
     data-lcp-candidate={priority ? "" : undefined}
   />
-  <figcaption class="flagship-capture__label">
-    {label}
-    <span class="flagship-capture__provenance">{capturedOn}</span>
-  </figcaption>
+  {showLabel ? (
+    <figcaption class="flagship-capture__label">
+      {label}
+      <span class="flagship-capture__provenance">{capturedOn}</span>
+    </figcaption>
+  ) : null}
 </figure>
 
 <style>

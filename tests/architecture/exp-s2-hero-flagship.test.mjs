@@ -14,7 +14,7 @@ export function heroContractHolds(hero, capture) {
   const promiseH1 = /\bproposition\b/.test(h1) && !/\bjobs\b/.test(h1);
   const eagerCapture =
     /<FlagshipCapture[\s\S]*?\bpriority\b[\s\S]*?\/>/.test(hero) &&
-    /fetchpriority=\{priority \? "high"/.test(capture) &&
+    /fetchpriority=\{lowPriority \? "low" : priority \? "high"/.test(capture) &&
     /width=\{item\.width\}/.test(capture) &&
     /height=\{item\.height\}/.test(capture);
   const labelled =
