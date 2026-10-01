@@ -46,3 +46,37 @@ test("robots and sitemap are public and exclude staging hard-codes", async ({
   expect(sitemapBody).not.toContain("<loc>");
   expect(sitemapBody).not.toMatch(/portfolio\.tonydemo\.com/);
 });
+
+const EVIDENCE_IDS = [
+  "security-reporting-is-private",
+  "privacy-no-tracking-on-this-site",
+  "registry-publishes-only-proven-products",
+];
+
+for (const lang of ["en", "vi"]) {
+  for (const id of EVIDENCE_IDS) {
+    test(`evidence title stays short on /${lang}/evidence/${id}/`, async ({
+      page,
+    }) => {
+      await page.goto(`/${lang}/evidence/${id}/`);
+      const title = await page.title();
+      expect(
+        title.replace(/ \| BlueSkyz Labs$/, "").length,
+      ).toBeLessThanOrEqual(75);
+      const og = await page
+        .locator('meta[property="og:title"]')
+        .getAttribute("content");
+      expect(og).toBe(title);
+      await expect(page.locator("[data-passport-page-title]")).toBeVisible();
+    });
+  }
+}
+
+test("zh and zh-hant security page titles differ", async ({ page }) => {
+  await page.goto("/zh/security/");
+  const zh = await page.title();
+  await page.goto("/zh-hant/security/");
+  const zhHant = await page.title();
+  expect(zhHant).toContain("資訊安全");
+  expect(zh).not.toBe(zhHant);
+});
