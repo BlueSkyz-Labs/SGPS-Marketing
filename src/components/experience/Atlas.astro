@@ -43,12 +43,12 @@ const kindLabels: Record<AtlasNodeKind, string> = {
 
 const heading = "BlueSkyz Atlas";
 const eyebrow = isVi
-  ? "Chòm sao bằng chứng"
+  ? "Bản đồ bằng chứng"
   : isZh
-    ? "证据星图"
+    ? "证据地图"
     : isZhHant
-      ? "證據星圖"
-      : "Evidence constellation";
+      ? "證據地圖"
+      : "Evidence map";
 const lede = isVi
   ? "Sơ đồ hóa từ chính những nguồn trang này công bố: thương hiệu mẹ, các nguyên tắc, những bề mặt tin cậy có thể xác minh, và các tuyên bố công khai cùng bằng chứng mà chúng dẫn chiếu. Nút sản phẩm chỉ xuất hiện khi sản phẩm thật được công bố."
   : isZh
@@ -57,12 +57,12 @@ const lede = isVi
       ? "依據本站發布的資訊製圖：主品牌、其原則、可驗證的信任層面，以及公開聲明與其引用的證據。產品節點僅在真實產品發布後出現。"
       : "Mapped from the same sources this site publishes: the masterbrand, its principles, verifiable trust surfaces, and the public claims with the evidence they cite. Product nodes appear only when real products are public.";
 const indexHint = isVi
-  ? "Di chuột hoặc chuyển tiêu điểm vào một mục để làm nổi bật nút tương ứng trên chòm sao."
+  ? "Di chuột hoặc chuyển tiêu điểm vào một mục để làm nổi bật nút tương ứng trên bản đồ."
   : isZh
-    ? "将指针悬停或聚焦在条目上，即可在星图中突出显示对应节点。"
+    ? "将指针悬停或聚焦在条目上，即可在证据地图中突出显示对应节点。"
     : isZhHant
-      ? "將游標懸停或聚焦在條目上，即可在星圖中突出顯示對應節點。"
-      : "Hover or focus an entry to light its node in the constellation.";
+      ? "將游標懸停或聚焦在條目上，即可在證據地圖中突出顯示對應節點。"
+      : "Hover or focus an entry to light its node in the evidence map.";
 
 const emptyLabel = isVi
   ? "Chưa có sản phẩm công khai nào được công bố."
@@ -269,10 +269,7 @@ const groups = [
   aria-labelledby="atlas-title"
 >
   <p class="atlas-eyebrow">{eyebrow}</p>
-  <h2
-    id="atlas-title"
-    class="mt-3 text-3xl font-semibold tracking-tight text-balance sm:text-4xl"
-  >
+  <h2 id="atlas-title" class="type-d2 mt-3 text-balance">
     {heading}
   </h2>
   <p class="mt-4 max-w-2xl text-lg text-[var(--text-secondary)] text-pretty">

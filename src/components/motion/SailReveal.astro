@@ -1,0 +1,84 @@
+---
+import RevealObserver from "@/components/motion/RevealObserver.astro";
+
+/**
+ * Experience v6 S7 — "Reveal" signature (VALIDATE prototype, not a House Code).
+ *
+ * Decorative inline SVG (aria-hidden). Geometry source: the three sail paths of
+ * public/brand/blueskyz/v4/logos/horizontal-flat-dark.svg (identical to
+ * public/icons/favicon.svg), viewBox 0 0 512 512; gradient stops from the same
+ * file. brand/ is untouched — the path data is copied, not edited.
+ *
+ * Grammar: construction lines draw (stroke-dashoffset), then the three layers
+ * fill back-to-front (clip-path). `handoff` (hero): the overlay fades out at
+ * the end so the static raster mark beneath is the resting state; without
+ * `handoff` the fully drawn mark is the resting state. The CSS default is the
+ * final state, so no-JS / reduced-motion / forced-colors show it at t=0.
+ */
+interface Props {
+  handoff?: boolean;
+  class?: string;
+}
+const { handoff = false, class: className = "" } = Astro.props;
+---
+
+<svg
+  class:list={["sail-reveal", handoff && "sail-reveal--handoff", className]}
+  data-reveal="signature"
+  viewBox="0 0 512 512"
+  aria-hidden="true"
+  focusable="false"
+>
+  <defs>
+    <linearGradient id="sail-wing-a" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#FFFFFF"></stop>
+      <stop offset="1" stop-color="#CBD5E1"></stop>
+    </linearGradient>
+    <linearGradient id="sail-wing-b" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#F7F8FA"></stop>
+      <stop offset="1" stop-color="#64748B"></stop>
+    </linearGradient>
+    <linearGradient id="sail-base" x1="0" y1="0" x2="1" y2="0">
+      <stop stop-color="#2564FF"></stop>
+      <stop offset="1" stop-color="#0B1020"></stop>
+    </linearGradient>
+  </defs>
+  <g class="sail-guides">
+    <path class="sail-stroke" pathLength="1" d="M72 432 L394 54"></path>
+    <path class="sail-stroke" pathLength="1" d="M72 432 L371 408"></path>
+    <path class="sail-stroke" pathLength="1" d="M255 334 L394 54"></path>
+  </g>
+  <path
+    class="sail-layer sail-layer--1"
+    fill="url(#sail-wing-a)"
+    d="M72 432 C118 285 226 139 394 54 C326 166 278 256 255 334 C196 329 130 369 72 432 Z"
+  ></path>
+  <path
+    class="sail-layer sail-layer--2"
+    fill="url(#sail-wing-b)"
+    d="M394 54 C353 165 333 276 371 408 L255 334 C289 244 326 138 394 54 Z"
+  ></path>
+  <path
+    class="sail-layer sail-layer--3"
+    fill="url(#sail-base)"
+    d="M72 432 C151 363 213 333 255 334 L371 408 C292 363 193 364 72 432 Z"
+  ></path>
+  <g class="sail-outline">
+    <path
+      class="sail-stroke"
+      pathLength="1"
+      d="M72 432 C118 285 226 139 394 54 C326 166 278 256 255 334 C196 329 130 369 72 432 Z"
+    ></path>
+    <path
+      class="sail-stroke"
+      pathLength="1"
+      d="M394 54 C353 165 333 276 371 408 L255 334 C289 244 326 138 394 54 Z"
+    ></path>
+    <path
+      class="sail-stroke"
+      pathLength="1"
+      d="M72 432 C151 363 213 333 255 334 L371 408 C292 363 193 364 72 432 Z"
+    ></path>
+  </g>
+</svg>
+<RevealObserver />

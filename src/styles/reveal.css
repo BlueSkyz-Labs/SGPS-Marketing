@@ -1,0 +1,198 @@
+/* Experience v6 S7 — "Reveal" signature (Sơn Mài layered revelation × Chu Đậu
+   precision). VALIDATE prototype, not a House Code. Functional token names.
+
+   Contract (guarded by tests/architecture/exp-s7-reveal-contract.test.mjs):
+   - the CSS default of every element here is its FINAL resting state;
+   - only transform, opacity, stroke-dashoffset and clip-path are animated;
+   - no infinite loops, no will-change, no backdrop-filter;
+   - nothing targets the hero headline / [data-lcp]; the LCP never animates;
+   - reduced motion and forced colors render the final state immediately. */
+
+:root {
+  --motion-instant: 90ms;
+  --motion-quick: 180ms;
+  --motion-base: 320ms;
+  --motion-reveal: 560ms;
+  --motion-draw: 900ms;
+  --motion-stagger: 70ms;
+  --motion-start-delay: 120ms; /* nothing moves in the first 100 ms of paint */
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --ease-emphasized: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-linear-draw: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ---- Sail mark: resting state (also no-JS, reduced motion, forced colors) */
+.sail-reveal {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1;
+  overflow: visible;
+  pointer-events: none;
+}
+.sail-stroke {
+  fill: none;
+  stroke: var(--brand-porcelain, #f7f8fa);
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 0;
+}
+.sail-guides .sail-stroke {
+  stroke-width: 1;
+  opacity: 0.45;
+}
+/* Standalone mark rests with its construction guides gone; hero hand-off
+   overlays rest fully transparent so the static raster mark is the final state. */
+.sail-guides {
+  opacity: 0;
+}
+.sail-outline {
+  opacity: 0;
+}
+.sail-reveal--handoff {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: min(100%, 30rem);
+  /* Fit the flat geometry onto the raster mark's sail (static transform). */
+  translate: calc(-50% + 4.2%) 3.2%;
+  scale: 1.07;
+  opacity: 0;
+}
+
+/* ---- Sail mark: motion (JS-confirmed, motion allowed only) */
+@media (prefers-reduced-motion: no-preference) {
+  html[data-motion="on"] .sail-reveal {
+    --sail-t0: var(--motion-start-delay);
+  }
+  html[data-motion="on"] .sail-guides,
+  html[data-motion="on"] .sail-outline {
+    opacity: 1;
+  }
+  html[data-motion="on"] .sail-guides {
+    animation: sail-guide-out var(--motion-base) var(--ease-standard)
+      calc(var(--motion-start-delay) + var(--motion-draw) * 0.55) 1 both;
+  }
+  html[data-motion="on"] .sail-stroke {
+    animation: sail-draw var(--motion-draw) var(--ease-linear-draw)
+      var(--motion-start-delay) 1 both;
+  }
+  html[data-motion="on"] .sail-layer {
+    animation: sail-layer var(--motion-base) var(--ease-emphasized)
+      calc(
+        var(--motion-start-delay) + var(--motion-draw) * 0.45 +
+          var(--motion-stagger) * (var(--sail-i) - 1)
+      )
+      1 both;
+  }
+  html[data-motion="on"] .sail-outline {
+    animation: sail-guide-out var(--motion-base) var(--ease-standard)
+      calc(var(--motion-start-delay) + var(--motion-draw) * 0.8) 1 both;
+  }
+  html[data-motion="on"] .sail-reveal--handoff {
+    opacity: 1;
+    animation: sail-handoff var(--motion-quick) var(--ease-standard)
+      calc(var(--motion-start-delay) + var(--motion-draw)) 1 both;
+  }
+}
+.sail-layer--1 {
+  --sail-i: 1;
+}
+.sail-layer--2 {
+  --sail-i: 2;
+}
+.sail-layer--3 {
+  --sail-i: 3;
+}
+
+@keyframes sail-draw {
+  from {
+    stroke-dashoffset: 1;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes sail-layer {
+  from {
+    opacity: 0;
+    clip-path: inset(0 100% 0 0);
+  }
+  to {
+    opacity: 1;
+    clip-path: inset(0 0 0 0);
+  }
+}
+@keyframes sail-guide-out {
+  to {
+    opacity: 0;
+  }
+}
+@keyframes sail-handoff {
+  to {
+    opacity: 0;
+  }
+}
+
+/* ---- .reveal-planes: same grammar for flagship frames and the proof band.
+   Default = final. Only JS arms it (below the fold, motion allowed). */
+.reveal-planes {
+  opacity: 1;
+  clip-path: inset(0 0 0 0);
+}
+@media (prefers-reduced-motion: no-preference) {
+  .reveal-planes[data-revealed="true"] {
+    transition:
+      opacity var(--motion-reveal) var(--ease-emphasized),
+      clip-path var(--motion-reveal) var(--ease-emphasized);
+  }
+  .reveal-planes[data-revealed="false"] {
+    opacity: 0;
+    clip-path: inset(0 0 16% 0);
+  }
+}
+
+/* ---- Final state, unconditionally, where motion must not run */
+@media (prefers-reduced-motion: reduce) {
+  html .sail-reveal,
+  html .sail-reveal *,
+  html .reveal-planes {
+    animation: none;
+    transition: none;
+  }
+  html .reveal-planes {
+    opacity: 1;
+    clip-path: none;
+  }
+  html .sail-stroke {
+    stroke-dashoffset: 0;
+  }
+}
+@media (forced-colors: active) {
+  .sail-reveal,
+  .sail-reveal * {
+    animation: none !important;
+  }
+  .sail-stroke {
+    stroke: CanvasText;
+  }
+  .sail-reveal--handoff {
+    display: none;
+  }
+  .reveal-planes {
+    opacity: 1 !important;
+    clip-path: none !important;
+  }
+}
+@media print {
+  .sail-reveal--handoff {
+    display: none;
+  }
+  .reveal-planes {
+    opacity: 1 !important;
+    clip-path: none !important;
+  }
+}

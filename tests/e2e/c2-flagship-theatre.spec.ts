@@ -52,9 +52,9 @@ test.describe("C2 Flagship Theatre — fixture-backed (product present)", () => 
       status: "In development",
       eyebrow: "Flagship product",
       description: "Fixture description for the flagship act.",
-      jobsHeading: "What it helps people do",
+      jobsHeading: "What it helps you do",
       jobs: ["Fixture job one", "Fixture job two"],
-      scopeHeading: "Development scope",
+      scopeHeading: "What we're building",
       capabilities: [
         "Fixture capability one",
         "Fixture capability two",
@@ -71,9 +71,9 @@ test.describe("C2 Flagship Theatre — fixture-backed (product present)", () => 
       status: "Đang phát triển",
       eyebrow: "Sản phẩm chủ lực",
       description: "Mô tả thử nghiệm cho sản phẩm chủ lực.",
-      jobsHeading: "Việc sản phẩm hỗ trợ",
+      jobsHeading: "Giúp bạn làm gì",
       jobs: ["Công việc thử nghiệm một", "Công việc thử nghiệm hai"],
-      scopeHeading: "Phạm vi phát triển",
+      scopeHeading: "Đang xây dựng những gì",
       capabilities: [
         "Phạm vi thử nghiệm một",
         "Phạm vi thử nghiệm hai",
@@ -90,9 +90,9 @@ test.describe("C2 Flagship Theatre — fixture-backed (product present)", () => 
       status: "开发中",
       eyebrow: "旗舰产品",
       description: "旗舰产品的测试说明。",
-      jobsHeading: "可完成的工作",
+      jobsHeading: "能帮你做什么",
       jobs: ["测试工作一", "测试工作二"],
-      scopeHeading: "开发范围",
+      scopeHeading: "正在开发的内容",
       capabilities: ["测试范围一", "测试范围二", "测试范围三"],
       action: "查看开发状态",
       caption: "品牌视觉素材，并非应用运行界面的截图。",
@@ -223,27 +223,26 @@ test.describe("C2 Flagship Theatre — fixture-backed (product present)", () => 
   }
 });
 
-test.describe("public flagship artwork presentation", () => {
+test.describe("public flagship capture presentation (Experience v6 S2)", () => {
   for (const locale of [
     {
       lang: "en",
       path: "/en/",
-      caption:
-        "Brand identity artwork — not a screenshot of the running application.",
+      label: /^Capture of the app in development · sample data/,
     },
     {
       lang: "vi",
       path: "/vi/",
-      caption:
-        "Hình ảnh nhận diện thương hiệu — không phải ảnh chụp giao diện ứng dụng.",
+      label: /^Ảnh chụp ứng dụng đang phát triển · dữ liệu mẫu/,
     },
+    { lang: "zh", path: "/zh/", label: /^开发中应用的截图 · 示例数据/ },
     {
-      lang: "zh",
-      path: "/zh/",
-      caption: "品牌视觉素材，并非应用运行界面的截图。",
+      lang: "zh-hant",
+      path: "/zh-hant/",
+      label: /^開發中應用程式的截圖 · 範例資料/,
     },
   ]) {
-    test(`${locale.lang}: homepage shows Sổ Trọ identity art without app chrome`, async ({
+    test(`${locale.lang}: homepage shows a labelled real Sổ Trọ capture, no app chrome, no identity art`, async ({
       page,
     }) => {
       test.skip(!hasPublicProducts, "No published hero product is available");
@@ -258,7 +257,14 @@ test.describe("public flagship artwork presentation", () => {
       await expect(
         theatre.locator(".c2-flagship-theatre__window-controls"),
       ).toHaveCount(0);
-      await expect(theatre.locator("figcaption")).toHaveText(locale.caption);
+      const capture = theatre.locator("[data-flagship-capture]");
+      await expect(capture).toHaveCount(1);
+      await expect(capture.locator("figcaption")).toHaveText(locale.label);
+      await expect(capture.locator("img")).toHaveAttribute(
+        "src",
+        /\/products\/sotro\/showcase\/[a-z0-9-]+\.webp$/,
+      );
+      await expect(theatre.locator('img[src*="identity"]')).toHaveCount(0);
     });
   }
 });

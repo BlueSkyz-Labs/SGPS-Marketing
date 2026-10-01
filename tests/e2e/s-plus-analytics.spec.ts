@@ -1,6 +1,7 @@
 // C2: discovery surfaces (Intent Lens, Atlas) moved off the homepage to the
 // product index (design §8) — assertions retargeted, coverage preserved.
 import { expect, test, type Page } from "@playwright/test";
+import { openVerifyLayer } from "./verify-helpers.ts";
 
 const instrument = async (page: Page) => {
   await page.evaluate(() => {
@@ -75,39 +76,35 @@ test("command navigator open and result activation emit typed events", async ({
   ).toBe(true);
 });
 
-test("trust, journey, and atlas activations emit surface events", async ({
-  page,
-}) => {
-  // Trust Ledger lives in the homepage trust act (C2 keeps compact trust
-  // there); Atlas is the exploration tool on the product index.
-  await page.goto("/en/");
-  await instrument(page);
-  await page
-    .locator("[data-trust-ledger] details")
-    .first()
-    .evaluate((el) => {
-      (el as HTMLDetailsElement).open = true;
-    });
-  await page.locator("[data-trust-ledger] a").first().click();
-  await expect
-    .poll(async () => JSON.stringify(await telemetry(page)))
-    .toContain('"trust_route_opened"');
-  const trustEvents = await telemetry(page);
-  expect(
-    trustEvents.some(
-      (event) =>
-        event.name === "trust_route_opened" &&
-        (event as { properties?: { surface?: string } }).properties?.surface ===
-          "privacy",
-    ),
-  ).toBe(true);
-
-  await page.goto("/en/products/");
+test("atlas activations emit surface events", async ({ page }) => {
+  // Experience v6 S1 removed the Trust Ledger from the home; its
+  // `trust_route_opened` emission returns with the ledger on /verify (S3).
+  // Atlas is the exploration tool, staged on /verify (Experience v6 S3).
+  await openVerifyLayer(page, "/en/verify/", "atlas");
   await instrument(page);
   await page.locator("[data-atlas-node] a").first().click();
   await expect
     .poll(async () => JSON.stringify(await telemetry(page)))
     .toContain('"atlas_node_opened"');
+});
+
+test("trust ledger activations on /verify emit trust_route_opened", async ({
+  page,
+}) => {
+  await page.goto("/en/verify/");
+  await instrument(page);
+  await page
+    .locator(
+      '[data-trust-ledger] [data-trust-surface="privacy"] details > summary',
+    )
+    .click();
+  await page
+    .locator('[data-trust-ledger] [data-trust-surface="privacy"] a')
+    .first()
+    .click();
+  await expect
+    .poll(async () => JSON.stringify(await telemetry(page)))
+    .toContain('"trust_route_opened"');
 });
 
 test("journey activations emit journey_action_opened with destination", async ({
@@ -164,19 +161,13 @@ test("duplicate events inside the dedupe window collapse", async ({ page }) => {
 test("navigation succeeds even when a telemetry listener throws", async ({
   page,
 }) => {
-  // The Trust Ledger's public routes live in the homepage trust act.
-  await page.goto("/en/");
+  // The journey bar on /en/about/ replaces the removed home Trust Ledger links.
+  await page.goto("/en/about/");
   await page.evaluate(() => {
     document.addEventListener("blueskyz:telemetry", () => {
       throw new Error("analytics unavailable");
     });
   });
-  await page
-    .locator("[data-trust-ledger] details")
-    .first()
-    .evaluate((el) => {
-      (el as HTMLDetailsElement).open = true;
-    });
-  await page.locator("[data-trust-ledger] a").first().click();
-  await page.waitForURL("**/en/privacy/");
+  await page.locator("[data-journey-bar] a").first().click();
+  await page.waitForURL("**/en/products/");
 });

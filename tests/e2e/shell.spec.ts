@@ -1,5 +1,4 @@
 import { expect, test } from "@playwright/test";
-import { hasPublicProducts } from "./product-helpers";
 
 test("shell exposes skip link and product-led nav", async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 800 });
@@ -15,25 +14,21 @@ test("shell exposes skip link and product-led nav", async ({ page }) => {
   await expect(
     page.getByRole("link", { name: "Contact" }).first(),
   ).toBeVisible();
-  // Primary CTA soft-lands on Explore products when products exist, or About when registry is empty.
-  if (hasPublicProducts) {
-    await expect(
-      page.getByRole("navigation", { name: "Primary" }).getByRole("link", {
-        name: "Explore products",
-      }),
-    ).toBeVisible();
-  } else {
-    await expect(
-      page.getByRole("navigation", { name: "Primary" }).getByRole("link", {
-        name: "About BlueSkyz",
-      }),
-    ).toBeVisible();
-  }
+  // Experience v6 S6: the header CTA has a job distinct from the Products
+  // link, so it is never "Explore products" (Contact with a real mailbox,
+  // otherwise About via the Act soft-land).
+  const primary = page.getByRole("navigation", { name: "Primary" });
+  await expect(
+    primary.getByRole("link", { name: "About BlueSkyz" }),
+  ).toBeVisible();
+  await expect(
+    primary.getByRole("link", { name: "Explore products" }),
+  ).toHaveCount(0);
   await expect(page.getByRole("heading", { level: 1 })).toContainText(
-    "Intelligence. Elevated.",
+    "We build intelligent products that empower people",
   );
-  await expect(page.getByRole("heading", { level: 1 })).toContainText(
-    "Impact.",
+  await expect(page.getByRole("contentinfo")).toContainText(
+    "Intelligence. Elevated. Impact.",
   );
 });
 
