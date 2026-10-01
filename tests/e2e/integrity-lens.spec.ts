@@ -14,9 +14,13 @@ test.describe("SGPS integrity lens", () => {
     await expect(lens.locator('[data-truth-state="source-linked"]')).toHaveText(
       /Source-linked/,
     );
+    // v7 D-20: localized display text, ISO date kept in <time datetime>.
     await expect(lens.locator("[data-evidence-review]")).toHaveText(
-      /2026-09-12/,
+      /September 12, 2026/,
     );
+    await expect(
+      lens.locator("[data-evidence-review] time").first(),
+    ).toHaveAttribute("datetime", "2026-09-12");
     await lens
       .locator("details")
       .first()

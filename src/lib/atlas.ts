@@ -1,6 +1,6 @@
 import { PRINCIPLE_MATRIX, type Language } from "@/data/experience";
 import { TRUST_LEDGER } from "@/data/trust-ledger";
-import { getPublicClaims } from "@/lib/claims";
+import { claimShortLabel, getPublicClaims } from "@/lib/claims";
 import { getProductProfilePath } from "@/lib/product-routes";
 import type { ProductEntry } from "@/lib/products";
 
@@ -50,7 +50,7 @@ export function buildAtlasModel(
       id,
       kind: "principle",
       label: principle.name[lang],
-      href: `/${lang}/#house-title`,
+      href: `/${lang}/about/`,
     });
     edges.push({ from: "brand", to: id });
   }
@@ -79,7 +79,7 @@ export function buildAtlasModel(
     nodes.push({
       id: claimId,
       kind: "claim",
-      label: resolved.claim.statement[lang],
+      label: claimShortLabel(resolved.claim, lang),
       href: `/${lang}/${resolved.claim.surface}/`,
     });
     edges.push({ from: "brand", to: claimId });

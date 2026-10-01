@@ -125,3 +125,66 @@ test("negative proof: each check turns RED on a broken invariant", () => {
   );
   assert.throws(() => checkCapture(theatre, sizeOf, () => 69_118));
 });
+
+/**
+ * #410 regression (c790abb): the hero capture slot grew to 15-16.25rem, so a
+ * 288w candidate no longer satisfied a 1.75x phone and Chrome fetched the
+ * 780 px master (55 KB) ahead of the H1's fonts: /vi/ mobile LCP 2561ms.
+ */
+const HERO_MID_MAX_BYTES = 30_000;
+
+function checkHeroCandidates(hero, layout, sizeOf, bytesOf) {
+  assert.match(hero, /op-01-home-288\.webp/);
+  assert.match(
+    hero,
+    /op-01-home-480\.webp[\s\S]*?width:\s*480/,
+    "hero must offer a 480w candidate for 1.75x phones",
+  );
+  const file = "public/products/sotro/showcase/op-01-home-480.webp";
+  const master = sizeOf("public/products/sotro/showcase/op-01-home.webp");
+  const mid = sizeOf(file);
+  assert.equal(mid.width, 480, "declared srcset width must be real");
+  assert.ok(
+    Math.abs(mid.height * master.width - mid.width * master.height) <=
+      master.width,
+  );
+  assert.ok(bytesOf(file) <= HERO_MID_MAX_BYTES, "480w must stay small");
+  const entries = (layout.match(/<script>[\s\S]*?<\/script>/g) ?? []).filter(
+    (block) => /@\/scripts\//.test(block),
+  );
+  assert.equal(entries.length, 1, "shell initialisers share one module entry");
+}
+
+test("hero capture offers a 480w candidate and the shell is one module entry", () => {
+  checkHeroCandidates(
+    read("src/components/sections/Hero.astro"),
+    read("src/layouts/BaseLayout.astro"),
+    sizeOf,
+    bytes,
+  );
+});
+
+test("negative proof: hero candidate and single shell entry are enforced", () => {
+  const hero = read("src/components/sections/Hero.astro");
+  const layout = read("src/layouts/BaseLayout.astro");
+  assert.throws(() =>
+    checkHeroCandidates(
+      hero.replace("op-01-home-480.webp", "op-01-home.webp"),
+      layout,
+      sizeOf,
+      bytes,
+    ),
+  );
+  assert.throws(() => checkHeroCandidates(hero, layout, sizeOf, () => 55_676));
+  assert.throws(() =>
+    checkHeroCandidates(
+      hero,
+      layout.replace(
+        "      initFidelityEngine();\n",
+        '    </script>\n    <script>\n      import "@/scripts/x";\n',
+      ),
+      sizeOf,
+      bytes,
+    ),
+  );
+});

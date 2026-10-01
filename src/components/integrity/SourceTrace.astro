@@ -8,10 +8,21 @@ interface Props {
   products: { slug: string; name: string }[];
   /** Evidence ids whose anchor id is already emitted elsewhere on the page. */
   omitAnchorIds?: string[];
+  /** false: the page already shows its own boundary card (no repeated limits). */
+  showBoundary?: boolean;
 }
 
-const { claimId, lang, products, omitAnchorIds = [] } = Astro.props;
-const trace = getClaimTrace(claimId, products);
+const {
+  claimId,
+  lang,
+  products,
+  omitAnchorIds = [],
+  showBoundary = true,
+} = Astro.props;
+const trace =
+  getClaimTrace(claimId, products)?.filter(
+    (step) => showBoundary || step.kind !== "boundary",
+  ) ?? null;
 
 const ROLE_LABELS: Record<ClaimTraceStep["kind"], Record<Language, string>> = {
   claim: { en: "Claim", vi: "Tuyên bố", zh: "声明", "zh-hant": "聲明" },

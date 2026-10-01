@@ -119,6 +119,20 @@ export const SHARED_LABELS = {
     "zh-hant": "檢視產品簡介",
   },
   signIn: { en: "Sign in", vi: "Đăng nhập", zh: "登录", "zh-hant": "登入" },
+  /** Qualified label: the sign-in page is for existing users, not an open sign-up. */
+  signInExisting: {
+    en: "Sign in (existing users)",
+    vi: "Đăng nhập (người dùng hiện có)",
+    zh: "登录（现有用户）",
+    "zh-hant": "登入（現有使用者）",
+  },
+  /** Same wording as the product showcase guide link. */
+  readGuide: {
+    en: "Read the getting-started guide",
+    vi: "Xem hướng dẫn bắt đầu",
+    zh: "阅读入门指南",
+    "zh-hant": "閱讀入門指南",
+  },
   proofCaption: {
     en: "Brand identity artwork — not a screenshot of the running application.",
     vi: "Hình ảnh nhận diện thương hiệu — không phải ảnh chụp giao diện ứng dụng.",
@@ -325,3 +339,19 @@ export const BRAND_PRINCIPLES = [
     summary: "Real value. Real change.",
   },
 ] as const;
+
+/**
+ * The brand line per locale. zh and zh-hant reuse the renderings already
+ * published in the home hero (`src/content/pages/<lang>/index.yaml`, the Hero
+ * company fallback and `docs/notes/zh-localization-glossary.md`); nothing here
+ * is new copy. Consumers render `lead` then `accent`.
+ */
+export const BRAND_TAGLINE: Record<
+  "en" | "vi" | "zh" | "zh-hant",
+  { lead: string; accent: string }
+> = {
+  en: { lead: SITE.taglineLead, accent: SITE.taglineAccent },
+  vi: { lead: "Trí tuệ. Nâng tầm.", accent: "Tác động." },
+  zh: { lead: "智能。提升。", accent: "影响。" },
+  "zh-hant": { lead: "智慧。提升。", accent: "影響。" },
+};
