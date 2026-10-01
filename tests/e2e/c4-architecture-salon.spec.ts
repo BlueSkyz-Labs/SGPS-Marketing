@@ -60,11 +60,12 @@ test.describe("C4-D architecture salon", () => {
     const textEdges = await page.locator("[data-architecture-edge]").count();
     expect(textNodes).toBeGreaterThan(0);
     expect(textEdges).toBeGreaterThan(0);
-    // the connector diagram is decorative only
-    const diagram = page.locator(".c4-salon__diagram");
-    if ((await diagram.count()) > 0) {
-      await expect(diagram.first()).toHaveAttribute("aria-hidden", "true");
-    }
+    // the connection diagram is made of labeled text, not an image
+    expect(
+      await page
+        .locator("[data-architecture-diagram] svg, svg.c4-salon__diagram")
+        .count(),
+    ).toBe(0);
     expect(await page.locator("canvas").count()).toBe(0);
     const html = await page.content();
     expect(html.toLowerCase()).not.toContain("webgl");
@@ -132,4 +133,138 @@ test.describe("C4-D architecture salon", () => {
       expect(overflow, `no sideways scroll at ${width}`).toBeLessThanOrEqual(1);
     }
   });
+});
+
+/**
+ * Explainer contract (V7-D-02 / V7-A-04). The checkers run inside the page so
+ * the same function can be pointed at deliberately broken markup (negative
+ * proof) and must report a violation there.
+ */
+const KEBAB = "^[a-z0-9]+(-[a-z0-9]+){1,}$";
+
+async function installCheckers(page: import("@playwright/test").Page) {
+  await page.evaluate((kebab) => {
+    const re = new RegExp(kebab);
+    const visibleLeaves = () =>
+      [...document.body.querySelectorAll<HTMLElement>("*")].filter((el) => {
+        if (el.closest("[data-architecture-technical]")) return false;
+        if (["SCRIPT", "STYLE", "NOSCRIPT", "TEMPLATE"].includes(el.tagName))
+          return false;
+        if (!el.checkVisibility()) return false;
+        return [...el.childNodes].some(
+          (n) => n.nodeType === 3 && (n.textContent ?? "").trim() !== "",
+        );
+      });
+    const own = (el: HTMLElement) =>
+      [...el.childNodes]
+        .filter((n) => n.nodeType === 3)
+        .map((n) => (n.textContent ?? "").trim())
+        .join(" ")
+        .trim();
+    (window as unknown as Record<string, unknown>).__arch = {
+      slugs: () =>
+        visibleLeaves()
+          .map(own)
+          .filter((t) => re.test(t)),
+      sgps: () => visibleLeaves().map(own).join(" ").split(/sgps/i).length - 1,
+      unlabeled: () =>
+        [
+          ...document.querySelectorAll<HTMLElement>("[data-diagram-node]"),
+        ].filter((el) => !el.checkVisibility() || !el.textContent?.trim())
+          .length,
+    };
+  }, KEBAB);
+}
+
+type Checkers = { slugs(): string[]; sgps(): number; unlabeled(): number };
+const run = <T>(
+  page: import("@playwright/test").Page,
+  fn: (c: Checkers) => T,
+) => page.evaluate(`(${fn.toString()})(window.__arch)`) as Promise<T>;
+
+for (const lang of LANGS) {
+  test.describe(`/${lang}/architecture/ plain-language contract`, () => {
+    test("no visible kebab-case slug outside the technical-names disclosure", async ({
+      page,
+    }) => {
+      await page.goto(`/${lang}/architecture/`);
+      await installCheckers(page);
+      expect(await run(page, (c) => c.slugs())).toEqual([]);
+
+      // the slugs are still there for verifiers, inside the closed disclosure
+      const details = page.locator("[data-architecture-technical]");
+      expect(await details.count()).toBeGreaterThan(0);
+      await expect(details.first()).not.toHaveAttribute("open", /.*/);
+      expect(
+        await details.first().evaluate((el) => el.textContent ?? ""),
+      ).toContain("system.sgps-marketing");
+
+      // negative proof: a visible slug is caught
+      await page.evaluate(() => {
+        const p = document.createElement("p");
+        p.id = "neg-slug";
+        p.textContent = "github-actions-read-only";
+        document.querySelector("[data-architecture-salon]")!.append(p);
+      });
+      expect(await run(page, (c) => c.slugs())).toEqual([
+        "github-actions-read-only",
+      ]);
+      // ...and the same slug inside the disclosure is exempt
+      await page.evaluate(() => {
+        const p = document.getElementById("neg-slug")!;
+        document.querySelector("[data-architecture-technical]")!.append(p);
+        document
+          .querySelector("[data-architecture-technical]")!
+          .setAttribute("open", "");
+      });
+      expect(await run(page, (c) => c.slugs())).toEqual([]);
+    });
+
+    test("SGPS is visible at most twice", async ({ page }) => {
+      await page.goto(`/${lang}/architecture/`);
+      await installCheckers(page);
+      expect(await run(page, (c) => c.sgps())).toBeLessThanOrEqual(2);
+
+      // negative proof: the counter really counts
+      await page.evaluate(() => {
+        for (let i = 0; i < 3; i += 1) {
+          const p = document.createElement("p");
+          p.textContent = "SGPS";
+          document.querySelector("[data-architecture-salon]")!.append(p);
+        }
+      });
+      expect(await run(page, (c) => c.sgps())).toBeGreaterThan(2);
+    });
+
+    test("every diagram node has a visible label", async ({ page }) => {
+      await page.goto(`/${lang}/architecture/`);
+      await installCheckers(page);
+      expect(await page.locator("[data-diagram-node]").count()).toBeGreaterThan(
+        0,
+      );
+      expect(await run(page, (c) => c.unlabeled())).toBe(0);
+
+      // negative proof: an empty node is caught
+      await page.evaluate(() => {
+        const span = document.createElement("span");
+        span.setAttribute("data-diagram-node", "");
+        document.querySelector("[data-architecture-diagram]")!.append(span);
+      });
+      expect(await run(page, (c) => c.unlabeled())).toBe(1);
+    });
+  });
+}
+
+test("all four locales render the same number of sections", async ({
+  request,
+}) => {
+  const counts: number[] = [];
+  for (const lang of LANGS) {
+    const html = await (await request.get(`/${lang}/architecture/`)).text();
+    counts.push((html.match(/data-architecture-lens="/g) ?? []).length);
+  }
+  expect(counts[0]).toBe(LENSES.length);
+  expect(new Set(counts).size).toBe(1);
+  // negative proof: a locale missing a section would make the set differ
+  expect(new Set([...counts.slice(0, 3), counts[3]! - 1]).size).toBe(2);
 });
