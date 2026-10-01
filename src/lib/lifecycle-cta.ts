@@ -46,10 +46,10 @@ export const LIFECYCLE_CTA_VERB_LABELS: Record<
 > = {
   learn: { en: "Learn", vi: "Tìm hiểu", zh: "了解", "zh-hant": "了解" },
   "view-development-status": {
-    en: "View development status",
-    vi: "Xem trạng thái phát triển",
-    zh: "查看开发状态",
-    "zh-hant": "查看開發狀態",
+    en: "See",
+    vi: "Xem",
+    zh: "查看",
+    "zh-hant": "查看",
   },
   try: { en: "Try", vi: "Dùng thử", zh: "试用", "zh-hant": "試用" },
 };
@@ -77,6 +77,8 @@ export interface LifecycleCtaInput {
   lifecycle: Lifecycle;
   availability: Availability;
   primaryActionHref: string;
+  /** Product name for view-development-status CTA label formatting. */
+  productName?: string;
 }
 
 export interface LifecycleCta {
@@ -112,9 +114,15 @@ export function resolveLifecycleCta(
       ? "view-development-status"
       : "learn";
 
+  let label = lifecycleCtaVerbLabel(verb, lang);
+  // For view-development-status, append the product name if provided
+  if (verb === "view-development-status" && input.productName) {
+    label = `${label} ${input.productName}`;
+  }
+
   return {
     verb,
-    label: lifecycleCtaVerbLabel(verb, lang),
+    label,
     href: tryEligible
       ? input.primaryActionHref
       : getProductProfilePath(lang, input.slug),

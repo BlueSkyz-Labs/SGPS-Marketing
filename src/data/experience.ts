@@ -151,7 +151,7 @@ const PRINCIPLE_DIMENSIONS: Record<
       "zh-hant": "讓使用和維護我們所構建產品的人少一些猜測。",
     },
     evidence: {
-      en: "Evidence lives in tests, reviews, and versioned decisions — not slogans.",
+      en: "Evidence lives in tests, reviews, and versioned decisions.",
       vi: "Bằng chứng nằm ở kiểm thử, soát xét và các quyết định được phiên bản hóa — không phải khẩu hiệu.",
       zh: "证据存在于测试、审阅与版本化的决策之中 — 而非口号。",
       "zh-hant": "證據存在於測試、審閱與版本化的決策之中 — 而非口號。",
@@ -191,10 +191,10 @@ const PRINCIPLE_DIMENSIONS: Record<
   },
   Trust: {
     product: {
-      en: "Security and privacy treated as first-class routes, not afterthoughts.",
-      vi: "Bảo mật và quyền riêng tư là ưu tiên hàng đầu — không phải phần thêm vào.",
-      zh: "将安全与隐私视为核心路径，而非事后补充。",
-      "zh-hant": "將安全與隱私視為核心路徑，而非事後補充。",
+      en: "",
+      vi: "",
+      zh: "",
+      "zh-hant": "",
     },
     people: {
       en: "No general support mailbox has been published yet. Security reporting is for vulnerabilities only.",

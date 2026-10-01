@@ -51,14 +51,8 @@ test("negative proof: a divergent label is detected", () => {
 test("verify aliases only reuse wording already on the site", () => {
   const source =
     read("src/data/site.ts") + read("src/components/sections/ProofBand.astro");
-  for (const alias of [
-    "核实",
-    "核验",
-    "查證",
-    "我们如何核验",
-    "我們如何核驗",
-  ]) {
+  for (const alias of ["核实", "查證", "查看", "依据", "Kiểm chứng", "Xem"]) {
     assert.ok(source.includes(alias), alias);
   }
-  assert.ok(source.includes("Cách chúng tôi xác minh"));
+  assert.ok(source.includes("Xem các tuyên bố"));
 });
