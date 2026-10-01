@@ -713,6 +713,19 @@ PLAYWRIGHT_BASE_URL=http://127.0.0.1:<PORT> pnpm exec playwright test --project=
 
 The pre-commit hook runs the local source gate. Never bypass it with `--no-verify`.
 
+### 5.6 Model routing per wave (cost)
+
+Subagents are defined in `.claude/agents/`; the routing and token rules are in `.claude/AGENT_ROUTING.md`.
+
+| Wave                         | Lead agent                                                             | Delegate to Haiku                                                               |
+| ---------------------------- | ---------------------------------------------------------------------- | ------------------------------------------------------------------------------- |
+| W1 copy foundation           | `mechanic` (Haiku), supervised by `implementer` for the new voice test | most of it: verbatim deck rows                                                  |
+| W2, W3, W4, W5a, W5b, W6, W9 | `implementer` (Sonnet)                                                 | `scout` for lookups and residual grep; `mechanic` for string rows and test pins |
+| W7 localization              | `mechanic` for deck rows and dates; `reviewer` (Opus) checks VI and zh | —                                                                               |
+| W8 SEO                       | `implementer`                                                          | `mechanic` for the 4 `lang` spec pins                                           |
+| W10 gardening                | `scout` (inventory) then `mechanic` (delete the listed files)          | all                                                                             |
+| W11 verification             | `reviewer` (Opus), a distinct lane                                     | `scout` for log and screenshot collection                                       |
+
 ### 5.5 PR conventions
 
 - **Title:** `<type>(<scope>): <what> (v8 W<n>)`.
