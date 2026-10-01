@@ -5,6 +5,7 @@ import Container from "@/components/layout/Container.astro";
 import ProductStatus from "@/components/product/ProductStatus.astro";
 import ButtonLink from "@/components/ui/ButtonLink.astro";
 import { getPublicProducts } from "@/lib/products";
+import { audienceText } from "@/lib/product-audience";
 
 export async function getStaticPaths() {
   const products = await getPublicProducts();
@@ -118,9 +119,7 @@ return Astro.redirect("/en/products/");
               Audience
             </dt>
             <dd class="mt-1 text-[var(--text-primary)]">
-              {data.audience
-                .map((a: string) => AUDIENCE_LABELS[a] ?? a)
-                .join(", ")}
+              {audienceText(data.slug, data.audience, AUDIENCE_LABELS, "en")}
             </dd>
           </div>
         </dl>

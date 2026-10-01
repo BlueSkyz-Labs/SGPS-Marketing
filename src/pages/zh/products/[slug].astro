@@ -15,6 +15,7 @@ import { getShowcase } from "@/lib/showcases";
 import { getPublicProducts } from "@/lib/products";
 import { safeJsonLd, productJsonLd } from "@/lib/seo";
 import { productBreadcrumbJsonLd } from "@/lib/breadcrumbs";
+import { audienceText } from "@/lib/product-audience";
 import { productMeta } from "@/data/page-meta";
 import { labelFor, SHARED_LABELS, SITE } from "@/data/site";
 
@@ -260,9 +261,7 @@ const breadcrumbStructuredData = productBreadcrumbJsonLd(
               适用对象
             </dt>
             <dd class="mt-2 text-base font-semibold text-[var(--text-primary)]">
-              {data.audience
-                .map((a: string) => AUDIENCE_LABELS[a] ?? a)
-                .join(", ")}
+              {audienceText(data.slug, data.audience, AUDIENCE_LABELS, "zh")}
             </dd>
           </div>
         </dl>
@@ -313,7 +312,7 @@ const breadcrumbStructuredData = productBreadcrumbJsonLd(
             >
               {data.lifecycle === "active" || data.lifecycle === "maintenance"
                 ? "主要能力"
-                : "开发重点"}
+                : labelFor(SHARED_LABELS.scopeHeading, "zh")}
             </h2>
           </div>
           <div class="mt-6 grid gap-4 sm:grid-cols-2">
