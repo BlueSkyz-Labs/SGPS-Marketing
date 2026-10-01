@@ -29,7 +29,7 @@ export const CRAFT_STORIES: readonly CraftStoryDraft[] = [
       },
       constraint: {
         en: "This site is static-first: it holds no intake service of its own, so the reporting path has to leave the site and say so plainly.",
-        vi: "Trang web này tĩnh trước: nó không có dịch vụ tiếp nhận riêng, nên đường báo cáo phải rời khỏi trang web và nói rõ điều đó.",
+        vi: "Trang web này là trang tĩnh, không có dịch vụ tiếp nhận riêng, nên đường báo cáo phải dẫn ra ngoài trang web và nói rõ điều đó.",
         zh: "本站以静态为先：自身没有接收服务，因此报告路径必须离开本站，并明确说明这一点。",
         "zh-hant":
           "本站以靜態為先：自身沒有接收服務，因此報告路徑必須離開本站，並明確說明這一點。",
