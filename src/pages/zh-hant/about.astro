@@ -1,14 +1,15 @@
 ---
 // zh-Hant copy: machine-assisted (OpenCC s2twp), pending native review.
 import BaseLayout from "@/layouts/BaseLayout.astro";
+import { PAGE_META } from "@/data/page-meta";
 import Container from "@/components/layout/Container.astro";
 import PageHeader from "@/components/layout/PageHeader.astro";
 import AboutComposition from "@/components/empty-state/AboutComposition.astro";
 ---
 
 <BaseLayout
-  title="關於我們"
-  description="關於 BlueSkyz Labs — 我們打造智慧化產品，賦能個人並提升工作方式。"
+  title={PAGE_META["zh-hant"]["about"].title}
+  description={PAGE_META["zh-hant"]["about"].description}
   path="/zh-hant/about/"
 >
   <section class="py-16 lg:py-24">

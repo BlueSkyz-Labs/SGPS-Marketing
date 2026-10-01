@@ -14,6 +14,8 @@ import ProductShowcase from "@/components/product/ProductShowcase.astro";
 import { getShowcase } from "@/lib/showcases";
 import { getPublicProducts } from "@/lib/products";
 import { safeJsonLd, productJsonLd } from "@/lib/seo";
+import { productBreadcrumbJsonLd } from "@/lib/breadcrumbs";
+import { productMeta } from "@/data/page-meta";
 import { labelFor, SHARED_LABELS, SITE } from "@/data/site";
 
 export async function getStaticPaths() {
@@ -89,19 +91,34 @@ const productStructuredData = productJsonLd(
   SITE.url,
   "en",
 );
+const meta = productMeta(data.slug, "en", {
+  title: data.name,
+  description: copy.shortDescription,
+});
+const breadcrumbStructuredData = productBreadcrumbJsonLd(
+  "en",
+  data.slug,
+  data.name,
+  SITE.url,
+);
 ---
 
 <BaseLayout
-  title={`${data.name} — BlueSkyz Labs`}
-  description={copy.shortDescription}
+  title={meta.title}
+  description={meta.description}
   path={`/en/products/${data.slug}/`}
-  ogImage={data.proof.media?.src}
   scene="product"
 >
   <script
     type="application/ld+json"
     set:html={safeJsonLd(productStructuredData)}
   ></script>
+  {breadcrumbStructuredData ? (
+    <script
+      type="application/ld+json"
+      set:html={safeJsonLd(breadcrumbStructuredData)}
+    ></script>
+  ) : null}
   <article class="py-12 sm:py-16">
     <Container>
       <!-- Breadcrumb navigation -->

@@ -1,5 +1,6 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
+import { PAGE_META } from "@/data/page-meta";
 import Container from "@/components/layout/Container.astro";
 import PageHeader from "@/components/layout/PageHeader.astro";
 import BoundaryCard from "@/components/integrity/BoundaryCard.astro";
@@ -11,8 +12,8 @@ const hasBusinessEmail = Boolean(SITE.contactEmail);
 ---
 
 <BaseLayout
-  title="Quyền riêng tư"
-  description="Cách BlueSkyz Labs xử lý dữ liệu: không cookie, chỉ lưu lựa chọn ngôn ngữ và giao diện chủ động, không theo dõi."
+  title={PAGE_META["vi"]["privacy"].title}
+  description={PAGE_META["vi"]["privacy"].description}
   path="/vi/privacy/"
   surface="privacy"
 >
