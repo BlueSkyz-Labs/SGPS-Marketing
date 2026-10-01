@@ -534,8 +534,8 @@
 .horizon-field.c2-closing-signature {
   position: relative;
   inset: auto;
-  height: clamp(6rem, 14vw, 10rem);
-  margin-top: 2rem;
+  height: clamp(3rem, 7vw, 5rem);
+  margin-top: 0;
   opacity: 0.45;
   pointer-events: none;
 }
