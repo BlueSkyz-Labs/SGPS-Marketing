@@ -1298,8 +1298,8 @@ summary {
   font-size: 0.9375rem;
   color: var(--text-muted);
 }
-/* The comparison tray sits above the items ("choose ... below") and owns its
-   space on wide screens, so adding an item never moves the page. */
+/* The comparison tray sits below the item grid. Empty, it is a single line;
+   it never reserves a box, so adding items cannot move anything above it. */
 .decision-room__tray {
   margin-top: 1.5rem;
 }
@@ -1307,15 +1307,11 @@ summary {
   .decision-room {
     max-width: 72rem;
   }
-  .decision-room__tray {
-    min-height: 22rem;
-    border: 1px dashed var(--border-subtle);
-    border-radius: 0.75rem;
-    padding: 1.25rem;
-  }
   .decision-room__tray:has(.decision-room__board:not([hidden])) {
-    border-style: solid;
+    border: 1px solid var(--border-subtle);
+    border-radius: 0.75rem;
     background: var(--surface-subtle);
+    padding: 1.25rem;
   }
 }
 .decision-room__board-head {

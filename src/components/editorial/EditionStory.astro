@@ -22,10 +22,10 @@ const LABELS: Record<
   Language,
   { sources: string; published: string; note: string }
 > = {
-  en: { sources: "Sources", published: "Published", note: "Editorial note" },
-  vi: { sources: "Nguồn", published: "Công bố", note: "Ghi chú biên tập" },
-  zh: { sources: "来源", published: "发布日期", note: "编辑说明" },
-  "zh-hant": { sources: "來源", published: "發布日期", note: "編輯說明" },
+  en: { sources: "Sources", published: "Published", note: "" },
+  vi: { sources: "Nguồn", published: "Đăng ngày", note: "" },
+  zh: { sources: "来源", published: "发布于", note: "" },
+  "zh-hant": { sources: "來源", published: "發布於", note: "" },
 };
 const labels = LABELS[lang];
 ---
@@ -34,16 +34,13 @@ const labels = LABELS[lang];
   <h1 class="c4-edition__title">{view.title}</h1>
   <p class="c4-edition__deck">{view.deck}</p>
   <p class="c4-edition__published">
-    {labels.published}:{" "}
+    {labels.published}{" "}
     <time datetime={view.published}>
       {formatDisplayDate(view.published, lang)}
     </time>
+    .
   </p>
-  {view.note && (
-    <p class="c4-edition__note">
-      <span class="c4-edition__note-label">{labels.note}:</span> {view.note}
-    </p>
-  )}
+  {view.note && <p class="c4-edition__note">{view.note}</p>}
   <h2 class="c4-edition__sources-title">{labels.sources}</h2>
   <ul class="c4-edition__sources">
     {view.sources.map((source) => (

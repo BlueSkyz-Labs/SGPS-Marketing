@@ -31,7 +31,7 @@ const LABELS: Record<
   }
 > = {
   en: {
-    heading: "Boardroom presentation",
+    heading: "Present",
     modeNote:
       "A contained presentation of already-published public dossier items. Sources remain directly inspectable.",
     previous: "Previous",
@@ -41,7 +41,7 @@ const LABELS: Record<
     section: "Section",
   },
   vi: {
-    heading: "Trình bày phòng họp",
+    heading: "Trình chiếu",
     modeNote:
       "Một bản trình bày giới hạn từ các mục hồ sơ công khai đã công bố. Các nguồn vẫn có thể kiểm tra trực tiếp.",
     previous: "Trước",
@@ -51,7 +51,7 @@ const LABELS: Record<
     section: "Phần",
   },
   zh: {
-    heading: "会议室演示",
+    heading: "展示",
     modeNote: "对已发布公开档案条目的受限演示视图。来源仍可直接查阅。",
     previous: "上一项",
     next: "下一项",
@@ -60,7 +60,7 @@ const LABELS: Record<
     section: "章节",
   },
   "zh-hant": {
-    heading: "會議室演示",
+    heading: "簡報",
     modeNote: "對已發布公開檔案條目的受限演示檢視。來源仍可直接查閱。",
     previous: "上一項",
     next: "下一項",
@@ -116,10 +116,10 @@ const sectionLabels: Record<string, string> = {
   data-boardroom-ready="false"
   data-boardroom-lang={lang}
   aria-label={labels.heading}
+  hidden
 >
   <header class="c4-boardroom__header">
     <h2 class="c4-boardroom__title">{labels.heading}</h2>
-    <p class="c4-boardroom__lede">{labels.modeNote}</p>
   </header>
 
   {/* Presentation stage: one screen at a time */}
@@ -145,6 +145,7 @@ const sectionLabels: Record<string, string> = {
           class="c4-boardroom__screen"
           data-boardroom-screen
           data-boardroom-index={index}
+          data-boardroom-id={entry.id}
           aria-label={`${labels.section}: ${sectionLabels[entry.section] ?? entry.section}`}
         >
           <div class="c4-boardroom__screen-meta">

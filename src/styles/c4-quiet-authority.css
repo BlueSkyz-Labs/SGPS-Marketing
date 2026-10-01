@@ -1398,7 +1398,7 @@
   overflow-wrap: anywhere;
 }
 
-.c4-salon__technical-body h4 {
+.c4-salon__technical-body h3 {
   margin: var(--space-4) 0 var(--space-2);
   color: var(--text-primary);
   font-weight: 600;
@@ -1451,4 +1451,177 @@
   .c4-salon__lens {
     break-inside: avoid;
   }
+}
+
+/* ---- v8 W5b — dossier: wide layout, custom checkboxes, actions ---- */
+.c4-dossier {
+  max-width: none;
+}
+.c4-dossier__layout {
+  display: grid;
+  gap: var(--space-8);
+  margin-block-start: var(--space-6);
+}
+.c4-dossier__layout > .c4-dossier__form {
+  margin-block-start: 0;
+}
+.c4-dossier__aside .c4-dossier-preview {
+  margin-block-start: 0;
+  padding-block-start: 0;
+  border-top: 0;
+}
+@media (min-width: 1024px) {
+  .c4-dossier__layout {
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+    align-items: start;
+  }
+  .c4-dossier__aside {
+    position: sticky;
+    top: 6rem;
+  }
+}
+.c4-dossier__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  margin-block-start: var(--space-6);
+}
+.c4-dossier__action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding-inline: 1.25rem;
+  border: 1px solid var(--border-subtle);
+  border-radius: 0.5rem;
+  background: var(--surface-subtle);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  text-decoration: none;
+  cursor: pointer;
+}
+.c4-dossier__action[hidden] {
+  display: none;
+}
+.c4-dossier__action:hover {
+  border-color: var(--action-primary);
+}
+.c4-dossier__action:focus-visible {
+  outline: 2px solid var(--action-primary);
+  outline-offset: 2px;
+}
+.c4-dossier__label input[type="checkbox"] {
+  appearance: none;
+  -webkit-appearance: none;
+  inline-size: 20px;
+  block-size: 20px;
+  border: 2px solid var(--text-secondary);
+  border-radius: 4px;
+  background: var(--surface-primary);
+  display: inline-grid;
+  place-content: center;
+  cursor: pointer;
+}
+.c4-dossier__label input[type="checkbox"]::after {
+  content: "";
+  inline-size: 10px;
+  block-size: 6px;
+  border: solid var(--action-primary);
+  border-width: 0 0 2px 2px;
+  transform: translateY(-1px) rotate(-45deg) scale(0);
+}
+.c4-dossier__label input[type="checkbox"]:checked {
+  border-color: var(--action-primary);
+}
+.c4-dossier__label input[type="checkbox"]:checked::after {
+  transform: translateY(-1px) rotate(-45deg) scale(1);
+}
+.c4-dossier__label input[type="checkbox"]:focus-visible {
+  outline: 2px solid var(--action-primary);
+  outline-offset: 2px;
+}
+.c4-boardroom {
+  max-width: none;
+}
+.c4-boardroom[hidden] {
+  display: none;
+}
+
+/* ---- v8 W5b — architecture: one diagram, lenses as disclosures ---- */
+.c4-salon__diagram {
+  display: grid;
+  gap: var(--space-4);
+  margin-block-start: var(--space-4);
+}
+@media (min-width: 1024px) {
+  .c4-salon__diagram {
+    grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+    align-items: start;
+  }
+}
+.c4-salon__system,
+.c4-salon__outside {
+  padding: var(--space-4);
+  border: 1px solid var(--border-subtle);
+  border-radius: 0.75rem;
+  background: var(--surface-raised);
+}
+.c4-salon__outside {
+  border-style: dashed;
+}
+.c4-salon__system-label,
+.c4-salon__outside-label {
+  margin: 0 0 var(--space-3);
+  font-weight: 600;
+  color: var(--text-primary);
+}
+.c4-salon__outside-label {
+  font-size: 0.8125rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+.c4-salon__parts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.c4-salon__part {
+  display: inline-flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+.c4-salon__part-note {
+  font-size: 0.8125rem;
+  color: var(--text-secondary);
+}
+.c4-salon__lenses {
+  margin-block-start: var(--space-6);
+  border-block-end: 1px solid var(--c4-hairline);
+}
+.c4-salon__lens {
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid var(--c4-hairline);
+}
+.c4-salon__lens-summary {
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  padding-block: var(--space-2);
+  font-size: 1.0625rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  cursor: pointer;
+}
+.c4-salon__lens-summary:focus-visible {
+  outline: 2px solid var(--action-primary);
+  outline-offset: 2px;
+}
+.c4-salon__lens-body {
+  padding-block-end: var(--space-6);
 }

@@ -4,7 +4,7 @@ const LANGS = ["en", "vi", "zh", "zh-hant"] as const;
 const LENSES = ["system", "data", "trust", "recovery", "evidence"];
 
 test.describe("C4-D architecture salon", () => {
-  test("all five lenses are semantic sections reached by ordinary links", async ({
+  test("all five lenses are disclosures, closed by default, opened by their summary", async ({
     page,
   }) => {
     await page.goto("/en/architecture/");
@@ -12,22 +12,24 @@ test.describe("C4-D architecture salon", () => {
     await expect(salon).toBeVisible();
 
     for (const lens of LENSES) {
-      const section = salon.locator(`[data-architecture-lens="${lens}"]`);
+      const section = salon.locator(
+        `details[data-architecture-lens="${lens}"]`,
+      );
       await expect(section).toHaveCount(1);
-      await expect(section.locator("h2")).toHaveCount(1);
-      await expect(
-        section.locator("[data-architecture-node]").first(),
-      ).toBeVisible();
+      await expect(section).not.toHaveAttribute("open", /.*/);
+      await expect(section.locator("summary")).toBeVisible();
     }
 
-    // ordinary in-page links, one per lens, and they actually navigate
-    const navLinks = salon.locator(".c4-salon__nav-link");
-    await expect(navLinks).toHaveCount(LENSES.length);
-    await navLinks.nth(1).click();
-    await expect(page).toHaveURL(/#lens-data$/);
+    // the one diagram is always visible; lens detail opens on demand
     await expect(
-      salon.locator('[data-architecture-lens="data"]'),
-    ).toBeInViewport();
+      salon.locator("[data-architecture-diagram] [data-diagram-node]").first(),
+    ).toBeVisible();
+    const data = salon.locator('details[data-architecture-lens="data"]');
+    await data.locator("summary").click();
+    await expect(data).toHaveAttribute("open", "");
+    await expect(
+      data.locator("[data-architecture-node]").first(),
+    ).toBeVisible();
   });
 
   test("a validated lens parameter focuses that lens and an unknown one changes nothing", async ({
@@ -82,10 +84,9 @@ test.describe("C4-D architecture salon", () => {
       );
     expect(order).toEqual(LENSES);
 
-    await page.keyboard.press("Tab");
     const reachable = await page.evaluate(() =>
-      [...document.querySelectorAll(".c4-salon__nav-link")].every(
-        (link) => (link as HTMLElement).tabIndex >= 0,
+      [...document.querySelectorAll(".c4-salon__lens-summary")].every(
+        (summary) => (summary as HTMLElement).tabIndex >= 0,
       ),
     );
     expect(reachable).toBe(true);
@@ -101,7 +102,7 @@ test.describe("C4-D architecture salon", () => {
         expect(html).toContain(`data-architecture-lens="${lens}"`);
       }
       expect(html).toContain("data-architecture-node=");
-      expect(html).toContain(`#lens-${LENSES[0]}`);
+      expect(html).toContain(`id="lens-${LENSES[0]}"`);
     });
   }
 

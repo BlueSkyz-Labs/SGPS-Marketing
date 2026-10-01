@@ -55,22 +55,22 @@ const ROUTE_ALIASES: Record<string, Record<Language, string[]>> = {
     "zh-hant": ["查證", "核驗", "我們如何核驗"],
   },
   architecture: {
-    en: ["architecture"],
-    vi: ["kiến trúc"],
-    zh: ["架构"],
-    "zh-hant": ["架構"],
+    en: ["architecture", "how this site is built"],
+    vi: ["kiến trúc", "cách trang web này được xây dựng"],
+    zh: ["架构", "本站如何构建"],
+    "zh-hant": ["架構", "本站如何建置"],
   },
   editions: {
-    en: ["collected editions", "editions"],
+    en: ["collected editions", "editions", "collections"],
     vi: ["tuyển tập"],
-    zh: ["选集", "已发布选集", "精选集合"],
-    "zh-hant": ["選集"],
+    zh: ["选集", "已发布选集", "精选集合", "合集"],
+    "zh-hant": ["選集", "合集"],
   },
   dossier: {
-    en: ["public dossier", "dossier"],
-    vi: ["hồ sơ công khai"],
-    zh: ["公开档案", "档案"],
-    "zh-hant": ["公開檔案"],
+    en: ["public dossier", "dossier", "printable summary"],
+    vi: ["hồ sơ công khai", "bản tóm tắt để in"],
+    zh: ["公开档案", "档案", "可打印摘要"],
+    "zh-hant": ["公開檔案", "可列印摘要"],
   },
   security: {
     en: ["security", "vulnerability", "report an issue"],
@@ -85,10 +85,10 @@ const ROUTE_ALIASES: Record<string, Record<Language, string[]>> = {
  * the page files by tests/architecture/navigator-pages.test.mjs.
  */
 const DECISION_ROOM_LABEL: Record<Language, string> = {
-  en: "Compare the evidence",
-  vi: "So sánh bằng chứng",
-  zh: "对比证据",
-  "zh-hant": "對照證據",
+  en: "Compare claims",
+  vi: "So sánh tuyên bố",
+  zh: "比较声明",
+  "zh-hant": "比較聲明",
 };
 
 /** The product showcase's own "read the guide" link text. */

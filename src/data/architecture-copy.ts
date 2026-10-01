@@ -52,15 +52,14 @@ export interface ArchitectureCopy {
 
 export const ARCHITECTURE_COPY: Record<Language, ArchitectureCopy> = {
   en: {
-    title: "Architecture",
-    description:
-      "How this website is built and served, explained in plain language and derived from our public architecture model.",
-    lede: "How this website is built and served, explained in plain language. Everything below comes from the project's public architecture model.",
+    title: "How this site is built",
+    description: "How this website is built and served, in plain terms.",
+    lede: "This site is a set of static pages. We build it from source held on GitHub, and Cloudflare serves the finished pages. The site has no intake service of its own. At build time, a check lists a product only if its public evidence is ready to verify.",
     nav: "Sections",
     parts: "The parts",
     connections: "How they connect",
     noConnections: "This view does not describe any connection between parts.",
-    lastVerified: "Last checked against the architecture model",
+    lastVerified: "Model last verified {date}.",
     verifyLink: "Check our claims on the Verify page",
     technical: {
       summary: "Technical names",
@@ -187,15 +186,15 @@ export const ARCHITECTURE_COPY: Record<Language, ArchitectureCopy> = {
     },
   },
   vi: {
-    title: "Kiến trúc",
+    title: "Cách trang web này được xây dựng",
     description:
-      "Trang web này được xây dựng và vận hành ra sao, giải thích dễ hiểu và lấy từ mô hình kiến trúc công khai của chúng tôi.",
-    lede: "Trang web này được xây dựng và vận hành ra sao, giải thích dễ hiểu. Mọi nội dung bên dưới đều lấy từ mô hình kiến trúc công khai của dự án.",
+      "Cách trang web được xây dựng và phân phối, giải thích dễ hiểu.",
+    lede: "Trang web này là tập hợp các trang tĩnh. Chúng tôi dựng từ mã nguồn trên GitHub, và Cloudflare phân phối các trang đã dựng. Trang web không có dịch vụ tiếp nhận riêng. Khi dựng, một bước kiểm tra chỉ liệt kê sản phẩm nếu bằng chứng công khai sẵn sàng để kiểm chứng.",
     nav: "Các phần",
     parts: "Các thành phần",
     connections: "Chúng kết nối thế nào",
     noConnections: "Phần này không mô tả kết nối nào giữa các thành phần.",
-    lastVerified: "Đối chiếu gần nhất với mô hình kiến trúc",
+    lastVerified: "Mô hình được kiểm chứng lần cuối ngày {date}.",
     verifyLink: "Kiểm chứng các tuyên bố của chúng tôi tại trang Xác minh",
     technical: {
       summary: "Tên kỹ thuật",
@@ -324,15 +323,14 @@ export const ARCHITECTURE_COPY: Record<Language, ArchitectureCopy> = {
     },
   },
   zh: {
-    title: "架构",
-    description:
-      "用通俗语言说明本网站如何构建与提供服务，内容派生自我们公开的架构模型。",
-    lede: "用通俗语言说明本网站如何构建与提供服务。以下所有内容均来自项目公开的架构模型。",
+    title: "本站如何构建",
+    description: "用通俗的话说明本网站如何构建和提供服务。",
+    lede: "本站由静态页面组成。我们从托管在 GitHub 的源码构建，由 Cloudflare 提供成品页面。本站自身没有接收服务。构建时会检查：只有公开证据可核验的产品才会被列出。",
     nav: "章节",
     parts: "组成部分",
     connections: "它们如何连接",
     noConnections: "此视角没有描述各部分之间的任何连接。",
-    lastVerified: "最近一次对照架构模型核验",
+    lastVerified: "模型最近核实于 {date}。",
     verifyLink: "前往“验证”页面核对我们的说法",
     technical: {
       summary: "技术名称",
@@ -458,15 +456,14 @@ export const ARCHITECTURE_COPY: Record<Language, ArchitectureCopy> = {
   },
   // zh-Hant copy: machine-assisted (OpenCC s2twp), pending native review.
   "zh-hant": {
-    title: "架構",
-    description:
-      "用淺顯的語言說明本網站如何建置與提供服務，內容派生自我們公開的架構模型。",
-    lede: "用淺顯的語言說明本網站如何建置與提供服務。以下所有內容均來自專案公開的架構模型。",
+    title: "本站如何建置",
+    description: "用淺白的話說明本網站如何建置與提供服務。",
+    lede: "本站由靜態頁面組成。我們從託管在 GitHub 的原始碼建置，由 Cloudflare 提供成品頁面。本站自身沒有接收服務。建置時會檢查：只有公開證據可查證的產品才會被列出。",
     nav: "章節",
     parts: "組成部分",
     connections: "它們如何連接",
     noConnections: "此視角沒有描述各部分之間的任何連接。",
-    lastVerified: "最近一次對照架構模型核驗",
+    lastVerified: "模型最近查證於 {date}。",
     verifyLink: "前往「驗證」頁面核對我們的說法",
     technical: {
       summary: "技術名稱",
