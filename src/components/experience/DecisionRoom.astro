@@ -292,8 +292,8 @@ const domId = (id: string): string =>
   data-msg-none={atelierCopy.noneMatch}
   aria-labelledby="decision-room-title"
 >
-  <h2 id="decision-room-title" class="decision-room__title">
-    {copy.heading}
+  <h2 id="decision-room-title" class="sr-only">
+    {copy.boardTitle}
   </h2>
   <p class="decision-room__lede">{copy.lede}</p>
 
@@ -360,6 +360,74 @@ const domId = (id: string): string =>
 
   <template data-atelier-handoff-action>{atelierCopy.handoff.action}</template>
 
+  <div class="decision-room__tray" data-decision-tray>
+    <p class="decision-room__empty" data-decision-empty-state>
+      {copy.empty}
+    </p>
+
+    <div class="decision-room__board" data-decision-board hidden>
+      <div class="decision-room__board-head">
+        <p class="decision-room__board-title">{copy.boardTitle}</p>
+        <p class="decision-room__count" data-decision-count></p>
+        <button
+          type="button"
+          class="decision-room__reset"
+          data-decision-reset
+          hidden
+        >
+          {copy.reset}
+        </button>
+      </div>
+      <p
+        class="decision-room__limit"
+        id="decision-room-limit"
+        data-decision-limit
+        data-active="false"
+      >
+        {copy.full.replace("{max}", String(MAX_COMPARISON))}
+      </p>
+      <ul class="decision-room__rows">
+        {items.map((item) => (
+          <li class="decision-room__row" data-decision-row={item.id} hidden>
+            <span class="decision-room__row-label">{item.label[lang]}</span>
+            {item.summary ? (
+              <span class="decision-room__row-summary">
+                {item.summary[lang]}
+              </span>
+            ) : null}
+            {item.boundaryText ? (
+              <span class="decision-room__boundary">
+                {item.boundaryText[lang]}
+              </span>
+            ) : null}
+            {item.evidenceHref ? (
+              <a
+                href={item.evidenceHref[lang]}
+                rel={
+                  /^https?:\/\//i.test(item.evidenceHref[lang])
+                    ? "noopener noreferrer"
+                    : undefined
+                }
+                class="decision-room__source"
+                aria-label={`${copy.source}: ${item.label[lang]}`}
+              >
+                {copy.source} →
+              </a>
+            ) : null}
+            <button
+              type="button"
+              class="decision-room__remove"
+              data-decision-remove={item.id}
+              aria-label={`${copy.remove}: ${item.label[lang]}`}
+            >
+              {copy.remove}
+            </button>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </div>
+
   <div class="decision-room__items" data-decision-items>
     {items.map((item, index) => (
       <article
@@ -408,6 +476,7 @@ const domId = (id: string): string =>
           class="decision-room__add"
           data-decision-add={item.id}
           aria-pressed="false"
+          aria-label={`${copy.add}: ${item.label[lang]}`}
         >
           {copy.add}
         </button>
@@ -415,33 +484,8 @@ const domId = (id: string): string =>
     ))}
   </div>
 
-  <p class="decision-room__empty" data-decision-empty-state>
-    {copy.empty}
-  </p>
-
-  <div class="decision-room__board" data-decision-board hidden>
-    <h3 class="decision-room__board-title">{copy.boardTitle}</h3>
-    <ul class="decision-room__rows">
-      {items.map((item) => (
-        <li data-decision-row={item.id} hidden>
-          <span class="decision-room__row-label">{item.label[lang]}</span>
-          <button
-            type="button"
-            class="decision-room__remove"
-            data-decision-remove={item.id}
-          >
-            {copy.remove}
-          </button>
-        </li>
-      ))}
-    </ul>
-  </div>
-
-  <button type="button" class="decision-room__reset" data-decision-reset hidden>
-    {copy.reset}
-  </button>
-
   <div class="decision-room__handoff" data-atelier-handoff>
+    <p class="decision-room__handoff-title">{atelierCopy.handoff.select}</p>
     <p class="decision-room__handoff-empty" data-atelier-handoff-empty>
       {atelierCopy.handoff.empty}
     </p>
@@ -465,8 +509,12 @@ const domId = (id: string): string =>
   <style>
     [data-decision-add],
     [data-decision-reset],
+    [data-decision-remove],
     [data-atelier-handoff-link] {
       display: none !important;
+    }
+    .decision-room__tray {
+      min-height: 0 !important;
     }
   </style>
 </noscript>

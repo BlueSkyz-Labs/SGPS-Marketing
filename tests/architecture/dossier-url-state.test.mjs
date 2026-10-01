@@ -5,6 +5,7 @@ import {
   DOSSIER_ITEMS_MAX_COUNT,
   DOSSIER_ITEMS_MAX_RAW_LENGTH,
   DOSSIER_QUERY_MAX_LENGTH,
+  buildSelectionSearch,
   parseDossierSearch,
   parseDossierSelection,
 } from "../../src/lib/dossier-url-state.ts";
@@ -70,4 +71,42 @@ test("quote/backslash/selector-like values remain inert ids at parser boundary",
     ids: [payload],
     reason: null,
   });
+});
+
+test("write-back round-trips through the bounded parser and keeps other params", () => {
+  const search = buildSelectionSearch("?goal=verify", "items", [
+    "a",
+    "b:c",
+    "d",
+  ]);
+  assert.ok(search);
+  assert.equal(new URLSearchParams(search).get("goal"), "verify");
+  assert.deepEqual(parseDossierSearch(search, "items"), {
+    status: "ok",
+    ids: ["a", "b:c", "d"],
+    reason: null,
+  });
+  assert.equal(buildSelectionSearch("?items=a", "items", []), "");
+});
+
+test("negative proof: write-back refuses anything the parser would reject or alter", () => {
+  const tooMany = Array.from(
+    { length: DOSSIER_ITEMS_MAX_COUNT + 1 },
+    (_, i) => `i${i}`,
+  );
+  assert.equal(buildSelectionSearch("", "items", tooMany), null);
+  assert.equal(
+    buildSelectionSearch("", "items", [
+      "x".repeat(DOSSIER_ITEM_MAX_LENGTH + 1),
+    ]),
+    null,
+  );
+  // a comma inside an id would split on read-back, so it is never written
+  assert.equal(buildSelectionSearch("", "items", ["a,b"]), null);
+  assert.equal(
+    buildSelectionSearch("?" + "x".repeat(DOSSIER_QUERY_MAX_LENGTH), "items", [
+      "a",
+    ]),
+    null,
+  );
 });
