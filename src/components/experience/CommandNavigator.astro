@@ -115,6 +115,10 @@ const resultNone = isVi
 
 <script>
   import { initCommandNavigator } from "@/scripts/command-navigator";
+  // Shares this module (already on every page) so the header menu enhancement
+  // adds no extra script request to first paint.
+  import { initMobileMenu } from "@/scripts/mobile-menu";
 
   initCommandNavigator();
+  initMobileMenu();
 </script>
