@@ -142,7 +142,7 @@ check("root serves the bounded language gateway", async () => {
   const response = await get("/");
   assert(response.status === 200, `status ${response.status}`);
   const html = await response.text();
-    // Owner 2026-10-01 (F16): the gateway is the indexable x-default language
+  // Owner 2026-10-01 (F16): the gateway is the indexable x-default language
   // selector, so production must not mark it noindex and it is self-canonical.
   assert(
     !/<meta\s+name="robots"[^>]*noindex/i.test(html),
