@@ -1,4 +1,9 @@
-import { SUPPORTED_LANGUAGES, LANGUAGES, getAlternatePath } from "./i18n.ts";
+import {
+  SUPPORTED_LANGUAGES,
+  LANGUAGES,
+  getAlternatePath,
+  type Language,
+} from "./i18n.ts";
 
 export function absoluteUrl(base: string, path: string): string {
   return new URL(path, base.endsWith("/") ? base : `${base}/`).toString();
@@ -12,12 +17,17 @@ export function safeJsonLd(data: unknown): string {
 /** Committed 512x512 square BlueSkyz mark under `public/`. */
 export const ORGANIZATION_LOGO_PATH = "/icons/icon-512x512.png";
 
+/** Site root with the trailing slash that matches the canonical of `/`. */
+export function siteRootUrl(siteUrl: string): string {
+  return absoluteUrl(siteUrl, "/");
+}
+
 export function organizationJsonLd(siteUrl: string) {
   return {
     "@context": "https://schema.org",
     "@type": "Organization",
     name: "BlueSkyz Labs",
-    url: siteUrl,
+    url: siteRootUrl(siteUrl),
     // Square BlueSkyz mark (Owner decision F11, 2026-10-01). No sameAs and no
     // contactPoint: those stay absent until the Owner supplies real profiles.
     logo: absoluteUrl(siteUrl, ORGANIZATION_LOGO_PATH),
@@ -29,12 +39,12 @@ export function websiteJsonLd(siteUrl: string) {
     "@context": "https://schema.org",
     "@type": "WebSite",
     name: "BlueSkyz Labs",
-    url: siteUrl,
+    url: siteRootUrl(siteUrl),
     inLanguage: SUPPORTED_LANGUAGES.map((lang) => LANGUAGES[lang].hreflang),
     publisher: {
       "@type": "Organization",
       name: "BlueSkyz Labs",
-      url: siteUrl,
+      url: siteRootUrl(siteUrl),
     },
   } as const;
 }
@@ -119,6 +129,20 @@ export const DEFAULT_OG_IMAGE = {
   height: 630,
   alt: 'BlueSkyz Labs wordmark and the line "Intelligence. Elevated. Impact." beside a bright angular mark over the Earth seen from space',
 } as const;
+
+/**
+ * Social-card alt text per locale. The English string is the committed
+ * `DEFAULT_OG_IMAGE.alt`; the others restate it with each locale's own
+ * hero tagline (src/content/pages/<lang>/index.yaml), so a vi/zh social
+ * preview is not described in English.
+ */
+export const DEFAULT_OG_IMAGE_ALT: Record<Language, string> = {
+  en: DEFAULT_OG_IMAGE.alt,
+  vi: 'Chữ BlueSkyz Labs và dòng "Trí tuệ. Nâng tầm. Tác động." bên cạnh một biểu tượng góc cạnh sáng trên nền Trái Đất nhìn từ vũ trụ',
+  zh: "BlueSkyz Labs 字标与标语“智能。提升。影响。”，旁边是明亮的棱角标志，背景为从太空俯瞰的地球",
+  "zh-hant":
+    "BlueSkyz Labs 字標與標語「智慧。提升。影響。」，旁邊是明亮的稜角標誌，背景為從太空俯瞰的地球",
+};
 
 export function canonicalForPath(path: string, siteUrl: string): string {
   const normalized = path.startsWith("/") ? path : `/${path}`;
@@ -205,3 +229,12 @@ export const PUBLIC_STATIC_PATHS = [
   "/zh-hant/dossier/",
   "/zh-hant/dossier/print/",
 ] as const;
+
+/**
+ * Printable restatements of `/<lang>/dossier/`. They stay public and linked
+ * but are `noindex, follow` and absent from the sitemap (duplicative of the
+ * dossier page; SEO-11).
+ */
+export function isNoindexPath(path: string): boolean {
+  return /^\/(en|vi|zh|zh-hant)\/dossier\/print\/$/.test(path);
+}

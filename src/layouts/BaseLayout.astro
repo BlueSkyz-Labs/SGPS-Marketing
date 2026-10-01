@@ -13,6 +13,7 @@ import {
   defaultOgImagePath,
   hreflangLinks,
   xDefaultPath,
+  DEFAULT_OG_IMAGE_ALT,
   organizationJsonLd,
   safeJsonLd,
   websiteJsonLd,
@@ -30,6 +31,8 @@ interface Props {
   path?: string;
   ogImage?: string;
   noindex?: boolean;
+  /** With `noindex`: keep links followable (`noindex, follow`), e.g. print views. */
+  followLinks?: boolean;
   /** Stable integrity surface id; the lens renders only for modeled surfaces. */
   surface?: string;
   /** false: the lens omits its source-to-surface chains (see /verify). */
@@ -44,6 +47,7 @@ const {
   path = Astro.url.pathname,
   ogImage = defaultOgImagePath(),
   noindex = false,
+  followLinks = false,
   surface,
   lensTraces = true,
   scene = DEFAULT_SCENE,
@@ -71,6 +75,7 @@ const canonical = canonicalForPath(path, SITE.url);
 const ogImageUrl = absoluteUrl(SITE.url, ogImage);
 /** Pixel size and alt are only known for the committed default card. */
 const ogImageMeta = ogImage === defaultOgImagePath() ? DEFAULT_OG_IMAGE : null;
+const ogImageAlt = DEFAULT_OG_IMAGE_ALT[currentLang];
 const structuredData: Record<string, unknown>[] = [
   organizationJsonLd(SITE.url),
   websiteJsonLd(SITE.url),
@@ -78,6 +83,11 @@ const structuredData: Record<string, unknown>[] = [
 const breadcrumb = breadcrumbJsonLd(currentLang, path, SITE.url);
 if (breadcrumb) structuredData.push(breadcrumb);
 const robotsNoindex = noindex || isNonProductionSiteUrl(SITE.url);
+/** Non-production origins never follow; only a deliberate noindex may. */
+const robotsContent =
+  noindex && followLinks && !isNonProductionSiteUrl(SITE.url)
+    ? "noindex, follow"
+    : "noindex, nofollow";
 ---
 
 <!doctype html>
@@ -112,7 +122,7 @@ const robotsNoindex = noindex || isNonProductionSiteUrl(SITE.url);
       hreflang="x-default"
       href={canonicalForPath(xDefaultPath(path), SITE.url)}
     />
-    {robotsNoindex ? <meta name="robots" content="noindex, nofollow" /> : null}
+    {robotsNoindex ? <meta name="robots" content={robotsContent} /> : null}
     <meta property="og:type" content="website" />
     <meta property="og:locale" content={ogLocale} />
     {ogAlternates.map((locale) => (
@@ -127,7 +137,7 @@ const robotsNoindex = noindex || isNonProductionSiteUrl(SITE.url);
       <>
         <meta property="og:image:width" content={String(ogImageMeta.width)} />
         <meta property="og:image:height" content={String(ogImageMeta.height)} />
-        <meta property="og:image:alt" content={ogImageMeta.alt} />
+        <meta property="og:image:alt" content={ogImageAlt} />
       </>
     ) : null}
     <meta name="twitter:card" content="summary_large_image" />
@@ -135,7 +145,7 @@ const robotsNoindex = noindex || isNonProductionSiteUrl(SITE.url);
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImageUrl} />
     {ogImageMeta ? (
-      <meta name="twitter:image:alt" content={ogImageMeta.alt} />
+      <meta name="twitter:image:alt" content={ogImageAlt} />
     ) : null}
     {structuredData.map((data) => (
       <script
