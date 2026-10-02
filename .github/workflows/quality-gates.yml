@@ -122,50 +122,32 @@ jobs:
         include:
           - project: chromium
             browser: chromium
-            pr_lane: true
           - project: firefox
             browser: firefox
-            pr_lane: false
           - project: webkit
             browser: webkit
-            pr_lane: false
           - project: mobile-chromium
             browser: chromium
-            pr_lane: true
-    # Pre-go-live speed mode (Owner 2026-09-30, expires at GOLIVE): pull
-    # requests run only the pr_lane shards; every push to main still runs the
-    # full four-engine matrix. A shard outside the PR lane completes with its
-    # test steps skipped, so the aggregator still requires every shard job.
-    env:
-      RUN_SHARD: ${{ github.event_name != 'pull_request' || matrix.pr_lane }}
     steps:
-      - name: Shard lane
-        run: echo "project=${{ matrix.project }} run=${RUN_SHARD} event=${{ github.event_name }}"
       - name: Checkout exact candidate
-        if: ${{ env.RUN_SHARD == 'true' }}
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
           persist-credentials: false
           fetch-depth: 0
       - name: Set up Node 24.20.0
-        if: ${{ env.RUN_SHARD == 'true' }}
         uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
         with:
           node-version: 24.20.0
       - name: Activate project package manager
-        if: ${{ env.RUN_SHARD == 'true' }}
         run: |
           corepack enable
           pnpm --version
       - name: Install frozen dependency graph
-        if: ${{ env.RUN_SHARD == 'true' }}
         run: pnpm install --frozen-lockfile
       - name: Build browser test artifact
-        if: ${{ env.RUN_SHARD == 'true' }}
         run: pnpm build
       - name: Install Playwright runtime
-        if: ${{ env.RUN_SHARD == 'true' }}
         timeout-minutes: 10
         env:
           SHARD_BROWSER: ${{ matrix.browser }}
@@ -189,7 +171,6 @@ jobs:
             .then(()=>console.log(process.env.SHARD_BROWSER+' runtime launched successfully'))
             .catch((error)=>{console.error(error);process.exit(1);});"
       - name: Playwright and axe assurance
-        if: ${{ env.RUN_SHARD == 'true' }}
         env:
           E2E_PROJECT: ${{ matrix.project }}
         run: pnpm test:e2e
