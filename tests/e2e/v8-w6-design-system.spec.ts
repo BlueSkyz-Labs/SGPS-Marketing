@@ -133,7 +133,22 @@ test.describe("header material (ADR 0012, blur branch)", () => {
   test.use({ viewport: { width: 1440, height: 900 } });
   test("sticky header is translucent at >= 0.86 alpha with blur", async ({
     page,
+    browserName,
   }) => {
+    // The blur branch is disabled by design under
+    // `prefers-reduced-transparency: reduce` (c3-craft.css). A runner whose OS
+    // reports "reduce" (e.g. Windows with Transparency effects off) would
+    // otherwise measure the accessibility branch instead of this one, so pin
+    // the media feature to no-preference for this assertion. Chromium only:
+    // Firefox/WebKit do not evaluate the feature and always take the base branch.
+    if (browserName === "chromium") {
+      const cdp = await page.context().newCDPSession(page);
+      await cdp.send("Emulation.setEmulatedMedia", {
+        features: [
+          { name: "prefers-reduced-transparency", value: "no-preference" },
+        ],
+      });
+    }
     await page.goto("/en/about/");
     const style = await page
       .locator("header.header-glass")

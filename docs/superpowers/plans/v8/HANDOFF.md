@@ -1,30 +1,36 @@
 # v8 handoff: website elevation (SGPS-Marketing)
 
 **Status date:** 2026-10-02
-**Baseline:** `main@e6e8ca4 (W10 #430 auto-merging; re-bind R1 to the SHA after it lands)`
+**Baseline:** `main@5b7273ee` (W11 phase-2 fixes landed 2026-10-02; evidence: `docs/evidence/2026-10-01-experience-v8-verification.md`)
 **Plan:** `docs/superpowers/plans/2026-10-01-website-elevation-v8.md`
 **Copy deck:** `docs/superpowers/plans/v8/copy-deck.md`
 **Routing:** `.claude/AGENT_ROUTING.md`
 
 ## 1. Done (merged)
 
-| Wave                    | PR                               | Notes                                                 |
-| ----------------------- | -------------------------------- | ----------------------------------------------------- |
-| W0 plan, W0 discovery   | #414, #415                       |                                                       |
-| W1 copy foundation      | #420                             |                                                       |
-| W2 home                 | #424                             | one focal object; height 3110 → 2362 px               |
-| W3 product pages        | #423                             | Availability line; "What it does" list                |
-| Hotfix W3               | #426                             | Sổ Trọ LCP + Firefox 44 px                            |
-| W4 products index       | #422                             |                                                       |
-| W5a, W5b trust cluster  | #418, #419                       |                                                       |
-| W6 design system        | #427                             | tokens, buttons, back-to-top outside `<main>`         |
-| W7 localization         | #425                             | 你, `formatDate`, VI glossary                         |
-| W8 global SEO           | #421                             |                                                       |
-| W9 performance          | #429                             | Inter wght-only 88 → 41 KB; local LCP about 1.9–2.0 s |
-| W10 gardening           | #430 (auto-merge on, CI running) | 8 components deleted; 1.5 KB gzip CSS saved           |
-| W11 phase 1 fixes F2/F6 | #428                             |                                                       |
+| Wave                                         | PR                               | Notes                                                                 |
+| -------------------------------------------- | -------------------------------- | --------------------------------------------------------------------- |
+| W0 plan, W0 discovery                        | #414, #415                       |                                                                       |
+| W1 copy foundation                           | #420                             |                                                                       |
+| W2 home                                      | #424                             | one focal object; height 3110 → 2362 px                               |
+| W3 product pages                             | #423                             | Availability line; "What it does" list                                |
+| Hotfix W3                                    | #426                             | Sổ Trọ LCP + Firefox 44 px                                            |
+| W4 products index                            | #422                             |                                                                       |
+| W5a, W5b trust cluster                       | #418, #419                       |                                                                       |
+| W6 design system                             | #427                             | tokens, buttons, back-to-top outside `<main>`                         |
+| W7 localization                              | #425                             | 你, `formatDate`, VI glossary                                         |
+| W8 global SEO                                | #421                             |                                                                       |
+| W9 performance                               | #429                             | Inter wght-only 88 → 41 KB; local LCP about 1.9–2.0 s                 |
+| W10 gardening                                | #430 (auto-merge on, CI running) | 8 components deleted; 1.5 KB gzip CSS saved                           |
+| W11 phase 1 fixes F2/F6                      | #428                             |                                                                       |
+| W11 phase 2 — firefox touch floor (F-01)     | #432                             | merged 2026-10-02; four-engine re-proof runs 36972472908, 36983061448 |
+| W11 phase 2 — Windows guard separator (F-02) | #433                             | merged; `toPosix` verified on main                                    |
+| W11 phase 2 — VI calibration (R2)            | #438                             | merged `53b2e8f9`; landing verified; run 36983061448                  |
+| W11 phase 2 — verification evidence + R3     | (this PR)                        | `docs/evidence/2026-10-01-experience-v8-verification.md`              |
 
 ## 2. Remaining work (executable; hand to a coding agent)
+
+**Status 2026-10-02 (W11 phase 2):** R1 DONE (evidence doc, this PR); R2 DONE (#438, `53b2e8f9`); R3 DONE (accepted + recorded, evidence doc section 4); R4 OPEN (Owner or native reviewer).
 
 | ID  | Work                                                                                                                                                                                                                                                                                                                                                                  | Owner of decision                   | Files                 |
 | --- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------- | --------------------- |
@@ -69,3 +75,6 @@
   - Delete `dist/` and `.wrangler` before committing.
   - Use one worktree per lane, each with its own ports.
   - Never use `pkill -f`.
+- **Windows host specifics (2026-10-02, W11):**
+  - `pnpm test:e2e` is a silent no-op on Windows (`scripts/run-e2e.mjs` entry guard; F-06): run `node scripts/build-parity-fixture.mjs` then `pnpm exec playwright test --project=<p>` directly.
+  - `lhci` cannot run on Windows (`chrome-launcher` EPERM in temp-profile cleanup; F-05): substitute = spawn Playwright's chromium (`--headless=new --remote-debugging-port=9333 --user-data-dir=<tmp>`) and drive the lighthouse node API with `{ port: 9333 }`, same URLs/settings as `lighthouserc.mobile.json`. On a contended Windows host local LCP reads ~7x CI; CI Lighthouse is the authoritative gate.
