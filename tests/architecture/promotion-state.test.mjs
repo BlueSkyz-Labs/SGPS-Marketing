@@ -6,6 +6,7 @@ import test from "node:test";
 import {
   STATUS,
   evaluateDeployment,
+  evaluateProviderDeployment,
   evaluatePromotionState,
   evaluatePublicTruth,
   evaluateSource,
@@ -20,7 +21,7 @@ const workflow = read(".github/workflows/quality-gates.yml");
 test("real repository yields no FAIL in any assurance stage", () => {
   const state = evaluatePromotionState({ root: ROOT });
 
-  assert.equal(state.stages.length, 3);
+  assert.equal(state.stages.length, 4);
   for (const stage of state.stages) {
     assert.notEqual(
       stage.status,
@@ -31,16 +32,28 @@ test("real repository yields no FAIL in any assurance stage", () => {
   assert.equal(state.exitCode, 0);
 });
 
-test("source and deployment stages hold on the real repository", () => {
+test("source/deploy-contract pass while provider deployment stays NOT_VERIFIED", () => {
   const state = evaluatePromotionState({ root: ROOT });
   const byName = Object.fromEntries(
     state.stages.map((stage) => [stage.stage, stage]),
   );
 
   assert.equal(byName.source.status, STATUS.PASS);
-  assert.equal(byName.deployment.status, STATUS.PASS);
+  assert.equal(byName["deployment-contract"].status, STATUS.PASS);
+  assert.equal(byName["provider-deployment"].status, STATUS.NOT_VERIFIED);
   // Owner facts are not committed yet, so public truth is honestly blocked.
   assert.notEqual(byName["public-truth"].status, STATUS.FAIL);
+  assert.notEqual(byName["provider-deployment"].status, STATUS.PASS);
+});
+
+test("offline checker cannot certify authoritative Cloudflare provider deployment", () => {
+  const result = evaluateProviderDeployment();
+
+  assert.equal(result.status, STATUS.NOT_VERIFIED);
+  assert.notEqual(result.status, STATUS.PASS);
+  assert.equal(result.findings.length, 1);
+  assert.match(result.findings[0].subject, /Cloudflare Workers Builds/);
+  assert.match(result.findings[0].detail, /not read back/i);
 });
 
 test("a synthetic source stage with a missing script yields FAIL", () => {
@@ -158,9 +171,16 @@ test("CLI exits 0 and prints the per-stage summary", () => {
   );
 
   assert.match(output, /source\s+PASS/);
-  assert.match(output, /deployment\s+PASS/);
-  assert.match(output, /Promotion assurance: no FAIL/);
+  assert.match(output, /deployment-contract\s+PASS/);
+  assert.match(output, /provider-deployment\s+NOT_VERIFIED/);
+  assert.doesNotMatch(output, /^deployment\s+PASS$/m);
+  assert.match(output, /Promotion assurance: offline checks non-failing/);
   assert.match(output, /BLOCKED_OWNER_FACT/);
+  assert.match(output, /NOT_VERIFIED/);
+  assert.match(
+    output,
+    /Authoritative Cloudflare provider deployment\/runtime is never implied/,
+  );
 });
 
 test("promotion-state script performs no network access", () => {
