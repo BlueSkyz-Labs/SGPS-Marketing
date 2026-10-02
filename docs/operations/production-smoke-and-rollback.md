@@ -28,8 +28,12 @@ guessing.
    `X-Content-Type-Options: nosniff`, `X-Frame-Options: DENY`,
    `Referrer-Policy`, `Permissions-Policy`.
 3. Record the outcome in a post-merge read-back ledger under `docs/evidence/`
-   (declared revision + smoke result + host), which
-   `pnpm check:deployment-evidence` validates in CI.
+   with the **full 40-character deployed Git revision**, smoke result and
+   canonical host read-back.
+4. Certify that exact served revision explicitly:
+   `pnpm check:deployment-evidence -- <ledger-path> --expected-sha <40-character-served-sha>`.
+   The no-argument CI invocation validates historical ledger structure only
+   and reports `current revision NOT_VERIFIED`; it is never current-runtime proof.
 
 ## 3. Observability (deliberately minimal)
 
@@ -51,15 +55,28 @@ guessing.
 the pipeline is healthy: open a PR, pass Source Assurance, merge.
 
 **Roll back when** the deployed revision is materially broken (broken layout,
-broken routes, security-relevant regression) and a fix cannot land quickly:
+broken routes, security-relevant regression) and a fix cannot land quickly.
 
-1. Cloudflare dashboard → the Worker → **Deployments** → select the last known
-   good version → _Rollback / redeploy that version_.
-   (Equivalent: re-run Workers Builds on the last known good `main` commit.)
-2. Immediately re-run §2 post-deploy verification against the rolled-back
-   revision and record the ledger entry (`pnpm check:deployment-evidence`).
-3. Open an issue or PR describing the incident, the rolled-back revision and
-   the forward-fix plan; the fix follows the normal gates. No direct pushes to
+A previously stable provider version is **not automatically rollback-eligible**.
+Before changing the provider deployment:
+
+1. Map the candidate provider version to its exact 40-character Git revision.
+   If that mapping is unknown, the rollback target is `NOT_VERIFIED / INELIGIBLE`.
+2. From a full-history current repository checkout, run:
+   `node scripts/check-rollback-candidate.mjs --candidate <40-character-git-sha>`.
+   The guard requires the candidate to stay on current `main` lineage, remain
+   at/after every active security floor, retain the no-payment-authority guard,
+   and contain no VietQR/NAPAS/EMVCo payment-authority markers in textual
+   runtime source under `src/` and `public/`.
+3. Only after the source guard reports `Rollback candidate: ELIGIBLE`, use the
+   Cloudflare dashboard → Worker → **Deployments** to select the mapped version
+   and _Rollback / redeploy that version_.
+4. Immediately re-run §2 post-deploy verification against the rolled-back
+   revision, record a full-SHA ledger entry, and certify it with
+   `pnpm check:deployment-evidence -- <ledger-path> --expected-sha <40-character-served-sha>`.
+   Source eligibility is not runtime proof.
+5. Open an issue or PR describing the incident, target revision, security-floor
+   qualification, provider rollback and forward-fix plan. No direct pushes to
    `main`, no bypassing protection.
 
 **Never** patch production outside the pipeline, and never roll back without
