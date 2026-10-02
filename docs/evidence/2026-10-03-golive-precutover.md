@@ -38,3 +38,18 @@
 - Copy change (vtt): VI **before** `… với dữ liệu minh hoạ · blueskyzlabs.com` → **after** `… với dữ liệu mẫu · blueskyzlabs.com` (deck rows sro-9, glo-11).
 
 🤖 Generated with Hermes Agent
+
+## Orchestrator verification addendum (2026-10-03 05:40 GMT+7)
+
+**Verifier lane:** orchestrator (cloud), independent of the authoring agent. **Bound to:** `main@aa5f21a` (#445 merge). This revision contains `0658697b` plus the one-line caption fix.
+
+| Item                                                                   | Result                                                               | Evidence                                                                                                                                                                                                                          |
+| ---------------------------------------------------------------------- | -------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Four-engine CI on the revision this record names (`0658697b`)          | **FAIL (corrected)**                                                 | Run `37063562297` ended `cancelled`: webkit shard `cancelled`, Browser Assurance `failure`. The original row said "PASS (in progress)"; an in-progress or cancelled run is never PASS.                                            |
+| Four-engine CI + Lighthouse CI on `aa5f21a` (supersedes the row above) | **PASS**                                                             | Run `37068517474`: Quality Gates, chromium, firefox, webkit, mobile-chromium, Browser Assurance and Lighthouse CI all `success`.                                                                                                  |
+| VI term `dữ liệu minh hoạ / minh họa` in `src/` + `public/`            | **PASS**                                                             | `git grep` on `aa5f21a`: 0 hits.                                                                                                                                                                                                  |
+| Redirect `/products/sotro`                                             | **PASS against the current rules, NOT against Owner decision OG-12** | `public/_redirects:19–20` sends `/products/:slug` to `/en/products/`. OG-12 = A sets the target to `/vi/products/sotro/`, which lands only with #440 (it needs the Owner label). The matrix row above records the pre-#440 state. |
+| Atlas principle nodes → `/{lang}/about/`                               | **FINDING F-11 (low, not a go-live blocker)**                        | `src/lib/atlas.ts:53`. The About page no longer renders `PRINCIPLE_MATRIX` (abt-4 = A), so the link resolves (200) but explains nothing. Tracked as v9 F9.                                                                        |
+| axe 180 scans, worker redirect probes                                  | **Accepted, not re-run**                                             | The caption change does not touch HTML routes. Re-running is not needed for go-live; §3E re-checks redirects in production.                                                                                                       |
+
+**Verdict:** §3C is **PASS on `aa5f21a`** for pre-cutover purposes, with the corrections above. The next gate is the Owner's Cloudflare Access lift, then §3E. #440 and F-11 do not block go-live.
