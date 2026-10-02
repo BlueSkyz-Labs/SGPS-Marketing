@@ -4,9 +4,6 @@ shortDescription: A local-first journal for private written reflections and pers
 lifecycle: development
 availability: preview
 publicLabel: In development
-audience:
-  - individual
-  - professional
 jobs:
   - Write private reflections at your own pace
   - Revisit your journal entries and personal memories
