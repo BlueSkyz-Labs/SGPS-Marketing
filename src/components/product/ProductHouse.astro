@@ -2,6 +2,13 @@
 import type { CollectionEntry } from "astro:content";
 import { SHARED_LABELS, labelFor, type Language } from "@/data/site";
 import { getProductIndexPath } from "@/lib/product-routes";
+import {
+  getProductIconThumbPath,
+  getProductProfilePath,
+} from "@/lib/product-routes";
+import { productCopy } from "@/lib/product-copy";
+import { resolveLifecycleCta } from "@/lib/lifecycle-cta";
+import { HOME_ONE_LINER } from "@/data/home-copy";
 import ProductCard from "./ProductCard.astro";
 import ProofFirstEmptyState from "./ProofFirstEmptyState.astro";
 
@@ -52,10 +59,38 @@ const headingLabel = labelFor(
 );
 const ctaLabel = labelFor(SHARED_LABELS.exploreAllProducts, lang);
 const indexPath = getProductIndexPath(lang);
+// v8 W2: on the home the continuation is one full-width horizontal row per
+// product: icon, name, badge, one-liner (deck hom-14) and the lifecycle CTA.
+const rows = (compact && isContinuation ? visibleProducts : []).map(
+  (product) => {
+    const copy = productCopy(product.data, lang);
+    const slug = product.data.slug;
+    return {
+      product,
+      statusLabel: copy.statusLabel,
+      line: HOME_ONE_LINER[slug]?.[lang] ?? copy.shortDescription,
+      href: getProductProfilePath(lang, slug),
+      icon: getProductIconThumbPath(slug),
+      cta: resolveLifecycleCta(
+        {
+          slug,
+          lifecycle: product.data.lifecycle,
+          availability: product.data.availability,
+          primaryActionHref: product.data.primaryAction.href,
+          productName: product.data.name,
+        },
+        lang,
+      ),
+    };
+  },
+);
 ---
 
 <section
-  class="c2-product-house border-b border-[var(--border-subtle)] py-16 lg:py-24"
+  class:list={[
+    "c2-product-house border-b border-[var(--border-subtle)]",
+    compact ? "py-10 lg:py-12" : "py-16 lg:py-24",
+  ]}
   aria-labelledby="product-house-title"
   data-product-house
 >
@@ -79,6 +114,51 @@ const indexPath = getProductIndexPath(lang);
     <div class="mt-8">
       <ProofFirstEmptyState lang={lang} />
     </div>
+  ) : rows.length > 0 ? (
+    <div class="mt-6 grid gap-4">
+      {rows.map((row) => (
+        <article
+          class="product-row"
+          data-product-card
+          data-product-tier={row.product.data.featuredTier}
+        >
+          <img
+            class="product-row__icon"
+            src={row.icon}
+            alt=""
+            width="48"
+            height="48"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="product-row__main">
+            <h3 class="product-row__name">
+              <a
+                href={row.href}
+                class="inline-flex min-h-11 items-center text-inherit no-underline hover:underline"
+              >
+                {row.product.data.name}
+              </a>
+              <span
+                data-product-status={row.product.data.publicLabel}
+                class="product-row__badge"
+              >
+                {row.statusLabel}
+              </span>
+            </h3>
+            <p class="product-row__line">{row.line}</p>
+          </div>
+          <a
+            href={row.cta.href}
+            data-product-cta={row.cta.verb}
+            aria-label={`${row.cta.label}: ${row.product.data.name}`}
+            class="product-row__cta"
+          >
+            {row.cta.label}
+          </a>
+        </article>
+      ))}
+    </div>
   ) : (
     <div class="mt-10 grid gap-6">
       {hero ? (
@@ -98,3 +178,81 @@ const indexPath = getProductIndexPath(lang);
     </div>
   )}
 </section>
+
+<style>
+  .product-row {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    min-width: 0;
+    align-items: center;
+    gap: 0.75rem 1rem;
+    padding: 1rem;
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-card);
+    background: var(--surface-raised);
+  }
+  .product-row__main {
+    min-width: 0;
+  }
+  .product-row__icon {
+    width: 3rem;
+    height: 3rem;
+    border-radius: 0.9rem;
+  }
+  .product-row__name {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.25rem 0.75rem;
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    color: var(--text-primary);
+  }
+  .product-row__badge {
+    display: inline-flex;
+    border: 1px solid var(--border-subtle);
+    border-radius: 999px;
+    max-width: 100%;
+    min-width: 0;
+    overflow-wrap: anywhere;
+    padding: 0.125rem 0.625rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    color: var(--action-primary);
+  }
+  .product-row__line {
+    margin: 0.25rem 0 0;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    color: var(--text-secondary);
+  }
+  .product-row__cta {
+    grid-column: 1 / -1;
+    display: inline-flex;
+    min-height: 2.75rem;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--border-subtle);
+    border-radius: 999px;
+    padding: 0.375rem 1rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--action-primary);
+    text-decoration: none;
+  }
+  .product-row__cta:hover {
+    border-color: var(--action-primary);
+  }
+  @media (min-width: 768px) {
+    .product-row {
+      grid-template-columns: auto minmax(0, 1fr) auto;
+      padding: 1.25rem 1.5rem;
+    }
+    .product-row__cta {
+      grid-column: auto;
+    }
+  }
+</style>

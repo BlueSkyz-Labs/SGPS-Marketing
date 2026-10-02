@@ -75,7 +75,8 @@ for (const lang of ["en", "vi", "zh", "zh-hant"]) {
     const primary = page.locator("[data-hero-primary]");
     await expect(primary).toHaveCount(1);
     const box = await primary.boundingBox();
-    expect(box && box.y + box.height).toBeLessThanOrEqual(844);
+    // v8 W2: inside two viewports at 390 (capture first, then caption + CTA).
+    expect(box && box.y + box.height).toBeLessThanOrEqual(844 * 2);
     // Removed bands stay removed in every locale.
     await expect(page.locator("[data-one-house-editorial]")).toHaveCount(0);
     await expect(page.locator("[data-about-blueskyz]")).toHaveCount(0);
@@ -96,7 +97,7 @@ test("the mobile LCP element is in the hero (H1 text or the capture) and paints 
       };
       const el = last?.element;
       (window as unknown as { __lcp: string }).__lcp = el
-        ? `${el.tagName}|${el.closest("[data-hero]") ? "hero" : "other"}`
+        ? `${el.tagName}|${el.closest("[data-hero],[data-hero-flagship]") ? "hero" : "other"}`
         : "";
     }).observe({ type: "largest-contentful-paint", buffered: true });
   });

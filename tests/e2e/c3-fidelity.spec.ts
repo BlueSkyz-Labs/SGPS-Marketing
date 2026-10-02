@@ -16,7 +16,7 @@ const CRITICAL = [
     selector: "#hero-title",
     text: /We build intelligent products|Intelligence|Trí tuệ/i,
   },
-  { selector: ".hero-actions", text: /./ },
+  { selector: "[data-hero-primary]", text: /./ },
 ];
 
 /** Action links that must remain reachable at every tier. */

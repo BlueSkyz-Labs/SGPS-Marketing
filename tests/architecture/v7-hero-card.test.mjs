@@ -13,15 +13,18 @@ const REVEAL = "src/styles/reveal.css";
 
 export function cardIssues(hero, capture, reveal, sail) {
   const issues = [];
-  if (!/container-type:\s*inline-size/.test(hero))
-    issues.push("card is not a container");
-  if (!/class="hero-flagship__cta"/.test(hero))
+  // v8 W2: the bordered flagship card is gone; the capture, caption row and
+  // CTA sit directly in the hero stage, so there is no container-query card.
+  if (/hero-flagship__card/.test(hero)) issues.push("bordered card is back");
+  if (!/class="hero-flagship__cta/.test(hero))
     issues.push("CTA lacks the no-break class");
-  if (!/@container hero-flagship \(min-width:\s*34rem\)/.test(hero))
-    issues.push("no stack-below-34rem container query");
   if (/grid-template-columns:\s*9rem/.test(hero))
     issues.push("fixed 9rem capture column");
-  if (!/\.hero-flagship__cta\s*\)?\s*\{[^}]*overflow-wrap:\s*normal/.test(hero))
+  if (
+    !/\.hero-flagship\s+:global\(\.hero-flagship__cta\)\s*\{[^}]*overflow-wrap:\s*normal/.test(
+      hero,
+    )
+  )
     issues.push("CTA may break inside a word");
   if (/\$\{revision\}|\{provenance\}/.test(capture))
     issues.push("revision rendered in caption");
@@ -54,7 +57,7 @@ test("negative proof: each regression is reported", () => {
     ).length,
   );
   assert.ok(
-    cardIssues(h.replace("@container hero-flagship", "@media"), c, r, s).length,
+    cardIssues(h + '\n<div class="hero-flagship__card"></div>', c, r, s).length,
   );
   assert.ok(
     cardIssues(h + "\n.x{grid-template-columns: 9rem 1fr}", c, r, s).length,
