@@ -38,25 +38,12 @@ const read = (path) => readFileSync(path, "utf8");
 const HOME_SURFACE = [
   "src/components/sections/Hero.astro", // cta=4 (2 per branch), primary=2, h1
   "src/components/experience/ExperienceSpine.astro", // nav only, cta=0
-  "src/components/sections/FeaturedProducts.astro", // cta=1 (secondary)
-  "src/components/sections/OneHouse.astro", // cta=0, h2
-  "src/components/experience/OneHouseMatrix.astro", // nested, h3
-  "src/components/sections/FlagshipProof.astro", // cta=2, primary=1
-  "src/components/sections/Trust.astro", // cta=0, h2
-  "src/components/sections/AboutBlueSkyz.astro", // cta=0, h2
-  "src/components/sections/NextStep.astro", // cta=4 (2 per branch), primary=2
   "src/components/experience/Atlas.astro", // cta=0, h2
 ];
 
 /** Page-level sections must each carry exactly one top-level heading. */
 const PAGE_LEVEL_SECTIONS = [
   "src/components/sections/Hero.astro",
-  "src/components/sections/FeaturedProducts.astro",
-  "src/components/sections/OneHouse.astro",
-  "src/components/sections/FlagshipProof.astro",
-  "src/components/sections/Trust.astro",
-  "src/components/sections/AboutBlueSkyz.astro",
-  "src/components/sections/NextStep.astro",
   "src/components/experience/Atlas.astro",
 ];
 
@@ -64,12 +51,6 @@ const SECTION_COMPONENT_NAMES = new Set([
   "Hero",
   "ExperienceSpine",
   "IntentLens",
-  "FeaturedProducts",
-  "OneHouse",
-  "FlagshipProof",
-  "Trust",
-  "AboutBlueSkyz",
-  "NextStep",
   "Atlas",
   "DecisionRoom",
 ]);

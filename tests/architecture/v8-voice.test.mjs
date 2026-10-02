@@ -44,8 +44,6 @@ function grepSrc(phrase) {
         if (line.includes("SITE.proposition")) return false;
         // Exclude verify component (W5a owns it)
         if (line.includes("verify/")) return false;
-        // Exclude Trust.astro (scheduled for deletion in W10; ProofBand.astro is the active component)
-        if (line.includes("sections/Trust.astro")) return false;
         return true;
       });
   } catch {

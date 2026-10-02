@@ -28,7 +28,7 @@ test("decision-room source link is at least 24px tall", () => {
 test("decision-room checkboxes are at least 24x24", () => {
   const body = ruleBody(
     quiet,
-    '.decision-room__atelier-check input[type="checkbox"],\n.decision-room__select input[type="checkbox"]',
+    '.decision-room__atelier-check input[type="checkbox"]',
   );
   assert.equal(checkboxIs24(body), true);
 });
