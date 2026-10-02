@@ -19,8 +19,7 @@ import {
 
 const ROOT = resolve(fileURLToPath(new URL("../..", import.meta.url)));
 const SCRIPT = "scripts/check-rollback-candidate.mjs";
-const PRE_D0 =
-  "462aa460243d9dd07976306c962db0a26d49328a";
+const PRE_D0 = "462aa460243d9dd07976306c962db0a26d49328a";
 
 function git(...args) {
   return execFileSync("git", args, {
@@ -90,9 +89,7 @@ test("negative proof: a pre-D0 revision is rollback-ineligible", () => {
 
   assert.equal(result.eligible, false);
   assert.ok(
-    result.failures.some(
-      (failure) => failure.id === "PREDATES_SECURITY_FLOOR",
-    ),
+    result.failures.some((failure) => failure.id === "PREDATES_SECURITY_FLOOR"),
   );
 });
 

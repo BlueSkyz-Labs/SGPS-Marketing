@@ -42,8 +42,12 @@ const PAYMENT_MARKERS = [
   /\bemvco\b/i,
 ];
 
-const PUBLIC_SOURCE_EXTENSION = /\.(?:astro|ts|tsx|js|mjs|cjs|html|css|svg|xml|txt|yaml|yml|json|webmanifest)$/i;
-const PUBLIC_SOURCE_SPECIAL_FILES = new Set(["public/_headers", "public/_redirects"]);
+const PUBLIC_SOURCE_EXTENSION =
+  /\.(?:astro|ts|tsx|js|mjs|cjs|html|css|svg|xml|txt|yaml|yml|json|webmanifest)$/i;
+const PUBLIC_SOURCE_SPECIAL_FILES = new Set([
+  "public/_headers",
+  "public/_redirects",
+]);
 export const PAYMENT_RUNTIME_ROOTS = ["src", "public"];
 const REQUIRED_GUARD = "tests/architecture/no-payment-authority.test.mjs";
 
@@ -144,7 +148,9 @@ export function qualifyRollbackCandidate({
       });
       continue;
     }
-    if (!gitOk(["merge-base", "--is-ancestor", floor.revision, candidate], cwd)) {
+    if (
+      !gitOk(["merge-base", "--is-ancestor", floor.revision, candidate], cwd)
+    ) {
       failures.push({
         id: "PREDATES_SECURITY_FLOOR",
         detail: `candidate predates ${floor.id} at ${floor.revision}: ${floor.rationale}`,
@@ -152,12 +158,7 @@ export function qualifyRollbackCandidate({
     }
   }
 
-  if (
-    !gitOk(
-      ["cat-file", "-e", `${candidate}:${REQUIRED_GUARD}`],
-      cwd,
-    )
-  ) {
+  if (!gitOk(["cat-file", "-e", `${candidate}:${REQUIRED_GUARD}`], cwd)) {
     failures.push({
       id: "PAYMENT_GUARD_MISSING",
       detail: `candidate does not contain ${REQUIRED_GUARD}`,
