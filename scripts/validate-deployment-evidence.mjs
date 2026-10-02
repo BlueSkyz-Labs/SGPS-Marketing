@@ -254,7 +254,9 @@ function parseArguments(argv, root) {
   }
 
   if (expectedSha !== null && !EXACT_SHA_PATTERN.test(expectedSha)) {
-    throw new Error("--expected-sha must be a full 40-character lowercase hex SHA");
+    throw new Error(
+      "--expected-sha must be a full 40-character lowercase hex SHA",
+    );
   }
 
   return {
