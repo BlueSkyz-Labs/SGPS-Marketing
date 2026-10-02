@@ -55,16 +55,28 @@ guessing.
 the pipeline is healthy: open a PR, pass Source Assurance, merge.
 
 **Roll back when** the deployed revision is materially broken (broken layout,
-broken routes, security-relevant regression) and a fix cannot land quickly:
+broken routes, security-relevant regression) and a fix cannot land quickly.
 
-1. Cloudflare dashboard → the Worker → **Deployments** → select the last known
-   good version → _Rollback / redeploy that version_.
-   (Equivalent: re-run Workers Builds on the last known good `main` commit.)
-2. Immediately re-run §2 post-deploy verification against the rolled-back
+A previously stable provider version is **not automatically rollback-eligible**.
+Before changing the provider deployment:
+
+1. Map the candidate provider version to its exact 40-character Git revision.
+   If that mapping is unknown, the rollback target is `NOT_VERIFIED / INELIGIBLE`.
+2. From a full-history current repository checkout, run:
+   `node scripts/check-rollback-candidate.mjs --candidate <40-character-git-sha>`.
+   The guard requires the candidate to stay on current `main` lineage, remain
+   at/after every active security floor, retain the no-payment-authority guard,
+   and contain no VietQR/NAPAS/EMVCo payment-authority markers in public source.
+3. Only after the source guard reports `Rollback candidate: ELIGIBLE`, use the
+   Cloudflare dashboard → Worker → **Deployments** to select the mapped version
+   and _Rollback / redeploy that version_.
+   (Equivalent: re-run Workers Builds on that exact eligible `main` commit.)
+4. Immediately re-run §2 post-deploy verification against the rolled-back
    revision, record the full-SHA ledger entry, and certify it with
    `pnpm check:deployment-evidence -- <ledger-path> --expected-sha <40-character-served-sha>`.
-3. Open an issue or PR describing the incident, the rolled-back revision and
-   the forward-fix plan; the fix follows the normal gates. No direct pushes to
+   An eligible source target is not runtime proof.
+5. Open an issue or PR describing the incident, target revision, security-floor
+   qualification, provider rollback and forward-fix plan. No direct pushes to
    `main`, no bypassing protection.
 
 **Never** patch production outside the pipeline, and never roll back without

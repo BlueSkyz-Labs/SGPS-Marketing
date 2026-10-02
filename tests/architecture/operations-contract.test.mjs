@@ -42,6 +42,16 @@ test("rollback and fix-forward are both documented", () => {
     /never roll back without/i,
     "verification rule must be explicit",
   );
+  assert.match(
+    doc,
+    /check-rollback-candidate\.mjs/,
+    "rollback must qualify the target against active security floors",
+  );
+  assert.match(
+    doc,
+    /NOT_VERIFIED \/ INELIGIBLE/,
+    "unknown provider-version to Git-revision mapping must fail closed",
+  );
 });
 
 test("the smoke claims in the document match the smoke script", () => {
