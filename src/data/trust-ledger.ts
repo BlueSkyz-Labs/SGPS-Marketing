@@ -39,7 +39,7 @@ export const TRUST_LEDGER: TrustLedgerEntry[] = [
     },
     summary: {
       en: "What this site collects and does not collect.",
-      vi: "Trang này thu thập gì và không thu thập gì.",
+      vi: "Trang web này thu thập gì và không thu thập gì.",
       zh: "本站收集什么、不收集什么。",
       "zh-hant": "本站蒐集什麼、不蒐集什麼。",
     },
