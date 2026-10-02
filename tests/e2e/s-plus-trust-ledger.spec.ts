@@ -18,14 +18,14 @@ const FORBIDDEN = [
 ];
 
 const LOCALES = [
-  { lang: "en", heading: "Trust you can verify", link: "How we verify" },
+  { lang: "en", heading: "Check what we say", link: "Check our claims" },
   {
     lang: "vi",
-    heading: "Tin cậy bạn có thể xác minh",
-    link: "Cách chúng tôi xác minh",
+    heading: "Kiểm chứng điều chúng tôi nói",
+    link: "Xem các tuyên bố",
   },
-  { lang: "zh", heading: "您可以核实的信任", link: "我们如何核验" },
-  { lang: "zh-hant", heading: "您可以核實的信任", link: "我們如何核驗" },
+  { lang: "zh", heading: "核实我们所说的", link: "查看依据" },
+  { lang: "zh-hant", heading: "查證我們所說的", link: "查看依據" },
 ] as const;
 
 for (const locale of LOCALES) {

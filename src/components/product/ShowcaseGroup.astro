@@ -1,0 +1,106 @@
+---
+import type { Language } from "@/lib/i18n";
+import type { ShowcaseSchema } from "@/lib/showcase-schema";
+
+/**
+ * One block of captures: a phone rail followed by desktop captures. Used for
+ * the hero captures and again inside the "More screens" disclosure; the
+ * styles live in ProductShowcase (inline, global).
+ */
+type Screen = ShowcaseSchema["screens"][number];
+interface Props {
+  phones: Screen[];
+  desktops: Screen[];
+  lang: Language;
+  labels: { phone: string; phoneRail: string; desktop: string };
+  first?: boolean;
+}
+
+const { phones, desktops, lang, labels, first = false } = Astro.props;
+
+// Phone captures render at most 17rem in the rail (24rem in the desktop grid),
+// so phones get the 480w derivative next to each master (`<name>-480.webp`).
+// Without it the 780px masters compete with the LCP text's fonts.
+const PHONE_SIZES = "(min-width: 64rem) 24rem, min(72vw, 17rem)";
+// The rail's static tabindex="0" is kept on purpose (v8 W10): it scrolls only
+// below 64rem, where keyboard users need to focus it. At >= 64rem it is a plain
+// grid and stays a focus stop, because CSS cannot set tabindex and no showcase
+// script exists; adding one would spend client budget on a one-attribute fix.
+const phoneSmallSrc = (src: string) => src.replace(/\.webp$/, "-480.webp");
+---
+
+{phones.length > 0 ? (
+  <div class:list={[first ? "mt-10" : "mt-8"]}>
+    <h3 class="showcase__label">{labels.phone}</h3>
+    <ul
+      class="showcase__rail"
+      role="list"
+      tabindex="0"
+      aria-label={labels.phoneRail}
+    >
+      {phones.map((item, index) => (
+        <li class="showcase__phone view-rise" style={`--i:${index}`}>
+          <figure class="m-0">
+            <div class="showcase__device">
+              <img
+                src={item.src}
+                srcset={`${phoneSmallSrc(item.src)} 480w, ${item.src} ${item.width}w`}
+                sizes={PHONE_SIZES}
+                alt={item.alt[lang]}
+                width={item.width}
+                height={item.height}
+                loading="lazy"
+                decoding="async"
+              />
+            </div>
+            <figcaption class="mt-4">
+              <span class="block text-base font-semibold text-[var(--text-primary)]">
+                {item.title[lang]}
+              </span>
+              <span class="mt-1 block text-sm leading-relaxed text-[var(--text-secondary)]">
+                {item.caption[lang]}
+              </span>
+            </figcaption>
+          </figure>
+        </li>
+      ))}
+    </ul>
+  </div>
+) : null}
+
+{desktops.length > 0 ? (
+  <div class="mt-12">
+    <h3 class="showcase__label">{labels.desktop}</h3>
+    <ul class="showcase__desktops" role="list">
+      {desktops.map((item) => (
+        <li class="view-rise">
+          <figure class="m-0">
+            <div class="showcase__browser">
+              <span class="showcase__browser-bar" aria-hidden="true">
+                <i />
+                <i />
+                <i />
+              </span>
+              <img
+                src={item.src}
+                alt={item.alt[lang]}
+                width={item.width}
+                height={item.height}
+                loading="lazy"
+                decoding="async"
+              />
+            </div>
+            <figcaption class="mt-4">
+              <span class="block text-base font-semibold text-[var(--text-primary)]">
+                {item.title[lang]}
+              </span>
+              <span class="mt-1 block text-sm leading-relaxed text-[var(--text-secondary)]">
+                {item.caption[lang]}
+              </span>
+            </figcaption>
+          </figure>
+        </li>
+      ))}
+    </ul>
+  </div>
+) : null}

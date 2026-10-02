@@ -9,6 +9,18 @@ const VIEWPORTS = [
 ];
 
 /**
+ * v8 W5b: the presentation exists only for a selection. Every test below
+ * selects items first and opens it with the Present control.
+ */
+async function openDeck(page: import("@playwright/test").Page, lang = "en") {
+  await page.goto(`/${lang}/dossier/`);
+  const boxes = page.locator("[data-dossier-item]");
+  for (let i = 0; i < 3; i += 1) await boxes.nth(i).check();
+  await page.locator("[data-dossier-present]").click();
+  await expect(page.locator("[data-boardroom-deck]")).toBeVisible();
+}
+
+/**
  * C4-C Task 4 — Boardroom Presentation Mode.
  *
  * A contained presentation view of the already-compiled public dossier:
@@ -19,14 +31,16 @@ const VIEWPORTS = [
  * placeholder.
  */
 test.describe("C4-C boardroom presentation mode", () => {
-  test("one dominant idea per screen on load", async ({ page }) => {
-    await page.goto("/en/dossier/");
+  test("one dominant idea per screen on open, for the selection only", async ({
+    page,
+  }) => {
+    await openDeck(page);
 
     const deck = page.locator("[data-boardroom-deck]");
     await expect(deck).toBeVisible();
-    expect(
-      await page.locator("[data-boardroom-screen]").count(),
-    ).toBeGreaterThan(1);
+    await expect(page.locator("[data-boardroom-progress-total]")).toHaveText(
+      "3",
+    );
 
     const active = page.locator(".c4-boardroom__screen--active");
     await expect(active).toHaveCount(1);
@@ -44,7 +58,7 @@ test.describe("C4-C boardroom presentation mode", () => {
   test("explicit controls advance and rewind without touching the route", async ({
     page,
   }) => {
-    await page.goto("/en/dossier/");
+    await openDeck(page);
     const url = page.url();
     const progress = page.locator("[data-boardroom-progress-current]");
 
@@ -63,7 +77,7 @@ test.describe("C4-C boardroom presentation mode", () => {
   test("arrow keys move between screens and Escape exits the mode", async ({
     page,
   }) => {
-    await page.goto("/en/dossier/");
+    await openDeck(page);
     const progress = page.locator("[data-boardroom-progress-current]");
 
     await page.locator("[data-boardroom-next]").focus();
@@ -75,14 +89,14 @@ test.describe("C4-C boardroom presentation mode", () => {
 
     await page.keyboard.press("Escape");
     await expect(page.locator(".c4-boardroom__screen--active")).toHaveCount(0);
-    await expect(page.locator("[data-boardroom-exit]")).toBeFocused();
-    await expect(page.locator("[data-boardroom-next]")).toBeDisabled();
+    await expect(page.locator("[data-boardroom-deck]")).toBeHidden();
+    await expect(page.locator("[data-dossier-present]")).toBeFocused();
   });
 
   test("controls are named, keyboard reachable, and never trapped", async ({
     page,
   }) => {
-    await page.goto("/en/dossier/");
+    await openDeck(page);
 
     await expect(page.locator("[data-boardroom-prev]")).toHaveAttribute(
       "aria-label",
@@ -111,7 +125,7 @@ test.describe("C4-C boardroom presentation mode", () => {
   test("keyboard navigation moves visible focus onto the active screen", async ({
     page,
   }) => {
-    await page.goto("/en/dossier/");
+    await openDeck(page);
 
     await page.locator("[data-boardroom-next]").focus();
     await page.keyboard.press("ArrowRight");
@@ -133,7 +147,7 @@ test.describe("C4-C boardroom presentation mode", () => {
   });
 
   test("source links remain ordinary links", async ({ page }) => {
-    await page.goto("/en/dossier/");
+    await openDeck(page);
 
     const links = page.locator(".c4-boardroom__source-link");
     expect(await links.count()).toBeGreaterThan(0);
@@ -153,7 +167,7 @@ test.describe("C4-C boardroom presentation mode", () => {
     page,
   }) => {
     await page.emulateMedia({ reducedMotion: "reduce" });
-    await page.goto("/en/dossier/");
+    await openDeck(page);
 
     const active = page.locator(".c4-boardroom__screen--active");
     await expect(active.locator(".c4-boardroom__screen-heading")).toBeVisible();
@@ -176,9 +190,8 @@ test.describe("C4-C boardroom presentation mode", () => {
     test(`/${lang}/dossier/ stays contained at 1440/1024/390/320`, async ({
       page,
     }) => {
-      await page.goto(`/${lang}/dossier/`);
+      await openDeck(page, lang);
       const deck = page.locator("[data-boardroom-deck]");
-      await expect(deck).toBeVisible();
 
       for (const viewport of VIEWPORTS) {
         await page.setViewportSize(viewport);
@@ -195,26 +208,21 @@ test.describe("C4-C boardroom presentation mode", () => {
 test.describe("C4-C boardroom without JavaScript", () => {
   test.use({ javaScriptEnabled: false });
 
-  test("every screen and its source stays readable", async ({ page }) => {
+  test("the presentation is not offered; items, sources and Print stay readable", async ({
+    page,
+  }) => {
     await page.goto("/en/dossier/");
 
-    await expect(page.locator("[data-boardroom-deck]")).toBeVisible();
+    // Present needs script, so it is never offered without it.
+    await expect(page.locator("[data-dossier-present]")).toBeHidden();
+    await expect(page.locator("[data-boardroom-deck]")).toBeHidden();
 
-    // Without the enhancement no screen is collapsed: the whole presentation
-    // is an ordinary readable section list.
-    const screens = page.locator("[data-boardroom-screen]");
-    const count = await screens.count();
-    expect(count).toBeGreaterThan(0);
-    for (let index = 0; index < count; index += 1) {
-      await expect(screens.nth(index)).toBeVisible();
-    }
-    expect(await page.locator(".c4-boardroom__screen--active").count()).toBe(0);
-
-    // Controls that cannot work must not be offered.
-    await expect(page.locator("[data-boardroom-next]")).toBeHidden();
-
-    const links = page.locator(".c4-boardroom__source-link");
-    expect(await links.count()).toBeGreaterThan(0);
-    await expect(links.first()).toBeVisible();
+    // The catalog and every source link remain ordinary content.
+    const sources = page.locator(".c4-dossier__source");
+    expect(await sources.count()).toBeGreaterThan(0);
+    await expect(sources.first()).toBeVisible();
+    await expect(
+      page.getByRole("link", { name: "Print", exact: true }),
+    ).toHaveAttribute("href", "/en/dossier/print/");
   });
 });

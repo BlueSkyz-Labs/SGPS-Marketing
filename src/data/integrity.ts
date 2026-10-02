@@ -18,6 +18,18 @@ export interface LocalizedText {
   "zh-hant": string;
 }
 
+/**
+ * One plain definition of the "Source-linked" truth-state label, shown beside
+ * its first occurrence on every page that uses it.
+ */
+export const SOURCE_LINKED_LEGEND: LocalizedText = {
+  en: "Source-linked means every claim on this page cites at least one public source you can open.",
+  vi: "Đã gắn nguồn nghĩa là mọi tuyên bố trên trang này đều dẫn ít nhất một nguồn công khai bạn có thể mở.",
+  zh: "“已关联来源”表示本页每一项声明都至少引出一个你可打开的公开来源。",
+  "zh-hant":
+    "「已關聯來源」表示本頁每一項聲明都至少引出一個你可開啟的公開來源。",
+};
+
 export interface EvidenceReference {
   /** Stable public evidence id referenced by the claim fabric. */
   id: string;
@@ -75,14 +87,14 @@ export const PRIVACY_BOUNDARY: BoundaryStatement = {
   id: "bnd-privacy-collection",
   claim: {
     en: "This site sets no cookies. It stores explicitly selected language and theme preferences in this browser, without tracking or profiling.",
-    vi: "Trang này không đặt cookie. Trang chỉ lưu lựa chọn ngôn ngữ và giao diện do khách truy cập chủ động chọn trong trình duyệt, không theo dõi hay lập hồ sơ.",
+    vi: "Trang web này không đặt cookie. Trang web chỉ lưu lựa chọn ngôn ngữ và giao diện do khách truy cập chủ động chọn trong trình duyệt, không theo dõi hay lập hồ sơ.",
     zh: "本站不设置 Cookie；仅在访客明确选择语言或主题时于浏览器本地保存偏好，不进行跟踪或行为画像。",
     "zh-hant":
-      "本站不設定 Cookie；僅在訪客明確選擇語言或主題時於瀏覽器本地儲存偏好，不進行跟蹤或行為畫像。",
+      "本站不設定 Cookie；僅在訪客明確選擇語言或主題時於瀏覽器本地儲存偏好，不進行追蹤或行為剖析。",
   },
   doesNotImply: {
     en: "It does not establish that no data at all is processed: serving any website still requires infrastructure to handle network-level metadata such as IP addresses and request headers.",
-    vi: "Nó không xác lập rằng không có dữ liệu nào được xử lý: mọi website vẫn cần hạ tầng xử lý siêu dữ liệu mạng như địa chỉ IP và header yêu cầu.",
+    vi: "Nó không xác lập rằng không có dữ liệu nào được xử lý: mọi trang web vẫn cần hạ tầng xử lý siêu dữ liệu mạng như địa chỉ IP và header yêu cầu.",
     zh: "这并不表示完全不会处理任何数据：提供任何网站服务仍需要基础设施处理网络层面元数据，例如 IP 地址和请求头。",
     "zh-hant":
       "這並不表示完全不會處理任何資料：提供任何網站服務仍需要基礎設施處理網路層面後設資料，例如 IP 地址和請求頭。",
@@ -197,7 +209,8 @@ export const INTEGRITY_ENTRIES: readonly IntegrityEntry[] = [
       en: "The public registry stays quiet by design: listings appear only when a product's evidence is ready to verify.",
       vi: "Danh mục công khai giữ im lặng có chủ đích: mục chỉ xuất hiện khi bằng chứng của sản phẩm sẵn sàng để xác minh.",
       zh: "公开登记表按设计保持静默：仅当产品的证据可核验时才显示条目。",
-      "zh-hant": "公開登記表按設計保持靜默：僅當產品的證據可核驗時才顯示條目。",
+      "zh-hant":
+        "公開登錄名單按設計保持靜默：僅當產品的證據可核驗時才顯示條目。",
     },
     evidence: [
       {
@@ -226,10 +239,10 @@ export const INTEGRITY_ENTRIES: readonly IntegrityEntry[] = [
           "zh-hant": "/.well-known/sgps.json",
         },
         label: {
-          en: "Public SGPS manifest",
-          vi: "Bản kê SGPS công khai",
-          zh: "公开 SGPS 清单",
-          "zh-hant": "公開 SGPS 清單",
+          en: "Public claims file (JSON)",
+          vi: "Tệp tuyên bố công khai (JSON)",
+          zh: "公开声明文件（JSON）",
+          "zh-hant": "公開聲明檔案（JSON）",
         },
       },
     ],

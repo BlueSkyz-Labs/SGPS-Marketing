@@ -99,9 +99,8 @@ test("every authored title composes to a single-separator, brand-last title", ()
   }
 });
 
-test("Vietnamese About title does not repeat the brand", () => {
-  assert.equal(PAGE_META.vi.about.title.includes("BlueSkyz"), false);
-  assert.equal(PAGE_META.vi.about.title, "Giới thiệu");
+test("Vietnamese About title uses the glossary label (v8 W7)", () => {
+  assert.equal(PAGE_META.vi.about.title, "Về BlueSkyz");
 });
 
 test("home titles name the brand once and carry a descriptor", () => {
@@ -368,7 +367,10 @@ test("footer-linked indexable /architecture/ routes are in the sitemap set", () 
   }
 });
 
-test("sitemap does not fabricate lastmod", () => {
+test("sitemap never derives lastmod from build time", () => {
+  // v8 W8 (SEO-10): lastmod now comes from git per route (see
+  // seo-v7-technical.test.mjs); it must never be the build clock.
   const sitemap = readFileSync("src/pages/sitemap.xml.ts", "utf8");
-  assert.doesNotMatch(sitemap, /lastmod/);
+  assert.doesNotMatch(sitemap, /new Date|Date\.now/);
+  assert.match(sitemap, /lastmodForPath/);
 });

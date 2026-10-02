@@ -5,7 +5,6 @@ import PageHeader from "@/components/layout/PageHeader.astro";
 import ProductCard from "@/components/product/ProductCard.astro";
 import ProofFirstEmptyState from "@/components/product/ProofFirstEmptyState.astro";
 import { getPublicProducts } from "@/lib/products";
-import IntentControl from "@/components/experience/IntentControl.astro";
 
 const products = await getPublicProducts();
 const allInDevelopment =
@@ -17,7 +16,7 @@ const emptyDescription = products.length
 ---
 
 <BaseLayout
-  title="Products"
+  title="Products: Sổ Trọ and Sổ Tâm, in development"
   description={emptyDescription}
   path="/en/products/"
   scene="product"
@@ -30,7 +29,7 @@ const emptyDescription = products.length
           products.length === 0
             ? "Products appear here when they are ready to evaluate. We publish only what you can verify."
             : allInDevelopment
-              ? "Every product here is in development. Each page states its status and what backs it."
+              ? "Both are in development. Each page states its status."
               : "Each product page states its status and what backs it."
         }
       />
@@ -42,32 +41,20 @@ const emptyDescription = products.length
         <section class="mt-12" aria-labelledby="published-products">
           <h2
             id="published-products"
-            class="text-xs font-semibold tracking-[0.18em] text-[var(--text-secondary)] uppercase"
+            class:list={[
+              "text-xs font-semibold tracking-[0.18em] text-[var(--text-secondary)] uppercase",
+              allInDevelopment && "sr-only",
+            ]}
           >
             {allInDevelopment ? "In development" : "Products"}
           </h2>
           <div class="mt-6 grid gap-4 md:grid-cols-2">
             {products.map((product) => (
-              <ProductCard product={product} lang="en" />
+              <ProductCard product={product} lang="en" showThumb />
             ))}
           </div>
         </section>
       )}
-    </Container>
-  </section>
-  {/* Experience v6 S3: Atlas and evidence moved to /verify; one quiet link remains. */}
-  <section class="border-t border-[var(--border-subtle)] py-16 lg:py-20">
-    <Container>
-      <IntentControl lang="en" />
-      <p class="mt-8">
-        <a
-          href="/en/verify/"
-          class="inline-flex min-h-11 items-center text-sm font-semibold text-[var(--action-primary)] underline underline-offset-4 hover:no-underline"
-          data-verify-link
-        >
-          How we verify →
-        </a>
-      </p>
     </Container>
   </section>
 </BaseLayout>

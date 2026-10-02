@@ -1,10 +1,18 @@
 ---
 interface Props {
   class?: string;
+  /** "wide" (default) or the narrower reading measure. */
+  width?: "wide" | "reading";
 }
-const { class: className = "" } = Astro.props;
+const { class: className = "", width = "wide" } = Astro.props;
 ---
 
-<div class:list={["site-container", className]}>
+<div
+  class:list={[
+    "site-container",
+    width === "reading" && "site-container--reading",
+    className,
+  ]}
+>
   <slot />
 </div>

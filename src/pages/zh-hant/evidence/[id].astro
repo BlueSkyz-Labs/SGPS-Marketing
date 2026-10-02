@@ -31,10 +31,15 @@ const title = passport ? `證據：${passport.claim["zh-hant"]}` : "證據";
   <section class="py-16 lg:py-24">
     <Container>
       <div class="max-w-3xl">
-        <h1 class="evidence-passport__page-title" data-passport-page-title>
+        <p class="evidence-passport__page-title" data-passport-page-title>
           這項說法的證據
-        </h1>
-        <EvidencePassport id={id ?? ""} lang="zh-hant" products={products} />
+        </p>
+        <EvidencePassport
+          id={id ?? ""}
+          lang="zh-hant"
+          products={products}
+          claimAs="h1"
+        />
       </div>
     </Container>
   </section>

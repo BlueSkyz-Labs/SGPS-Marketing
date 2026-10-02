@@ -13,7 +13,7 @@ import test from "node:test";
 
 const schema = readFileSync("src/lib/product-schema.ts", "utf8");
 const flagship = readFileSync(
-  "src/components/sections/FlagshipProof.astro",
+  "src/components/product/FlagshipTheatre.astro",
   "utf8",
 );
 const profile = readFileSync("src/pages/products/[slug].astro", "utf8");

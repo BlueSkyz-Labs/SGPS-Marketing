@@ -52,29 +52,8 @@ test("C4 motion: at most one focal motion hook class", () => {
   );
 });
 
-test("C4 motion: every C4 animation is neutralised under reduced motion", () => {
-  const reduced = css.match(
-    /@media\s*\(prefers-reduced-motion:\s*reduce\)\s*\{([\s\S]*?)\n\}/,
-  );
-  assert.ok(
-    reduced,
-    "C4 must neutralise its motion under prefers-reduced-motion",
-  );
-  assert.match(
-    reduced[1],
-    /animation:\s*none/,
-    "reduced motion must disable the focal animation",
-  );
-});
-
-test("C4 motion: print media shows content, not the entrance", () => {
-  const print = css.match(/@media\s*print\s*\{([\s\S]*?)\n\}/);
-  assert.ok(print, "C4 must neutralise its focal animation for print");
-  assert.match(
-    print[1],
-    /animation:\s*none/,
-    "print must not freeze content at its hidden start",
-  );
+test("C4 motion: the stylesheet carries no animation to neutralise (W10 removed the dead focal entrance)", () => {
+  assert.doesNotMatch(css, /@keyframes|(?<![-\w])animation\s*:/);
 });
 
 test("C4 motion: no new animation engine enters the bundle", () => {

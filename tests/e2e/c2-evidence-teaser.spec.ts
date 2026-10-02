@@ -37,7 +37,7 @@ const LOCALES = [
     lang: "vi",
     home: "/vi/",
     more: "Xem bằng chứng",
-    passport: "Bằng chứng cho nhận định này",
+    passport: "Bằng chứng cho tuyên bố này",
   },
 ] as const;
 

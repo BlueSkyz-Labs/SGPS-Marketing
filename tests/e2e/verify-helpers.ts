@@ -1,6 +1,6 @@
 import type { Page } from "@playwright/test";
 
-export type VerifyLayer = "atlas" | "trace" | "pages";
+export type VerifyLayer = "atlas";
 
 /**
  * Open a /verify route and expand one collapsed technical layer with a real

@@ -31,13 +31,13 @@
 
   /* C4-A S2 — Optical typography roles: fluid clamp ranges over ONE family.
    * No new font family, no route-local scale; hierarchy stays semantic. */
-  --c4-type-display: clamp(2.5rem, 1.75rem + 2.6vw, 4rem);
-  --c4-type-section: clamp(1.75rem, 1.35rem + 1.4vw, 2.5rem);
-  --c4-type-product: clamp(1.25rem, 1.1rem + 0.6vw, 1.6rem);
-  --c4-type-evidence: clamp(1.05rem, 1rem + 0.3vw, 1.25rem);
-  --c4-type-reading: clamp(1rem, 0.95rem + 0.25vw, 1.125rem);
-  --c4-type-meta: 0.8125rem;
-  --c4-type-caption: 0.75rem;
+  --c4-type-display: var(--size-7);
+  --c4-type-section: var(--size-7);
+  --c4-type-product: var(--size-5);
+  --c4-type-evidence: var(--size-4);
+  --c4-type-reading: var(--size-3);
+  --c4-type-meta: var(--size-2);
+  --c4-type-caption: var(--size-1);
 }
 
 /* C4-A S1 — Editorial grid roles.
@@ -46,24 +46,8 @@
  * supporting column); the phone composition is authored as a single column in
  * source order, so DOM reading order never depends on visual placement.
  */
-.c4-editorial-grid {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  gap: var(--c4-folio-gap);
-}
-
-.c4-reading-column {
-  max-width: var(--c4-reading-measure);
-}
 
 /* C4-A S2 — calibrated type role utilities (semantic element keeps its level). */
-.c4-type-section {
-  font-size: var(--c4-type-section);
-}
-
-.c4-type-reading {
-  font-size: var(--c4-type-reading);
-}
 
 /* C4-A S5 — Editorial folio: running context as real text, ordinal as ornament. */
 .c4-folio {
@@ -113,43 +97,11 @@
   background: var(--c4-hairline);
 }
 
-/* C4-A S8 — Quiet motion budget.
- *
- * One focal entrance moment per scene is the ceiling. The only animation the
- * quiet-authority layer is allowed to declare is this single, short rise; it is
- * fully neutralised under reduced motion. No perpetual decoration, no second
- * entrance hook, no new animation engine.
- */
-.c4-motion-focal {
-  animation: c4-focal-rise var(--c4-motion-scarcity-duration)
-    var(--c4-motion-scarcity-ease) both;
-}
+/* C4-A S8 — Quiet motion budget. The quiet-authority layer declares no
+ * animation (W10 removed the unused focal entrance); a regression test pins
+ * that. */
 
-@keyframes c4-focal-rise {
-  from {
-    opacity: 0;
-    transform: translateY(0.5rem);
-  }
-
-  to {
-    opacity: 1;
-    transform: none;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .c4-motion-focal {
-    animation: none;
-  }
-}
-
-/* Print runs no animation, so a `both` fill would freeze the element at its
- * hidden start state. Print must show the content, not the entrance. */
 @media print {
-  .c4-motion-focal {
-    animation: none;
-  }
-
   .c4-maison {
     display: none;
   }
@@ -177,13 +129,6 @@
   gap: var(--space-3);
 }
 
-.c4-editions__ordinal {
-  font-size: var(--c4-type-meta);
-  font-variant-numeric: tabular-nums;
-  letter-spacing: 0.08em;
-  color: var(--text-muted);
-}
-
 .c4-editions__link {
   display: inline-flex;
   align-items: center;
@@ -206,7 +151,7 @@
 }
 
 .c4-edition {
-  max-width: 62ch;
+  max-width: var(--container-reading);
 }
 
 .c4-edition__title {
@@ -233,11 +178,6 @@
   margin-block-start: var(--space-4);
   font-size: var(--c4-type-meta);
   color: var(--text-muted);
-}
-
-.c4-edition__note-label {
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
 }
 
 .c4-edition__sources-title {
@@ -282,7 +222,7 @@
 
 /* ---- C4-C G3 — Boardroom presentation mode ---- */
 .c4-boardroom {
-  max-width: 72ch;
+  max-width: var(--container-reading);
   margin-block-start: var(--space-10);
   padding-block-start: var(--space-8);
   border-top: 1px solid var(--c4-hairline);
@@ -294,13 +234,11 @@
 
 .c4-boardroom__title {
   margin: 0 0 var(--space-2);
-  font-size: var(--c4-type-section);
-}
-
-.c4-boardroom__lede {
-  margin: 0;
-  font-size: var(--c4-type-reading);
-  color: var(--text-secondary);
+  font-size: var(--size-6);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  line-height: 1.25;
+  color: var(--text-primary);
 }
 
 .c4-boardroom__stage {
@@ -355,8 +293,10 @@
 
 .c4-boardroom__screen-heading {
   margin: 0 0 var(--space-4);
-  font-size: var(--c4-type-display);
-  line-height: 1.08;
+  font-size: var(--size-6);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  line-height: 1.2;
   text-wrap: balance;
 }
 
@@ -364,7 +304,7 @@
   margin: 0 0 var(--space-4);
   font-size: var(--c4-type-reading);
   color: var(--text-secondary);
-  max-width: 62ch;
+  max-width: var(--container-reading);
 }
 
 /* Programmatic focus lands on the active screen heading; keep it visible. */
@@ -514,22 +454,6 @@
   }
 }
 
-@media (min-width: 64rem) {
-  .c4-editorial-grid {
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1.618fr);
-  }
-
-  .c4-focal-span {
-    grid-column: 2 / -1;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .c4-editorial-grid {
-    gap: var(--c4-folio-gap);
-  }
-}
-
 /* ---- C4-B G1 — Maison orientation surface ---- */
 
 .c4-maison {
@@ -592,7 +516,7 @@
   margin-block-start: var(--space-10);
   padding-block-start: var(--space-8);
   border-top: 1px solid var(--c4-hairline);
-  max-width: 62ch;
+  max-width: var(--container-reading);
 }
 
 .c4-craft__sections {
@@ -605,7 +529,15 @@
 
 .c4-craft__heading {
   margin: 0 0 var(--space-2);
-  font-size: var(--c4-type-section);
+  font-size: var(--size-6);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  line-height: 1.25;
+  color: var(--text-primary);
+}
+
+.c4-craft__sections + .c4-craft__heading {
+  margin-block-start: var(--space-8);
 }
 
 .c4-craft__text {
@@ -644,17 +576,16 @@
 /* ---- C4-C G2/G3 — Public dossier composer ---- */
 
 .c4-dossier {
-  max-width: 72ch;
+  max-width: var(--container-reading);
 }
 
 .c4-dossier__heading {
   margin: 0 0 var(--space-2);
-  font-size: var(--c4-type-section);
-}
-
-.c4-dossier__lede {
-  font-size: var(--c4-type-reading);
-  color: var(--text-secondary);
+  font-size: var(--size-6);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  line-height: 1.25;
+  color: var(--text-primary);
 }
 
 .c4-dossier__form {
@@ -665,17 +596,33 @@
   margin: 0;
   padding: var(--space-6);
   border: 1px solid var(--c4-hairline);
+  border-radius: var(--radius-card);
+  background: var(--surface-raised);
+  min-inline-size: 0;
 }
 
-.c4-dossier__legend,
 .c4-dossier__group-heading,
-.c4-dossier__preview-heading,
-.c4-dossier__unknown-heading {
-  font-size: var(--c4-type-section);
+.c4-dossier__preview-heading {
+  margin: 0 0 var(--space-3);
+  font-size: var(--size-4);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--text-primary);
+}
+
+.c4-dossier__preview-heading {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--size-6);
 }
 
 .c4-dossier__group {
   margin-block-start: var(--space-6);
+}
+
+.c4-dossier__group:first-of-type {
+  margin-block-start: 0;
 }
 
 .c4-dossier__items,
@@ -688,11 +635,39 @@
   list-style: none;
 }
 
+.c4-dossier__item {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2) var(--space-4);
+  padding: var(--space-2) var(--space-4);
+  border: 1px solid var(--border-subtle);
+  border-radius: 0.5rem;
+  background: var(--surface-primary);
+}
+
+.c4-dossier__item:has(input:checked) {
+  border-color: var(--action-primary);
+  box-shadow: inset 0 0 0 1px var(--action-primary);
+}
+
 .c4-dossier__label {
   display: inline-flex;
+  flex: 1 1 18rem;
   align-items: center;
   gap: var(--space-3);
   min-height: 44px;
+  font-size: var(--size-3);
+  color: var(--text-primary);
+}
+
+.c4-dossier__label input[type="checkbox"] {
+  flex: none;
+  inline-size: 1.375rem;
+  block-size: 1.375rem;
+  margin: 0;
+  accent-color: var(--action-primary);
 }
 
 .c4-dossier__source,
@@ -700,7 +675,9 @@
   display: inline-flex;
   align-items: center;
   min-height: 44px;
-  color: inherit;
+  font-size: var(--size-2);
+  font-weight: 600;
+  color: var(--action-primary);
   text-decoration: none;
 }
 
@@ -717,12 +694,59 @@
 }
 
 .c4-dossier__counter {
-  margin-inline-start: var(--space-2);
+  min-inline-size: 1.75rem;
+  padding: 0.125rem 0.5rem;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-pill);
+  font-size: var(--size-2);
+  font-weight: 600;
+  text-align: center;
+  color: var(--text-secondary);
+  font-variant-numeric: tabular-nums;
 }
 
-.c4-dossier__note {
-  font-size: var(--c4-type-reading);
+.c4-dossier__empty {
+  padding: var(--space-6);
+  border: 1px dashed var(--border-subtle);
+  border-radius: var(--radius-card);
+  font-size: var(--size-3);
+  color: var(--text-muted);
+}
+
+.c4-dossier__entry {
+  padding: var(--space-4);
+  border: 1px solid var(--border-subtle);
+  border-radius: 0.5rem;
+  background: var(--surface-raised);
+}
+
+.c4-dossier__entry-label {
+  margin: 0;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.c4-dossier__entry-detail,
+.c4-dossier__entry-freshness {
+  margin: var(--space-1) 0 0;
+  font-size: var(--size-2);
   color: var(--text-secondary);
+}
+
+.c4-dossier__unknown-block {
+  margin-block-start: var(--space-4);
+  padding: var(--space-4);
+  border: 1px solid var(--border-subtle);
+  border-inline-start: 3px solid var(--action-primary);
+  border-radius: 0.5rem;
+  background: var(--surface-subtle);
+}
+
+.c4-dossier__unknown-heading {
+  margin: 0 0 var(--space-2);
+  font-size: var(--size-3);
+  font-weight: 600;
+  color: var(--text-primary);
 }
 
 .c4-dossier__preview-list[data-empty] {
@@ -731,6 +755,67 @@
 
 .c4-dossier__preview-list:not([data-empty]) + .c4-dossier__empty {
   display: none;
+}
+
+/* Sources and freshness: same card grammar, one scale. */
+.c4-dossier-sources {
+  max-width: var(--container-reading);
+  margin-block-start: var(--space-10);
+  padding-block-start: var(--space-8);
+  border-top: 1px solid var(--c4-hairline);
+}
+
+.c4-dossier-sources > h2 {
+  margin: 0 0 var(--space-4);
+  font-size: var(--size-6);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--text-primary);
+}
+
+.c4-dossier-sources > article {
+  margin-block-end: var(--space-3);
+  padding: var(--space-4);
+  border: 1px solid var(--border-subtle);
+  border-radius: 0.5rem;
+  background: var(--surface-raised);
+  font-size: var(--size-2);
+  color: var(--text-secondary);
+}
+
+.c4-dossier-sources h3 {
+  margin: 0 0 var(--space-2);
+  font-size: var(--size-3);
+  font-weight: 600;
+  line-height: 1.4;
+  color: var(--text-primary);
+}
+
+.c4-dossier-sources h4 {
+  margin: var(--space-2) 0 var(--space-1);
+  font-size: var(--size-1);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.c4-dossier-sources ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.c4-dossier-sources p {
+  margin: var(--space-2) 0 0;
+}
+
+.c4-dossier-sources a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  font-weight: 600;
+  color: var(--action-primary);
 }
 
 @media print {
@@ -748,7 +833,7 @@
 /* ---- C4-C G3 — Printable dossier document ---- */
 
 .c4-dossier-document {
-  max-width: 78ch;
+  max-width: var(--container-reading);
 }
 
 .c4-dossier-document__title {
@@ -824,7 +909,7 @@
 }
 /* ---- C4-D G5 — provenance lens ---- */
 .c4-provenance {
-  max-width: 78ch;
+  max-width: var(--container-reading);
 }
 .c4-provenance__heading {
   margin: 0 0 var(--space-2);
@@ -929,8 +1014,7 @@
   gap: var(--space-2);
 }
 /* WCAG 2.5.8: the checkbox itself is at least 24 CSS px, not only its label. */
-.decision-room__atelier-check input[type="checkbox"],
-.decision-room__select input[type="checkbox"] {
+.decision-room__atelier-check input[type="checkbox"] {
   inline-size: 1.5rem;
   block-size: 1.5rem;
   margin: 0;
@@ -939,7 +1023,7 @@
 .decision-room__group-label {
   display: inline-block;
   margin-block-end: var(--space-1);
-  font-size: var(--c4-type-caption, 0.8125rem);
+  font-size: var(--c4-type-caption);
   letter-spacing: 0.04em;
   text-transform: uppercase;
   color: var(--text-secondary);
@@ -960,15 +1044,6 @@
   color: var(--text-secondary);
 }
 
-.decision-room__select {
-  display: inline-flex;
-  gap: var(--space-2);
-  align-items: center;
-  min-block-size: 44px;
-  margin-block-end: var(--space-2);
-  font-size: var(--c4-type-reading);
-}
-
 .decision-room__handoff {
   margin-block-start: var(--space-4);
   padding-block-start: var(--space-3);
@@ -976,7 +1051,6 @@
     color-mix(in srgb, var(--brand-porcelain) 18%, transparent);
 }
 
-.decision-room__handoff-empty,
 .decision-room__handoff-report {
   margin: 0;
   font-size: var(--c4-type-reading);
@@ -989,61 +1063,38 @@
   min-block-size: 44px;
 }
 
-/* ---- C4-D G4 — Architecture salon ---- */
+/* ---- Architecture explainer (card grammar shared with /products, /verify) ---- */
 .c4-salon {
-  max-width: 78ch;
-}
-
-.c4-salon__heading,
-.c4-salon__lens-heading {
-  margin: 0 0 var(--space-2);
-  font-size: var(--c4-type-section);
-}
-
-.c4-salon__lede,
-.c4-salon__none,
-.c4-salon__source {
-  margin: 0;
-  color: var(--text-secondary);
-}
-
-.c4-salon__nav-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-4);
-  margin: var(--space-6) 0 0;
-  padding: 0;
-  list-style: none;
-}
-
-.c4-salon__nav-link {
-  display: inline-flex;
-  align-items: center;
-  min-block-size: 44px;
-  color: inherit;
-}
-
-.c4-salon__nav-link:hover {
-  text-decoration: underline;
-  text-underline-offset: 0.25em;
+  max-width: 64rem;
 }
 
 .c4-salon__lens {
-  margin-block-start: var(--space-10);
+  margin-block-start: var(--space-16);
   padding-block-start: var(--space-8);
   border-top: 1px solid var(--c4-hairline);
+  scroll-margin-top: var(--space-16);
+}
+
+.c4-salon__lens-intro {
+  max-width: var(--container-reading);
+  margin: var(--space-3) 0 0;
+  color: var(--text-secondary);
+  font-size: var(--c4-type-reading);
 }
 
 .c4-salon__subheading {
-  margin: var(--space-6) 0 var(--space-2);
-  font-size: var(--c4-type-reading);
+  margin: var(--space-8) 0 var(--space-3);
+  color: var(--text-secondary);
+  font-size: var(--c4-type-caption);
   font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
 }
 
-.c4-salon__nodes,
-.c4-salon__edges {
+.c4-salon__nodes {
   display: grid;
-  gap: var(--space-2);
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 16rem), 1fr));
+  gap: var(--space-4);
   margin: 0;
   padding: 0;
   list-style: none;
@@ -1051,48 +1102,388 @@
 
 .c4-salon__node {
   display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-3);
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-2);
+  min-width: 0;
+  padding: var(--space-4);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-card);
+  background: var(--surface-raised);
   overflow-wrap: anywhere;
 }
 
-.c4-salon__node-kind,
-.c4-salon__node-boundary,
-.c4-salon__edge-type {
+.c4-salon__node-kind {
+  color: var(--action-primary);
+  font-size: var(--c4-type-caption);
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.c4-salon__node-label {
+  font-size: var(--c4-type-evidence);
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+.c4-salon__node-blurb {
   color: var(--text-secondary);
+  font-size: var(--c4-type-meta);
+  line-height: 1.5;
+}
+
+.c4-salon__node-boundary {
+  margin-block-start: auto;
+  padding: 0.125rem var(--space-3);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-pill);
+  background: var(--surface-subtle);
+  color: var(--text-secondary);
+  font-size: var(--c4-type-caption);
+  font-weight: 500;
+}
+
+.c4-salon__flow {
+  display: grid;
+  gap: var(--space-3);
+  margin: 0;
+  padding: 0;
+  list-style: none;
 }
 
 .c4-salon__edge {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-2);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(5rem, auto) minmax(0, 1fr);
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.c4-salon__chip {
+  min-width: 0;
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-card);
+  background: var(--surface-raised);
+  font-size: var(--c4-type-meta);
+  font-weight: 600;
   overflow-wrap: anywhere;
 }
 
-.c4-salon__diagram {
+.c4-salon__arrow {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  color: var(--text-secondary);
+  font-size: var(--c4-type-caption);
+  text-align: center;
+}
+
+.c4-salon__arrow-line {
+  position: relative;
   display: block;
-  width: 100%;
-  max-width: 100%;
-  height: auto;
-  margin-block-start: var(--space-4);
+  inline-size: 100%;
+  block-size: 1px;
+  background: var(--text-muted);
 }
 
-.c4-salon__diagram-line {
-  stroke: var(--text-muted);
-  stroke-width: 1;
+.c4-salon__arrow-line::after {
+  content: "";
+  position: absolute;
+  inset-inline-end: 0;
+  inset-block-start: -3px;
+  inline-size: 6px;
+  block-size: 6px;
+  border-top: 1px solid var(--text-muted);
+  border-inline-end: 1px solid var(--text-muted);
+  transform: rotate(45deg);
 }
 
-.c4-salon__diagram-dot {
-  fill: var(--text-secondary);
+.c4-salon__more {
+  margin: var(--space-6) 0 0;
+}
+
+.c4-salon__link {
+  display: inline-flex;
+  align-items: center;
+  min-block-size: 44px;
+  color: var(--action-primary);
+  font-size: var(--c4-type-meta);
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 0.25em;
+}
+
+.c4-salon__link:hover {
+  text-decoration: none;
+}
+
+.c4-salon__technical {
+  margin-block-start: var(--space-6);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-card);
+  background: var(--surface-raised);
+}
+
+.c4-salon__technical-summary {
+  display: flex;
+  align-items: center;
+  min-block-size: 2.75rem;
+  padding: 0.5rem 1.25rem;
+  color: var(--text-primary);
+  font-size: var(--c4-type-meta);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.c4-salon__technical-summary:focus-visible {
+  outline: 2px solid var(--action-primary);
+  outline-offset: 2px;
+}
+
+.c4-salon__technical-body {
+  min-width: 0;
+  padding: 0 1.25rem 1.25rem;
+  color: var(--text-secondary);
+  font-size: var(--c4-type-meta);
+  overflow-wrap: anywhere;
+}
+
+.c4-salon__technical-body h3 {
+  margin: var(--space-4) 0 var(--space-2);
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.c4-salon__technical-body ul {
+  display: grid;
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.c4-salon__source {
+  margin: var(--space-12) 0 0;
+  color: var(--text-secondary);
+  font-size: var(--c4-type-meta);
+}
+
+@media (max-width: 40rem) {
+  .c4-salon__edge {
+    grid-template-columns: minmax(0, 1fr);
+    justify-items: stretch;
+  }
+
+  .c4-salon__arrow {
+    flex-direction: row;
+    justify-content: center;
+    gap: var(--space-2);
+  }
+
+  .c4-salon__arrow-line {
+    inline-size: 1px;
+    block-size: 1.25rem;
+  }
+
+  .c4-salon__arrow-line::after {
+    inset-inline-end: -3px;
+    inset-block-start: auto;
+    inset-block-end: 0;
+    transform: rotate(135deg);
+  }
 }
 
 @media print {
-  .c4-salon__nav,
-  .c4-salon__diagram {
-    display: none;
-  }
-
   .c4-salon__lens {
     break-inside: avoid;
+  }
+}
+
+/* ---- v8 W5b — dossier: wide layout, custom checkboxes, actions ---- */
+.c4-dossier {
+  max-width: none;
+}
+.c4-dossier__layout {
+  display: grid;
+  gap: var(--space-8);
+  margin-block-start: var(--space-6);
+}
+.c4-dossier__layout > .c4-dossier__form {
+  margin-block-start: 0;
+}
+.c4-dossier__aside .c4-dossier-preview {
+  margin-block-start: 0;
+  padding-block-start: 0;
+  border-top: 0;
+}
+@media (min-width: 1024px) {
+  .c4-dossier__layout {
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+    align-items: start;
+  }
+  .c4-dossier__aside {
+    position: sticky;
+    top: 6rem;
+  }
+}
+.c4-dossier__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  margin-block-start: var(--space-6);
+}
+.c4-dossier__action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding-inline: 1.25rem;
+  border: 1px solid var(--border-subtle);
+  border-radius: 0.5rem;
+  background: var(--surface-subtle);
+  font-size: var(--size-3);
+  font-weight: 600;
+  color: var(--text-primary);
+  text-decoration: none;
+  cursor: pointer;
+}
+.c4-dossier__action[hidden] {
+  display: none;
+}
+.c4-dossier__action:hover {
+  border-color: var(--action-primary);
+}
+.c4-dossier__action:focus-visible {
+  outline: 2px solid var(--action-primary);
+  outline-offset: 2px;
+}
+.c4-dossier__label input[type="checkbox"] {
+  appearance: none;
+  -webkit-appearance: none;
+  inline-size: 20px;
+  block-size: 20px;
+  border: 2px solid var(--text-secondary);
+  border-radius: 4px;
+  background: var(--surface-primary);
+  display: inline-grid;
+  place-content: center;
+  cursor: pointer;
+}
+.c4-dossier__label input[type="checkbox"]::after {
+  content: "";
+  inline-size: 10px;
+  block-size: 6px;
+  border: solid var(--action-primary);
+  border-width: 0 0 2px 2px;
+  transform: translateY(-1px) rotate(-45deg) scale(0);
+}
+.c4-dossier__label input[type="checkbox"]:checked {
+  border-color: var(--action-primary);
+}
+.c4-dossier__label input[type="checkbox"]:checked::after {
+  transform: translateY(-1px) rotate(-45deg) scale(1);
+}
+.c4-dossier__label input[type="checkbox"]:focus-visible {
+  outline: 2px solid var(--action-primary);
+  outline-offset: 2px;
+}
+.c4-boardroom {
+  max-width: none;
+}
+.c4-boardroom[hidden] {
+  display: none;
+}
+
+/* ---- v8 W5b — architecture: one diagram, lenses as disclosures ---- */
+.c4-salon__diagram {
+  display: grid;
+  gap: var(--space-4);
+  margin-block-start: var(--space-4);
+}
+@media (min-width: 1024px) {
+  .c4-salon__diagram {
+    grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+    align-items: start;
+  }
+}
+.c4-salon__system,
+.c4-salon__outside {
+  padding: var(--space-4);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-card);
+  background: var(--surface-raised);
+}
+.c4-salon__outside {
+  border-style: dashed;
+}
+.c4-salon__system-label,
+.c4-salon__outside-label {
+  margin: 0 0 var(--space-3);
+  font-weight: 600;
+  color: var(--text-primary);
+}
+.c4-salon__outside-label {
+  font-size: var(--size-2);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+.c4-salon__parts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.c4-salon__part {
+  display: inline-flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+.c4-salon__part-note {
+  font-size: var(--size-2);
+  color: var(--text-secondary);
+}
+.c4-salon__lenses {
+  margin-block-start: var(--space-6);
+  border-block-end: 1px solid var(--c4-hairline);
+}
+.c4-salon__lens {
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid var(--c4-hairline);
+}
+.c4-salon__lens-summary {
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  padding-block: var(--space-2);
+  font-size: var(--size-4);
+  font-weight: 600;
+  color: var(--text-primary);
+  cursor: pointer;
+}
+.c4-salon__lens-summary:focus-visible {
+  outline: 2px solid var(--action-primary);
+  outline-offset: 2px;
+}
+.c4-salon__lens-body {
+  padding-block-end: var(--space-6);
+}
+
+/* v8 W6: stepped (not fluid) display sizes from the shared scale. */
+@media (min-width: 768px) {
+  :root {
+    --c4-type-product: var(--size-6);
+    --c4-type-evidence: var(--size-5);
+  }
+}
+@media (min-width: 1024px) {
+  :root {
+    --c4-type-display: var(--size-9);
+    --c4-type-reading: var(--size-4);
   }
 }
