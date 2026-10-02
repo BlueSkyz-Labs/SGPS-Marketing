@@ -2,6 +2,8 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
+**Reconciliation 2026-10-03:** this plan's task text is historical. Phases 1–3 and 5 were delivered or superseded by the v5/v8/v6 programs (`#302`–`#439`); the VietQR engine tasks (Task 4–5) are superseded by the P0 VietQR removal (#302) and the Owner D-0 marketing payment boundary — do not implement them. Evidence: `docs/evidence/2026-10-03-experience-v6-slice-reconciliation.md`; `docs/current-work.json` carries the reconciled status.
+
 **Goal:** Transform the BlueSkyz Labs public web ecosystem into a human-centered, living product experience that people genuinely need, understand, trust, enjoy, and can use successfully in real-world contexts (Vietnam and global).
 
 **Architecture:** Static-first Astro 7 output on Cloudflare Edge, zero-knowledge client computations, local-first storage, strictly bounded client JS (<120 KB Brotli), and fail-closed Dual-Control source assurance.
