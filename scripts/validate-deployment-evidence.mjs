@@ -3,22 +3,37 @@
  * Deployment / runtime read-back evidence validator - offline, read-only.
  *
  * A post-merge ledger may only certify the exact revision that was deployed
- * and read back (plan Task 7): stale runtime evidence must never silently
- * certify a newer source revision.
+ * and read back: stale runtime evidence must never silently certify a newer
+ * source revision.
+ *
+ * Two modes are intentionally separate:
+ *
+ *   BASELINE (default)
+ *     Validates that the newest historical post-merge ledger is structurally
+ *     credible. It NEVER emits "Deployment evidence: PASS" and does not claim
+ *     that the current source candidate is deployed.
+ *
+ *   EXACT CERTIFICATION (--expected-sha <40-hex>)
+ *     Requires the ledger to record the same full 40-character Git revision.
+ *     Only this mode may emit "Deployment evidence: PASS (<sha>)".
  *
  * Required in the ledger:
  *   1. a Git revision (7-40 hex) declared as the deployed head/source SHA.
- *      A full 40-hex revision is used verbatim when the ledger records one;
- *      abbreviated revisions are accepted but never expanded or guessed.
+ *      Baseline mode accepts historical abbreviated SHAs; exact certification
+ *      requires the ledger itself to carry the full 40-character revision.
  *   2. a production smoke result line whose verdict is PASS.
  *   3. a read-back section that mentions the production host.
  *
  * Provider identifiers stay internal evidence metadata; they are never
  * treated as customer-facing proof. Nothing is inferred from timestamps.
  *
- * Usage: node scripts/validate-deployment-evidence.mjs [ledger-path]
- *        (default: newest docs/evidence/*post-merge*.md by name)
- * Exit:  1 on any violation, 0 with `Deployment evidence: PASS (<sha>)`.
+ * Usage:
+ *   node scripts/validate-deployment-evidence.mjs [ledger-path]
+ *   node scripts/validate-deployment-evidence.mjs [ledger-path] \
+ *     --expected-sha <40-hex>
+ *
+ * Default ledger: newest docs/evidence/*post-merge*.md by name.
+ * Exit: 1 on any violation, otherwise 0.
  */
 import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { join, resolve } from "node:path";
@@ -32,6 +47,7 @@ export const EVIDENCE_DIR = "docs/evidence";
 const LEDGER_PATTERN = /post-merge/i;
 const SHA_PATTERN = /\b[0-9a-f]{7,40}\b/;
 const FULL_SHA_PATTERN = /\b[0-9a-f]{40}\b/;
+const EXACT_SHA_PATTERN = /^[0-9a-f]{40}$/;
 const DECLARATION_PATTERN =
   /deploy(?:ed|ment)?\s*(?:head|sha|revision|commit)|\bsource\s*sha\b/i;
 const VERDICT_PATTERN = /\b(PASS|FAIL|NOT_RUN)\b/i;
@@ -107,7 +123,17 @@ function violation(subject, detail, fix) {
   return { subject, detail, fix };
 }
 
-export function validateLedger(text, { host = CANONICAL_HOST } = {}) {
+/**
+ * Validate one ledger.
+ *
+ * When expectedSha is supplied, the evidence is being used to certify an
+ * exact deployed revision. The expected SHA and ledger SHA must both be full
+ * 40-character revisions and must match exactly.
+ */
+export function validateLedger(
+  text,
+  { host = CANONICAL_HOST, expectedSha = null } = {},
+) {
   const violations = [];
 
   const sha = parseDeployedSha(text);
@@ -119,6 +145,35 @@ export function validateLedger(text, { host = CANONICAL_HOST } = {}) {
         "record the provider's deployed head, e.g. `Deployed head: <sha>`",
       ),
     );
+  }
+
+  if (expectedSha !== null) {
+    const normalizedExpected = String(expectedSha).toLowerCase();
+    if (!EXACT_SHA_PATTERN.test(normalizedExpected)) {
+      violations.push(
+        violation(
+          "expected-sha",
+          "exact certification requires a full 40-character expected SHA",
+          "pass --expected-sha with the exact served Git revision",
+        ),
+      );
+    } else if (sha !== null && !EXACT_SHA_PATTERN.test(sha)) {
+      violations.push(
+        violation(
+          "deployed-sha-binding",
+          `ledger revision ${sha} is abbreviated and cannot certify exact revision ${normalizedExpected}`,
+          "record the full 40-character deployed Git revision in the ledger",
+        ),
+      );
+    } else if (sha !== null && sha !== normalizedExpected) {
+      violations.push(
+        violation(
+          "deployed-sha-binding",
+          `ledger revision ${sha} does not match expected revision ${normalizedExpected}`,
+          "read back the actual served revision and record evidence for that exact SHA",
+        ),
+      );
+    }
   }
 
   const smoke = findSmokeResult(text);
@@ -174,13 +229,53 @@ export function resolveDefaultLedger(root = process.cwd()) {
   return join(dir, candidates[candidates.length - 1]);
 }
 
-function parseLedgerPath(argv, root) {
-  const candidate = argv.find((value) => !value.startsWith("--"));
-  return candidate ? resolve(candidate) : resolveDefaultLedger(root);
+function parseArguments(argv, root) {
+  let ledgerPath = null;
+  let expectedSha = null;
+
+  for (let index = 0; index < argv.length; index += 1) {
+    const value = argv[index];
+    if (value === "--expected-sha") {
+      const next = argv[index + 1];
+      if (!next || next.startsWith("--")) {
+        throw new Error("--expected-sha requires a full 40-character SHA");
+      }
+      expectedSha = next.toLowerCase();
+      index += 1;
+      continue;
+    }
+    if (value.startsWith("--")) {
+      throw new Error(`unknown option ${value}`);
+    }
+    if (ledgerPath !== null) {
+      throw new Error("only one ledger path may be supplied");
+    }
+    ledgerPath = value;
+  }
+
+  if (expectedSha !== null && !EXACT_SHA_PATTERN.test(expectedSha)) {
+    throw new Error("--expected-sha must be a full 40-character lowercase hex SHA");
+  }
+
+  return {
+    ledger: ledgerPath ? resolve(root, ledgerPath) : resolveDefaultLedger(root),
+    expectedSha,
+  };
 }
 
 export function main(argv = process.argv.slice(2)) {
-  const ledger = parseLedgerPath(argv, process.cwd());
+  let args;
+  try {
+    args = parseArguments(argv, process.cwd());
+  } catch (error) {
+    console.log(
+      `FAIL arguments — ${error.message} (fix: use [ledger-path] --expected-sha <40-hex>)`,
+    );
+    process.exitCode = 1;
+    return 1;
+  }
+
+  const { ledger, expectedSha } = args;
 
   if (ledger === null || !existsSync(ledger)) {
     console.log(
@@ -191,7 +286,9 @@ export function main(argv = process.argv.slice(2)) {
     return 1;
   }
 
-  const { sha, violations } = validateLedger(readFileSync(ledger, "utf8"));
+  const { sha, violations } = validateLedger(readFileSync(ledger, "utf8"), {
+    expectedSha,
+  });
 
   console.log(`Ledger: ${ledger}`);
   for (const item of violations) {
@@ -204,7 +301,13 @@ export function main(argv = process.argv.slice(2)) {
     return 1;
   }
 
-  console.log(`Deployment evidence: PASS (${sha})`);
+  if (expectedSha !== null) {
+    console.log(`Deployment evidence: PASS (${sha})`);
+  } else {
+    console.log(
+      `Deployment evidence baseline: VALID (${sha}) — historical ledger only; current revision NOT_VERIFIED`,
+    );
+  }
   process.exitCode = 0;
   return 0;
 }
