@@ -234,6 +234,12 @@ const defaultTrack = wanted
   }
   .showcase__phone {
     scroll-snap-align: start;
+    /* Far-below captures stay out of the first-paint request graph. */
+    /* Top padding leaves room for the hover lift under paint containment. */
+    content-visibility: auto;
+    contain-intrinsic-size: auto 41rem;
+    padding-top: 0.5rem;
+    margin-top: -0.5rem;
   }
   @media (min-width: 64rem) {
     .showcase__rail {
