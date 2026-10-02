@@ -3,29 +3,21 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
 import Container from "@/components/layout/Container.astro";
 import PageHeader from "@/components/layout/PageHeader.astro";
 import DossierComposer from "@/components/dossier/DossierComposer.astro";
-import DossierSources from "@/components/dossier/DossierSources.astro";
-import BoardroomDeck from "@/components/dossier/BoardroomDeck.astro";
 ---
 
 <BaseLayout
-  title="Hồ sơ công khai"
-  description="Dựng bản trình bày cho phòng họp từ các tuyên bố và bằng chứng trang này đã công bố. Không truyền dữ liệu, không lưu trữ."
+  title="Bản tóm tắt để in"
+  description="Chọn tuyên bố và nguồn đã công bố để in hoặc trình bày. Không truyền đi, không lưu."
   path="/vi/dossier/"
 >
   <section class="py-16 lg:py-24">
     <Container>
       <PageHeader
-        title="Hồ sơ công khai"
-        lede="Dựng bản trình bày cho phòng họp từ các tuyên bố và bằng chứng trang này đã công bố. Không truyền dữ liệu, không lưu trữ."
+        title="Bản tóm tắt để in"
+        lede="Chọn các tuyên bố và nguồn đã công bố để in hoặc trình bày. Không có gì rời khỏi trang này và không có gì được lưu."
       />
       <div class="mt-12">
         <DossierComposer lang="vi" />
-      </div>
-      <div class="mt-12">
-        <DossierSources lang="vi" />
-      </div>
-      <div class="mt-12">
-        <BoardroomDeck lang="vi" />
       </div>
     </Container>
   </section>

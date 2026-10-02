@@ -1,5 +1,6 @@
 ---
 import { getPublicProvenance } from "@/lib/provenance-lens";
+import { formatDisplayDate } from "@/lib/display-date";
 import type { Language } from "@/lib/i18n";
 
 /**
@@ -76,13 +77,15 @@ const labels = LABELS[lang];
   <section class="c4-provenance" data-provenance-lens={view.subject}>
     <h2 class="c4-provenance__heading">{labels.heading}</h2>
     <p class="c4-provenance__statement" data-provenance-statement>
-      {view.statement}
+      {view.statementLabel ?? view.statement}
     </p>
 
     {view.freshness && (
       <p class="c4-provenance__freshness">
         {labels.freshness}:{" "}
-        <time datetime={view.freshness}>{view.freshness}</time>
+        <time datetime={view.freshness}>
+          {formatDisplayDate(view.freshness, lang)}
+        </time>
       </p>
     )}
 

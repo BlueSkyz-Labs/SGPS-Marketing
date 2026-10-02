@@ -6,29 +6,29 @@ const SIGN_IN: Record<string, string> = {
   sotro: "https://sotro.blueskyzlabs.com/login",
   sotam: "https://sotam.blueskyzlabs.com/auth/login",
 };
-const NAMES: Record<string, string> = { sotro: "Sổ Trọ", sotam: "Sổ Tâm" };
 const HIDDEN = ["apexagent", "fluentarc", "vungtaylai"];
 
 test.describe("app access", () => {
   for (const slug of PUBLISHED) {
-    test(`${slug}: direct sign-in link; Android and iOS in development, never linked`, async ({
+    test(`${slug}: one Availability line (no store link); sign-in is a text link`, async ({
       page,
     }) => {
       await page.goto(`/vi/products/${slug}/`);
+      // v8 W3: Access + Platforms + Stage collapse into one line; an
+      // in-development native app is plain text and is never linked.
       const block = page.locator("[data-app-access]");
-      await expect(block.getByRole("heading")).toHaveText("Truy cập ứng dụng");
-      for (const key of ["android", "ios"]) {
-        const app = block.locator(`[data-mobile-app="${key}"]`);
-        await expect(app).toHaveAttribute(
-          "data-mobile-state",
-          "in-development",
-        );
-        await expect(app).toContainText("Đang phát triển");
-        await expect(app.locator("a")).toHaveCount(0);
-        expect(await app.evaluate((el) => el.tagName)).toBe("P");
-      }
+      await expect(block).toHaveCount(1);
+      await expect(block).toContainText(
+        "Android và iOS: đang phát triển, chưa có bản trên cửa hàng ứng dụng",
+      );
+      await expect(block).toContainText("Web: đang phát triển");
+      await expect(block.locator("a")).toHaveCount(0);
+      await expect(block.locator("[data-mobile-app]")).toHaveCount(0);
+      await expect(
+        block.locator('[data-mobile-state="in-development"]'),
+      ).toHaveCount(1);
       const signIn = page.getByRole("link", {
-        name: `Đăng nhập · ${NAMES[slug]}`,
+        name: "Đã có tài khoản? Đăng nhập",
       });
       await expect(signIn).toHaveAttribute("href", SIGN_IN[slug]);
       await expect(block.locator("[data-app-signin]")).toHaveCount(0);
@@ -39,7 +39,7 @@ test.describe("app access", () => {
 
   for (const lang of ["en", "vi", "zh", "zh-hant"]) {
     for (const slug of PUBLISHED) {
-      test(`${lang}/${slug}: profile primary CTA opens sign-in, not itself`, async ({
+      test(`${lang}/${slug}: sign-in link opens the app, not this page`, async ({
         page,
       }) => {
         await page.goto(`/${lang}/products/${slug}/`);

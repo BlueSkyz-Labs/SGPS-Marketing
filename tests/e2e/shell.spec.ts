@@ -14,15 +14,17 @@ test("shell exposes skip link and product-led nav", async ({ page }) => {
   await expect(
     page.getByRole("link", { name: "Contact" }).first(),
   ).toBeVisible();
-  // Experience v6 S6: the header CTA has a job distinct from the Products
-  // link, so it is never "Explore products" (Contact with a real mailbox,
-  // otherwise About via the Act soft-land).
+  // Owner decision 2026-10-01 (v7 A-12): the filled CTA leads to Products and
+  // About is the plain link; Products is not listed twice.
   const primary = page.getByRole("navigation", { name: "Primary" });
+  await expect(primary.getByRole("link", { name: "Products" })).toHaveCount(1);
+  await expect(primary.getByRole("link", { name: "Products" })).toHaveAttribute(
+    "href",
+    "/en/products/",
+  );
+  await expect(primary.getByRole("link", { name: "About" })).toBeVisible();
   await expect(
     primary.getByRole("link", { name: "About BlueSkyz" }),
-  ).toBeVisible();
-  await expect(
-    primary.getByRole("link", { name: "Explore products" }),
   ).toHaveCount(0);
   await expect(page.getByRole("heading", { level: 1 })).toContainText(
     "We build intelligent products that empower people",

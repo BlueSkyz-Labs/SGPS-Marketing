@@ -1,0 +1,56 @@
+---
+/**
+ * v8 W5a: the /privacy/ page body (deck rows pri-1..6).
+ * Lede, what is collected, limits, deletion, one sources line. No headings
+ * below the H1, so no heading can fall off the page scale.
+ */
+import Container from "@/components/layout/Container.astro";
+import PageHeader from "@/components/layout/PageHeader.astro";
+import SourcesLine from "@/components/trust/SourcesLine.astro";
+import { getClaimAnchor } from "@/lib/claims";
+import { PRIVACY_COPY } from "@/data/trust-copy";
+import type { Language } from "@/data/site";
+
+interface Props {
+  lang: Language;
+}
+
+const { lang } = Astro.props;
+const c = PRIVACY_COPY[lang];
+const CLAIM_ID = "privacy-no-tracking-on-this-site";
+---
+
+<section class="py-16 lg:py-24" data-trust-page="privacy">
+  <Container>
+    <div
+      id={getClaimAnchor(CLAIM_ID)}
+      data-integrity-entry
+      class="scroll-mt-24"
+    >
+      <PageHeader title={c.title} lede={c.lede} />
+    </div>
+    <div class="mt-10 grid max-w-3xl gap-4 text-[var(--text-secondary)]">
+      <p>
+        <strong class="font-semibold text-[var(--text-primary)]">
+          {c.collectedLead}
+        </strong>{" "}
+        {c.collectedBody}
+      </p>
+      <p>
+        <strong class="font-semibold text-[var(--text-primary)]">
+          {c.limitsLead}
+        </strong>{" "}
+        {c.limitsBody}
+      </p>
+      <p>{c.deletion}</p>
+    </div>
+    <div class="mt-6 max-w-3xl">
+      <SourcesLine
+        lang={lang}
+        claimId={CLAIM_ID}
+        label={c.sourcesLabel}
+        sources={c.sources}
+      />
+    </div>
+  </Container>
+</section>

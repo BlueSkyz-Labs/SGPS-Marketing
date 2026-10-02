@@ -1,6 +1,7 @@
 import {
   BOUNDARY_INDEX,
   CLAIMS,
+  claimShortLabel,
   EVIDENCE_INDEX,
   INTEGRITY_ENTRY_INDEX,
 } from "../data/claims.ts";
@@ -28,6 +29,11 @@ export interface PublicProvenance {
   subject: string;
   /** Localized statement taken verbatim from the canonical source. */
   statement: string;
+  /**
+   * Short label for the same claim, for pages that already show `statement`
+   * in full and only need to refer back to it. Claims only.
+   */
+  statementLabel?: string | undefined;
   /** Canonical public evidence only; never a self-reference. */
   sourceRefs: ProvenanceSourceRef[];
   boundary: { claim: string; doesNotImply: string } | null;
@@ -221,6 +227,7 @@ export function getPublicProvenance(
       return {
         subject: claim.id,
         statement,
+        statementLabel: claimShortLabel(claim, language),
         sourceRefs: [],
         boundary: null,
         freshness: null,
@@ -244,6 +251,7 @@ export function getPublicProvenance(
     return {
       subject: claim.id,
       statement,
+      statementLabel: claimShortLabel(claim, language),
       sourceRefs: refs,
       boundary: boundary && boundary.claim.length > 0 ? boundary : null,
       freshness:

@@ -50,6 +50,7 @@ test("the evidence passport page names its document and its claim", async ({
   await expect(page.locator("[data-passport-page-title]")).toHaveText(
     "Evidence for this claim",
   );
-  // The claim itself stays a section heading below the document title.
-  await expect(page.locator(".evidence-passport__claim")).toHaveCount(1);
+  // v7 D-18: the claim is the document's single H1; the label is an eyebrow.
+  await expect(page.locator("h1")).toHaveCount(1);
+  await expect(page.locator("h1.evidence-passport__claim")).toHaveCount(1);
 });

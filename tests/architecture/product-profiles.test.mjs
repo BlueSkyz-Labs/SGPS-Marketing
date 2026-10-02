@@ -21,7 +21,13 @@ test("localized product-profile primary CTAs use the app sign-in destination", (
     );
     assert.match(source, /data\.appAccess\?\.signInUrl/, lang);
     assert.doesNotMatch(source, /href=\{data\.primaryAction\.href\}/, lang);
-    assert.match(source, /showSignIn=\{false\}/, lang);
+    // v8 W3: sign-in is a plain text link (data-app-signin), never a button.
+    assert.match(source, /data-app-signin/, lang);
+    assert.doesNotMatch(
+      source,
+      /<ButtonLink[^>]*href=\{data\.appAccess\.signInUrl\}/,
+      lang,
+    );
     assert.match(source, /resolveLifecycleCta/, lang);
     assert.doesNotMatch(source, /data\.primaryAction\.label/, lang);
   }

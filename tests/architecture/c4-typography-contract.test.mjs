@@ -30,17 +30,17 @@ test("C4 typography: no second font family", () => {
   );
 });
 
-test("C4 typography: every type role declared exactly once", () => {
+test("C4 typography: every type role has one base declaration (v8 W6: viewport steps may re-point it)", () => {
   for (const role of TYPE_ROLES) {
-    assert.equal(
-      declarations(role),
-      1,
-      `${role} must be declared exactly once`,
-    );
+    assert.ok(declarations(role) >= 1, `${role} must be declared`);
+    const base = css
+      .split("\n")
+      .find((l) => new RegExp(`^\\s{2}${escapeRe(role)}\\s*:`).test(l));
+    assert.ok(base, `${role} must have a base declaration at :root level`);
   }
 });
 
-test("C4 typography: headline roles are fluid, not one-off fixed steps", () => {
+test("C4 typography: headline roles step through the v8 W6 size scale, never a fluid or literal size", () => {
   for (const role of [
     "--c4-type-display",
     "--c4-type-section",
@@ -50,7 +50,12 @@ test("C4 typography: headline roles are fluid, not one-off fixed steps", () => {
       css
         .split("\n")
         .find((l) => new RegExp(`^\\s*${escapeRe(role)}\\s*:`).test(l)) ?? "";
-    assert.match(line, /clamp\(/, `${role} must use a fluid clamp range`);
+    assert.match(
+      line,
+      /var\(--size-[1-9]\)/,
+      `${role} must use a size-scale token`,
+    );
+    assert.doesNotMatch(line, /clamp\(/, `${role} must not be fluid`);
   }
 });
 

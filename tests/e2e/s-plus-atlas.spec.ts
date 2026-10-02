@@ -79,13 +79,19 @@ test("atlas node links resolve to real destinations", async ({ page }) => {
   expect(
     await atlas.locator("[data-atlas-node] a[href='/en/privacy/']").count(),
   ).toBeGreaterThanOrEqual(1);
-  // The principle nodes point at the home page's "Elevation" anchor. A bare
-  // "#house-title" does not exist on /verify, so it must be the full route.
+  // v7 B-17: "#house-title" is not rendered on the home page (OneHouse is not
+  // mounted there), so no atlas link may carry it. Principle nodes point at the
+  // About page, which states the principles. Existence is checked in the real
+  // target documents in tests/e2e/v7-truth-content.spec.ts.
   await expect(
-    atlas.locator("[data-atlas-node] a[href='#house-title']"),
+    atlas.locator("[data-atlas-node] a[href*='#house-title']"),
   ).toHaveCount(0);
   await expect(
-    atlas.locator("[data-atlas-node] a[href='/en/#house-title']").first(),
+    atlas
+      .locator(
+        "[data-atlas-node][data-atlas-kind='principle'] a[href='/en/about/']",
+      )
+      .first(),
   ).toHaveCount(1);
 });
 

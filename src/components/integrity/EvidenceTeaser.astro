@@ -56,7 +56,7 @@ const teasers = getEvidencePassportIds(products)
 
 const LABELS = {
   en: { more: "See the evidence", passport: "Evidence for this claim" },
-  vi: { more: "Xem bằng chứng", passport: "Bằng chứng cho nhận định này" },
+  vi: { more: "Xem bằng chứng", passport: "Bằng chứng cho tuyên bố này" },
   zh: { more: "查看证据", passport: "这条说法的证据" },
   "zh-hant": { more: "檢視證據", passport: "這項說法的證據" },
 } as const;
@@ -139,7 +139,7 @@ const labels = LABELS[lang];
 
   .evidence-teaser__claim {
     margin: 0;
-    font-size: 1.125rem;
+    font-size: var(--size-4);
     font-weight: 600;
     letter-spacing: -0.01em;
     line-height: 1.4;
@@ -157,7 +157,7 @@ const labels = LABELS[lang];
     align-items: center;
     min-height: 2.75rem;
     cursor: pointer;
-    font-size: 0.875rem;
+    font-size: var(--size-2);
     font-weight: 600;
     color: var(--action-primary);
   }
@@ -174,8 +174,8 @@ const labels = LABELS[lang];
 
   .evidence-teaser__boundary {
     margin: 0;
-    max-width: 46ch;
-    font-size: 0.8125rem;
+    max-width: var(--container-reading);
+    font-size: var(--size-2);
     line-height: 1.5;
     color: var(--text-muted);
     overflow-wrap: anywhere;
@@ -197,7 +197,7 @@ const labels = LABELS[lang];
     display: inline-flex;
     align-items: center;
     min-height: 2.75rem;
-    font-size: 0.9375rem;
+    font-size: var(--size-3);
     font-weight: 600;
     color: var(--action-primary);
     text-decoration: none;

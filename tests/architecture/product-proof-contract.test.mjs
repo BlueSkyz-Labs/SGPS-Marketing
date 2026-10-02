@@ -4,10 +4,6 @@ import test from "node:test";
 
 const schema = readFileSync("src/lib/product-schema.ts", "utf8");
 const config = readFileSync("src/content.config.ts", "utf8");
-const flagship = readFileSync(
-  "src/components/sections/FlagshipProof.astro",
-  "utf8",
-);
 const productVisual = readFileSync(
   "src/components/product/ProductVisual.astro",
   "utf8",
@@ -77,12 +73,11 @@ test("identity artwork stays on the ink stage without invented app chrome", () =
   assert.doesNotMatch(theatre, /device-frame|window-controls/);
 });
 
-test("FlagshipProof renders capabilities through the shared ProductVisual", () => {
-  assert.match(flagship, /capabilities\.slice\(0,\s*3\)/);
-  assert.doesNotMatch(flagship, /data\.jobs\.slice/);
-  assert.match(flagship, /ProductVisual/);
-  assert.match(flagship, /media=\{media\}/);
-  assert.match(flagship, /data\.proof\.media/);
+test("FlagshipTheatre renders proof media through the shared ProductVisual", () => {
+  assert.match(theatre, /capabilities\.slice\(0,\s*3\)/);
+  assert.match(theatre, /ProductVisual/);
+  assert.match(theatre, /media=\{media\}/);
+  assert.match(theatre, /data\.proof\.media/);
 });
 
 test("product profile exposes public status without internal enums", () => {

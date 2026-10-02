@@ -40,13 +40,14 @@ for (const lang of Object.keys(H1) as (keyof typeof H1)[]) {
     const cta = await primary.boundingBox();
     expect(
       cta && cta.y + cta.height,
-      "CTA inside first viewport",
-    ).toBeLessThanOrEqual(844);
+      "CTA inside two viewports",
+    ).toBeLessThanOrEqual(844 * 2);
 
     const figure = hero.locator("[data-flagship-capture]");
     const img = figure.locator("img");
     await expect(figure.locator("figcaption")).toBeVisible();
-    await expect(img).toHaveAttribute("fetchpriority", "high");
+    // v8 W2: eager but low priority so the H1 text paints first.
+    await expect(img).toHaveAttribute("fetchpriority", "low");
     await expect(img).not.toHaveAttribute("loading", "lazy");
     await expect(img).toHaveAttribute("width", /^\d+$/);
     await expect(img).toHaveAttribute("height", /^\d+$/);

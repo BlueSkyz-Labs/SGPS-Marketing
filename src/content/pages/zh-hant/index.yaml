@@ -22,7 +22,7 @@ sections:
         summary: 真實價值。真實改變。
   trust:
     heading: 信任
-    intro: 產品成熟度始終明確。隱私、安全與支援均為正式通道——而非口號。
+    intro: 產品成熟度始終明確。隱私、安全與支援各有專屬頁面。
     links:
       - label: 隱私
         href: /zh-hant/privacy/
