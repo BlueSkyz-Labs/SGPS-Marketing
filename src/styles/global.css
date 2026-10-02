@@ -1775,10 +1775,13 @@ dd {
 }
 
 /* Back to top: a plain anchor at the end of long pages on phones. */
-.back-to-top {
+.back-to-top-nav {
   display: none;
 }
 @media (max-width: 767px) {
+  .back-to-top-nav {
+    display: block;
+  }
   .back-to-top {
     display: flex;
     min-height: 2.75rem;
@@ -1807,7 +1810,7 @@ dd {
   .hero-atmosphere,
   svg:has(.sail-outline),
   .sail-layer,
-  .back-to-top {
+  .back-to-top-nav {
     display: none !important;
   }
   main a:not(.btn-secondary) {

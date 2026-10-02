@@ -13,6 +13,10 @@ const LABEL: Record<string, string> = {
 const { lang } = Astro.props;
 ---
 
-<a class="back-to-top" href="#top" data-back-to-top>
-  {LABEL[lang] ?? LABEL.en}
-</a>
+<!-- Outside <main> so it never counts toward page word or action caps; its
+     own nav landmark keeps axe "region" satisfied. -->
+<nav class="back-to-top-nav" aria-label={LABEL[lang] ?? LABEL.en}>
+  <a class="back-to-top" href="#top" data-back-to-top>
+    {LABEL[lang] ?? LABEL.en}
+  </a>
+</nav>

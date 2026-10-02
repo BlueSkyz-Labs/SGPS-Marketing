@@ -222,3 +222,24 @@ test("back to top is a plain anchor with no script", () => {
     /<body id="top"/,
   );
 });
+
+// The link sits outside <main> so it never inflates page word or action caps
+// (v8-trust-pages, exp-s8 contact), inside its own nav landmark for axe.
+function backToTopInsideMain(layout) {
+  const main = layout.slice(layout.indexOf("<main"), layout.indexOf("</main>"));
+  return main.includes("<BackToTop");
+}
+
+test("back to top renders outside <main>", () => {
+  const layout = readFileSync("src/layouts/BaseLayout.astro", "utf8");
+  assert.equal(backToTopInsideMain(layout), false);
+  assert.match(
+    readFileSync("src/components/layout/BackToTop.astro", "utf8"),
+    /<nav class="back-to-top-nav" aria-label=/,
+  );
+});
+
+test("negative proof: back to top inside <main> is caught", () => {
+  const broken = '<main id="m">\n<BackToTop lang="en" />\n</main>';
+  assert.equal(backToTopInsideMain(broken), true);
+});
