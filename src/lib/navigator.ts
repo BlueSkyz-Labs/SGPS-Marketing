@@ -80,6 +80,14 @@ const ROUTE_ALIASES: Record<string, Record<Language, string[]>> = {
   },
 };
 
+/** Search keywords for every public evidence-passport item (>= 2 per locale). */
+const EVIDENCE_PASSPORT_ALIASES: Record<Language, string[]> = {
+  en: ["evidence", "claim", "passport"],
+  vi: ["bằng chứng", "tuyên bố"],
+  zh: ["证据", "声明"],
+  "zh-hant": ["證據", "聲明"],
+};
+
 /**
  * Existing page titles / link texts only (no new copy). Kept in lock-step with
  * the page files by tests/architecture/navigator-pages.test.mjs.
@@ -211,7 +219,7 @@ export function buildNavigatorIndex(
       href,
       label: passport.claim[lang],
       kind: "evidence",
-      aliases: [],
+      aliases: [...EVIDENCE_PASSPORT_ALIASES[lang]],
     };
     items.push(item);
     byHref.set(href, item);

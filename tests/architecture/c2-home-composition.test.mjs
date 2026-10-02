@@ -16,7 +16,7 @@ const homePath = (lang) => `src/pages/${lang}/index.astro`;
 /** Act components in the order the C2 design requires. */
 const ACT_ORDER = ["Hero", "FlagshipTheatre", "ProductHouse", "ProofBand"];
 
-/** Experience v6 S1: removed from the home (components stay in the repo). */
+/** Experience v6 S1: removed from the home (W10 deleted all but MaisonIndex). */
 const REMOVED_FROM_HOME = [
   "OneHouse",
   "Trust",

@@ -69,35 +69,6 @@ export const EXPERIENCE_STAGES: ExperienceStage[] = [
 
 export type DimensionKey = "product" | "people" | "evidence" | "impact";
 
-export const PRINCIPLE_DIMENSION_KEYS: DimensionKey[] = [
-  "product",
-  "people",
-  "evidence",
-  "impact",
-];
-
-export const PRINCIPLE_DIMENSION_LABELS: Record<DimensionKey, LocalizedText> = {
-  product: {
-    en: "In the product",
-    vi: "Trong sản phẩm",
-    zh: "产品之中",
-    "zh-hant": "產品之中",
-  },
-  people: {
-    en: "For people",
-    vi: "Cho con người",
-    zh: "以人为本",
-    "zh-hant": "以人為本",
-  },
-  evidence: { en: "Evidence", vi: "Bằng chứng", zh: "证据", "zh-hant": "證據" },
-  impact: {
-    en: "Real-world impact",
-    vi: "Tác động thực tế",
-    zh: "实际影响",
-    "zh-hant": "實際影響",
-  },
-};
-
 export interface PrincipleMatrixEntry {
   id: string;
   name: LocalizedText;

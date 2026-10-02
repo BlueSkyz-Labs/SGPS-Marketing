@@ -100,6 +100,14 @@ test("W7: every palette route has at least 2 keywords per locale", () => {
   assert.ok(counts.length >= 40, `parsed ${counts.length} locale lists`);
   assert.deepEqual(shortLists(counts), []);
 });
+test("W7: evidence-passport palette items carry the keyword list", () => {
+  const src = read("src/lib/navigator.ts");
+  assert.match(
+    src,
+    /kind: "evidence",\s*aliases: \[\.\.\.EVIDENCE_PASSPORT_ALIASES\[lang\]\]/,
+  );
+  assert.ok(src.includes('vi: ["bằng chứng", "tuyên bố"]'));
+});
 test("W7: zh and zh-hant verify synonyms are present", () => {
   const src = read("src/lib/navigator.ts");
   for (const t of ["核实", "核验", "验证", "核實", "核驗", "驗證", "查證"]) {
