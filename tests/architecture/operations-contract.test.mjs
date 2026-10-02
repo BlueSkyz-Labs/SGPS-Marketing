@@ -34,6 +34,11 @@ test("rollback and fix-forward are both documented", () => {
   );
   assert.match(
     doc,
+    /--expected-sha/,
+    "runtime deployment certification must bind the exact served SHA",
+  );
+  assert.match(
+    doc,
     /never roll back without/i,
     "verification rule must be explicit",
   );

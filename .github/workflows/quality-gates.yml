@@ -84,7 +84,7 @@ jobs:
         run: pnpm verify:git-evidence
       - name: Promotion assurance state
         run: pnpm check:promotion-state
-      - name: Deployment evidence ledger
+      - name: Historical deployment evidence baseline (not current-head proof)
         run: pnpm check:deployment-evidence
       - name: Product provenance
         run: pnpm check:product-provenance
