@@ -46,24 +46,8 @@
  * supporting column); the phone composition is authored as a single column in
  * source order, so DOM reading order never depends on visual placement.
  */
-.c4-editorial-grid {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  gap: var(--c4-folio-gap);
-}
-
-.c4-reading-column {
-  max-width: var(--c4-reading-measure);
-}
 
 /* C4-A S2 — calibrated type role utilities (semantic element keeps its level). */
-.c4-type-section {
-  font-size: var(--c4-type-section);
-}
-
-.c4-type-reading {
-  font-size: var(--c4-type-reading);
-}
 
 /* C4-A S5 — Editorial folio: running context as real text, ordinal as ornament. */
 .c4-folio {
@@ -113,43 +97,11 @@
   background: var(--c4-hairline);
 }
 
-/* C4-A S8 — Quiet motion budget.
- *
- * One focal entrance moment per scene is the ceiling. The only animation the
- * quiet-authority layer is allowed to declare is this single, short rise; it is
- * fully neutralised under reduced motion. No perpetual decoration, no second
- * entrance hook, no new animation engine.
- */
-.c4-motion-focal {
-  animation: c4-focal-rise var(--c4-motion-scarcity-duration)
-    var(--c4-motion-scarcity-ease) both;
-}
+/* C4-A S8 — Quiet motion budget. The quiet-authority layer declares no
+ * animation (W10 removed the unused focal entrance); a regression test pins
+ * that. */
 
-@keyframes c4-focal-rise {
-  from {
-    opacity: 0;
-    transform: translateY(0.5rem);
-  }
-
-  to {
-    opacity: 1;
-    transform: none;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .c4-motion-focal {
-    animation: none;
-  }
-}
-
-/* Print runs no animation, so a `both` fill would freeze the element at its
- * hidden start state. Print must show the content, not the entrance. */
 @media print {
-  .c4-motion-focal {
-    animation: none;
-  }
-
   .c4-maison {
     display: none;
   }
@@ -175,13 +127,6 @@
   display: flex;
   align-items: baseline;
   gap: var(--space-3);
-}
-
-.c4-editions__ordinal {
-  font-size: var(--c4-type-meta);
-  font-variant-numeric: tabular-nums;
-  letter-spacing: 0.08em;
-  color: var(--text-muted);
 }
 
 .c4-editions__link {
@@ -233,11 +178,6 @@
   margin-block-start: var(--space-4);
   font-size: var(--c4-type-meta);
   color: var(--text-muted);
-}
-
-.c4-edition__note-label {
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
 }
 
 .c4-edition__sources-title {
@@ -299,12 +239,6 @@
   letter-spacing: -0.01em;
   line-height: 1.25;
   color: var(--text-primary);
-}
-
-.c4-boardroom__lede {
-  margin: 0;
-  font-size: var(--c4-type-reading);
-  color: var(--text-secondary);
 }
 
 .c4-boardroom__stage {
@@ -520,22 +454,6 @@
   }
 }
 
-@media (min-width: 64rem) {
-  .c4-editorial-grid {
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1.618fr);
-  }
-
-  .c4-focal-span {
-    grid-column: 2 / -1;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .c4-editorial-grid {
-    gap: var(--c4-folio-gap);
-  }
-}
-
 /* ---- C4-B G1 — Maison orientation surface ---- */
 
 .c4-maison {
@@ -670,11 +588,6 @@
   color: var(--text-primary);
 }
 
-.c4-dossier__lede {
-  font-size: var(--c4-type-reading);
-  color: var(--text-secondary);
-}
-
 .c4-dossier__form {
   margin-block-start: var(--space-8);
 }
@@ -686,15 +599,6 @@
   border-radius: var(--radius-card);
   background: var(--surface-raised);
   min-inline-size: 0;
-}
-
-.c4-dossier__legend {
-  padding-inline: var(--space-2);
-  font-size: var(--size-2);
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--text-secondary);
 }
 
 .c4-dossier__group-heading,
@@ -799,11 +703,6 @@
   text-align: center;
   color: var(--text-secondary);
   font-variant-numeric: tabular-nums;
-}
-
-.c4-dossier__note {
-  font-size: var(--size-3);
-  color: var(--text-secondary);
 }
 
 .c4-dossier__empty {
@@ -1115,8 +1014,7 @@
   gap: var(--space-2);
 }
 /* WCAG 2.5.8: the checkbox itself is at least 24 CSS px, not only its label. */
-.decision-room__atelier-check input[type="checkbox"],
-.decision-room__select input[type="checkbox"] {
+.decision-room__atelier-check input[type="checkbox"] {
   inline-size: 1.5rem;
   block-size: 1.5rem;
   margin: 0;
@@ -1146,15 +1044,6 @@
   color: var(--text-secondary);
 }
 
-.decision-room__select {
-  display: inline-flex;
-  gap: var(--space-2);
-  align-items: center;
-  min-block-size: 44px;
-  margin-block-end: var(--space-2);
-  font-size: var(--c4-type-reading);
-}
-
 .decision-room__handoff {
   margin-block-start: var(--space-4);
   padding-block-start: var(--space-3);
@@ -1162,7 +1051,6 @@
     color-mix(in srgb, var(--brand-porcelain) 18%, transparent);
 }
 
-.decision-room__handoff-empty,
 .decision-room__handoff-report {
   margin: 0;
   font-size: var(--c4-type-reading);
@@ -1180,47 +1068,11 @@
   max-width: 64rem;
 }
 
-.c4-salon__nav-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-2);
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.c4-salon__nav-link {
-  display: inline-flex;
-  align-items: center;
-  min-block-size: 44px;
-  padding-inline: var(--space-4);
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-pill);
-  color: var(--text-secondary);
-  font-size: var(--c4-type-meta);
-  font-weight: 600;
-  text-decoration: none;
-}
-
-.c4-salon__nav-link:hover {
-  border-color: var(--action-primary);
-  color: var(--action-primary);
-}
-
 .c4-salon__lens {
   margin-block-start: var(--space-16);
   padding-block-start: var(--space-8);
   border-top: 1px solid var(--c4-hairline);
   scroll-margin-top: var(--space-16);
-}
-
-.c4-salon__lens-heading {
-  margin: 0;
-  max-width: var(--measure-short);
-  font-size: var(--c4-type-section);
-  font-weight: 600;
-  letter-spacing: -0.01em;
-  text-wrap: balance;
 }
 
 .c4-salon__lens-intro {
@@ -1444,10 +1296,6 @@
 }
 
 @media print {
-  .c4-salon__nav {
-    display: none;
-  }
-
   .c4-salon__lens {
     break-inside: avoid;
   }

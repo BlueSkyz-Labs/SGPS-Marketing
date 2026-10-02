@@ -169,14 +169,6 @@ export const SHARED_LABELS = {
     zh: "网站目录",
     "zh-hant": "網站目錄",
   },
-  // Accessible name for the One House principle matrix — the four principles
-  // render as cards, so the list needs a locale-aware label of its own.
-  brandPrinciples: {
-    en: "Brand principles",
-    vi: "Nguyên tắc thương hiệu",
-    zh: "品牌原则",
-    "zh-hant": "品牌原則",
-  },
   platforms: { en: "Platforms", vi: "Nền tảng", zh: "平台", "zh-hant": "平台" },
 } as const satisfies Record<string, LocalizedLabel>;
 

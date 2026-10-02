@@ -5,19 +5,13 @@ import { readFileSync } from "node:fs";
 const read = (path) =>
   readFileSync(new URL(`../../${path}`, import.meta.url), "utf8");
 
-const featured = read("src/components/sections/FeaturedProducts.astro");
-const flagship = read("src/components/sections/FlagshipProof.astro");
 const card = read("src/components/product/ProductCard.astro");
 const header = read("src/components/layout/Header.astro");
 const act = read("src/lib/act.ts");
 const productRoutes = read("src/lib/product-routes.ts");
 
 test("shared product components never emit bare /products/ paths", () => {
-  for (const [name, source] of [
-    ["FeaturedProducts", featured],
-    ["FlagshipProof", flagship],
-    ["ProductCard", card],
-  ]) {
+  for (const [name, source] of [["ProductCard", card]]) {
     assert.doesNotMatch(
       source,
       /href="\/products\/"/,
@@ -32,26 +26,6 @@ test("shared product components never emit bare /products/ paths", () => {
 });
 
 test("shared product components carry locale-aware labels only", () => {
-  assert.doesNotMatch(
-    featured,
-    /Featured products/,
-    "FeaturedProducts heading/CTA labels must come from localized labels",
-  );
-  assert.doesNotMatch(
-    featured,
-    />Explore all products</,
-    "FeaturedProducts CTA must come from localized labels",
-  );
-  assert.doesNotMatch(
-    flagship,
-    />View profile</,
-    "FlagshipProof profile CTA must come from localized labels",
-  );
-  assert.doesNotMatch(
-    flagship,
-    /Verified public artifact — not a concept mock\./,
-    "FlagshipProof caption must come from localized labels",
-  );
   assert.doesNotMatch(
     card,
     /View profile/,
@@ -91,11 +65,7 @@ test("product route helpers are locale-aware", () => {
 
 test("locale-prefixed CTA helpers are never double-prefixed by consumers", () => {
   const hero = read("src/components/sections/Hero.astro");
-  const nextStep = read("src/components/sections/NextStep.astro");
-  for (const [name, source] of [
-    ["Hero", hero],
-    ["NextStep", nextStep],
-  ]) {
+  for (const [name, source] of [["Hero", hero]]) {
     assert.doesNotMatch(
       source,
       /\/(en|vi)\$\{empty/,
