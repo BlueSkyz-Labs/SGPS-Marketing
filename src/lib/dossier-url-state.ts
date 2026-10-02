@@ -59,3 +59,62 @@ export function parseDossierSearch(
   const raw = new URLSearchParams(search).get(selectionParam);
   return parseDossierSelection(raw);
 }
+
+/**
+ * Serialize a selection back into a query string, round-trip safe.
+ *
+ * The result is accepted only if the bounded parser above reads it back as
+ * exactly the same ids; anything the parser would reject (or alter) yields
+ * `null`, so a written URL can never be one the reader refuses. Other query
+ * parameters are preserved untouched.
+ */
+export function buildSelectionSearch(
+  currentSearch: string,
+  selectionParam: string,
+  ids: readonly string[],
+): string | null {
+  if (currentSearch.length > DOSSIER_QUERY_MAX_LENGTH) return null;
+  const params = new URLSearchParams(currentSearch);
+  const unique = [...new Set(ids)];
+  if (unique.length === 0) {
+    params.delete(selectionParam);
+  } else {
+    params.set(selectionParam, unique.join(","));
+  }
+  const text = params.toString();
+  const search = text === "" ? "" : `?${text}`;
+  const check = parseDossierSearch(search, selectionParam);
+  if (
+    check.status !== "ok" ||
+    check.ids.length !== unique.length ||
+    check.ids.some((id, index) => id !== unique[index])
+  ) {
+    return null;
+  }
+  return search;
+}
+
+/**
+ * Write a selection into the address bar with `history.replaceState` only:
+ * same document, no new history entry, no navigation, no storage.
+ * Returns whether the URL was updated.
+ */
+export function writeSelectionToUrl(
+  win: Pick<Window, "location" | "history">,
+  selectionParam: string,
+  ids: readonly string[],
+): boolean {
+  const search = buildSelectionSearch(win.location.search, selectionParam, ids);
+  if (search === null) return false;
+  const { pathname, hash } = win.location;
+  try {
+    win.history.replaceState(
+      win.history.state,
+      "",
+      `${pathname}${search}${hash}`,
+    );
+    return true;
+  } catch {
+    return false;
+  }
+}

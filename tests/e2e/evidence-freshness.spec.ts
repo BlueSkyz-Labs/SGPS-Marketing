@@ -1,35 +1,27 @@
 import { expect, test } from "@playwright/test";
-import { openVerifyLayer } from "./verify-helpers.ts";
 
+/**
+ * v8 W5a: the review date sits in the one "Sources" line of a reviewed page
+ * (security). Pages whose claim carries no review record show no date.
+ */
 test.describe("authored evidence freshness", () => {
   test("reviewed surfaces show the authored review date", async ({ page }) => {
     await page.goto("/en/security/");
-    const review = page
-      .locator(
-        '[data-integrity-lens][data-surface="security"] [data-evidence-review]',
-      )
-      .first();
-    await review.scrollIntoViewIfNeeded();
-    await page
-      .locator('[data-integrity-lens][data-surface="security"] details')
-      .first()
-      .evaluate((el) => {
-        (el as HTMLDetailsElement).open = true;
-      });
-    await expect(review).toBeVisible();
-    await expect(review).toHaveText(/2026-09-12/);
+    const line = page.locator("[data-sources-line]");
+    await expect(line).toBeVisible();
+    await expect(line).toContainText(/Reviewed September 12, 2026/);
+    await expect(line.locator("time")).toHaveAttribute(
+      "datetime",
+      "2026-09-12",
+    );
   });
 
   test("no date is invented when metadata is absent", async ({ page }) => {
-    await openVerifyLayer(page, "/en/verify/", "pages");
-    const lens = page.locator('[data-integrity-lens][data-surface="products"]');
-    await lens
-      .locator("details")
-      .first()
-      .evaluate((el) => {
-        (el as HTMLDetailsElement).open = true;
-      });
-    await expect(lens.locator("[data-evidence-review]")).toHaveCount(0);
+    await page.goto("/en/privacy/");
+    await expect(page.locator("[data-sources-line]")).toBeVisible();
+    await expect(page.locator("[data-sources-line] time")).toHaveCount(0);
+    await page.goto("/en/verify/");
+    await expect(page.locator("[data-sources-line] time")).toHaveCount(0);
   });
 
   test("no relative or generated time language appears", async ({ page }) => {
@@ -38,10 +30,10 @@ test.describe("authored evidence freshness", () => {
     expect(body).not.toMatch(/today|yesterday|\bago\b|hours? ago|just now/i);
   });
 
-  test("no perpetual pulse animation in the lens", async ({ page }) => {
+  test("no perpetual pulse animation on the sources line", async ({ page }) => {
     await page.goto("/en/security/");
     const names = await page
-      .locator("[data-integrity-lens] *")
+      .locator("[data-sources-line], [data-sources-line] *")
       .evaluateAll((els) =>
         els.map((el) => getComputedStyle(el).animationName),
       );
@@ -52,18 +44,8 @@ test.describe("authored evidence freshness", () => {
 
   test("VI freshness row is localized", async ({ page }) => {
     await page.goto("/vi/security/");
-    await page
-      .locator('[data-integrity-lens][data-surface="security"] details')
-      .first()
-      .evaluate((el) => {
-        (el as HTMLDetailsElement).open = true;
-      });
-    await expect(
-      page
-        .locator(
-          '[data-integrity-lens][data-surface="security"] [data-evidence-review]',
-        )
-        .first(),
-    ).toHaveText(/Đã xem xét: 2026-09-12/);
+    await expect(page.locator("[data-sources-line]")).toContainText(
+      /Rà soát 12 tháng 9, 2026/,
+    );
   });
 });

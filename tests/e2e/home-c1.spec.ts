@@ -38,9 +38,7 @@ test("homepage keeps the C2 act landmarks", async ({ page }) => {
   // The product act is present and honest:
   await expect(
     page.getByRole("heading", {
-      name: hasPublicProducts
-        ? "The rest of the house, in development"
-        : "Featured products",
+      name: hasPublicProducts ? "Also in development" : "Featured products",
     }),
   ).toBeVisible();
   if (hasPublicProducts) {

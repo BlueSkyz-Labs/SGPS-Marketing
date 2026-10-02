@@ -13,11 +13,7 @@ function readPages() {
 
 test("customer-facing pages ban internal path and env jargon", () => {
   const pages = readPages();
-  const featured = readFileSync(
-    "src/components/sections/FeaturedProducts.astro",
-    "utf8",
-  );
-  const corpus = `${pages}\n${featured}`;
+  const corpus = pages;
   assert.doesNotMatch(corpus, /docs\/evidence/);
   assert.doesNotMatch(corpus, /PUBLIC_CONTACT_EMAIL/);
   assert.doesNotMatch(corpus, /PUBLIC_SECURITY_EMAIL/);
@@ -100,18 +96,6 @@ test("privacy page summarizes practical trust answers", () => {
   assert.match(privacy, /href="\/security\/"/);
 });
 
-test("empty featured section is omitted instead of a hollow shelf", () => {
-  const featured = readFileSync(
-    "src/components/sections/FeaturedProducts.astro",
-    "utf8",
-  );
-  const labels = readFileSync("src/data/site.ts", "utf8");
-  assert.match(featured, /products\.length > 0/);
-  assert.match(featured, /exploreAllProducts/);
-  assert.match(labels, /Explore all products/);
-  assert.doesNotMatch(featured, /No public products are published yet/);
-});
-
 test("404 page always requests noindex", () => {
   const en404 = readFileSync("src/pages/en/404.astro", "utf8");
   const vi404 = readFileSync("src/pages/vi/404.astro", "utf8");
@@ -125,10 +109,7 @@ test("empty registry soft-lands via email-aware Act helper", () => {
   assert.match(act, /\/\/?about\//);
   assert.match(act, /\/\/?contact\//);
   assert.match(act, /\/\/?security\//);
-  for (const path of [
-    "src/components/sections/Hero.astro",
-    "src/components/sections/NextStep.astro",
-  ]) {
+  for (const path of ["src/components/sections/Hero.astro"]) {
     const source = readFileSync(path, "utf8");
     assert.match(
       source,

@@ -14,6 +14,7 @@ import {
   type ResolvedClaim,
 } from "@/lib/claims";
 import { getShowcase } from "@/lib/showcases";
+import { HOME_PROOF_POINTS } from "@/data/home-copy";
 import { productTransitionStyle } from "@/lib/product-transition";
 
 /**
@@ -75,9 +76,17 @@ const cta = resolveLifecycleCta(
     lifecycle: data.lifecycle,
     availability: data.availability,
     primaryActionHref: data.primaryAction.href,
+    productName: data.name,
   },
   lang,
 );
+// v8 W2: the compact (home) act keeps two proof points as a vertical list with
+// an icon and one line each (deck hom-8, hom-9), Sổ Trọ only; any other
+// product falls back to its record capabilities, capped at two.
+const proofPoints: string[] =
+  data.slug === "sotro"
+    ? HOME_PROOF_POINTS.map((point) => point[lang])
+    : capabilities.slice(0, 2);
 const hasCapture =
   compact &&
   (await getShowcase(data.slug))?.data.screens.some(
@@ -95,7 +104,10 @@ const ctaIsExternal = cta.external || /^https?:\/\//i.test(cta.href);
 ---
 
 <section
-  class="c2-flagship-theatre c2-product-house border-b border-[var(--border-subtle)] py-16 lg:py-24"
+  class:list={[
+    "c2-flagship-theatre c2-product-house border-b border-[var(--border-subtle)]",
+    compact ? "py-12 lg:py-14" : "py-16 lg:py-24",
+  ]}
   aria-labelledby="flagship-theatre-title"
   data-flagship-theatre
 >
@@ -142,7 +154,54 @@ const ctaIsExternal = cta.external || /^https?:\/\//i.test(cta.href);
           </ul>
         </div>
       ) : null}
-      {capabilities.length > 0 ? (
+      {compact && proofPoints.length > 0 ? (
+        <ul class="c2-flagship-theatre__proof mt-6" data-home-proof-list>
+          {proofPoints.map((point: string, i: number) => (
+            <li class="c2-flagship-theatre__proof-item">
+              <span class="c2-flagship-theatre__proof-icon" aria-hidden="true">
+                {i === 0 ? (
+                  <svg
+                    viewBox="0 0 24 24"
+                    width="20"
+                    height="20"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.75"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path d="M13 2 4 14h7l-1 8 9-12h-7z" />
+                  </svg>
+                ) : (
+                  <svg
+                    viewBox="0 0 24 24"
+                    width="20"
+                    height="20"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.75"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path d="M6 3h12v18l-3-2-3 2-3-2-3 2zM9 8h6M9 12h6" />
+                  </svg>
+                )}
+              </span>
+              <span class="c2-flagship-theatre__proof-text">
+                {point}
+                <ProductProofLink
+                  slug={data.slug}
+                  capability={copy.capabilityKeys[i] ?? point}
+                  products={products}
+                  claims={claims}
+                  lang={lang}
+                />
+              </span>
+            </li>
+          ))}
+        </ul>
+      ) : null}
+      {!compact && capabilities.length > 0 ? (
         <div class="mt-6">
           <h3 class="mb-3 text-sm font-semibold text-[var(--text-primary)]">
             {labelFor(SHARED_LABELS.scopeHeading, lang)}
@@ -202,7 +261,16 @@ const ctaIsExternal = cta.external || /^https?:\/\//i.test(cta.href);
             slug={data.slug}
             screen="owner-collect"
             lang={lang}
+            showLabel={false}
             sizes="(min-width: 1024px) 34rem, 92vw"
+            smallSrc={
+              data.slug === "sotro"
+                ? {
+                    src: "/products/sotro/showcase/mgr-02-payments-768.webp",
+                    width: 768,
+                  }
+                : undefined
+            }
           />
         </div>
       </div>
@@ -279,7 +347,7 @@ const ctaIsExternal = cta.external || /^https?:\/\//i.test(cta.href);
   .c2-flagship-theatre__ink-stage figcaption {
     padding: 0.75rem 1rem 1rem;
     color: color-mix(in srgb, var(--brand-porcelain) 82%, transparent);
-    font-size: 0.875rem;
+    font-size: var(--size-2);
   }
 
   /* ---- Micro-feature cards (capability bullets re-presented) ---- */
@@ -306,7 +374,7 @@ const ctaIsExternal = cta.external || /^https?:\/\//i.test(cta.href);
 
   .c2-flagship-theatre__feature-index {
     flex: none;
-    font-size: 0.75rem;
+    font-size: var(--size-1);
     font-weight: 700;
     color: var(--text-muted);
     font-variant-numeric: tabular-nums;
@@ -316,10 +384,41 @@ const ctaIsExternal = cta.external || /^https?:\/\//i.test(cta.href);
   .c2-flagship-theatre__feature-text {
     flex: 1;
     min-width: 0;
-    font-size: 0.875rem;
+    font-size: var(--size-2);
     color: var(--text-secondary);
     line-height: 1.5;
     overflow-wrap: anywhere;
+  }
+
+  /* ---- v8 W2: compact proof list (icon + one line each) ---- */
+  .c2-flagship-theatre__proof {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 0.75rem;
+  }
+  .c2-flagship-theatre__proof-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+  .c2-flagship-theatre__proof-icon {
+    flex: none;
+    display: inline-grid;
+    place-items: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: var(--radius-md);
+    background: var(--surface-subtle);
+    border: 1px solid var(--border-subtle);
+    color: var(--action-primary);
+  }
+  .c2-flagship-theatre__proof-text {
+    min-width: 0;
+    padding-top: 0.45rem;
+    color: var(--text-secondary);
+    line-height: 1.5;
   }
 
   /* ---- Reduced motion: neutralise all decorative layers ---- */

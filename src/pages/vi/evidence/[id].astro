@@ -26,16 +26,21 @@ const title = passport
 
 <BaseLayout
   title={title}
-  description={passport?.claim.vi ?? "Bằng chứng cho nhận định này"}
+  description={passport?.claim.vi ?? "Bằng chứng cho tuyên bố này"}
   path={`/vi/evidence/${id}/`}
 >
   <section class="py-16 lg:py-24">
     <Container>
       <div class="max-w-3xl">
-        <h1 class="evidence-passport__page-title" data-passport-page-title>
-          Bằng chứng cho nhận định này
-        </h1>
-        <EvidencePassport id={id ?? ""} lang="vi" products={products} />
+        <p class="evidence-passport__page-title" data-passport-page-title>
+          Bằng chứng cho tuyên bố này
+        </p>
+        <EvidencePassport
+          id={id ?? ""}
+          lang="vi"
+          products={products}
+          claimAs="h1"
+        />
       </div>
     </Container>
   </section>

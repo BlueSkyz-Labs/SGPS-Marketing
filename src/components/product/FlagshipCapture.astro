@@ -20,6 +20,10 @@ interface Props {
   lang: Language;
   /** Above-the-fold capture: eager + fetchpriority high. Default lazy. */
   priority?: boolean;
+  /** v8: eager (never lazy) but `fetchpriority="low"` so the H1 text paints first. */
+  lowPriority?: boolean;
+  /** v8: false drops the visible label when a sibling capture already carries it (deck hom-11). */
+  showLabel?: boolean;
   /** CSS `sizes` for the rendered width. */
   sizes: string;
   /**
@@ -28,7 +32,10 @@ interface Props {
    * ahead of the LCP text's font. Same pixels, only resized; `src` stays the
    * recorded showcase asset.
    */
-  smallSrc?: { src: string; width: number } | undefined;
+  smallSrc?:
+    | { src: string; width: number }
+    | { src: string; width: number }[]
+    | undefined;
   class?: string;
 }
 
@@ -37,6 +44,8 @@ const {
   screen,
   lang,
   priority = false,
+  lowPriority = false,
+  showLabel = true,
   sizes,
   smallSrc,
   class: className = "",
@@ -50,17 +59,21 @@ const capture = showcase?.data.capture;
 if (!item || !capture) {
   return null;
 }
+const smallCandidates = smallSrc
+  ? (Array.isArray(smallSrc) ? smallSrc : [smallSrc]).map(
+      (entry) => `${entry.src} ${entry.width}w`,
+    )
+  : [];
 const revision = capture.sourceRevision.slice(0, 7);
 const capturedOn = capture.capturedAt.toISOString().slice(0, 10);
 
 const LABEL: Record<Language, string> = {
-  en: "Capture of the app in development · sample data",
-  vi: "Ảnh chụp ứng dụng đang phát triển · dữ liệu mẫu",
-  zh: "开发中应用的截图 · 示例数据",
-  "zh-hant": "開發中應用程式的截圖 · 範例資料",
+  en: "Development build · sample data",
+  vi: "Bản đang phát triển · dữ liệu mẫu",
+  zh: "开发版本 · 示例数据",
+  "zh-hant": "開發版本 · 範例資料",
 };
 const label = LABEL[lang];
-const provenance = `${revision} · ${capturedOn}`;
 ---
 
 <figure
@@ -68,13 +81,14 @@ const provenance = `${revision} · ${capturedOn}`;
   data-flagship-capture
   data-capture-surface={item.surface}
   data-capture-revision={revision}
+  data-capture-date={capturedOn}
 >
   <img
     class="flagship-capture__image"
     src={item.src}
     srcset={
-      smallSrc
-        ? `${smallSrc.src} ${smallSrc.width}w, ${item.src} ${item.width}w`
+      smallCandidates.length > 0
+        ? [...smallCandidates, `${item.src} ${item.width}w`].join(", ")
         : undefined
     }
     alt={item.alt[lang]}
@@ -83,14 +97,16 @@ const provenance = `${revision} · ${capturedOn}`;
     sizes={sizes}
     decoding="async"
     loading={priority ? "eager" : "lazy"}
-    fetchpriority={priority ? "high" : "auto"}
+    fetchpriority={lowPriority ? "low" : priority ? "high" : "auto"}
     data-capture-src={item.src}
     data-lcp-candidate={priority ? "" : undefined}
   />
-  <figcaption class="flagship-capture__label">
-    {label}
-    <span class="flagship-capture__provenance">{provenance}</span>
-  </figcaption>
+  {showLabel ? (
+    <figcaption class="flagship-capture__label">
+      {label}
+      <span class="flagship-capture__provenance">{capturedOn}</span>
+    </figcaption>
+  ) : null}
 </figure>
 
 <style>
@@ -110,7 +126,7 @@ const provenance = `${revision} · ${capturedOn}`;
   }
   .flagship-capture__label {
     margin-top: 0.5rem;
-    font-size: 0.75rem;
+    font-size: var(--size-1);
     line-height: 1.35;
     color: color-mix(in srgb, var(--brand-porcelain) 82%, transparent);
   }

@@ -78,10 +78,24 @@ test("the composer reads URL state only through the bounded parser", () => {
     /new URLSearchParams\(search\)/,
     "bounded parser must be the URLSearchParams boundary",
   );
+  // v7 B-06: the URL is written, but only through the bounded writer in the
+  // library - never by the composer itself, and never with pushState.
   assert.equal(
-    /history\.(pushState|replaceState)/.test(source),
+    /history\./.test(source),
     false,
-    "composer must not mutate URL state",
+    "composer must not touch history directly; it delegates to the bounded writer",
+  );
+  assert.match(source, /writeSelectionToUrl\(window,\s*SELECTION_PARAM/);
+  assert.match(parser, /history\.replaceState\(/);
+  assert.equal(
+    /pushState|location\.(assign|replace|href)/.test(parser),
+    false,
+    "the writer is replaceState-only: no new history entry, no navigation",
+  );
+  assert.match(
+    parser,
+    /parseDossierSearch\(search,\s*selectionParam\)/,
+    "the writer must verify its output through the bounded parser",
   );
 });
 

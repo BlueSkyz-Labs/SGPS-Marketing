@@ -30,9 +30,13 @@ test("privacy truth discloses opt-in preference storage", () => {
 });
 
 test("Chinese privacy navigation stays on the matching locale", () => {
-  const privacy = read("src/pages/zh/privacy.astro");
-  for (const route of ["security", "contact", "about"]) {
-    assert.match(privacy, new RegExp(`href="/zh/${route}/"`));
-    assert.doesNotMatch(privacy, new RegExp(`href="/en/${route}/"`));
+  // v8 W5a: the page renders through PrivacyBody; its source links resolve
+  // from the claim's evidence refs, which carry the matching locale.
+  const privacy = read("src/components/trust/PrivacyBody.astro");
+  assert.match(privacy, /lang=\{lang\}/);
+  const evidence = read("src/data/integrity.ts");
+  for (const route of ["privacy", "security"]) {
+    assert.match(evidence, new RegExp(`zh: "/zh/${route}/"`));
   }
+  assert.doesNotMatch(read("src/pages/zh/privacy.astro"), /href="\/en\//);
 });
