@@ -115,14 +115,37 @@ test("legacy page redirects still exist and target the localized routes", () => 
 
   for (const [from, to] of [
     ["/products/", "/en/products/"],
-    ["/products/sotro/", "/en/products/"],
-    ["/products/sotro", "/en/products/"],
+    ["/products/sotro/", "/vi/products/sotro/"],
+    ["/products/sotro", "/vi/products/sotro/"],
+    ["/products/sotam/", "/en/products/sotam/"],
+    ["/products/sotam", "/en/products/sotam/"],
     ["/products/apexagent/", "/en/products/"],
   ]) {
     const hit = matches(rules, from)[0];
     assert.ok(hit, `${from} must be redirected`);
     assert.equal(hit.destination, to);
   }
+});
+
+test("specific product rules precede the :slug catch-alls (OG-12)", () => {
+  const idx = (src) => rules.findIndex((r) => r.source === src);
+  for (const specific of ["/products/sotro/", "/products/sotro"]) {
+    assert.ok(idx(specific) >= 0, `missing ${specific}`);
+  }
+  assert.ok(idx("/products/sotro/") < idx("/products/:slug/"));
+  assert.ok(idx("/products/sotro") < idx("/products/:slug"));
+  assert.ok(idx("/products/sotam/") < idx("/products/:slug/"));
+  assert.ok(idx("/products/sotam") < idx("/products/:slug"));
+});
+
+test("negative proof: a catch-all placed before the sotro rule is detected", () => {
+  const bad = parseRedirects(
+    "/products/:slug/ /en/products/ 301\n/products/sotro/ /vi/products/sotro/ 301\n",
+  );
+  assert.equal(
+    matches(bad, "/products/sotro/")[0].destination,
+    "/en/products/",
+  );
 });
 
 test("negative proof: the old greedy /products/* rule is detected", () => {

@@ -9,6 +9,7 @@
  * shard list identical to E2E_PROJECTS, so sharding can never narrow coverage.
  */
 import { spawnSync } from "node:child_process";
+import { pathToFileURL } from "node:url";
 
 export const E2E_PROJECTS = [
   "chromium",
@@ -39,7 +40,10 @@ function run(command, args) {
   if (result.status !== 0) process.exit(result.status ?? 1);
 }
 
-if (import.meta.url === `file://${process.argv[1]}`) {
+if (
+  process.argv[1] &&
+  import.meta.url === pathToFileURL(process.argv[1]).href
+) {
   let projects;
   try {
     projects = selectProjects(process.env.E2E_PROJECT);
