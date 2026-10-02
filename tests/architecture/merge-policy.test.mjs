@@ -63,6 +63,39 @@ test("prefix rules match whole path segments, not look-alike names", () => {
   );
 });
 
+
+test("security-critical verifier tests are protected without freezing ordinary feature tests", () => {
+  for (const path of [
+    "tests/architecture/merge-policy.test.mjs",
+    "tests/architecture/browser-assurance-matrix.test.mjs",
+    "tests/architecture/deployment-evidence.test.mjs",
+    "tests/architecture/no-payment-authority.test.mjs",
+    "tests/architecture/rollback-security-floor.test.mjs",
+    "tests/architecture/promotion-state.test.mjs",
+    "tests/architecture/static-links.test.mjs",
+    "tests/architecture/security-surface.test.mjs",
+    "tests/architecture/post-merge-landing-guard.test.mjs",
+    "tests/architecture/product-provenance.test.mjs",
+    "tests/architecture/public-truth-gate.test.mjs",
+    "tests/architecture/integrity-firewall.test.mjs",
+    "tests/architecture/supply-chain-policy.test.mjs",
+  ]) {
+    assert.equal(isProtected(path), true, `${path} must be in the verifier root of trust`);
+  }
+
+  assert.equal(isProtected("tests/e2e/accessibility.spec.ts"), false);
+  assert.equal(isProtected("tests/architecture/product-page-v8-w3.test.mjs"), false);
+
+  const held = evaluateMergePolicy({
+    changedFiles: ["tests/architecture/no-payment-authority.test.mjs"],
+    labels: [],
+  });
+  assert.equal(held.ok, false);
+  assert.deepEqual(held.protectedFiles, [
+    "tests/architecture/no-payment-authority.test.mjs",
+  ]);
+});
+
 test("Quality Gates runs the policy from the base commit and reruns on label changes", () => {
   const workflow = readFileSync(".github/workflows/quality-gates.yml", "utf8");
   assert.match(
