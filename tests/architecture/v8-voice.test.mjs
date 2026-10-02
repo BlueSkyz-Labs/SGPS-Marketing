@@ -27,11 +27,14 @@ const BANNED_PHRASES = [
   "Web / PWA",
   "first-class routes",
   "not slogans",
+  "không phải khẩu hiệu",
+  "而非口号",
+  "而非口號",
 ];
 
 function grepSrc(phrase) {
   try {
-    const cmd = `grep -r "${phrase.replace(/"/g, '\\"')}" ${path.join(repoRoot, "src")} --include="*.astro" --include="*.ts" 2>/dev/null || true`;
+    const cmd = `grep -r "${phrase.replace(/"/g, '\\"')}" ${path.join(repoRoot, "src")} --include="*.astro" --include="*.ts" --include="*.yaml" 2>/dev/null || true`;
     const result = execSync(cmd, { encoding: "utf-8", stdio: "pipe" });
     return result
       .split("\n")
@@ -74,6 +77,18 @@ test("v8-voice: should not contain 'not slogans' in src/", () => {
   const hits = grepSrc("not slogans");
   assert.equal(hits.length, 0, `Banned phrase found:\n${hits.join("\n")}`);
 });
+
+test("v8-voice: should not contain 'không phải khẩu hiệu' (vi \"not slogans\") in src/", () => {
+  const hits = grepSrc("không phải khẩu hiệu");
+  assert.equal(hits.length, 0, `Banned phrase found:\n${hits.join("\n")}`);
+});
+
+for (const phrase of ["而非口号", "而非口號"]) {
+  test(`v8-voice: should not contain '${phrase}' (zh "not slogans") in src/`, () => {
+    const hits = grepSrc(phrase);
+    assert.equal(hits.length, 0, `Banned phrase found:\n${hits.join("\n")}`);
+  });
+}
 
 test("v8-voice: negative proof - should detect banned phrases when present", () => {
   // This test verifies the mechanism works by checking that BANNED_PHRASES

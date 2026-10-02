@@ -32,7 +32,7 @@ const ROUTE_ALIASES: Record<string, Record<Language, string[]>> = {
   },
   contact: {
     en: ["contact", "reach out"],
-    vi: ["liên hệ"],
+    vi: ["liên hệ", "liên lạc"],
     zh: ["联系", "联系我们"],
     "zh-hant": ["聯絡", "聯絡我們"],
   },
@@ -52,7 +52,7 @@ const ROUTE_ALIASES: Record<string, Record<Language, string[]>> = {
     en: ["verify", "check yourself"],
     vi: ["xác minh", "cách chúng tôi xác minh"],
     zh: ["核实", "核验", "验证", "我们如何核验"],
-    "zh-hant": ["查證", "核驗", "我們如何核驗"],
+    "zh-hant": ["核實", "核驗", "驗證", "查證", "我們如何核驗"],
   },
   architecture: {
     en: ["architecture", "how this site is built"],
@@ -62,7 +62,7 @@ const ROUTE_ALIASES: Record<string, Record<Language, string[]>> = {
   },
   editions: {
     en: ["collected editions", "editions", "collections"],
-    vi: ["tuyển tập"],
+    vi: ["tuyển tập", "bộ sưu tập"],
     zh: ["选集", "已发布选集", "精选集合", "合集"],
     "zh-hant": ["選集", "合集"],
   },
@@ -89,6 +89,20 @@ const DECISION_ROOM_LABEL: Record<Language, string> = {
   vi: "So sánh tuyên bố",
   zh: "比较声明",
   "zh-hant": "比較聲明",
+};
+
+const DECISION_ROOM_ALIASES: Record<Language, string[]> = {
+  en: ["compare", "decision room"],
+  vi: ["so sánh", "tuyên bố"],
+  zh: ["比较", "声明"],
+  "zh-hant": ["比較", "聲明"],
+};
+
+const GUIDE_ALIASES: Record<Language, string> = {
+  en: "guide",
+  vi: "hướng dẫn",
+  zh: "指南",
+  "zh-hant": "指南",
 };
 
 /** The product showcase's own "read the guide" link text. */
@@ -178,7 +192,7 @@ export function buildNavigatorIndex(
       href: decisionHref,
       label: DECISION_ROOM_LABEL[lang],
       kind: "route",
-      aliases: [],
+      aliases: [...DECISION_ROOM_ALIASES[lang]],
     };
     items.push(item);
     byHref.set(item.href, item);
@@ -211,7 +225,7 @@ export function buildNavigatorIndex(
         href: guideHref,
         label: guide.title,
         kind: "route",
-        aliases: [GUIDE_LINK_TEXT[lang], "guide"],
+        aliases: [GUIDE_LINK_TEXT[lang], GUIDE_ALIASES[lang]],
       });
       byHref.set(guideHref, items[items.length - 1]!);
     }

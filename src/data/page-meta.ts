@@ -25,7 +25,7 @@ export const PAGE_META: Record<Language, Record<StaticPageKey, PageMeta>> = {
         "BlueSkyz Labs đang xây dựng Sổ Trọ, sổ tay điện tử cho chủ trọ ở Việt Nam, và Sổ Tâm, cuốn nhật ký riêng tư ưu tiên lưu trên máy. Cả hai đang phát triển.",
     },
     about: {
-      title: "Giới thiệu",
+      title: "Về BlueSkyz",
       description:
         "BlueSkyz Labs đang làm Sổ Trọ và Sổ Tâm. Tìm hiểu cách chúng tôi làm việc và tự kiểm chứng từng điều chúng tôi nói qua nguồn công khai.",
     },
@@ -134,7 +134,7 @@ export const PRODUCT_META: Record<string, Record<Language, PageMeta>> = {
     vi: {
       title: "Sổ Trọ – sổ tay điện tử cho chủ trọ",
       description:
-        "Sổ Trọ giúp chủ trọ nắm phòng, khoản tiền chưa thu, tiền điện nước theo chỉ số công tơ và biên nhận. Đang phát triển; ảnh chụp từ bản thử, dữ liệu minh hoạ.",
+        "Sổ Trọ giúp chủ trọ nắm phòng, khoản tiền chưa thu, tiền điện nước theo chỉ số công tơ và biên nhận. Đang phát triển; ảnh chụp từ bản thử, dữ liệu mẫu.",
     },
     en: {
       title: "Sổ Trọ: a digital notebook for landlords",

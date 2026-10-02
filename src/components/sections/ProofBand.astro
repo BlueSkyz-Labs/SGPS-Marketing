@@ -15,21 +15,37 @@ const { lang = "en" } = Astro.props;
 ---
 
 <section
-  class="reveal-planes py-10 lg:py-12"
+  class="reveal-planes trust-strip py-8 lg:py-10"
   data-reveal="plane"
   aria-labelledby="trust-title"
   data-trust-band
 >
-  <h2 id="trust-title" class="type-d2 text-balance">
-    {labelFor(SHARED_LABELS.trustHeading, lang)}
-  </h2>
-  <p class="mt-3 max-w-2xl text-[var(--text-secondary)] text-pretty">
-    {labelFor(SHARED_LABELS.trustBody, lang)}
-  </p>
+  <div class="trust-strip__copy">
+    <h2 id="trust-title" class="type-d2 text-balance">
+      {labelFor(SHARED_LABELS.trustHeading, lang)}
+    </h2>
+    <p class="mt-2 max-w-2xl text-[var(--text-secondary)] text-pretty">
+      {labelFor(SHARED_LABELS.trustBody, lang)}
+    </p>
+  </div>
   <a
     href={`/${lang}/verify/`}
-    class="mt-4 inline-flex min-h-11 items-center text-sm font-semibold text-[var(--action-primary)] underline underline-offset-4 hover:no-underline"
+    class="inline-flex min-h-11 items-center text-sm font-semibold text-[var(--action-primary)] underline underline-offset-4 hover:no-underline"
   >
     {labelFor(SHARED_LABELS.trustCta, lang)}
   </a>
 </section>
+
+<style>
+  .trust-strip {
+    display: grid;
+    gap: 1rem;
+    align-items: center;
+  }
+  @media (min-width: 768px) {
+    .trust-strip {
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 2rem;
+    }
+  }
+</style>

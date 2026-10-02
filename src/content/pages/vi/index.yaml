@@ -21,7 +21,7 @@ sections:
         summary: Giá trị thật. Thay đổi thật.
   trust:
     heading: Tin cậy
-    intro: Sản phẩm nào đang ở giai đoạn nào, chúng tôi nói rõ. Quyền riêng tư, bảo mật và hỗ trợ đều có trang riêng — không phải khẩu hiệu.
+    intro: Sản phẩm nào đang ở giai đoạn nào, chúng tôi nói rõ. Quyền riêng tư, bảo mật và hỗ trợ đều có trang riêng.
     links:
       - label: Quyền riêng tư
         href: /vi/privacy/

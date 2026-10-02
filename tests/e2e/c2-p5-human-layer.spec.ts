@@ -26,50 +26,16 @@ for (const locale of LOCALES) {
       const primary = page.locator("[data-hero-primary]");
       await expect(primary).toHaveCount(1);
       expect(await primary.getAttribute("href")).toMatch(/^\//);
-      const secondary = page.locator("[data-hero-secondary]");
-      await expect(secondary).toHaveCount(1);
-      expect(await secondary.getAttribute("href")).toMatch(/^\//);
+      // v8 W2: the orphan "Explore products" link is removed.
+      await expect(page.locator("[data-hero-secondary]")).toHaveCount(0);
     });
 
-    test("Closing horizon is decorative and hidden from AT", async ({
-      page,
-    }) => {
+    test("the home ends without a closing horizon band", async ({ page }) => {
+      // v8 W2 (V7-C-08): the trailing empty gradient band before the footer is
+      // removed; the trust strip is the last content block.
       await page.goto(locale.path);
-      // Closing horizon must be aria-hidden
-      const horizon = page.locator("[data-closing-horizon]");
-      await expect(horizon).toHaveAttribute("aria-hidden", "true");
-    });
-
-    test("Closing horizon stays at the end of the document", async ({
-      page,
-    }) => {
-      await page.goto(locale.path);
-      // Regression: without its own in-flow box the closing signature
-      // resolved against the viewport and painted a grey band under the hero.
-      const box = await page.evaluate(() => {
-        const horizon = document.querySelector("[data-closing-horizon]");
-        if (!horizon) return null;
-        const h = horizon.getBoundingClientRect();
-        return {
-          top: h.top + scrollY,
-          height: h.height,
-          doc: document.documentElement.scrollHeight,
-        };
-      });
-      expect(box).not.toBeNull();
-      // It must sit in the last part of the page and stay a bounded band,
-      // never a viewport-sized layer anchored near the top.
-      expect(box!.top).toBeGreaterThan(box!.doc * 0.6);
-      expect(box!.height).toBeLessThan(400);
-    });
-
-    test("No horizontal overflow at 390px", async ({ page }) => {
-      await page.setViewportSize({ width: 390, height: 844 });
-      await page.goto(locale.path);
-      const overflow = await page.evaluate(
-        () => document.documentElement.scrollWidth - window.innerWidth,
-      );
-      expect(overflow).toBeLessThanOrEqual(1);
+      await expect(page.locator("[data-closing-horizon]")).toHaveCount(0);
+      await expect(page.locator("[data-trust-band]")).toHaveCount(1);
     });
   });
 }

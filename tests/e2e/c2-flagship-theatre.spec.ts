@@ -259,7 +259,12 @@ test.describe("public flagship capture presentation (Experience v6 S2)", () => {
       ).toHaveCount(0);
       const capture = theatre.locator("[data-flagship-capture]");
       await expect(capture).toHaveCount(1);
-      await expect(capture.locator("figcaption")).toHaveText(locale.label);
+      // v8 W2 (hom-11): one truth label per capture group; the hero capture
+      // carries it, this second capture has none.
+      await expect(capture.locator("figcaption")).toHaveCount(0);
+      await expect(page.locator("[data-hero-flagship] figcaption")).toHaveText(
+        locale.label,
+      );
       await expect(capture.locator("img")).toHaveAttribute(
         "src",
         /\/products\/sotro\/showcase\/[a-z0-9-]+\.webp$/,
