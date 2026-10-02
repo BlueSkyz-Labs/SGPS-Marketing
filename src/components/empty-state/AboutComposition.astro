@@ -1,5 +1,4 @@
 ---
-import { getEntry } from "astro:content";
 import ButtonLink from "@/components/ui/ButtonLink.astro";
 import { EMPTY_STATE_COPY } from "@/data/empty-state-copy";
 import { labelFor, SHARED_LABELS, type Language } from "@/data/site";
@@ -8,24 +7,16 @@ import { productCopy } from "@/lib/product-copy";
 
 /**
  * Experience v6 S8 — About, composed only from existing authored data:
- * registry products (`productCopy`) and the `principles` block of the locale's
- * `src/content/pages/{lang}/about.yaml`. The yaml `founder_*` fields are not
- * read: founder detail is an Owner-confirmation item (audit E-26) and an
+ * registry products (`productCopy`) and the "What you can check" block (v8
+ * abt-5; two bound claims linked to their pages). The yaml `founder_*` fields
+ * are not read: founder detail is an Owner-confirmation item (audit E-26) and an
  * absent fact is omitted, never padded.
  */
 interface Props {
   lang: Language;
 }
 
-interface Principles {
-  heading?: string;
-  intro?: string;
-  items?: { name: string; summary: string }[];
-}
-
 const { lang } = Astro.props;
-const page = await getEntry("pages", `${lang}-about`);
-const principles = (page?.data.sections?.principles ?? {}) as Principles;
 const products = (await getPublicProducts()).map((product) => ({
   slug: product.data.slug,
   name: product.data.name,
@@ -59,31 +50,38 @@ const products = (await getPublicProducts()).map((product) => ({
       </ul>
     </section>
   ) : null}
-  {principles.items && principles.items.length > 0 ? (
-    <section aria-labelledby="about-work">
-      <h2
-        id="about-work"
-        class="text-xs font-semibold tracking-[0.18em] text-[var(--text-secondary)] uppercase"
-      >
-        {principles.heading}
-      </h2>
-      {principles.intro ? (
-        <p class="mt-4 text-sm leading-relaxed text-[var(--text-secondary)]">
-          {principles.intro}
-        </p>
-      ) : null}
-      <dl class="mt-4 grid gap-3">
-        {principles.items.map((item) => (
-          <div>
-            <dt class="text-base font-semibold text-[var(--text-primary)]">
-              {item.name}
-            </dt>
-            <dd class="text-sm text-[var(--text-secondary)]">{item.summary}</dd>
-          </div>
-        ))}
-      </dl>
-    </section>
-  ) : null}
+  <section aria-labelledby="about-check" data-about-check>
+    <h2
+      id="about-check"
+      class="text-xs font-semibold tracking-[0.18em] text-[var(--text-secondary)] uppercase"
+    >
+      {labelFor(EMPTY_STATE_COPY.aboutCheck, lang)}
+    </h2>
+    <ul class="mt-4 grid gap-3 text-sm text-[var(--text-secondary)]">
+      <li data-claim-id="privacy-no-tracking-on-this-site">
+        <a
+          href={`/${lang}/privacy/`}
+          class="inline-flex min-h-11 items-center underline"
+        >
+          {labelFor(EMPTY_STATE_COPY.aboutCheckNoCookies, lang)}
+        </a>
+      </li>
+      <li data-claim-id="security-reporting-is-private">
+        <a
+          href={`/${lang}/security/`}
+          class="inline-flex min-h-11 items-center underline"
+        >
+          {labelFor(EMPTY_STATE_COPY.aboutCheckSecurity, lang)}
+        </a>
+      </li>
+    </ul>
+    <a
+      href={`/${lang}/verify/`}
+      class="mt-3 inline-flex min-h-11 items-center text-sm font-semibold text-[var(--text-primary)] underline"
+    >
+      {labelFor(EMPTY_STATE_COPY.aboutCheckCta, lang)}
+    </a>
+  </section>
 </div>
 <div class="mt-12 flex flex-wrap gap-3">
   <ButtonLink href={`/${lang}/products/`}>
