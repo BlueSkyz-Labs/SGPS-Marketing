@@ -70,7 +70,7 @@ export const SHARED_LABELS = {
   },
   aboutBlueSkyz: {
     en: "About BlueSkyz",
-    vi: "Tìm hiểu BlueSkyz",
+    vi: "Về BlueSkyz",
     zh: "关于 BlueSkyz",
     "zh-hant": "關於 BlueSkyz",
   },

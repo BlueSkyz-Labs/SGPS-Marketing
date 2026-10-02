@@ -49,7 +49,7 @@ i18n:
     capabilities:
       - "Mục tiêu phát triển: bài học có dẫn nguồn và các chế độ luyện tập hạng B"
       - "Mục tiêu phát triển: câu trả lời ưu tiên độ tự tin và phản hồi về hiểu lầm"
-      - "Mục tiêu phát triển: tiến độ học và ôn tập sẵn sàng ngoại tuyến"
+      - "Mục tiêu phát triển: tiến độ học và ôn tập sẵn sàng khi không có mạng"
     primaryActionLabel: "Xem trước Vững Tay Lái"
   zh:
     shortDescription: "以越南语为先的 Web/PWA 学习体验，面向 B 类驾照的知识、理解与考试练习。"
