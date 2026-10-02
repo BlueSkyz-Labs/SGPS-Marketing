@@ -38,6 +38,30 @@ export const EMPTY_STATE_COPY = {
     zh: "获批后在此公布。",
     "zh-hant": "核准後於此公布。",
   },
+  aboutCheck: {
+    en: "What you can check",
+    vi: "Bạn có thể tự kiểm chứng",
+    zh: "你可以自行核实",
+    "zh-hant": "你可以自行查證",
+  },
+  aboutCheckNoCookies: {
+    en: "This site sets no cookies.",
+    vi: "Trang web này không đặt cookie.",
+    zh: "本站不设置 Cookie。",
+    "zh-hant": "本站不設定 Cookie。",
+  },
+  aboutCheckSecurity: {
+    en: "Security reports go through a private GitHub channel.",
+    vi: "Báo cáo bảo mật được gửi qua kênh GitHub riêng tư.",
+    zh: "安全报告通过 GitHub 私有渠道提交。",
+    "zh-hant": "資安通報透過 GitHub 私有管道提交。",
+  },
+  aboutCheckCta: {
+    en: "See our claims and sources →",
+    vi: "Xem các tuyên bố và nguồn →",
+    zh: "查看我们的声明与依据 →",
+    "zh-hant": "查看我們的聲明與依據 →",
+  },
   aboutWhatWeMake: {
     en: "What we are building",
     vi: "Chúng tôi đang xây dựng",
