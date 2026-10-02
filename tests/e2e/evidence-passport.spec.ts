@@ -68,7 +68,7 @@ test.describe("evidence passport", () => {
     page,
   }) => {
     await page.goto(VI);
-    await expect(page.getByText("Bằng chứng cho nhận định này")).toBeVisible();
+    await expect(page.getByText("Bằng chứng cho tuyên bố này")).toBeVisible();
     await expect(
       page.locator(`link[rel="alternate"][hreflang="en"]`),
     ).toHaveAttribute(

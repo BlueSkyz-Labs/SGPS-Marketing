@@ -99,9 +99,8 @@ test("every authored title composes to a single-separator, brand-last title", ()
   }
 });
 
-test("Vietnamese About title does not repeat the brand", () => {
-  assert.equal(PAGE_META.vi.about.title.includes("BlueSkyz"), false);
-  assert.equal(PAGE_META.vi.about.title, "Giới thiệu");
+test("Vietnamese About title uses the glossary label (v8 W7)", () => {
+  assert.equal(PAGE_META.vi.about.title, "Về BlueSkyz");
 });
 
 test("home titles name the brand once and carry a descriptor", () => {

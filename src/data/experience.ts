@@ -319,7 +319,7 @@ export const MISSIONS: Mission[] = [
         path: "/architecture/",
         label: {
           en: "Architecture",
-          vi: "Kiến trúc",
+          vi: "Cách trang web này được xây dựng",
           zh: "架构",
           "zh-hant": "架構",
         },
@@ -397,7 +397,7 @@ export const MISSIONS: Mission[] = [
     id: "understand-architecture",
     label: {
       en: "Understand architecture",
-      vi: "Tìm hiểu kiến trúc",
+      vi: "Tìm hiểu cách trang web này được xây dựng",
       zh: "了解架构",
       "zh-hant": "了解架構",
     },
@@ -406,7 +406,7 @@ export const MISSIONS: Mission[] = [
         path: "/architecture/",
         label: {
           en: "Architecture",
-          vi: "Kiến trúc",
+          vi: "Cách trang web này được xây dựng",
           zh: "架构",
           "zh-hant": "架構",
         },

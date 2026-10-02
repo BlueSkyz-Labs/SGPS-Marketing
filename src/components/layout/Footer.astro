@@ -34,7 +34,10 @@ const languageName = isVi
       <LanguageSwitcher variant="dark" placement="footer" />
     </div>
     <div class="footer-body grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.6fr)] lg:gap-16">
-      <p class="footer-tagline max-w-sm text-2xl leading-tight font-semibold text-[var(--brand-porcelain)] sm:text-3xl">
+      <p
+        lang={isVi ? undefined : "en"}
+        class="footer-tagline max-w-sm text-2xl leading-tight font-semibold text-[var(--brand-porcelain)] sm:text-3xl"
+      >
         {taglineLead}{" "}
         <span class="text-[color-mix(in_srgb,var(--brand-cobalt)_70%,white)]">
           {taglineAccent}
