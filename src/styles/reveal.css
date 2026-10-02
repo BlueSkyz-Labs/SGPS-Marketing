@@ -57,9 +57,9 @@
   top: 0;
   left: 50%;
   width: min(100%, 30rem);
-  /* Fit the flat geometry onto the raster mark's sail (static transform). */
-  translate: calc(-50% + 4.2%) 3.2%;
-  scale: 1.07;
+  /* Same box as the raster mark: geometry is fitted by the SVG viewBox
+     (SailReveal.astro), never by a CSS scale/translate. */
+  translate: -50% 0;
   opacity: 0;
 }
 

@@ -13,9 +13,11 @@ interface Props {
   product: CollectionEntry<"products">;
   lang: Language;
   emphasis?: "default" | "hero";
+  /** Products index only: real capture (when one exists) or icon composition. */
+  showThumb?: boolean;
 }
 
-const { product, lang, emphasis = "default" } = Astro.props;
+const { product, lang, emphasis = "default", showThumb = false } = Astro.props;
 const { data } = product;
 const profileHref = getProductProfilePath(lang, data.slug);
 const copy = productCopy(data, lang);
@@ -28,9 +30,20 @@ const cta = resolveLifecycleCta(
     lifecycle: data.lifecycle,
     availability: data.availability,
     primaryActionHref: data.primaryAction.href,
+    productName: data.name,
   },
   lang,
 );
+// Real in-repo capture per slug; any product without one gets the icon composition.
+const CAPTURES: Record<string, { src: string; width: number; height: number }> =
+  {
+    sotro: {
+      src: "/products/sotro/showcase/op-01-home-288.webp",
+      width: 288,
+      height: 532,
+    },
+  };
+const capture = showThumb ? CAPTURES[data.slug] : undefined;
 const showProfileLink = cta.href !== profileHref;
 const ctaIsExternal = cta.external || /^https?:\/\//i.test(cta.href);
 ---
@@ -43,28 +56,60 @@ const ctaIsExternal = cta.external || /^https?:\/\//i.test(cta.href);
     emphasis === "hero" && "md:p-8",
   ]}
 >
-  <!-- Icon + Status Badge Header -->
-  <header class="flex flex-wrap items-start justify-between gap-3">
-    <div class="relative flex-shrink-0">
-      <!-- Squircle icon container with ambient drop-shadow -->
-      <div
-        class="size-12 sm:size-14 rounded-[1.25rem] overflow-hidden bg-white/5 backdrop-blur-sm shadow-[0_8px_24px_-6px_rgba(11,16,32,0.35)] ring-1 ring-inset ring-white/5"
-        aria-hidden="true"
-      >
+  {showThumb && (
+    <div
+      class="product-thumb mb-4"
+      data-product-thumb={capture ? "capture" : "icon"}
+      aria-hidden="true"
+    >
+      {capture ? (
         <img
-          src={iconHref}
+          src={capture.src}
+          width={capture.width}
+          height={capture.height}
           alt=""
-          class="w-full h-full object-cover"
+          class="product-thumb__capture"
           loading="lazy"
           decoding="async"
         />
-        <!-- Subtle ambient glow matched to brand cobalt -->
-        <div
-          class="absolute inset-0 bg-gradient-to-br from-[color-mix(in_srgb,var(--brand-cobalt)_18%,transparent)] to-transparent pointer-events-none"
-          aria-hidden="true"
+      ) : (
+        <img
+          src={iconHref}
+          width="112"
+          height="112"
+          alt=""
+          class="product-thumb__icon"
+          loading="lazy"
+          decoding="async"
         />
-      </div>
+      )}
     </div>
+  )}
+
+  <!-- Icon + Status Badge Header -->
+  <header class="flex flex-wrap items-start justify-between gap-3">
+    {!showThumb && (
+      <div class="relative flex-shrink-0">
+        <!-- Squircle icon container with ambient drop-shadow -->
+        <div
+          class="size-12 sm:size-14 rounded-[1.25rem] overflow-hidden bg-white/5 backdrop-blur-sm shadow-[0_8px_24px_-6px_rgba(11,16,32,0.35)] ring-1 ring-inset ring-white/5"
+          aria-hidden="true"
+        >
+          <img
+            src={iconHref}
+            alt=""
+            class="w-full h-full object-cover"
+            loading="lazy"
+            decoding="async"
+          />
+          <!-- Subtle ambient glow matched to brand cobalt -->
+          <div
+            class="absolute inset-0 bg-gradient-to-br from-[color-mix(in_srgb,var(--brand-cobalt)_18%,transparent)] to-transparent pointer-events-none"
+            aria-hidden="true"
+          />
+        </div>
+      </div>
+    )}
 
     <!-- Static lifecycle status badge -->
     <span
@@ -115,12 +160,8 @@ const ctaIsExternal = cta.external || /^https?:\/\//i.test(cta.href);
     {showProfileLink && (
       <a
         href={profileHref}
-        class="inline-flex min-h-11 max-w-full min-w-0 items-center gap-1.5 rounded-full border border-[var(--border-subtle)] bg-transparent px-3 py-1.5 text-sm font-semibold text-[var(--action-primary)] no-underline [overflow-wrap:anywhere] hover:bg-[color-mix(in_srgb,var(--action-primary)_8%,transparent)] hover:border-[var(--action-primary)] active:scale-[0.98] transition-[transform,border-color,background-color] duration-100 ease-[var(--motion-ease-standard)]"
+        class="inline-flex min-h-11 max-w-full min-w-0 items-center gap-1.5 [overflow-wrap:anywhere] btn-secondary"
       >
-        <span
-          aria-hidden="true"
-          class="size-1.5 shrink-0 rounded-full bg-current opacity-60"
-        />
         {profileLabel}
       </a>
     )}
@@ -129,12 +170,9 @@ const ctaIsExternal = cta.external || /^https?:\/\//i.test(cta.href);
       href={cta.href}
       rel={ctaIsExternal ? "noopener noreferrer" : undefined}
       data-product-cta={cta.verb}
-      class="inline-flex min-h-11 max-w-full min-w-0 items-center gap-1.5 rounded-full border border-[var(--border-subtle)] bg-transparent px-3 py-1.5 text-sm font-semibold text-[var(--text-secondary)] no-underline [overflow-wrap:anywhere] hover:text-[var(--text-primary)] hover:border-[var(--text-secondary)] active:scale-[0.98] transition-[transform,border-color,color] duration-100 ease-[var(--motion-ease-standard)]"
+      aria-label={`${cta.label}: ${data.name}`}
+      class="inline-flex min-h-11 max-w-full min-w-0 items-center gap-1.5 [overflow-wrap:anywhere] btn-secondary"
     >
-      <span
-        aria-hidden="true"
-        class="size-1.5 shrink-0 rounded-full border border-current opacity-40"
-      />
       {cta.label}
     </a>
 
@@ -146,14 +184,47 @@ const ctaIsExternal = cta.external || /^https?:\/\//i.test(cta.href);
             ? "noopener noreferrer"
             : undefined
         }
-        class="inline-flex min-h-11 max-w-full min-w-0 items-center gap-1.5 rounded-full border border-[var(--border-subtle)] bg-transparent px-3 py-1.5 text-sm font-medium text-[var(--text-muted)] no-underline [overflow-wrap:anywhere] hover:text-[var(--text-secondary)] hover:border-[var(--text-muted)] active:scale-[0.98] transition-[transform,border-color,color] duration-100 ease-[var(--motion-ease-standard)]"
+        class="inline-flex min-h-11 max-w-full min-w-0 items-center gap-1.5 [overflow-wrap:anywhere] btn-secondary"
       >
-        <span
-          aria-hidden="true"
-          class="size-1.5 shrink-0 rounded-full border border-current opacity-30"
-        />
         {data.secondaryAction.label}
       </a>
     )}
   </div>
 </article>
+
+<style>
+  .product-thumb {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    height: 12rem;
+    overflow: hidden;
+    border-radius: calc(var(--radius-card) - 2px);
+    border: 1px solid var(--border-subtle);
+    background:
+      radial-gradient(
+        ellipse at 50% 0%,
+        color-mix(in srgb, var(--brand-cobalt) 16%, transparent),
+        transparent 70%
+      ),
+      var(--surface-subtle);
+  }
+  .product-thumb__capture {
+    width: 7.5rem;
+    height: auto;
+    margin-top: 1.25rem;
+    border-radius: var(--radius-media) var(--radius-media) 0 0;
+    border: 1px solid var(--border-subtle);
+    border-bottom: 0;
+    box-shadow: 0 12px 32px -12px rgba(11, 16, 32, 0.4);
+  }
+  .product-thumb__icon {
+    align-self: center;
+    width: 6rem;
+    height: 6rem;
+    border-radius: var(--radius-media);
+    box-shadow: 0 14px 36px -10px rgba(11, 16, 32, 0.4);
+    outline: 1px solid var(--border-subtle);
+  }
+</style>

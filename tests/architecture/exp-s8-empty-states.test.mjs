@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { readFileSync, readdirSync, statSync } from "node:fs";
+import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
 import { join } from "node:path";
 import test from "node:test";
 
@@ -31,9 +31,7 @@ function walk(dir) {
 const RENDERED = ["src/pages", "src/components", "src/layouts", "src/data"]
   .flatMap(walk)
   .filter((p) => /\.(astro|ts|md)$/.test(p));
-// Retired home block kept only for historical density contracts; must stay unimported.
-const RETIRED = "src/components/sections/AboutBlueSkyz.astro";
-const SCANNED = RENDERED.filter((p) => p !== RETIRED);
+const SCANNED = RENDERED;
 
 test("rendered sources carry no literal e-mail address", () => {
   const hits = SCANNED.filter((p) =>
@@ -52,7 +50,11 @@ test("rendered sources carry no founder or biography literal", () => {
   assert.deepEqual(hits, []);
 });
 
-test("the retired About block stays unimported", () => {
+test("the retired About block (deleted in v8 W10) does not return", () => {
+  assert.equal(
+    existsSync("src/components/sections/AboutBlueSkyz.astro"),
+    false,
+  );
   const importers = SCANNED.filter((p) =>
     readFileSync(p, "utf8").includes("AboutBlueSkyz"),
   );

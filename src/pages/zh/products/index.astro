@@ -5,7 +5,6 @@ import PageHeader from "@/components/layout/PageHeader.astro";
 import ProductCard from "@/components/product/ProductCard.astro";
 import ProofFirstEmptyState from "@/components/product/ProofFirstEmptyState.astro";
 import { getPublicProducts } from "@/lib/products";
-import IntentControl from "@/components/experience/IntentControl.astro";
 
 const products = await getPublicProducts();
 const allInDevelopment =
@@ -17,7 +16,7 @@ const emptyDescription = products.length
 ---
 
 <BaseLayout
-  title="产品"
+  title="产品：Sổ Trọ 与 Sổ Tâm，开发中"
   description={emptyDescription}
   path="/zh/products/"
   scene="product"
@@ -28,9 +27,9 @@ const emptyDescription = products.length
         title="我们的产品"
         lede={
           products.length === 0
-            ? "产品将在可评估时展示于此。我们只发布您可以核验的内容。"
+            ? "产品将在可评估时展示于此。我们只发布你可以核验的内容。"
             : allInDevelopment
-              ? "这里的每款产品均在开发中。每个页面都写明产品状态及其依据。"
+              ? "两款产品都在开发中。每个页面都说明其状态。"
               : "每个页面都写明产品状态及其依据。"
         }
       />
@@ -42,32 +41,20 @@ const emptyDescription = products.length
         <section class="mt-12" aria-labelledby="published-products">
           <h2
             id="published-products"
-            class="text-xs font-semibold tracking-[0.18em] text-[var(--text-secondary)] uppercase"
+            class:list={[
+              "text-xs font-semibold tracking-[0.18em] text-[var(--text-secondary)] uppercase",
+              allInDevelopment && "sr-only",
+            ]}
           >
             {allInDevelopment ? "开发中" : "产品"}
           </h2>
           <div class="mt-6 grid gap-4 md:grid-cols-2">
             {products.map((product) => (
-              <ProductCard product={product} lang="zh" />
+              <ProductCard product={product} lang="zh" showThumb />
             ))}
           </div>
         </section>
       )}
-    </Container>
-  </section>
-  {/* Experience v6 S3: Atlas and evidence moved to /verify; one quiet link remains. */}
-  <section class="border-t border-[var(--border-subtle)] py-16 lg:py-20">
-    <Container>
-      <IntentControl lang="zh" />
-      <p class="mt-8">
-        <a
-          href="/zh/verify/"
-          class="inline-flex min-h-11 items-center text-sm font-semibold text-[var(--action-primary)] underline underline-offset-4 hover:no-underline"
-          data-verify-link
-        >
-          我们如何核验 →
-        </a>
-      </p>
     </Container>
   </section>
 </BaseLayout>

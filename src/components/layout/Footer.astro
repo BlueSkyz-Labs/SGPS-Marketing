@@ -2,13 +2,13 @@
 import BrandLockup from "@/components/brand/BrandLockup.astro";
 import Container from "@/components/layout/Container.astro";
 import LanguageSwitcher from "@/components/layout/LanguageSwitcher.astro";
-import { SITE, SHARED_LABELS, labelFor, getFooterLinks } from "@/data/site";
+import { SITE, SHARED_LABELS, labelFor, getFooterGroups } from "@/data/site";
 import { getLanguageFromPath } from "@/lib/i18n";
 
 const currentPath = Astro.url.pathname;
 const lang = getLanguageFromPath(currentPath);
 const isVi = lang === "vi";
-const FOOTER_LINKS = getFooterLinks(lang);
+const FOOTER_GROUPS = getFooterGroups(lang);
 
 const taglineLead = isVi ? "Trí tuệ. Nâng tầm." : SITE.taglineLead;
 const taglineAccent = isVi ? "Tác động." : SITE.taglineAccent;
@@ -33,31 +33,43 @@ const languageName = isVi
       <BrandLockup size="footer" />
       <LanguageSwitcher variant="dark" placement="footer" />
     </div>
-    <div class="grid gap-8 sm:grid-cols-[minmax(0,1fr)_minmax(0,1.25fr)]">
-      <nav aria-label={labelFor(SHARED_LABELS.footerNav, lang)}>
-        <ul class="flex flex-wrap gap-x-7 gap-y-1 sm:grid sm:grid-cols-2 sm:gap-x-6 sm:gap-y-1">
-          {FOOTER_LINKS.map((item) => (
-            <li>
-              <a
-                href={item.href}
-                class="footer-nav-link inline-flex min-h-11 items-center text-[0.9375rem] text-[color-mix(in_srgb,var(--brand-porcelain)_86%,white)] no-underline transition-colors hover:text-white"
-              >
-                {item.label}
-              </a>
-            </li>
-          ))}
-        </ul>
+    <div class="footer-body grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.6fr)] lg:gap-16">
+      <p
+        lang={isVi ? undefined : "en"}
+        class="footer-tagline max-w-sm text-2xl leading-tight font-semibold text-[var(--brand-porcelain)] sm:text-3xl"
+      >
+        {taglineLead}{" "}
+        <span class="text-[color-mix(in_srgb,var(--brand-cobalt)_70%,white)]">
+          {taglineAccent}
+        </span>
+      </p>
+      <nav
+        aria-label={labelFor(SHARED_LABELS.footerNav, lang)}
+        class="grid gap-x-8 gap-y-6 sm:grid-cols-3"
+      >
+        {FOOTER_GROUPS.map((group, index) => (
+          <div>
+            <p
+              id={`footer-group-${index}`}
+              class="text-xs font-semibold tracking-wide text-[color-mix(in_srgb,var(--brand-porcelain)_72%,white)] uppercase"
+            >
+              {group.label}
+            </p>
+            <ul aria-labelledby={`footer-group-${index}`} class="mt-2">
+              {group.links.map((item) => (
+                <li>
+                  <a
+                    href={item.href}
+                    class="footer-nav-link inline-flex min-h-11 items-center text-[0.9375rem] text-[color-mix(in_srgb,var(--brand-porcelain)_86%,white)] no-underline transition-colors hover:text-white"
+                  >
+                    {item.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
       </nav>
-      <div class="flex flex-col gap-3.5 sm:border-l sm:border-white/10 sm:pl-8">
-        <p class="max-w-2xl text-sm text-[color-mix(in_srgb,var(--brand-porcelain)_72%,white)]">
-          <span class="font-medium text-[var(--brand-porcelain)]">
-            {taglineLead}{" "}
-            <span class="text-[color-mix(in_srgb,var(--brand-cobalt)_70%,white)]">
-              {taglineAccent}
-            </span>
-          </span>
-        </p>
-      </div>
     </div>
     <div class="c4-colophon" data-c4-colophon>
       <span class="c4-colophon__identity">{SITE.name}</span>

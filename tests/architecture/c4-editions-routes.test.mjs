@@ -67,6 +67,9 @@ test("C4-B edition routes: story routes are generated from the authored editions
   }
 });
 
+// v8 edi-1: the deck gives zh and zh-hant the same plain word for Collections.
+const SHARED_BY_DESIGN = new Set(["合集"]);
+
 test("C4-B edition routes: index pages are localized, not copies", () => {
   const seen = new Set();
   for (const lang of LANGS) {
@@ -85,7 +88,7 @@ test("C4-B edition routes: index pages are localized, not copies", () => {
     const heading = index.match(/title="([^"]+)"/)?.[1] ?? "";
     assert.ok(heading.length > 0, `${lang} index needs a heading`);
     assert.ok(
-      !seen.has(heading),
+      SHARED_BY_DESIGN.has(heading) || !seen.has(heading),
       `${lang} heading must be authored, not copied`,
     );
     seen.add(heading);

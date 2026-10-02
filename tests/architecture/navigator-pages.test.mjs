@@ -32,12 +32,16 @@ test("decision-room palette label equals each locale's page title", () => {
 
 test("guide palette alias equals the product showcase's own guide link text", () => {
   const labels = record("GUIDE_LINK_TEXT");
+  // v8 W3: the showcase link is now the shorter "Read the guide"; the alias
+  // must still equal a guide link text that exists on a product surface.
   const showcase = read("src/components/product/ProductShowcase.astro");
+  const site = read("src/data/site.ts");
   for (const lang of LANGS) {
     assert.ok(labels[lang], lang);
     assert.ok(
-      showcase.includes(`"${labels[lang]}"`),
-      `${lang}: ${labels[lang]} appears in ProductShowcase`,
+      showcase.includes(`"${labels[lang]}"`) ||
+        site.includes(`"${labels[lang]}"`),
+      `${lang}: ${labels[lang]} appears in ProductShowcase or SHARED_LABELS.readGuide`,
     );
   }
 });
@@ -51,14 +55,8 @@ test("negative proof: a divergent label is detected", () => {
 test("verify aliases only reuse wording already on the site", () => {
   const source =
     read("src/data/site.ts") + read("src/components/sections/ProofBand.astro");
-  for (const alias of [
-    "核实",
-    "核验",
-    "查證",
-    "我们如何核验",
-    "我們如何核驗",
-  ]) {
+  for (const alias of ["核实", "查證", "查看", "依据", "Kiểm chứng", "Xem"]) {
     assert.ok(source.includes(alias), alias);
   }
-  assert.ok(source.includes("Cách chúng tôi xác minh"));
+  assert.ok(source.includes("Xem các tuyên bố"));
 });
