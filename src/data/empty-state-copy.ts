@@ -9,10 +9,10 @@ import type { LocalizedLabel } from "@/data/site";
  */
 export const EMPTY_STATE_COPY = {
   contactLede: {
-    en: "Two routes work today. A business mailbox will be published here once it is approved.",
-    vi: "Hiện bạn có thể liên hệ qua hai kênh. Hộp thư công việc sẽ được đăng tại đây khi sẵn sàng.",
-    zh: "目前有两个渠道可用。商务邮箱获批后将在此公布。",
-    "zh-hant": "目前有兩個管道可用。商務電子信箱核准後將於此公布。",
+    en: "No business mailbox is published yet. We will list it here once it is approved.",
+    vi: "Chưa có hộp thư công việc được công bố. Chúng tôi sẽ đăng tại đây khi được phê duyệt.",
+    zh: "商务邮箱尚未公布。获批后将在此列出。",
+    "zh-hant": "商務電子信箱尚未公布。核准後將在此列出。",
   },
   signInHeading: {
     en: "Product sign-in",
