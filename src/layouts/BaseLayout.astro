@@ -1,6 +1,7 @@
 ---
 import Header from "@/components/layout/Header.astro";
 import Footer from "@/components/layout/Footer.astro";
+import BackToTop from "@/components/layout/BackToTop.astro";
 import LocaleSuggestion from "@/components/layout/LocaleSuggestion.astro";
 import CommandNavigator from "@/components/experience/CommandNavigator.astro";
 import JourneyBar from "@/components/experience/JourneyBar.astro";
@@ -13,6 +14,7 @@ import {
   defaultOgImagePath,
   hreflangLinks,
   xDefaultPath,
+  DEFAULT_OG_IMAGE_ALT,
   organizationJsonLd,
   safeJsonLd,
   websiteJsonLd,
@@ -30,10 +32,14 @@ interface Props {
   path?: string;
   ogImage?: string;
   noindex?: boolean;
+  /** With `noindex`: keep links followable (`noindex, follow`), e.g. print views. */
+  followLinks?: boolean;
   /** Stable integrity surface id; the lens renders only for modeled surfaces. */
   surface?: string;
   /** false: the lens omits its source-to-surface chains (see /verify). */
   lensTraces?: boolean;
+  /** false: the page shows its own boundary card; the lens omits the repeat. */
+  lensBoundaries?: boolean;
   /** Authored scene marker consumed by the global header (C3-A Task 4). */
   scene?: Scene;
 }
@@ -44,8 +50,10 @@ const {
   path = Astro.url.pathname,
   ogImage = defaultOgImagePath(),
   noindex = false,
+  followLinks = false,
   surface,
   lensTraces = true,
+  lensBoundaries = true,
   scene = DEFAULT_SCENE,
 } = Astro.props;
 
@@ -53,8 +61,16 @@ const {
  * names the brand (home) is used as authored. */
 const fullTitle = title.includes(SITE.name) ? title : `${title} | ${SITE.name}`;
 const currentLang = getLanguageFromPath(path);
-/** Traditional Chinese is routed as `zh-hant` but tagged with its BCP-47 script subtag. */
-const htmlLang = currentLang === "zh-hant" ? "zh-Hant" : currentLang;
+/** Chinese locales are routed as `zh` / `zh-hant` but tagged with their BCP-47
+ * script subtag (matches hreflang). CSS `:lang(zh)` matches both. */
+const htmlLang =
+  currentLang === "zh-hant"
+    ? "zh-Hant"
+    : currentLang === "zh"
+      ? "zh-Hans"
+      : currentLang;
+/** 404 pages are noindex and carry no alternates or site-level entities. */
+const isNotFoundPage = /\/404\/?$/.test(path);
 /** Social-card locale format is language_TERRITORY; this is presentation
  * metadata, never a market, residency or jurisdiction decision. */
 const OG_LOCALES = {
@@ -71,13 +87,18 @@ const canonical = canonicalForPath(path, SITE.url);
 const ogImageUrl = absoluteUrl(SITE.url, ogImage);
 /** Pixel size and alt are only known for the committed default card. */
 const ogImageMeta = ogImage === defaultOgImagePath() ? DEFAULT_OG_IMAGE : null;
-const structuredData: Record<string, unknown>[] = [
-  organizationJsonLd(SITE.url),
-  websiteJsonLd(SITE.url),
-];
+const ogImageAlt = DEFAULT_OG_IMAGE_ALT[currentLang];
+const structuredData: Record<string, unknown>[] = isNotFoundPage
+  ? []
+  : [organizationJsonLd(SITE.url), websiteJsonLd(SITE.url)];
 const breadcrumb = breadcrumbJsonLd(currentLang, path, SITE.url);
 if (breadcrumb) structuredData.push(breadcrumb);
 const robotsNoindex = noindex || isNonProductionSiteUrl(SITE.url);
+/** Non-production origins never follow; only a deliberate noindex may. */
+const robotsContent =
+  noindex && followLinks && !isNonProductionSiteUrl(SITE.url)
+    ? "noindex, follow"
+    : "noindex, nofollow";
 ---
 
 <!doctype html>
@@ -86,6 +107,17 @@ const robotsNoindex = noindex || isNonProductionSiteUrl(SITE.url);
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <script is:inline src="/theme-init.js"></script>
+    <!-- Without JavaScript the theme controls cannot do anything, so they are
+         hidden. The language switcher needs no rule: its native popover opens
+         and closes without JavaScript. -->
+    <noscript>
+      <style>
+        [data-theme-trigger],
+        [role="group"]:has([data-theme-mode]) {
+          display: none !important;
+        }
+      </style>
+    </noscript>
     <!-- Fonts are not preloaded from the HTML: measured 2026-09-29, a
          spec-correct font preload (`crossorigin`) makes WebKit download every
          subset twice (177 KB vs 88 KB on /vi/) and omitting `crossorigin` makes
@@ -104,15 +136,19 @@ const robotsNoindex = noindex || isNonProductionSiteUrl(SITE.url);
     <meta name="description" content={description} />
     <title>{fullTitle}</title>
     <link rel="canonical" href={canonical} />
-    {hreflangLinks(path, SITE.url).map((link) => (
-      <link rel="alternate" hreflang={link.hreflang} href={link.href} />
-    ))}
-    <link
-      rel="alternate"
-      hreflang="x-default"
-      href={canonicalForPath(xDefaultPath(path), SITE.url)}
-    />
-    {robotsNoindex ? <meta name="robots" content="noindex, nofollow" /> : null}
+    {isNotFoundPage
+      ? null
+      : hreflangLinks(path, SITE.url).map((link) => (
+          <link rel="alternate" hreflang={link.hreflang} href={link.href} />
+        ))}
+    {isNotFoundPage ? null : (
+      <link
+        rel="alternate"
+        hreflang="x-default"
+        href={canonicalForPath(xDefaultPath(path), SITE.url)}
+      />
+    )}
+    {robotsNoindex ? <meta name="robots" content={robotsContent} /> : null}
     <meta property="og:type" content="website" />
     <meta property="og:locale" content={ogLocale} />
     {ogAlternates.map((locale) => (
@@ -127,7 +163,7 @@ const robotsNoindex = noindex || isNonProductionSiteUrl(SITE.url);
       <>
         <meta property="og:image:width" content={String(ogImageMeta.width)} />
         <meta property="og:image:height" content={String(ogImageMeta.height)} />
-        <meta property="og:image:alt" content={ogImageMeta.alt} />
+        <meta property="og:image:alt" content={ogImageAlt} />
       </>
     ) : null}
     <meta name="twitter:card" content="summary_large_image" />
@@ -135,7 +171,7 @@ const robotsNoindex = noindex || isNonProductionSiteUrl(SITE.url);
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImageUrl} />
     {ogImageMeta ? (
-      <meta name="twitter:image:alt" content={ogImageMeta.alt} />
+      <meta name="twitter:image:alt" content={ogImageAlt} />
     ) : null}
     {structuredData.map((data) => (
       <script
@@ -145,7 +181,7 @@ const robotsNoindex = noindex || isNonProductionSiteUrl(SITE.url);
       ></script>
     ))}
   </head>
-  <body class="flex min-h-screen flex-col" data-scene={scene}>
+  <body id="top" class="flex min-h-screen flex-col" data-scene={scene}>
     <a class="skip-link" href="#main-content">
       {currentLang === "vi"
         ? "Chuyển đến nội dung chính"
@@ -158,19 +194,16 @@ const robotsNoindex = noindex || isNonProductionSiteUrl(SITE.url);
     <Header scene={scene} />
     <CommandNavigator />
     <LocaleSuggestion />
+    <!-- One module entry for the three shell initialisers: each separate
+         entry is its own request, and Lighthouse's simulated LCP waits on
+         every request that finishes before the hero paints. -->
     <script>
       import { initAnalyticsBridge } from "@/scripts/analytics-bridge";
-
-      initAnalyticsBridge();
-    </script>
-    <script>
       import { initFidelityEngine } from "@/scripts/fidelity-engine";
-
-      initFidelityEngine();
-    </script>
-    <script>
       import { initFragmentAnchor } from "@/scripts/fragment-anchor";
 
+      initAnalyticsBridge();
+      initFidelityEngine();
       initFragmentAnchor();
     </script>
     <main id="main-content" class="flex-1" tabindex="-1">
@@ -180,10 +213,12 @@ const robotsNoindex = noindex || isNonProductionSiteUrl(SITE.url);
           surface={surface}
           lang={currentLang}
           traces={lensTraces}
+          boundaries={lensBoundaries}
         />
       ) : null}
       <JourneyBar />
     </main>
+    <BackToTop lang={currentLang} />
     <Footer />
   </body>
 </html>

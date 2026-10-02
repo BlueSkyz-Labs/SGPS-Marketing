@@ -21,7 +21,7 @@ sections:
         summary: 真实价值。真实改变。
   trust:
     heading: 信任
-    intro: 产品成熟度始终明确。隐私、安全与支持均为正式通道——而非口号。
+    intro: 产品成熟度始终明确。隐私、安全与支持各有专门页面。
     links:
       - label: 隐私
         href: /zh/privacy/

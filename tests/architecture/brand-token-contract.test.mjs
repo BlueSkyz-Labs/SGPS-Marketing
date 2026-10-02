@@ -125,19 +125,6 @@ test("Brand Kit v4 tokens.json has no radius.xl — --radius-xl must NOT exist i
   );
 });
 
-test("border-specular utility exists with specular top highlight", () => {
-  assert.match(
-    css,
-    /\.border-specular\s*\{[^}]*border-top-color[^}]*\}/,
-    ".border-specular must set a top highlight",
-  );
-  assert.match(
-    css,
-    /\.border-specular\s*\{[^}]*border\s*:\s*1px\s*solid\s*var\(--bsl-border\)/,
-    ".border-specular must use --bsl-border",
-  );
-});
-
 test("dark mode overrides --bsl-border to semanticDark.border (#334155)", () => {
   assert.match(
     css,
@@ -148,14 +135,6 @@ test("dark mode overrides --bsl-border to semanticDark.border (#334155)", () => 
     css,
     /@media\s*\(prefers-color-scheme:\s*dark\)[^}]*--bsl-border\s*:\s*#334155/s,
     "prefers-color-scheme dark --bsl-border must be #334155",
-  );
-});
-
-test("forced-colors mode degrades .border-specular gracefully", () => {
-  assert.match(
-    css,
-    /@media\s*\(forced-colors:\s*active\)[^}]*\.border-specular/,
-    "forced-colors media query must guard .border-specular",
   );
 });
 

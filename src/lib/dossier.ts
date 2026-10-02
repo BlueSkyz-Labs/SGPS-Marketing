@@ -1,4 +1,4 @@
-import { BOUNDARY_INDEX, CLAIMS } from "../data/claims.ts";
+import { BOUNDARY_INDEX, CLAIMS, claimShortLabel } from "../data/claims.ts";
 import { getPublicProvenance } from "./provenance-lens.ts";
 
 /**
@@ -138,10 +138,20 @@ function resolveSection(
   }
   const boundary = BOUNDARY_INDEX.get(id);
   if (!boundary) return null;
+  // When the boundary's "covers" sentence is the very statement of the claim it
+  // bounds, the dossier already lists that claim in full: refer to it by its
+  // short label instead of printing the same sentence twice.
+  const boundedClaim = CLAIMS.find(
+    (claim) =>
+      claim.boundaryId === boundary.id &&
+      pick(claim.statement, lang) === pick(boundary.claim, lang),
+  );
   return {
     id: boundary.id,
     section,
-    label: pick(boundary.claim, lang),
+    label: boundedClaim
+      ? claimShortLabel(boundedClaim, lang)
+      : pick(boundary.claim, lang),
     detail: pick(boundary.doesNotImply, lang),
     href: null,
     freshness: null,

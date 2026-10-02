@@ -6,7 +6,6 @@ import Hero from "@/components/sections/Hero.astro";
 import FlagshipTheatre from "@/components/product/FlagshipTheatre.astro";
 import ProductHouse from "@/components/product/ProductHouse.astro";
 import ProofBand from "@/components/sections/ProofBand.astro";
-import HorizonField from "@/components/experience/HorizonField.astro";
 import { getFlagshipProduct, getPublicProducts } from "@/lib/products";
 
 // Experience v6 S1 home: Hero (registry promise) → Flagship → second product
@@ -38,9 +37,4 @@ const flagship = await getFlagshipProduct();
     <ProductHouse products={products} lang="en" mode="continuation" compact />
     <ProofBand lang="en" />
   </Container>
-  <HorizonField
-    class="c2-closing-signature"
-    data-closing-horizon
-    aria-hidden="true"
-  />
 </BaseLayout>

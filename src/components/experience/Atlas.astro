@@ -41,28 +41,13 @@ const kindLabels: Record<AtlasNodeKind, string> = {
   product: isVi ? "Sản phẩm" : isZh ? "产品" : isZhHant ? "產品" : "Product",
 };
 
-const heading = "BlueSkyz Atlas";
-const eyebrow = isVi
+const heading = isVi
   ? "Bản đồ bằng chứng"
   : isZh
     ? "证据地图"
     : isZhHant
       ? "證據地圖"
       : "Evidence map";
-const lede = isVi
-  ? "Sơ đồ hóa từ chính những nguồn trang này công bố: thương hiệu mẹ, các nguyên tắc, những bề mặt tin cậy có thể xác minh, và các tuyên bố công khai cùng bằng chứng mà chúng dẫn chiếu. Nút sản phẩm chỉ xuất hiện khi sản phẩm thật được công bố."
-  : isZh
-    ? "依据本站发布的信息制图：主品牌、其原则、可验证的信任层面，以及公开声明与其引用的证据。产品节点仅在真实产品发布后出现。"
-    : isZhHant
-      ? "依據本站發布的資訊製圖：主品牌、其原則、可驗證的信任層面，以及公開聲明與其引用的證據。產品節點僅在真實產品發布後出現。"
-      : "Mapped from the same sources this site publishes: the masterbrand, its principles, verifiable trust surfaces, and the public claims with the evidence they cite. Product nodes appear only when real products are public.";
-const indexHint = isVi
-  ? "Di chuột hoặc chuyển tiêu điểm vào một mục để làm nổi bật nút tương ứng trên bản đồ."
-  : isZh
-    ? "将指针悬停或聚焦在条目上，即可在证据地图中突出显示对应节点。"
-    : isZhHant
-      ? "將游標懸停或聚焦在條目上，即可在證據地圖中突出顯示對應節點。"
-      : "Hover or focus an entry to light its node in the evidence map.";
 
 const emptyLabel = isVi
   ? "Chưa có sản phẩm công khai nào được công bố."
@@ -242,14 +227,6 @@ function edgePath(a: Placed, b: Placed, bend: number): string {
   return `M${a.x} ${a.y} Q${qx} ${qy} ${b.x} ${b.y}`;
 }
 
-const legendKinds = (
-  ["principle", "trust", "claim", "evidence", "product"] as AtlasNodeKind[]
-).map((kind) => ({
-  kind,
-  label: kindLabels[kind],
-  count: nodes.filter((node) => node.kind === kind).length,
-}));
-
 const groups = [
   { id: "house", title: groupTitles.house, kinds: ["brand", "principle"] },
   {
@@ -268,14 +245,9 @@ const groups = [
   class="atlas-section border-b border-[var(--border-subtle)] py-16 lg:py-20"
   aria-labelledby="atlas-title"
 >
-  <p class="atlas-eyebrow">{eyebrow}</p>
-  <h2 id="atlas-title" class="type-d2 mt-3 text-balance">
+  <h2 id="atlas-title" class="type-d2 text-balance">
     {heading}
   </h2>
-  <p class="mt-4 max-w-2xl text-lg text-[var(--text-secondary)] text-pretty">
-    {lede}
-  </p>
-
   <div data-atlas class="atlas-stage mt-10">
     <div class="atlas-plate">
       {plates.map(({ id, plate, positions, className }) => (
@@ -437,22 +409,7 @@ const groups = [
           })}
         </svg>
       ))}
-
-      <ul class="atlas-legend" role="list">
-        {legendKinds.map((entry) => (
-          <li class="atlas-legend__item">
-            <span
-              class={`atlas-swatch atlas-swatch--${entry.kind}`}
-              aria-hidden="true"
-            />
-            <span>{entry.label}</span>
-            <span class="atlas-legend__count">{entry.count}</span>
-          </li>
-        ))}
-      </ul>
     </div>
-
-    <p class="atlas-hint">{indexHint}</p>
 
     <div class="atlas-index">
       {groups.map((group) => (
@@ -503,14 +460,6 @@ const groups = [
      index below follows the page theme. Static SVG/CSS only: no client JS,
      no animation on nodes; hover/focus linking uses :has() as a progressive
      enhancement and degrades to a plain, complete index. */
-  .atlas-eyebrow {
-    font-size: 0.75rem;
-    font-weight: 600;
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
-    color: var(--action-primary);
-  }
-
   .atlas-plate {
     position: relative;
     overflow: hidden;
@@ -577,13 +526,13 @@ const groups = [
 
   .atlas-label {
     fill: color-mix(in srgb, var(--brand-porcelain) 84%, transparent);
-    font-size: 14px;
+    font-size: var(--size-2);
     font-weight: 500;
     letter-spacing: 0.01em;
   }
   .atlas-label--brand {
     fill: var(--brand-porcelain);
-    font-size: 15px;
+    font-size: var(--size-3);
     font-weight: 700;
     letter-spacing: 0.08em;
     text-transform: uppercase;
@@ -595,7 +544,7 @@ const groups = [
   .atlas-label--claim,
   .atlas-label--evidence {
     fill: color-mix(in srgb, var(--brand-cobalt) 45%, white);
-    font-size: 11px;
+    font-size: var(--size-1);
     font-weight: 700;
     letter-spacing: 0.12em;
   }
@@ -976,33 +925,12 @@ const groups = [
     filter: drop-shadow(0 0 6px var(--brand-cobalt));
   }
 
-  .atlas-legend {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem 1.25rem;
-    margin-top: 0.75rem;
-    padding-top: 0.875rem;
-    border-top: 1px solid
-      color-mix(in srgb, var(--brand-porcelain) 10%, transparent);
-    font-size: 0.8125rem;
-    color: color-mix(in srgb, var(--brand-porcelain) 80%, transparent);
-  }
-  .atlas-legend__item {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-  }
-  .atlas-legend__count {
-    font-variant-numeric: tabular-nums;
-    color: color-mix(in srgb, var(--brand-porcelain) 55%, transparent);
-  }
-
   .atlas-swatch {
     display: inline-block;
     flex: none;
     width: 0.625rem;
     height: 0.625rem;
-    border-radius: 999px;
+    border-radius: var(--radius-pill);
     border: 1.5px solid var(--brand-cobalt);
   }
   .atlas-swatch--brand,
@@ -1026,12 +954,6 @@ const groups = [
     border-width: 2.5px;
   }
 
-  .atlas-hint {
-    margin-top: 1rem;
-    font-size: 0.8125rem;
-    color: var(--text-muted);
-  }
-
   .atlas-index {
     display: grid;
     gap: 1.25rem;
@@ -1053,7 +975,7 @@ const groups = [
     gap: 0.75rem;
     padding-bottom: 0.5rem;
     border-bottom: 1px solid var(--border-subtle);
-    font-size: 0.75rem;
+    font-size: var(--size-1);
     font-weight: 600;
     letter-spacing: 0.14em;
     text-transform: uppercase;
@@ -1065,7 +987,7 @@ const groups = [
   }
   .atlas-group__empty {
     padding-block: 0.75rem;
-    font-size: 0.875rem;
+    font-size: var(--size-2);
     color: var(--text-muted);
   }
 
@@ -1097,7 +1019,7 @@ const groups = [
     );
   }
   .atlas-code {
-    font-size: 0.6875rem;
+    font-size: var(--size-1);
     font-weight: 700;
     letter-spacing: 0.1em;
     font-variant-numeric: tabular-nums;
@@ -1110,7 +1032,7 @@ const groups = [
     min-width: 0;
     min-height: 2.75rem;
     overflow-wrap: anywhere;
-    font-size: 0.875rem;
+    font-size: var(--size-2);
     font-weight: 500;
     color: var(--text-primary);
     text-decoration: none;
@@ -1119,7 +1041,7 @@ const groups = [
     color: var(--action-primary);
   }
   .atlas-row__kind {
-    font-size: 0.625rem;
+    font-size: var(--size-1);
     font-weight: 600;
     letter-spacing: 0.14em;
     text-transform: uppercase;

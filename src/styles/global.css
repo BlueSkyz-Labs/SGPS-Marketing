@@ -22,7 +22,7 @@
   font-style: normal;
   font-display: swap;
   font-weight: 100 900;
-  src: url("/fonts/inter-vietnamese-opsz-v5.3.0.woff2") format("woff2");
+  src: url("/fonts/inter-vietnamese-wght-v5.3.0.woff2") format("woff2");
   unicode-range:
     U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1,
     U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329,
@@ -33,7 +33,7 @@
   font-style: normal;
   font-display: swap;
   font-weight: 100 900;
-  src: url("/fonts/inter-latin-opsz-v5.3.0.woff2") format("woff2");
+  src: url("/fonts/inter-latin-wght-v5.3.0.woff2") format("woff2");
   unicode-range:
     U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC,
     U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212,
@@ -65,16 +65,20 @@
   /* Grid contract (Experience v6 S6): every shell and section container shares
      one max width and one gutter scale, so header, hero, sections and footer
      start on the same left edge at every viewport. */
-  --site-max: 1320px;
+  --site-max: var(--container-wide);
   --site-gutter: 1.25rem;
   /* Frosted header surface: the same scene token at 82% so a translucent
      surface can never drift away from the scene's text colour. */
-  --surface-primary-glass: rgba(247, 248, 250, 0.82);
+  --surface-primary-glass: rgba(247, 248, 250, 0.88);
   --surface-subtle: #f1f5f9;
   --surface-inverse: var(--brand-ink);
   /* Raised cards/controls: white on porcelain, slate-900 on ink. Components
      must use this token, never a literal white that ignores the theme. */
+  --surface-1: #f7f8fa;
+  --surface-2: #ffffff;
+  --surface-3: #f1f5f9;
   --surface-raised: #ffffff;
+  --measure-short: 30ch;
   --text-primary: var(--brand-ink);
   --text-secondary: #334155;
   /* Brand slate_500 (#64748B) fails AA on Porcelain; UI muted stays #475569. */
@@ -117,6 +121,30 @@
   --bsl-border: #cbd5e1;
   --bsl-shadow-subtle: 0 8px 28px rgba(11, 16, 32, 0.12);
   --radius-sm: 0.5rem;
+  /* v8 W6 type scale: nine steps, no fluid or fractional sizes. */
+  --size-1: 0.75rem;
+  --size-2: 0.875rem;
+  --size-3: 1rem;
+  --size-4: 1.125rem;
+  --size-5: 1.25rem;
+  --size-6: 1.5rem;
+  --size-7: 2rem;
+  --size-8: 2.75rem;
+  --size-9: 4rem;
+  --lh-1: 1.5;
+  --lh-2: 1.5;
+  --lh-3: 1.6;
+  --lh-4: 1.55;
+  --lh-5: 1.4;
+  --lh-6: 1.33;
+  --lh-7: 1.2;
+  --lh-8: 1.12;
+  --lh-9: 1.08;
+  /* Two container widths only: reading and wide. */
+  --container-reading: 45rem;
+  --container-wide: 78.5rem;
+  --radius-media: 20px;
+  --radius-pill: 999px;
   --radius-md: 0.75rem;
   --radius-lg: 1.25rem;
   --motion-fast: 120ms;
@@ -147,10 +175,13 @@
 [data-theme="dark"] {
   color-scheme: dark;
   --surface-primary: var(--brand-ink);
-  --surface-primary-glass: rgba(11, 16, 32, 0.82);
+  --surface-primary-glass: rgba(11, 16, 32, 0.88);
   --surface-subtle: #0f172a;
   --surface-band: #0d1426;
   --surface-inverse: var(--brand-porcelain);
+  --surface-1: #0b1020;
+  --surface-2: #0f172a;
+  --surface-3: #151e36;
   --surface-raised: #0f172a;
   --text-primary: #ffffff;
   --text-secondary: #cbd5e1;
@@ -175,10 +206,13 @@
   :root:not([data-theme="light"]) {
     color-scheme: dark;
     --surface-primary: var(--brand-ink);
-    --surface-primary-glass: rgba(11, 16, 32, 0.82);
+    --surface-primary-glass: rgba(11, 16, 32, 0.88);
     --surface-subtle: #0f172a;
     --surface-band: #0d1426;
     --surface-inverse: var(--brand-porcelain);
+    --surface-1: #0b1020;
+    --surface-2: #0f172a;
+    --surface-3: #151e36;
     --surface-raised: #0f172a;
     --text-primary: #ffffff;
     --text-secondary: #cbd5e1;
@@ -211,22 +245,6 @@
   max-width: var(--site-max);
   margin-inline: auto;
   padding-inline: var(--site-gutter);
-}
-
-/* Specular hairline border: subtle top highlight, degrades gracefully. */
-.border-specular {
-  border: 1px solid var(--bsl-border);
-  border-top-color: color-mix(
-    in srgb,
-    var(--brand-white, #fff) 40%,
-    transparent
-  );
-}
-
-@media (forced-colors: active) {
-  .border-specular {
-    border-top-color: Highlight;
-  }
 }
 
 html {
@@ -282,7 +300,10 @@ body {
   transform: translateY(-200%);
   border-radius: 0.5rem;
   background: var(--surface-inverse);
-  color: var(--brand-porcelain);
+  /* Paired with --surface-inverse: both flip together between themes, so the
+     text must be the opposite surface (porcelain on ink, ink on porcelain). */
+  color: var(--surface-primary);
+  outline: 2px solid var(--surface-primary);
   padding: 0.75rem 1rem;
   text-decoration: none;
 }
@@ -439,7 +460,7 @@ body {
   gap: 0.5rem;
   padding: 0.25rem 0;
   color: var(--text-secondary);
-  font-size: 0.8125rem;
+  font-size: var(--size-2);
   letter-spacing: 0.01em;
   text-decoration: none;
   transition: color var(--motion-confirmation-duration)
@@ -452,7 +473,7 @@ body {
 
 .experience-spine__index {
   color: var(--text-muted);
-  font-size: 0.6875rem;
+  font-size: var(--size-1);
   letter-spacing: 0.14em;
 }
 
@@ -464,11 +485,11 @@ body {
 
   .experience-spine__link {
     padding: 0.375rem 0;
-    font-size: 0.875rem;
+    font-size: var(--size-2);
   }
 
   .experience-spine__index {
-    font-size: 0.6875rem;
+    font-size: var(--size-1);
     letter-spacing: 0.08em;
   }
 }
@@ -479,7 +500,7 @@ body {
   }
 
   .experience-spine__link {
-    font-size: 0.8125rem;
+    font-size: var(--size-2);
   }
 }
 
@@ -497,8 +518,7 @@ body {
 #hero-title,
 #house-title,
 #trust-title,
-#about-title,
-#next-title {
+#about-title {
   scroll-margin-top: 4rem;
 }
 
@@ -512,7 +532,7 @@ body {
   border-radius: 0.5rem;
   background: var(--surface-raised);
   color: var(--text-secondary);
-  font-size: 0.875rem;
+  font-size: var(--size-2);
   font-weight: 500;
   cursor: pointer;
   transition:
@@ -570,7 +590,11 @@ html[data-intent="evaluate-product"] [data-journey-bar] a[href$="/products/"] {
 
 /* S+ Command Navigator (Task 9) — native dialog command palette. */
 .command-navigator {
-  width: min(92vw, 34rem);
+  /* Tailwind preflight zeroes the native dialog's margin:auto, which pinned
+     the palette to the top-left. Centre it and offset it from the top. */
+  margin: 12vh auto 0;
+  width: min(100% - 2rem, 34rem);
+  max-height: calc(100dvh - 12vh - 1rem);
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-md);
   background: var(--surface-raised);
@@ -598,14 +622,15 @@ html[data-intent="evaluate-product"] [data-journey-bar] a[href$="/products/"] {
   border-radius: 0.5rem;
   background: var(--surface-raised);
   padding: 0 0.75rem;
-  font-size: 0.9375rem;
+  font-size: var(--size-3);
   color: var(--text-primary);
 }
 
 .command-navigator__list {
   list-style: none;
   margin: 0;
-  padding: 0;
+  /* Room for the focus ring: the list scrolls, so it would clip it. */
+  padding: 4px;
   max-height: 18rem;
   overflow-y: auto;
 }
@@ -615,10 +640,14 @@ html[data-intent="evaluate-product"] [data-journey-bar] a[href$="/products/"] {
   min-height: 2.5rem;
   align-items: center;
   border-radius: 0.5rem;
-  padding: 0 0.75rem;
-  font-size: 0.9375rem;
+  padding: 0.5rem 0.75rem;
+  font-size: var(--size-3);
   color: var(--text-primary);
   text-decoration: none;
+}
+
+.command-navigator__list a:focus-visible {
+  outline-offset: -2px;
 }
 
 .command-navigator__list a:hover,
@@ -629,35 +658,8 @@ html[data-intent="evaluate-product"] [data-journey-bar] a[href$="/products/"] {
 .command-navigator__empty {
   margin: 0;
   padding: 0.5rem 0.75rem 0.25rem;
-  font-size: 0.875rem;
+  font-size: var(--size-2);
   color: var(--text-muted);
-}
-
-.hero-mark-stage {
-  position: relative;
-  display: grid;
-  place-items: center;
-  min-height: 16rem;
-}
-
-.hero-mark-stage::after {
-  content: "";
-  position: absolute;
-  left: 12%;
-  right: 12%;
-  bottom: 18%;
-  height: 2px;
-  border-radius: 999px;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    color-mix(in srgb, var(--brand-cobalt) 85%, white),
-    transparent
-  );
-  box-shadow:
-    0 0 28px color-mix(in srgb, var(--brand-cobalt) 70%, transparent),
-    0 0 64px color-mix(in srgb, var(--brand-cobalt) 40%, transparent);
-  opacity: 0.9;
 }
 
 .hero-mark {
@@ -689,10 +691,6 @@ html[data-intent="evaluate-product"] [data-journey-bar] a[href$="/products/"] {
 
   .hero-mark {
     animation: mark-settle 900ms cubic-bezier(0.22, 1, 0.36, 1) both;
-  }
-
-  .hero-mark-stage::after {
-    animation: flare-settle 1100ms cubic-bezier(0.22, 1, 0.36, 1) both;
   }
 
   @keyframes reveal-rise {
@@ -738,18 +736,6 @@ html[data-intent="evaluate-product"] [data-journey-bar] a[href$="/products/"] {
       transform: translate3d(0, 0, 0) scale(1);
     }
   }
-
-  @keyframes flare-settle {
-    from {
-      opacity: 0;
-      transform: scaleX(0.55);
-    }
-
-    to {
-      opacity: 0.9;
-      transform: scaleX(1);
-    }
-  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -775,8 +761,7 @@ html[data-intent="evaluate-product"] [data-journey-bar] a[href$="/products/"] {
   .reveal,
   .brand-signal,
   .hero-atmosphere,
-  .hero-mark,
-  .hero-mark-stage::after {
+  .hero-mark {
     animation: none;
     transform: none;
     opacity: 1;
@@ -822,20 +807,17 @@ html[data-intent="evaluate-product"] [data-journey-bar] a[href$="/products/"] {
     box-shadow 150ms var(--motion-ease-standard, ease);
 }
 
-[data-fidelity-tier="cinematic"] .horizon-field__line {
-  animation: horizon-drift 6s ease-in-out infinite;
-}
+/* The horizon lines are decorative and stay still. Two motion contracts meet
+   here: reveal.css forbids infinite loops, and the cinematic fidelity contract
+   forbids long one-shot animations (>= 2s) that are not ambient loops. A
+   decorative drift satisfies neither, so it is removed (v7 B-22). */
 
-@keyframes horizon-drift {
-  0%,
-  100% {
-    opacity: 0.85;
-    transform: translateX(0);
-  }
-  50% {
-    opacity: 0.5;
-    transform: translateX(2px);
-  }
+/* Every enabled control that acts like a button signals it. Tailwind v4
+   preflight resets buttons to cursor:default. */
+button:not(:disabled),
+summary,
+[role="button"]:not([aria-disabled="true"]) {
+  cursor: pointer;
 }
 
 /* Mobile nav disclosure: hide default marker for consistent control chrome. */
@@ -852,9 +834,9 @@ summary {
   align-items: center;
   gap: 0.4em;
   border: 1px solid var(--border-subtle);
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   padding: 0.125rem 0.625rem;
-  font-size: 0.8125rem;
+  font-size: var(--size-2);
   font-weight: 600;
   color: var(--text-primary);
   background: var(--surface-subtle);
@@ -882,7 +864,7 @@ summary {
   }
 }
 .boundary-card__label {
-  font-size: 0.75rem;
+  font-size: var(--size-1);
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -901,7 +883,7 @@ summary {
   gap: 0.5rem;
 }
 .safe-action__context {
-  font-size: 0.8125rem;
+  font-size: var(--size-2);
   color: var(--text-muted);
   line-height: 1.5;
 }
@@ -916,7 +898,7 @@ summary {
 }
 .integrity-lens__title,
 .bilingual-mirror__title {
-  font-size: 1.125rem;
+  font-size: var(--size-4);
   font-weight: 600;
   letter-spacing: -0.01em;
   color: var(--text-primary);
@@ -986,7 +968,7 @@ summary {
 }
 .evidence-details__more > summary {
   cursor: pointer;
-  font-size: 0.875rem;
+  font-size: var(--size-2);
   font-weight: 600;
   color: var(--action-primary);
   min-height: 2.75rem;
@@ -1001,14 +983,14 @@ summary {
 .evidence-details__review,
 .evidence-details__boundary {
   margin-top: 0.75rem;
-  font-size: 0.8125rem;
+  font-size: var(--size-2);
   color: var(--text-muted);
   line-height: 1.5;
 }
 .bilingual-mirror__note {
   margin-top: 0.5rem;
   color: var(--text-muted);
-  font-size: 0.875rem;
+  font-size: var(--size-2);
   line-height: 1.6;
 }
 .bilingual-mirror__pairs {
@@ -1038,7 +1020,7 @@ summary {
 }
 .bilingual-mirror__tag {
   display: inline-block;
-  font-size: 0.6875rem;
+  font-size: var(--size-1);
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -1087,13 +1069,13 @@ summary {
 }
 .command-navigator__kind {
   flex: none;
-  font-size: 0.625rem;
+  font-size: var(--size-1);
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--text-muted);
   border: 1px solid var(--border-subtle);
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   padding: 0.125rem 0.5rem;
 }
 
@@ -1102,11 +1084,11 @@ summary {
   margin-top: 1.25rem;
   background: var(--surface-subtle);
   border: 1px solid var(--border-subtle);
-  border-radius: 0.75rem;
+  border-radius: var(--radius-card);
   padding: 1rem 1.25rem;
 }
 .source-trace__title {
-  font-size: 0.8125rem;
+  font-size: var(--size-2);
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -1123,18 +1105,18 @@ summary {
   align-items: baseline;
   gap: 0.625rem;
   color: var(--text-secondary);
-  font-size: 0.875rem;
+  font-size: var(--size-2);
   line-height: 1.5;
 }
 .source-trace__role {
   flex: none;
-  font-size: 0.6875rem;
+  font-size: var(--size-1);
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--text-muted);
   border: 1px solid var(--border-subtle);
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   padding: 0.125rem 0.5rem;
 }
 /* Decorative connector line between steps; empty content, zero AT impact. */
@@ -1157,7 +1139,7 @@ summary {
 }
 .evidence-passport__claim {
   margin-top: 0.5rem;
-  font-size: 1.25rem;
+  font-size: var(--size-5);
   font-weight: 600;
   letter-spacing: -0.01em;
   color: var(--text-primary);
@@ -1170,14 +1152,14 @@ summary {
   gap: 0.75rem;
 }
 .evidence-passport__review {
-  font-size: 0.8125rem;
+  font-size: var(--size-2);
   color: var(--text-muted);
 }
 .evidence-passport__sources {
   margin-top: 1.25rem;
 }
 .evidence-passport__sources-title {
-  font-size: 0.8125rem;
+  font-size: var(--size-2);
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -1199,16 +1181,10 @@ summary {
 .decision-room {
   max-width: 56rem;
 }
-.decision-room__title {
-  font-size: 1.125rem;
-  font-weight: 700;
-  letter-spacing: -0.01em;
-  color: var(--text-primary);
-}
 .decision-room__lede {
   margin-top: 0.375rem;
   max-width: 44rem;
-  font-size: 0.9375rem;
+  font-size: var(--size-3);
   color: var(--text-muted);
 }
 .decision-room__items {
@@ -1223,34 +1199,34 @@ summary {
   align-items: flex-start;
   gap: 0.5rem;
   border: 1px solid var(--border-subtle);
-  border-radius: 0.75rem;
+  border-radius: var(--radius-card);
   background: var(--surface-raised);
   padding: 1.25rem;
   scroll-margin-top: 6rem;
   box-shadow: var(--elevation-1);
 }
 .decision-room__kind {
-  font-size: 0.6875rem;
+  font-size: var(--size-1);
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--text-muted);
   border: 1px solid var(--border-subtle);
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   padding: 0.125rem 0.5rem;
 }
 .decision-room__label {
-  font-size: 1rem;
+  font-size: var(--size-3);
   font-weight: 600;
   letter-spacing: -0.01em;
   color: var(--text-primary);
 }
 .decision-room__summary {
-  font-size: 0.875rem;
+  font-size: var(--size-2);
   color: var(--text-secondary);
 }
 .decision-room__boundary {
-  font-size: 0.8125rem;
+  font-size: var(--size-2);
   color: var(--text-muted);
   border-left: 2px solid var(--border-subtle);
   padding-left: 0.625rem;
@@ -1259,7 +1235,7 @@ summary {
   display: inline-flex;
   align-items: center;
   min-height: 1.5rem; /* WCAG 2.5.8 target size */
-  font-size: 0.875rem;
+  font-size: var(--size-2);
   font-weight: 600;
   color: var(--action-primary);
   text-decoration: underline;
@@ -1273,7 +1249,7 @@ summary {
   border-radius: 0.5rem;
   background: var(--surface-subtle);
   padding: 0 1rem;
-  font-size: 0.875rem;
+  font-size: var(--size-2);
   font-weight: 600;
   color: var(--text-primary);
 }
@@ -1285,42 +1261,116 @@ summary {
   opacity: 0.5;
 }
 .decision-room__empty {
-  margin-top: 1.5rem;
-  font-size: 0.9375rem;
+  margin: 0;
+  font-size: var(--size-3);
   color: var(--text-muted);
 }
-.decision-room__board {
+/* The comparison tray sits below the item grid. Empty, it is a single line;
+   it never reserves a box, so adding items cannot move anything above it. */
+.decision-room__tray {
   margin-top: 1.5rem;
-  border-top: 1px solid var(--border-subtle);
-  padding-top: 1.25rem;
+}
+@media (min-width: 1024px) {
+  .decision-room {
+    max-width: 72rem;
+  }
+  .decision-room__tray:has(.decision-room__board:not([hidden])) {
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-card);
+    background: var(--surface-subtle);
+    padding: 1.25rem;
+  }
+}
+.decision-room__board-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 1rem;
 }
 .decision-room__board-title {
-  font-size: 1rem;
+  margin: 0;
+  font-size: var(--size-3);
   font-weight: 600;
   color: var(--text-primary);
 }
+.decision-room__count {
+  margin: 0;
+  font-size: var(--size-2);
+  font-variant-numeric: tabular-nums;
+  color: var(--text-secondary);
+}
+.decision-room__limit:not([data-active="true"]) {
+  visibility: hidden;
+}
+.decision-room__limit {
+  margin: 0.75rem 0 0;
+  border-inline-start: 3px solid var(--action-primary);
+  padding: 0.5rem 0.75rem;
+  font-size: var(--size-2);
+  color: var(--text-primary);
+  background: var(--surface-raised);
+}
 .decision-room__rows {
-  margin-top: 0.75rem;
+  margin: 0.75rem 0 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: 1fr;
+}
+@media (min-width: 1024px) {
+  /* Truly side by side: one column per compared item, up to four. */
+  .decision-room__rows {
+    grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+    align-items: stretch;
+  }
+}
+.decision-room__row {
   display: flex;
   flex-direction: column;
+  align-items: flex-start;
   gap: 0.5rem;
-}
-.decision-room__rows li {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.75rem;
-  align-items: center;
-  justify-content: space-between;
   border: 1px solid var(--border-subtle);
   border-radius: 0.5rem;
+  background: var(--surface-raised);
   padding: 0.75rem 1rem;
 }
 .decision-room__row-label {
-  font-size: 0.9375rem;
+  font-size: var(--size-3);
+  font-weight: 600;
   color: var(--text-primary);
 }
+.decision-room__row-summary {
+  font-size: var(--size-2);
+  color: var(--text-secondary);
+}
+.decision-room__row .decision-room__remove {
+  margin-top: auto;
+}
+/* The boundary stays with its item card above; the tray compares the fact,
+   the summary and the source, which keeps the reserved height bounded. */
+.decision-room__row .decision-room__boundary {
+  display: none;
+}
+/* Below the wide breakpoint rows stay compact: label and Remove only. */
+@media (max-width: 1023.98px) {
+  .decision-room__row-summary,
+  .decision-room__row .decision-room__boundary,
+  .decision-room__row .decision-room__source {
+    display: none;
+  }
+  .decision-room__row {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .decision-room__row .decision-room__remove {
+    margin-top: 0;
+  }
+}
 .decision-room__reset {
-  margin-top: 1rem;
+  margin-inline-start: auto;
 }
 
 /* v3 G5 — mission emphasis: reorder or emphasize only, never hide. */
@@ -1376,15 +1426,21 @@ html[data-intent] [data-journey-bar] li[data-evidence-first="true"] a {
   transform: translateY(-1px);
 }
 .decision-room__add[aria-pressed="true"] {
-  background: color-mix(in srgb, var(--brand-cobalt) 5%, var(--surface-raised));
-  box-shadow: inset 0 0 0 1px var(--action-primary);
+  background: color-mix(in srgb, var(--brand-cobalt) 8%, var(--surface-raised));
+  box-shadow: inset 0 0 0 2px var(--action-primary);
+}
+/* Pressed is shown by a check mark as well as colour (WCAG 1.4.1). */
+.decision-room__add[aria-pressed="true"]::before {
+  content: "\2713";
+  margin-inline-end: 0.5rem;
+  font-weight: 700;
 }
 
 /* Wave UI-4 — integrity lens legend. */
 .integrity-lens__legend {
   margin-top: 0.5rem;
   max-width: 44rem;
-  font-size: 0.875rem;
+  font-size: var(--size-2);
   line-height: 1.6;
   color: var(--text-muted);
 }
@@ -1392,7 +1448,7 @@ html[data-intent] [data-journey-bar] li[data-evidence-first="true"] a {
 /* Wave H7 — page-level heading for the evidence passport document. */
 .evidence-passport__page-title {
   margin-bottom: 0.75rem;
-  font-size: 0.9375rem;
+  font-size: var(--size-3);
   font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -1551,5 +1607,148 @@ h3 {
     > section:not(.hero-plane):nth-of-type(even) {
     background: var(--surface-band);
     color: var(--text-primary);
+  }
+}
+
+/* v8 W6: the footer link size comes from the type scale. */
+.footer-nav-link {
+  font-size: var(--size-3);
+}
+
+/* ------------------------------------------------------------------------
+   v8 W6 — design system pass: one grid, one scale, one family.
+   ------------------------------------------------------------------------ */
+
+/* Containers: exactly two widths (wide via --site-max, and reading). */
+.site-container--reading {
+  max-width: var(--container-reading);
+}
+
+/* Buttons: primary (solid cobalt, ButtonLink), secondary (outline, no dot) and
+   on-ink. `.btn-secondary` is the same secondary for next-step chips. */
+.btn-secondary {
+  display: inline-flex;
+  min-height: 2.75rem;
+  min-width: 0;
+  max-width: 100%;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-pill);
+  background: transparent;
+  padding: 0.5rem 1.25rem;
+  color: var(--text-primary);
+  font-size: var(--size-2);
+  font-weight: 600;
+  text-decoration: none;
+  overflow-wrap: anywhere;
+  transition:
+    border-color 150ms,
+    background-color 150ms,
+    transform 150ms;
+}
+.btn-secondary:hover {
+  border-color: var(--text-secondary);
+  background: var(--surface-subtle);
+}
+@media (prefers-reduced-motion: no-preference) {
+  .btn-secondary:active {
+    transform: scale(0.98);
+  }
+}
+button:not(:disabled),
+[role="button"]:not([aria-disabled="true"]),
+summary {
+  cursor: pointer;
+}
+
+/* Dark elevation: cards sit on surface-2 with a 1px top highlight. The hero
+   keeps the only glow. */
+[data-theme="dark"] [class*="bg-[var(--surface-raised)]"] {
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) [class*="bg-[var(--surface-raised)]"] {
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  }
+}
+
+/* Type: balanced headings, pretty body; CJK stacks and strict breaking. */
+h1,
+h2 {
+  text-wrap: balance;
+}
+p,
+li,
+dd {
+  text-wrap: pretty;
+}
+:lang(zh-Hans) {
+  font-family:
+    "PingFang SC", "Noto Sans SC", "Microsoft YaHei", var(--font-sans),
+    sans-serif;
+}
+:lang(zh-Hant) {
+  font-family:
+    "PingFang TC", "Noto Sans TC", "Microsoft JhengHei", var(--font-sans),
+    sans-serif;
+}
+:is(:lang(zh-Hans), :lang(zh-Hant)) :is(h1, h2, h3) {
+  word-break: keep-all;
+  line-break: strict;
+}
+
+/* Back to top: a plain anchor at the end of long pages on phones. */
+.back-to-top-nav {
+  display: none;
+}
+@media (max-width: 767px) {
+  .back-to-top-nav {
+    display: block;
+  }
+  .back-to-top {
+    display: flex;
+    min-height: 2.75rem;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1.5rem;
+    padding-inline: 1.25rem;
+    color: var(--text-secondary);
+    font-size: var(--size-2);
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+}
+
+/* Print: black on white, no atmosphere or sail, visible link targets and every
+   <details> unfolded (V7-C-03). */
+@media print {
+  .hero-plane,
+  .hero-plane * {
+    background: #fff !important;
+    color: #000 !important;
+    text-shadow: none !important;
+    box-shadow: none !important;
+  }
+  .hero-atmosphere,
+  svg:has(.sail-outline),
+  .sail-layer,
+  .back-to-top-nav {
+    display: none !important;
+  }
+  main a:not(.btn-secondary) {
+    text-decoration: underline !important;
+  }
+  details::details-content {
+    content-visibility: visible !important;
+    display: block !important;
+  }
+  details > :not(summary) {
+    display: block !important;
+  }
+  details > summary {
+    list-style: none;
   }
 }
