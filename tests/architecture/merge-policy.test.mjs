@@ -51,6 +51,10 @@ test("prefix rules match whole path segments, not look-alike names", () => {
   assert.equal(isProtected(".github/CODEOWNERS"), true);
   assert.equal(isProtected("docs/decisions/0013-new.md"), true);
   assert.equal(
+    isProtected("docs/evidence/product-source-qualification.json"),
+    true,
+  );
+  assert.equal(
     isProtected("brand/blueskyz-production-v4/07_DESIGN_TOKENS/tokens.css"),
     true,
   );
