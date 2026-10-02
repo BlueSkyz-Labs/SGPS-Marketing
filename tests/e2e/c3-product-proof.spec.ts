@@ -156,7 +156,15 @@ test.describe("C3-B Product-to-Proof — fixture-backed", () => {
         document.documentElement.clientWidth,
     );
     expect(overflow).toBeLessThanOrEqual(1);
-    const summary = await page.locator(`${CAP_ONE} summary`).boundingBox();
-    expect(summary?.height ?? 0).toBeGreaterThanOrEqual(44);
+    // Measure the box in-page: Firefox's Playwright boundingBox() converts
+    // through Juggler and reports 43.99998474121094 for a layout that is
+    // exactly 44 px, which would fail this guard on a compliant element.
+    // getBoundingClientRect() — the measurement the touch-floor guard in
+    // accessibility.spec.ts already uses — reports exactly 44 in Chromium,
+    // Firefox and WebKit, so the >= 44 assertion stays strict.
+    const summaryHeight = await page
+      .locator(`${CAP_ONE} summary`)
+      .evaluate((el) => el.getBoundingClientRect().height);
+    expect(summaryHeight).toBeGreaterThanOrEqual(44);
   });
 });
