@@ -18,6 +18,7 @@ import { EMPTY_STATE_COPY } from "@/data/empty-state-copy";
 import { productCopy, proofCaptionForKind } from "@/lib/product-copy";
 import { resolveLifecycleCta } from "@/lib/lifecycle-cta";
 import { getShowcase } from "@/lib/showcases";
+import { getProductIconThumbPath } from "@/lib/product-routes";
 import { safeJsonLd, productJsonLd } from "@/lib/seo";
 import { productBreadcrumbJsonLd } from "@/lib/breadcrumbs";
 import { getPublicProducts } from "@/lib/products";
@@ -143,7 +144,7 @@ const isIdentityArt = media?.kind === "identity-art";
           aria-hidden="true"
         >
           <img
-            src={`/products/${data.slug}/icon.png`}
+            src={getProductIconThumbPath(data.slug)}
             alt=""
             class="h-full w-full rounded-[22%] object-contain"
             loading="eager"
@@ -164,14 +165,14 @@ const isIdentityArt = media?.kind === "identity-art";
               src={`/brand/blueskyz/v4/products/${data.slug}_endorsed_lockup_light.svg`}
               alt=""
               class="profile-lockup-light h-8 w-auto sm:h-10"
-              loading="eager"
+              loading="lazy"
               decoding="async"
             />
             <img
               src={`/brand/blueskyz/v4/products/${data.slug}_endorsed_lockup_dark.svg`}
               alt=""
               class="profile-lockup-dark h-8 w-auto sm:h-10"
-              loading="eager"
+              loading="lazy"
               decoding="async"
             />
           </div>
@@ -198,7 +199,7 @@ const isIdentityArt = media?.kind === "identity-art";
         ) : null}
         {data.appAccess?.signInUrl ? (
           <a
-            class="profile-signin inline-flex min-h-11 items-center text-sm font-semibold text-[var(--action-primary)] underline underline-offset-4"
+            class="profile-signin inline-flex min-h-12 items-center text-sm font-semibold text-[var(--action-primary)] underline underline-offset-4"
             href={data.appAccess.signInUrl}
             rel="noopener noreferrer"
             data-app-signin
