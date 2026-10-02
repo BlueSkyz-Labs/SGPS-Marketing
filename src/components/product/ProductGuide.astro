@@ -151,7 +151,7 @@ const signInUrl = product.data.appAccess?.signInUrl;
     min-height: 2.75rem;
     align-items: center;
     gap: 0.5rem;
-    font-size: 0.875rem;
+    font-size: var(--size-2);
     font-weight: 600;
     color: var(--action-primary);
     text-decoration: none;
@@ -161,11 +161,11 @@ const signInUrl = product.data.appAccess?.signInUrl;
   }
   .guide__status {
     display: inline-block;
-    border-radius: 999px;
+    border-radius: var(--radius-pill);
     border: 1px solid var(--border-subtle);
     background: var(--surface-raised);
     padding: 0.25rem 0.75rem;
-    font-size: 0.8125rem;
+    font-size: var(--size-2);
     font-weight: 600;
     color: var(--text-secondary);
   }
@@ -199,7 +199,7 @@ const signInUrl = product.data.appAccess?.signInUrl;
     flex-wrap: wrap;
     align-items: center;
     gap: 0.5rem;
-    font-size: 0.75rem;
+    font-size: var(--size-1);
     font-weight: 600;
     letter-spacing: 0.06em;
     text-transform: uppercase;
@@ -208,7 +208,7 @@ const signInUrl = product.data.appAccess?.signInUrl;
     color: var(--badge-ink, var(--text-secondary));
   }
   .guide__role {
-    border-radius: 999px;
+    border-radius: var(--radius-pill);
     padding: 0.125rem 0.625rem;
     border: 1px solid var(--border-subtle);
     color: var(--text-secondary);
@@ -224,7 +224,7 @@ const signInUrl = product.data.appAccess?.signInUrl;
     display: block;
     width: 100%;
     height: auto;
-    border-radius: 0.875rem;
+    border-radius: var(--radius-card);
     border: 1px solid var(--border-subtle);
     box-shadow: 0 24px 48px -28px color-mix(in srgb, #0b1020 50%, transparent);
   }
@@ -233,7 +233,7 @@ const signInUrl = product.data.appAccess?.signInUrl;
     justify-self: center;
   }
   .guide__step[data-surface="phone"] .guide__shot img {
-    border-radius: 1.75rem;
+    border-radius: var(--radius-media);
     border-width: 6px;
     border-color: color-mix(in srgb, var(--text-primary) 12%, transparent);
   }

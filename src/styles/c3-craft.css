@@ -66,7 +66,7 @@
  */
 header[data-scene="ink"] {
   --surface-primary: var(--brand-ink);
-  --surface-primary-glass: rgba(11, 16, 32, 0.82);
+  --surface-primary-glass: rgba(11, 16, 32, 0.88);
   --surface-subtle: color-mix(in srgb, var(--brand-porcelain) 14%, transparent);
   --border-subtle: color-mix(in srgb, var(--brand-porcelain) 24%, transparent);
   --text-primary: var(--brand-porcelain);
@@ -140,7 +140,7 @@ main details > summary:active {
   min-height: 2.75rem;
   align-items: center;
   color: var(--action-primary);
-  font-size: 0.8125rem;
+  font-size: var(--size-2);
   font-weight: 600;
   cursor: pointer;
 }
@@ -168,7 +168,7 @@ main details > summary:active {
   align-items: center;
   overflow-wrap: anywhere;
   color: var(--text-secondary);
-  font-size: 0.875rem;
+  font-size: var(--size-2);
   font-weight: 600;
   text-underline-offset: 2px;
 }

@@ -160,12 +160,8 @@ const ctaIsExternal = cta.external || /^https?:\/\//i.test(cta.href);
     {showProfileLink && (
       <a
         href={profileHref}
-        class="inline-flex min-h-11 max-w-full min-w-0 items-center gap-1.5 rounded-full border border-[var(--border-subtle)] bg-transparent px-3 py-1.5 text-sm font-semibold text-[var(--action-primary)] no-underline [overflow-wrap:anywhere] hover:bg-[color-mix(in_srgb,var(--action-primary)_8%,transparent)] hover:border-[var(--action-primary)] active:scale-[0.98] transition-[transform,border-color,background-color] duration-100 ease-[var(--motion-ease-standard)]"
+        class="inline-flex min-h-11 max-w-full min-w-0 items-center gap-1.5 [overflow-wrap:anywhere] btn-secondary"
       >
-        <span
-          aria-hidden="true"
-          class="size-1.5 shrink-0 rounded-full bg-current opacity-60"
-        />
         {profileLabel}
       </a>
     )}
@@ -175,12 +171,8 @@ const ctaIsExternal = cta.external || /^https?:\/\//i.test(cta.href);
       rel={ctaIsExternal ? "noopener noreferrer" : undefined}
       data-product-cta={cta.verb}
       aria-label={`${cta.label}: ${data.name}`}
-      class="inline-flex min-h-11 max-w-full min-w-0 items-center gap-1.5 rounded-full border border-[var(--border-subtle)] bg-transparent px-3 py-1.5 text-sm font-semibold text-[var(--text-secondary)] no-underline [overflow-wrap:anywhere] hover:text-[var(--text-primary)] hover:border-[var(--text-secondary)] active:scale-[0.98] transition-[transform,border-color,color] duration-100 ease-[var(--motion-ease-standard)]"
+      class="inline-flex min-h-11 max-w-full min-w-0 items-center gap-1.5 [overflow-wrap:anywhere] btn-secondary"
     >
-      <span
-        aria-hidden="true"
-        class="size-1.5 shrink-0 rounded-full border border-current opacity-40"
-      />
       {cta.label}
     </a>
 
@@ -192,12 +184,8 @@ const ctaIsExternal = cta.external || /^https?:\/\//i.test(cta.href);
             ? "noopener noreferrer"
             : undefined
         }
-        class="inline-flex min-h-11 max-w-full min-w-0 items-center gap-1.5 rounded-full border border-[var(--border-subtle)] bg-transparent px-3 py-1.5 text-sm font-medium text-[var(--text-muted)] no-underline [overflow-wrap:anywhere] hover:text-[var(--text-secondary)] hover:border-[var(--text-muted)] active:scale-[0.98] transition-[transform,border-color,color] duration-100 ease-[var(--motion-ease-standard)]"
+        class="inline-flex min-h-11 max-w-full min-w-0 items-center gap-1.5 [overflow-wrap:anywhere] btn-secondary"
       >
-        <span
-          aria-hidden="true"
-          class="size-1.5 shrink-0 rounded-full border border-current opacity-30"
-        />
         {data.secondaryAction.label}
       </a>
     )}
@@ -226,7 +214,7 @@ const ctaIsExternal = cta.external || /^https?:\/\//i.test(cta.href);
     width: 7.5rem;
     height: auto;
     margin-top: 1.25rem;
-    border-radius: 1.25rem 1.25rem 0 0;
+    border-radius: var(--radius-media) var(--radius-media) 0 0;
     border: 1px solid var(--border-subtle);
     border-bottom: 0;
     box-shadow: 0 12px 32px -12px rgba(11, 16, 32, 0.4);
@@ -235,7 +223,7 @@ const ctaIsExternal = cta.external || /^https?:\/\//i.test(cta.href);
     align-self: center;
     width: 6rem;
     height: 6rem;
-    border-radius: 1.6rem;
+    border-radius: var(--radius-media);
     box-shadow: 0 14px 36px -10px rgba(11, 16, 32, 0.4);
     outline: 1px solid var(--border-subtle);
   }

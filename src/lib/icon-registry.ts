@@ -40,7 +40,7 @@ export const ICON_REGISTRY: Readonly<Record<string, IconDefinition>> =
       ]),
     }),
     external: Object.freeze({
-      paths: Object.freeze(["M14 5h5v5", "M19 5l-8 8", "M18 14v5H5V6h5"]),
+      paths: Object.freeze(["M7 17L17 7", "M8 7h9v9"]),
     }),
     search: Object.freeze({
       paths: Object.freeze([

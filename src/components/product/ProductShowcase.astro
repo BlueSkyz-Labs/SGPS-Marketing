@@ -201,7 +201,7 @@ const defaultTrack = wanted
     }
   }
   .showcase__label {
-    font-size: 0.75rem;
+    font-size: var(--size-1);
     font-weight: 600;
     letter-spacing: 0.1em;
     text-transform: uppercase;
@@ -255,7 +255,7 @@ const defaultTrack = wanted
   }
   .showcase__device {
     position: relative;
-    border-radius: 2.25rem;
+    border-radius: var(--radius-media);
     padding: 0.5rem;
     background: linear-gradient(
       160deg,
@@ -274,7 +274,7 @@ const defaultTrack = wanted
     display: block;
     width: 100%;
     height: auto;
-    border-radius: 1.75rem;
+    border-radius: var(--radius-media);
   }
   .showcase__phone:hover .showcase__device {
     transform: translateY(-6px);
@@ -299,7 +299,7 @@ const defaultTrack = wanted
   }
   .showcase__browser {
     overflow: hidden;
-    border-radius: 0.875rem;
+    border-radius: var(--radius-card);
     border: 1px solid var(--border-subtle);
     background: var(--surface-raised);
     box-shadow: 0 24px 48px -28px color-mix(in srgb, #0b1020 50%, transparent);
@@ -317,7 +317,7 @@ const defaultTrack = wanted
   .showcase__browser-bar i {
     width: 0.5rem;
     height: 0.5rem;
-    border-radius: 999px;
+    border-radius: var(--radius-pill);
     background: color-mix(in srgb, var(--text-primary) 22%, transparent);
   }
   .showcase__browser img {
@@ -330,7 +330,7 @@ const defaultTrack = wanted
     min-height: 2.75rem;
     align-items: center;
     gap: 0.5rem;
-    font-size: 0.875rem;
+    font-size: var(--size-2);
     font-weight: 600;
     color: var(--action-primary);
     text-decoration: underline;
@@ -341,7 +341,7 @@ const defaultTrack = wanted
     min-height: 2.75rem;
     cursor: pointer;
     align-items: center;
-    font-size: 0.875rem;
+    font-size: var(--size-2);
     font-weight: 600;
     color: var(--action-primary);
     text-decoration: underline;

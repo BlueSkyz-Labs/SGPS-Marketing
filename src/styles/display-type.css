@@ -77,7 +77,7 @@
     "Noto Sans CJK SC", "Noto Sans CJK TC", "Source Han Sans", sans-serif;
 
   /* Fluid scale, 390 px -> 1440 px (plan section 8). */
-  --type-d1: clamp(2.5rem, 1.6rem + 3.6vw, 4.5rem);
+  --type-d1: var(--size-8);
   --type-d1-leading: 1.08;
   --type-d1-tracking: -0.02em;
   /* VALIDATED in S4 screenshots: a sentence-length promise in the ~540 px hero
@@ -86,11 +86,11 @@
      (28 px, the display minimum): at 36 px the same sentence took 5 (EN) to 7
      (VI) lines and pushed the flagship CTA below the 844 px fold. Short display
      statements keep d1. */
-  --type-d1-promise: clamp(1.75rem, 1.05rem + 2.6vw, 2.25rem);
-  --type-d2: clamp(1.75rem, 1.3rem + 1.8vw, 2.75rem);
+  --type-d1-promise: var(--size-7);
+  --type-d2: var(--size-7);
   --type-d2-leading: 1.15;
   --type-d2-tracking: -0.015em;
-  --type-t1: clamp(1.25rem, 1.15rem + 0.4vw, 1.5rem);
+  --type-t1: var(--size-5);
   --type-t1-leading: 1.3;
   --type-t1-tracking: -0.01em;
 }
@@ -137,7 +137,7 @@
    4 at 1024 and the flagship card, capture and CTA stay in the first screen. */
 @media (min-width: 640px) {
   .hero-headline--promise {
-    font-size: clamp(2rem, 1.2rem + 2vw, 2.8125rem);
+    font-size: var(--size-7);
   }
 }
 .type-d2 {
@@ -172,5 +172,21 @@
 @supports (word-break: auto-phrase) {
   :lang(zh) :is(.type-d1, .type-d2, .hero-headline) {
     word-break: auto-phrase;
+  }
+}
+
+/* v8 W6: stepped display sizes (no fluid clamp, so every page stays on the
+   nine-step scale). */
+@media (min-width: 768px) {
+  :root {
+    --type-t1: var(--size-6);
+  }
+}
+@media (min-width: 1024px) {
+  :root {
+    --type-d1: var(--size-9);
+  }
+  .hero-headline--promise {
+    font-size: var(--size-8);
   }
 }
