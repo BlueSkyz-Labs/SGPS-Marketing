@@ -476,7 +476,7 @@ test.describe("Self-hosted Inter — Vietnamese delivery", () => {
       performance
         .getEntriesByType("resource")
         .filter((entry) =>
-          /\/fonts\/inter-(latin|vietnamese)-opsz-v5\.3\.0\.woff2$/.test(
+          /\/fonts\/inter-(latin|vietnamese)-wght-v5\.3\.0\.woff2$/.test(
             entry.name,
           ),
         )
@@ -500,7 +500,7 @@ test.describe("Self-hosted Inter — Vietnamese delivery", () => {
     for (const subset of ["latin", "vietnamese"]) {
       const downloads = fontTransfers.filter(
         (entry) =>
-          entry.path.includes(`inter-${subset}-opsz-v5.3.0.woff2`) &&
+          entry.path.includes(`inter-${subset}-wght-v5.3.0.woff2`) &&
           entry.transferSize > 1_024,
       );
       expect(

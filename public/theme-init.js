@@ -33,7 +33,7 @@ try {
       preload(`/fonts/plus-jakarta-sans-${subset}-700-v5.3.0.woff2`);
     }
     for (const subset of subsets) {
-      preload(`/fonts/inter-${subset}-opsz-v5.3.0.woff2`);
+      preload(`/fonts/inter-${subset}-wght-v5.3.0.woff2`);
     }
   }
 } catch {
