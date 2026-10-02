@@ -38,6 +38,25 @@ export const PROTECTED_PATHS = [
   "eslint.config.mjs",
   "playwright.config.ts",
   "lighthouserc.json",
+  // Bounded root-of-trust verifier inventory. Ordinary feature/E2E tests remain
+  // agent-flowing; only tests that decide governance, financial authority,
+  // deployment/runtime evidence or security-gate integrity require Owner review.
+  "tests/architecture/merge-policy.test.mjs",
+  "tests/architecture/browser-assurance-matrix.test.mjs",
+  "tests/architecture/deployment-evidence.test.mjs",
+  "tests/architecture/no-payment-authority.test.mjs",
+  "tests/architecture/rollback-security-floor.test.mjs",
+  "tests/architecture/promotion-state.test.mjs",
+  "tests/architecture/static-links.test.mjs",
+  "tests/architecture/security-surface.test.mjs",
+  "tests/architecture/security-headers.test.mjs",
+  "tests/architecture/security-policy.test.mjs",
+  "tests/architecture/post-merge-landing-guard.test.mjs",
+  "tests/architecture/post-merge-workflow-wiring.test.mjs",
+  "tests/architecture/product-provenance.test.mjs",
+  "tests/architecture/public-truth-gate.test.mjs",
+  "tests/architecture/integrity-firewall.test.mjs",
+  "tests/architecture/supply-chain-policy.test.mjs",
 ];
 
 export function isProtected(path) {
