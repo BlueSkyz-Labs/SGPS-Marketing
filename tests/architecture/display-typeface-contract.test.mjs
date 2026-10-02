@@ -22,6 +22,9 @@ const DISPLAY_SELECTORS = [".type-d1", ".type-d2", ".hero-headline"];
 
 const read = (path) => readFileSync(path, "utf8");
 
+/** Forward-slash paths so assertions are separator-independent. */
+const toPosix = (path) => path.replaceAll("\\", "/");
+
 function walk(dir, out = []) {
   for (const entry of readdirSync(dir, { withFileTypes: true })) {
     const path = join(dir, entry.name);
@@ -99,7 +102,7 @@ function checkDisplayScope(css) {
 
 function checkNoOtherUsage(files) {
   for (const [path, text] of files) {
-    if (path === CSS_PATH) continue;
+    if (toPosix(path) === CSS_PATH) continue;
     assert.doesNotMatch(
       text,
       /--font-display|"Display Face"|plus-jakarta/,
@@ -148,6 +151,20 @@ test("display face is applied to h1/h2 display headings only", () => {
   checkNoOtherUsage(sources);
   checkHeadingOnly(templates);
   checkNoCulturalNames(css);
+});
+
+// Windows regression pin: walk() yields OS-native separators, so the
+// allowlisted stylesheet must still be skipped after normalization, and a
+// non-allowlisted file that references the face must still fail.
+test("display-face usage guard is separator-independent", () => {
+  checkNoOtherUsage([
+    ["src\\styles\\display-type.css", "a{font-family:var(--font-display)}"],
+  ]);
+  assert.throws(() =>
+    checkNoOtherUsage([
+      ["src\\styles\\other.css", "a{font-family:var(--font-display)}"],
+    ]),
+  );
 });
 
 /** Display preload must exist, be engine-gated, and precede the Inter loop. */
