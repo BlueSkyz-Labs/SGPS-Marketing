@@ -17,6 +17,12 @@ interface Props {
 }
 
 const { phones, desktops, lang, labels, first = false } = Astro.props;
+
+// Phone captures render at most 17rem in the rail (24rem in the desktop grid),
+// so phones get the 480w derivative next to each master (`<name>-480.webp`).
+// Without it the 780px masters compete with the LCP text's fonts.
+const PHONE_SIZES = "(min-width: 64rem) 24rem, min(72vw, 17rem)";
+const phoneSmallSrc = (src: string) => src.replace(/\.webp$/, "-480.webp");
 ---
 
 {phones.length > 0 ? (
@@ -34,6 +40,8 @@ const { phones, desktops, lang, labels, first = false } = Astro.props;
             <div class="showcase__device">
               <img
                 src={item.src}
+                srcset={`${phoneSmallSrc(item.src)} 480w, ${item.src} ${item.width}w`}
+                sizes={PHONE_SIZES}
                 alt={item.alt[lang]}
                 width={item.width}
                 height={item.height}
