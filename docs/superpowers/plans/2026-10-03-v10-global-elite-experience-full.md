@@ -1,9 +1,22 @@
 # v10: Experience FULL round and Global-Elite elevation (SGPS-Marketing)
 
-**Status:** Proposed. Track A may start once the Owner confirms this plan. Track B items each wait on their own Owner decision (§6).
-**Date:** 2026-10-03
-**Baseline:** `main@2cfb15c`. Baseline, target and gap matrix: `docs/evidence/2026-10-03-v10-global-elite-baseline.md`.
-**Relationship to v9:**
+**Status:** **APPROVED — ACTIVE (Track A).**
+
+- **Approval source:** Owner delegation of 2026-10-03, 07:50 GMT+7: "Nếu là plan tự duyệt theo mục tiêu dự án" ("plans are self-approved against the project objectives").
+- **The delegation covers only:**
+  - plan approval;
+  - routine reversible work inside this plan and the Agent Safety Envelope.
+- **It does not cover:**
+  - SGPS governance decisions (for example DEC-025);
+  - the `owner-approved` label;
+  - production settings (Cloudflare Access, DNS);
+  - product facts;
+  - human or native-review evidence.
+
+  Those stay Owner-only (§6).
+  **Date:** 2026-10-03
+  **Baseline:** `main@2cfb15c`. Baseline, target and gap matrix: `docs/evidence/2026-10-03-v10-global-elite-baseline.md`.
+  **Relationship to v9:**
 
 - v9 keeps priority until go-live: T1–T3 and the Owner Access lift.
 - v10 must not delay go-live. Every v10 PR lands after the v9 T-card it would conflict with.
@@ -121,17 +134,22 @@ Order: E1 → E2 → E3 → E4 → E5 → E6 → E7. E1 is verification only and
 | E6  | Beauty-Blind UX review (BPXS §18) of 4 key routes, then craft fixes from its findings                  | reviewer lane, then local agent | no                                              |
 | E7  | VISUAL_RUNTIME_CONVERGENCE_AUDIT + Experience Convergence Evidence (SGPS template)                     | orchestrator                    | no                                              |
 
-## 6. Owner gates
+## 6. Owner gates and their dispositions (2026-10-03)
 
-| ID     | Decision                                                                      | Unlocks                                                     | Recommendation                                                                   |
-| ------ | ----------------------------------------------------------------------------- | ----------------------------------------------------------- | -------------------------------------------------------------------------------- |
-| O-10.1 | Approve DEC-025 for the Marketing pilot                                       | per-feature budget file + gate (G6); replaces v9 F8         | Approve: the site is static and already near budget, so it is the cheapest pilot |
-| O-10.2 | Label the protected Track A PRs (E3, E4, E5) after review                     | E3–E5                                                       | Label after orchestrator review                                                  |
-| O-10.3 | RUM provider (privacy-first, cookieless) or keep it OFF                       | field CWV (G8). The "no cookies" claim must stay true       | Decide after go-live, once traffic exists                                        |
-| O-10.4 | Human E4: 3–5 real visitors per primary task                                  | G1/G2 task success (G8)                                     | Run it in the first 2 weeks after go-live                                        |
-| O-10.5 | Product facts and screenshots for Sổ Tâm and the other source-listed products | C3-C Living Product: **the largest visible elevation** (G9) | Provide them for at least Sổ Tâm                                                 |
-| O-10.6 | Native zh / zh-hant reviewer                                                  | G8                                                          | Needed before any zh marketing push                                              |
-| O-10.7 | C3-G spatial halo experiment: GO to run it (NO-GO is a valid outcome)         | G9                                                          | Only after O-10.5; product truth comes before spectacle                          |
+**Kind** says who can close each gate:
+
+- **PLAN**: the orchestrator decided it under the plan delegation.
+- **OWNER**: only the Owner can close it.
+
+| ID     | Decision                                     | Kind                                    | Disposition                                                                                                                                                            |
+| ------ | -------------------------------------------- | --------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| O-10.1 | Approve DEC-025 for the Marketing pilot      | OWNER (SGPS governance, AGENTS rule 17) | **Open.** Until it is approved, E-slices use the plan's own budgets (§4) and v9 F8 stays the CI guard. Nothing in Track A is blocked by it.                            |
+| O-10.2 | Label the protected Track A PRs (E3, E4, E5) | OWNER (merge gate)                      | **Open per PR.** The orchestrator reviews each PR first and posts a one-line "ready for label" note.                                                                   |
+| O-10.3 | RUM provider or keep it OFF                  | PLAN default + OWNER for any provider   | **Decided by default: stays OFF.** The "no cookies / no analytics" truth is unchanged. Choosing a provider is an Owner privacy decision. Field CWV stays NOT VERIFIED. |
+| O-10.4 | Human E4 with real visitors                  | OWNER (human evidence)                  | **Open.** The protocol and templates already exist (`docs/evidence/2026-09-12-v3-human-e4.md`). Run it after go-live. Agents cannot substitute for it.                 |
+| O-10.5 | Product facts and screenshots (Sổ Tâm first) | OWNER (Product Truth)                   | **Open: the largest visible elevation.** Agents must not fabricate them.                                                                                               |
+| O-10.6 | Native zh / zh-hant reviewer                 | OWNER (human evidence)                  | **Open.** zh stays marked machine-assisted where it is already marked.                                                                                                 |
+| O-10.7 | C3-G spatial halo experiment                 | PLAN                                    | **Decided: DEFER** until O-10.5 has landed. Product truth comes before spectacle (C2 doctrine), so it is not run in v10.                                               |
 
 ## 7. v10 additions to the agent contract (MANDATORY, on top of v9 §8)
 
@@ -149,6 +167,7 @@ Order: E1 → E2 → E3 → E4 → E5 → E6 → E7. E1 is verification only and
 - Bind the Lighthouse, axe and CI numbers in the baseline evidence record to `main@<sha at E1 start>`.
 - Re-run `locale-suggestion-contract.test.mjs` and record DEC-019 as GUARDED, or as a FAIL with a finding.
 - **Done when:** the evidence record shows every §6 dimension with its state.
+- **State: DONE** on `main@c39d34b`. `locale-suggestion-contract` + `i18n-contract`: 26/26 pass. They prove that a stored choice wins, that the script never navigates by itself, and they include negative proofs. DEC-019 is **GUARDED**.
 
 ### E2: WCAG 2.2 delta guards (local agent)
 

@@ -331,8 +331,8 @@
     },
     {
       "id": "experience-full-v10",
-      "name": "v10 Experience FULL round: Global-Elite (BPXS §6) benchmark; Track A E1-E7 agent slices, Track B Owner gates O-10.1..O-10.7",
-      "status": "PLANNED",
+      "name": "v10 Experience FULL round: Global-Elite (BPXS §6). Plan APPROVED under Owner plan-delegation 2026-10-03; Track A E1 done, E2-E7 next; Track B Owner gates O-10.1/2/4/5/6 open, O-10.3 OFF by default, O-10.7 DEFER",
+      "status": "IN_PROGRESS",
       "evidence": "docs/superpowers/plans/2026-10-03-v10-global-elite-experience-full.md"
     }
   ],
