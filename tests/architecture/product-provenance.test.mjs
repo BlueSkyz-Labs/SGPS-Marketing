@@ -8,7 +8,13 @@
  */
 import assert from "node:assert/strict";
 import { execFileSync, spawnSync } from "node:child_process";
-import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
+import {
+  mkdirSync,
+  mkdtempSync,
+  readFileSync,
+  rmSync,
+  writeFileSync,
+} from "node:fs";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import test from "node:test";
@@ -18,6 +24,14 @@ const ROOT = resolve(fileURLToPath(new URL("../..", import.meta.url)));
 const SCRIPT = "scripts/check-product-provenance.mjs";
 /** A real revision of the Sotro product repository — a foreign revision, not one of ours. */
 const FOREIGN_REVISION = "b226e491517f34d49286b117e2d2634f7d47e763";
+const FAKE_FOREIGN_REVISION = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+const FIXTURE_REPOSITORIES = {
+  apexagent: "BlueSkyz-Labs/ApexAgent",
+  fluentarc: "BlueSkyz-Labs/FluentArc",
+  sotam: "BlueSkyz-Labs/sotam",
+  sotro: "BlueSkyz-Labs/Sotro",
+  vungtaylai: "BlueSkyz-Labs/VungTayLai",
+};
 const HEAD = execFileSync("git", ["rev-parse", "HEAD"], {
   cwd: ROOT,
   encoding: "utf8",
@@ -30,9 +44,50 @@ function run(root) {
   });
 }
 
-function withFixture(lines, assertion, productFile = "sotro.yaml") {
+function writeQualificationFixture(dir, revision = FOREIGN_REVISION) {
+  mkdirSync(join(dir, "docs/evidence"), { recursive: true });
+  const products = Object.fromEntries(
+    Object.entries(FIXTURE_REPOSITORIES).map(([slug, repository]) => [
+      slug,
+      {
+        repository,
+        defaultBranch: "main",
+        sourceRevision: revision,
+        checkedDefaultHead: revision,
+        relationship: "EXACT_DEFAULT_HEAD",
+      },
+    ]),
+  );
+  writeFileSync(
+    join(dir, "docs/evidence/product-source-qualification.json"),
+    JSON.stringify(
+      {
+        schemaVersion: "1.0",
+        evidenceClass: "PROVIDER_REPOSITORY_READBACK",
+        verifiedAt: "2026-09-30",
+        limitations: ["synthetic architecture-test qualification fixture"],
+        products,
+      },
+      null,
+      2,
+    ) + "\n",
+  );
+}
+
+function withFixture(
+  lines,
+  assertion,
+  productFile = "sotro.yaml",
+  {
+    qualificationRevision = FOREIGN_REVISION,
+    includeQualification = true,
+  } = {},
+) {
   const dir = mkdtempSync(join(tmpdir(), "product-provenance-"));
   mkdirSync(join(dir, "src/content/products"), { recursive: true });
+  if (includeQualification) {
+    writeQualificationFixture(dir, qualificationRevision);
+  }
   writeFileSync(
     join(dir, "src/content/products", productFile),
     `${lines.join("\n")}\n`,
@@ -69,7 +124,11 @@ function record(overrides = {}) {
 test("the real registry satisfies provenance honestly", () => {
   const result = run(ROOT);
   assert.equal(result.status, 0, result.stderr);
-  assert.match(result.stdout, /Product provenance: PASS \(5 entries\)/);
+  assert.match(
+    result.stdout,
+    /Product provenance source qualification: QUALIFIED \(5 entries;/,
+  );
+  assert.match(result.stdout, /capability\/runtime\/payment\/E4 NOT_VERIFIED/);
 });
 
 test("an empty registry reports IDLE instead of passing by accident", () => {
@@ -77,7 +136,10 @@ test("an empty registry reports IDLE instead of passing by accident", () => {
   try {
     const result = run(dir);
     assert.equal(result.status, 0, result.stderr);
-    assert.match(result.stdout, /Product provenance: IDLE/);
+    assert.match(
+      result.stdout,
+      /Product provenance source qualification: IDLE/,
+    );
   } finally {
     rmSync(dir, { recursive: true, force: true });
   }
@@ -87,7 +149,14 @@ test("a well-formed record citing an allow-listed repository passes", () => {
   withFixture(record(), (dir) => {
     const result = run(dir);
     assert.equal(result.status, 0, result.stderr);
-    assert.match(result.stdout, /Product provenance: PASS \(1 entries\)/);
+    assert.match(
+      result.stdout,
+      /Product provenance source qualification: QUALIFIED \(1 entries;/,
+    );
+    assert.match(
+      result.stdout,
+      /capability\/runtime\/payment\/E4 NOT_VERIFIED/,
+    );
   });
 });
 
@@ -141,6 +210,58 @@ test("a sourceRevision that is a commit of THIS repository fails closed", () => 
   });
 });
 
+test("negative proof: an arbitrary foreign-looking 40-hex revision is not qualified", () => {
+  withFixture(record({ revision: FAKE_FOREIGN_REVISION }), (dir) => {
+    const result = run(dir);
+    assert.equal(result.status, 1);
+    assert.match(result.stderr, /is not the qualified revision/);
+  });
+});
+
+test("negative proof: EXACT_DEFAULT_HEAD cannot name a different checked head", () => {
+  const dir = mkdtempSync(join(tmpdir(), "product-provenance-"));
+  mkdirSync(join(dir, "src/content/products"), { recursive: true });
+  writeQualificationFixture(dir, FOREIGN_REVISION);
+
+  const qualificationPath = join(
+    dir,
+    "docs/evidence/product-source-qualification.json",
+  );
+  const registry = JSON.parse(readFileSync(qualificationPath, "utf8"));
+  registry.products.sotro.checkedDefaultHead =
+    "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb";
+  writeFileSync(qualificationPath, JSON.stringify(registry, null, 2) + "\n");
+
+  writeFileSync(
+    join(dir, "src/content/products/sotro.yaml"),
+    `${record().join("\n")}\n`,
+  );
+
+  try {
+    const result = run(dir);
+    assert.equal(result.status, 1);
+    assert.match(
+      result.stderr,
+      /EXACT_DEFAULT_HEAD requires sourceRevision .* to equal checkedDefaultHead/,
+    );
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test("a product record cannot pass when the qualification registry is missing", () => {
+  withFixture(
+    record(),
+    (dir) => {
+      const result = run(dir);
+      assert.equal(result.status, 1);
+      assert.match(result.stderr, /qualification registry is missing/);
+    },
+    "sotro.yaml",
+    { includeQualification: false },
+  );
+});
+
 test("a missing sourceRevision fails closed", () => {
   withFixture(record({ revision: null }), (dir) => {
     const result = run(dir);
@@ -191,7 +312,14 @@ test("positive control: a screenshot-kind record with matching evidence passes",
     (dir) => {
       const result = run(dir);
       assert.equal(result.status, 0, result.stderr);
-      assert.match(result.stdout, /Product provenance: PASS \(1 entries\)/);
+      assert.match(
+        result.stdout,
+        /Product provenance source qualification: QUALIFIED \(1 entries;/,
+      );
+      assert.match(
+        result.stdout,
+        /capability\/runtime\/payment\/E4 NOT_VERIFIED/,
+      );
     },
   );
 });
