@@ -10,10 +10,16 @@ import {
   arrangeDecisionItems,
 } from "@/lib/decision-atelier";
 import { planDossierHandoff } from "@/lib/decision-handoff";
+import {
+  parseDossierSearch,
+  writeSelectionToUrl,
+} from "@/lib/dossier-url-state";
 import type { DecisionItem, DecisionKind } from "@/lib/decision-room";
 import type { Language } from "@/lib/dossier";
 
 const MAX_DEFAULT = 4;
+/** The comparison set travels in this query parameter (bounded parser). */
+const COMPARE_PARAM = "compare";
 
 function template(message: string, n: number, max: number): string {
   return message.replace("{n}", String(n)).replace("{max}", String(max));
@@ -29,12 +35,14 @@ export function initDecisionRoom(root: ParentNode = document): void {
   }
   room.setAttribute("data-decision-ready", "");
   initDecisionAtelier(room);
-  initAtelierHandoff(room);
+  const refreshHandoff = initAtelierHandoff(room, () => [...selected]);
 
   const board = room.querySelector("[data-decision-board]");
   const empty = room.querySelector("[data-decision-empty-state]");
   const live = room.querySelector("[data-decision-live]");
   const reset = room.querySelector("[data-decision-reset]");
+  const count = room.querySelector("[data-decision-count]");
+  const limit = room.querySelector("[data-decision-limit]");
   const max = Math.min(
     MAX_DEFAULT,
     Number(room.getAttribute("data-max")) || MAX_DEFAULT,
@@ -75,12 +83,43 @@ export function initDecisionRoom(root: ParentNode = document): void {
       const id = button.getAttribute("data-decision-add") ?? "";
       const isSelected = selected.has(id);
       button.setAttribute("aria-pressed", String(isSelected));
-      button.disabled = !isSelected && selected.size >= max;
+      const blocked = !isSelected && selected.size >= max;
+      button.disabled = blocked;
+      // A disabled control must say why, visibly and to assistive tech.
+      if (blocked && limit instanceof HTMLElement) {
+        button.setAttribute("aria-describedby", limit.id);
+      } else {
+        button.removeAttribute("aria-describedby");
+      }
+    }
+    if (count instanceof HTMLElement) {
+      count.textContent = template(msgCount, selected.size, max);
+    }
+    if (limit instanceof HTMLElement) {
+      // Space stays reserved (visibility, not display) so the hint cannot shift the page.
+      limit.dataset.active = String(selected.size >= max);
     }
     if (reset instanceof HTMLElement) {
       reset.hidden = selected.size === 0;
     }
+    refreshHandoff();
   };
+
+  const persist = (): void => {
+    writeSelectionToUrl(window, COMPARE_PARAM, [...selected]);
+  };
+
+  // Validated URL state: the bounded parser, intersected with the rendered
+  // buttons and capped at the maximum. Anything else is ignored.
+  const known = new Set(
+    addButtons.map((button) => button.getAttribute("data-decision-add") ?? ""),
+  );
+  const requested = parseDossierSearch(window.location.search, COMPARE_PARAM);
+  if (requested.status === "ok") {
+    for (const id of requested.ids) {
+      if (known.has(id) && selected.size < max) selected.add(id);
+    }
+  }
 
   const toggle = (id: string, fromButton: boolean): void => {
     if (!id) return;
@@ -94,6 +133,7 @@ export function initDecisionRoom(root: ParentNode = document): void {
       announce(template(msgCount, selected.size, max));
     }
     render();
+    persist();
     if (fromButton) {
       const button = addButtons.find(
         (candidate) => candidate.getAttribute("data-decision-add") === id,
@@ -113,6 +153,7 @@ export function initDecisionRoom(root: ParentNode = document): void {
       selected.delete(id);
       announce(template(msgCount, selected.size, max));
       render();
+      persist();
       const origin = addButtons.find(
         (candidate) => candidate.getAttribute("data-decision-add") === id,
       );
@@ -124,6 +165,7 @@ export function initDecisionRoom(root: ParentNode = document): void {
       selected.clear();
       announce(template(msgCount, 0, max));
       render();
+      persist();
       // The reset button hides itself; keep keyboard focus on the board.
       addButtons[0]?.focus();
     });
@@ -287,22 +329,47 @@ export function initDecisionAtelier(room: HTMLElement): void {
   if (requestedGoal && goals.has(requestedGoal)) {
     goalSelect.value = requestedGoal;
   }
-  const requestedConstraint = params.get("constraint");
+  const requestedConstraints = new Set(
+    (params.get("constraint") ?? "").split(",").map((token) => token.trim()),
+  );
   for (const box of checkboxes) {
-    if (
-      requestedConstraint &&
-      constraints.has(requestedConstraint) &&
-      box.value === requestedConstraint
-    ) {
+    if (constraints.has(box.value) && requestedConstraints.has(box.value)) {
       box.checked = true;
     }
   }
 
+  // Keep the address bar in step with the arrangement (replace, never push).
+  const persistArrangement = (): void => {
+    const next = new URLSearchParams(window.location.search);
+    if (goalSelect.value && goals.has(goalSelect.value)) {
+      next.set("goal", goalSelect.value);
+    } else {
+      next.delete("goal");
+    }
+    const checked = checkboxes
+      .filter((box) => box.checked && constraints.has(box.value))
+      .map((box) => box.value);
+    if (checked.length > 0) next.set("constraint", checked.join(","));
+    else next.delete("constraint");
+    const text = next.toString();
+    window.history.replaceState(
+      window.history.state,
+      "",
+      `${window.location.pathname}${text ? `?${text}` : ""}${window.location.hash}`,
+    );
+  };
+
   controls.hidden = false;
   controls.setAttribute("data-atelier-ready", "");
-  goalSelect.addEventListener("change", () => apply(true));
+  goalSelect.addEventListener("change", () => {
+    apply(true);
+    persistArrangement();
+  });
   for (const box of checkboxes) {
-    box.addEventListener("change", () => apply(true));
+    box.addEventListener("change", () => {
+      apply(true);
+      persistArrangement();
+    });
   }
   resetButton.addEventListener("click", () => {
     goalSelect.value = "";
@@ -310,6 +377,7 @@ export function initDecisionAtelier(room: HTMLElement): void {
       box.checked = false;
     }
     apply(true);
+    persistArrangement();
   });
 
   apply(false);
@@ -322,11 +390,13 @@ export function initDecisionAtelier(room: HTMLElement): void {
  * plan is recomputed from what is checked right now, and the destination is an
  * ordinary same-origin link the browser follows only when they click it.
  */
-export function initAtelierHandoff(room: HTMLElement): void {
+export function initAtelierHandoff(
+  room: HTMLElement,
+  getSelected: () => string[],
+): () => void {
   const link = room.querySelector<HTMLAnchorElement>(
     "[data-atelier-handoff-link]",
   );
-  const empty = room.querySelector<HTMLElement>("[data-atelier-handoff-empty]");
   const report = room.querySelector<HTMLElement>(
     "[data-atelier-handoff-report]",
   );
@@ -336,29 +406,22 @@ export function initAtelierHandoff(room: HTMLElement): void {
   const reportTemplate = room.querySelector<HTMLTemplateElement>(
     "template[data-atelier-handoff-report]",
   );
-  if (!link || !empty || !report || !actionTemplate || !reportTemplate) return;
+  if (!link || !report || !actionTemplate || !reportTemplate) return () => {};
 
   const actionCopy = (actionTemplate.content.textContent ?? "").trim();
   const reportCopy = (reportTemplate.content.textContent ?? "").trim();
   const lang = readLanguage();
 
   const render = (): void => {
-    const selected = Array.from(
-      room.querySelectorAll<HTMLInputElement>(
-        "[data-atelier-item-select]:checked",
-      ),
-    ).map((input) => input.value);
-    const plan = planDossierHandoff(selected, lang);
+    const plan = planDossierHandoff(getSelected(), lang);
 
     if (plan.href !== null && plan.itemIds.length > 0) {
       link.setAttribute("href", plan.href);
       link.textContent = actionCopy.replace("{n}", String(plan.itemIds.length));
       link.hidden = false;
-      empty.hidden = true;
     } else {
       link.removeAttribute("href");
       link.hidden = true;
-      empty.hidden = false;
     }
 
     if (plan.rejected.length > 0) {
@@ -373,17 +436,7 @@ export function initAtelierHandoff(room: HTMLElement): void {
     }
   };
 
-  const itemInputs = Array.from(
-    room.querySelectorAll<HTMLInputElement>("[data-atelier-item-select]"),
-  );
-  for (const input of itemInputs) {
-    // Firefox can restore native checkbox state across reloads. The handoff is
-    // intentionally ephemeral, so discard that browser-restored state before
-    // the first render rather than allowing it to become a hidden selection.
-    input.checked = false;
-    input.addEventListener("change", render);
-  }
-  render();
+  return render;
 }
 
 /** The document's language, restricted to the locales the site publishes. */

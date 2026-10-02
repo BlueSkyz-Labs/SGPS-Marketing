@@ -15,7 +15,9 @@ export function containerBypasses(source) {
 }
 
 test("shell and hero containers use the single site-container contract", () => {
-  assert.match(css, /--site-max:\s*1320px/);
+  // v8 W6: the wide container token replaces the 1320px literal.
+  assert.match(css, /--site-max:\s*var\(--container-wide\)/);
+  assert.match(css, /--container-wide:\s*78\.5rem/);
   assert.match(css, /\.site-container\s*\{[^}]*max-width:\s*var\(--site-max\)/);
   assert.match(container, /site-container/);
   assert.match(hero, /site-container/);
@@ -46,8 +48,11 @@ test("dark is composed: band token in every dark block and a distinct hero stage
   assert.doesNotMatch(atmosphere, /linear-gradient\(\s*90deg/);
 });
 
-test("header: one CTA distinct from Products, compact theme trigger, no Explore CTA", () => {
-  assert.match(header, /emptyRegistryPrimaryCta\(SITE\.contactEmail, lang\)/);
+test("header: one Products CTA, About as the plain link, compact theme trigger", () => {
+  // Owner decision 2026-10-01 (v7 A-12).
+  assert.match(header, /const primaryCta = NAV\[0\]!;/);
+  assert.match(header, /const primaryLink = NAV\[1\]!;/);
+  assert.doesNotMatch(header, /emptyRegistryPrimaryCta/);
   assert.doesNotMatch(header, /exploreProducts/);
   assert.match(header, /variant="popover"/);
 });

@@ -14,12 +14,8 @@ const SCHEMES = ["light", "dark"] as const;
 const FLOOR = 4.5;
 
 // Body-text selectors on the security page. `.c4-craft__text` is the P0 target.
-const SELECTORS = [
-  ".c4-craft__text",
-  ".c4-craft__heading",
-  ".c4-craft__evidence-link",
-  "main p",
-] as const;
+const SELECTORS = ["main p", "main a", "main strong"] as const;
+const TRUST_PAGES = ["security", "privacy", "verify"] as const;
 
 interface Sample {
   selector: string;
@@ -111,21 +107,20 @@ async function measure(
 
 for (const scheme of SCHEMES) {
   for (const lang of LANGS) {
-    test(`/${lang}/security/ body text meets 4.5:1 in ${scheme} mode`, async ({
-      browser,
-    }) => {
-      const context = await browser.newContext({ colorScheme: scheme });
-      const page = await context.newPage();
-      await page.goto(`/${lang}/security/`);
-      await expect(page.locator(".c4-craft__text").first()).toBeVisible();
-      const samples = await measure(page, SELECTORS);
-      expect(
-        samples.filter((s) => s.selector === ".c4-craft__text").length,
-      ).toBeGreaterThan(0);
-      const failures = samples.filter((s) => s.ratio < FLOOR);
-      expect(failures, JSON.stringify(failures, null, 2)).toEqual([]);
-      await context.close();
-    });
+    for (const route of TRUST_PAGES) {
+      test(`/${lang}/${route}/ body text meets 4.5:1 in ${scheme} mode`, async ({
+        browser,
+      }) => {
+        const context = await browser.newContext({ colorScheme: scheme });
+        const page = await context.newPage();
+        await page.goto(`/${lang}/${route}/`);
+        const samples = await measure(page, SELECTORS);
+        expect(samples.length).toBeGreaterThan(0);
+        const failures = samples.filter((s) => s.ratio < FLOOR);
+        expect(failures, JSON.stringify(failures, null, 2)).toEqual([]);
+        await context.close();
+      });
+    }
   }
 
   test(`C4 editorial surfaces meet 4.5:1 in ${scheme} mode`, async ({

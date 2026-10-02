@@ -30,10 +30,15 @@ const title = passport ? `证据：${passport.claim.zh}` : "证据";
   <section class="py-16 lg:py-24">
     <Container>
       <div class="max-w-3xl">
-        <h1 class="evidence-passport__page-title" data-passport-page-title>
+        <p class="evidence-passport__page-title" data-passport-page-title>
           这条说法的证据
-        </h1>
-        <EvidencePassport id={id ?? ""} lang="zh" products={products} />
+        </p>
+        <EvidencePassport
+          id={id ?? ""}
+          lang="zh"
+          products={products}
+          claimAs="h1"
+        />
       </div>
     </Container>
   </section>

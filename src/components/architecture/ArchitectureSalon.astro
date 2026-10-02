@@ -4,10 +4,16 @@ import {
   getPublicArchitectureView,
 } from "@/lib/public-architecture";
 import type { Language } from "@/lib/i18n";
+import {
+  ARCHITECTURE_COPY,
+  humanEdge,
+  humanNode,
+} from "@/data/architecture-copy";
+import { formatDisplayDate } from "@/lib/display-date";
 import ArchitectureLens from "@/components/architecture/ArchitectureLens.astro";
 
 /**
- * C4-D Task 2 — architecture salon.
+ * Architecture explainer (was the C4-D "salon"): five plain-language sections.
  *
  * Static-first and text-first: all five lenses are rendered as ordinary
  * sections with semantic headings, reached by ordinary in-page links. Nothing
@@ -22,73 +28,145 @@ interface Props {
 
 const { lang } = Astro.props;
 
-const LABELS: Record<
-  Language,
-  { heading: string; lede: string; nav: string; source: string }
-> = {
-  en: {
-    heading: "Architecture salon",
-    lede: "Five calm views of the system this site runs on. Every view is derived from the canonical architecture model; nothing here is a diagram-only claim.",
-    nav: "Views",
-    source: "Last verified against the canonical model",
-  },
-  vi: {
-    heading: "Phòng kiến trúc",
-    lede: "Năm góc nhìn tĩnh lặng về hệ thống mà trang này vận hành. Mọi góc nhìn đều dẫn xuất từ mô hình kiến trúc chuẩn; không có thông tin nào chỉ nằm trong sơ đồ.",
-    nav: "Góc nhìn",
-    source: "Xác minh gần nhất với mô hình chuẩn",
-  },
-  zh: {
-    heading: "架构沙龙",
-    lede: "本站运行系统的五个静态视角。所有视角均派生自规范架构模型；不存在仅由图示承载的信息。",
-    nav: "视角",
-    source: "最近一次对照规范模型核验",
-  },
-  "zh-hant": {
-    heading: "架構沙龍",
-    lede: "本站執行系統的五個靜態視角。所有視角均派生自規範架構模型；不存在僅由圖示承載的資訊。",
-    nav: "視角",
-    source: "最近一次對照規範模型核驗",
-  },
-};
-
-const labels = LABELS[lang];
+const copy = ARCHITECTURE_COPY[lang];
+const verifyHref = `/${lang}/verify/`;
 
 const views = PUBLIC_LENSES.map((lens) => ({
   lens,
   view: getPublicArchitectureView(lens),
 }));
 const lastVerified = views[0]?.view.lastVerified ?? null;
+const lastVerifiedText = lastVerified
+  ? formatDisplayDate(lastVerified, lang)
+  : null;
+const [verifiedBefore = "", verifiedAfter = ""] =
+  copy.lastVerified.split("{date}");
+
+/**
+ * The one diagram: the website, the three parts it contains and the outside
+ * services it relies on, each drawn once. The lens sections below list only
+ * what this diagram does not already show.
+ */
+const trust = views.find(({ lens }) => lens === "trust")!.view;
+const rootNode = trust.nodes.find((node) => node.kind === "System")!;
+const innerNodes = trust.nodes.filter((node) => node.kind === "Component");
+const outsideNodes = trust.nodes.filter(
+  (node) => node.kind === "ExternalDependency",
+);
+const assurer = trust.edges.find((edge) => edge.type === "assures");
+const labelOf = (id: string) => humanNode(lang, id).label;
+const uniqueBy = <T extends { id: string }>(items: T[]): T[] => [
+  ...new Map(items.map((item) => [item.id, item])).values(),
+];
+const allNodes = uniqueBy(views.flatMap(({ view }) => view.nodes));
+const allEdges = uniqueBy(views.flatMap(({ view }) => view.edges));
+
+// Cumulative "already shown" bookkeeping: each part is described once.
+const shownNodes = new Set(trust.nodes.map((node) => node.id));
+const shownEdges = new Set(trust.edges.map((edge) => edge.id));
+const lensViews = views.map(({ lens, view }) => {
+  const newNodes = view.nodes.filter((node) => !shownNodes.has(node.id));
+  const newEdges = view.edges.filter((edge) => !shownEdges.has(edge.id));
+  newNodes.forEach((node) => shownNodes.add(node.id));
+  newEdges.forEach((edge) => shownEdges.add(edge.id));
+  const boundaries =
+    lens === "trust"
+      ? [
+          ...new Set(
+            view.nodes.flatMap((node) =>
+              node.boundary ? [node.boundary] : [],
+            ),
+          ),
+        ]
+      : [];
+  return { lens, newNodes, newEdges, boundaries };
+});
 ---
 
 <section class="c4-salon" data-architecture-salon>
-  <h2 class="c4-salon__heading">{labels.heading}</h2>
-  <p class="c4-salon__lede">{labels.lede}</p>
+  <h2 class="c4-salon__subheading">{copy.connections}</h2>
+  <div class="c4-salon__diagram" data-architecture-diagram>
+    <div class="c4-salon__system" data-architecture-node={rootNode.id}>
+      <p class="c4-salon__system-label">{labelOf(rootNode.id)}</p>
+      <ul class="c4-salon__parts">
+        {innerNodes.map((node) => (
+          <li class="c4-salon__part" data-architecture-node={node.id}>
+            <span class="c4-salon__chip" data-diagram-node>
+              {labelOf(node.id)}
+            </span>
+            {assurer && assurer.from === node.id && (
+              <span class="c4-salon__part-note">
+                {humanEdge(lang, assurer.type)}
+              </span>
+            )}
+          </li>
+        ))}
+      </ul>
+    </div>
+    <div class="c4-salon__outside">
+      <p class="c4-salon__outside-label">{humanEdge(lang, "depends_on")}</p>
+      <ul class="c4-salon__parts">
+        {outsideNodes.map((node) => (
+          <li class="c4-salon__part" data-architecture-node={node.id}>
+            <span class="c4-salon__chip" data-diagram-node>
+              {labelOf(node.id)}
+            </span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </div>
 
-  <nav class="c4-salon__nav" aria-label={labels.nav}>
-    <ul class="c4-salon__nav-list">
-      {views.map(({ lens }) => (
-        <li class="c4-salon__nav-item">
-          <a class="c4-salon__nav-link" href={`#lens-${lens}`}>
-            {lens}
-          </a>
-        </li>
-      ))}
-    </ul>
-  </nav>
+  <div class="c4-salon__lenses">
+    {lensViews.map(({ lens, newNodes, newEdges, boundaries }) => (
+      <ArchitectureLens
+        lens={lens}
+        nodes={newNodes}
+        edges={newEdges}
+        boundaries={boundaries}
+        lang={lang}
+        {...(lens === "evidence" ? { verifyHref } : {})}
+      />
+    ))}
+  </div>
 
-  {views.map(({ lens, view }) => (
-    <ArchitectureLens
-      lens={lens}
-      nodes={view.nodes}
-      edges={view.edges}
-      lang={lang}
-    />
-  ))}
+  <details class="c4-salon__technical" data-architecture-technical>
+    <summary class="c4-salon__technical-summary">
+      {copy.technical.summary}
+    </summary>
+    <div class="c4-salon__technical-body">
+      <p>{copy.technical.hint}</p>
+      <h3>{copy.technical.parts}</h3>
+      <ul>
+        {allNodes.map((node) => (
+          <li>
+            <code>{node.id}</code> · <code>{node.kind}</code>
+            {node.boundary && (
+              <>
+                {" "}
+                · <code>{node.boundary}</code>
+              </>
+            )}
+          </li>
+        ))}
+      </ul>
+      <h3>{copy.technical.connections}</h3>
+      <ul>
+        {allEdges.map((edge) => (
+          <li>
+            <code>{edge.from}</code> <code>{edge.type}</code>{" "}
+            <code>{edge.to}</code>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </details>
 
   {lastVerified && (
     <p class="c4-salon__source">
-      {labels.source}: <time datetime={lastVerified}>{lastVerified}</time>
+      {verifiedBefore}
+      <time datetime={lastVerified}>{lastVerifiedText}</time>
+      {verifiedAfter}
     </p>
   )}
 </section>
@@ -109,9 +187,17 @@ const lastVerified = views[0]?.view.lastVerified ?? null;
   const requested = new URLSearchParams(window.location.search).get("lens");
   if (requested && allowed.has(requested)) {
     const target = document.getElementById(`lens-${requested}`);
-    if (target) {
+    if (target instanceof HTMLDetailsElement) {
+      target.open = true;
       target.setAttribute("tabindex", "-1");
       target.focus({ preventScroll: false });
     }
   }
+  // An in-page link to a lens opens it.
+  const openFromHash = () => {
+    const target = document.getElementById(window.location.hash.slice(1));
+    if (target instanceof HTMLDetailsElement) target.open = true;
+  };
+  window.addEventListener("hashchange", openFromHash);
+  openFromHash();
 </script>

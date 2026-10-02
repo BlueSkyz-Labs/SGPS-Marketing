@@ -120,7 +120,7 @@ test.describe("provenance search without JavaScript", () => {
     await page.goto("/en/");
     await expect(
       page.locator('[data-command-item][data-command-kind="evidence"]'),
-    ).toHaveCount(1);
+    ).toHaveCount(4); // GitHub advisory channel + the 3 public evidence passports
     // Mobile projects hide the desktop nav; the brand lockup is always the
     // visible navigation path without JS.
     await expect(page.locator('header a[href="/en/"]').first()).toBeVisible();

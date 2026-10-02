@@ -27,7 +27,7 @@ test("empty registry primary prefers Contact only when email exists", () => {
 test("empty registry CTA paths and labels are locale-aware", () => {
   assert.deepEqual(emptyRegistryPrimaryCta(null, "vi"), {
     href: "/vi/about/",
-    label: "Tìm hiểu BlueSkyz",
+    label: "Về BlueSkyz",
   });
   assert.deepEqual(emptyRegistrySecondaryCta(null, "vi"), {
     href: "/vi/security/",

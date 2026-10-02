@@ -23,13 +23,13 @@ for (const reducedMotion of ["reduce", "no-preference"] as const) {
         /We build intelligent products|Intelligence/i,
       );
 
-      // S2: the one primary action sits in the flagship card, the quiet link in
-      // .hero-actions; together they are still exactly two actions.
+      // v8 W2: the one primary action sits in the flagship caption; the orphan
+      // "Explore products" link is gone, so the hero has exactly one action.
       const actions = page.locator(
         "[data-hero-flagship] [data-hero-primary], .hero-actions a",
       );
-      await expect(actions).toHaveCount(2);
-      for (let index = 0; index < 2; index += 1) {
+      await expect(actions).toHaveCount(1);
+      for (let index = 0; index < 1; index += 1) {
         await expect(actions.nth(index)).toBeVisible();
         const href = await actions.nth(index).getAttribute("href");
         expect(href?.startsWith("/")).toBe(true);
@@ -77,5 +77,5 @@ test("the hero carries the same content with motion enabled", async ({
   );
   await expect(
     page.locator("[data-hero-flagship] [data-hero-primary], .hero-actions a"),
-  ).toHaveCount(2);
+  ).toHaveCount(1);
 });

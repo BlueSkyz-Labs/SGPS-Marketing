@@ -22,6 +22,9 @@ const DISPLAY_SELECTORS = [".type-d1", ".type-d2", ".hero-headline"];
 
 const read = (path) => readFileSync(path, "utf8");
 
+/** Forward-slash paths so assertions are separator-independent. */
+const toPosix = (path) => path.replaceAll("\\", "/");
+
 function walk(dir, out = []) {
   for (const entry of readdirSync(dir, { withFileTypes: true })) {
     const path = join(dir, entry.name);
@@ -99,7 +102,7 @@ function checkDisplayScope(css) {
 
 function checkNoOtherUsage(files) {
   for (const [path, text] of files) {
-    if (path === CSS_PATH) continue;
+    if (toPosix(path) === CSS_PATH) continue;
     assert.doesNotMatch(
       text,
       /--font-display|"Display Face"|plus-jakarta/,
@@ -150,6 +153,20 @@ test("display face is applied to h1/h2 display headings only", () => {
   checkNoCulturalNames(css);
 });
 
+// Windows regression pin: walk() yields OS-native separators, so the
+// allowlisted stylesheet must still be skipped after normalization, and a
+// non-allowlisted file that references the face must still fail.
+test("display-face usage guard is separator-independent", () => {
+  checkNoOtherUsage([
+    ["src\\styles\\display-type.css", "a{font-family:var(--font-display)}"],
+  ]);
+  assert.throws(() =>
+    checkNoOtherUsage([
+      ["src\\styles\\other.css", "a{font-family:var(--font-display)}"],
+    ]),
+  );
+});
+
 /** Display preload must exist, be engine-gated, and precede the Inter loop. */
 function checkDisplayPreload(layoutSrc, bootstrap) {
   assert.doesNotMatch(
@@ -159,7 +176,7 @@ function checkDisplayPreload(layoutSrc, bootstrap) {
   );
   assert.match(bootstrap, /AppleWebKit/, "preload must stay engine-gated");
   const display = bootstrap.indexOf("plus-jakarta-sans-${subset}-700-v5.3.0");
-  const inter = bootstrap.indexOf("inter-${subset}-opsz-v5.3.0");
+  const inter = bootstrap.indexOf("inter-${subset}-wght-v5.3.0");
   assert.ok(display > -1, "display face (LCP H1) must be preloaded");
   assert.ok(inter > -1, "Inter preload must remain");
   assert.ok(display < inter, "display preload must precede Inter");
@@ -187,7 +204,7 @@ test("negative proof: each blocking check turns RED on a broken invariant", () =
     checkDisplayPreload(layoutSrc, boot.replaceAll("plus-jakarta-sans-", "x-")),
   );
   const D = "plus-jakarta-sans-${subset}-700-v5.3.0";
-  const I = "inter-${subset}-opsz-v5.3.0";
+  const I = "inter-${subset}-wght-v5.3.0";
   assert.throws(() =>
     checkDisplayPreload(
       layoutSrc,

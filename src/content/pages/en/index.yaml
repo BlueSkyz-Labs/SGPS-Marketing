@@ -21,7 +21,7 @@ sections:
         summary: Real value. Real change.
   trust:
     heading: Trust
-    intro: Every product shows its real stage. Privacy, security and support each have their own page — not slogans.
+    intro: Every product shows its real stage. Privacy, security and support each have their own page.
     links:
       - label: Privacy
         href: /en/privacy/
