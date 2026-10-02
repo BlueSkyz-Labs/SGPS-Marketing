@@ -52,8 +52,26 @@ function resolveLocalTarget(fromFile, rawUrl) {
   };
 }
 
-const ATTR = /(?:href|src)=["']([^"']+)["']/gi;
-const SKIP = /^(?:https?:|mailto:|tel:|data:|javascript:|#)/i;
+const ATTR = /(href|src)=["']([^"']+)["']/gi;
+const SAFE_SCHEME = /^(?:https?:|mailto:|tel:)/i;
+const EXECUTABLE_SCHEME = /^(?:javascript|vbscript):/i;
+const ANY_SCHEME = /^[a-z][a-z0-9+.-]*:/i;
+
+function classifyUrl(attribute, url) {
+  if (EXECUTABLE_SCHEME.test(url)) {
+    return { kind: "forbidden", reason: `forbidden executable URL scheme: ${url}` };
+  }
+  if (/^data:/i.test(url)) {
+    return attribute === "src"
+      ? { kind: "skip" }
+      : { kind: "forbidden", reason: `data: navigation is not allowed: ${url}` };
+  }
+  if (SAFE_SCHEME.test(url) || url.startsWith("#")) return { kind: "skip" };
+  if (ANY_SCHEME.test(url)) {
+    return { kind: "forbidden", reason: `unsupported URL scheme: ${url}` };
+  }
+  return { kind: "local" };
+}
 
 const pages = walkHtml(DIST);
 const broken = [];
@@ -63,12 +81,25 @@ let external = 0;
 for (const page of pages) {
   const html = readFileSync(page, "utf8");
   for (const match of html.matchAll(ATTR)) {
-    const url = match[1].trim();
-    if (!url || SKIP.test(url)) {
+    const attribute = match[1].toLowerCase();
+    const url = match[2].trim();
+    if (!url) continue;
+
+    const classification = classifyUrl(attribute, url);
+    if (classification.kind === "skip") {
       if (/^https?:/i.test(url)) external += 1;
       continue;
     }
     checked += 1;
+    if (classification.kind === "forbidden") {
+      broken.push({
+        page: `/${relative(DIST, page).replaceAll("\\", "/")}`,
+        url,
+        detail: classification.reason,
+      });
+      continue;
+    }
+
     const result = resolveLocalTarget(page, url);
     if (!result) continue;
     if (!result.ok) {
