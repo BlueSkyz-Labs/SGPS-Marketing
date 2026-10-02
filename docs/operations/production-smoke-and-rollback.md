@@ -28,8 +28,12 @@ guessing.
    `X-Content-Type-Options: nosniff`, `X-Frame-Options: DENY`,
    `Referrer-Policy`, `Permissions-Policy`.
 3. Record the outcome in a post-merge read-back ledger under `docs/evidence/`
-   (declared revision + smoke result + host), which
-   `pnpm check:deployment-evidence` validates in CI.
+   with the **full 40-character deployed Git revision**, smoke result and
+   canonical host read-back.
+4. Certify that exact served revision explicitly:
+   `pnpm check:deployment-evidence -- <ledger-path> --expected-sha <40-character-served-sha>`.
+   The no-argument CI invocation validates historical ledger structure only
+   and reports `current revision NOT_VERIFIED`; it is never current-runtime proof.
 
 ## 3. Observability (deliberately minimal)
 
@@ -68,8 +72,9 @@ Before changing the provider deployment:
    and _Rollback / redeploy that version_.
    (Equivalent: re-run Workers Builds on that exact eligible `main` commit.)
 4. Immediately re-run §2 post-deploy verification against the rolled-back
-   revision and record/certify the exact served SHA. An eligible source target
-   is not runtime proof.
+   revision, record the full-SHA ledger entry, and certify it with
+   `pnpm check:deployment-evidence -- <ledger-path> --expected-sha <40-character-served-sha>`.
+   An eligible source target is not runtime proof.
 5. Open an issue or PR describing the incident, target revision, security-floor
    qualification, provider rollback and forward-fix plan. No direct pushes to
    `main`, no bypassing protection.
