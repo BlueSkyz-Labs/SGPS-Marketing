@@ -44,7 +44,7 @@ Full Playwright matrix and Lighthouse are promotion/preview evidence, not every-
 - **Quality Gates** — frozen install, dependency vulnerability audit, architecture contracts (`test:architecture`), typecheck, lint, format, static build, then the assurance gates in order: `check:client-budget`, `check:static-links`, `check:publishability`, `check:integrity-firewall`, `verify:git-evidence`, `check:promotion-state`, `check:deployment-evidence`, `check:product-provenance`.
 - **Browser Assurance** — the repository E4 Playwright/axe matrix across Chromium, Firefox, WebKit/Safari-class and mobile Chromium, followed by Lighthouse CI after `Quality Gates` succeeds.
 
-The checkout uses `fetch-depth: 0` so `verify:git-evidence` can resolve every cited revision to a real commit object and prove it is reachable from the candidate (no SHA-shaped strings, no squash-orphaned revisions). `check:promotion-state` reports `source`, `deployment` and `public-truth` with `PASS | FAIL | BLOCKED_OWNER_FACT`: an absent owner fact (contact/security email) is blocked, never a failure and never a pass. `check:deployment-evidence` validates the newest post-merge read-back ledger (declared revision + smoke `PASS` + host mention). `check:product-provenance` fails closed if a listed product cites a `sourceRevision` that does not resolve; an empty registry reports `IDLE`, not a silent pass.
+The checkout uses `fetch-depth: 0` so `verify:git-evidence` can resolve every cited revision to a real commit object and prove it is reachable from the candidate (no SHA-shaped strings, no squash-orphaned revisions). `check:promotion-state` reports four distinct boundaries: `source`, `deployment-contract`, `provider-deployment` and `public-truth`. The repository one-shot deploy script may earn `deployment-contract PASS`, but authoritative Cloudflare Workers Builds is always `provider-deployment NOT_VERIFIED` in this offline checker until independently read back; an absent owner fact remains `BLOCKED_OWNER_FACT`, never PASS. `check:deployment-evidence` in ordinary Source Assurance validates only the structure of the newest historical post-merge ledger and must report the current revision as `NOT_VERIFIED`; an actual runtime `PASS` additionally requires `--expected-sha <full-40-hex>` matching the ledger's full deployed revision, plus smoke `PASS` and canonical-host read-back. `check:product-provenance` fails closed if a listed product cites a `sourceRevision` that does not resolve; an empty registry reports `IDLE`, not a silent pass.
 
 #### C2 contract suites (inside `test:architecture`)
 
@@ -70,7 +70,7 @@ Active ruleset `main-promotion-governance` (`22500299`) protects `main`: a pull 
 
 - Playwright: Chromium, Firefox, WebKit, mobile Chromium (`pnpm test:e2e`)
 - Browser bootstrap: `pnpm test:e2e:install`
-- Protected PR/main assurance: one parallel shard per Playwright project (`chromium`, `firefox`, `webkit`, `mobile-chromium`). Each shard installs only its own browser with OS dependencies and runs `pnpm test:e2e` with `E2E_PROJECT` set to its project; Lighthouse runs in its own job. The required check `Browser Assurance` is an aggregator that fails unless every shard and Lighthouse succeeded. `scripts/run-e2e.mjs` owns the project list and `tests/architecture/browser-assurance-matrix.test.mjs` keeps the workflow's shard list equal to it, so sharding never narrows coverage.
+- Protected PR/main assurance: one parallel shard per Playwright project (`chromium`, `firefox`, `webkit`, `mobile-chromium`). Browser shards run in Microsoft's Playwright `v1.63.0-noble` image pinned to OCI digest `sha256:eff16c30e6f3f4af0a03fa4b706120d5e9b0891c344a27d64559aff5900a4a27`, as non-root uid 1001, with `PLAYWRIGHT_BROWSERS_PATH=/ms-playwright`. CI does not run `playwright install` and fails if a Playwright download-host override is present. This binds browser bytes to an immutable MCR artifact; it does **not** claim publisher-signature/SLSA verification. During the temporary pre-go-live speed lane, PRs run Chromium + mobile Chromium while every push to `main` still runs all four engines; PR #405 is the explicit post-go-live removal of that temporary lane. Lighthouse remains separate and required by the `Browser Assurance` aggregator.
 - axe tags: WCAG 2.0 / 2.1 / 2.2 A+AA (`wcag2a`, `wcag2aa`, `wcag21a`, `wcag21aa`, `wcag22a`, `wcag22aa`)
 - Static internal links/assets: `pnpm check:static-links` (after `pnpm build`)
 - Optional remote target: `PLAYWRIGHT_BASE_URL`
@@ -105,6 +105,8 @@ branch: main
 command: pnpm install --frozen-lockfile && pnpm validate:public-truth && pnpm build && pnpm check:client-budget && pnpm check:static-links
 preview branches: enabled
 ```
+
+This block is the **required target configuration**, not source proof of the live provider state. Current Cloudflare branch/build/deploy settings must be independently read back and kept fresh (see #375); `check:promotion-state` cannot certify them from repository source.
 
 Preview builds may omit `validate:public-truth` when production-only email variables are intentionally absent, but must still build and pass static gates (`check:client-budget`, `check:static-links`).
 
