@@ -277,7 +277,7 @@ export function evaluateProviderDeployment() {
       "provider-deployment",
       "Cloudflare Workers Builds",
       "authoritative provider branch/build/deploy configuration is not read back by this offline source checker",
-      "independently read back the current provider configuration and exact deployed revision; track freshness under issue #369",
+      "independently read back the current provider configuration and exact deployed revision; track freshness under issue #375",
     ),
   ]);
 }
