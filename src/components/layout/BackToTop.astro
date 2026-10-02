@@ -1,0 +1,18 @@
+---
+import type { Language } from "@/lib/i18n";
+
+interface Props {
+  lang: Language;
+}
+const LABEL: Record<string, string> = {
+  en: "Back to top",
+  vi: "Lên đầu trang",
+  zh: "返回顶部",
+  "zh-hant": "返回頂部",
+};
+const { lang } = Astro.props;
+---
+
+<a class="back-to-top" href="#top" data-back-to-top>
+  {LABEL[lang] ?? LABEL.en}
+</a>

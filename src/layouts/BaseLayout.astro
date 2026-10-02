@@ -1,6 +1,7 @@
 ---
 import Header from "@/components/layout/Header.astro";
 import Footer from "@/components/layout/Footer.astro";
+import BackToTop from "@/components/layout/BackToTop.astro";
 import LocaleSuggestion from "@/components/layout/LocaleSuggestion.astro";
 import CommandNavigator from "@/components/experience/CommandNavigator.astro";
 import JourneyBar from "@/components/experience/JourneyBar.astro";
@@ -180,7 +181,7 @@ const robotsContent =
       ></script>
     ))}
   </head>
-  <body class="flex min-h-screen flex-col" data-scene={scene}>
+  <body id="top" class="flex min-h-screen flex-col" data-scene={scene}>
     <a class="skip-link" href="#main-content">
       {currentLang === "vi"
         ? "Chuyển đến nội dung chính"
@@ -216,6 +217,7 @@ const robotsContent =
         />
       ) : null}
       <JourneyBar />
+      <BackToTop lang={currentLang} />
     </main>
     <Footer />
   </body>

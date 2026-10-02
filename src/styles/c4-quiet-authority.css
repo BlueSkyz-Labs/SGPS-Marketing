@@ -31,13 +31,13 @@
 
   /* C4-A S2 — Optical typography roles: fluid clamp ranges over ONE family.
    * No new font family, no route-local scale; hierarchy stays semantic. */
-  --c4-type-display: clamp(2.5rem, 1.75rem + 2.6vw, 4rem);
-  --c4-type-section: clamp(1.75rem, 1.35rem + 1.4vw, 2.5rem);
-  --c4-type-product: clamp(1.25rem, 1.1rem + 0.6vw, 1.6rem);
-  --c4-type-evidence: clamp(1.05rem, 1rem + 0.3vw, 1.25rem);
-  --c4-type-reading: clamp(1rem, 0.95rem + 0.25vw, 1.125rem);
-  --c4-type-meta: 0.8125rem;
-  --c4-type-caption: 0.75rem;
+  --c4-type-display: var(--size-7);
+  --c4-type-section: var(--size-7);
+  --c4-type-product: var(--size-5);
+  --c4-type-evidence: var(--size-4);
+  --c4-type-reading: var(--size-3);
+  --c4-type-meta: var(--size-2);
+  --c4-type-caption: var(--size-1);
 }
 
 /* C4-A S1 — Editorial grid roles.
@@ -206,7 +206,7 @@
 }
 
 .c4-edition {
-  max-width: 62ch;
+  max-width: var(--container-reading);
 }
 
 .c4-edition__title {
@@ -282,7 +282,7 @@
 
 /* ---- C4-C G3 — Boardroom presentation mode ---- */
 .c4-boardroom {
-  max-width: 72ch;
+  max-width: var(--container-reading);
   margin-block-start: var(--space-10);
   padding-block-start: var(--space-8);
   border-top: 1px solid var(--c4-hairline);
@@ -294,7 +294,7 @@
 
 .c4-boardroom__title {
   margin: 0 0 var(--space-2);
-  font-size: clamp(1.25rem, 1.15rem + 0.5vw, 1.5rem);
+  font-size: var(--size-6);
   font-weight: 600;
   letter-spacing: -0.01em;
   line-height: 1.25;
@@ -359,7 +359,7 @@
 
 .c4-boardroom__screen-heading {
   margin: 0 0 var(--space-4);
-  font-size: clamp(1.5rem, 1.3rem + 0.8vw, 1.75rem);
+  font-size: var(--size-6);
   font-weight: 600;
   letter-spacing: -0.01em;
   line-height: 1.2;
@@ -370,7 +370,7 @@
   margin: 0 0 var(--space-4);
   font-size: var(--c4-type-reading);
   color: var(--text-secondary);
-  max-width: 62ch;
+  max-width: var(--container-reading);
 }
 
 /* Programmatic focus lands on the active screen heading; keep it visible. */
@@ -598,7 +598,7 @@
   margin-block-start: var(--space-10);
   padding-block-start: var(--space-8);
   border-top: 1px solid var(--c4-hairline);
-  max-width: 62ch;
+  max-width: var(--container-reading);
 }
 
 .c4-craft__sections {
@@ -611,7 +611,7 @@
 
 .c4-craft__heading {
   margin: 0 0 var(--space-2);
-  font-size: clamp(1.25rem, 1.15rem + 0.5vw, 1.5rem);
+  font-size: var(--size-6);
   font-weight: 600;
   letter-spacing: -0.01em;
   line-height: 1.25;
@@ -658,12 +658,12 @@
 /* ---- C4-C G2/G3 — Public dossier composer ---- */
 
 .c4-dossier {
-  max-width: 72ch;
+  max-width: var(--container-reading);
 }
 
 .c4-dossier__heading {
   margin: 0 0 var(--space-2);
-  font-size: clamp(1.25rem, 1.15rem + 0.5vw, 1.5rem);
+  font-size: var(--size-6);
   font-weight: 600;
   letter-spacing: -0.01em;
   line-height: 1.25;
@@ -683,14 +683,14 @@
   margin: 0;
   padding: var(--space-6);
   border: 1px solid var(--c4-hairline);
-  border-radius: 0.75rem;
+  border-radius: var(--radius-card);
   background: var(--surface-raised);
   min-inline-size: 0;
 }
 
 .c4-dossier__legend {
   padding-inline: var(--space-2);
-  font-size: 0.8125rem;
+  font-size: var(--size-2);
   font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -700,7 +700,7 @@
 .c4-dossier__group-heading,
 .c4-dossier__preview-heading {
   margin: 0 0 var(--space-3);
-  font-size: 1.0625rem;
+  font-size: var(--size-4);
   font-weight: 600;
   letter-spacing: -0.01em;
   color: var(--text-primary);
@@ -710,7 +710,7 @@
   display: flex;
   align-items: center;
   gap: var(--space-2);
-  font-size: clamp(1.25rem, 1.15rem + 0.5vw, 1.5rem);
+  font-size: var(--size-6);
 }
 
 .c4-dossier__group {
@@ -754,7 +754,7 @@
   align-items: center;
   gap: var(--space-3);
   min-height: 44px;
-  font-size: 0.9375rem;
+  font-size: var(--size-3);
   color: var(--text-primary);
 }
 
@@ -771,7 +771,7 @@
   display: inline-flex;
   align-items: center;
   min-height: 44px;
-  font-size: 0.875rem;
+  font-size: var(--size-2);
   font-weight: 600;
   color: var(--action-primary);
   text-decoration: none;
@@ -793,8 +793,8 @@
   min-inline-size: 1.75rem;
   padding: 0.125rem 0.5rem;
   border: 1px solid var(--border-subtle);
-  border-radius: 999px;
-  font-size: 0.8125rem;
+  border-radius: var(--radius-pill);
+  font-size: var(--size-2);
   font-weight: 600;
   text-align: center;
   color: var(--text-secondary);
@@ -802,15 +802,15 @@
 }
 
 .c4-dossier__note {
-  font-size: 0.9375rem;
+  font-size: var(--size-3);
   color: var(--text-secondary);
 }
 
 .c4-dossier__empty {
   padding: var(--space-6);
   border: 1px dashed var(--border-subtle);
-  border-radius: 0.75rem;
-  font-size: 0.9375rem;
+  border-radius: var(--radius-card);
+  font-size: var(--size-3);
   color: var(--text-muted);
 }
 
@@ -830,7 +830,7 @@
 .c4-dossier__entry-detail,
 .c4-dossier__entry-freshness {
   margin: var(--space-1) 0 0;
-  font-size: 0.875rem;
+  font-size: var(--size-2);
   color: var(--text-secondary);
 }
 
@@ -845,7 +845,7 @@
 
 .c4-dossier__unknown-heading {
   margin: 0 0 var(--space-2);
-  font-size: 0.9375rem;
+  font-size: var(--size-3);
   font-weight: 600;
   color: var(--text-primary);
 }
@@ -860,7 +860,7 @@
 
 /* Sources and freshness: same card grammar, one scale. */
 .c4-dossier-sources {
-  max-width: 72ch;
+  max-width: var(--container-reading);
   margin-block-start: var(--space-10);
   padding-block-start: var(--space-8);
   border-top: 1px solid var(--c4-hairline);
@@ -868,7 +868,7 @@
 
 .c4-dossier-sources > h2 {
   margin: 0 0 var(--space-4);
-  font-size: clamp(1.25rem, 1.15rem + 0.5vw, 1.5rem);
+  font-size: var(--size-6);
   font-weight: 600;
   letter-spacing: -0.01em;
   color: var(--text-primary);
@@ -880,13 +880,13 @@
   border: 1px solid var(--border-subtle);
   border-radius: 0.5rem;
   background: var(--surface-raised);
-  font-size: 0.875rem;
+  font-size: var(--size-2);
   color: var(--text-secondary);
 }
 
 .c4-dossier-sources h3 {
   margin: 0 0 var(--space-2);
-  font-size: 1rem;
+  font-size: var(--size-3);
   font-weight: 600;
   line-height: 1.4;
   color: var(--text-primary);
@@ -894,7 +894,7 @@
 
 .c4-dossier-sources h4 {
   margin: var(--space-2) 0 var(--space-1);
-  font-size: 0.75rem;
+  font-size: var(--size-1);
   font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -934,7 +934,7 @@
 /* ---- C4-C G3 — Printable dossier document ---- */
 
 .c4-dossier-document {
-  max-width: 78ch;
+  max-width: var(--container-reading);
 }
 
 .c4-dossier-document__title {
@@ -1010,7 +1010,7 @@
 }
 /* ---- C4-D G5 — provenance lens ---- */
 .c4-provenance {
-  max-width: 78ch;
+  max-width: var(--container-reading);
 }
 .c4-provenance__heading {
   margin: 0 0 var(--space-2);
@@ -1125,7 +1125,7 @@
 .decision-room__group-label {
   display: inline-block;
   margin-block-end: var(--space-1);
-  font-size: var(--c4-type-caption, 0.8125rem);
+  font-size: var(--c4-type-caption);
   letter-spacing: 0.04em;
   text-transform: uppercase;
   color: var(--text-secondary);
@@ -1195,7 +1195,7 @@
   min-block-size: 44px;
   padding-inline: var(--space-4);
   border: 1px solid var(--border-subtle);
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   color: var(--text-secondary);
   font-size: var(--c4-type-meta);
   font-weight: 600;
@@ -1216,7 +1216,7 @@
 
 .c4-salon__lens-heading {
   margin: 0;
-  max-width: 30ch;
+  max-width: var(--measure-short);
   font-size: var(--c4-type-section);
   font-weight: 600;
   letter-spacing: -0.01em;
@@ -1224,7 +1224,7 @@
 }
 
 .c4-salon__lens-intro {
-  max-width: 62ch;
+  max-width: var(--container-reading);
   margin: var(--space-3) 0 0;
   color: var(--text-secondary);
   font-size: var(--c4-type-reading);
@@ -1285,7 +1285,7 @@
   margin-block-start: auto;
   padding: 0.125rem var(--space-3);
   border: 1px solid var(--border-subtle);
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   background: var(--surface-subtle);
   color: var(--text-secondary);
   font-size: var(--c4-type-caption);
@@ -1370,7 +1370,7 @@
 .c4-salon__technical {
   margin-block-start: var(--space-6);
   border: 1px solid var(--border-subtle);
-  border-radius: 0.75rem;
+  border-radius: var(--radius-card);
   background: var(--surface-raised);
 }
 
@@ -1495,7 +1495,7 @@
   border: 1px solid var(--border-subtle);
   border-radius: 0.5rem;
   background: var(--surface-subtle);
-  font-size: 0.9375rem;
+  font-size: var(--size-3);
   font-weight: 600;
   color: var(--text-primary);
   text-decoration: none;
@@ -1564,7 +1564,7 @@
 .c4-salon__outside {
   padding: var(--space-4);
   border: 1px solid var(--border-subtle);
-  border-radius: 0.75rem;
+  border-radius: var(--radius-card);
   background: var(--surface-raised);
 }
 .c4-salon__outside {
@@ -1577,7 +1577,7 @@
   color: var(--text-primary);
 }
 .c4-salon__outside-label {
-  font-size: 0.8125rem;
+  font-size: var(--size-2);
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--text-secondary);
@@ -1596,7 +1596,7 @@
   gap: var(--space-1);
 }
 .c4-salon__part-note {
-  font-size: 0.8125rem;
+  font-size: var(--size-2);
   color: var(--text-secondary);
 }
 .c4-salon__lenses {
@@ -1613,7 +1613,7 @@
   align-items: center;
   min-height: 44px;
   padding-block: var(--space-2);
-  font-size: 1.0625rem;
+  font-size: var(--size-4);
   font-weight: 600;
   color: var(--text-primary);
   cursor: pointer;
@@ -1624,4 +1624,18 @@
 }
 .c4-salon__lens-body {
   padding-block-end: var(--space-6);
+}
+
+/* v8 W6: stepped (not fluid) display sizes from the shared scale. */
+@media (min-width: 768px) {
+  :root {
+    --c4-type-product: var(--size-6);
+    --c4-type-evidence: var(--size-5);
+  }
+}
+@media (min-width: 1024px) {
+  :root {
+    --c4-type-display: var(--size-9);
+    --c4-type-reading: var(--size-4);
+  }
 }

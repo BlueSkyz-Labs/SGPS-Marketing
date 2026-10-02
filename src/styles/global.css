@@ -65,16 +65,20 @@
   /* Grid contract (Experience v6 S6): every shell and section container shares
      one max width and one gutter scale, so header, hero, sections and footer
      start on the same left edge at every viewport. */
-  --site-max: 1320px;
+  --site-max: var(--container-wide);
   --site-gutter: 1.25rem;
   /* Frosted header surface: the same scene token at 82% so a translucent
      surface can never drift away from the scene's text colour. */
-  --surface-primary-glass: rgba(247, 248, 250, 0.82);
+  --surface-primary-glass: rgba(247, 248, 250, 0.88);
   --surface-subtle: #f1f5f9;
   --surface-inverse: var(--brand-ink);
   /* Raised cards/controls: white on porcelain, slate-900 on ink. Components
      must use this token, never a literal white that ignores the theme. */
+  --surface-1: #f7f8fa;
+  --surface-2: #ffffff;
+  --surface-3: #f1f5f9;
   --surface-raised: #ffffff;
+  --measure-short: 30ch;
   --text-primary: var(--brand-ink);
   --text-secondary: #334155;
   /* Brand slate_500 (#64748B) fails AA on Porcelain; UI muted stays #475569. */
@@ -117,6 +121,30 @@
   --bsl-border: #cbd5e1;
   --bsl-shadow-subtle: 0 8px 28px rgba(11, 16, 32, 0.12);
   --radius-sm: 0.5rem;
+  /* v8 W6 type scale: nine steps, no fluid or fractional sizes. */
+  --size-1: 0.75rem;
+  --size-2: 0.875rem;
+  --size-3: 1rem;
+  --size-4: 1.125rem;
+  --size-5: 1.25rem;
+  --size-6: 1.5rem;
+  --size-7: 2rem;
+  --size-8: 2.75rem;
+  --size-9: 4rem;
+  --lh-1: 1.5;
+  --lh-2: 1.5;
+  --lh-3: 1.6;
+  --lh-4: 1.55;
+  --lh-5: 1.4;
+  --lh-6: 1.33;
+  --lh-7: 1.2;
+  --lh-8: 1.12;
+  --lh-9: 1.08;
+  /* Two container widths only: reading and wide. */
+  --container-reading: 45rem;
+  --container-wide: 78.5rem;
+  --radius-media: 20px;
+  --radius-pill: 999px;
   --radius-md: 0.75rem;
   --radius-lg: 1.25rem;
   --motion-fast: 120ms;
@@ -147,10 +175,13 @@
 [data-theme="dark"] {
   color-scheme: dark;
   --surface-primary: var(--brand-ink);
-  --surface-primary-glass: rgba(11, 16, 32, 0.82);
+  --surface-primary-glass: rgba(11, 16, 32, 0.88);
   --surface-subtle: #0f172a;
   --surface-band: #0d1426;
   --surface-inverse: var(--brand-porcelain);
+  --surface-1: #0b1020;
+  --surface-2: #0f172a;
+  --surface-3: #151e36;
   --surface-raised: #0f172a;
   --text-primary: #ffffff;
   --text-secondary: #cbd5e1;
@@ -175,10 +206,13 @@
   :root:not([data-theme="light"]) {
     color-scheme: dark;
     --surface-primary: var(--brand-ink);
-    --surface-primary-glass: rgba(11, 16, 32, 0.82);
+    --surface-primary-glass: rgba(11, 16, 32, 0.88);
     --surface-subtle: #0f172a;
     --surface-band: #0d1426;
     --surface-inverse: var(--brand-porcelain);
+    --surface-1: #0b1020;
+    --surface-2: #0f172a;
+    --surface-3: #151e36;
     --surface-raised: #0f172a;
     --text-primary: #ffffff;
     --text-secondary: #cbd5e1;
@@ -442,7 +476,7 @@ body {
   gap: 0.5rem;
   padding: 0.25rem 0;
   color: var(--text-secondary);
-  font-size: 0.8125rem;
+  font-size: var(--size-2);
   letter-spacing: 0.01em;
   text-decoration: none;
   transition: color var(--motion-confirmation-duration)
@@ -455,7 +489,7 @@ body {
 
 .experience-spine__index {
   color: var(--text-muted);
-  font-size: 0.6875rem;
+  font-size: var(--size-1);
   letter-spacing: 0.14em;
 }
 
@@ -467,11 +501,11 @@ body {
 
   .experience-spine__link {
     padding: 0.375rem 0;
-    font-size: 0.875rem;
+    font-size: var(--size-2);
   }
 
   .experience-spine__index {
-    font-size: 0.6875rem;
+    font-size: var(--size-1);
     letter-spacing: 0.08em;
   }
 }
@@ -482,7 +516,7 @@ body {
   }
 
   .experience-spine__link {
-    font-size: 0.8125rem;
+    font-size: var(--size-2);
   }
 }
 
@@ -515,7 +549,7 @@ body {
   border-radius: 0.5rem;
   background: var(--surface-raised);
   color: var(--text-secondary);
-  font-size: 0.875rem;
+  font-size: var(--size-2);
   font-weight: 500;
   cursor: pointer;
   transition:
@@ -605,7 +639,7 @@ html[data-intent="evaluate-product"] [data-journey-bar] a[href$="/products/"] {
   border-radius: 0.5rem;
   background: var(--surface-raised);
   padding: 0 0.75rem;
-  font-size: 0.9375rem;
+  font-size: var(--size-3);
   color: var(--text-primary);
 }
 
@@ -624,7 +658,7 @@ html[data-intent="evaluate-product"] [data-journey-bar] a[href$="/products/"] {
   align-items: center;
   border-radius: 0.5rem;
   padding: 0.5rem 0.75rem;
-  font-size: 0.9375rem;
+  font-size: var(--size-3);
   color: var(--text-primary);
   text-decoration: none;
 }
@@ -641,7 +675,7 @@ html[data-intent="evaluate-product"] [data-journey-bar] a[href$="/products/"] {
 .command-navigator__empty {
   margin: 0;
   padding: 0.5rem 0.75rem 0.25rem;
-  font-size: 0.875rem;
+  font-size: var(--size-2);
   color: var(--text-muted);
 }
 
@@ -659,7 +693,7 @@ html[data-intent="evaluate-product"] [data-journey-bar] a[href$="/products/"] {
   right: 12%;
   bottom: 18%;
   height: 2px;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   background: linear-gradient(
     90deg,
     transparent,
@@ -861,9 +895,9 @@ summary {
   align-items: center;
   gap: 0.4em;
   border: 1px solid var(--border-subtle);
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   padding: 0.125rem 0.625rem;
-  font-size: 0.8125rem;
+  font-size: var(--size-2);
   font-weight: 600;
   color: var(--text-primary);
   background: var(--surface-subtle);
@@ -891,7 +925,7 @@ summary {
   }
 }
 .boundary-card__label {
-  font-size: 0.75rem;
+  font-size: var(--size-1);
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -910,7 +944,7 @@ summary {
   gap: 0.5rem;
 }
 .safe-action__context {
-  font-size: 0.8125rem;
+  font-size: var(--size-2);
   color: var(--text-muted);
   line-height: 1.5;
 }
@@ -925,7 +959,7 @@ summary {
 }
 .integrity-lens__title,
 .bilingual-mirror__title {
-  font-size: 1.125rem;
+  font-size: var(--size-4);
   font-weight: 600;
   letter-spacing: -0.01em;
   color: var(--text-primary);
@@ -995,7 +1029,7 @@ summary {
 }
 .evidence-details__more > summary {
   cursor: pointer;
-  font-size: 0.875rem;
+  font-size: var(--size-2);
   font-weight: 600;
   color: var(--action-primary);
   min-height: 2.75rem;
@@ -1010,14 +1044,14 @@ summary {
 .evidence-details__review,
 .evidence-details__boundary {
   margin-top: 0.75rem;
-  font-size: 0.8125rem;
+  font-size: var(--size-2);
   color: var(--text-muted);
   line-height: 1.5;
 }
 .bilingual-mirror__note {
   margin-top: 0.5rem;
   color: var(--text-muted);
-  font-size: 0.875rem;
+  font-size: var(--size-2);
   line-height: 1.6;
 }
 .bilingual-mirror__pairs {
@@ -1047,7 +1081,7 @@ summary {
 }
 .bilingual-mirror__tag {
   display: inline-block;
-  font-size: 0.6875rem;
+  font-size: var(--size-1);
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -1096,13 +1130,13 @@ summary {
 }
 .command-navigator__kind {
   flex: none;
-  font-size: 0.625rem;
+  font-size: var(--size-1);
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--text-muted);
   border: 1px solid var(--border-subtle);
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   padding: 0.125rem 0.5rem;
 }
 
@@ -1111,11 +1145,11 @@ summary {
   margin-top: 1.25rem;
   background: var(--surface-subtle);
   border: 1px solid var(--border-subtle);
-  border-radius: 0.75rem;
+  border-radius: var(--radius-card);
   padding: 1rem 1.25rem;
 }
 .source-trace__title {
-  font-size: 0.8125rem;
+  font-size: var(--size-2);
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -1132,18 +1166,18 @@ summary {
   align-items: baseline;
   gap: 0.625rem;
   color: var(--text-secondary);
-  font-size: 0.875rem;
+  font-size: var(--size-2);
   line-height: 1.5;
 }
 .source-trace__role {
   flex: none;
-  font-size: 0.6875rem;
+  font-size: var(--size-1);
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--text-muted);
   border: 1px solid var(--border-subtle);
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   padding: 0.125rem 0.5rem;
 }
 /* Decorative connector line between steps; empty content, zero AT impact. */
@@ -1166,7 +1200,7 @@ summary {
 }
 .evidence-passport__claim {
   margin-top: 0.5rem;
-  font-size: 1.25rem;
+  font-size: var(--size-5);
   font-weight: 600;
   letter-spacing: -0.01em;
   color: var(--text-primary);
@@ -1179,14 +1213,14 @@ summary {
   gap: 0.75rem;
 }
 .evidence-passport__review {
-  font-size: 0.8125rem;
+  font-size: var(--size-2);
   color: var(--text-muted);
 }
 .evidence-passport__sources {
   margin-top: 1.25rem;
 }
 .evidence-passport__sources-title {
-  font-size: 0.8125rem;
+  font-size: var(--size-2);
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -1209,7 +1243,7 @@ summary {
   max-width: 56rem;
 }
 .decision-room__title {
-  font-size: 1.125rem;
+  font-size: var(--size-4);
   font-weight: 700;
   letter-spacing: -0.01em;
   color: var(--text-primary);
@@ -1217,7 +1251,7 @@ summary {
 .decision-room__lede {
   margin-top: 0.375rem;
   max-width: 44rem;
-  font-size: 0.9375rem;
+  font-size: var(--size-3);
   color: var(--text-muted);
 }
 .decision-room__items {
@@ -1232,34 +1266,34 @@ summary {
   align-items: flex-start;
   gap: 0.5rem;
   border: 1px solid var(--border-subtle);
-  border-radius: 0.75rem;
+  border-radius: var(--radius-card);
   background: var(--surface-raised);
   padding: 1.25rem;
   scroll-margin-top: 6rem;
   box-shadow: var(--elevation-1);
 }
 .decision-room__kind {
-  font-size: 0.6875rem;
+  font-size: var(--size-1);
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--text-muted);
   border: 1px solid var(--border-subtle);
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   padding: 0.125rem 0.5rem;
 }
 .decision-room__label {
-  font-size: 1rem;
+  font-size: var(--size-3);
   font-weight: 600;
   letter-spacing: -0.01em;
   color: var(--text-primary);
 }
 .decision-room__summary {
-  font-size: 0.875rem;
+  font-size: var(--size-2);
   color: var(--text-secondary);
 }
 .decision-room__boundary {
-  font-size: 0.8125rem;
+  font-size: var(--size-2);
   color: var(--text-muted);
   border-left: 2px solid var(--border-subtle);
   padding-left: 0.625rem;
@@ -1268,7 +1302,7 @@ summary {
   display: inline-flex;
   align-items: center;
   min-height: 1.5rem; /* WCAG 2.5.8 target size */
-  font-size: 0.875rem;
+  font-size: var(--size-2);
   font-weight: 600;
   color: var(--action-primary);
   text-decoration: underline;
@@ -1282,7 +1316,7 @@ summary {
   border-radius: 0.5rem;
   background: var(--surface-subtle);
   padding: 0 1rem;
-  font-size: 0.875rem;
+  font-size: var(--size-2);
   font-weight: 600;
   color: var(--text-primary);
 }
@@ -1295,7 +1329,7 @@ summary {
 }
 .decision-room__empty {
   margin: 0;
-  font-size: 0.9375rem;
+  font-size: var(--size-3);
   color: var(--text-muted);
 }
 /* The comparison tray sits below the item grid. Empty, it is a single line;
@@ -1309,7 +1343,7 @@ summary {
   }
   .decision-room__tray:has(.decision-room__board:not([hidden])) {
     border: 1px solid var(--border-subtle);
-    border-radius: 0.75rem;
+    border-radius: var(--radius-card);
     background: var(--surface-subtle);
     padding: 1.25rem;
   }
@@ -1322,13 +1356,13 @@ summary {
 }
 .decision-room__board-title {
   margin: 0;
-  font-size: 1rem;
+  font-size: var(--size-3);
   font-weight: 600;
   color: var(--text-primary);
 }
 .decision-room__count {
   margin: 0;
-  font-size: 0.875rem;
+  font-size: var(--size-2);
   font-variant-numeric: tabular-nums;
   color: var(--text-secondary);
 }
@@ -1339,7 +1373,7 @@ summary {
   margin: 0.75rem 0 0;
   border-inline-start: 3px solid var(--action-primary);
   padding: 0.5rem 0.75rem;
-  font-size: 0.875rem;
+  font-size: var(--size-2);
   color: var(--text-primary);
   background: var(--surface-raised);
 }
@@ -1369,12 +1403,12 @@ summary {
   padding: 0.75rem 1rem;
 }
 .decision-room__row-label {
-  font-size: 0.9375rem;
+  font-size: var(--size-3);
   font-weight: 600;
   color: var(--text-primary);
 }
 .decision-room__row-summary {
-  font-size: 0.875rem;
+  font-size: var(--size-2);
   color: var(--text-secondary);
 }
 .decision-room__row .decision-room__remove {
@@ -1407,7 +1441,7 @@ summary {
 }
 .decision-room__handoff-title {
   margin: 0 0 0.25rem;
-  font-size: 0.875rem;
+  font-size: var(--size-2);
   font-weight: 600;
   color: var(--text-primary);
 }
@@ -1479,7 +1513,7 @@ html[data-intent] [data-journey-bar] li[data-evidence-first="true"] a {
 .integrity-lens__legend {
   margin-top: 0.5rem;
   max-width: 44rem;
-  font-size: 0.875rem;
+  font-size: var(--size-2);
   line-height: 1.6;
   color: var(--text-muted);
 }
@@ -1487,7 +1521,7 @@ html[data-intent] [data-journey-bar] li[data-evidence-first="true"] a {
 /* Wave H7 — page-level heading for the evidence passport document. */
 .evidence-passport__page-title {
   margin-bottom: 0.75rem;
-  font-size: 0.9375rem;
+  font-size: var(--size-3);
   font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -1646,5 +1680,147 @@ h3 {
     > section:not(.hero-plane):nth-of-type(even) {
     background: var(--surface-band);
     color: var(--text-primary);
+  }
+}
+
+/* v8 W6: the footer link size comes from the type scale. */
+.footer-nav-link {
+  font-size: var(--size-3);
+}
+
+/* ------------------------------------------------------------------------
+   v8 W6 — design system pass: one grid, one scale, one family.
+   ------------------------------------------------------------------------ */
+
+/* Containers: exactly two widths (wide via --site-max, and reading). */
+.site-container--reading {
+  max-width: var(--container-reading);
+}
+
+/* Buttons: primary (solid cobalt, ButtonLink), secondary (outline, no dot) and
+   on-ink. `.btn-secondary` is the same secondary for next-step chips. */
+.btn-secondary {
+  display: inline-flex;
+  min-height: 2.75rem;
+  min-width: 0;
+  max-width: 100%;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-pill);
+  background: transparent;
+  padding: 0.5rem 1.25rem;
+  color: var(--text-primary);
+  font-size: var(--size-2);
+  font-weight: 600;
+  text-decoration: none;
+  overflow-wrap: anywhere;
+  transition:
+    border-color 150ms,
+    background-color 150ms,
+    transform 150ms;
+}
+.btn-secondary:hover {
+  border-color: var(--text-secondary);
+  background: var(--surface-subtle);
+}
+@media (prefers-reduced-motion: no-preference) {
+  .btn-secondary:active {
+    transform: scale(0.98);
+  }
+}
+button:not(:disabled),
+[role="button"]:not([aria-disabled="true"]),
+summary {
+  cursor: pointer;
+}
+
+/* Dark elevation: cards sit on surface-2 with a 1px top highlight. The hero
+   keeps the only glow. */
+[data-theme="dark"] [class*="bg-[var(--surface-raised)]"],
+[data-theme="dark"] .border-specular {
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) [class*="bg-[var(--surface-raised)]"],
+  :root:not([data-theme="light"]) .border-specular {
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  }
+}
+
+/* Type: balanced headings, pretty body; CJK stacks and strict breaking. */
+h1,
+h2 {
+  text-wrap: balance;
+}
+p,
+li,
+dd {
+  text-wrap: pretty;
+}
+:lang(zh-Hans) {
+  font-family:
+    "PingFang SC", "Noto Sans SC", "Microsoft YaHei", var(--font-sans),
+    sans-serif;
+}
+:lang(zh-Hant) {
+  font-family:
+    "PingFang TC", "Noto Sans TC", "Microsoft JhengHei", var(--font-sans),
+    sans-serif;
+}
+:is(:lang(zh-Hans), :lang(zh-Hant)) :is(h1, h2, h3) {
+  word-break: keep-all;
+  line-break: strict;
+}
+
+/* Back to top: a plain anchor at the end of long pages on phones. */
+.back-to-top {
+  display: none;
+}
+@media (max-width: 767px) {
+  .back-to-top {
+    display: flex;
+    min-height: 2.75rem;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1.5rem;
+    padding-inline: 1.25rem;
+    color: var(--text-secondary);
+    font-size: var(--size-2);
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+}
+
+/* Print: black on white, no atmosphere or sail, visible link targets and every
+   <details> unfolded (V7-C-03). */
+@media print {
+  .hero-plane,
+  .hero-plane * {
+    background: #fff !important;
+    color: #000 !important;
+    text-shadow: none !important;
+    box-shadow: none !important;
+  }
+  .hero-atmosphere,
+  svg:has(.sail-outline),
+  .sail-layer,
+  .back-to-top {
+    display: none !important;
+  }
+  main a:not(.btn-secondary) {
+    text-decoration: underline !important;
+  }
+  details::details-content {
+    content-visibility: visible !important;
+    display: block !important;
+  }
+  details > :not(summary) {
+    display: block !important;
+  }
+  details > summary {
+    list-style: none;
   }
 }

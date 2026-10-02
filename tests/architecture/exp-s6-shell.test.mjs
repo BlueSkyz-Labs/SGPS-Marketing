@@ -15,7 +15,9 @@ export function containerBypasses(source) {
 }
 
 test("shell and hero containers use the single site-container contract", () => {
-  assert.match(css, /--site-max:\s*1320px/);
+  // v8 W6: the wide container token replaces the 1320px literal.
+  assert.match(css, /--site-max:\s*var\(--container-wide\)/);
+  assert.match(css, /--container-wide:\s*78\.5rem/);
   assert.match(css, /\.site-container\s*\{[^}]*max-width:\s*var\(--site-max\)/);
   assert.match(container, /site-container/);
   assert.match(hero, /site-container/);

@@ -546,13 +546,13 @@ const groups = [
 
   .atlas-label {
     fill: color-mix(in srgb, var(--brand-porcelain) 84%, transparent);
-    font-size: 14px;
+    font-size: var(--size-2);
     font-weight: 500;
     letter-spacing: 0.01em;
   }
   .atlas-label--brand {
     fill: var(--brand-porcelain);
-    font-size: 15px;
+    font-size: var(--size-3);
     font-weight: 700;
     letter-spacing: 0.08em;
     text-transform: uppercase;
@@ -564,7 +564,7 @@ const groups = [
   .atlas-label--claim,
   .atlas-label--evidence {
     fill: color-mix(in srgb, var(--brand-cobalt) 45%, white);
-    font-size: 11px;
+    font-size: var(--size-1);
     font-weight: 700;
     letter-spacing: 0.12em;
   }
@@ -950,7 +950,7 @@ const groups = [
     flex: none;
     width: 0.625rem;
     height: 0.625rem;
-    border-radius: 999px;
+    border-radius: var(--radius-pill);
     border: 1.5px solid var(--brand-cobalt);
   }
   .atlas-swatch--brand,
@@ -976,7 +976,7 @@ const groups = [
 
   .atlas-hint {
     margin-top: 1rem;
-    font-size: 0.8125rem;
+    font-size: var(--size-2);
     color: var(--text-muted);
   }
 
@@ -1001,7 +1001,7 @@ const groups = [
     gap: 0.75rem;
     padding-bottom: 0.5rem;
     border-bottom: 1px solid var(--border-subtle);
-    font-size: 0.75rem;
+    font-size: var(--size-1);
     font-weight: 600;
     letter-spacing: 0.14em;
     text-transform: uppercase;
@@ -1013,7 +1013,7 @@ const groups = [
   }
   .atlas-group__empty {
     padding-block: 0.75rem;
-    font-size: 0.875rem;
+    font-size: var(--size-2);
     color: var(--text-muted);
   }
 
@@ -1045,7 +1045,7 @@ const groups = [
     );
   }
   .atlas-code {
-    font-size: 0.6875rem;
+    font-size: var(--size-1);
     font-weight: 700;
     letter-spacing: 0.1em;
     font-variant-numeric: tabular-nums;
@@ -1058,7 +1058,7 @@ const groups = [
     min-width: 0;
     min-height: 2.75rem;
     overflow-wrap: anywhere;
-    font-size: 0.875rem;
+    font-size: var(--size-2);
     font-weight: 500;
     color: var(--text-primary);
     text-decoration: none;
@@ -1067,7 +1067,7 @@ const groups = [
     color: var(--action-primary);
   }
   .atlas-row__kind {
-    font-size: 0.625rem;
+    font-size: var(--size-1);
     font-weight: 600;
     letter-spacing: 0.14em;
     text-transform: uppercase;
