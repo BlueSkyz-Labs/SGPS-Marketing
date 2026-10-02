@@ -8,7 +8,13 @@
  */
 import assert from "node:assert/strict";
 import { execFileSync, spawnSync } from "node:child_process";
-import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
+import {
+  mkdirSync,
+  mkdtempSync,
+  readFileSync,
+  rmSync,
+  writeFileSync,
+} from "node:fs";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import test from "node:test";
@@ -72,7 +78,10 @@ function withFixture(
   lines,
   assertion,
   productFile = "sotro.yaml",
-  { qualificationRevision = FOREIGN_REVISION, includeQualification = true } = {},
+  {
+    qualificationRevision = FOREIGN_REVISION,
+    includeQualification = true,
+  } = {},
 ) {
   const dir = mkdtempSync(join(tmpdir(), "product-provenance-"));
   mkdirSync(join(dir, "src/content/products"), { recursive: true });
@@ -127,7 +136,10 @@ test("an empty registry reports IDLE instead of passing by accident", () => {
   try {
     const result = run(dir);
     assert.equal(result.status, 0, result.stderr);
-    assert.match(result.stdout, /Product provenance source qualification: IDLE/);
+    assert.match(
+      result.stdout,
+      /Product provenance source qualification: IDLE/,
+    );
   } finally {
     rmSync(dir, { recursive: true, force: true });
   }
@@ -141,7 +153,10 @@ test("a well-formed record citing an allow-listed repository passes", () => {
       result.stdout,
       /Product provenance source qualification: QUALIFIED \(1 entries;/,
     );
-    assert.match(result.stdout, /capability\/runtime\/payment\/E4 NOT_VERIFIED/);
+    assert.match(
+      result.stdout,
+      /capability\/runtime\/payment\/E4 NOT_VERIFIED/,
+    );
   });
 });
 
@@ -298,10 +313,13 @@ test("positive control: a screenshot-kind record with matching evidence passes",
       const result = run(dir);
       assert.equal(result.status, 0, result.stderr);
       assert.match(
-      result.stdout,
-      /Product provenance source qualification: QUALIFIED \(1 entries;/,
-    );
-    assert.match(result.stdout, /capability\/runtime\/payment\/E4 NOT_VERIFIED/);
+        result.stdout,
+        /Product provenance source qualification: QUALIFIED \(1 entries;/,
+      );
+      assert.match(
+        result.stdout,
+        /capability\/runtime\/payment\/E4 NOT_VERIFIED/,
+      );
     },
   );
 });

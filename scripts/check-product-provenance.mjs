@@ -70,9 +70,7 @@ function loadQualificationRegistry() {
     const registry = JSON.parse(readFileSync(path, "utf8"));
     const errors = [];
     if (registry?.schemaVersion !== "1.0") {
-      errors.push(
-        `FAIL ${QUALIFICATION_FILE} — schemaVersion must be 1.0`,
-      );
+      errors.push(`FAIL ${QUALIFICATION_FILE} — schemaVersion must be 1.0`);
     }
     if (registry?.evidenceClass !== "PROVIDER_REPOSITORY_READBACK") {
       errors.push(
