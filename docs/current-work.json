@@ -328,6 +328,12 @@
       "name": "C4-E Decision Atelier Task 3 (#229) 32c6a7c",
       "status": "MERGED",
       "evidence": "docs/evidence/2026-09-24-current-work-router-readback.md"
+    },
+    {
+      "id": "experience-full-v10",
+      "name": "v10 Experience FULL round: Global-Elite (BPXS §6) benchmark; Track A E1-E7 agent slices, Track B Owner gates O-10.1..O-10.7",
+      "status": "PLANNED",
+      "evidence": "docs/superpowers/plans/2026-10-03-v10-global-elite-experience-full.md"
     }
   ],
   "openOwnerDecisions": [

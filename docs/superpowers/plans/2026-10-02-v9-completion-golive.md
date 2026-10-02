@@ -1,9 +1,11 @@
 # v9: completion and go-live plan (SGPS-Marketing)
 
 **Status:** Active. This plan supersedes the v8 HANDOFF §2–§3 for the remaining work.
-**Date:** 2026-10-02
-**Baseline:** `main@cb5f9fe` (v8 W1–W11 merged; W11 evidence in `docs/evidence/2026-10-01-experience-v8-verification.md`)
-**Roles:**
+
+> **MANDATORY FOR EVERY AGENT.** Read §8 (the agent execution contract) and your task card in §9 before you run any command. You must follow §8. If §8 conflicts with anything else in this plan, §8 wins. An agent that has not read §8 must not push, merge or write evidence.
+> **Date:** 2026-10-02
+> **Baseline:** `main@cb5f9fe` (v8 W1–W11 merged; W11 evidence in `docs/evidence/2026-10-01-experience-v8-verification.md`)
+> **Roles:**
 
 - The orchestrator (cloud) owns verification, planning and architecture review.
 - The local coding agent owns implementation.
@@ -46,6 +48,18 @@ A. Land open PRs (serial)  →  B. Owner-decision copy  →  C. Pre-cutover veri
 | A7    | #364 astro 7.3.5, #365 dev-deps                                          | dependabot (patch/minor)                  | Update branch, merge when green                                                                                                                        | audit clean; Lighthouse CI green                                          |
 | A8    | #436 log artifacts, #437 paid go-live hardening, #374 Playwright OCI pin | protected, **not this plan's authorship** | Review only, and report the findings to the Owner. Marketing is not a payment authority (Owner D-0), so #437 must not add payment surface to the site. | Owner decides                                                             |
 | A9    | #406 BK-31 raster icons                                                  | protected, unlabelled                     | Owner decision, post-go-live (prior Owner decision)                                                                                                    | —                                                                         |
+
+### 2.0 Status at `main@2cfb15c` (2026-10-03 06:10 GMT+7, orchestrator)
+
+| Item          | State                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+| ------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| A1–A4, A6, A7 | **Merged** (#368, #367, #371, #405, #443, #364, #365)                                                                                                                                                                                                                                                                                                                                                                                                    |
+| A5 #440       | Open. Quality Gates fails **only** on the missing `owner-approved` label (protected: `public/_redirects`, `scripts/e4-matrix.mjs`, `scripts/run-e2e.mjs`). The branch is 78 commits behind main. #441 is closed as a duplicate. → task **T2**                                                                                                                                                                                                            |
+| A8 #436       | Review done: removes 5 committed local logs, adds a `.gitignore` rule and a hygiene test. Every check is green, no protected path, no served-route change. **Recommendation: merge.** → Owner decision O-2                                                                                                                                                                                                                                               |
+| A8 #437       | Review done (local-agent note, orchestrator concurs): no payment surface added (D-0 respected). Most of it is now a duplicate of #367/#368/#371/#405. Remaining unique deltas: static-link executable-scheme rejection, critical-verifier trust inventory, and no-payment scan coverage of `public/`. The OCI pin is also in #374. **Recommendation: close with a pointer, and re-cut the unique deltas as one small protected PR after go-live.** → O-3 |
+| A8 #374       | Review done: pins the Playwright runtime by OCI digest. It is protected (`.github/`), so Quality Gates fails on the missing label. **Recommendation: keep #374 as the single home of the OCI pin; label it after go-live.** → O-3                                                                                                                                                                                                                        |
+| A9 #406       | Post-go-live (unchanged)                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+| §3C           | **PASS** on `aa5f21a` (#445 plus addendum #446)                                                                                                                                                                                                                                                                                                                                                                                                          |
 
 ### 2.1 Acceptance for A6 (Owner decisions 2026-10-02: 1A 2A 3A 4A)
 
@@ -141,3 +155,104 @@ The local agent reports back to the orchestrator for:
 
 - verification of each workstream boundary (A done, C done, E done);
 - VI review before any copy merge.
+
+## 8. Agent execution contract (MANDATORY: read before acting; it overrides other sections)
+
+Every agent working on this plan (orchestrator, local coding agent, subagent) must follow these rules. Breaking any of them invalidates the work: the orchestrator reverts it or rewrites the evidence.
+
+### 8.1 Before you start
+
+1. Refresh live state: `git fetch origin main`, the open PRs, and the latest main push run. A SHA in this plan is a baseline, not permission to skip the refresh.
+2. Read in this order: `AGENTS.md` → this §8 → your task card in §9 → only the files your card names. Do not read the whole plan or the copy deck unless your card says so.
+3. Confirm that your card's **Preconditions** hold. If one fails, stop and report `BLOCKED: <precondition>`. Do not improvise around it.
+
+### 8.2 While you work
+
+1. **Scope.** Change only the files your card lists. If you need another file, stop and report. Never widen a PR.
+2. **Protected paths** (`scripts/check-merge-policy.mjs` `PROTECTED_PATHS`):
+   - Never add, remove or ask for the `owner-approved` label.
+   - Never enable auto-merge on a protected PR.
+   - Merge a protected PR by hand, only after the Owner has labelled it and its exact head is green.
+3. **Git.** Update a branch by merging main into it. Never rebase, amend or force-push a pushed branch. One PR per card.
+4. **Tests.**
+   - Never weaken, skip or delete a test to get green.
+   - When behaviour changes on purpose, replace the old assertion with one that is at least as strong, and say so in the PR body.
+   - Every new guard needs a negative proof: break the invariant and show that the test fails.
+5. **Truth.** Never invent copy, claims, screenshots, emails or facts. VI copy changes need orchestrator review before merge (§7).
+6. **Duplicates.** Before opening a PR, search the open PRs for the same fix. If one exists, extend it or stop. Do not open a second one (the #440/#441 lesson).
+
+### 8.3 Evidence rules (zero tolerance)
+
+1. **Vocabulary:** PASS / FAIL / NOT VERIFIED / NOT APPLICABLE only.
+2. **CI counts only when completed.** A CI result is PASS only when the run is `completed` with conclusion `success` on the exact SHA you cite. Cite it as: run id, SHA, `conclusion`.
+   - A run that is `in_progress` or `queued` is **NOT VERIFIED**.
+   - A run that is `cancelled` or `skipped` is **NOT VERIFIED**. If the required check then reads `failure`, report **FAIL**.
+   - Never write "PASS (in progress)" (the #445 lesson).
+3. **Check against the Owner decision, not current behaviour.** When an Owner decision sets the expected value (for example OG-12 = `/vi/products/sotro/`), compare against that decision. Report current behaviour that differs as FAIL or as "pending <PR>". Never call it "expected".
+4. **Name the scope.** Every sweep states what it covered (`dist/` HTML only, `public/`, `src/`). A 0-hit claim is valid only within the stated scope.
+5. **Bind every evidence record** to one SHA and to the environment (OS, Node, browser).
+
+### 8.4 Stop and report
+
+- Stop when your card's **Done when** is met.
+- Also stop at any `BLOCKED` condition, or when you would need to touch a protected label, a production setting, Cloudflare or DNS.
+- Report to the orchestrator in this format:
+
+```
+CARD: T<n>   STATE: DONE | BLOCKED | PARTIAL
+PR: #<n> @ <head sha>   CI: run <id> <conclusion> (completed)
+GATES: <gate>=PASS|FAIL|NOT VERIFIED ...
+CHANGED: <files>
+OPEN: <anything left, with reason>
+```
+
+## 9. Task cards (next work, in order)
+
+### T1: F9, fix the Atlas principle links (local coding agent)
+
+- **Why:** the Atlas principle nodes link to `/{lang}/about/`, and since abt-4 = A no page renders `PRINCIPLE_MATRIX`. `tests/e2e/s-plus-atlas.spec.ts:83–95` pins that link, and its comment cites a check in `v7-truth-content.spec.ts` that does not exist.
+- **Preconditions:** main is green, and no open PR touches `src/lib/atlas.ts`.
+- **Files:**
+  - `src/lib/atlas.ts`
+  - `src/components/experience/Atlas.astro`
+  - `tests/e2e/s-plus-atlas.spec.ts`
+  - one architecture test (new file, or an existing atlas/truth test)
+- **Change (smallest truthful fix):**
+  - Make `AtlasNode.href` optional, and give principle nodes no `href`.
+  - In `Atlas.astro`, render a node without `href` as a plain `<span class="atlas-row__label">`, not as `<a>`.
+  - Keep the count of 4 principle nodes and the other node kinds unchanged.
+- **Tests:**
+  - Replace the e2e assertion: principle rows contain **no** `<a>` and still show their 4 labels.
+  - Add an architecture test asserting that every Atlas node with an `href` points to a route that exists in the built page list.
+  - Negative proof: give one principle node `href: "/en/nope/"` and show that the test fails.
+- **Not allowed:** re-adding the principles to About (that is Owner copy, abt-4), or deleting the principle nodes.
+- **Done when:** the PR is green on all 4 engines and Lighthouse CI, and `Quality Gates` passes. This is not a protected path, so normal merge is allowed. Report per §8.4.
+
+### T2: A5, bring #440 up to date (local coding agent)
+
+- **Preconditions:** #440 is open, and T1 has merged or is not touching `tests/architecture/browser-assurance-matrix.test.mjs`.
+- **Steps:**
+  1. Merge `origin/main` into `fix/v8-owner-gated-tooling` (78 commits behind) and resolve the conflicts.
+  2. Run the local source gate and `E2E_PROJECT=bogus node scripts/run-e2e.mjs`, which must exit 2.
+  3. Run the redirect asset-safety test, then push.
+- **Done when:** every check is green **except** `Quality Gates`, which fails only on the label message. Then **stop**: the Owner labels #440, and after that you merge it by hand on a green exact head.
+
+### T3: E, production smoke (orchestrator)
+
+- **Preconditions:** the Owner has lifted Cloudflare Access. Check: `curl -sI https://blueskyzlabs.com/` returns 200, not 302.
+- **Steps:** run every check in §3 E against production.
+- **Done when:** `docs/evidence/2026-10-xx-golive-production-smoke.md` is merged and `docs/current-work.json` is updated.
+
+### T4: Owner decisions (Owner only; agents never act on them unasked)
+
+| ID  | Decision                                      | Recommendation                                      |
+| --- | --------------------------------------------- | --------------------------------------------------- |
+| O-1 | Lift Cloudflare Access                        | Yes. §3C is PASS. This is the only go-live blocker. |
+| O-2 | #436 (remove local logs)                      | Merge                                               |
+| O-3 | #437 close + re-cut; #374 label after go-live | Close #437 with a pointer. Keep #374.               |
+| O-4 | Label #440 (OG-12, F-04, F-06)                | Label (not a go-live blocker)                       |
+| O-5 | Fix or remove the 2 subdomains returning 502  | Needed only for HSTS preload (F1)                   |
+
+### T5: post-go-live (after T3 PASS)
+
+Run F-items in this order: F9 (if T1 is not done yet) → F8 → F1 → F7 → F6. F2–F5 wait on the Owner or native reviewers. Each F-item gets a §9-style card from the orchestrator before any agent starts it.
