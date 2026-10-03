@@ -53,7 +53,11 @@ function resolveLocalTarget(fromFile, rawUrl) {
 }
 
 const ATTR = /(?:href|src)=["']([^"']+)["']/gi;
-const SKIP = /^(?:https?:|mailto:|tel:|data:|javascript:|#)/i;
+// Executable navigation schemes are never legitimate build output: a future
+// raw-template regression must fail the gate instead of being skipped.
+// (Issue #377: the old SKIP set silently ignored javascript: URLs.)
+const FORBIDDEN_SCHEME = /^(javascript|vbscript):/i;
+const SKIP = /^(?:https?:|mailto:|tel:|data:|#)/i;
 
 const pages = walkHtml(DIST);
 const broken = [];
@@ -64,7 +68,17 @@ for (const page of pages) {
   const html = readFileSync(page, "utf8");
   for (const match of html.matchAll(ATTR)) {
     const url = match[1].trim();
-    if (!url || SKIP.test(url)) {
+    if (!url) continue;
+    const forbidden = url.match(FORBIDDEN_SCHEME);
+    if (forbidden) {
+      broken.push({
+        page: `/${relative(DIST, page).replaceAll("\\", "/")}`,
+        url,
+        detail: `forbidden executable URL scheme: ${forbidden[1].toLowerCase()}:`,
+      });
+      continue;
+    }
+    if (SKIP.test(url)) {
       if (/^https?:/i.test(url)) external += 1;
       continue;
     }
