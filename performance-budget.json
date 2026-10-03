@@ -22,15 +22,5 @@
   "zeroCounts": {
     "third-party": 0,
     "render-blocking": 0
-  },
-  "routeOverrides": {
-    "/vi/products/sotro/": {
-      "resourceBytes": {
-        "image": 245760,
-        "total": 399360
-      },
-      "reason": "Showcase phone captures just below the fold are fetched by Chrome's native lazy-load distance threshold; CI (exact head 6646cc6, Lighthouse job 111228203272) measured image 181611 B and total 295564 B. Ceilings set at ~1.35x that CI measurement. The local-lab baseline (21.4 KB image) did not reproduce CI's Chrome and is superseded.",
-      "evidence": "docs/performance/experience-performance-friction-contract.md §2.2"
-    }
   }
 }
