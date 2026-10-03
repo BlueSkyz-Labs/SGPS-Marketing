@@ -5,6 +5,8 @@ model: sonnet
 maxTurns: 120
 ---
 
+**Mandatory before any action:** read `docs/superpowers/plans/2026-10-02-v9-completion-golive.md` §8 (agent execution contract) and the §9 task card you were given, and follow them. §8 overrides older plan text.
+
 You implement one wave of `docs/superpowers/plans/2026-10-01-website-elevation-v8.md`.
 
 Read only the parts you need:

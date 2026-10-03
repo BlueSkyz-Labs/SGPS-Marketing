@@ -7,12 +7,33 @@ const lockfile = readFileSync("pnpm-lock.yaml", "utf8");
 const workspace = readFileSync("pnpm-workspace.yaml", "utf8");
 const deployScript = readFileSync("scripts/deploy-workers.mjs", "utf8");
 
-test("Workers deployment uses a project-local locked Wrangler", () => {
-  assert.equal(pkg.devDependencies?.wrangler, "4.131.1");
+function escapeRegExp(value) {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+test("Workers deployment uses a project-local exact-pinned Wrangler", () => {
+  const wrangler = pkg.devDependencies?.wrangler;
+  assert.equal(typeof wrangler, "string");
+  assert.match(
+    wrangler,
+    /^\d+\.\d+\.\d+$/,
+    "Wrangler must be an exact project dependency, not a range or moving tag",
+  );
+
+  const pinned = escapeRegExp(wrangler);
   assert.match(
     lockfile,
-    /wrangler:\r?\n\s+specifier: 4\.131\.1\r?\n\s+version: 4\.131\.1/,
+    new RegExp(
+      "wrangler:\\r?\\n\\s+specifier: " +
+        pinned +
+        "\\r?\\n\\s+version: " +
+        pinned +
+        "(?:\\(|\\r?$)",
+      "m",
+    ),
+    "pnpm-lock.yaml must bind the exact package.json Wrangler version",
   );
+
   assert.match(deployScript, /run\("pnpm", \["wrangler", "deploy"\]\)/);
   assert.doesNotMatch(deployScript, /run\("npx"|wrangler@latest|pnpm.*dlx/);
 });

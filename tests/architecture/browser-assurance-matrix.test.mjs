@@ -60,23 +60,17 @@ function auditBrowserAssurance(workflow) {
     problems.push("shards must run pnpm test:e2e");
   }
 
-  // Pre-go-live speed mode: pull requests may run a subset, but a push to
-  // main must always run the full matrix, and the PR lane must keep at least
-  // one desktop and one mobile engine.
-  if (
-    !/RUN_SHARD:\s*\$\{\{\s*github\.event_name != 'pull_request' \|\| matrix\.pr_lane\s*\}\}/.test(
-      shards,
-    )
-  ) {
-    problems.push("RUN_SHARD must run every shard outside pull_request events");
-  }
-  for (const project of ["chromium", "mobile-chromium"]) {
-    const entry = new RegExp(
-      `-\\s*project:\\s*${project}\\n\\s*browser:\\s*\\w+\\n\\s*pr_lane:\\s*true`,
+  // Every shard runs on every event (pull_request and push). No per-event or
+  // per-entry gating may skip an engine, and no step may be conditional.
+  if (/pr_lane|RUN_SHARD|github\.event_name\s*[!=]=/.test(shards)) {
+    problems.push(
+      "shards must not gate any engine on the event or a lane flag",
     );
-    if (!entry.test(shards)) {
-      problems.push(`the PR lane must include ${project}`);
-    }
+  }
+  if (/^\s*if:/m.test(shards)) {
+    problems.push(
+      "shard steps must not be conditional: every engine runs on every event",
+    );
   }
 
   if (!/run:\s*pnpm lighthouse\s*$/m.test(lighthouse)) {
@@ -128,25 +122,38 @@ test("negative proof: narrowing the shard list is caught", () => {
   );
 });
 
-test("negative proof: skipping engines on main or emptying the PR lane is caught", () => {
-  const prOnly = WORKFLOW.replace(
-    "github.event_name != 'pull_request' || matrix.pr_lane",
-    "matrix.pr_lane",
+test("negative proof: a matrix that skips any engine on pull_request is caught", () => {
+  const lane = WORKFLOW.replace(
+    "            browser: chromium\n    steps:\n",
+    "            browser: chromium\n    env:\n      RUN_SHARD: ${{ github.event_name != 'pull_request' || matrix.pr_lane }}\n    steps:\n",
   );
-  assert.notEqual(prOnly, WORKFLOW);
+  assert.notEqual(lane, WORKFLOW);
   assert.ok(
-    auditBrowserAssurance(prOnly).some((problem) =>
-      problem.includes("outside pull_request"),
+    auditBrowserAssurance(lane).some((problem) =>
+      problem.includes("must not gate any engine"),
     ),
   );
-  const noMobile = WORKFLOW.replace(
-    /(project: mobile-chromium\n {12}browser: chromium\n {12}pr_lane: )true/,
-    "$1false",
+  for (const project of ["chromium", "firefox", "webkit", "mobile-chromium"]) {
+    const flagged = WORKFLOW.replace(
+      new RegExp(`(- project: ${project}\\n {12}browser: \\w+)`),
+      "$1\n            pr_lane: false",
+    );
+    assert.notEqual(flagged, WORKFLOW, project);
+    assert.ok(
+      auditBrowserAssurance(flagged).some((problem) =>
+        problem.includes("must not gate any engine"),
+      ),
+      `${project} lane flag must fail`,
+    );
+  }
+  const skipped = WORKFLOW.replace(
+    "      - name: Build browser test artifact\n",
+    "      - name: Build browser test artifact\n        if: ${{ github.event_name != 'pull_request' }}\n",
   );
-  assert.notEqual(noMobile, WORKFLOW);
+  assert.notEqual(skipped, WORKFLOW);
   assert.ok(
-    auditBrowserAssurance(noMobile).some((problem) =>
-      problem.includes("mobile-chromium"),
+    auditBrowserAssurance(skipped).some((problem) =>
+      problem.includes("must not be conditional"),
     ),
   );
 });

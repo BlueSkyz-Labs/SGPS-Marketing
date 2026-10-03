@@ -10,15 +10,3 @@ sections:
     intro: Chúng tôi làm những sản phẩm thông minh, giúp mọi người làm việc nhẹ nhàng và hiệu quả hơn. Nhìn cao hơn để xây một ngày mai sáng hơn.
     founder_name: Tony Nguyen
     founder_title: Nhà sáng lập kiêm CEO
-  principles:
-    heading: Một mái nhà
-    intro: Chúng tôi không làm theo một mảng sản phẩm cố định, mà làm theo một cách nghĩ.
-    items:
-      - name: Trí tuệ
-        summary: Nghĩ sâu. Giải pháp thông minh.
-      - name: Nâng tầm
-        summary: Nhìn cao hơn. Tác động lớn hơn.
-      - name: Tin cậy
-        summary: Nói rõ. Có bằng chứng để kiểm chứng.
-      - name: Tác động
-        summary: Giá trị thật. Thay đổi thật.

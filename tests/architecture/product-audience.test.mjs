@@ -14,11 +14,27 @@ test("Sổ Trọ registry audience is individual only", () => {
   assert.deepEqual(audienceOf(registry("sotro")), ["individual"]);
 });
 
-test("Sổ Tâm audience is unchanged", () => {
-  assert.deepEqual(audienceOf(registry("sotam")), [
-    "individual",
-    "professional",
-  ]);
+// v8 OG-3 (Owner 2026-10-02): Sổ Tâm's audience is unconfirmed, so it is not
+// declared in the registry and nothing public (page row, JSON-LD) can emit it.
+test("Sổ Tâm declares no audience", () => {
+  assert.deepEqual(audienceOf(registry("sotam")), []);
+  assert.doesNotMatch(registry("sotam"), /^audience:/m);
+});
+
+test("registry audience is optional in the schema and the legacy row is gated", () => {
+  assert.match(
+    readFileSync("src/lib/product-schema.ts", "utf8"),
+    /audience: z\.array\(audience\)\.min\(1\)\.optional\(\)/,
+  );
+  assert.match(
+    readFileSync("src/pages/products/[slug].astro", "utf8"),
+    /data\.audience \?/,
+  );
+});
+
+test("negative proof: a declared Sổ Tâm audience is detected", () => {
+  const regressed = `${registry("sotam")}audience:\n  - individual\n`;
+  assert.notDeepEqual(audienceOf(regressed), []);
 });
 
 test("Sổ Trọ audience label reads Landlords in every locale", () => {

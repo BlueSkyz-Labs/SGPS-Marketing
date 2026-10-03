@@ -28,6 +28,7 @@ export const PROTECTED_PATHS = [
   "scripts/",
   "brand/",
   "docs/decisions/",
+  "docs/evidence/product-source-qualification.json",
   "AGENTS.md",
   "SECURITY.md",
   "pnpm-workspace.yaml",
