@@ -243,3 +243,12 @@ test(
     }
   },
 );
+
+test("run-e2e main-module guard is cross-platform (pathToFileURL, F-06)", () => {
+  const src = readFileSync("scripts/run-e2e.mjs", "utf8");
+  assert.match(src, /pathToFileURL\(process\.argv\[1\]\)\.href/);
+  assert.doesNotMatch(src, /file:\/\/\$\{process\.argv\[1\]\}/);
+  // negative proof: the legacy Windows-broken guard is rejected
+  const legacy = "import.meta.url === `file://${process.argv[1]}`";
+  assert.match(legacy, /file:\/\/\$\{process\.argv\[1\]\}/);
+});
