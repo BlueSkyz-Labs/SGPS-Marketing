@@ -5,6 +5,7 @@
 **Lifecycle:** IMPLEMENTING  
 **Go-Live:** BLOCKED for the DEC-028 experience gate until exact-head evidence closes.  
 **Canonical candidate:** sgps-core PR #257 @ `278abbcfc789ea2081c9653bfe4e6c1697071c69`.  
+**Canonical merged:** sgps-core `3a71af89fe6c525c63c3242c88417a0e3ffa76a5` (merge commit of #257; compare `278abbc...3a71af8` is ahead by 1 commit with 0 changed files, so the merged content equals the reviewed candidate).  
 **Tracking:** #451
 
 ## Local mapping

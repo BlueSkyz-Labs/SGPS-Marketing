@@ -6,8 +6,8 @@
   "canonical": {
     "candidate_pr": 257,
     "candidate_head": "278abbcfc789ea2081c9653bfe4e6c1697071c69",
-    "merged_sha": null,
-    "status": "WAIT_ON_CANONICAL_MERGE"
+    "merged_sha": "3a71af89fe6c525c63c3242c88417a0e3ffa76a5",
+    "status": "CANONICAL_MERGED"
   },
   "critical_journeys": [
     "landing page first usable render",
@@ -54,7 +54,7 @@
   },
   "go_live": {
     "state": "BLOCKED",
-    "reason": "DEC-028 canonical merge binding + exact-head performance/friction evidence + negative/positive proof pending"
+    "reason": "DEC-028 exact-head performance/friction evidence + negative/positive proof pending"
   },
   "gaps": {
     "disposition": "ADOPT",
