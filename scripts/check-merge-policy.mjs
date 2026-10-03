@@ -39,6 +39,8 @@ export const PROTECTED_PATHS = [
   "eslint.config.mjs",
   "playwright.config.ts",
   "lighthouserc.json",
+  "lighthouserc.mobile.json",
+  "performance-budget.json",
 ];
 
 export function isProtected(path) {
