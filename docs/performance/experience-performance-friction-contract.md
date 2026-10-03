@@ -37,6 +37,8 @@ Every journey above is reachable without JavaScript. The no-JS state is part of 
 ### 2.2 Deterministic resource budgets (per gate route, transfer bytes)
 
 > **CI calibration (2026-10-03):** the first CI run of the gate (exact head `6646cc6`, Lighthouse job 111228203272) measured `/vi/products/sotro/` at **181,611 B images / 295,564 B total**. The local-lab figure below (21.4 KB images) did not reproduce CI's Chrome, which fetches the showcase phone captures just below the fold through its native lazy-load distance threshold; real Chrome users fetch them too. That route therefore carries a recorded `routeOverrides` entry in `performance-budget.json`: image 240 KB and total 390 KB, about 1.35× the CI value. Overrides may only change resource bytes for a named route, require a reason and an evidence reference, and are guarded with negative proofs. Timing and zero-count budgets are never relaxed per route. Follow-up (not a gate): serving the 288 px phone-capture variants below the fold would cut those bytes.
+>
+> **Re-calibration (2026-10-04, #472):** root cause found. Desktop captures shipped only 1920px masters with no `srcset`, so phones downloaded them. With 768w derivatives offered through `srcset`, CI (exact head `07fe766`, Lighthouse job 111290412367) measured **114,349 B images / 228,416 B total** (−37% images). The global caps are still exceeded (images 81,920 B; total by 3 KB), so the override stays but tightens to image 128 KiB and total 256 KiB (about 1.15× the CI value; was 240 / 390 KB). The remaining image bytes are the phone captures inside Chrome's lazy-load distance.
 
 Lighthouse `resource-summary`, mobile, transfer bytes. Run of 2026-10-03 on the baseline above, 3 runs per route (resource bytes are identical across runs).
 
