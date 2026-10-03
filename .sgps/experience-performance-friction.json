@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "decision": "SGPS-DEC-2026-028",
+  "owner_directive_date": "2026-10-03",
+  "applicability": "MANDATORY",
+  "canonical": {
+    "candidate_pr": 257,
+    "candidate_head": "278abbcfc789ea2081c9653bfe4e6c1697071c69",
+    "merged_sha": "3a71af89fe6c525c63c3242c88417a0e3ffa76a5",
+    "status": "CANONICAL_MERGED"
+  },
+  "critical_journeys": [
+    "landing page first usable render",
+    "primary navigation",
+    "product detail pages",
+    "CTA/contact handoff where enabled",
+    "locale/theme route transitions"
+  ],
+  "reuse_existing_evidence": [
+    "existing Lighthouse CI",
+    "Experience v10 baseline",
+    "axe/redirect/engine verification",
+    "field CWV only when privacy-approved"
+  ],
+  "budgets": {
+    "web_field_baseline": {
+      "lcp_ms_p75": 2500,
+      "inp_ms_p75": 200,
+      "cls_p75": 0.1
+    },
+    "platform_rule": "Use platform-native responsiveness/jank/service latency evidence; stricter Product Truth wins.",
+    "friction_rule": "Every blocking wait/confirmation/re-auth/repeated-entry/context-switch must have user-value, correctness, safety, security, compliance or irreversible-risk justification."
+  },
+  "gate": {
+    "fail_closed": true,
+    "exact_revision_required": true,
+    "missing_evidence": "NON_PASS",
+    "budget_relaxation_to_pass": "PROHIBITED"
+  },
+  "evidence": {
+    "status": "NOT_VERIFIED",
+    "exact_revision": null,
+    "artifacts": []
+  },
+  "negative_proof": {
+    "required": true,
+    "status": "NOT_VERIFIED",
+    "artifact": null
+  },
+  "positive_proof": {
+    "required": true,
+    "status": "NOT_VERIFIED",
+    "artifact": null
+  },
+  "go_live": {
+    "state": "BLOCKED",
+    "reason": "DEC-028 exact-head performance/friction evidence + negative/positive proof pending"
+  },
+  "gaps": {
+    "disposition": "ADOPT",
+    "lifecycle": "IMPLEMENTING",
+    "adopted": false
+  },
+  "tracking_issue": 451
+}

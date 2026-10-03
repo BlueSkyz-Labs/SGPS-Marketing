@@ -12,24 +12,28 @@
       "startServerReadyTimeout": 60000,
       "settings": {
         "chromeFlags": "--no-sandbox",
+        "onlyCategories": ["seo"],
         "disableFullPageScreenshot": true
       }
     },
     "assert": {
       "assertions": {
-        "categories:performance": ["error", { "minScore": 0.9 }],
-        "categories:accessibility": ["error", { "minScore": 0.9 }],
-        "categories:best-practices": ["error", { "minScore": 0.9 }],
-        "categories:seo": ["warn", { "minScore": 0.9 }],
-        "is-crawlable": "off",
-        "largest-contentful-paint": ["error", { "maxNumericValue": 2500 }],
-        "cumulative-layout-shift": ["error", { "maxNumericValue": 0.05 }],
-        "total-blocking-time": ["error", { "maxNumericValue": 200 }]
+        "categories:seo": ["error", { "minScore": 0.95 }],
+        "is-crawlable": "error",
+        "canonical": "error",
+        "hreflang": "error",
+        "http-status-code": "error",
+        "document-title": "error",
+        "meta-description": "error",
+        "robots-txt": "error",
+        "crawlable-anchors": "error",
+        "link-text": "error",
+        "image-alt": "error"
       }
     },
     "upload": {
       "target": "filesystem",
-      "outputDir": ".lighthouseci"
+      "outputDir": ".lighthouseci-seo"
     }
   }
 }
