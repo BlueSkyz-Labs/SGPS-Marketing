@@ -5,6 +5,7 @@ pnpm-lock.yaml
 playwright-report/
 test-results/
 .lighthouseci/
+.lighthouseci-seo/
 coverage/
 
 # Production v4 source and token projections are checksum-sensitive.
