@@ -198,7 +198,7 @@ Order: **E0 (P0, DEC-025)** → E1 → E2 → E3 → E4 → E5 → E6 → E7. E1
 - **Negative proof:** temporarily set `scroll-margin-top: 0` and give the header a taller fixed height, and show that the test fails. Revert, and record the negative proof in the PR body.
 - **Done when:** green on all 4 engines (non-protected path, so normal merge).
 
-- **State: DONE (PR pending).** `tests/e2e/wcag22-focus-not-obscured.spec.ts`:
+- **State: DONE, merged in #453 (`main@5b76df4`).** `tests/e2e/wcag22-focus-not-obscured.spec.ts`:
   - **2.4.11:** a stacking-aware `elementFromPoint` probe over 5 routes × 390/1440 px, Tab ×40.
   - **2.5.8:** button-like targets are ≥ 24 px.
   - **Result:** 30/30 on chromium + mobile-chromium.
@@ -219,6 +219,12 @@ Order: **E0 (P0, DEC-025)** → E1 → E2 → E3 → E4 → E5 → E6 → E7. E1
 - **Negative proof:** change one spacing token by 4 px, and show that the gate fails on the affected routes.
 - **Not allowed:** auto-updating snapshots in CI. Snapshot updates need a PR whose body states why the visual change is intended.
 - **Done when:** the CI step is green and the Owner has labelled the PR. Merge by hand (v9 §8.2).
+- **State: HANDOFF to the local agent (2026-10-03).** E2 merged, so the precondition is met. The orchestrator cannot produce valid baselines: its sandbox has Chromium 1194, CI's Playwright 1.63 uses Chromium 1243, and it cannot download CI artifacts. Baselines made there would differ by pixels and flake. **Procedure (mandatory):**
+  1. Branch from `main` and add the `visual` project and `tests/visual/*.spec.ts` per the design above.
+  2. Add a **temporary** `workflow_dispatch`-only job (or step) that runs `pnpm exec playwright test --project=visual --update-snapshots` on `ubuntu-24.04` and uploads `tests/visual/**/*-snapshots/` as an artifact. It must have no write token and no commit.
+  3. Download the artifact, commit the PNGs, then **remove the update job** in the same PR. CI must never update snapshots.
+  4. Run the negative proof: a 4 px spacing-token change fails the affected routes. Record it in the PR body.
+  5. Open the PR (protected: `playwright.config.ts`, `.github/`) and stop for the Owner label.
 
 ### E4: M02 navigation prefetch experiment (local agent; protected)
 
@@ -241,6 +247,7 @@ Order: **E0 (P0, DEC-025)** → E1 → E2 → E3 → E4 → E5 → E6 → E7. E1
 - **Design:** add a second Lighthouse CI collection for **SEO only**, against a build with `PUBLIC_SITE_URL=https://blueskyzlabs.com` served locally. That build emits no `noindex`, and canonical and hreflang are production-shaped. Assert `categories:seo ≥ 0.95` as an **error**. The existing performance lane is unchanged.
 - **Negative proof:** remove one `hreflang` alternate, and show that the SEO assertion fails.
 - **Done when:** the CI SEO lane is green and the Owner has labelled the PR.
+- **State: PR #454 open, waiting for the Owner label.** Local lab evidence: 12/12 runs score SEO 1.00, and 3 negative proofs fail the lane (`docs/evidence/2026-10-03-v10-e5-seo-lab-truth.md`). The CI lane has not run yet, because the label gate skips it.
 
 ### E6: Beauty-Blind review and craft fixes (reviewer lane, then local agent)
 
@@ -252,6 +259,7 @@ Order: **E0 (P0, DEC-025)** → E1 → E2 → E3 → E4 → E5 → E6 → E7. E1
   - Fix the findings rated high or medium that need no Owner copy.
   - Findings that need copy, imagery or brand changes go to the Owner as decisions.
 - **Done when:** the review record is merged, and the fixes are merged or explicitly moved to the Owner.
+- **State: PR #455** (review record plus the BB-02 affordance fix). BB-01 is kept by Owner decision. Mobile capture legibility (BB-02) and the lockup size (BB-03) go to Owner/design. BB-04 and BB-05 are accepted as designed (`docs/evidence/2026-10-03-v10-beauty-blind-review.md`).
 
 ### E7: visual-runtime convergence audit (orchestrator)
 
