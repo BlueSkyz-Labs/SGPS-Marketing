@@ -137,9 +137,24 @@ test("warning fires at 85 % of a ceiling without failing", () => {
 // Route overrides (CI calibration of /vi/products/sotro/ resource bytes).
 const SOTRO = "/vi/products/sotro/";
 const ciSotro = { resourceBytes: { image: 181611, total: 295564 } };
+// The mechanism is tested against a fixture override so the test does not
+// depend on whether the live budget currently carries one for this route.
+const withSotro = {
+  ...budget,
+  routeOverrides: {
+    [SOTRO]: {
+      resourceBytes: { image: 245760, total: 399360 },
+      reason:
+        "fixture: below-fold lazy captures fetched by Chrome's lazy-load distance in CI",
+      evidence:
+        "docs/performance/experience-performance-friction-contract.md §2.2",
+    },
+  },
+};
 
 test("route override: the CI-measured Sổ Trọ page passes only on its own route", () => {
   assert.deepEqual(validateOverrides(budget), []);
+  assert.deepEqual(validateOverrides(withSotro), []);
   const runs = allRoutes().map((r) =>
     r.route === SOTRO
       ? {
@@ -148,7 +163,7 @@ test("route override: the CI-measured Sổ Trọ page passes only on its own rou
         }
       : r,
   );
-  assert.deepEqual(evaluate(runs, budget).errors, []);
+  assert.deepEqual(evaluate(runs, withSotro).errors, []);
   // Negative proof: the same bytes on another route still fail the base cap.
   const leaked = allRoutes().map((r) =>
     r.route === "/en/"
@@ -158,7 +173,9 @@ test("route override: the CI-measured Sổ Trọ page passes only on its own rou
         }
       : r,
   );
-  assert.ok(evaluate(leaked, budget).errors.some((e) => e.startsWith("/en/ ")));
+  assert.ok(
+    evaluate(leaked, withSotro).errors.some((e) => e.startsWith("/en/ ")),
+  );
 });
 
 test("negative proof: an override cannot relax timing, lacks no reason, and names a known route", () => {

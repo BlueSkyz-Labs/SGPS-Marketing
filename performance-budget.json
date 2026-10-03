@@ -26,10 +26,10 @@
   "routeOverrides": {
     "/vi/products/sotro/": {
       "resourceBytes": {
-        "image": 245760,
-        "total": 399360
+        "image": 131072,
+        "total": 262144
       },
-      "reason": "Showcase phone captures just below the fold are fetched by Chrome's native lazy-load distance threshold; CI (exact head 6646cc6, Lighthouse job 111228203272) measured image 181611 B and total 295564 B. Ceilings set at ~1.35x that CI measurement. The local-lab baseline (21.4 KB image) did not reproduce CI's Chrome and is superseded.",
+      "reason": "Showcase phone captures just below the fold are fetched by Chrome's native lazy-load distance threshold. After desktop captures moved to 768w derivatives, CI (exact head 07fe766, Lighthouse job 111290412367) measured image 114349 B and total 228416 B (was 181611 / 295564). Ceilings set at ~1.15x that CI measurement.",
       "evidence": "docs/performance/experience-performance-friction-contract.md §2.2"
     }
   }
