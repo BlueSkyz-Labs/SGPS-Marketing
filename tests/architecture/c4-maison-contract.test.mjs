@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { existsSync, readFileSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync } from "node:fs";
 import {
   getMaisonPendingSections,
   getMaisonSections,
@@ -44,9 +44,19 @@ test("C4-B maison: sections without a public route fail closed", () => {
         !ids.includes(pending),
         `${pending} must be omitted, not invented`,
       );
+      // v11 J1: the journal index may exist before its first post, but only
+      // while it is noindex-gated on published posts and has none; the first
+      // published post must take it out of the pending list.
+      const index = `src/pages/${lang}/${pending}/index.astro`;
+      const gatedEmptyJournal =
+        pending === "journal" &&
+        existsSync(index) &&
+        /noindex=\{!indexable\}/.test(readFileSync(index, "utf8")) &&
+        !readdirSync("src/content/journal").some((f) => f.endsWith(".md"));
       assert.ok(
-        !existsSync(`src/pages/${lang}/${pending}.astro`) &&
-          !existsSync(`src/pages/${lang}/${pending}/index.astro`),
+        gatedEmptyJournal ||
+          (!existsSync(`src/pages/${lang}/${pending}.astro`) &&
+            !existsSync(index)),
         `${pending} is only pending while it truly has no public route`,
       );
     }
