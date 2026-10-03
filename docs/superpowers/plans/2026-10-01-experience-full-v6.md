@@ -1,6 +1,9 @@
 # SGPS:Experience FULL v6 — Experience Baseline & Target and Experience Convergence Plan
 
 **Status:** PLANNED. Target defined; no slice executed by this document. Experience axis proposed transition: `AUDITED` → `TARGET_DEFINED` → `PLANNED` (this document). Governance axis stays `ADOPTED` (`docs/evidence/2026-09-22-sgps-experience-adoption.md`). `ADOPTED` is not `CONVERGED`.
+
+**Reconciliation 2026-10-03 (W11 follow-up):** the status text above is the authoring-time status. Slices S0–S8 are delivered on `main` — S0 (#382), S1 (#384), and the rest through the interleaved wave program and the v8 elevation (#418–#430, #432/#433/#438/#439); per-slice artifact verification is recorded in `docs/evidence/2026-10-03-experience-v6-slice-reconciliation.md`. The S9-equivalent convergence audit for the current revision is `docs/evidence/2026-10-01-experience-v8-verification.md`. Human E4, native language review and production anonymous verification remain `NOT VERIFIED`.
+
 **Date:** 2026-10-01 (Owner decisions of 2026-09-30).
 **Measured base revision:** `1160ce22d16c346b81f84def3e2b3d36c8556ad1` (`main`, #379).
 **Experience source revision:** `sgps-core` `ec0a1cfcc9cebdea10cf20d5de0bd0260a0fa890` (`v1.13.0-571`), Experience standard 1.4.0 (`BPXS-2026-09-01`). Project SGPS pin stays `v1.13.0`; no repin, no new overlay adoption.

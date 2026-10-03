@@ -319,7 +319,51 @@ function atlasHrefs(html) {
 
 test("B-17: no atlas node points at the unrendered #house-title", () => {
   assert.doesNotMatch(read("src/lib/atlas.ts"), /house-title/);
-  assert.match(read("src/lib/atlas.ts"), /href: `\/\$\{lang\}\/about\/`/);
+});
+
+/* v9 F9 / F-11: since abt-4 = A no page renders PRINCIPLE_MATRIX, so a
+   principle node must not link anywhere (a link that resolves but explains
+   nothing is a dead end). This replaces the old pin to `/${lang}/about/`. */
+function principleRows(html) {
+  return [
+    ...html.matchAll(
+      /<li[^>]*data-atlas-kind="principle"[^>]*>[\s\S]*?<\/li>/g,
+    ),
+  ].map((match) => match[0]);
+}
+
+test("F9: atlas principle nodes carry no href in the model", () => {
+  const source = read("src/lib/atlas.ts");
+  const block = source.match(
+    /for \(const principle of PRINCIPLE_MATRIX\)[\s\S]*?\n  \}/,
+  )?.[0];
+  assert.ok(block, "principle loop present");
+  assert.doesNotMatch(block, /href:/);
+});
+
+test("F9: built atlas principle rows show their label and contain no link", () => {
+  if (!existsSync("dist")) return; // architecture tests may run before build
+  for (const lang of LOCALES) {
+    const rows = principleRows(read(`dist/${lang}/verify/index.html`));
+    assert.equal(rows.length, 4, `${lang}: four principle rows`);
+    for (const row of rows) {
+      assert.doesNotMatch(row, /<a\s/, `${lang}: principle row links`);
+      assert.match(
+        row,
+        /class="atlas-row__label"[^>]*>[^<]+</,
+        `${lang}: label`,
+      );
+    }
+  }
+});
+
+test("F9 negative proof: a linked principle row is detected", () => {
+  const linked =
+    '<li data-atlas-node data-atlas-kind="principle" class="atlas-row"><a href="/en/about/" class="atlas-row__link">Clarity</a></li>';
+  const rows = principleRows(linked);
+  assert.equal(rows.length, 1);
+  assert.match(rows[0], /<a\s/);
+  assert.doesNotMatch(rows[0], /class="atlas-row__label"/);
 });
 
 test("B-17: every local atlas link in dist resolves to a built page and anchor", () => {

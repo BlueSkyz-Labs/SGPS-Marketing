@@ -114,14 +114,16 @@ return Astro.redirect("/en/products/");
                 .join(", ")}
             </dd>
           </div>
-          <div>
-            <dt class="text-sm font-medium text-[var(--text-muted)]">
-              Audience
-            </dt>
-            <dd class="mt-1 text-[var(--text-primary)]">
-              {audienceText(data.slug, data.audience, AUDIENCE_LABELS, "en")}
-            </dd>
-          </div>
+          {data.audience ? (
+            <div>
+              <dt class="text-sm font-medium text-[var(--text-muted)]">
+                Audience
+              </dt>
+              <dd class="mt-1 text-[var(--text-primary)]">
+                {audienceText(data.slug, data.audience, AUDIENCE_LABELS, "en")}
+              </dd>
+            </div>
+          ) : null}
         </dl>
       </section>
 

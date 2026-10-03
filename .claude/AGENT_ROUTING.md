@@ -11,7 +11,7 @@ The orchestrator (the main session) plans, decides and edits Vietnamese. It dele
 
 ## Token rules
 
-1. Read the smallest slice: plan §4 for your wave and §5. Do not read the whole plan or the deck.
+1. **Mandatory first read:** active plan `docs/superpowers/plans/2026-10-02-v9-completion-golive.md` §8 (agent execution contract) and your §9 task card. Then read only the files your card names. v8 plan §5 still supplies ports, the glossary (§5.3) and PR conventions. Do not read the whole plan or the deck.
 2. Use `file:line` references instead of pasting code. Quote at most 5 lines.
 3. Delegate lookups to `scout` instead of reading many files in an expensive context.
 4. Run independent tool calls in parallel. Never re-read a file you just edited.

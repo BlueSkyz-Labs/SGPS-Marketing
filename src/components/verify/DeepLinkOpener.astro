@@ -9,7 +9,12 @@
 
 <script>
   function openLayerForHash(): void {
-    const id = decodeURIComponent(window.location.hash.slice(1));
+    let id = "";
+    try {
+      id = decodeURIComponent(window.location.hash.slice(1));
+    } catch {
+      return; // A malformed fragment (e.g. "#%E0%A4%A") is ignored, not thrown.
+    }
     if (!id) return;
     const target = document.getElementById(id);
     const layer = target?.closest("details");

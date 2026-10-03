@@ -1,0 +1,47 @@
+{
+  "schemaVersion": "1.0",
+  "evidenceClass": "PROVIDER_REPOSITORY_READBACK",
+  "verifiedAt": "2026-09-30",
+  "limitations": [
+    "Proves the cited Git commit existed in the named product repository and was reachable from that repository's default branch at read-back time.",
+    "Does not independently attest every product capability, deployment/runtime state, merchant/payment state, public availability, or Human E4.",
+    "A later product default-branch advance does not invalidate an older qualified sourceRevision; changing a Marketing sourceRevision requires a fresh qualification update."
+  ],
+  "products": {
+    "apexagent": {
+      "repository": "BlueSkyz-Labs/ApexAgent",
+      "defaultBranch": "main",
+      "sourceRevision": "f395a7de7cb561ee8330c6309ac57df257a7e184",
+      "checkedDefaultHead": "d667730f88d3969d0ee332dfc238a3dc1ec8c8ee",
+      "relationship": "ANCESTOR_OF_DEFAULT_HEAD"
+    },
+    "fluentarc": {
+      "repository": "BlueSkyz-Labs/FluentArc",
+      "defaultBranch": "main",
+      "sourceRevision": "b74a3027dc5ebd4cd4b3a3502576dc0d1edba6bc",
+      "checkedDefaultHead": "86a2cb93bd59334c1bbb64ccc43351fe50435008",
+      "relationship": "ANCESTOR_OF_DEFAULT_HEAD"
+    },
+    "sotam": {
+      "repository": "BlueSkyz-Labs/sotam",
+      "defaultBranch": "main",
+      "sourceRevision": "ffb771b5f47886b581df0c1409c7f1b5ea758724",
+      "checkedDefaultHead": "c7fa89c6464d1bb82d49aa285a42d9370c877158",
+      "relationship": "ANCESTOR_OF_DEFAULT_HEAD"
+    },
+    "sotro": {
+      "repository": "BlueSkyz-Labs/Sotro",
+      "defaultBranch": "main",
+      "sourceRevision": "1d87c09380341360acb5f2882115ebc5cd99e687",
+      "checkedDefaultHead": "1d87c09380341360acb5f2882115ebc5cd99e687",
+      "relationship": "EXACT_DEFAULT_HEAD"
+    },
+    "vungtaylai": {
+      "repository": "BlueSkyz-Labs/VungTayLai",
+      "defaultBranch": "main",
+      "sourceRevision": "228ea827f2af66ee46aea38c6aecb934ec99878c",
+      "checkedDefaultHead": "3dce07de2991d322b269b4aa59437f080d4a319a",
+      "relationship": "ANCESTOR_OF_DEFAULT_HEAD"
+    }
+  }
+}

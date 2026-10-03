@@ -9,10 +9,10 @@ import type { LocalizedLabel } from "@/data/site";
  */
 export const EMPTY_STATE_COPY = {
   contactLede: {
-    en: "Two routes work today. A business mailbox will be published here once it is approved.",
-    vi: "Hiện bạn có thể liên hệ qua hai kênh. Hộp thư công việc sẽ được đăng tại đây khi sẵn sàng.",
-    zh: "目前有两个渠道可用。商务邮箱获批后将在此公布。",
-    "zh-hant": "目前有兩個管道可用。商務電子信箱核准後將於此公布。",
+    en: "No business mailbox is published yet. We will list it here once it is approved.",
+    vi: "Chưa có hộp thư công việc được công bố. Chúng tôi sẽ đăng tại đây khi được phê duyệt.",
+    zh: "商务邮箱尚未公布。获批后将在此列出。",
+    "zh-hant": "商務電子信箱尚未公布。核准後將在此列出。",
   },
   signInHeading: {
     en: "Product sign-in",
@@ -37,6 +37,30 @@ export const EMPTY_STATE_COPY = {
     vi: "Sẽ được công bố tại đây khi được phê duyệt.",
     zh: "获批后在此公布。",
     "zh-hant": "核准後於此公布。",
+  },
+  aboutCheck: {
+    en: "What you can check",
+    vi: "Bạn có thể tự kiểm chứng",
+    zh: "你可以自行核实",
+    "zh-hant": "你可以自行查證",
+  },
+  aboutCheckNoCookies: {
+    en: "This site sets no cookies.",
+    vi: "Trang web này không đặt cookie.",
+    zh: "本站不设置 Cookie。",
+    "zh-hant": "本站不設定 Cookie。",
+  },
+  aboutCheckSecurity: {
+    en: "Security reports go through a private GitHub channel.",
+    vi: "Báo cáo bảo mật được gửi qua kênh GitHub riêng tư.",
+    zh: "安全报告通过 GitHub 私有渠道提交。",
+    "zh-hant": "資安通報透過 GitHub 私有管道提交。",
+  },
+  aboutCheckCta: {
+    en: "See our claims and sources →",
+    vi: "Xem các tuyên bố và nguồn →",
+    zh: "查看我们的声明与依据 →",
+    "zh-hant": "查看我們的聲明與依據 →",
   },
   aboutWhatWeMake: {
     en: "What we are building",

@@ -180,7 +180,7 @@ export const productSchema = z
     lifecycle,
     availability,
     publicLabel,
-    audience: z.array(audience).min(1),
+    audience: z.array(audience).min(1).optional(),
     jobs: z.array(z.string().min(1)).min(1),
     /** Verified product capabilities — distinct from customer jobs-to-be-done. */
     capabilities: z.array(z.string().min(1).max(120)).min(2).max(3).optional(),

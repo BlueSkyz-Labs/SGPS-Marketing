@@ -48,20 +48,6 @@ const heading = isVi
     : isZhHant
       ? "證據地圖"
       : "Evidence map";
-const lede = isVi
-  ? "Sơ đồ hóa từ chính những nguồn trang này công bố: thương hiệu mẹ, các nguyên tắc, những bề mặt tin cậy có thể xác minh, và các tuyên bố công khai cùng bằng chứng mà chúng dẫn chiếu. Nút sản phẩm chỉ xuất hiện khi sản phẩm thật được công bố."
-  : isZh
-    ? "依据本站发布的信息制图：主品牌、其原则、可验证的信任层面，以及公开声明与其引用的证据。产品节点仅在真实产品发布后出现。"
-    : isZhHant
-      ? "依據本站發布的資訊製圖：主品牌、其原則、可驗證的信任層面，以及公開聲明與其引用的證據。產品節點僅在真實產品發布後出現。"
-      : "Mapped from the same sources this site publishes: the masterbrand, its principles, verifiable trust surfaces, and the public claims with the evidence they cite. Product nodes appear only when real products are public.";
-const indexHint = isVi
-  ? "Di chuột hoặc chuyển tiêu điểm vào một mục để làm nổi bật nút tương ứng trên bản đồ."
-  : isZh
-    ? "将指针悬停或聚焦在条目上，即可在证据地图中突出显示对应节点。"
-    : isZhHant
-      ? "將游標懸停或聚焦在條目上，即可在證據地圖中突出顯示對應節點。"
-      : "Hover or focus an entry to light its node in the evidence map.";
 
 const emptyLabel = isVi
   ? "Chưa có sản phẩm công khai nào được công bố."
@@ -262,10 +248,6 @@ const groups = [
   <h2 id="atlas-title" class="type-d2 text-balance">
     {heading}
   </h2>
-  <p class="mt-4 max-w-2xl text-lg text-[var(--text-secondary)] text-pretty">
-    {lede}
-  </p>
-
   <div data-atlas class="atlas-stage mt-10">
     <div class="atlas-plate">
       {plates.map(({ id, plate, positions, className }) => (
@@ -429,8 +411,6 @@ const groups = [
       ))}
     </div>
 
-    <p class="atlas-hint">{indexHint}</p>
-
     <div class="atlas-index">
       {groups.map((group) => (
         <div class="atlas-group">
@@ -454,9 +434,13 @@ const groups = [
                   {codes.has(node.id) ? (
                     <span class="atlas-code">{codes.get(node.id)}</span>
                   ) : null}
-                  <a href={node.href} class="atlas-row__link">
-                    {node.label}
-                  </a>
+                  {node.href ? (
+                    <a href={node.href} class="atlas-row__link">
+                      {node.label}
+                    </a>
+                  ) : (
+                    <span class="atlas-row__label">{node.label}</span>
+                  )}
                   <span class="atlas-row__kind">{kindLabels[node.kind]}</span>
                 </li>
               ))}
@@ -974,12 +958,6 @@ const groups = [
     border-width: 2.5px;
   }
 
-  .atlas-hint {
-    margin-top: 1rem;
-    font-size: var(--size-2);
-    color: var(--text-muted);
-  }
-
   .atlas-index {
     display: grid;
     gap: 1.25rem;
@@ -1051,7 +1029,8 @@ const groups = [
     font-variant-numeric: tabular-nums;
     color: var(--action-primary);
   }
-  .atlas-row__link {
+  .atlas-row__link,
+  .atlas-row__label {
     display: inline-flex;
     flex: 1 1 12rem;
     align-items: center;

@@ -18,7 +18,10 @@ import { EMPTY_STATE_COPY } from "@/data/empty-state-copy";
 import { productCopy, proofCaptionForKind } from "@/lib/product-copy";
 import { resolveLifecycleCta } from "@/lib/lifecycle-cta";
 import { getShowcase } from "@/lib/showcases";
-import { getProductIconThumbPath } from "@/lib/product-routes";
+import {
+  getProductIconThumbPath,
+  localizeSiteHref,
+} from "@/lib/product-routes";
 import { safeJsonLd, productJsonLd } from "@/lib/seo";
 import { productBreadcrumbJsonLd } from "@/lib/breadcrumbs";
 import { getPublicProducts } from "@/lib/products";
@@ -69,7 +72,9 @@ const proofLinks = [
   { href: data.proof.privacyUrl, label: PAGE_LABELS.privacy[lang] },
   { href: data.proof.securityUrl, label: PAGE_LABELS.security[lang] },
   { href: data.proof.supportUrl, label: PAGE_LABELS.support[lang] },
-].filter((link): link is { href: string; label: string } => Boolean(link.href));
+]
+  .filter((link): link is { href: string; label: string } => Boolean(link.href))
+  .map((link) => ({ ...link, href: localizeSiteHref(link.href, lang) }));
 
 const productStructuredData = productJsonLd(
   {
