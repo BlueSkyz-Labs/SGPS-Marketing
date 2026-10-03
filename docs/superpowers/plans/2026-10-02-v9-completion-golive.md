@@ -90,6 +90,7 @@ Run against `https://blueskyzlabs.com`:
 - HTTP 200 on every sitemap URL.
 - Headers match `public/_headers`: CSP, HSTS without `includeSubDomains` until the 502s are fixed, COOP/CORP, `X-Content-Type-Options`.
 - 301 matrix for the legacy and locale-root routes.
+- **`https://www.blueskyzlabs.com/*` → 301 to the apex** (red-team RT-01: www currently serves the site publicly and bypasses Access).
 - `robots.txt` and the sitemap are reachable, and `noindex` is removed from the production build.
 - No 4xx/5xx for assets on the 4 Lighthouse routes.
 - One production Lighthouse mobile run per route (field-like; PASS needs LCP ≤ 2.5 s).
