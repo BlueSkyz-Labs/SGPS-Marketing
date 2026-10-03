@@ -20,6 +20,7 @@ The site is **LIVE** when every item below is true and bound to an exact SHA in 
 2. `main` is green on the four-engine push matrix and on Lighthouse CI.
 3. Cloudflare Access is lifted for public routes, and the production smoke in §3 is PASS against `https://blueskyzlabs.com`.
 4. No Owner gate in §5 that blocks go-live is still open.
+5. **Experience Performance & Friction gate (SGPS-DEC-2026-025 / Experience 1.5, issue #449).** The Owner LOCKed it on 2026-10-03 in sgps-core #256. Once #256 merges, this gate is non-compensatory for go-live: PASS, or an Owner-authorized bounded deviation. The contract is prepared in `docs/performance/experience-performance-friction-contract.md`, and the work is in v10 card E0.
 
 `PLAN COMPLETE ≠ PROJECT COMPLETE`: §4 lists the post-go-live work that keeps the project open.
 
