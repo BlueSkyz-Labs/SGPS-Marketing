@@ -41,6 +41,7 @@ export const PROTECTED_PATHS = [
   "lighthouserc.json",
   "lighthouserc.mobile.json",
   "performance-budget.json",
+  "lighthouserc.seo.json",
 ];
 
 export function isProtected(path) {
