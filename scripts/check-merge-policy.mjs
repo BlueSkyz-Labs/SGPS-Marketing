@@ -40,6 +40,7 @@ export const PROTECTED_PATHS = [
   "playwright.config.ts",
   "lighthouserc.json",
   "lighthouserc.mobile.json",
+  "performance-budget.json",
   "lighthouserc.seo.json",
 ];
 

@@ -185,3 +185,4 @@
   - So the public release record lives in **this public repository** (`src/data/releases/<product>/<version>.json`). Its source identity is the **merged Owner-approval PR** that adds it.
   - The adapter is `src/lib/release-adapter.ts`. It maps records through `parseReleaseStory`, without prose authority.
   - O-11.2 now means approving each release record's PR here, not a format inside the product repos.
+- **J0:** Owner runbook prepared at docs/runbooks/search-console-readiness.md (executed by the Owner after go-live).
