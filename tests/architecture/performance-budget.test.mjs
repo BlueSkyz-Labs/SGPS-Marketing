@@ -1,7 +1,10 @@
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import test from "node:test";
-import { evaluate } from "../../scripts/check-performance-budget.mjs";
+import {
+  evaluate,
+  validateOverrides,
+} from "../../scripts/check-performance-budget.mjs";
 import { PROTECTED_PATHS } from "../../scripts/check-merge-policy.mjs";
 
 /*
@@ -129,4 +132,66 @@ test("warning fires at 85 % of a ceiling without failing", () => {
   );
   assert.deepEqual(errors, []);
   assert.ok(warnings.some((w) => w.includes("largest-contentful-paint")));
+});
+
+// Route overrides (CI calibration of /vi/products/sotro/ resource bytes).
+const SOTRO = "/vi/products/sotro/";
+const ciSotro = { resourceBytes: { image: 181611, total: 295564 } };
+
+test("route override: the CI-measured Sổ Trọ page passes only on its own route", () => {
+  assert.deepEqual(validateOverrides(budget), []);
+  const runs = allRoutes().map((r) =>
+    r.route === SOTRO
+      ? {
+          ...r,
+          resourceBytes: { ...r.resourceBytes, ...ciSotro.resourceBytes },
+        }
+      : r,
+  );
+  assert.deepEqual(evaluate(runs, budget).errors, []);
+  // Negative proof: the same bytes on another route still fail the base cap.
+  const leaked = allRoutes().map((r) =>
+    r.route === "/en/"
+      ? {
+          ...r,
+          resourceBytes: { ...r.resourceBytes, ...ciSotro.resourceBytes },
+        }
+      : r,
+  );
+  assert.ok(evaluate(leaked, budget).errors.some((e) => e.startsWith("/en/ ")));
+});
+
+test("negative proof: an override cannot relax timing, lacks no reason, and names a known route", () => {
+  const base = { ...budget, routeOverrides: {} };
+  const withO = (o) => ({ ...base, routeOverrides: o });
+  assert.equal(
+    validateOverrides(
+      withO({
+        [SOTRO]: {
+          timing: { "total-blocking-time": 900 },
+          reason: "x".repeat(50),
+          evidence: "e",
+        },
+      }),
+    ).length,
+    1,
+  );
+  assert.equal(
+    validateOverrides(
+      withO({ [SOTRO]: { resourceBytes: { image: 1 }, evidence: "e" } }),
+    ).length,
+    1,
+  );
+  assert.equal(
+    validateOverrides(
+      withO({
+        "/xx/": {
+          resourceBytes: { image: 1 },
+          reason: "x".repeat(50),
+          evidence: "e",
+        },
+      }),
+    ).length,
+    1,
+  );
 });

@@ -47,6 +47,27 @@ export function summarize(lhr) {
   };
 }
 
+/** Overrides: known routes only, resourceBytes only, with reason + evidence. */
+export function validateOverrides(budget) {
+  const problems = [];
+  for (const [route, o] of Object.entries(budget.routeOverrides ?? {})) {
+    if (!budget.routes.includes(route))
+      problems.push(`${route}: override for an unknown route`);
+    const keys = Object.keys(o).filter(
+      (k) => !["resourceBytes", "reason", "evidence"].includes(k),
+    );
+    if (keys.length) problems.push(`${route}: override may not set ${keys}`);
+    if (typeof o.reason !== "string" || o.reason.length < 40)
+      problems.push(`${route}: override needs a recorded reason`);
+    if (typeof o.evidence !== "string" || !o.evidence)
+      problems.push(`${route}: override needs an evidence reference`);
+    for (const key of Object.keys(o.resourceBytes ?? {}))
+      if (!(key in budget.resourceBytes))
+        problems.push(`${route}: unknown resource key ${key}`);
+  }
+  return problems;
+}
+
 export function evaluate(summaries, budget) {
   const errors = [];
   const warnings = [];
@@ -74,7 +95,14 @@ export function evaluate(summaries, budget) {
     };
     for (const [key, ceiling] of Object.entries(budget.timing))
       check("timing", key, ceiling);
-    for (const [key, ceiling] of Object.entries(budget.resourceBytes))
+    // Route overrides may only re-calibrate resource bytes for one route,
+    // with a recorded reason (validateOverrides); timing and zero counts
+    // are never relaxed per route.
+    const routeBytes = {
+      ...budget.resourceBytes,
+      ...(budget.routeOverrides?.[route]?.resourceBytes ?? {}),
+    };
+    for (const [key, ceiling] of Object.entries(routeBytes))
       check("resourceBytes", key, ceiling);
     for (const [key, ceiling] of Object.entries(budget.zeroCounts))
       check("zeroCounts", key, ceiling);
@@ -89,7 +117,9 @@ function main(dir = ".lighthouseci") {
     .map((name) =>
       summarize(JSON.parse(readFileSync(join(dir, name), "utf8"))),
     );
+  const overrideProblems = validateOverrides(budget);
   const { errors, warnings } = evaluate(summaries, budget);
+  errors.unshift(...overrideProblems);
   for (const warning of warnings) console.log(`WARN  ${warning}`);
   for (const error of errors) console.log(`FAIL  ${error}`);
   console.log(
