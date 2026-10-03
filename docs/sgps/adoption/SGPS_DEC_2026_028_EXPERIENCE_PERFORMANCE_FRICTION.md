@@ -4,7 +4,7 @@
 **Local disposition:** ADOPT  
 **Lifecycle:** IMPLEMENTING  
 **Go-Live:** BLOCKED for the DEC-028 experience gate until exact-head evidence closes.  
-**Canonical candidate:** sgps-core PR #257 @ `d04ac59a2e8a8d3caf3e9412f88f3d3263bf4f62`.  
+**Canonical candidate:** sgps-core PR #257 @ `278abbcfc789ea2081c9653bfe4e6c1697071c69`.  
 **Tracking:** #451
 
 ## Local mapping
