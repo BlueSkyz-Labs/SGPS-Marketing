@@ -5,7 +5,7 @@
   "applicability": "MANDATORY",
   "canonical": {
     "candidate_pr": 257,
-    "candidate_head": "d04ac59a2e8a8d3caf3e9412f88f3d3263bf4f62",
+    "candidate_head": "278abbcfc789ea2081c9653bfe4e6c1697071c69",
     "merged_sha": null,
     "status": "WAIT_ON_CANONICAL_MERGE"
   },
