@@ -12,6 +12,7 @@ export default [
       // Throwaway parity fixture app: synthetic data, never shipped, not typechecked.
       "tests/e2e/fixtures/parity-app/**",
       ".lighthouseci/**",
+      ".lighthouseci-seo/**",
       ".worktrees/**",
       ".hermes/**",
     ],
