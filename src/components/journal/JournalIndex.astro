@@ -1,0 +1,79 @@
+---
+import { getCollection } from "astro:content";
+import type { Language } from "@/data/site";
+import { JOURNAL_COPY } from "@/data/journal-copy";
+import { JOURNAL_BRANCHES, type JournalEntry } from "@/lib/journal-schema";
+
+/**
+ * v11 J1: the journal index. Lists published posts of this language by
+ * branch, newest first. zh / zh-Hant list nothing and point readers to the
+ * Vietnamese and English editions (posts are VI + EN only).
+ */
+interface Props {
+  lang: Language;
+}
+
+const { lang } = Astro.props;
+const copy = JOURNAL_COPY[lang];
+const entries: JournalEntry[] = (await getCollection("journal"))
+  .map((entry: { data: JournalEntry }) => entry.data)
+  .filter((entry: JournalEntry) => !entry.draft && entry.lang === lang)
+  .sort((a: JournalEntry, b: JournalEntry) =>
+    b.datePublished.localeCompare(a.datePublished),
+  );
+const heading = { news: copy.news, product: copy.product } as const;
+---
+
+<div class="journal-index" data-journal-index>
+  {copy.languageNote ? (
+    <p class="text-[var(--text-secondary)]" data-journal-language-note>
+      {copy.languageNote}{" "}
+      <a href="/vi/journal/" lang="vi" hreflang="vi">
+        Tiếng Việt
+      </a>{" "}
+      ·{" "}
+      <a href="/en/journal/" lang="en" hreflang="en">
+        English
+      </a>
+    </p>
+  ) : null}
+  {JOURNAL_BRANCHES.map((branch) => {
+    const items = entries.filter((entry) => entry.branch === branch);
+    return (
+      <section
+        id={branch}
+        class="mt-12"
+        aria-labelledby={`journal-${branch}`}
+        data-journal-branch={branch}
+      >
+        <h2
+          id={`journal-${branch}`}
+          class="text-xl font-semibold tracking-tight sm:text-2xl"
+        >
+          {heading[branch]}
+        </h2>
+        {items.length === 0 ? (
+          <p class="mt-4 text-[var(--text-secondary)]" data-journal-empty>
+            {copy.empty}
+          </p>
+        ) : (
+          <ul class="mt-6 grid gap-6">
+            {items.map((entry) => (
+              <li data-journal-item={entry.id}>
+                <h3 class="text-lg font-semibold">{entry.title}</h3>
+                <p class="mt-1 text-sm text-[var(--text-secondary)]">
+                  <time datetime={entry.datePublished}>
+                    {entry.datePublished}
+                  </time>
+                </p>
+                <p class="mt-2 text-[var(--text-secondary)]">
+                  {entry.description}
+                </p>
+              </li>
+            ))}
+          </ul>
+        )}
+      </section>
+    );
+  })}
+</div>

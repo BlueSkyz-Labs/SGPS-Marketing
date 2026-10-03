@@ -3,6 +3,7 @@ import { glob } from "astro/loaders";
 import { z } from "astro/zod";
 import { productSchema } from "@/lib/product-schema";
 import { showcaseSchema } from "@/lib/showcase-schema";
+import { journalEntrySchema } from "@/lib/journal-schema";
 import path from "node:path";
 
 const products = defineCollection({
@@ -40,4 +41,10 @@ const showcases = defineCollection({
   schema: showcaseSchema,
 });
 
-export const collections = { products, pages, showcases };
+// v11 Journal: VI + EN Markdown posts; strict frontmatter (journal-schema).
+const journal = defineCollection({
+  loader: glob({ pattern: "*.md", base: "./src/content/journal" }),
+  schema: journalEntrySchema,
+});
+
+export const collections = { products, pages, showcases, journal };
