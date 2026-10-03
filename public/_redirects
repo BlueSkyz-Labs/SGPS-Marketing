@@ -16,5 +16,9 @@
 /security/ /en/security/ 301
 /support/ /en/support/ 301
 /products/ /en/products/ 301
+/products/sotro/ /vi/products/sotro/ 301
+/products/sotro /vi/products/sotro/ 301
+/products/sotam/ /en/products/sotam/ 301
+/products/sotam /en/products/sotam/ 301
 /products/:slug/ /en/products/ 301
 /products/:slug /en/products/ 301

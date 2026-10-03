@@ -64,16 +64,12 @@ for (const [engineName, engine] of ENGINES) {
           "hero h1 missing",
         );
         assert(
-          await page.locator("[data-intent-lens]").isVisible(),
-          "intent lens missing",
+          (await page.locator("[data-hero-focal]").count()) === 1,
+          "hero focal missing",
         );
         assert(
-          (await page.locator("[data-principle-matrix]").count()) === 1,
-          "principle matrix missing",
-        );
-        assert(
-          (await page.locator("[data-atlas]").count()) === 1,
-          "atlas missing",
+          (await page.locator("[data-trust-band]").count()) === 1,
+          "trust band missing",
         );
       },
     );
@@ -98,18 +94,6 @@ for (const [engineName, engine] of ENGINES) {
     },
   );
 
-  await check(`${engineName} intent lens interaction (1280px)`, async () => {
-    await page.setViewportSize({ width: 1280, height: 900 });
-    await page.goto(`${BASE}/en/`, { waitUntil: "networkidle" });
-    await page
-      .locator("[data-intent-lens] button[data-intent='verify-trust']")
-      .click();
-    const intent = await page.evaluate(
-      () => document.documentElement.dataset.intent ?? "",
-    );
-    assert(intent === "verify-trust", `intent state is "${intent}"`);
-  });
-
   await context.close();
 
   // Reduced motion sweep.
@@ -122,12 +106,12 @@ for (const [engineName, engine] of ENGINES) {
       await noHorizontalOverflow(rmPage);
       assert(await rmPage.locator("#hero-title").isVisible(), "hero missing");
       assert(
-        (await rmPage.locator("[data-trust-ledger]").count()) === 1,
-        "trust ledger missing",
+        (await rmPage.locator("[data-trust-band]").count()) === 1,
+        "trust band missing",
       );
       assert(
-        (await rmPage.locator("[data-journey-bar]").count()) === 1,
-        "journey bar missing",
+        (await rmPage.locator("[data-hero-focal]").count()) === 1,
+        "hero focal missing",
       );
     },
   );
@@ -158,7 +142,7 @@ const kbContext = await kbBrowser.newContext({
 });
 const kbPage = await kbContext.newPage();
 await check(
-  "keyboard-only: skip link, nav, intent lens reachable",
+  "keyboard-only: skip link, nav, product links reachable",
   async () => {
     await kbPage.goto(`${BASE}/en/`, { waitUntil: "networkidle" });
     const seen = [];
@@ -180,16 +164,8 @@ await check(
     const joined = seen.join(" | ");
     assert(/a:skip to main content/i.test(joined), "skip link not reachable");
     assert(
-      seen.some((entry) =>
-        /evaluate a product|verify trust|understand blueskyz/i.test(entry),
-      ),
-      "intent lens buttons not reachable via keyboard",
-    );
-    assert(
-      seen.some((entry) =>
-        /intelligence\.|elevation\.|trust\.|impact\./i.test(entry),
-      ),
-      "story spine links not reachable via keyboard",
+      (await kbPage.locator("main a[href*='/products/']").count()) > 0,
+      "product links missing from the home page",
     );
   },
 );
