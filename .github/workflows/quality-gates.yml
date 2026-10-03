@@ -35,11 +35,11 @@ jobs:
         uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
         with:
           node-version: 24.20.0
-      - name: Activate project package manager
-        run: |
-          corepack enable
-          pnpm --version
       - name: Merge policy (protected paths need the owner-approved label)
+        # Trust ordering (#376): the BASE-commit policy runs before ANY
+        # candidate package-manager activation. This step uses only the
+        # runner's `node` (pinned above) and `git` — no corepack/pnpm/npm
+        # and no candidate package script may execute before it.
         # Auto-merge lands a PR once required checks pass, so this required job
         # also holds governance, supply-chain, deployment and gate roots until
         # the Owner labels the PR. The policy file is read from the BASE commit
@@ -58,6 +58,10 @@ jobs:
             cp scripts/check-merge-policy.mjs "${policy}"
           fi
           node "${policy}" --base "${BASE_SHA}" --head "${HEAD_SHA}"
+      - name: Activate project package manager
+        run: |
+          corepack enable
+          pnpm --version
       - name: Install frozen dependency graph
         run: pnpm install --frozen-lockfile
       - name: Dependency vulnerability audit
