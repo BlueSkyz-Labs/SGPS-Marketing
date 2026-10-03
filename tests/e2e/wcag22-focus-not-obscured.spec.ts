@@ -38,8 +38,23 @@ async function probeFocused(
     if (!el || el === document.body) return null;
     const r = el.getBoundingClientRect();
     if (r.width === 0 || r.height === 0) return null;
-    const xs = [0.1, 0.5, 0.9].map((f) => r.left + r.width * f);
-    const ys = [0.1, 0.5, 0.9].map((f) => r.top + r.height * f);
+    // Clip to the viewport first: a focused element taller than the viewport
+    // (Firefox scrolls it to its nearest edge) is visible through the clipped
+    // part, so sample inside that part only.
+    const left = Math.max(r.left, 0);
+    const right = Math.min(r.right, innerWidth);
+    const top = Math.max(r.top, 0);
+    const bottom = Math.min(r.bottom, innerHeight);
+    if (right <= left || bottom <= top) {
+      return {
+        label: `${el.tagName.toLowerCase()} "${(el.innerText || el.getAttribute("aria-label") || "").trim().slice(0, 40)}"`,
+        visibleArea: 0,
+        area: 0,
+        obscuredBy: ["outside viewport"],
+      };
+    }
+    const xs = [0.1, 0.5, 0.9].map((f) => left + (right - left) * f);
+    const ys = [0.1, 0.5, 0.9].map((f) => top + (bottom - top) * f);
     let samples = 0;
     let hits = 0;
     const covers = new Set<string>();
