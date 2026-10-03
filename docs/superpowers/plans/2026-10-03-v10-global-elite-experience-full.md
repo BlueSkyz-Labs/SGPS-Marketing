@@ -172,6 +172,7 @@ Order: **E0 (P0, DEC-025)** → E1 → E2 → E3 → E4 → E5 → E6 → E7. E1
   - Add the friction guards that are still NOT VERIFIED: the no-custom-busy-state guard, the dialog Esc/back guard, base step counts for J1–J3, and the motion feedback-delay check.
   - Capture the 3 negative proofs in contract §5.
   - Open the PR, then stop for the Owner label.
+- **E0b state: PR #457 open, waiting for the Owner label** (opened independently of #452 by Owner choice, 2026-10-03). It contains the budget gate, TBT as an error and four friction guards, each with a negative proof. The budget step has not run in CI yet.
 - **E0c (orchestrator):** after E0b merges and §3E production evidence exists:
   - write the GAPS adoption read-back, bound to the exact merged sgps-core revision and the exact local revision;
   - update issue #449 and `current-work.json`;
@@ -247,7 +248,7 @@ Order: **E0 (P0, DEC-025)** → E1 → E2 → E3 → E4 → E5 → E6 → E7. E1
 - **Design:** add a second Lighthouse CI collection for **SEO only**, against a build with `PUBLIC_SITE_URL=https://blueskyzlabs.com` served locally. That build emits no `noindex`, and canonical and hreflang are production-shaped. Assert `categories:seo ≥ 0.95` as an **error**. The existing performance lane is unchanged.
 - **Negative proof:** remove one `hreflang` alternate, and show that the SEO assertion fails.
 - **Done when:** the CI SEO lane is green and the Owner has labelled the PR.
-- **State: PR #454 open, waiting for the Owner label.** Local lab evidence: 12/12 runs score SEO 1.00, and 3 negative proofs fail the lane (`docs/evidence/2026-10-03-v10-e5-seo-lab-truth.md`). The CI lane has not run yet, because the label gate skips it.
+- **State: PR #454 open, waiting for the Owner label (its only failing step is the merge policy).** Local lab evidence: 12/12 runs score SEO 1.00, and 3 negative proofs fail the lane (`docs/evidence/2026-10-03-v10-e5-seo-lab-truth.md`). The CI lane has not run yet, because the label gate skips it.
 
 ### E6: Beauty-Blind review and craft fixes (reviewer lane, then local agent)
 
@@ -259,7 +260,7 @@ Order: **E0 (P0, DEC-025)** → E1 → E2 → E3 → E4 → E5 → E6 → E7. E1
   - Fix the findings rated high or medium that need no Owner copy.
   - Findings that need copy, imagery or brand changes go to the Owner as decisions.
 - **Done when:** the review record is merged, and the fixes are merged or explicitly moved to the Owner.
-- **State: PR #455** (review record plus the BB-02 affordance fix). BB-01 is kept by Owner decision. Mobile capture legibility (BB-02) and the lockup size (BB-03) go to Owner/design. BB-04 and BB-05 are accepted as designed (`docs/evidence/2026-10-03-v10-beauty-blind-review.md`).
+- **State: DONE, merged in #455 (`main@d9231d0`)** (review record plus the BB-02 affordance fix). BB-01 is kept by Owner decision. Mobile capture legibility (BB-02) and the lockup size (BB-03) go to Owner/design. BB-04 and BB-05 are accepted as designed (`docs/evidence/2026-10-03-v10-beauty-blind-review.md`).
 
 ### E7: visual-runtime convergence audit (orchestrator)
 
@@ -297,3 +298,51 @@ Order: **E0 (P0, DEC-025)** → E1 → E2 → E3 → E4 → E5 → E6 → E7. E1
 | Pushes to other PR branches (sgps-core #256, #440) | Allowed. Pushed as `2f4809c` (gate fixes) and `3ae126e` (T2 base merge) |
 | RT-01 `www`                                        | Redirect 301 `www` → apex in Cloudflare (Owner action; pending)         |
 | RT-10 waitlist                                     | Not now. The site stays no-cookie and no-data-collection                |
+
+## 12. Progress and the local-agent wave (2026-10-03, 19:10 GMT+7)
+
+### 12.1 Progress (measured on `main@563f013`)
+
+**Method:** a merged or closed card or gate counts 1. A finished PR that waits only on the label counts 0.5. Anything not started or blocked counts 0. This is a share of cards, **not of effort**.
+
+| Area           | Closed / total | %         | Open                                                                                        |
+| -------------- | -------------- | --------- | ------------------------------------------------------------------------------------------- |
+| Go-live (v9)   | 2 / 6 gates    | 33 %      | #457 label; www redirect (www still serves 200 publicly); Access lift; §3E production smoke |
+| v10 Track A    | 3 + 2×0.5 / 8  | ~50 %     | E0b #457 and E5 #454 (labels); E3 (local agent, §12.2 L1); E4 (after go-live); E7 (last)    |
+| v11 Journal    | 2 / 8          | 25 %      | J0, J3–J7 (go-live, Owner post approval, Search Console)                                    |
+| Human evidence | 0 / 4          | 0 %       | Human E4, native zh review, Sổ Tâm facts, Search Console data                               |
+| **Total**      | **~8 / 22**    | **~35 %** | The agent-executable share is about 90 % done; the remainder is Owner or go-live gated      |
+
+### 12.2 Local-agent wave (MANDATORY cards; serial; one PR each)
+
+> Read v9 §8, then v10 §7, then this section, before acting. v9 §8 wins on conflict. Never add, remove or ask to bypass `owner-approved`. Never enable auto-merge on a protected PR. Never weaken a test or gate. Never fabricate facts, screenshots or copy.
+
+| Card   | Goal                                                                                                                                                                                                                                                                                                                                                                                         | Protected?                                            | Done when                                                                                                                               |
+| ------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
+| **L1** | **E3 visual regression gate**, using the procedure in §8 E3 "State: HANDOFF" (CI-generated Linux baselines, temporary dispatch-only job removed in the same PR, 4 px token negative proof)                                                                                                                                                                                                   | yes (`playwright.config.ts`, `.github/`)              | The PR is open with the CI visual step green on its exact head, the negative proof is in the PR body, and the agent stops for the label |
+| **L2** | **Land #452** (DEC-028 adoption record): run Prettier on its 2 files, merge `main` into the branch (no rebase or force-push), and re-bind the record to the merged sgps-core revision `3a71af8`. It must **not** duplicate #457's gate wiring: #452 keeps only the adoption record and its verify tool                                                                                       | yes (`tools/`, `.sgps/` if listed)                    | Every check except the label step is green on the exact head, and the PR body states the overlap boundary with #457                     |
+| **L3** | **Triage the stale PRs #406 (BK-31 raster icons) and #374 (Playwright runtime pin)**: merge `main` in, re-run the gates, and either bring each to green or close it with a comment naming the superseding change                                                                                                                                                                             | both protected                                        | Each PR is green and waits for the label, or is closed with a reason                                                                    |
+| **L4** | **RT-01 www → apex 301**, **only if** the local environment holds an Owner Cloudflare credential scoped to Zone Rules for `blueskyzlabs.com`. Create a Single Redirect `www.blueskyzlabs.com/*` → `https://blueskyzlabs.com/${1}`, status 301, preserve the query string. Verify with `curl -sI https://www.blueskyzlabs.com/en/` (expect 301 to the apex) and record it in `docs/evidence/` | production setting: the Owner chose 301 on 2026-10-03 | Read-back evidence is merged. **If there is no credential: stop and report; do not ask for one in chat**                                |
+
+**Order:** L4 (risk) → L2 → L1 → L3.
+
+**Live state at 20:55 GMT+7 (orchestrator review of the parallel Cursor agent):**
+
+- **L1 is in progress as draft #459.** Blocking review finding: `visual-gate` is not in `browser-assurance.needs`, so under the current ruleset a red visual gate would **not** block a merge. Wire it into the aggregator, guard that with a negative proof, then generate the baselines.
+- **L2 is moving on #452.** The adoption files now stand alone. Bind it to sgps-core `3a71af8` (#257), not #256.
+- **L3:** #406 is green, but it is an **Owner hold until after go-live** (#463 G7), so do not merge it. #374 conflicts: rebase it or close it as superseded.
+- **New security PRs, protected and waiting for the label:**
+  - #460: the static-link checker rejects executable URL schemes (#377);
+  - #462: merge-policy runs before the package manager activates (#376), plus the promotion-state reframe (#372).
+
+  Review: both strengthen the gates and weaken nothing.
+
+- #461 (test pins) is merged at `72ee037`. #463 (go-live gap reconciliation) is a docs draft; its stale premise about #256 has been flagged.
+
+**Return report (per card):**
+
+- exact head SHA;
+- the CI table, with completed runs only;
+- negative proofs run;
+- what is NOT VERIFIED;
+- the PR link.
