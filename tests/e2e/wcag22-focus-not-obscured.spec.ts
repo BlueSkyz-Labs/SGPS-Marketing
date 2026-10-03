@@ -33,7 +33,14 @@ async function probeFocused(
   // which element is painted on top (elementFromPoint respects z-index and
   // fixed/sticky layers). The element is obscured only if no sample point
   // inside the viewport hits it or one of its descendants.
-  return page.evaluate(() => {
+  return page.evaluate(async () => {
+    // Engines may scroll the newly focused element into view a frame after
+    // the key event (seen on WebKit at 1440px: the footer "EN" button was
+    // probed before its focus scroll). Measure after two animation frames,
+    // so the probe sees the settled layout; the visibility rule is unchanged.
+    await new Promise((resolve) =>
+      requestAnimationFrame(() => requestAnimationFrame(resolve)),
+    );
     const el = document.activeElement as HTMLElement | null;
     if (!el || el === document.body) return null;
     const r = el.getBoundingClientRect();
