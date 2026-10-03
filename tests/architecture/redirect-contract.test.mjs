@@ -25,7 +25,7 @@ test("the redirect table is non-empty and all destinations are localized", () =>
   for (const rule of rules) {
     assert.match(
       rule.to,
-      /^\/(en|vi)\//,
+      /^\/(en|vi|zh|zh-hant)\//,
       `${rule.from} must land on a localized canonical route`,
     );
     assert.equal(
