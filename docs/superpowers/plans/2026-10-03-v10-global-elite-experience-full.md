@@ -198,6 +198,13 @@ Order: **E0 (P0, DEC-025)** → E1 → E2 → E3 → E4 → E5 → E6 → E7. E1
 - **Negative proof:** temporarily set `scroll-margin-top: 0` and give the header a taller fixed height, and show that the test fails. Revert, and record the negative proof in the PR body.
 - **Done when:** green on all 4 engines (non-protected path, so normal merge).
 
+- **State: DONE (PR pending).** `tests/e2e/wcag22-focus-not-obscured.spec.ts`:
+  - **2.4.11:** a stacking-aware `elementFromPoint` probe over 5 routes × 390/1440 px, Tab ×40.
+  - **2.5.8:** button-like targets are ≥ 24 px.
+  - **Result:** 30/30 on chromium + mobile-chromium.
+  - **Negative proof:** lowering the skip link under the sticky header fails 2.4.11 at both widths.
+  - **Self-correction:** a first, area-only probe reported a false positive (it ignored z-order) and was replaced before any site change.
+
 ### E3: visual regression gate (local agent; protected)
 
 - **Preconditions:** E2 merged.
@@ -273,3 +280,12 @@ Order: **E0 (P0, DEC-025)** → E1 → E2 → E3 → E4 → E5 → E6 → E7. E1
 - **Track A done:** E1–E7 closed, main green, governance **ADOPTED**, experience **CONVERGED with residual boundaries** (G8/G9 listed).
 - **Track B:** each Owner decision in §6 opens its own card from the orchestrator; no agent starts B work from this file alone.
 - `PLAN COMPLETE ≠ PROJECT COMPLETE`: after Track A, the next coherent successor is whatever Owner gates have opened, starting with O-10.5 (the product facts behind the largest visible elevation).
+
+## 11. Owner decisions recorded (2026-10-03, multiple choice)
+
+| Topic                                              | Decision                                                                |
+| -------------------------------------------------- | ----------------------------------------------------------------------- |
+| #450                                               | Approved and labelled; merged as `b0b7e7b`                              |
+| Pushes to other PR branches (sgps-core #256, #440) | Allowed. Pushed as `2f4809c` (gate fixes) and `3ae126e` (T2 base merge) |
+| RT-01 `www`                                        | Redirect 301 `www` → apex in Cloudflare (Owner action; pending)         |
+| RT-10 waitlist                                     | Not now. The site stays no-cookie and no-data-collection                |
