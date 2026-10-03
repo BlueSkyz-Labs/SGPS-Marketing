@@ -235,7 +235,7 @@ check("branded 404 is served on unknown paths", async () => {
     );
     const html = await response.text();
     assert(
-      html.includes("Page not found") || html.includes("không tìm thấy"),
+      /page not found|không tìm thấy/i.test(html),
       `${path}: branded 404 content missing`,
     );
     assert(
