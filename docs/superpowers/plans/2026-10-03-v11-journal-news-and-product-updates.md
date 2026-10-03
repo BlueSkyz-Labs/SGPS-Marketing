@@ -168,3 +168,20 @@
 - **Foundation done:** J1 and J2 merged, guards with negative proofs, and C3-F Task 2 is no longer BLOCKED.
 - **Running:** at least 2 posts per month for 3 months, or Owner-accepted gaps.
 - **Measured:** the J7 review is merged with GSC data.
+
+## 12. Execution log
+
+- **2026-10-03, Owner decisions:**
+  - Slug: **shared `/vi/journal/` and `/en/journal/`**, so O-11.4 is decided for paths. This keeps the language switcher, hreflang and sitemap conventions, and the visible title stays "Nhật ký" in Vietnamese.
+  - Order: J1 and J2 are built before go-live, with nothing published.
+- **J1 as built:**
+  - The index exists in **all four locales**, because the site convention is that every page has four locale twins.
+  - zh and zh-Hant list no posts. They say that posts are published in Vietnamese and English, and link to both. zh-Hant goes through OpenCC s2twp and carries the machine-assisted marker.
+  - The index is `noindex, follow` and stays out of the sitemap until a post is published (`journalIsIndexable`).
+  - It has **no navigation link**, which is stricter than §3's "footer only". The footer link and RSS land with the first post (J3), so readers never meet an empty section.
+  - The C4-B maison `journal` section stays pending while the index is gated and empty. The guard requires the first post to move it out of pending.
+- **J2 correction:**
+  - The product repositories (Sotro, sotam) are **private**, and the C3-F schema requires a public, published source.
+  - So the public release record lives in **this public repository** (`src/data/releases/<product>/<version>.json`). Its source identity is the **merged Owner-approval PR** that adds it.
+  - The adapter is `src/lib/release-adapter.ts`. It maps records through `parseReleaseStory`, without prose authority.
+  - O-11.2 now means approving each release record's PR here, not a format inside the product repos.
