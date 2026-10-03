@@ -92,3 +92,9 @@ See plan §3 (G1–G9). Material gaps found: **YES**. The required convergence p
 - Chrome for Developers, "Page is blocked from indexing" (Lighthouse `is-crawlable`): https://developer.chrome.com/docs/lighthouse/seo/is-crawlable
 - MDN, "Speculation Rules API": https://developer.mozilla.org/en-US/docs/Web/API/Speculation_Rules_API
 - Chrome for Developers, "Cross-document view transitions for multi-page applications": https://developer.chrome.com/docs/web-platform/view-transitions/cross-document
+
+## E1 read-back (2026-10-03, `main@c39d34b`)
+
+- `node --test tests/architecture/locale-suggestion-contract.test.mjs tests/architecture/i18n-contract.test.mjs` gives **26 pass, 0 fail**. The tests prove that a stored language choice wins over browser order, that the script never navigates by itself (accept is a real link), that no cookies, network or timezone signals are used, and that every audit has a negative proof.
+- **DEC-019 (multilingual baseline and language preference): GUARDED.**
+- The baseline numbers above remain bound to `2cfb15c`. Between `2cfb15c` and `c39d34b` only docs and agent-instruction files changed, so no runtime file changed.
