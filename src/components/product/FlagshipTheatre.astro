@@ -129,9 +129,26 @@ const ctaIsExternal = cta.external || /^https?:\/\//i.test(cta.href);
           <a
             href={cta.href}
             rel={ctaIsExternal ? "noopener noreferrer" : undefined}
-            class="inline-flex min-h-11 items-center text-inherit no-underline hover:underline"
+            class="c2-flagship-theatre__title-link inline-flex min-h-11 items-center gap-2 text-inherit no-underline hover:underline"
+            data-flagship-title-link
           >
             {data.name}
+            {/* v10 E6 BB-02: the heading is a link; the arrow makes that visible
+                without hover. Decorative: the name is the accessible text. */}
+            <svg
+              class="c2-flagship-theatre__title-arrow"
+              aria-hidden="true"
+              viewBox="0 0 24 24"
+              width="24"
+              height="24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M5 12h14M13 6l6 6-6 6" />
+            </svg>
           </a>
         ) : (
           data.name
@@ -388,6 +405,25 @@ const ctaIsExternal = cta.external || /^https?:\/\//i.test(cta.href);
     color: var(--text-secondary);
     line-height: 1.5;
     overflow-wrap: anywhere;
+  }
+
+  /* ---- v10 E6 BB-02: visible link affordance on the compact heading ---- */
+  .c2-flagship-theatre__title-arrow {
+    flex: none;
+    width: 0.75em;
+    height: 0.75em;
+    color: var(--action-primary);
+    transition: transform var(--motion-quick) var(--ease-standard);
+  }
+  .c2-flagship-theatre__title-link:hover .c2-flagship-theatre__title-arrow,
+  .c2-flagship-theatre__title-link:focus-visible
+    .c2-flagship-theatre__title-arrow {
+    transform: translateX(0.15em);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .c2-flagship-theatre__title-arrow {
+      transition: none;
+    }
   }
 
   /* ---- v8 W2: compact proof list (icon + one line each) ---- */
