@@ -326,6 +326,19 @@ Order: **E0 (P0, DEC-025)** → E1 → E2 → E3 → E4 → E5 → E6 → E7. E1
 
 **Order:** L4 (risk) → L2 → L1 → L3.
 
+**Live state at 20:55 GMT+7 (orchestrator review of the parallel Cursor agent):**
+
+- **L1 is in progress as draft #459.** Blocking review finding: `visual-gate` is not in `browser-assurance.needs`, so under the current ruleset a red visual gate would **not** block a merge. Wire it into the aggregator, guard that with a negative proof, then generate the baselines.
+- **L2 is moving on #452.** The adoption files now stand alone. Bind it to sgps-core `3a71af8` (#257), not #256.
+- **L3:** #406 is green, but it is an **Owner hold until after go-live** (#463 G7), so do not merge it. #374 conflicts: rebase it or close it as superseded.
+- **New security PRs, protected and waiting for the label:**
+  - #460: the static-link checker rejects executable URL schemes (#377);
+  - #462: merge-policy runs before the package manager activates (#376), plus the promotion-state reframe (#372).
+
+  Review: both strengthen the gates and weaken nothing.
+
+- #461 (test pins) is merged at `72ee037`. #463 (go-live gap reconciliation) is a docs draft; its stale premise about #256 has been flagged.
+
 **Return report (per card):**
 
 - exact head SHA;
