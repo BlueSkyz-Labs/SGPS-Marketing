@@ -23,4 +23,6 @@ function run(command, args) {
 }
 
 run("pnpm", ["build"]);
-run("lhci", ["autorun", "--config=./lighthouserc.seo.json"]);
+// `pnpm exec` resolves the local lhci binary: CI runs this file with plain
+// `node`, so node_modules/.bin is not on PATH (spawnSync lhci ENOENT).
+run("pnpm", ["exec", "lhci", "autorun", "--config=./lighthouserc.seo.json"]);

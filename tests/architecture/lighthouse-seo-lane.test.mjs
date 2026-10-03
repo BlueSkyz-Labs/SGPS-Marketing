@@ -13,6 +13,10 @@ const gateRoutes = JSON.parse(readFileSync("lighthouserc.mobile.json", "utf8"))
 test("SEO lane builds against the canonical production origin", () => {
   assert.match(launcher, /PUBLIC_SITE_URL: "https:\/\/blueskyzlabs\.com"/);
   assert.match(launcher, /"--config=\.\/lighthouserc\.seo\.json"/);
+  // CI runs the launcher with plain `node`: the binary must resolve through
+  // `pnpm exec`, never a bare `lhci` spawn (ENOENT on the runner).
+  assert.match(launcher, /run\("pnpm", \["exec", "lhci"/);
+  assert.doesNotMatch(launcher, /run\("lhci"/);
   assert.match(launcher, /run\("pnpm", \["build"\]\)/);
 });
 
