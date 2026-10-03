@@ -10,6 +10,7 @@
 ## Local mapping
 
 Critical journeys:
+
 - landing page first usable render
 - primary navigation
 - product detail pages
@@ -17,6 +18,7 @@ Critical journeys:
 - locale/theme route transitions
 
 Reuse before adding machinery:
+
 - `existing Lighthouse CI`
 - `Experience v10 baseline`
 - `axe/redirect/engine verification`
