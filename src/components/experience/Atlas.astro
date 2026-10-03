@@ -434,9 +434,13 @@ const groups = [
                   {codes.has(node.id) ? (
                     <span class="atlas-code">{codes.get(node.id)}</span>
                   ) : null}
-                  <a href={node.href} class="atlas-row__link">
-                    {node.label}
-                  </a>
+                  {node.href ? (
+                    <a href={node.href} class="atlas-row__link">
+                      {node.label}
+                    </a>
+                  ) : (
+                    <span class="atlas-row__label">{node.label}</span>
+                  )}
                   <span class="atlas-row__kind">{kindLabels[node.kind]}</span>
                 </li>
               ))}
@@ -1025,7 +1029,8 @@ const groups = [
     font-variant-numeric: tabular-nums;
     color: var(--action-primary);
   }
-  .atlas-row__link {
+  .atlas-row__link,
+  .atlas-row__label {
     display: inline-flex;
     flex: 1 1 12rem;
     align-items: center;
