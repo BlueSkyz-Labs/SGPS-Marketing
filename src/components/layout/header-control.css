@@ -155,6 +155,17 @@ header[data-scene="ink"] :is(.hc-trigger, .hc-group),
     border-color 150ms var(--motion-ease-standard, ease);
 }
 
+/* Quiet resting state (calm-chrome round, 2026-10-04; Linear-style softened
+   chrome): at rest a trigger carries no edge, fill or shadow, so the header
+   reads as one calm line of text and icons. Hover, an open panel and keyboard
+   focus bring the edge back; forced colours keep the CanvasText edge (below).
+   The family geometry above is unchanged, so nothing shifts on hover. */
+.hc-trigger:not(:hover, [aria-expanded="true"]) {
+  border-color: transparent;
+  background: transparent;
+  box-shadow: none;
+}
+
 /* Icon-only trigger (search): a 44px square. */
 .hc-trigger--icon {
   width: 44px;
