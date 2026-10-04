@@ -29,6 +29,18 @@ export const PROTECTED_PATHS = [
   "brand/",
   "docs/decisions/",
   "docs/evidence/product-source-qualification.json",
+  // Security-assurance roots whose weakening would be SILENT:
+  // - tests/architecture/ is the deterministic guard tier (189 guards); a
+  //   weakened guard produces false-green with no visible failure.
+  // - tests/visual/ holds the committed Linux baselines; replacing them
+  //   silently accepts a visual regression.
+  // - docs/security/ holds the audit-exception justifications the exception
+  //   policy requires ("justified, guarded and time-boxed").
+  // tests/e2e/ intentionally stays automatic: the dev loop touches it
+  // constantly and its failures are loud, not silent.
+  "tests/architecture/",
+  "tests/visual/",
+  "docs/security/",
   "AGENTS.md",
   "SECURITY.md",
   "pnpm-workspace.yaml",
