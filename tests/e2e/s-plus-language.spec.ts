@@ -74,14 +74,22 @@ test("view transitions are CSS-only with a reduced-motion override", async ({
   page,
 }) => {
   await page.goto("/en/about/");
-  const cssHref = await page.evaluate(() => {
-    const link = document.querySelector('link[rel="stylesheet"]');
-    return link instanceof HTMLLinkElement ? link.href : null;
-  });
-  expect(cssHref).toBeTruthy();
-  const response = await page.request.get(cssHref as string);
-  expect(response.ok()).toBe(true);
-  const css = await response.text();
+  // Read every linked stylesheet: Astro may split page-scoped CSS into its
+  // own chunk ahead of the global sheet, so "the first link" is not stable.
+  const cssHrefs = await page.evaluate(() =>
+    [...document.querySelectorAll('link[rel="stylesheet"]')]
+      .filter(
+        (link): link is HTMLLinkElement => link instanceof HTMLLinkElement,
+      )
+      .map((link) => link.href),
+  );
+  expect(cssHrefs.length).toBeGreaterThan(0);
+  let css = "";
+  for (const href of cssHrefs) {
+    const response = await page.request.get(href);
+    expect(response.ok()).toBe(true);
+    css += await response.text();
+  }
   expect(css).toContain("@view-transition");
   expect(css).toContain("view-transition-old(root)");
   expect(css).toMatch(/prefers-reduced-motion:\s*reduce/);
