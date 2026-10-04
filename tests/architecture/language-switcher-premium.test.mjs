@@ -5,7 +5,8 @@
  * What must not regress:
  *   - the decorative flag appears in the trigger and in every row, aria-hidden;
  *   - the panel has its visible (aria-hidden) caption;
- *   - the current row carries a 2px accent border, others a transparent one;
+ *   - the current row carries a 2px accent border, others a transparent one
+ *     (shared header-control.css row, keyed on aria-current);
  *   - the trigger shows the native name from lg and the short code below;
  *   - the flag mapping is the Owner decision: en US, vi VN, zh CN, zh-hant HK.
  */
@@ -18,6 +19,8 @@ const SWITCHER = readFileSync(
   "utf8",
 );
 const FLAG = readFileSync("src/components/icon/LanguageFlag.astro", "utf8");
+// Row styling lives in the shared header-control family stylesheet.
+const SHARED = readFileSync("src/components/layout/header-control.css", "utf8");
 
 function rule(source, selector) {
   const escaped = selector.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
@@ -27,7 +30,7 @@ function rule(source, selector) {
   );
 }
 
-export function auditPremium(switcher, flag) {
+export function auditPremium(switcher, flag, shared = SHARED) {
   const problems = [];
   const triggerBlock = switcher.match(/<button[\s\S]*?<\/button>/)?.[0] ?? "";
   if (!/<LanguageFlag language=\{currentLang\}/.test(triggerBlock)) {
@@ -44,11 +47,16 @@ export function auditPremium(switcher, flag) {
   if (!/lang-panel__caption"\s+aria-hidden="true"/.test(switcher)) {
     problems.push("the panel needs its visible caption (aria-hidden)");
   }
-  const current = rule(switcher, ".lang-option--current");
-  if (!current || !/border-color:\s*var\(--lang-accent\)/.test(current)) {
+  if (!/"lang-option hc-row"/.test(switcher)) {
+    problems.push("language rows must use the shared row");
+  }
+  const current = shared.match(
+    /\.hc-row:is\(\[aria-current="page"\], \[aria-pressed="true"\]\),[^{]*\{([^}]*)\}/,
+  )?.[1];
+  if (!current || !/border-color:\s*var\(--hc-accent\)/.test(current)) {
     problems.push("the current row must carry the accent border");
   }
-  const option = rule(switcher, ".lang-option");
+  const option = rule(shared, ".hc-row");
   if (!option || !/border:\s*2px solid transparent/.test(option)) {
     problems.push("rows keep a 2px transparent border (no layout shift)");
   }
@@ -114,13 +122,15 @@ test("negative proof: an exposed flag or a missing caption is caught", () => {
 });
 
 test("negative proof: losing the accent border or the lg swap is caught", () => {
-  const noBorder = SWITCHER.replace(
-    /(\.lang-option--current\s*\{\s*)border-color:\s*var\(--lang-accent\);/,
+  const noBorder = SHARED.replace(
+    /(\.hc-row:is\(\[aria-current="page"\], \[aria-pressed="true"\]\),[^{]*\{\s*)border-color:\s*var\(--hc-accent\);/,
     "$1",
   );
-  assert.notEqual(noBorder, SWITCHER);
+  assert.notEqual(noBorder, SHARED);
   assert.ok(
-    auditPremium(noBorder, FLAG).some((p) => p.includes("accent border")),
+    auditPremium(SWITCHER, FLAG, noBorder).some((p) =>
+      p.includes("accent border"),
+    ),
   );
   const noSwap = SWITCHER.replace("min-width: 64rem", "min-width: 99rem");
   assert.notEqual(noSwap, SWITCHER);

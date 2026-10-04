@@ -17,6 +17,8 @@ import { readFileSync } from "node:fs";
 import test from "node:test";
 
 const SOURCE = readFileSync("src/components/layout/ThemeToggle.astro", "utf8");
+// Trigger, panel and row styling live in the shared header-control family.
+const SHARED = readFileSync("src/components/layout/header-control.css", "utf8");
 
 function rule(source, selector) {
   const escaped = selector.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
@@ -26,11 +28,11 @@ function rule(source, selector) {
   );
 }
 
-export function auditThemeSwitcher(source) {
+export function auditThemeSwitcher(source, shared = SHARED) {
   const problems = [];
 
   // Trigger: icon + label + chevron, name contains the visible label.
-  if (!/class="theme-trigger__icons"/.test(source)) {
+  if (!/class="theme-trigger__icons hc-glyph"/.test(source)) {
     problems.push("the trigger must render the current-mode icon");
   }
   if (!/data-theme-current-label/.test(source)) {
@@ -60,8 +62,9 @@ export function auditThemeSwitcher(source) {
       "the trigger accessible name must contain the visible mode label",
     );
   }
-  const trigger = rule(source, ".theme-trigger");
+  const trigger = rule(shared, ".hc-trigger");
   if (
+    !/class="theme-trigger hc-trigger"/.test(source) ||
     !trigger ||
     !/min-width:\s*44px/.test(trigger) ||
     !/min-height:\s*44px/.test(trigger) ||
@@ -74,7 +77,7 @@ export function auditThemeSwitcher(source) {
 
   // Panel caption + row order.
   if (
-    !/class="theme-group__caption"/.test(source) ||
+    !/class="theme-group__caption hc-caption"/.test(source) ||
     !/<span>\{L\.label\}<\/span>/.test(source)
   ) {
     problems.push("the panel must carry a caption row with the group label");
@@ -82,14 +85,18 @@ export function auditThemeSwitcher(source) {
   if (!/const MODES = \["light", "dark", "system"\] as const;/.test(source)) {
     problems.push("rows must be ordered Light, Dark, System");
   }
-  const panel = rule(source, ".theme-panel");
+  const panel = rule(shared, ".hc-panel");
   if (
+    !/"theme-group--panel theme-panel hc-panel"/.test(source) ||
     !panel ||
-    !/width:\s*min\(16rem, calc\(100vw - 1\.5rem\)\)/.test(panel) ||
-    !/border-radius:\s*1rem/.test(panel) ||
-    /backdrop-filter/.test(source)
+    !/width:\s*min\(18rem, calc\(100vw - 1\.5rem\)\)/.test(panel) ||
+    !/border-radius:\s*var\(--radius-panel\)/.test(panel) ||
+    /backdrop-filter/.test(source) ||
+    /backdrop-filter/.test(shared.replace(/\/\*[\s\S]*?\*\//g, ""))
   ) {
-    problems.push("the panel must be a solid 16rem card with a 1rem radius");
+    problems.push(
+      "the panel must be a solid 18rem card with the --radius-panel radius",
+    );
   }
 
   // Rows: state only through aria-pressed; check only for the current row.
@@ -101,7 +108,7 @@ export function auditThemeSwitcher(source) {
   if (!/data-theme-mode=\{mode\}/.test(source)) {
     problems.push("every row must keep data-theme-mode");
   }
-  if (!/class="theme-row__check"\s+aria-hidden="true"/.test(source)) {
+  if (!/class="theme-row__check hc-check"\s+aria-hidden="true"/.test(source)) {
     problems.push("the check mark is a decoration and must be aria-hidden");
   }
   if (
@@ -111,17 +118,18 @@ export function auditThemeSwitcher(source) {
   ) {
     problems.push("the check mark must be shown only for the current row");
   }
-  const check = rule(source, ".theme-row__check");
+  const check = rule(shared, ".hc-check");
   if (
     !check ||
     /display:\s*none/.test(check) ||
     !/width:\s*1\.5rem/.test(check) ||
-    !/color:\s*var\(--theme-accent\)/.test(check)
+    !/color:\s*var\(--hc-accent\)/.test(check)
   ) {
     problems.push("the check mark must be sized and use the owned accent");
   }
-  const row = rule(source, ".theme-row");
+  const row = rule(shared, ".hc-row");
   if (
+    !/class="theme-row hc-row"/.test(source) ||
     !row ||
     !/min-height:\s*3\.5rem/.test(row) ||
     !/border:\s*2px solid transparent/.test(row) ||
@@ -129,21 +137,25 @@ export function auditThemeSwitcher(source) {
   ) {
     problems.push("rows must keep the 3.5rem / 2px transparent border grid");
   }
-  const current = source.match(
-    /\.theme-row\[aria-pressed="true"\],\s*\.theme-row\[aria-pressed="true"\]:hover\s*\{([^}]*)\}/,
+  const current = shared.match(
+    /\.hc-row:is\(\[aria-current="page"\], \[aria-pressed="true"\]\),[^{]*\{([^}]*)\}/,
   )?.[1];
   if (
     !current ||
-    !/border-color:\s*var\(--theme-accent\)/.test(current) ||
-    !/background:\s*var\(--theme-current-bg\)/.test(current)
+    !/border-color:\s*var\(--hc-accent\)/.test(current) ||
+    !/background:\s*var\(--hc-current-bg\)/.test(current)
   ) {
     problems.push("the current row must carry the accent border and tint");
   }
 
   // Reduced motion.
   if (
-    !/@media \(prefers-reduced-motion: reduce\)[\s\S]*?\.theme-trigger__icon[\s\S]*?\.theme-trigger__chevron[\s\S]*?transition:\s*none/.test(
+    !/@media \(prefers-reduced-motion: reduce\)\s*\{\s*\.theme-trigger__icon\s*\{\s*transition:\s*none/.test(
       source,
+    ) ||
+    !/class="theme-trigger__chevron hc-chevron"/.test(source) ||
+    !/@media \(prefers-reduced-motion: reduce\)\s*\{\s*\.hc-trigger,\s*\.hc-chevron,\s*\.hc-panel,\s*\.hc-panel::backdrop,\s*\.hc-row\s*\{\s*transition:\s*none/.test(
+      shared,
     )
   ) {
     problems.push("motion must be disabled under prefers-reduced-motion");
@@ -179,15 +191,19 @@ test("CSP and Trusted Types: no inline handlers, no innerHTML", () => {
 });
 
 test("palette is owned for light, explicit dark and OS dark", () => {
-  assert.match(SOURCE, /\.theme-group--panel \{[^}]*--theme-accent:\s*#1d4ed8/);
   assert.match(
-    SOURCE,
-    /:global\(\[data-theme="dark"\]\) \.theme-group--panel \{[^}]*--theme-accent:\s*#3b82f6/,
+    SHARED,
+    /\.hc-trigger,\s*\.hc-panel,\s*\.hc-group\s*\{[^}]*--hc-accent:\s*#1d4ed8/,
   );
   assert.match(
-    SOURCE,
-    /prefers-color-scheme: dark\)\s*\{\s*:global\(:root:not\(\[data-theme="light"\]\)\) \.theme-group--panel/,
+    SHARED,
+    /:root\[data-theme="dark"\] :is\(\.hc-trigger, \.hc-panel, \.hc-group\),[^{]*\{[^}]*--hc-accent:\s*#3b82f6/,
   );
+  assert.match(
+    SHARED,
+    /prefers-color-scheme: dark\)\s*\{\s*:root:not\(\[data-theme="light"\]\) :is\(\.hc-trigger, \.hc-panel, \.hc-group\)/,
+  );
+  assert.match(SOURCE, /"theme-group--inline hc-group"/);
 });
 
 test("negative proof: rendering the check on every row is caught", () => {
@@ -224,19 +240,22 @@ test("negative proof: reordering rows or dropping the caption is caught", () => 
       p.includes("Light, Dark, System"),
     ),
   );
-  const noCaption = SOURCE.replace('class="theme-group__caption"', 'class="x"');
+  const noCaption = SOURCE.replace(
+    'class="theme-group__caption hc-caption"',
+    'class="x"',
+  );
   assert.notEqual(noCaption, SOURCE);
   assert.ok(auditThemeSwitcher(noCaption).some((p) => p.includes("caption")));
 });
 
 test("negative proof: losing the accent border, label breakpoint or chevron is caught", () => {
-  const border = SOURCE.replace(
-    /(\.theme-row\[aria-pressed="true"\],\s*\.theme-row\[aria-pressed="true"\]:hover\s*\{\s*)border-color:\s*var\(--theme-accent\);/,
+  const border = SHARED.replace(
+    /(\.hc-row:is\(\[aria-current="page"\], \[aria-pressed="true"\]\),[^{]*\{\s*)border-color:\s*var\(--hc-accent\);/,
     "$1border-color: transparent;",
   );
-  assert.notEqual(border, SOURCE);
+  assert.notEqual(border, SHARED);
   assert.ok(
-    auditThemeSwitcher(border).some((p) => p.includes("accent border")),
+    auditThemeSwitcher(SOURCE, border).some((p) => p.includes("accent border")),
   );
   const label = SOURCE.replace(
     "@media (min-width: 64rem)",

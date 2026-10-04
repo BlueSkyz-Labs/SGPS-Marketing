@@ -22,6 +22,8 @@ const SOURCE = readFileSync(
   "src/components/layout/LanguageSwitcher.astro",
   "utf8",
 );
+// Trigger, panel and row styling live in the shared header-control family.
+const SHARED = readFileSync("src/components/layout/header-control.css", "utf8");
 
 function rule(source, selector) {
   const escaped = selector.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
@@ -32,7 +34,7 @@ function rule(source, selector) {
 }
 
 // Every way the current-language cue stops identifying the selected language.
-export function auditStateCue(source) {
+export function auditStateCue(source, shared = SHARED) {
   const problems = [];
   if (!/aria-current=\{isActive \? "page" : undefined\}/.test(source)) {
     problems.push("the current item must carry aria-current=page");
@@ -48,20 +50,25 @@ export function auditStateCue(source) {
   if (!/lang-option__check"\s+aria-hidden="true"/.test(source)) {
     problems.push("the check mark is a decoration and must be aria-hidden");
   }
-  const check = rule(source, ".lang-option__check");
+  if (!/class="hc-check lang-option__check"/.test(source)) {
+    problems.push("the check mark must use the shared check slot");
+  }
+  const check = rule(shared, ".hc-check");
   if (
     !check ||
     /display:\s*none/.test(check) ||
     /visibility:\s*hidden/.test(check) ||
     /opacity:\s*0\b/.test(check) ||
     !/width:\s*1\.5rem/.test(check) ||
-    !/color:\s*var\(--lang-accent\)/.test(check)
+    !/color:\s*var\(--hc-accent\)/.test(check)
   ) {
     problems.push(
       "the check mark must stay visible: sized, owned accent colour, not hidden",
     );
   }
-  const current = rule(source, ".lang-option--current");
+  const current = shared.match(
+    /\.hc-row:is\(\[aria-current="page"\], \[aria-pressed="true"\]\),[^{]*\{([^}]*)\}/,
+  )?.[1];
   if (!current || !/background:/.test(current)) {
     problems.push("the current row must keep its tint as a secondary cue");
   }
@@ -73,16 +80,21 @@ export function auditStateCue(source) {
       "the trigger accessible name must contain its visible short code",
     );
   }
-  const trigger = rule(source, ".lang-switch__trigger");
+  const trigger = rule(shared, ".hc-trigger");
   if (
+    !/isMenu \? "hc-row hc-row--disclosure" : "hc-trigger"/.test(source) ||
     !trigger ||
     !/min-width:\s*44px/.test(trigger) ||
     !/min-height:\s*44px/.test(trigger)
   ) {
     problems.push("the trigger must keep a 44x44 minimum target");
   }
-  const option = rule(source, ".lang-option");
-  if (!option || !/min-height:\s*3\.5rem/.test(option)) {
+  const option = rule(shared, ".hc-row");
+  if (
+    !/"lang-option hc-row"/.test(source) ||
+    !option ||
+    !/min-height:\s*3\.5rem/.test(option)
+  ) {
     problems.push("every language row must keep a comfortable touch target");
   }
   return problems;
@@ -118,12 +130,14 @@ test("the language-storage click path survives the redesign", () => {
 });
 
 test("entrance motion is transition-only and guarded by reduced motion", () => {
-  assert.match(SOURCE, /@starting-style/);
-  assert.match(SOURCE, /display 170ms allow-discrete/);
+  assert.match(SOURCE, /class="lang-panel hc-panel"/);
+  assert.match(SHARED, /@starting-style/);
+  assert.match(SHARED, /display 170ms allow-discrete/);
   assert.match(
-    SOURCE,
-    /@media \(prefers-reduced-motion: reduce\)[\s\S]*?\.lang-panel[\s\S]*?transition:\s*none/,
+    SHARED,
+    /@media \(prefers-reduced-motion: reduce\)[\s\S]*?\.hc-panel[\s\S]*?transition:\s*none/,
   );
+  assert.doesNotMatch(SHARED, /@keyframes\b/);
 });
 
 test("negative proof: showing the check mark on idle items is caught", () => {
@@ -151,22 +165,24 @@ test("negative proof: losing aria-current is caught", () => {
 });
 
 test("negative proof: hiding the check mark or its accent is caught", () => {
-  const hidden = SOURCE.replace(
-    /(\.lang-option__check\s*\{\s*)display:\s*inline-flex;/,
+  const hidden = SHARED.replace(
+    /(\n\.hc-check\s*\{\s*)display:\s*inline-flex;/,
     "$1display: none;",
   );
-  assert.notEqual(hidden, SOURCE);
+  assert.notEqual(hidden, SHARED);
   assert.ok(
-    auditStateCue(hidden).some((problem) => problem.includes("stay visible")),
+    auditStateCue(SOURCE, hidden).some((problem) =>
+      problem.includes("stay visible"),
+    ),
   );
 
-  const uncoloured = SOURCE.replace(
-    /(\.lang-option__check\s*\{[^}]*?)color:\s*var\(--lang-accent\);/,
+  const uncoloured = SHARED.replace(
+    /(\n\.hc-check\s*\{[^}]*?)color:\s*var\(--hc-accent\);/,
     "$1color: transparent;",
   );
-  assert.notEqual(uncoloured, SOURCE);
+  assert.notEqual(uncoloured, SHARED);
   assert.ok(
-    auditStateCue(uncoloured).some((problem) =>
+    auditStateCue(SOURCE, uncoloured).some((problem) =>
       problem.includes("stay visible"),
     ),
   );
@@ -184,9 +200,11 @@ test("negative proof: exposing the decorative check to assistive tech is caught"
 });
 
 test("negative proof: shrinking the trigger below 44px or renaming it is caught", () => {
-  const small = SOURCE.replace(/min-height:\s*44px/, "min-height: 32px");
-  assert.notEqual(small, SOURCE);
-  assert.ok(auditStateCue(small).some((problem) => problem.includes("44x44")));
+  const small = SHARED.replace(/min-height:\s*44px/, "min-height: 32px");
+  assert.notEqual(small, SHARED);
+  assert.ok(
+    auditStateCue(SOURCE, small).some((problem) => problem.includes("44x44")),
+  );
 
   const renamed = SOURCE.replace(
     "const triggerName = `${current.shortLabel}",

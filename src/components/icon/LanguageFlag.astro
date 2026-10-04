@@ -147,7 +147,8 @@ const smalls = [
 
   .lang-flag svg {
     display: block;
-    width: 1.875rem;
+    /* 30x20 by default; a control may set --flag-width (e.g. the trigger). */
+    width: var(--flag-width, 1.875rem);
     height: auto;
   }
 

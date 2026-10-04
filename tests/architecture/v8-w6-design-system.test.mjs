@@ -34,7 +34,7 @@ export function strayRadii(text) {
     .map((m) => m[1].trim())
     .filter(
       (v) =>
-        !/^(0|50%|0\.25rem|0\.5rem|1rem|4px|inherit|var\(--[a-z0-9-]+(?:,[^)]*)?\)(?: var\(--[a-z0-9-]+\))*|calc\(var\([^)]*\) - [0-9.a-z]+\)|var\(--radius-media\) var\(--radius-media\) 0 0)$/.test(
+        !/^(0|50%|0\.25rem|0\.5rem|4px|inherit|var\(--[a-z0-9-]+(?:,[^)]*)?\)(?: var\(--[a-z0-9-]+\))*|calc\(var\([^)]*\) - [0-9.a-z]+\)|var\(--radius-media\) var\(--radius-media\) 0 0)$/.test(
           v,
         ),
     );
@@ -98,16 +98,18 @@ test("radii use the three radius tokens or the small control allowlist", () => {
   assert.match(css, /--radius-card:\s*0\.75rem/);
   assert.match(css, /--radius-media:\s*20px/);
   assert.match(css, /--radius-pill:\s*999px/);
+  assert.match(css, /--radius-panel:\s*1rem/);
 });
 
 test("negative proof: a stray radius is detected", () => {
   assert.deepEqual(strayRadii(".x{border-radius: 13px;}"), ["13px"]);
   assert.deepEqual(strayRadii(".x{border-radius: 999px;}"), ["999px"]);
   assert.deepEqual(strayRadii(".x{border-radius: var(--radius-pill);}"), []);
-  // 1rem is the popover-card radius shared by the header controls; its
-  // neighbours stay stray.
-  assert.deepEqual(strayRadii(".x{border-radius: 1rem;}"), []);
+  // The header-control popover radius is the --radius-panel token; the literal
+  // and its neighbours stay stray.
+  assert.deepEqual(strayRadii(".x{border-radius: 1rem;}"), ["1rem"]);
   assert.deepEqual(strayRadii(".x{border-radius: 1.1rem;}"), ["1.1rem"]);
+  assert.deepEqual(strayRadii(".x{border-radius: var(--radius-panel);}"), []);
 });
 
 test("no outline pill carries an inline dot", () => {

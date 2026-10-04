@@ -1,7 +1,8 @@
 ---
 /**
- * Appearance control. Same visual family as LanguageSwitcher (shared trigger
- * and panel numbers) and the Sổ Trọ appearance menu.
+ * Appearance control. Same visual family as LanguageSwitcher and the search
+ * trigger through ONE stylesheet (./header-control.css) and the Sổ Trọ
+ * appearance menu.
  *
  * `popover` (desktop header): a trigger showing the icon + label of the CURRENT
  * mode and a chevron, opening a native popover card with three rows
@@ -14,6 +15,7 @@
  */
 import BlueSkyzIcon from "@/components/icon/BlueSkyzIcon.astro";
 import type { Language } from "@/lib/i18n";
+import "./header-control.css";
 interface Props {
   lang?: Language;
   /** Extra classes for the wrapper (e.g. vertical spacing inside the mobile menu). */
@@ -39,15 +41,17 @@ type Mode = (typeof MODES)[number];
 // Server-rendered state; the client paints the stored mode on load.
 const DEFAULT_MODE: Mode = "system";
 
+// 20-unit glyphs drawn to the optical size of the 24x16 trigger flag: the sun
+// core and the moon fill the same circle so no mode reads lighter.
 const ICONS: Record<Mode, string[]> = {
   light: [
-    "M13.25 10a3.25 3.25 0 1 1-6.5 0 3.25 3.25 0 0 1 6.5 0Z",
-    "M10 2v1.5M10 16.5V18M2 10h1.5M16.5 10H18M4.3 4.3l1.05 1.05M14.65 14.65l1.05 1.05M15.7 4.3l-1.05 1.05M5.35 14.65l-1.05 1.05",
+    "M13.5 10a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Z",
+    "M10 1.75v1.5M10 16.75v1.5M1.75 10h1.5M16.75 10h1.5M4.17 4.17l1.06 1.06M14.77 14.77l1.06 1.06M15.83 4.17l-1.06 1.06M5.23 14.77l-1.06 1.06",
   ],
-  dark: ["M15.5 12.5A5.5 5.5 0 1 1 7.5 4.5a4.5 4.5 0 0 0 8 8Z"],
+  dark: ["M17 12.4A7.25 7.25 0 0 1 7.6 3a7.25 7.25 0 1 0 9.4 9.4Z"],
   system: [
-    "M4.5 3.5h11a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2h-11a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2Z",
-    "M7 17h6M10 14.5V17",
+    "M4.25 3.25h11.5a2 2 0 0 1 2 2v7.5a2 2 0 0 1-2 2H4.25a2 2 0 0 1-2-2v-7.5a2 2 0 0 1 2-2Z",
+    "M7 17.75h6M10 14.75v3",
   ],
 };
 
@@ -58,15 +62,16 @@ const triggerName = `${L.label}: ${L[DEFAULT_MODE]}`;
 {asPopover ? (
   <button
     type="button"
-    class="theme-trigger"
+    class="theme-trigger hc-trigger"
     popovertarget={panelId}
     aria-label={triggerName}
     aria-expanded="false"
     title={L.label}
     data-theme-trigger
     data-theme-current={DEFAULT_MODE}
+    style="anchor-name: --theme-anchor"
   >
-    <span class="theme-trigger__icons" aria-hidden="true">
+    <span class="theme-trigger__icons hc-glyph" aria-hidden="true">
       {MODES.map((mode) => (
         <svg
           viewBox="0 0 20 20"
@@ -74,7 +79,7 @@ const triggerName = `${L.label}: ${L[DEFAULT_MODE]}`;
           data-theme-icon={mode}
           fill="none"
           stroke="currentColor"
-          stroke-width="1.5"
+          stroke-width="1.75"
           stroke-linecap="round"
           stroke-linejoin="round"
           focusable="false"
@@ -92,7 +97,7 @@ const triggerName = `${L.label}: ${L[DEFAULT_MODE]}`;
     >
       {L[DEFAULT_MODE]}
     </span>
-    <span class="theme-trigger__chevron" aria-hidden="true">
+    <span class="theme-trigger__chevron hc-chevron" aria-hidden="true">
       <BlueSkyzIcon name="chevron-down" class="h-3.5 w-3.5" />
     </span>
   </button>
@@ -102,46 +107,47 @@ const triggerName = `${L.label}: ${L[DEFAULT_MODE]}`;
   id={asPopover ? panelId : undefined}
   popover={asPopover ? "auto" : undefined}
   aria-label={L.label}
+  style={asPopover ? "position-anchor: --theme-anchor" : undefined}
   class:list={[
     "theme-group",
-    asPopover ? "theme-group--panel theme-panel" : "theme-group--inline",
+    asPopover
+      ? "theme-group--panel theme-panel hc-panel"
+      : "theme-group--inline hc-group",
     className,
   ]}
 >
-  {asPopover ? (
-    <div class="theme-group__caption" aria-hidden="true">
-      <svg
-        viewBox="0 0 20 20"
-        class="theme-group__caption-icon"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="1.5"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        focusable="false"
-      >
-        {ICONS.light.map((d) => (
-          <path d={d} />
-        ))}
-      </svg>
-      <span>{L.label}</span>
-    </div>
-  ) : null}
+  {/* Visible caption in the panel and in the compact menu (the language row
+      above it carries the same caption); the group's aria-label names it. */}
+  <div class="theme-group__caption hc-caption" aria-hidden="true">
+    <svg
+      viewBox="0 0 20 20"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1.75"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      focusable="false"
+    >
+      {ICONS.light.map((d) => (
+        <path d={d} />
+      ))}
+    </svg>
+    <span>{L.label}</span>
+  </div>
   {MODES.map((mode) => (
     <button
       type="button"
       data-theme-mode={mode}
       data-theme-toggle
       aria-pressed={mode === DEFAULT_MODE ? "true" : "false"}
-      class="theme-row"
+      class="theme-row hc-row"
     >
-      <span class="theme-row__icon" aria-hidden="true">
+      <span class="theme-row__icon hc-row__lead" aria-hidden="true">
         <svg
           viewBox="0 0 20 20"
-          class="h-6 w-6"
           fill="none"
           stroke="currentColor"
-          stroke-width="1.5"
+          stroke-width="1.75"
           stroke-linecap="round"
           stroke-linejoin="round"
           focusable="false"
@@ -151,10 +157,10 @@ const triggerName = `${L.label}: ${L[DEFAULT_MODE]}`;
           ))}
         </svg>
       </span>
-      <span class="theme-row__label" data-theme-row-label>
+      <span class="theme-row__label hc-row__label" data-theme-row-label>
         {L[mode]}
       </span>
-      <span class="theme-row__check" aria-hidden="true">
+      <span class="theme-row__check hc-check" aria-hidden="true">
         <BlueSkyzIcon name="check" class="h-5 w-5" />
       </span>
     </button>
@@ -162,70 +168,14 @@ const triggerName = `${L.label}: ${L[DEFAULT_MODE]}`;
 </div>
 
 <style>
-  /* ─── Trigger ───────────────────────────────────────────────────────── */
-  .theme-trigger {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
-    min-width: 44px;
-    min-height: 44px;
-    padding: 0 0.75rem;
-    border: 1px solid var(--border-subtle);
-    border-radius: var(--radius-md);
-    background: var(--surface-raised);
-    color: var(--text-primary);
-    box-shadow:
-      0 1px 2px rgba(11, 16, 32, 0.05),
-      0 6px 16px -10px rgba(11, 16, 32, 0.18);
-    font: inherit;
-    font-size: var(--size-2);
-    font-weight: 600;
-    line-height: 1;
-    cursor: pointer;
-    anchor-name: --theme-anchor;
-    transition:
-      background-color 150ms var(--motion-ease-standard, ease),
-      border-color 150ms var(--motion-ease-standard, ease);
-  }
-
-  /* The ink scene re-points --text-* to porcelain but --surface-raised stays
-     theme-aware (white in light), so the trigger takes the scene's own
-     translucent surface there instead. */
-  :global(header[data-scene="ink"]) .theme-trigger {
-    background: var(--surface-subtle);
-  }
-
-  .theme-trigger:hover,
-  .theme-trigger:where([aria-expanded="true"]) {
-    border-color: var(--focus-ring);
-    background: color-mix(in srgb, var(--focus-ring) 6%, var(--surface-raised));
-  }
-
-  :global(header[data-scene="ink"]) .theme-trigger:hover,
-  :global(header[data-scene="ink"])
-    .theme-trigger:where([aria-expanded="true"]) {
-    background: color-mix(
-      in srgb,
-      var(--focus-ring) 14%,
-      var(--surface-subtle)
-    );
-  }
-
-  .theme-trigger:focus-visible {
-    outline: 3px solid var(--focus-ring);
-    outline-offset: 2px;
-  }
-
-  .theme-trigger__icons {
-    position: relative;
-    display: block;
-    flex-shrink: 0;
-    width: 1.25rem;
-    height: 1.25rem;
-  }
+  /* Trigger, panel, caption and row styling come from the shared
+     header-control.css; only the appearance-specific parts live here. */
 
   /* One icon per mode, stacked; only the current mode's icon is shown. */
+  .theme-trigger__icons {
+    position: relative;
+  }
+
   .theme-trigger__icon {
     position: absolute;
     inset: 0;
@@ -258,284 +208,28 @@ const triggerName = `${L.label}: ${L[DEFAULT_MODE]}`;
     }
   }
 
-  .theme-trigger__chevron {
-    display: inline-flex;
-    flex-shrink: 0;
-    opacity: 0.7;
-    transition: transform 160ms var(--motion-ease-standard, ease);
-  }
-
-  .theme-trigger:where([aria-expanded="true"]) .theme-trigger__chevron {
-    transform: rotate(180deg);
-  }
-
-  /* ─── Palette ───────────────────────────────────────────────────────── */
-  /* The popover is its own solid surface in the top layer, so it owns its
-     palette (the header re-points --text-* / --border-subtle on the ink
-     scene). The inline group sits on the compact menu surface and reads that
-     surface's ambient tokens; only its accent depends on the surface. */
-  .theme-group--panel {
-    --theme-fg: #0b1020;
-    --theme-fg-muted: #475569;
-    --theme-line: #cbd5e1;
-    --theme-hover: #f1f5f9;
-    --theme-current-bg: rgba(29, 78, 216, 0.09);
-    --theme-accent: #1d4ed8;
-    --theme-shadow:
-      0 1px 2px rgba(11, 16, 32, 0.06), 0 18px 44px -12px rgba(11, 16, 32, 0.28);
-  }
-
-  .theme-group--inline {
-    --theme-fg: var(--text-primary);
-    --theme-fg-muted: var(--text-secondary);
-    --theme-line: var(--border-subtle);
-    --theme-hover: var(--surface-subtle);
-    --theme-current-bg: rgba(29, 78, 216, 0.09);
-    --theme-accent: #1d4ed8;
-  }
-
-  :global([data-theme="dark"]) .theme-group--panel {
-    --theme-fg: #ffffff;
-    --theme-fg-muted: #94a3b8;
-    --theme-line: #334155;
-    --theme-hover: rgba(255, 255, 255, 0.08);
-    --theme-current-bg: rgba(59, 130, 246, 0.18);
-    --theme-accent: #3b82f6;
-    --theme-shadow:
-      0 1px 2px rgba(0, 0, 0, 0.4), 0 22px 48px -12px rgba(0, 0, 0, 0.7);
-  }
-
-  :global([data-theme="dark"]) .theme-group--inline,
-  :global(header[data-scene="ink"]) .theme-group--inline {
-    --theme-current-bg: rgba(59, 130, 246, 0.18);
-    --theme-accent: #3b82f6;
-  }
-
-  @media (prefers-color-scheme: dark) {
-    :global(:root:not([data-theme="light"])) .theme-group--panel {
-      --theme-fg: #ffffff;
-      --theme-fg-muted: #94a3b8;
-      --theme-line: #334155;
-      --theme-hover: rgba(255, 255, 255, 0.08);
-      --theme-current-bg: rgba(59, 130, 246, 0.18);
-      --theme-accent: #3b82f6;
-      --theme-shadow:
-        0 1px 2px rgba(0, 0, 0, 0.4), 0 22px 48px -12px rgba(0, 0, 0, 0.7);
-    }
-
-    :global(:root:not([data-theme="light"])) .theme-group--inline {
-      --theme-current-bg: rgba(59, 130, 246, 0.18);
-      --theme-accent: #3b82f6;
-    }
-  }
-
-  /* ─── Panel ─────────────────────────────────────────────────────────── */
-  /* ADR 0012: the header is the only translucent surface; the panel is a solid
-     raised surface with a soft shadow, never a blur material. */
-  .theme-panel {
-    position: fixed;
-    inset: auto;
-    margin: 0;
-    padding: 0.5rem;
-    width: min(16rem, calc(100vw - 1.5rem));
-    overflow: visible;
-    border: 1px solid var(--theme-line);
-    border-radius: 1rem;
-    background: var(--surface-raised, #ffffff);
-    color: var(--theme-fg);
-    box-shadow: var(--theme-shadow);
-    gap: 0.25rem;
-
-    opacity: 0;
-    transform: translateY(-0.375rem) scale(0.98);
-    transform-origin: top right;
-    transition:
-      opacity 170ms var(--motion-ease-standard, ease),
-      transform 170ms var(--motion-ease-standard, ease),
-      overlay 170ms allow-discrete,
-      display 170ms allow-discrete;
-  }
-
-  .theme-panel:not(:popover-open) {
-    display: none;
-  }
-
-  .theme-panel:popover-open {
-    display: grid;
-    opacity: 1;
-    transform: none;
-  }
-
-  @starting-style {
-    .theme-panel:popover-open {
-      opacity: 0;
-      transform: translateY(-0.375rem) scale(0.98);
-    }
-  }
-
-  @supports (anchor-name: --theme-probe) {
-    .theme-panel {
-      position-anchor: --theme-anchor;
-      top: calc(anchor(bottom) + 0.5rem);
-      right: anchor(right);
-      position-try-fallbacks:
-        flip-block,
-        flip-inline,
-        flip-block flip-inline;
-    }
-  }
-
+  /* Without anchor positioning the panel sits under the header's right edge. */
   @supports not (anchor-name: --theme-probe) {
     .theme-panel {
       inset: 4.5rem 1rem auto auto;
     }
   }
 
-  /* Phones: a bottom sheet is easier to reach than a corner popover. */
   @media (max-width: 40rem) {
     .theme-panel {
       inset: auto 0.75rem 0.75rem 0.75rem;
-      position-try-fallbacks: none;
-      width: auto;
-      transform-origin: bottom center;
-      transform: translateY(0.75rem);
     }
-
-    .theme-panel::backdrop {
-      background: rgba(11, 16, 32, 0);
-      transition:
-        background-color 170ms var(--motion-ease-standard, ease),
-        overlay 170ms allow-discrete,
-        display 170ms allow-discrete;
-    }
-
-    .theme-panel:popover-open::backdrop {
-      background: rgba(11, 16, 32, 0.45);
-    }
-
-    @starting-style {
-      .theme-panel:popover-open::backdrop {
-        background: rgba(11, 16, 32, 0);
-      }
-
-      .theme-panel:popover-open {
-        transform: translateY(0.75rem);
-      }
-    }
-  }
-
-  .theme-group--inline {
-    display: grid;
-    gap: 0.25rem;
-  }
-
-  .theme-group__caption {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.5rem 0.75rem 0.25rem;
-    color: var(--theme-fg-muted);
-    font-size: var(--size-1);
-    font-weight: 600;
-    line-height: 1.25;
-  }
-
-  .theme-group__caption-icon {
-    width: 18px;
-    height: 18px;
-    flex-shrink: 0;
-  }
-
-  /* ─── Rows ──────────────────────────────────────────────────────────── */
-  .theme-row {
-    display: grid;
-    grid-template-columns: 2.25rem minmax(0, 1fr) 1.5rem;
-    align-items: center;
-    gap: 0.75rem;
-    width: 100%;
-    min-height: 3.5rem;
-    padding: 0.5rem 0.75rem;
-    border: 2px solid transparent;
-    border-radius: var(--radius-md);
-    background: transparent;
-    color: var(--theme-fg);
-    font: inherit;
-    text-align: left;
-    cursor: pointer;
-    transition:
-      background-color 120ms var(--motion-ease-standard, ease),
-      border-color 120ms var(--motion-ease-standard, ease);
-  }
-
-  .theme-row:hover {
-    background: var(--theme-hover);
-  }
-
-  .theme-row:focus-visible {
-    outline: 3px solid var(--theme-accent);
-    outline-offset: -3px;
-  }
-
-  .theme-row[aria-pressed="true"],
-  .theme-row[aria-pressed="true"]:hover {
-    border-color: var(--theme-accent);
-    background: var(--theme-current-bg);
-  }
-
-  .theme-row__icon {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--theme-accent);
-  }
-
-  .theme-row__label {
-    font-size: var(--size-3);
-    font-weight: 600;
-    line-height: 1.25;
-  }
-
-  .theme-row[aria-pressed="true"] .theme-row__label {
-    font-weight: 700;
   }
 
   /* The check is rendered in every row but shown only for the current one, so
      the state has a single source (aria-pressed) that JS repaints. */
-  .theme-row__check {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 1.5rem;
-    height: 1.5rem;
-    color: var(--theme-accent);
-  }
-
-  .theme-row__check :global(svg) {
-    stroke-width: 2.25;
-  }
-
   .theme-row:not([aria-pressed="true"]) .theme-row__check :global(svg) {
     display: none;
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .theme-trigger,
-    .theme-trigger__icon,
-    .theme-trigger__chevron,
-    .theme-panel,
-    .theme-panel::backdrop,
-    .theme-row {
+    .theme-trigger__icon {
       transition: none !important;
-    }
-  }
-
-  @media (forced-colors: active) {
-    .theme-panel {
-      border-color: CanvasText;
-    }
-
-    .theme-row[aria-pressed="true"] {
-      border-color: Highlight;
     }
   }
 </style>
