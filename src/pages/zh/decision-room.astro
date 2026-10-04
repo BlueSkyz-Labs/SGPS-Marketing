@@ -1,13 +1,14 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
+import { PAGE_META } from "@/data/page-meta";
 import Container from "@/components/layout/Container.astro";
 import PageHeader from "@/components/layout/PageHeader.astro";
 import DecisionRoom from "@/components/experience/DecisionRoom.astro";
 ---
 
 <BaseLayout
-  title="比较声明"
-  description="并排比较最多四条公开声明。不下结论。"
+  title={PAGE_META["zh"].decisionRoom.title}
+  description={PAGE_META["zh"].decisionRoom.description}
   path="/zh/decision-room/"
 >
   <section class="py-16 lg:py-24">

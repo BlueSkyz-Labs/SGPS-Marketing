@@ -14,7 +14,7 @@ import {
   type ResolvedClaim,
 } from "@/lib/claims";
 import { getShowcase } from "@/lib/showcases";
-import { HOME_PROOF_POINTS } from "@/data/home-copy";
+import { HOME_FLAGSHIP_LEAD, HOME_PROOF_POINTS } from "@/data/home-copy";
 import { productTransitionStyle } from "@/lib/product-transition";
 
 /**
@@ -87,6 +87,11 @@ const proofPoints: string[] =
   data.slug === "sotro"
     ? HOME_PROOF_POINTS.map((point) => point[lang])
     : capabilities.slice(0, 2);
+// v12 S2: on the home act, one outcome line (the registry's second job,
+// reframed for the customer) leads into the two proof points.
+const flagshipLead = compact
+  ? HOME_FLAGSHIP_LEAD[data.slug]?.[lang]
+  : undefined;
 const hasCapture =
   compact &&
   (await getShowcase(data.slug))?.data.screens.some(
@@ -157,6 +162,14 @@ const ctaIsExternal = cta.external || /^https?:\/\//i.test(cta.href);
       {!compact ? (
         <p class="mt-4 max-w-xl text-lg text-[var(--text-secondary)]">
           {copy.shortDescription}
+        </p>
+      ) : null}
+      {flagshipLead ? (
+        <p
+          class="c2-flagship-theatre__lead mt-4 max-w-xl text-lg text-pretty text-[var(--text-secondary)]"
+          data-flagship-lead
+        >
+          {flagshipLead}
         </p>
       ) : null}
       {!compact && copy.jobs.length > 0 ? (
@@ -433,6 +446,11 @@ const ctaIsExternal = cta.external || /^https?:\/\//i.test(cta.href);
     padding: 0;
     display: grid;
     gap: 0.75rem;
+  }
+  /* v12 S2: with the outcome lead above it, the list keeps a clear step
+     (the list's own margin reset would otherwise butt it against the lead). */
+  .c2-flagship-theatre__lead + .c2-flagship-theatre__proof {
+    margin-top: 1.5rem;
   }
   .c2-flagship-theatre__proof-item {
     display: flex;
