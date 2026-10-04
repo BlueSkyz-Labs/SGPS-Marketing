@@ -1,5 +1,11 @@
 import { z } from "astro/zod";
 import { isHttpsUrl } from "./https-url.ts";
+import {
+  STORY_FACT_REF,
+  STORY_MAX_CHAPTERS,
+  STORY_MIN_CHAPTERS,
+  storyProblems,
+} from "./feature-story.ts";
 
 /**
  * Product showcase records (GOLIVE W5). A showcase binds real screens of a
@@ -14,7 +20,9 @@ import { isHttpsUrl } from "./https-url.ts";
  *   synthetic demo data (no real tenant, payment or identity data);
  * - assets live under this product's own `/products/<slug>/showcase/` path,
  *   so CSP `img-src 'self'` renders them and nothing is fetched remotely;
- * - guide steps may only reference screens declared in the same record.
+ * - guide steps may only reference screens declared in the same record;
+ * - a feature story (v12 S1) orders screens declared in the same record and
+ *   may bind each to a job or capability of the product record by index.
  */
 
 const localized = (max: number) =>
@@ -75,6 +83,11 @@ const guideStep = z.object({
   body: localized(320),
 });
 
+const storyChapter = z.object({
+  screen: z.string().min(1),
+  fact: z.string().regex(STORY_FACT_REF).optional(),
+});
+
 export const showcaseSchema = z
   .object({
     product: z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/),
@@ -93,6 +106,15 @@ export const showcaseSchema = z
         title: localized(80),
         intro: localized(320),
         steps: z.array(guideStep).min(3).max(12),
+      })
+      .optional(),
+    story: z
+      .object({
+        chapters: z
+          .array(storyChapter)
+          .min(STORY_MIN_CHAPTERS)
+          .max(STORY_MAX_CHAPTERS),
+        coda: z.string().min(1).optional(),
       })
       .optional(),
   })
@@ -149,6 +171,11 @@ export const showcaseSchema = z
         });
       }
     });
+    if (value.story) {
+      for (const message of storyProblems(value.story, value.screens)) {
+        ctx.addIssue({ code: "custom", path: ["story"], message });
+      }
+    }
   });
 
 export type ShowcaseSchema = z.infer<typeof showcaseSchema>;

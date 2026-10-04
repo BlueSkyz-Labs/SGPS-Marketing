@@ -1,0 +1,421 @@
+---
+import type { Language } from "@/lib/i18n";
+import type { ShowcaseSchema } from "@/lib/showcase-schema";
+import type { ResolvedStory } from "@/lib/feature-story";
+import { sentenceCase } from "@/lib/feature-story";
+import {
+  STORY_COPY,
+  desktopSmallSrc,
+  phoneSmallSrc,
+} from "@/components/product/story-copy";
+
+/**
+ * v12 S1 Feature Story: the product's month as chapters, one recorded screen
+ * each. Every chapter is a real <section> with a heading, its text and its
+ * screen inline, so without CSS animation support, with reduced motion and
+ * without JS the story reads as a plain vertical sequence (screen + text).
+ *
+ * Progressive enhancement (CSS only, no client script): on wide screens where
+ * scroll-driven animations and `timeline-scope` exist and motion is allowed,
+ * the chapter screens share one sticky phone stage and cross-fade as each
+ * chapter's text scrolls past. No scroll hijacking, no snapping of the page.
+ * The keyframes are the shared grammar (`story-screen` in reveal.css).
+ * Guard: tests/architecture/feature-story.test.mjs.
+ */
+type Screen = ShowcaseSchema["screens"][number];
+interface Props {
+  story: ResolvedStory<Screen>;
+  lang: Language;
+}
+
+const { story, lang } = Astro.props;
+const t = STORY_COPY[lang];
+const total = story.chapters.length;
+const pad = (n: number) => String(n).padStart(2, "0");
+const timeline = (index: number) => `--story-${index + 1}`;
+const scope = story.chapters.map((_, index) => timeline(index)).join(", ");
+// Phones render at most 19rem in the stage and min(64vw, 15rem) in the
+// sequence, so the 480w derivative is enough below 2x on most screens.
+const PHONE_SIZES = "(min-width: 64rem) 19rem, min(64vw, 15rem)";
+const DESKTOP_SIZES = "(min-width: 64rem) 64rem, calc(100vw - 2.5rem)";
+---
+
+<div class="story" data-feature-story>
+  <div
+    class="story__chapters"
+    style={`timeline-scope: ${scope}; --story-rows: ${total}`}
+  >
+    <div class="story__frame" aria-hidden="true">
+      <span class="story__glass"></span>
+      <span class="story__dots">
+        {story.chapters.map((_, index) => (
+          <i style={`--story-tl: ${timeline(index)}`} />
+        ))}
+      </span>
+    </div>
+    {story.chapters.map(({ screen, fact }, index) => (
+      <section
+        class="story__chapter"
+        aria-labelledby={`story-chapter-${screen.id}`}
+        data-story-chapter={screen.id}
+        style={`--story-tl: ${timeline(index)}; --story-row: ${index + 1}`}
+      >
+        <div class="story__text">
+          <p class="story__index" aria-hidden="true">
+            {pad(index + 1)}
+            <span>/ {pad(total)}</span>
+          </p>
+          <h3 id={`story-chapter-${screen.id}`} class="story__title">
+            {screen.title[lang]}
+          </h3>
+          <p class="story__line">{sentenceCase(screen.caption[lang], lang)}</p>
+          {fact ? (
+            <p class="story__fact" data-story-fact>
+              {fact}
+            </p>
+          ) : null}
+        </div>
+        <figure
+          class:list={[
+            "story__screen",
+            index === 0 && "story__screen--first",
+            index === total - 1 && "story__screen--last",
+          ]}
+          data-story-screen={screen.id}
+        >
+          <img
+            src={screen.src}
+            srcset={`${phoneSmallSrc(screen.src)} 480w, ${screen.src} ${screen.width}w`}
+            sizes={PHONE_SIZES}
+            alt={screen.alt[lang]}
+            width={screen.width}
+            height={screen.height}
+            loading="lazy"
+            decoding="async"
+          />
+        </figure>
+      </section>
+    ))}
+  </div>
+
+  {story.coda ? (
+    <section
+      class="story__coda"
+      aria-labelledby={`story-chapter-${story.coda.id}`}
+      data-story-coda={story.coda.id}
+    >
+      <div class="story__coda-text">
+        {/* The kicker sits inside the heading, so the coda's name and its
+            outline entry differ from the phone chapter with the same title
+            (vi: two "Thu tiền"). */}
+        <h3 id={`story-chapter-${story.coda.id}`} class="story__title">
+          <span class="story__kicker">{t.desktop}</span>
+          <span class="sr-only">: </span>
+          {story.coda.title[lang]}
+        </h3>
+        <p class="story__line">
+          {sentenceCase(story.coda.caption[lang], lang)}
+        </p>
+      </div>
+      <figure class="story__browser" data-story-screen={story.coda.id}>
+        <span class="story__browser-bar" aria-hidden="true">
+          <i />
+          <i />
+          <i />
+        </span>
+        <img
+          src={story.coda.src}
+          srcset={`${desktopSmallSrc(story.coda.src)} 768w, ${story.coda.src} ${story.coda.width}w`}
+          sizes={DESKTOP_SIZES}
+          alt={story.coda.alt[lang]}
+          width={story.coda.width}
+          height={story.coda.height}
+          loading="lazy"
+          decoding="async"
+        />
+      </figure>
+    </section>
+  ) : null}
+</div>
+
+<style is:global>
+  /* ---- Default = final, readable state: one chapter after another. ---- */
+  .story {
+    margin-top: 2.5rem;
+  }
+  .story__chapters {
+    display: grid;
+    gap: 3.5rem;
+  }
+  .story__frame {
+    display: none;
+  }
+  .story__chapter {
+    display: grid;
+    gap: 1.5rem;
+    min-width: 0;
+  }
+  .story__text {
+    min-width: 0;
+    max-width: 34rem;
+  }
+  .story__index {
+    margin: 0;
+    font-size: var(--size-2);
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.06em;
+    color: var(--text-secondary);
+  }
+  .story__index span {
+    margin-left: 0.25rem;
+    color: var(--text-muted);
+    font-weight: 500;
+  }
+  .story__kicker {
+    display: block;
+    margin: 0 0 0.5rem;
+    line-height: 1.4;
+    font-size: var(--size-1);
+    font-weight: 600;
+    letter-spacing: var(--tracking-eyebrow, 0.12em);
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+  /* Vietnamese keeps the kicker in sentence case (split-subset kerning). */
+  :lang(vi) .story__kicker {
+    text-transform: none;
+    letter-spacing: 0.01em;
+  }
+  .story__title {
+    margin: 0.5rem 0 0;
+    font-size: var(--size-7);
+    font-weight: 600;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    color: var(--text-primary);
+    text-wrap: balance;
+  }
+  :lang(vi) .story__title {
+    line-height: 1.25;
+    letter-spacing: -0.01em;
+  }
+  :lang(zh) .story__title {
+    letter-spacing: 0;
+    line-height: 1.3;
+  }
+  .story__line {
+    margin: 0.75rem 0 0;
+    font-size: var(--size-4);
+    line-height: 1.6;
+    color: var(--text-secondary);
+    text-wrap: pretty;
+  }
+  /* The registered capability this chapter's task relates to: plain
+     secondary text, never a check-marked "this screen shows" claim. */
+  .story__fact {
+    margin: 1rem 0 0;
+    font-size: var(--size-3);
+    line-height: 1.55;
+    color: var(--text-secondary);
+  }
+  .story__screen {
+    margin: 0;
+    width: min(64vw, 15rem);
+    padding: 0.5rem;
+    border-radius: var(--radius-media);
+    border: 1px solid var(--border-subtle);
+    background: linear-gradient(
+      160deg,
+      color-mix(in srgb, var(--text-primary) 16%, transparent),
+      color-mix(in srgb, var(--text-primary) 6%, transparent)
+    );
+    box-shadow:
+      0 1px 0 color-mix(in srgb, white 30%, transparent) inset,
+      0 28px 48px -28px color-mix(in srgb, #0b1020 55%, transparent);
+  }
+  .story__screen img,
+  .story__browser img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+  .story__screen img {
+    border-radius: var(--radius-card);
+  }
+  .story__coda {
+    display: grid;
+    gap: 1.5rem;
+    margin-top: 4.5rem;
+  }
+  .story__coda-text {
+    max-width: 40rem;
+  }
+  .story__browser {
+    margin: 0;
+    max-width: 64rem;
+    overflow: hidden;
+    border-radius: var(--radius-card);
+    border: 1px solid var(--border-subtle);
+    background: var(--surface-raised);
+    box-shadow: 0 24px 48px -28px color-mix(in srgb, #0b1020 50%, transparent);
+  }
+  .story__browser-bar {
+    display: flex;
+    gap: 0.375rem;
+    padding: 0.625rem 0.875rem;
+    border-bottom: 1px solid var(--border-subtle);
+  }
+  .story__browser-bar i {
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: var(--radius-pill);
+    background: color-mix(in srgb, var(--text-primary) 22%, transparent);
+  }
+
+  /* Wide, static: each chapter is a row, text beside its phone. */
+  @media (min-width: 64rem) {
+    .story__chapters {
+      gap: 4rem;
+    }
+    .story__chapter {
+      grid-template-columns: minmax(0, 1fr) 17rem;
+      align-items: center;
+      column-gap: clamp(3rem, 6vw, 6rem);
+    }
+    .story__screen {
+      width: 17rem;
+      justify-self: center;
+    }
+    .story__title {
+      font-size: var(--size-8);
+    }
+    .story__coda {
+      margin-top: 6rem;
+    }
+  }
+
+  /* ---- Enhancement 1 (any width): chapter text and screens rise in. ---- */
+  @media (prefers-reduced-motion: no-preference) {
+    @supports (animation-timeline: view()) {
+      .story__text,
+      .story__coda {
+        animation: view-rise linear both;
+        animation-timeline: view();
+        animation-range: entry 0% cover 28%;
+      }
+    }
+  }
+
+  /* ---- Enhancement 2 (wide): one sticky phone stage, screens cross-fade.
+     The chapters dissolve into one grid (display: contents): text in the left
+     column, one row per chapter; every screen, the frame and the dots share
+     the right column across all rows and stick to the middle of the viewport.
+     Each screen's opacity follows its own chapter's view timeline, made
+     visible to the stage by `timeline-scope`. ---- */
+  @media (min-width: 64rem) and (prefers-reduced-motion: no-preference) {
+    @supports (animation-timeline: view()) and (timeline-scope: --story) {
+      .story__chapters {
+        --stage-w: min(19rem, calc((100svh - 11rem) * 0.5417 + 1.25rem));
+        --stage-pad: 0.625rem;
+        --stage-top: max(5.5rem, calc(50svh + 2.25rem - var(--stage-w) * 0.92));
+        grid-template-columns: minmax(0, 30rem) var(--stage-w);
+        grid-template-rows: repeat(var(--story-rows), auto);
+        justify-content: center;
+        column-gap: clamp(4rem, 10vw, 10rem);
+        row-gap: 0;
+      }
+      .story__chapter {
+        display: contents;
+      }
+      .story__text {
+        grid-column: 1;
+        grid-row: var(--story-row);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        min-height: 78svh;
+        view-timeline-name: var(--story-tl);
+        view-timeline-axis: block;
+      }
+      .story__frame,
+      .story__screen {
+        grid-column: 2;
+        grid-row: 1 / -1;
+        position: sticky;
+        align-self: start;
+        top: var(--stage-top);
+      }
+      .story__frame {
+        display: block;
+        width: var(--stage-w);
+        padding: var(--stage-pad);
+        border-radius: var(--radius-media);
+        border: 1px solid var(--border-subtle);
+        background: linear-gradient(
+          160deg,
+          color-mix(in srgb, var(--text-primary) 16%, transparent),
+          color-mix(in srgb, var(--text-primary) 6%, transparent)
+        );
+        box-shadow:
+          0 1px 0 color-mix(in srgb, white 30%, transparent) inset,
+          0 48px 80px -40px
+            color-mix(in srgb, var(--brand-cobalt, #2564ff) 38%, transparent),
+          0 28px 48px -28px color-mix(in srgb, #0b1020 55%, transparent);
+      }
+      .story__glass {
+        display: block;
+        aspect-ratio: 780 / 1440;
+        border-radius: var(--radius-card);
+        background: var(--surface-raised);
+      }
+      .story__dots {
+        position: absolute;
+        left: 50%;
+        bottom: -2rem;
+        display: flex;
+        gap: 0.5rem;
+        transform: translateX(-50%);
+      }
+      .story__dots i {
+        width: 0.375rem;
+        height: 0.375rem;
+        border-radius: var(--radius-pill);
+        background: var(--brand-cobalt);
+        --story-in: 0.25;
+        --story-out: 0.25;
+        animation: story-screen linear both;
+        animation-timeline: var(--story-tl);
+      }
+      .story__screen {
+        z-index: 1;
+        width: calc(var(--stage-w) - 2 * var(--stage-pad) - 2px);
+        margin-top: calc(var(--stage-pad) + 1px);
+        justify-self: center;
+        padding: 0;
+        border: 0;
+        border-radius: var(--radius-card);
+        background: none;
+        box-shadow: none;
+        top: calc(var(--stage-top) + var(--stage-pad) + 1px);
+        animation: story-screen linear both;
+        animation-timeline: var(--story-tl);
+      }
+      /* The stage is never empty: the first screen is already there when the
+         stage arrives, and the last one stays after the final chapter. */
+      .story__screen--first {
+        --story-in: 1;
+      }
+      .story__screen--last {
+        --story-out: 1;
+      }
+    }
+  }
+
+  @media (forced-colors: active) {
+    .story__text,
+    .story__coda {
+      animation: none;
+    }
+  }
+</style>

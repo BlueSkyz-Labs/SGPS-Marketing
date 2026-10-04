@@ -158,6 +158,26 @@
     opacity: 1;
   }
 }
+/* v12 S1 Feature Story: a chapter screen's opacity across its chapter's view
+   timeline (cover range). It fades in as the chapter reaches the middle of
+   the viewport, holds, and fades out as the next chapter arrives, so adjacent
+   screens cross-fade. --story-in / --story-out keep the first and last screen
+   on stage (1) or dim the progress dots (0.25). Consumed only under
+   @supports (animation-timeline: view()) + reduced-motion no-preference. */
+@keyframes story-screen {
+  0%,
+  22% {
+    opacity: var(--story-in, 0);
+  }
+  32%,
+  68% {
+    opacity: 1;
+  }
+  78%,
+  100% {
+    opacity: var(--story-out, 0);
+  }
+}
 
 /* ---- .reveal-planes: same grammar for flagship frames and the proof band.
    Default = final. Only JS arms it (below the fold, motion allowed). */

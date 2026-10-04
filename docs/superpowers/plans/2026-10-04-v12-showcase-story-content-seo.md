@@ -148,6 +148,14 @@ GRES QUICK. Every source below was read in this session on 2026-10-04.
 - Gates are green and screenshots pass review (1440 and 390, light and dark).
 - Lighthouse on the product route is no worse than main.
 
+**S1 amendment (recorded by the orchestrator, 2026-10-04):**
+
+- The story is a deliberate scroll narrative, so the v8 §5 page budget changes for Sổ Trọ.
+- At 1440 × 900 the total page cap becomes `5000 + (chapters + 1.5) × 900` px.
+- The page outside the story keeps the 5000 px cap. The story's own runway is capped at `(chapters + 1.5) × 900` px.
+- Guard: `tests/e2e/v8-w3-product-pages.spec.ts`, in both motion modes.
+- Home teaser dropped: the home density caps hold (S1 words ≤ 220, no link-only blocks, height ≤ 2900 px at 1440). The story stays on the product page, and the home flagship act already links there.
+
 ### S2: Customer-led content and SEO (W3)
 
 **Content:**
