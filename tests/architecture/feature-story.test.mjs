@@ -68,7 +68,12 @@ test("the Sổ Trọ story resolves only from its own registry records", () => {
     resolved.chapters.map((chapter) => chapter.screen.id),
     ["today", "utilities", "collect", "rooms", "candlelight"],
   );
-  assert.equal(resolved.chapters[1].fact, facts.capabilities[0]);
+  // Facts relate a chapter's task to a registered job or capability; only
+  // the three chapters whose task is a registered entry carry one.
+  assert.deepEqual(
+    resolved.chapters.map((chapter) => chapter.fact),
+    [facts.jobs[0], facts.capabilities[0], facts.capabilities[1], null, null],
+  );
   assert.equal(resolved.coda?.id, "owner-collect");
 });
 
@@ -241,6 +246,36 @@ export function chapterHeadingProblems(source) {
 
 test("every chapter is a section named by its own heading", () => {
   assert.deepEqual(chapterHeadingProblems(read(STORY)), []);
+});
+
+/** The fact line must read as plain secondary text, not a "shows" claim. */
+export function factStyleProblems(source) {
+  const problems = [];
+  const css = styles(source);
+  const rule = /\.story__fact\s*\{([^}]*)\}/.exec(css)?.[1] ?? "";
+  if (!rule) problems.push("no .story__fact rule");
+  if (!/color:\s*var\(--text-secondary\)/.test(rule)) {
+    problems.push("fact must use the secondary text colour");
+  }
+  if (/\.story__fact[^{]*::?(before|after)/.test(css)) {
+    problems.push("no check mark or decoration on the fact line");
+  }
+  if (/data-story-fact[\s\S]{0,120}<svg/.test(source)) {
+    problems.push("no icon in the fact line");
+  }
+  return problems;
+}
+
+test("the fact line is plain secondary text", () => {
+  assert.deepEqual(factStyleProblems(read(STORY)), []);
+});
+
+test("negative proof: a check-marked fact line is caught", () => {
+  const checked = read(STORY).replace(
+    "  .story__fact {",
+    '  .story__fact::before { content: "✓"; }\n  .story__fact {',
+  );
+  assert.ok(factStyleProblems(checked).length > 0);
 });
 
 test("negative proof: a chapter without a heading is caught", () => {

@@ -18,6 +18,12 @@ export const storyRunwayFits = (
   chapters: number,
   viewport: number,
 ) => chapters > 0 && story <= (chapters + 1.5) * viewport;
+/** v12 S1 amendment (orchestrator, 2026-10-04): absolute total page cap. */
+export const totalHeightFits = (
+  height: number,
+  chapters: number,
+  viewport: number,
+) => chapters > 0 && height <= MAX_SOTRO_HEIGHT + (chapters + 1.5) * viewport;
 const hasStoreCta = (text: string, anchors: number) =>
   anchors > 0 || STORE_CTA.test(text);
 
@@ -26,6 +32,9 @@ test("negative proof: the height and store-CTA predicates can fail", () => {
   expect(storyRunwayFits(6000, 5, 900)).toBe(false);
   expect(storyRunwayFits(100, 0, 900)).toBe(false);
   expect(storyRunwayFits(5850, 5, 900)).toBe(true);
+  expect(totalHeightFits(10851, 5, 900)).toBe(false);
+  expect(totalHeightFits(100, 0, 900)).toBe(false);
+  expect(totalHeightFits(10850, 5, 900)).toBe(true);
   expect(hasStoreCta("Android: Get it on Google Play", 0)).toBe(true);
   expect(hasStoreCta("Android and iOS: in development", 1)).toBe(true);
 });
@@ -149,7 +158,7 @@ for (const lang of LOCALES) {
 }
 
 for (const reducedMotion of ["no-preference", "reduce"] as const) {
-  test(`Sổ Trọ is at most 5000 px tall at 1440 outside the story, and the story runway is capped (${reducedMotion})`, async ({
+  test(`Sổ Trọ height at 1440: total, outside-the-story and story runway caps (${reducedMotion})`, async ({
     page,
   }) => {
     await page.emulateMedia({ reducedMotion });
@@ -177,6 +186,10 @@ for (const reducedMotion of ["no-preference", "reduce"] as const) {
     expect(
       storyRunwayFits(story, chapters, 900),
       `story ${story}, ${chapters} chapters`,
+    ).toBe(true);
+    expect(
+      totalHeightFits(height, chapters, 900),
+      `total ${height}, ${chapters} chapters`,
     ).toBe(true);
   });
 }

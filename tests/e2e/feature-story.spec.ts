@@ -98,8 +98,49 @@ for (const lang of ["en", "vi"]) {
       await expect(section.locator("img")).toHaveCount(1);
     }
     await expect(page.locator("[data-story-coda] h3")).toHaveCount(1);
-    // Facts come from the record: four chapters carry one, night mode none.
-    await expect(page.locator("[data-story-fact]")).toHaveCount(4);
+    // Facts come from the record: Today, Meter readings and Collect rent
+    // carry one; Rooms and Night mode none.
+    await expect(page.locator("[data-story-fact]")).toHaveCount(3);
+  });
+}
+
+export const allUnique = (names: string[]) =>
+  names.length > 0 &&
+  names.every((name) => name.trim().length > 0) &&
+  new Set(names).size === names.length;
+
+test("negative proof: duplicate section names are caught", () => {
+  expect(allUnique(["Thu tiền", "Thu tiền"])).toBe(false);
+  expect(allUnique([""])).toBe(false);
+  expect(allUnique(["Thu tiền", "Trên máy tính của chủ trọ: Thu tiền"])).toBe(
+    true,
+  );
+});
+
+for (const lang of ["en", "vi", "zh", "zh-hant"]) {
+  test(`${lang}: chapter and coda sections have unique accessible names`, async ({
+    page,
+  }) => {
+    await page.goto(`/${lang}/products/sotro/`);
+    const sections = page.locator("[data-story-chapter], [data-story-coda]");
+    await expect(sections).toHaveCount(CHAPTERS.length + 1);
+    const names = await sections.evaluateAll((els) =>
+      els.map((el) => {
+        const ids = (el.getAttribute("aria-labelledby") ?? "").split(/\s+/);
+        return ids
+          .map((id) => document.getElementById(id)?.textContent ?? "")
+          .join(" ")
+          .replace(/\s+/g, " ")
+          .trim();
+      }),
+    );
+    expect(allUnique(names), JSON.stringify(names)).toBe(true);
+    const headings = await page
+      .locator("[data-feature-story] h3")
+      .evaluateAll((els) =>
+        els.map((el) => (el.textContent ?? "").replace(/\s+/g, " ").trim()),
+      );
+    expect(allUnique(headings), JSON.stringify(headings)).toBe(true);
   });
 }
 
@@ -297,3 +338,25 @@ for (const lang of ["en", "vi", "zh", "zh-hant"]) {
     await expect(page.locator("[data-story-chapter]")).toHaveCount(5);
   });
 }
+
+export const sameTop = (tops: number[]) =>
+  tops.length > 1 && Math.max(...tops) - Math.min(...tops) <= 1;
+
+test("negative proof: the teaser alignment predicate can fail", () => {
+  expect(sameTop([392, 405, 392])).toBe(false);
+  expect(sameTop([392])).toBe(false);
+});
+
+test("1440 home teaser: the three captions start on one line", async ({
+  page,
+}) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("/vi/");
+  const tops = await page
+    .locator("[data-story-teaser] .story-teaser__index")
+    .evaluateAll((els) =>
+      els.map((el) => Math.round(el.getBoundingClientRect().top)),
+    );
+  expect(sameTop(tops), JSON.stringify(tops)).toBe(true);
+});

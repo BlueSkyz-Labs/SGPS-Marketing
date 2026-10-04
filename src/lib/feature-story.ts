@@ -3,8 +3,10 @@
  *
  * The story is presentation only. It may order, pair and reveal registry
  * truth; it never creates any. Every chapter names a screen declared in the
- * same showcase record and, optionally, one job or capability of the product
- * record (`job-1`, `capability-2`, 1-based) that the screen shows. Resolution
+ * same showcase record and, optionally, the registered capability this
+ * chapter's task relates to: one job or capability of the product record
+ * (`job-1`, `capability-2`, 1-based). It never claims what the screen shows,
+ * so it renders as plain secondary text. Resolution
  * fails loudly, so an unknown screen, a wrong surface or a missing fact stops
  * the build instead of rendering an invented chapter.
  *
@@ -32,7 +34,7 @@ export interface StoryFacts {
 
 export interface ResolvedChapter<S extends StoryScreen> {
   screen: S;
-  /** The registry job/capability text this screen shows, if one is bound. */
+  /** The registered capability this chapter's task relates to, if bound. */
   fact: string | null;
 }
 

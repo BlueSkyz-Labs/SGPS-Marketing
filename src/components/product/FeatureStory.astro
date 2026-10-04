@@ -71,7 +71,7 @@ const DESKTOP_SIZES = "(min-width: 64rem) 64rem, calc(100vw - 2.5rem)";
           <p class="story__line">{sentenceCase(screen.caption[lang], lang)}</p>
           {fact ? (
             <p class="story__fact" data-story-fact>
-              <span>{fact}</span>
+              {fact}
             </p>
           ) : null}
         </div>
@@ -105,8 +105,12 @@ const DESKTOP_SIZES = "(min-width: 64rem) 64rem, calc(100vw - 2.5rem)";
       data-story-coda={story.coda.id}
     >
       <div class="story__coda-text">
-        <p class="story__kicker">{t.desktop}</p>
+        {/* The kicker sits inside the heading, so the coda's name and its
+            outline entry differ from the phone chapter with the same title
+            (vi: two "Thu tiền"). */}
         <h3 id={`story-chapter-${story.coda.id}`} class="story__title">
+          <span class="story__kicker">{t.desktop}</span>
+          <span class="sr-only">: </span>
           {story.coda.title[lang]}
         </h3>
         <p class="story__line">
@@ -169,12 +173,19 @@ const DESKTOP_SIZES = "(min-width: 64rem) 64rem, calc(100vw - 2.5rem)";
     font-weight: 500;
   }
   .story__kicker {
-    margin: 0;
+    display: block;
+    margin: 0 0 0.5rem;
+    line-height: 1.4;
     font-size: var(--size-1);
     font-weight: 600;
     letter-spacing: var(--tracking-eyebrow, 0.12em);
     text-transform: uppercase;
     color: var(--text-muted);
+  }
+  /* Vietnamese keeps the kicker in sentence case (split-subset kerning). */
+  :lang(vi) .story__kicker {
+    text-transform: none;
+    letter-spacing: 0.01em;
   }
   .story__title {
     margin: 0.5rem 0 0;
@@ -200,27 +211,13 @@ const DESKTOP_SIZES = "(min-width: 64rem) 64rem, calc(100vw - 2.5rem)";
     color: var(--text-secondary);
     text-wrap: pretty;
   }
+  /* The registered capability this chapter's task relates to: plain
+     secondary text, never a check-marked "this screen shows" claim. */
   .story__fact {
-    display: flex;
-    gap: 0.625rem;
-    align-items: flex-start;
-    margin: 1.25rem 0 0;
-    padding-top: 1rem;
-    border-top: 1px solid var(--border-subtle);
+    margin: 1rem 0 0;
     font-size: var(--size-3);
     line-height: 1.55;
-    color: var(--text-primary);
-  }
-  /* A drawn check mark (no per-chapter SVG markup). */
-  .story__fact::before {
-    content: "";
-    flex: none;
-    width: 0.4rem;
-    height: 0.75rem;
-    margin: 0.3rem 0.35rem 0 0.25rem;
-    border: solid var(--action-primary);
-    border-width: 0 2px 2px 0;
-    transform: rotate(45deg);
+    color: var(--text-secondary);
   }
   .story__screen {
     margin: 0;

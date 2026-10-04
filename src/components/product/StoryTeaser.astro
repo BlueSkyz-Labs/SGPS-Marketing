@@ -186,6 +186,9 @@ const SIZES = "(min-width: 48rem) 13rem, min(7.5rem, 30vw)";
       grid-template-columns: none;
       justify-items: center;
       align-items: start;
+      /* Rows hug their content: a shorter caption must not stretch the
+         phone row and push its text lower than its neighbours'. */
+      align-content: start;
       text-align: center;
     }
     .story-teaser__device {
