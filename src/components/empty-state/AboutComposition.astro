@@ -83,8 +83,12 @@ const products = (await getPublicProducts()).map((product) => ({
         </a>
       </li>
     </ul>
-    <a href={`/${lang}/verify/`} class="about-verify">
+    <a
+      href={`/${lang}/verify/`}
+      class="about-verify inline-flex items-center gap-2"
+    >
       {labelFor(EMPTY_STATE_COPY.aboutCheckCta, lang)}
+      <BlueSkyzIcon name="arrow-right" class="about-arrow h-4 w-4 shrink-0" />
     </a>
   </section>
 </div>

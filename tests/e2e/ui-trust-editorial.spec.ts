@@ -148,6 +148,26 @@ test.describe("F12 About header", () => {
     });
   }
 
+  for (const lang of LANGS) {
+    test(`/${lang}/about/ verify link carries a decorative arrow icon`, async ({
+      page,
+    }) => {
+      await page.goto(`/${lang}/about/`);
+      const icon = page.locator("main a.about-verify > svg.about-arrow");
+      await expect(icon).toHaveCount(1);
+      await expect(icon).toHaveAttribute("aria-hidden", "true");
+    });
+  }
+
+  test("negative proof: the arrow probe finds no icon where none exists", async ({
+    page,
+  }) => {
+    await page.goto("/en/about/");
+    await expect(
+      page.locator("main a.about-verify > svg.about-arrow-none"),
+    ).toHaveCount(0);
+  });
+
   test("negative proof: the eyebrow probe sees a PageHeader eyebrow", async ({
     page,
   }) => {
