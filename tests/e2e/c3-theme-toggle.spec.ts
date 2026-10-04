@@ -141,19 +141,45 @@ test("without JavaScript System still follows OS preference", async ({
   }
 });
 
-test("desktop trigger shows the current mode icon + label and keeps them after a choice and a reload", async ({
+// Owner 2026-10-04: icon-only trigger. The glyph shows the RESOLVED theme
+// (sun / moon, read from the rays' computed opacity), a cobalt dot marks System,
+// the accessible name states the mode and a CSS tooltip repeats it.
+async function glyphState(page: Page): Promise<{
+  rays: number;
+  dot: number;
+}> {
+  return page.evaluate(() => {
+    const svg = document.querySelector(
+      "header [data-theme-trigger] .tt-morph",
+    )!;
+    const read = (sel: string) =>
+      Number(getComputedStyle(svg.querySelector(sel)!).opacity);
+    return { rays: read(".tt-rays"), dot: read(".tt-dot") };
+  });
+}
+
+test("desktop icon trigger morphs to the chosen mode, names it and keeps it after a reload", async ({
   page,
 }) => {
+  await page.emulateMedia({ reducedMotion: "reduce", colorScheme: "light" });
   await page.setViewportSize({ width: 1280, height: 900 });
   await page.goto("/en/");
   const trigger = page.locator("header [data-theme-trigger]");
   await expect(trigger).toHaveAttribute("data-theme-current", "system");
   await expect(trigger).toHaveAttribute("aria-label", "Theme: System");
-  // The label is visible from lg and the accessible name contains it (2.5.3).
-  await expect(trigger.locator("[data-theme-current-label]")).toBeVisible();
-  await expect(trigger.locator("[data-theme-current-label]")).toHaveText(
-    "System",
-  );
+  await expect(trigger).not.toHaveAttribute("title", /.*/);
+  // No visible label, no chevron: a 44px square whose only text is the tooltip.
+  const box = await trigger.boundingBox();
+  expect(Math.round(box!.width)).toBe(44);
+  expect(Math.round(box!.height)).toBe(44);
+  await expect(trigger.locator("[data-theme-current-label]")).toHaveCount(0);
+  await expect(trigger.locator(".hc-chevron")).toHaveCount(0);
+  // System on a light OS: sun + status dot.
+  expect(await glyphState(page)).toEqual({ rays: 1, dot: 1 });
+  // Mask ids are unique per instance (header + compact menu).
+  const ids = await page.$$eval("mask[id]", (masks) => masks.map((m) => m.id));
+  expect(ids.length).toBeGreaterThan(1);
+  expect(new Set(ids).size).toBe(ids.length);
 
   await trigger.click();
   const theme = page.getByRole("group", { name: "Theme" });
@@ -171,39 +197,97 @@ test("desktop trigger shows the current mode icon + label and keeps them after a
   await expect(trigger).toHaveAttribute("aria-expanded", "false");
   await expect(trigger).toHaveAttribute("data-theme-current", "dark");
   await expect(trigger).toHaveAttribute("aria-label", "Theme: Dark");
-  await expect(trigger.locator("[data-theme-current-label]")).toHaveText(
-    "Dark",
-  );
-  await expect(trigger.locator('[data-theme-icon="dark"]')).toHaveCSS(
-    "opacity",
-    "1",
-  );
-  await expect(trigger.locator('[data-theme-icon="system"]')).toHaveCSS(
-    "opacity",
-    "0",
-  );
+  // Moon (rays gone) and no dot outside System.
+  expect(await glyphState(page)).toEqual({ rays: 0, dot: 0 });
 
   await page.reload();
   await expect(trigger).toHaveAttribute("data-theme-current", "dark");
   await expect(trigger).toHaveAttribute("aria-label", "Theme: Dark");
-  await expect(trigger.locator("[data-theme-current-label]")).toHaveText(
-    "Dark",
-  );
+  expect(await glyphState(page)).toEqual({ rays: 0, dot: 0 });
   await trigger.click();
   await expect(
     page
       .getByRole("group", { name: "Theme" })
       .getByRole("button", { name: "Dark" }),
   ).toHaveAttribute("aria-pressed", "true");
+  await page
+    .getByRole("group", { name: "Theme" })
+    .getByRole("button", { name: "Light" })
+    .click();
+  await expect(trigger).toHaveAttribute("aria-label", "Theme: Light");
+  // Pinned Light: sun, no dot.
+  expect(await glyphState(page)).toEqual({ rays: 1, dot: 0 });
 });
 
-test("below lg the trigger is icon + chevron only but keeps its accessible name", async ({
+test("System on an OS-dark device shows the moon with the status dot", async ({
+  page,
+}) => {
+  await page.emulateMedia({ reducedMotion: "reduce", colorScheme: "dark" });
+  await page.setViewportSize({ width: 1280, height: 900 });
+  await page.goto("/en/");
+  await expect(page.locator("header [data-theme-trigger]")).toHaveAttribute(
+    "aria-label",
+    "Theme: System",
+  );
+  expect(await glyphState(page)).toEqual({ rays: 0, dot: 1 });
+});
+
+test("the tooltip names the mode on hover and focus, never while the panel is open", async ({
+  page,
+}) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.setViewportSize({ width: 1280, height: 900 });
+  await page.goto("/vi/");
+  const trigger = page.locator("header [data-theme-trigger]");
+  const tip = trigger.locator("[data-theme-tip]");
+  await expect(tip).toHaveAttribute("aria-hidden", "true");
+  await expect(tip).toBeHidden();
+  // The hover tooltip exists only for hover-capable pointers (@media
+  // (hover: hover)); touch devices (mobile project) must NOT show it on tap.
+  const canHover = await page.evaluate(
+    () => matchMedia("(hover: hover)").matches,
+  );
+  await trigger.hover();
+  if (canHover) {
+    await expect(tip).toBeVisible();
+    // innerText: only the current mode's word is rendered (display), not all three.
+    await expect.poll(() => tip.innerText()).toBe("Giao diện: Tự động");
+  } else {
+    await expect(tip).toBeHidden();
+  }
+  // The tooltip never widens the page.
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= window.innerWidth,
+    ),
+  ).toBe(true);
+
+  await trigger.click();
+  await expect(trigger).toHaveAttribute("aria-expanded", "true");
+  await expect(tip).toBeHidden();
+  await page
+    .getByRole("group", { name: "Giao diện" })
+    .getByRole("button", { name: "Tối" })
+    .click();
+  await page.mouse.move(10, 600);
+  await expect(tip).toBeHidden();
+  // Keyboard focus shows it again with the new mode.
+  await trigger.focus();
+  await page.keyboard.press("Shift+Tab");
+  await page.keyboard.press("Tab");
+  await expect(trigger).toBeFocused();
+  await expect(tip).toBeVisible();
+  // innerText: only the current mode's word is rendered (display), not all three.
+  await expect.poll(() => tip.innerText()).toBe("Giao diện: Tối");
+  await expect(trigger).toHaveAttribute("aria-label", "Giao diện: Tối");
+});
+
+test("below lg the icon trigger keeps its accessible name", async ({
   page,
 }) => {
   await page.setViewportSize({ width: 1023, height: 800 });
   await page.goto("/vi/");
   const trigger = page.locator("header [data-theme-trigger]");
   await expect(trigger).toBeVisible();
-  await expect(trigger.locator("[data-theme-current-label]")).toBeHidden();
   await expect(trigger).toHaveAttribute("aria-label", "Giao diện: Tự động");
 });

@@ -266,6 +266,12 @@ const defaultTrack = wanted
     text-transform: uppercase;
     color: var(--text-muted);
   }
+
+  /* Vietnamese: sentence case (cross-subset kerning, see .eyebrow). */
+  :lang(vi) .showcase__label {
+    text-transform: none;
+    letter-spacing: var(--tracking-eyebrow, 0.03em);
+  }
   .showcase__video video {
     display: block;
     width: 100%;
