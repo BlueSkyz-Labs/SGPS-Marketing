@@ -95,7 +95,15 @@ for (const colorScheme of ["light", "dark"] as const) {
       expect(s.outlineWidth).toBe("3px");
       expect(s.outlineOffset).toBe("3px");
       expect(s.outlineColor).toBe(s.ring);
-      expect(s.boxShadow).toMatch(/0px 0px 0px 3px/);
+      // The halo is a box-shadow transition: read it once the transition has
+      // settled rather than mid-flight (a 2.85px frame is not a failure).
+      await expect
+        .poll(
+          async () =>
+            (await focusStyle(page, 'main a.btn[href="/en/products/"]'))
+              .boxShadow,
+        )
+        .toMatch(/0px 0px 0px 3px/);
     });
 
     test("the hero CTA on the ink band keeps a visible focus halo", async ({

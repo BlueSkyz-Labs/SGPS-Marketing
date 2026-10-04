@@ -107,6 +107,15 @@ const trailingIcon =
       var(--btn-shadow);
   }
 
+  /* The header craft layer styles the current nav link (text colour, weight,
+     underline). A button keeps its own palette and current-state cue, so the
+     scoped class + attribute outranks that rule (0,3,0 > 0,2,3). */
+  .btn[aria-current="page"] {
+    color: var(--btn-fg);
+    font-weight: 600;
+    text-decoration: none;
+  }
+
   /* Primary: solid cobalt with a specular top hairline. */
   .btn--primary {
     --btn-bg: var(--action-fill, #2564ff);
