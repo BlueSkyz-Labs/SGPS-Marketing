@@ -382,25 +382,40 @@ const defaultTrack = wanted
   }
 
   /* W2 "Device stage" (Tier A, CSS only). Where scroll-driven animations
-     exist and the visitor allows motion, the three lead phones rise into the
-     stage centre-first, then left, then right, and the owner's desktop
-     capture rises after them. Keyframes are the shared grammar (`view-rise`
-     in global.css; route-local keyframes are banned by
-     c3-craft-contract.test.mjs), so only the per-phone timing lives here.
-     The CSS default (no support, reduced motion, forced colors, print, no
-     JS) is the final layout. */
+     exist and the visitor allows motion, the three lead phones enter as one
+     stacked hand (the outer two tucked behind the centre phone, tilted) and
+     fan out to the final row as the stage scrolls in; captions fade in once
+     the fan has opened, so stacked captions never overlap. The owner's
+     desktop capture rises after them. Keyframes are the shared grammar
+     (`stage-fan` / `stage-caption` in reveal.css, `view-rise` in global.css;
+     route-local keyframes are banned by c3-craft-contract.test.mjs), so only
+     the per-phone offsets and timing live here. The CSS default (no support,
+     reduced motion, forced colors, print, no JS) is the final layout. */
   @media (min-width: 64rem) and (prefers-reduced-motion: no-preference) {
     @supports (animation-timeline: view()) {
       .showcase__rail--stage > .showcase__phone {
-        animation: view-rise linear both;
+        animation: stage-fan linear both;
         animation-timeline: view();
-        animation-range: entry 10% cover 38%;
+        animation-range: entry 15% cover 42%;
+      }
+      /* Centre phone on top of the hand; outer phones offset by most of one
+         column (17rem + 3.5rem gap) so they peek out from behind it. */
+      .showcase__rail--stage > .showcase__phone:nth-child(2) {
+        position: relative;
+        z-index: 1;
       }
       .showcase__rail--stage > .showcase__phone:nth-child(1) {
-        animation-range: entry 30% cover 44%;
+        --stack-x: 15.5rem;
+        --stack-r: -7deg;
       }
       .showcase__rail--stage > .showcase__phone:nth-child(3) {
-        animation-range: entry 50% cover 50%;
+        --stack-x: -15.5rem;
+        --stack-r: 7deg;
+      }
+      .showcase__rail--stage > .showcase__phone .showcase__caption {
+        animation: stage-caption linear both;
+        animation-timeline: view();
+        animation-range: cover 30% cover 46%;
       }
       .showcase__desktops--stage > li:first-child {
         animation: view-rise linear both;
@@ -411,6 +426,7 @@ const defaultTrack = wanted
   }
   @media (forced-colors: active) {
     .showcase__rail--stage > .showcase__phone,
+    .showcase__rail--stage > .showcase__phone .showcase__caption,
     .showcase__desktops--stage > li:first-child {
       animation: none;
     }
