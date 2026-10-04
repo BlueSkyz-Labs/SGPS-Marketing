@@ -151,7 +151,7 @@ test("header expectations are read from public/_headers", () => {
     "media-src 'self'",
     "upgrade-insecure-requests",
     "frame-ancestors 'none'",
-    "script-src 'self'",
+    "script-src 'self' 'inline-speculation-rules'",
   ]);
 });
 
