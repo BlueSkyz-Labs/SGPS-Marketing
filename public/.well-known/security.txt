@@ -4,3 +4,4 @@ Contact: https://github.com/BlueSkyz-Labs/SGPS-Marketing/security/advisories/new
 Expires: 2027-09-12T00:00:00.000Z
 Preferred-Languages: en, vi
 Canonical: https://blueskyzlabs.com/.well-known/security.txt
+Policy: https://blueskyzlabs.com/en/security/
