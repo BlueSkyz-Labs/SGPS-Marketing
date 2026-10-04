@@ -22,3 +22,17 @@
 /products/sotam /en/products/sotam/ 301
 /products/:slug/ /en/products/ 301
 /products/:slug /en/products/ 301
+# RT-03: explicit one-hop 301s for the no-slash forms so the platform's
+# 307 trailing-slash normalization never chains into the 301 above.
+# Exact-match only (no splat/placeholder); same-origin destinations only.
+# Guarded by tests/architecture/rt03-single-hop-redirects.test.mjs.
+/about /en/about/ 301
+/contact /en/contact/ 301
+/privacy /en/privacy/ 301
+/security /en/security/ 301
+/support /en/support/ 301
+/products /en/products/ 301
+/en /en/ 301
+/vi /vi/ 301
+/zh /zh/ 301
+/zh-hant /zh-hant/ 301

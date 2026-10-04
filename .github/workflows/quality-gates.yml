@@ -203,6 +203,11 @@ jobs:
         run: pnpm lighthouse
       - name: Lighthouse CI (mobile routes)
         run: pnpm exec lhci autorun --config=./lighthouserc.mobile.json
+      - name: Experience performance budget (SGPS-DEC-2026-025)
+        run: node scripts/check-performance-budget.mjs .lighthouseci
+      # Runs last: it rebuilds dist with the production origin.
+      - name: Lighthouse CI (SEO, production origin)
+        run: node scripts/run-lighthouse-seo.mjs
 
   # v10 E3 visual regression gate: chromium only, Linux baselines committed
   # in tests/visual/. Runs on every event like the engine shards (no

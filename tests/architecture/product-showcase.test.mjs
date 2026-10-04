@@ -204,6 +204,54 @@ test("negative proof: a phone capture without a 480w derivative is caught", () =
   assert.ok(problems.length > 0, "a missing derivative must be reported");
 });
 
+// DEC-025 calibration: desktop captures are 1920px masters, so each ships a
+// 768w derivative (`<name>-768.webp`) that ShowcaseGroup offers through
+// srcset. Without it a phone downloads every 1920px master the lazy-load
+// distance reaches, which blew the product page's image budget.
+function desktopDerivativeProblems(text, fileExists = existsSync) {
+  const blocks = text.split(/^\s+- id:\s*/m).slice(1);
+  const problems = [];
+  for (const block of blocks) {
+    if (!/^\s+surface:\s*desktop\s*$/m.test(block)) continue;
+    const src = block.match(/^\s+src:\s*(\S+\.webp)\s*$/m)?.[1];
+    if (!src) continue;
+    const small = src.replace(/\.webp$/, "-768.webp");
+    if (!fileExists(`public${small}`)) problems.push(`${small} is missing`);
+    else if (webpSize(`public${small}`).width !== 768) {
+      problems.push(`${small} is not 768px wide`);
+    }
+  }
+  return problems;
+}
+
+test("every desktop capture has a 768w derivative offered via srcset", () => {
+  for (const { name, text } of records()) {
+    assert.deepEqual(desktopDerivativeProblems(text), [], name);
+  }
+  const group = readFileSync(
+    "src/components/product/ShowcaseGroup.astro",
+    "utf8",
+  );
+  assert.match(
+    group,
+    /srcset=\{`\$\{desktopSmallSrc\(item\.src\)\} 768w, \$\{item\.src\} \$\{item\.width\}w`\}/,
+  );
+  assert.match(
+    group,
+    /sizes=\{index === 0 \? DESKTOP_SIZES_FULL : DESKTOP_SIZES_HALF\}/,
+  );
+});
+
+test("negative proof: a desktop capture without a 768w derivative is caught", () => {
+  const { text } = records().find(({ text: t }) =>
+    /surface:\s*desktop/.test(t),
+  );
+  const problems = desktopDerivativeProblems(text, (path) =>
+    path.endsWith("-768.webp") ? false : existsSync(path),
+  );
+  assert.ok(problems.length > 0, "a missing derivative must be reported");
+});
+
 // v8 hotfix: Lighthouse's simulated LCP waits on every request that starts
 // before the hero text paints. The product profile therefore (a) uses the
 // 112px icon derivative in its header, (b) fetches the hidden endorsed lockup
