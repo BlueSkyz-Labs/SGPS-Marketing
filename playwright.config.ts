@@ -59,5 +59,16 @@ export default defineConfig({
       name: "edge-ua",
       use: { ...devices["Desktop Chrome"], userAgent: edgeUserAgent },
     },
+    {
+      // v10 E3 visual regression gate: chromium only, specs live in
+      // tests/visual/ so the sharded e2e matrix (tests/e2e/) is untouched.
+      // Baselines are Linux-CI generated and committed; CI never updates.
+      name: "visual",
+      testDir: "./tests/visual",
+      use: {
+        ...devices["Desktop Chrome"],
+        reducedMotion: "reduce",
+      },
+    },
   ],
 });
