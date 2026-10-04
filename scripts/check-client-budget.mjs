@@ -41,16 +41,24 @@ function listHtmlFiles(dir) {
 
 // Inline executable scripts are rendered dead by the production CSP
 // (`script-src 'self'`); flag them so a build config change cannot silently
-// ship unrunnable interaction code.
+// ship unrunnable interaction code. Non-executable data blocks
+// (`application/ld+json`, `speculationrules`, …) are not scripts in this
+// sense and are skipped.
 function collectInlineExecutableScripts(html) {
   const inline = [];
   const pattern = /<script\b([^>]*)>([\s\S]*?)<\/script>/gi;
+  const executableTypes = new Set([
+    "module",
+    "text/javascript",
+    "application/javascript",
+  ]);
   for (const match of html.matchAll(pattern)) {
     const attributes = match[1] ?? "";
     if (/\bsrc\s*=/i.test(attributes)) {
       continue;
     }
-    if (/application\/ld\+json/i.test(attributes)) {
+    const typeMatch = attributes.match(/\btype\s*=\s*"([^"]*)"/i);
+    if (typeMatch && !executableTypes.has(typeMatch[1].toLowerCase())) {
       continue;
     }
     inline.push((match[2] ?? "").trim().slice(0, 120));
