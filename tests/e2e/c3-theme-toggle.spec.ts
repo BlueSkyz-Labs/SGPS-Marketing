@@ -140,3 +140,70 @@ test("without JavaScript System still follows OS preference", async ({
     await context.close();
   }
 });
+
+test("desktop trigger shows the current mode icon + label and keeps them after a choice and a reload", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1280, height: 900 });
+  await page.goto("/en/");
+  const trigger = page.locator("header [data-theme-trigger]");
+  await expect(trigger).toHaveAttribute("data-theme-current", "system");
+  await expect(trigger).toHaveAttribute("aria-label", "Theme: System");
+  // The label is visible from lg and the accessible name contains it (2.5.3).
+  await expect(trigger.locator("[data-theme-current-label]")).toBeVisible();
+  await expect(trigger.locator("[data-theme-current-label]")).toHaveText(
+    "System",
+  );
+
+  await trigger.click();
+  const theme = page.getByRole("group", { name: "Theme" });
+  // Rows are ordered Light, Dark, System.
+  await expect(theme.getByRole("button")).toHaveText([
+    /Light/,
+    /Dark/,
+    /System/,
+  ]);
+  await theme.getByRole("button", { name: "Dark" }).click();
+
+  // Choosing closes the popover, returns focus and keeps aria-expanded true to state.
+  await expect(theme.getByRole("button")).toHaveCount(0);
+  await expect(trigger).toBeFocused();
+  await expect(trigger).toHaveAttribute("aria-expanded", "false");
+  await expect(trigger).toHaveAttribute("data-theme-current", "dark");
+  await expect(trigger).toHaveAttribute("aria-label", "Theme: Dark");
+  await expect(trigger.locator("[data-theme-current-label]")).toHaveText(
+    "Dark",
+  );
+  await expect(trigger.locator('[data-theme-icon="dark"]')).toHaveCSS(
+    "opacity",
+    "1",
+  );
+  await expect(trigger.locator('[data-theme-icon="system"]')).toHaveCSS(
+    "opacity",
+    "0",
+  );
+
+  await page.reload();
+  await expect(trigger).toHaveAttribute("data-theme-current", "dark");
+  await expect(trigger).toHaveAttribute("aria-label", "Theme: Dark");
+  await expect(trigger.locator("[data-theme-current-label]")).toHaveText(
+    "Dark",
+  );
+  await trigger.click();
+  await expect(
+    page
+      .getByRole("group", { name: "Theme" })
+      .getByRole("button", { name: "Dark" }),
+  ).toHaveAttribute("aria-pressed", "true");
+});
+
+test("below lg the trigger is icon + chevron only but keeps its accessible name", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1023, height: 800 });
+  await page.goto("/vi/");
+  const trigger = page.locator("header [data-theme-trigger]");
+  await expect(trigger).toBeVisible();
+  await expect(trigger.locator("[data-theme-current-label]")).toBeHidden();
+  await expect(trigger).toHaveAttribute("aria-label", "Giao diện: Tự động");
+});
