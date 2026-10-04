@@ -189,15 +189,23 @@ const defaultTrack = wanted
 
 <style is:inline>
   /* Below the fold: skip layout and paint until near the viewport. The
-     placeholder heights are the measured section heights (1655 px mobile,
-     2777 px desktop, gallery collapsed) so the scrollbar does not jump. */
+     placeholder heights are the measured section heights with the gallery
+     collapsed (Sổ Trọ, 2026-10-04: 1542-1627 px at 390, 2236-2276 px at
+     1024, 2417-2457 px at 1440 across the four locales) so the scrollbar
+     does not jump. Guarded by tests/e2e/wp-c-product-surfaces.spec.ts;
+     re-measure after any layout change. */
   .showcase {
     content-visibility: auto;
-    contain-intrinsic-size: auto 1660px;
+    contain-intrinsic-size: auto 1620px;
   }
   @media (min-width: 64rem) {
     .showcase {
-      contain-intrinsic-size: auto 2780px;
+      contain-intrinsic-size: auto 2260px;
+    }
+  }
+  @media (min-width: 80rem) {
+    .showcase {
+      contain-intrinsic-size: auto 2440px;
     }
   }
   .showcase__label {
@@ -237,20 +245,30 @@ const defaultTrack = wanted
     /* Far-below captures stay out of the first-paint request graph. */
     /* Top padding leaves room for the hover lift under paint containment. */
     content-visibility: auto;
-    contain-intrinsic-size: auto 41rem;
+    contain-intrinsic-size: auto 35rem;
     padding-top: 0.5rem;
     margin-top: -0.5rem;
   }
+  /* F14: on desktop the phones keep their real-world scale (17rem, the same
+     as the rail) on a centred stage instead of stretching to a third of the
+     page each. */
   @media (min-width: 64rem) {
     .showcase__rail {
       margin: 1.25rem 0 0;
       padding: 0.5rem 0 0;
       grid-auto-flow: row;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
+      grid-template-columns: repeat(3, minmax(0, 17rem));
       grid-auto-columns: auto;
-      column-gap: 2rem;
+      justify-content: center;
+      column-gap: 3.5rem;
       row-gap: 2.75rem;
       overflow: visible;
+    }
+    /* Paint containment clips at the item edge, so the item carries room for
+       the device shadow instead of cutting it into a visible slab. */
+    .showcase__phone {
+      padding-inline: 1.5rem;
+      margin-inline: -1.5rem;
     }
   }
   .showcase__device {
@@ -281,6 +299,12 @@ const defaultTrack = wanted
     box-shadow:
       0 1px 0 color-mix(in srgb, white 30%, transparent) inset,
       0 36px 60px -28px color-mix(in srgb, var(--brand-cobalt) 40%, transparent);
+  }
+  .showcase__caption {
+    margin-top: 1rem;
+    font-size: var(--size-2);
+    line-height: 1.6;
+    color: var(--text-secondary);
   }
   .showcase__desktops {
     margin-top: 1.25rem;
@@ -355,6 +379,41 @@ const defaultTrack = wanted
   .showcase__rail:focus-visible {
     outline: 2px solid var(--brand-cobalt);
     outline-offset: 3px;
+  }
+
+  /* W2 "Device stage" (Tier A, CSS only). Where scroll-driven animations
+     exist and the visitor allows motion, the three lead phones rise into the
+     stage centre-first, then left, then right, and the owner's desktop
+     capture rises after them. Keyframes are the shared grammar (`view-rise`
+     in global.css; route-local keyframes are banned by
+     c3-craft-contract.test.mjs), so only the per-phone timing lives here.
+     The CSS default (no support, reduced motion, forced colors, print, no
+     JS) is the final layout. */
+  @media (min-width: 64rem) and (prefers-reduced-motion: no-preference) {
+    @supports (animation-timeline: view()) {
+      .showcase__rail--stage > .showcase__phone {
+        animation: view-rise linear both;
+        animation-timeline: view();
+        animation-range: entry 10% cover 38%;
+      }
+      .showcase__rail--stage > .showcase__phone:nth-child(1) {
+        animation-range: entry 30% cover 44%;
+      }
+      .showcase__rail--stage > .showcase__phone:nth-child(3) {
+        animation-range: entry 50% cover 50%;
+      }
+      .showcase__desktops--stage > li:first-child {
+        animation: view-rise linear both;
+        animation-timeline: view();
+        animation-range: entry 0% cover 30%;
+      }
+    }
+  }
+  @media (forced-colors: active) {
+    .showcase__rail--stage > .showcase__phone,
+    .showcase__desktops--stage > li:first-child {
+      animation: none;
+    }
   }
 
   @media (prefers-reduced-motion: reduce) {

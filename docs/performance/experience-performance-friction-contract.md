@@ -1,12 +1,12 @@
-# Experience Performance & Friction contract (SGPS-DEC-2026-025 / Experience 1.5)
+# Experience Performance & Friction contract (SGPS-DEC-2026-028 operationalizing DEC-025 / Experience 1.5)
 
 **Project:** SGPS-Marketing, the public brand surface at `https://blueskyzlabs.com`
 **Tracking:** issue #449 (P0, mandatory GAPS lane)
-**Authority state:** `PREPARED / WAIT_CANONICAL_MERGE / NOT_ADOPTED`
+**Authority state:** `ADOPTED (lab-verified)`. See `.sgps/experience-performance-friction.json` and `docs/sgps/adoption/SGPS_DEC_2026_028_EXPERIENCE_PERFORMANCE_FRICTION.md`.
 
-- DEC-025 is Owner-approved LOCK (2026-10-03) in `sgps-core` PR #256, which is **not merged yet**.
-- Per issue #449, this file is reversible local preparation. It is not adoption.
-- When #256 merges, record its exact merged revision here.
+- **Update 2026-10-04:** the Owner-approved LOCK landed as `SGPS-DEC-2026-028`, sgps-core PR #257, merged at `3a71af89fe6c525c63c3242c88417a0e3ffa76a5`. DEC-028 amends DEC-025's status, required-action and rollout clauses, and operationalizes DEC-025.
+- The DEC-025 file header upstream still reads DEFER. The `DEC-025 §n` references below cite the DEC-025 doctrine text that DEC-028 puts in force.
+- History: PR #256, which this file originally waited on, was superseded by #257.
 
 **Baseline revision:** `main@5b4a335` plus the below-the-fold Atlas change in #450. No Lighthouse route is affected by that change.
 **Status vocabulary:** PASS / FAIL / NOT VERIFIED / NOT APPLICABLE. Missing evidence is never PASS.
@@ -94,7 +94,7 @@ Revert each one and show the gate returns green.
 
 ## 6. Go-live boundary
 
-For the go-live of the public site, DEC-025 §7 makes this gate **non-compensatory** once #256 merges.
+For the go-live of the public site, DEC-025 §7, in force through DEC-028, makes this gate **non-compensatory**.
 
 PASS needs all of the following:
 

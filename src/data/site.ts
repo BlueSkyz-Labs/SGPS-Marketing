@@ -112,10 +112,10 @@ export const SHARED_LABELS = {
     "zh-hant": "我們的公開聲明都連結到其依據來源。",
   },
   trustCta: {
-    en: "Check our claims →",
-    vi: "Xem các tuyên bố →",
-    zh: "查看依据 →",
-    "zh-hant": "查看依據 →",
+    en: "Check our claims",
+    vi: "Xem các tuyên bố",
+    zh: "查看依据",
+    "zh-hant": "查看依據",
   },
   viewProfile: {
     en: "View profile",

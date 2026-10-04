@@ -60,7 +60,13 @@ test("stray font size is detected (negative proof)", async ({ page }) => {
   await page.goto("/en/about/");
   const before = await distinctSizes(page);
   await page.evaluate(() => {
-    for (const [i, el] of [...document.querySelectorAll("main p")].entries()) {
+    // Every text-bearing element in main, not only paragraphs: the page needs
+    // enough stray sizes to cross the cap however converged its scale is
+    // (the WP-D editorial pass also left /about/ with fewer paragraphs).
+    const targets = document.querySelectorAll(
+      "main :is(p, li, a, h2, h3, dt, dd, span)",
+    );
+    for (const [i, el] of [...targets].entries()) {
       (el as HTMLElement).style.fontSize = `${13.1 + i * 0.37}px`;
     }
   });

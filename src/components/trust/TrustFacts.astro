@@ -1,0 +1,80 @@
+---
+/**
+ * UI upgrade F12: authored trust copy as a definition list. Each fact is one
+ * hairline row: the label (`dt`) and its body (`dd`) stay adjacent in the DOM,
+ * so the reading order is unchanged at every width. When the column is wide
+ * enough (container query) the label moves into its own narrow track; below
+ * that it stacks above the body. Copy is rendered verbatim apart from the
+ * label's trailing run-in punctuation (":" / "." and CJK equivalents), which a
+ * separate label column no longer needs.
+ */
+interface Fact {
+  label: string;
+  body: string;
+  /** Optional data attribute hook kept from the previous paragraph markup. */
+  marker?: string;
+}
+interface Props {
+  facts: Fact[];
+}
+const { facts } = Astro.props;
+const factLabel = (label: string) => label.replace(/[:.：。]\s*$/u, "");
+---
+
+<div class="trust-facts-frame">
+  <dl class="trust-facts">
+    {facts.map((fact) => (
+      <div
+        class="trust-fact"
+        {...(fact.marker ? { [`data-${fact.marker}`]: "" } : {})}
+      >
+        <dt class="trust-fact__label">{factLabel(fact.label)}</dt>
+        <dd class="trust-fact__body text-pretty">{fact.body}</dd>
+      </div>
+    ))}
+  </dl>
+</div>
+
+<style>
+  .trust-facts-frame {
+    container-type: inline-size;
+  }
+  .trust-facts {
+    margin: 0;
+    border-block-end: 1px solid var(--border-subtle);
+  }
+  .trust-fact {
+    display: grid;
+    gap: 0.375rem;
+    padding-block: 1.25rem;
+    border-block-start: 1px solid var(--border-subtle);
+  }
+  .trust-fact:first-child {
+    padding-block-start: 0;
+    border-block-start: 0;
+  }
+  .trust-fact__label {
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+  .trust-fact__body {
+    margin: 0;
+    line-height: 1.65;
+    color: var(--text-secondary);
+  }
+  /* A run-in body that started lowercase after its label reads as a value
+     once the label has its own track (presentation only; DOM text is kept). */
+  .trust-fact__body::first-letter {
+    text-transform: uppercase;
+  }
+  @container (min-width: 36rem) {
+    .trust-fact {
+      grid-template-columns: 11rem minmax(0, 1fr);
+      column-gap: 2rem;
+      padding-block: 1.5rem;
+    }
+    .trust-fact:first-child {
+      padding-block-start: 0.25rem;
+    }
+  }
+</style>

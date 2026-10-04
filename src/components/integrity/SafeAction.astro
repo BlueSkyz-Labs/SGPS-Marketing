@@ -1,4 +1,5 @@
 ---
+import ButtonLink from "@/components/ui/ButtonLink.astro";
 import type { Language } from "@/data/site";
 
 interface Props {
@@ -14,8 +15,7 @@ interface Props {
 
 const { href, label, boundary, lang, note, fit = false } = Astro.props;
 
-const isExternal = /^https?:\/\//i.test(href);
-const host = isExternal ? new URL(href).host : "";
+const host = /^https?:\/\//i.test(href) ? new URL(href).host : "";
 const mailTarget = href.replace(/^mailto:/i, "");
 
 /** Visible destination context — no click interception, no modal. */
@@ -42,16 +42,8 @@ const CONTEXT = {
 ---
 
 <div class="safe-action" data-safe-action={boundary}>
-  <a
-    href={href}
-    rel={isExternal ? "noopener noreferrer" : undefined}
-    class:list={[
-      "inline-flex min-h-11 items-center gap-1.5 rounded-lg bg-[var(--action-fill)] px-5 text-sm font-semibold text-white no-underline transition-colors hover:bg-[var(--action-primary-hover)]",
-      fit && "self-start",
-    ]}
-  >
+  <ButtonLink href={href} class={fit ? "self-start" : ""}>
     {label}
-    <span aria-hidden="true">→</span>
-  </a>
+  </ButtonLink>
   <p class="safe-action__context">{note ?? CONTEXT[boundary][lang]}</p>
 </div>

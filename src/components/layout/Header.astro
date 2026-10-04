@@ -4,6 +4,7 @@ import BlueSkyzIcon from "@/components/icon/BlueSkyzIcon.astro";
 import Container from "@/components/layout/Container.astro";
 import LanguageSwitcher from "@/components/layout/LanguageSwitcher.astro";
 import ThemeToggle from "@/components/layout/ThemeToggle.astro";
+import "@/components/layout/header-control.css";
 import ButtonLink from "@/components/ui/ButtonLink.astro";
 import { SHARED_LABELS, labelFor, getNav } from "@/data/site";
 import { getLanguageFromPath } from "@/lib/i18n";
@@ -54,9 +55,9 @@ const primaryLink = NAV[1]!;
         data-command-trigger
         aria-keyshortcuts="Control+K Meta+K"
         title={`${labelFor(SHARED_LABELS.search, lang)} (Ctrl / ⌘K)`}
-        class="inline-flex min-h-11 min-w-11 items-center justify-center rounded-lg border border-[var(--border-subtle)] text-[var(--text-secondary)] transition-colors hover:text-[var(--text-primary)]"
+        class="hc-trigger hc-trigger--icon"
       >
-        <BlueSkyzIcon name="search" class="h-4 w-4 shrink-0" />
+        <BlueSkyzIcon name="search" class="hc-glyph" />
         <span class="sr-only">{labelFor(SHARED_LABELS.search, lang)}</span>
       </button>
       <LanguageSwitcher placement="header" />
@@ -74,7 +75,7 @@ const primaryLink = NAV[1]!;
       <summary class="inline-flex min-h-11 min-w-11 list-none items-center justify-center rounded-lg border border-[var(--border-subtle)] px-3 text-sm font-medium">
         {labelFor(SHARED_LABELS.menu, lang)}
       </summary>
-      <div class="absolute right-0 z-20 mt-2 w-56 rounded-lg border border-[var(--border-subtle)] bg-[var(--surface-primary)] p-3 shadow-sm">
+      <div class="absolute right-0 z-20 mt-2 w-64 rounded-lg border border-[var(--border-subtle)] bg-[var(--surface-primary)] p-3 shadow-sm">
         <nav
           aria-label={labelFor(SHARED_LABELS.mobileNav, lang)}
           class="flex flex-col gap-2"
@@ -97,6 +98,7 @@ const primaryLink = NAV[1]!;
               {item.label}
             </a>
           ))}
+          <hr class="my-1 border-[var(--border-subtle)]" />
           <LanguageSwitcher placement="menu" />
           <ThemeToggle lang={lang} />
         </nav>
