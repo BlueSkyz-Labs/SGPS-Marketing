@@ -18,3 +18,37 @@ The orchestrator (the main session) plans, decides and edits Vietnamese. It dele
 5. Keep reports short: Haiku agents ≤ 10–15 lines, the implementer ≤ 12 lines.
 6. Escalate instead of guessing: Haiku agents stop on any ambiguity and hand it back.
 7. Independence: the agent that implements a change never verifies it (plan W11, AGENTS rule 29).
+
+## Prompt routing (SGPS vNext, `SGPS-DEC-2026-036`)
+
+The Owner activated the SGPS vNext prompts for orchestration on 2026-10-04.
+
+**Exact reference:** sgps-core PR #278, head `10c69f3`. Replace it with the merge SHA once #278 merges. Until then the routing below is `MAPPED`, not `ADOPTED`. The project's SGPS release pin is unchanged (overlay only, AGENTS rule 52).
+
+Each agent loads only what the router returns for its own lane. Never paste a prompt into always-on context.
+
+**Routing command.** The orchestrator runs the router once per phase change and again before review or merge. It runs from a trusted sgps-core checkout at the reference above, never from the PR checkout:
+
+```bash
+git diff --name-only origin/main...HEAD | python <sgps-core>/tools/sgps_prompt_route_vnext.py route --phase <PHASE> --changed-files -
+```
+
+**What each agent loads:**
+
+| Agent                       | Phase                 | Loads                                                                                          |
+| --------------------------- | --------------------- | ---------------------------------------------------------------------------------------------- |
+| orchestrator (main session) | every phase           | Kernel K0–K10, then Master in the phase mode. Decides the phase and surfaces                   |
+| `implementer`               | `EXECUTE`             | Kernel, then the specialists routed for its card's changed files (website: usually Experience) |
+| `reviewer`                  | `REVIEW` or `RELEASE` | Kernel, then the routed specialists, run independently. maker != judge (rule 7)                |
+| `scout`, `mechanic`         | none                  | No prompt. They still obey K0: report live state, never claim it from memory                   |
+
+**Usual routes for this repo.** The router's default path rules cover this repo, so no local override is needed:
+
+| Change                                                       | Routed specialist                                   |
+| ------------------------------------------------------------ | --------------------------------------------------- |
+| `*.astro`, `*.css`, `components/`, `pages/`, `i18n/`, tokens | Experience                                          |
+| `package.json`, `pnpm-lock.yaml`                             | Security                                            |
+| `wrangler*`                                                  | Release                                             |
+| Go-live (`RELEASE`)                                          | Security + Release mandatory, Experience by surface |
+
+**Owner reports** are in Vietnamese and end with the kernel K10 continuation answer: "CÒN LÀM TIẾP ĐƯỢC KHÔNG?".
