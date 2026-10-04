@@ -61,14 +61,21 @@ const {
  * names the brand (home) is used as authored. */
 const fullTitle = title.includes(SITE.name) ? title : `${title} | ${SITE.name}`;
 const currentLang = getLanguageFromPath(path);
-const prefetchRules = JSON.stringify({
-  prefetch: [
-    {
-      urls: getNav(currentLang).map((item) => item.href),
-      eagerness: "moderate",
-    },
-  ],
-}).replace(/</g, "\\u003c");
+/** v10 E4 (M02): prefetch rules are emitted only on the production origin.
+ * Non-production origins (localhost previews, CI e2e over HTTP) make engines
+ * deny the prefetches and log console errors ("URL must be secure (HTTPS)"),
+ * which would red the no-console-errors gate; the same origin gate as
+ * `noindex` above. */
+const prefetchRules = isNonProductionSiteUrl(SITE.url)
+  ? null
+  : JSON.stringify({
+      prefetch: [
+        {
+          urls: getNav(currentLang).map((item) => item.href),
+          eagerness: "moderate",
+        },
+      ],
+    }).replace(/</g, "\\u003c");
 /** Chinese locales are routed as `zh` / `zh-hant` but tagged with their BCP-47
  * script subtag (matches hreflang). CSS `:lang(zh)` matches both. */
 const htmlLang =
@@ -123,7 +130,9 @@ const robotsContent =
         inline rule set via the `'inline-speculation-rules'` keyword
         (public/_headers); engines without the Speculation Rules API ignore
         it. Chromium skips prefetches under Data Saver. */}
-    <script is:inline type="speculationrules" set:html={prefetchRules} />
+    {prefetchRules && (
+      <script is:inline type="speculationrules" set:html={prefetchRules} />
+    )}
     <!-- Without JavaScript the theme controls cannot do anything, so they are
          hidden. The language switcher needs no rule: its native popover opens
          and closes without JavaScript. -->

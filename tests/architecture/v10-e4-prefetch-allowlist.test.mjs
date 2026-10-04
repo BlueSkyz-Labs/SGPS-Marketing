@@ -105,6 +105,14 @@ test("eagerness stays moderate (hover-triggered, not eager)", () => {
   );
 });
 
+test("rules are emitted on the production origin only", () => {
+  const source = readFileSync(LAYOUT, "utf8");
+  assert.ok(
+    /isNonProductionSiteUrl\(SITE\.url\)/.test(source),
+    "the prefetch rules must be gated on the production origin (same gate as noindex)",
+  );
+});
+
 test("CSP admits the inline rule set only via the dedicated keyword", () => {
   const headers = readFileSync(HEADERS, "utf8");
   const cspLine = headers
