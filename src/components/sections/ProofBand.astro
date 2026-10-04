@@ -1,51 +1,252 @@
 ---
 import type { Language } from "@/data/site";
 import { SHARED_LABELS, labelFor } from "@/data/site";
+import BlueSkyzIcon from "@/components/icon/BlueSkyzIcon.astro";
+import { SECURITY_COPY } from "@/data/trust-copy";
+import { claimShortLabel, getPublicClaims } from "@/lib/claims";
+import { getPublicProducts } from "@/lib/products";
 
 /**
  * Experience v6 S1 — one compact proof band on the home: the existing Trust
  * heading and line, one quiet link. `Trust.astro` (ledger cards, evidence
  * teasers, Decision Room links) keeps its component and routes; S3 re-stages
  * it on /verify, which this band links to.
+ *
+ * W3 "Evidence ledger": under the line, at most three published claims, each
+ * drawn to the names of the sources behind it. Presentation only: the claims,
+ * their short labels and the source names come from the claim fabric
+ * (`getPublicClaims`, fail-closed) and integrity data; nothing here authors a
+ * claim, a source or a status. The band keeps its single link (/verify), where
+ * every source is linked; the connecting thread is decorative (aria-hidden).
  */
 interface Props {
   lang?: Language;
 }
 const { lang = "en" } = Astro.props;
+
+/** S1 density cap: the home shows at most three short claims. */
+const MAX_LEDGER_ROWS = 3;
+const products = (await getPublicProducts()).map((product) => ({
+  slug: product.data.slug,
+  name: product.data.name,
+}));
+const rows = getPublicClaims(products)
+  .slice(0, MAX_LEDGER_ROWS)
+  .map((resolved) => ({
+    id: resolved.claim.id,
+    label: claimShortLabel(resolved.claim, lang),
+    sources: resolved.evidence.map((ref) => ref.label[lang]),
+  }));
+const sourcesLabel = SECURITY_COPY[lang].sourcesLabel;
+// The arrow is an icon, not copy: strip a trailing glyph if the shared label
+// still carries one, so the link never shows two arrows.
+const ctaLabel = labelFor(SHARED_LABELS.trustCta, lang).replace(
+  /\s*→\s*$/u,
+  "",
+);
 ---
 
 <section
-  class="reveal-planes trust-strip py-8 lg:py-10"
+  class="reveal-planes trust-strip"
   data-reveal="plane"
   aria-labelledby="trust-title"
   data-trust-band
 >
-  <div class="trust-strip__copy">
-    <h2 id="trust-title" class="type-d2 text-balance">
-      {labelFor(SHARED_LABELS.trustHeading, lang)}
-    </h2>
-    <p class="mt-2 max-w-2xl text-[var(--text-secondary)] text-pretty">
-      {labelFor(SHARED_LABELS.trustBody, lang)}
-    </p>
+  <div class="trust-strip__head">
+    <div class="trust-strip__copy">
+      <h2 id="trust-title" class="type-d2 text-balance">
+        {labelFor(SHARED_LABELS.trustHeading, lang)}
+      </h2>
+      <p class="mt-2 max-w-2xl text-[var(--text-secondary)] text-pretty">
+        {labelFor(SHARED_LABELS.trustBody, lang)}
+      </p>
+    </div>
+    <a
+      href={`/${lang}/verify/`}
+      class="trust-strip__cta inline-flex min-h-11 items-center gap-1.5 text-sm font-semibold text-[var(--action-primary)] underline underline-offset-4 hover:no-underline"
+    >
+      {ctaLabel}
+      <BlueSkyzIcon name="arrow-right" class="h-4 w-4 shrink-0" />
+    </a>
   </div>
-  <a
-    href={`/${lang}/verify/`}
-    class="inline-flex min-h-11 items-center text-sm font-semibold text-[var(--action-primary)] underline underline-offset-4 hover:no-underline"
-  >
-    {labelFor(SHARED_LABELS.trustCta, lang)}
-  </a>
+  {rows.length > 0 ? (
+    <ul
+      class="evidence-ledger"
+      data-evidence-ledger
+      aria-labelledby="trust-title"
+    >
+      {rows.map((row) => (
+        <li class="evidence-ledger__row" data-claim-id={row.id}>
+          <p class="evidence-ledger__claim">{row.label}</p>
+          <span class="evidence-ledger__thread" aria-hidden="true">
+            <svg
+              viewBox="0 0 100 2"
+              preserveAspectRatio="none"
+              focusable="false"
+            >
+              <line x1="0" y1="1" x2="100" y2="1" pathLength="1" />
+            </svg>
+          </span>
+          <p class="evidence-ledger__source">
+            <span class="sr-only">{sourcesLabel} </span>
+            {row.sources.join(" · ")}
+          </p>
+        </li>
+      ))}
+    </ul>
+  ) : null}
 </section>
 
 <style>
+  /* F8 home rhythm: the band consumes the shared section token (fallback until
+     the token lands) instead of a tighter one-off padding. */
   .trust-strip {
+    padding-block: var(--section-y, 3.5rem);
+  }
+  .trust-strip__head {
     display: grid;
     gap: 1rem;
     align-items: center;
   }
   @media (min-width: 768px) {
-    .trust-strip {
+    .trust-strip__head {
       grid-template-columns: minmax(0, 1fr) auto;
       gap: 2rem;
+    }
+  }
+
+  /* ---- W3 Evidence ledger ------------------------------------------------
+     A hairline row per claim. Phones: the claim, then a short thread into the
+     source names. From 768 px the thread fills exactly the space between the
+     end of the claim and the source names (grid `fit-content` + `1fr`), so the
+     line always touches both, whatever the locale length. */
+  .evidence-ledger {
+    margin: 2rem 0 0;
+    padding: 0;
+    list-style: none;
+    border-bottom: 1px solid var(--border-subtle, rgb(15 23 42 / 0.12));
+  }
+  .evidence-ledger__row {
+    display: grid;
+    grid-template-columns: 2rem minmax(0, 1fr);
+    grid-template-areas:
+      "claim claim"
+      "thread source";
+    column-gap: 0.75rem;
+    row-gap: 0.375rem;
+    align-items: center;
+    padding-block: 1rem;
+    border-top: 1px solid var(--border-subtle, rgb(15 23 42 / 0.12));
+    view-timeline-name: --ledger-row;
+  }
+  .evidence-ledger__claim {
+    grid-area: claim;
+    margin: 0;
+    font-weight: 600;
+    line-height: 1.45;
+    color: var(--text-primary);
+    text-wrap: pretty;
+  }
+  .evidence-ledger__source {
+    grid-area: source;
+    margin: 0;
+    font-size: var(--size-1);
+    line-height: 1.45;
+    color: var(--text-secondary);
+  }
+  .evidence-ledger__thread {
+    grid-area: thread;
+    position: relative;
+    display: block;
+    height: 0.5rem;
+    min-width: 0;
+  }
+  .evidence-ledger__thread svg {
+    position: absolute;
+    inset: 50% 0.4375rem auto 0.1875rem;
+    width: calc(100% - 0.625rem);
+    height: 2px;
+    translate: 0 -50%;
+    overflow: visible;
+  }
+  .evidence-ledger__thread line {
+    stroke: var(--action-primary, #2564ff);
+    /* No non-scaling-stroke: the dash must stay in pathLength units. The box is
+       2 px tall over a 2-unit viewBox, so the stroke is 1 CSS px. */
+    stroke-width: 1;
+    stroke-dasharray: 1;
+    stroke-dashoffset: 0;
+  }
+  /* Claim-side node and source-side ring. */
+  .evidence-ledger__thread::before,
+  .evidence-ledger__thread::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    border-radius: 50%;
+    translate: 0 -50%;
+  }
+  .evidence-ledger__thread::before {
+    left: 0;
+    width: 0.375rem;
+    height: 0.375rem;
+    background: var(--action-primary, #2564ff);
+  }
+  .evidence-ledger__thread::after {
+    right: 0;
+    width: 0.5rem;
+    height: 0.5rem;
+    border: 1px solid var(--action-primary, #2564ff);
+    background: var(--surface-primary, #fff);
+  }
+  @media (min-width: 768px) {
+    .evidence-ledger__row {
+      grid-template-columns: fit-content(36rem) minmax(3rem, 1fr) minmax(
+          0,
+          max-content
+        );
+      grid-template-areas: "claim thread source";
+      column-gap: 1rem;
+      padding-block: 1.125rem;
+    }
+    /* Start-aligned so the source names begin right at the thread's ring. */
+    .evidence-ledger__source {
+      max-width: 22rem;
+    }
+  }
+
+  /* Progressive: each thread draws once as its row enters, reusing the shared
+     sail keyframes (reveal.css `sail-draw`, `sail-layer`; no local grammar). Without scroll-driven animations, with reduced motion or
+     in forced colours the drawn line is the resting state; text never moves. */
+  @supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) {
+      .evidence-ledger__thread line {
+        animation: sail-draw linear both;
+        animation-timeline: --ledger-row;
+        animation-range: entry 60% cover 45%;
+      }
+      .evidence-ledger__thread::after {
+        animation: sail-layer linear both;
+        animation-timeline: --ledger-row;
+        animation-range: cover 38% cover 48%;
+      }
+    }
+  }
+  @media (forced-colors: active) {
+    .evidence-ledger__thread line {
+      stroke: CanvasText;
+    }
+    .evidence-ledger__thread::before {
+      background: CanvasText;
+    }
+    .evidence-ledger__thread::after {
+      border-color: CanvasText;
+      background: Canvas;
+    }
+  }
+  @media print {
+    .evidence-ledger__thread {
+      display: none;
     }
   }
 </style>
