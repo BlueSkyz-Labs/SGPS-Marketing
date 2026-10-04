@@ -82,7 +82,7 @@ export function auditStateCue(source) {
     problems.push("the trigger must keep a 44x44 minimum target");
   }
   const option = rule(source, ".lang-option");
-  if (!option || !/min-height:\s*3\.25rem/.test(option)) {
+  if (!option || !/min-height:\s*3\.5rem/.test(option)) {
     problems.push("every language row must keep a comfortable touch target");
   }
   return problems;

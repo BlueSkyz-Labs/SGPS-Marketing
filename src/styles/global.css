@@ -86,6 +86,15 @@
   --border-subtle: #cbd5e1;
   --action-primary: #1d4ed8;
   --focus-ring: #1d4ed8;
+  /* National flag artwork for the language control (decorative, theme-invariant
+     apart from a softened white). Owned here so no component carries raw hex. */
+  --flag-white: #f1f5f9;
+  --flag-red-vn: #da251d;
+  --flag-yellow-vn: #ffff00;
+  --flag-red-us: #b22234;
+  --flag-blue-us: #3c3b6e;
+  --flag-red-cn: #de2910;
+  --flag-yellow-cn: #ffde00;
   /* Kit v4 radius-md (12px); keeps cards on the canonical radius scale. */
   --radius-card: 0.75rem;
   --font-sans:
