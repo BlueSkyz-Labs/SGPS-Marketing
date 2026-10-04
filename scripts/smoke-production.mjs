@@ -92,6 +92,9 @@ for (const path of [
   "/zh/privacy/",
   "/zh/security/",
   "/zh/support/",
+  "/zh-hant/privacy/",
+  "/zh-hant/security/",
+  "/zh-hant/support/",
 ]) {
   check(`${path} responds 200`, async () => {
     const response = await get(path);
@@ -179,8 +182,10 @@ check("sitemap lists only canonical localized routes", async () => {
     `expected at least the 21 canonical URLs, got ${locs.length}`,
   );
   assert(
-    locs.every((loc) => isLocalizedCanonicalRoute(loc, site)),
-    "sitemap must only list same-origin localized canonical routes",
+    locs.every(
+      (loc) => loc === `${site}/` || isLocalizedCanonicalRoute(loc, site),
+    ),
+    "sitemap must list only the root gateway and same-origin localized canonical routes",
   );
 });
 
@@ -214,6 +219,16 @@ check("public SGPS manifest is served", async () => {
   );
 });
 
+check("public product-trust manifest is served", async () => {
+  const response = await get("/.well-known/product-trust.json");
+  assert(response.status === 200, `expected 200, got ${response.status}`);
+  const body = await response.text();
+  assert(
+    body.includes('"derivedFrom": "public-registry"'),
+    "product-trust manifest must be derived from the public registry",
+  );
+});
+
 check("machine-readable security policy is served", async () => {
   const response = await get("/.well-known/security.txt");
   assert(response.status === 200, `expected 200, got ${response.status}`);
@@ -227,6 +242,8 @@ check("branded 404 is served on unknown paths", async () => {
     "/en/no-such-page/",
     "/vi/khong-ton-tai/",
     "/no-such-root/",
+    "/zh/no-such-page/",
+    "/zh-hant/no-such-page/",
   ]) {
     const response = await get(path);
     assert(
@@ -235,7 +252,9 @@ check("branded 404 is served on unknown paths", async () => {
     );
     const html = await response.text();
     assert(
-      /page not found|không tìm thấy/i.test(html),
+      /page not found|không tìm thấy|未找到页面|找不到页面|未找到頁面|找不到頁面/i.test(
+        html,
+      ),
       `${path}: branded 404 content missing`,
     );
     assert(
