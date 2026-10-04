@@ -41,29 +41,41 @@ The injected `/cdn-cgi/challenge-platform/scripts/jsd/main.js` came from the sta
 | `workers.dev` / preview URLs                       | Disabled for `blueskyz-web`, `sotam-web-production`, `sotro-production`                                                                    | No bypass there                                                                                              |
 | Worker custom domains for `blueskyz-web`           | `blueskyzlabs.com`, `www.blueskyzlabs.com`                                                                                                 | `www` is served by the same Worker                                                                           |
 | Access app `blueskyzlabs.com`                      | Destinations: `blueskyzlabs.com` only. One reusable allow policy (Owner only), 24 h session                                                | **Does not cover `www`**                                                                                     |
-| Single Redirects (`http_request_dynamic_redirect`) | No entrypoint ruleset (empty)                                                                                                              | RT-01 redirect not present                                                                                   |
+| Single Redirects (`http_request_dynamic_redirect`) | Empty at first read; now rule `www_to_apex_301` (see RT-01)                                                                                | RT-01 redirect not present                                                                                   |
 | Email obfuscation                                  | On; no `email-decode` or `__cf_email__` found in sampled HTML                                                                              | Low priority: turn off for strict-CSP sites                                                                  |
 
-## RT-01 status: still OPEN
+## RT-01 status: CLOSED by Single Redirect (2026-10-04, about 04:10 UTC)
 
-`www.blueskyzlabs.com` is the only remaining path around the apex Access gate. Two actions close it. Both are prepared, but neither was executed by the agent: the session's safety controls held both production writes for the Owner.
+`www.blueskyzlabs.com` was the only path around the apex Access gate. The agent created a Single Redirect under the Owner's explicit instruction. The read-back of the `http_request_dynamic_redirect` entrypoint is:
 
-1. **Interim, fail-closed.** Add `www.blueskyzlabs.com` as a second public destination of the existing Access app `blueskyzlabs.com`. Keep its policy unchanged.
-2. **Final.** Create a Single Redirect:
-   - match: `http.host eq "www.blueskyzlabs.com"`;
-   - target expression: `concat("https://blueskyzlabs.com", http.request.uri.path)`;
-   - status 301, query string preserved.
+- `ref`: `www_to_apex_301`, enabled;
+- expression: `(http.host eq "www.blueskyzlabs.com")`;
+- target expression: `concat("https://blueskyzlabs.com", http.request.uri.path)`;
+- status 301;
+- `preserve_query_string: true`.
 
-   The target host is fixed, so this is not an open redirect.
+**Live verification** (curl, TLS on). No response body below contained site HTML (`<main` absent):
 
-   Single Redirects run in the first request phase, before WAF custom rules and Access. Whether they run before a Worker Custom Domain is NOT VERIFIED in the documentation; verify it live.
+| Request                                           | Result                                                                                                |
+| ------------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
+| `https://www.blueskyzlabs.com/vi/`                | 301 → `https://blueskyzlabs.com/vi/`                                                                  |
+| `https://www.blueskyzlabs.com/en/products/?utm=x` | 301 → `https://blueskyzlabs.com/en/products/?utm=x` (query kept)                                      |
+| `https://www.blueskyzlabs.com/`                   | 301 → `https://blueskyzlabs.com/`                                                                     |
+| `http://www.blueskyzlabs.com/vi/`                 | 301 → `https://blueskyzlabs.com/vi/` (one hop)                                                        |
+| `https://www.blueskyzlabs.com//evil.example/`     | 301 → `https://blueskyzlabs.com/evil.example/`: the host stays fixed, so this is not an open redirect |
+| Following redirects from `www/vi/`                | Ends at the Cloudflare Access login for `blueskyzlabs.com`                                            |
+| Apex `/vi/`, `sotro.`, `sotam.`                   | Unchanged: 302 to Access, 200, 200                                                                    |
 
-**Verification after each step:**
+This settles the earlier NOT VERIFIED point: the Single Redirect runs **before** the Worker Custom Domain.
 
-- `curl -sI https://www.blueskyzlabs.com/vi/` returns 302 to Access after step 1, and 301 with `location: https://blueskyzlabs.com/vi/` after step 2.
-- The body carries no site HTML.
+**Interim Access destination for `www`: not applied.** The session's safety controls held that account-level change. With the redirect in place it is defence-in-depth only. It would matter only if the redirect rule were disabled or deleted, in which case `www` would again serve the Worker publicly. The fully fail-closed variant remains an Owner option:
 
-**Known side effect:** after RT-01 closes, `/.well-known/security.txt` has no anonymous path until go-live, because the apex returns 302 to Access. To keep the security contact public, add an Access Bypass policy for `/.well-known/*` on the apex, or record this as accepted until go-live.
+- add `www` to the Access app; or
+- remove `www` from the Worker's custom domains and keep only a proxied placeholder record.
+
+**Rollback:** delete or disable rule `www_to_apex_301`.
+
+**Known side effect:** `/.well-known/security.txt` now has no anonymous path until go-live, because the apex returns 302 to Access. To keep the security contact public, add an Access Bypass policy for `/.well-known/*` on the apex (Owner decision pending), or accept this until go-live.
 
 ## Limits
 
