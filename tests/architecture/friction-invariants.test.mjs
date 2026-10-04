@@ -3,7 +3,7 @@ import { readFileSync, readdirSync, statSync } from "node:fs";
 import { join } from "node:path";
 import test from "node:test";
 
-// SGPS-DEC-2026-028 (operationalizing DEC-025) friction invariants (contract §3), static half.
+// SGPS-DEC-2026-025 friction invariants (contract §3), static half.
 // docs/performance/experience-performance-friction-contract.md
 
 function walk(dir, out = []) {
