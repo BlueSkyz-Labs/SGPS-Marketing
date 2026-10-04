@@ -9,6 +9,10 @@ test("static responses carry a safe baseline header set", () => {
   assert.match(headers, /Referrer-Policy:\s*strict-origin-when-cross-origin/);
   assert.match(headers, /Permissions-Policy:/);
   assert.match(headers, /payment=\(\)/);
+  // interest-cohort (FLoC) was removed from the Permissions-Policy spec; the
+  // Topics API successor is opted out instead.
+  assert.doesNotMatch(headers, /interest-cohort/);
+  assert.match(headers, /browsing-topics=\(\)/);
   assert.match(
     headers,
     /Strict-Transport-Security:\s*max-age=31536000;\s*includeSubDomains/,
