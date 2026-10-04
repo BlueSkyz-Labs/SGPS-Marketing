@@ -1,11 +1,28 @@
 ---
+/**
+ * The one CTA/link-button of the site.
+ *
+ * - Variants: primary (solid cobalt), secondary (outline), tertiary (quiet
+ *   text action) and on-ink (outline on an ink band).
+ * - States: hover, pressed (:active), focus-visible and disabled
+ *   (`disabled` renders a link without `href` plus `aria-disabled`).
+ * - The only arrow on a CTA is the BlueSkyzIcon rendered here; copy strings
+ *   never carry an arrow glyph.
+ * - Focus uses the global `--focus-ring` outline (3px, offset 3px) plus a
+ *   surface-coloured halo filling the offset, so the indicator clears 3:1 on
+ *   both porcelain and ink (WCAG 2.4.11 / 2.4.13).
+ * - Derived state colours use `color-mix()` only inside `@supports`; a static
+ *   hex is always declared first.
+ */
 import BlueSkyzIcon from "@/components/icon/BlueSkyzIcon.astro";
 
 interface Props {
   href: string;
-  variant?: "primary" | "secondary" | "on-ink";
+  variant?: "primary" | "secondary" | "tertiary" | "on-ink";
   class?: string;
   icon?: "arrow-right" | "external" | "none";
+  /** Inactive action: no `href`, `aria-disabled="true"`, not in tab order. */
+  disabled?: boolean;
   /** Current-page marker for links that live inside a navigation landmark. */
   "aria-current"?: "page" | undefined;
   /** Pass-through data-* hooks (e.g. data-hero-primary). */
@@ -16,31 +33,232 @@ const {
   variant = "primary",
   class: className = "",
   icon,
+  disabled = false,
   ...attributes
 } = Astro.props;
 const isExternal = /^https?:\/\//i.test(href);
 const trailingIcon =
   icon ??
-  (isExternal ? "external" : variant === "primary" ? "arrow-right" : "none");
+  (isExternal
+    ? "external"
+    : variant === "primary" || variant === "tertiary"
+      ? "arrow-right"
+      : "none");
 ---
 
 <a
-  href={href}
+  href={disabled ? undefined : href}
   {...attributes}
-  rel={isExternal ? "noopener noreferrer" : undefined}
-  class:list={[
-    "inline-flex min-h-11 max-w-full items-center justify-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold no-underline [overflow-wrap:anywhere] transition-[background-color,border-color,transform] duration-150 focus-visible:ring-2 focus-visible:ring-[var(--brand-cobalt)] focus-visible:ring-offset-2 focus-visible:outline-none active:scale-[0.98] motion-reduce:transition-none motion-reduce:active:scale-100",
-    variant === "primary" &&
-      "bg-[var(--brand-cobalt)] text-[#ffffff] hover:bg-[#1d4ed8] hover:shadow-[0_12px_30px_-10px_color-mix(in_srgb,var(--brand-cobalt)_60%,transparent)] motion-reduce:hover:shadow-none",
-    variant === "secondary" &&
-      "border border-[var(--border-subtle)] bg-transparent text-[var(--text-primary)] hover:border-[var(--text-secondary)] hover:bg-[var(--surface-subtle)]",
-    variant === "on-ink" &&
-      "border border-white/40 bg-transparent text-[var(--brand-porcelain)] hover:border-white/60 hover:bg-white/10",
-    className,
-  ]}
+  role={disabled ? "link" : undefined}
+  aria-disabled={disabled ? "true" : undefined}
+  rel={isExternal && !disabled ? "noopener noreferrer" : undefined}
+  data-button-variant={variant}
+  class:list={["btn", `btn--${variant}`, className]}
 >
   <slot />
   {trailingIcon !== "none" ? (
-    <BlueSkyzIcon name={trailingIcon} class="btn__icon h-4 w-4 shrink-0" />
+    <BlueSkyzIcon
+      name={trailingIcon}
+      class={`btn__icon btn__icon--${trailingIcon} h-4 w-4 shrink-0`}
+    />
   ) : null}
 </a>
+
+<style>
+  .btn {
+    --btn-bg: transparent;
+    --btn-fg: var(--text-primary, #0b1020);
+    --btn-border: transparent;
+    --btn-shadow: 0 0 #0000;
+    --btn-ring: var(--focus-ring, #1d4ed8);
+    --btn-halo: var(--surface-primary, #f7f8fa);
+
+    display: inline-flex;
+    min-height: 2.75rem;
+    max-width: 100%;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    border: 1px solid var(--btn-border);
+    border-radius: var(--radius-pill, 999px);
+    background-color: var(--btn-bg);
+    box-shadow: var(--btn-shadow);
+    padding: 0.625rem 1.25rem;
+    color: var(--btn-fg);
+    font-size: var(--size-2);
+    font-weight: 600;
+    line-height: 1.25rem;
+    text-decoration: none;
+    overflow-wrap: anywhere;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    transition-property: background-color, border-color, color, box-shadow;
+    transition-duration: 160ms;
+    transition-timing-function: cubic-bezier(0.2, 0, 0, 1);
+  }
+
+  /* One focus style for the whole site: the global outline, plus a halo in
+     the page surface colour so the ring stays visible on ink bands too. */
+  .btn:focus-visible {
+    outline: 3px solid var(--btn-ring);
+    outline-offset: 3px;
+    box-shadow:
+      0 0 0 3px var(--btn-halo),
+      var(--btn-shadow);
+  }
+
+  /* Primary: solid cobalt with a specular top hairline. */
+  .btn--primary {
+    --btn-bg: var(--action-fill, #2564ff);
+    --btn-fg: #ffffff;
+    --btn-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 0.16), 0 1px 2px rgb(11 16 32 / 0.16);
+  }
+  .btn--primary:hover {
+    --btn-bg: var(--action-primary-hover, #1d4ed8);
+    --btn-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 0.16),
+      0 12px 28px -12px rgb(37 100 255 / 0.6);
+  }
+  .btn--primary:active {
+    --btn-bg: var(--action-primary-hover, #1d4ed8);
+    --btn-shadow: inset 0 1px 2px rgb(11 16 32 / 0.28);
+  }
+
+  /* Secondary: hairline outline. */
+  .btn--secondary {
+    --btn-border: var(--border-subtle, #cbd5e1);
+  }
+  .btn--secondary:hover {
+    --btn-border: var(--text-secondary, #334155);
+    --btn-bg: var(--surface-subtle, #f1f5f9);
+  }
+  .btn--secondary:active {
+    --btn-border: var(--text-secondary, #334155);
+    --btn-bg: var(--surface-subtle, #f1f5f9);
+  }
+
+  /* Tertiary: quiet text action, full 44px target, underline on hover. */
+  .btn--tertiary {
+    --btn-fg: var(--action-primary, #1d4ed8);
+    padding-inline: 0.75rem;
+    text-decoration-line: underline;
+    text-decoration-color: transparent;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.3em;
+    transition-property:
+      background-color, border-color, color, box-shadow, text-decoration-color;
+  }
+  .btn--tertiary:hover {
+    text-decoration-color: currentColor;
+    --btn-bg: rgb(37 100 255 / 0.08);
+  }
+  .btn--tertiary:active {
+    --btn-bg: rgb(37 100 255 / 0.14);
+  }
+
+  /* On ink: porcelain outline; the ring flips to porcelain over an ink halo. */
+  .btn--on-ink {
+    --btn-fg: var(--brand-porcelain, #f7f8fa);
+    --btn-border: rgb(255 255 255 / 0.4);
+    --btn-ring: var(--brand-porcelain, #f7f8fa);
+    --btn-halo: var(--brand-ink, #0b1020);
+  }
+  .btn--on-ink:hover {
+    --btn-border: rgb(255 255 255 / 0.6);
+    --btn-bg: rgb(255 255 255 / 0.1);
+  }
+  .btn--on-ink:active {
+    --btn-bg: rgb(255 255 255 / 0.16);
+  }
+
+  /* Derived state colours; the static hex above stays the fallback. */
+  @supports (color: color-mix(in oklab, red, blue)) {
+    .btn--primary:hover {
+      --btn-shadow:
+        inset 0 1px 0 rgb(255 255 255 / 0.16),
+        0 12px 28px -12px
+          color-mix(in srgb, var(--brand-cobalt, #2564ff) 60%, transparent);
+    }
+    .btn--primary:active {
+      --btn-bg: color-mix(
+        in oklab,
+        var(--action-primary-hover, #1d4ed8) 80%,
+        var(--brand-ink, #0b1020)
+      );
+    }
+    .btn--secondary:active {
+      --btn-bg: color-mix(
+        in oklab,
+        var(--surface-subtle, #f1f5f9) 90%,
+        var(--text-primary, #0b1020)
+      );
+    }
+    .btn--tertiary:hover {
+      --btn-bg: color-mix(
+        in srgb,
+        var(--action-primary, #1d4ed8) 8%,
+        transparent
+      );
+    }
+    .btn--tertiary:active {
+      --btn-bg: color-mix(
+        in srgb,
+        var(--action-primary, #1d4ed8) 14%,
+        transparent
+      );
+    }
+  }
+
+  /* Disabled: muted, no shadow, no state change. Inactive controls are
+     exempt from contrast minimums (WCAG 1.4.3 / 1.4.11). */
+  .btn[aria-disabled="true"] {
+    --btn-bg: var(--surface-subtle, #f1f5f9);
+    --btn-fg: var(--text-muted, #475569);
+    --btn-border: var(--border-subtle, #cbd5e1);
+    --btn-shadow: 0 0 #0000;
+    cursor: not-allowed;
+    text-decoration-color: transparent;
+  }
+  .btn--tertiary[aria-disabled="true"],
+  .btn--on-ink[aria-disabled="true"] {
+    --btn-bg: transparent;
+  }
+
+  /* Arrow micro-motion: movement only when the visitor allows motion; the
+     static state is the final state. */
+  @media (prefers-reduced-motion: no-preference) {
+    .btn {
+      transition-property:
+        background-color, border-color, color, box-shadow,
+        text-decoration-color, transform;
+    }
+    .btn :global(.btn__icon) {
+      transition: transform 220ms cubic-bezier(0.2, 0, 0, 1);
+    }
+    .btn:not([aria-disabled="true"]):hover :global(.btn__icon--arrow-right),
+    .btn:focus-visible :global(.btn__icon--arrow-right) {
+      transform: translateX(3px);
+    }
+    .btn:not([aria-disabled="true"]):hover :global(.btn__icon--external),
+    .btn:focus-visible :global(.btn__icon--external) {
+      transform: translate(2px, -2px);
+    }
+    .btn:not([aria-disabled="true"]):active {
+      transform: scale(0.98);
+    }
+  }
+
+  @media (forced-colors: active) {
+    .btn {
+      border-color: ButtonText;
+    }
+    .btn:focus-visible {
+      outline-color: Highlight;
+    }
+    .btn[aria-disabled="true"] {
+      border-color: GrayText;
+      color: GrayText;
+    }
+  }
+</style>
