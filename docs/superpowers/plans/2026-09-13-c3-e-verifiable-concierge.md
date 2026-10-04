@@ -57,13 +57,13 @@ If no decision exists, mark C3-E blocked and stop runtime implementation.
 - Consumes: canonical public product, claim/evidence, support/security/privacy, release and route selectors.
 - Produces: bounded public corpus records `{id, kind, title, text, publicUrl, freshness?, sourceIds[]}`.
 
-- [ ] **Step 1: write negative leakage tests first**
+- [x] **Step 1: write negative leakage tests first**
 
 Reject unpublished products, internal repo paths, workflow names, private evidence, secrets, and unsupported public claims.
 
-- [ ] **Step 2: prove RED, implement serializer, prove GREEN**
+- [x] **Step 2: prove RED, implement serializer, prove GREEN**
 
-- [ ] **Step 3: verify deterministic stable ids and ordering**
+- [x] **Step 3: verify deterministic stable ids and ordering**
 
 ### Task 3: Define retrieval and citation policy
 
@@ -76,11 +76,11 @@ Reject unpublished products, internal repo paths, workflow names, private eviden
 
 - Produces policy functions for corpus allowlist, minimum source support, answerable/out-of-scope classification, and citation requirements.
 
-- [ ] **Step 1: write tests for supported, ambiguous, unknown, adversarial, and prompt-injection queries**
+- [x] **Step 1: write tests for supported, ambiguous, unknown, adversarial, and prompt-injection queries**
 
-- [ ] **Step 2: implement fail-closed policy before any model integration**
+- [x] **Step 2: implement fail-closed policy before any model integration**
 
-- [ ] **Step 3: reject answer objects missing source ids or containing unapproved source ids**
+- [x] **Step 3: reject answer objects missing source ids or containing unapproved source ids**
 
 ### Task 4: Implement runtime adapter behind approved ADR
 
