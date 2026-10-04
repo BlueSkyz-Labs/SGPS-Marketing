@@ -12,6 +12,8 @@
  *     OS dark and the ink header scene, and never reads `--text-*`;
  *   - the panel uses the `--radius-panel` token and no blur material
  *     (ADR 0012: the header is the sole translucent surface);
+ *   - triggers rest quietly (no edge/fill/shadow) and hover restores the
+ *     accent edge;
  *   - triggers keep the 44px floor, rows the 3.5rem row, both the 3px focus
  *     ring, and motion stops under prefers-reduced-motion.
  */
@@ -57,6 +59,22 @@ export function auditShared(css) {
     !/font-weight:\s*600/.test(trigger)
   ) {
     problems.push("the trigger must keep the shared 44px family geometry");
+  }
+  // Calm-chrome round: no edge/fill/shadow at rest; hover/open restore the edge.
+  const quiet = rule(css, '.hc-trigger:not(:hover, [aria-expanded="true"])');
+  if (
+    !quiet ||
+    !/border-color:\s*transparent/.test(quiet) ||
+    !/background:\s*transparent/.test(quiet) ||
+    !/box-shadow:\s*none/.test(quiet)
+  ) {
+    problems.push("the trigger must rest quietly (no edge, fill or shadow)");
+  }
+  const hover = strip(css).match(
+    /\.hc-trigger:hover,\s*\.hc-trigger\[aria-expanded="true"\]\s*\{([^}]*)\}/,
+  )?.[1];
+  if (!hover || !/border-color:\s*var\(--hc-accent\)/.test(hover)) {
+    problems.push("hover and the open state must restore the accent edge");
   }
   const focus = rule(css, ".hc-trigger:focus-visible");
   if (!focus || !/outline:\s*3px solid var\(--hc-accent\)/.test(focus)) {
@@ -230,6 +248,23 @@ test("search, language and theme all consume the shared family", () => {
 
 test("the panel radius is a token, not a literal", () => {
   assert.match(GLOBAL, /--radius-panel:\s*1rem;/);
+});
+
+test("negative proof: a loud resting trigger or a lost hover edge is caught", () => {
+  const loud = SHARED.replace(
+    '.hc-trigger:not(:hover, [aria-expanded="true"]) {\n  border-color: transparent;',
+    '.hc-trigger:not(:hover, [aria-expanded="true"]) {\n  border-color: var(--hc-line);',
+  );
+  assert.notEqual(loud, SHARED);
+  assert.ok(auditShared(loud).some((p) => p.includes("rest quietly")));
+  const noEdge = SHARED.replace(
+    /(\.hc-trigger\[aria-expanded="true"\]\s*\{[^}]*?)border-color:\s*var\(--hc-accent\);/,
+    "$1",
+  );
+  assert.notEqual(noEdge, SHARED);
+  assert.ok(
+    auditShared(noEdge).some((p) => p.includes("restore the accent edge")),
+  );
 });
 
 test("negative proof: a component re-declaring trigger styling is caught", () => {

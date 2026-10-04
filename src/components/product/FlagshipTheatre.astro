@@ -105,8 +105,8 @@ const ctaIsExternal = cta.external || /^https?:\/\//i.test(cta.href);
 
 <section
   class:list={[
-    "c2-flagship-theatre c2-product-house border-b border-[var(--border-subtle)]",
-    compact ? "py-12 lg:py-14" : "py-16 lg:py-24",
+    // Calm-chrome round (2026-10-04): acts are separated by space, not rules.
+    "c2-flagship-theatre c2-product-house section-y",
   ]}
   aria-labelledby="flagship-theatre-title"
   data-flagship-theatre
@@ -383,7 +383,7 @@ const ctaIsExternal = cta.external || /^https?:\/\//i.test(cta.href);
     display: flex;
     gap: 0.75rem;
     padding: 0.875rem 1rem;
-    border: 1px solid var(--border-subtle);
+    border: 1px solid var(--border-hairline);
     border-radius: var(--radius-md);
     background: var(--surface-subtle);
     min-height: 0;
@@ -412,7 +412,7 @@ const ctaIsExternal = cta.external || /^https?:\/\//i.test(cta.href);
     flex: none;
     width: 0.75em;
     height: 0.75em;
-    color: var(--action-primary);
+    color: var(--text-muted);
     transition: transform var(--motion-quick) var(--ease-standard);
   }
   .c2-flagship-theatre__title-link:hover .c2-flagship-theatre__title-arrow,
@@ -448,7 +448,7 @@ const ctaIsExternal = cta.external || /^https?:\/\//i.test(cta.href);
     border-radius: var(--radius-md);
     background: var(--surface-subtle);
     border: 1px solid var(--border-subtle);
-    color: var(--action-primary);
+    color: var(--text-secondary);
   }
   .c2-flagship-theatre__proof-text {
     min-width: 0;
