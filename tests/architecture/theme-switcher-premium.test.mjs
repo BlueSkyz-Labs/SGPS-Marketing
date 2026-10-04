@@ -1,13 +1,19 @@
 /**
  * Theme switcher premium guard (shared header-control family).
  *
- * The appearance control matches the Sổ Trọ control and the language switcher:
- *   - trigger = icon of the CURRENT mode + visible label + chevron, label
- *     visible from lg (64rem), accessible name contains the visible label;
- *   - panel = caption row, then Light, Dark, System rows;
+ * Owner decision 2026-10-04: the appearance trigger is ICON-ONLY.
+ *   - trigger = the search button's 44px square (hc-trigger hc-trigger--icon):
+ *     no visible text label at any breakpoint, no chevron, no native title;
+ *     its accessible name is "<label>: <mode>";
+ *   - glyph = one sun <-> moon morph (ThemeMorphIcon) showing the RESOLVED
+ *     theme from CSS, a status dot only in System mode, spring-like 450-550ms
+ *     motion, instant under reduced motion, system colours under forced
+ *     colours; mask ids unique per rendered instance;
+ *   - tooltip = CSS-only, aria-hidden, after 300ms on hover and
+ *     :focus-visible, hidden while the panel is open;
+ *   - panel = caption row, then Light, Dark, System rows (sun, moon, monitor);
  *   - the check mark is shown only for the current row (aria-pressed) and the
- *     current row carries a 2px accent border;
- *   - motion is disabled under prefers-reduced-motion.
+ *     current row carries a 2px accent border.
  * The choice semantics (toggle buttons with aria-pressed in a role=group) and
  * the runtime contracts (applyTheme/initTheme, popover close + focus return)
  * must survive the redesign.
@@ -19,6 +25,11 @@ import test from "node:test";
 const SOURCE = readFileSync("src/components/layout/ThemeToggle.astro", "utf8");
 // Trigger, panel and row styling live in the shared header-control family.
 const SHARED = readFileSync("src/components/layout/header-control.css", "utf8");
+// The sun <-> moon glyph.
+const MORPH = readFileSync(
+  "src/components/layout/ThemeMorphIcon.astro",
+  "utf8",
+);
 
 function rule(source, selector) {
   const escaped = selector.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
@@ -28,54 +39,225 @@ function rule(source, selector) {
   );
 }
 
+/** The header trigger's markup: `<button ... data-theme-trigger ...>...</button>`. */
+function triggerMarkup(source) {
+  return (
+    source.match(
+      /<button\b(?:(?!<button\b)[\s\S])*?data-theme-trigger[\s\S]*?<\/button>/,
+    )?.[0] ?? null
+  );
+}
+
+/** Text a sighted user sees in the trigger once the hidden tooltip is removed. */
+function visibleTriggerText(markup) {
+  return markup
+    .replace(/<span class="theme-tip"[\s\S]*?\)\)\}\s*<\/span>/, "")
+    .replace(/\{\/\*[\s\S]*?\*\/\}/g, "")
+    .replace(/<[^>]*>/g, "")
+    .trim();
+}
+
+/** The sun <-> moon glyph: geometry, motion, dot, ids, a11y modes. */
+export function auditMorph(morph) {
+  const problems = [];
+  // Unique mask id per rendered instance: a per-page counter, never a literal.
+  if (
+    !/const instance = \(Number\(locals\.themeMorphCount\) \|\| 0\) \+ 1;/.test(
+      morph,
+    ) ||
+    !/locals\.themeMorphCount = instance;/.test(morph) ||
+    !/const maskId = `theme-morph-\$\{instance\}`;/.test(morph) ||
+    !/<mask\s+id=\{maskId\}/.test(morph) ||
+    !/mask=\{`url\(#\$\{maskId\}\)`\}/.test(morph) ||
+    /\bid="[^"]*"/.test(morph)
+  ) {
+    problems.push("mask ids must be unique per rendered instance");
+  }
+  // Sun = disc + 8 rays at the family stroke; moon = same disc + bite.
+  const rays = morph.match(/class="tt-rays"[\s\S]*?d="([^"]+)"/)?.[1] ?? "";
+  if (
+    (rays.match(/M/g) ?? []).length !== 8 ||
+    !/class="tt-rays"[\s\S]*?stroke-width="1\.75"/.test(morph) ||
+    !/class="tt-core"[\s\S]*?fill="currentColor"/.test(morph) ||
+    !/class="tt-bite"[^>]*fill="#000"/.test(morph)
+  ) {
+    problems.push("the glyph must be one disc with 8 rays and a mask bite");
+  }
+  const moon = morph.match(
+    /\.tt-morph\[data-morph="moon"\],\s*:root\[data-theme="dark"\] \.tt-morph\[data-morph="live"\]\s*\{([^}]*)\}/,
+  )?.[1];
+  const osMoon = morph.match(
+    /@media \(prefers-color-scheme: dark\)\s*\{\s*:root:not\(\[data-theme="light"\]\) \.tt-morph\[data-morph="live"\]\s*\{([^}]*)\}/,
+  )?.[1];
+  for (const block of [moon, osMoon]) {
+    if (
+      !block ||
+      !/--tt-rays:\s*rotate\(90deg\) scale\(0\)/.test(block) ||
+      !/--tt-body:[^;]*rotate\(-25deg\) scale\(1\.\d+\)/.test(block) ||
+      !/--tt-bite:\s*none/.test(block)
+    ) {
+      problems.push(
+        "the moon (fixed, pinned dark, OS dark) must turn the rays away, grow and turn the disc, slide the bite in",
+      );
+      break;
+    }
+  }
+  const duration = Number(morph.match(/--tt-duration:\s*(\d+)ms/)?.[1] ?? 0);
+  const spring = morph.match(
+    /--tt-spring:\s*cubic-bezier\(([\d.]+), ([\d.]+), ([\d.]+), ([\d.]+)\)/,
+  );
+  if (
+    duration < 450 ||
+    duration > 550 ||
+    !spring ||
+    Number(spring[2]) <= 1 ||
+    Number(spring[2]) > 1.6 ||
+    !/\.tt-body\s*\{[^}]*transition:\s*transform var\(--tt-duration\) var\(--tt-spring\)/.test(
+      morph,
+    )
+  ) {
+    problems.push(
+      "the morph must run 450-550ms on a restrained overshoot spring",
+    );
+  }
+  // System dot: hidden by default, shown only while no theme is pinned.
+  const dot = rule(morph, ".tt-morph .tt-dot");
+  if (
+    !/\{dot \? <circle class="tt-dot"/.test(morph) ||
+    !dot ||
+    !/opacity:\s*0/.test(dot) ||
+    !/fill:\s*var\(--hc-accent/.test(dot) ||
+    !/stroke:\s*var\(--tt-ring, var\(--hc-surface/.test(dot) ||
+    !/:root:not\(\[data-theme\]\) \.tt-morph\[data-morph="live"\] \.tt-dot\s*\{\s*opacity:\s*1/.test(
+      morph,
+    )
+  ) {
+    problems.push("the status dot must show only in System mode");
+  }
+  if (
+    !/@media \(prefers-reduced-motion: reduce\)\s*\{\s*\.tt-morph,\s*\.tt-morph \*\s*\{\s*transition:\s*none !important/.test(
+      morph,
+    )
+  ) {
+    problems.push("the morph must be instant under prefers-reduced-motion");
+  }
+  const forced =
+    morph.match(
+      /@media \(forced-colors: active\)\s*\{([\s\S]*?)\n {2}\}/,
+    )?.[1] ?? "";
+  if (
+    !/\.tt-morph\s*\{\s*color:\s*CanvasText/.test(forced) ||
+    !/\.hc-trigger \.tt-morph\s*\{\s*color:\s*ButtonText/.test(forced) ||
+    !/\.tt-dot\s*\{\s*fill:\s*Highlight/.test(forced)
+  ) {
+    problems.push(
+      "forced colours must use CanvasText/ButtonText and Highlight",
+    );
+  }
+  if (!/aria-hidden="true"/.test(morph) || !/focusable="false"/.test(morph)) {
+    problems.push("the glyph is decoration and must be aria-hidden");
+  }
+  return problems;
+}
+
 export function auditThemeSwitcher(source, shared = SHARED) {
   const problems = [];
 
-  // Trigger: icon + label + chevron, name contains the visible label.
-  if (!/class="theme-trigger__icons hc-glyph"/.test(source)) {
-    problems.push("the trigger must render the current-mode icon");
+  // Trigger: icon only, no label, no chevron, no native title.
+  const markup = triggerMarkup(source);
+  if (!markup) {
+    problems.push("the header trigger must be rendered");
+  } else {
+    if (!/<ThemeMorphIcon state="live" dot \/>/.test(markup)) {
+      problems.push(
+        "the trigger must render the live morph glyph with its dot",
+      );
+    }
+    if (visibleTriggerText(markup) !== "") {
+      problems.push("the trigger must not render a visible text label");
+    }
+    if (/chevron/.test(markup)) {
+      problems.push("the trigger must not render a chevron");
+    }
+    if (/\stitle=/.test(markup)) {
+      problems.push("the trigger must not carry a native title tooltip");
+    }
+    if (
+      !/<span class="theme-tip" aria-hidden="true" data-theme-tip>/.test(markup)
+    ) {
+      problems.push("the tooltip must be inside the trigger and aria-hidden");
+    }
   }
-  if (!/data-theme-current-label/.test(source)) {
-    problems.push("the trigger must render the visible current-mode label");
-  }
-  if (!/<BlueSkyzIcon name="chevron-down"/.test(source)) {
-    problems.push("the trigger must render a chevron");
-  }
-  const label = rule(source, ".theme-trigger__label");
-  if (!label || !/display:\s*none/.test(label)) {
-    problems.push("the trigger label must be hidden below lg");
-  }
-  if (
-    !/@media \(min-width: 64rem\)\s*\{\s*\.theme-trigger__label\s*\{\s*display:\s*inline/.test(
-      source,
-    )
-  ) {
-    problems.push("the trigger label must be visible from lg (64rem)");
+  if (/data-theme-current-label|theme-trigger__label/.test(source)) {
+    problems.push("the trigger must not render a visible text label");
   }
   if (
     !/const triggerName = `\$\{L\.label\}: \$\{L\[DEFAULT_MODE\]\}`/.test(
       source,
     ) ||
-    !/aria-label=\{triggerName\}/.test(source)
+    !/aria-label=\{triggerName\}/.test(source) ||
+    !/trigger\.setAttribute\("aria-label", `\$\{caption\}: \$\{current\}`\)/.test(
+      source,
+    )
+  ) {
+    problems.push("the trigger accessible name must state label and mode");
+  }
+
+  // Tooltip: hidden by default, below the trigger, 300ms delay on hover
+  // (pointer devices) and focus-visible, never while the panel is open.
+  const tip = rule(source, ".theme-tip");
+  if (
+    !tip ||
+    !/opacity:\s*0/.test(tip) ||
+    !/visibility:\s*hidden/.test(tip) ||
+    !/pointer-events:\s*none/.test(tip) ||
+    !/top:\s*calc\(100% \+ 0\.5rem\)/.test(tip)
   ) {
     problems.push(
-      "the trigger accessible name must contain the visible mode label",
+      "the tooltip must be hidden by default and sit below the trigger",
     );
   }
+  const shown = [
+    /@media \(hover: hover\)\s*\{\s*\.theme-trigger:hover:not\(\[aria-expanded="true"\]\) \.theme-tip\s*\{([^}]*)\}/,
+    /\n\s*\.theme-trigger:focus-visible:not\(\[aria-expanded="true"\]\) \.theme-tip\s*\{([^}]*)\}/,
+  ].map((re) => source.match(re)?.[1] ?? null);
+  if (
+    shown.some(
+      (block) =>
+        !block ||
+        !/opacity:\s*1/.test(block) ||
+        !/visibility:\s*visible/.test(block) ||
+        !/opacity \d+ms [a-z-]+ 300ms/.test(block),
+    )
+  ) {
+    problems.push(
+      "the tooltip must show after 300ms on hover and focus-visible, not while open",
+    );
+  }
+  for (const mode of ["light", "dark", "system"]) {
+    if (!new RegExp(`\\[data-theme-tip-mode="${mode}"\\]`).test(source)) {
+      problems.push("the tooltip must name every mode");
+      break;
+    }
+  }
+
+  // Shell: the search trigger's 44px square in the shared family.
+  const square = rule(shared, ".hc-trigger--icon");
   const trigger = rule(shared, ".hc-trigger");
   if (
-    !/class="theme-trigger hc-trigger"/.test(source) ||
+    !/class="theme-trigger hc-trigger hc-trigger--icon"/.test(source) ||
+    !square ||
+    !/width:\s*44px/.test(square) ||
+    !/padding:\s*0/.test(square) ||
     !trigger ||
     !/min-width:\s*44px/.test(trigger) ||
     !/min-height:\s*44px/.test(trigger) ||
-    !/padding:\s*0 0\.75rem/.test(trigger) ||
-    !/gap:\s*0\.5rem/.test(trigger) ||
     !/border-radius:\s*var\(--radius-md\)/.test(trigger)
   ) {
-    problems.push("the trigger must keep the shared 44px family geometry");
+    problems.push("the trigger must be the family's 44px icon square");
   }
 
-  // Panel caption + row order.
+  // Panel caption + row order + row glyphs.
   if (
     !/class="theme-group__caption hc-caption"/.test(source) ||
     !/<span>\{L\.label\}<\/span>/.test(source)
@@ -84,6 +266,14 @@ export function auditThemeSwitcher(source, shared = SHARED) {
   }
   if (!/const MODES = \["light", "dark", "system"\] as const;/.test(source)) {
     problems.push("rows must be ordered Light, Dark, System");
+  }
+  if (
+    !/const ROW_GLYPH = \{ light: "sun", dark: "moon" \} as const;/.test(
+      source,
+    ) ||
+    !/<ThemeMorphIcon state=\{ROW_GLYPH\[mode\]\} \/>/.test(source)
+  ) {
+    problems.push("the Light and Dark rows must reuse the fixed morph glyph");
   }
   const panel = rule(shared, ".hc-panel");
   if (
@@ -148,12 +338,11 @@ export function auditThemeSwitcher(source, shared = SHARED) {
     problems.push("the current row must carry the accent border and tint");
   }
 
-  // Reduced motion.
+  // Reduced motion (press feedback + tooltip here, family in the shared file).
   if (
-    !/@media \(prefers-reduced-motion: reduce\)\s*\{\s*\.theme-trigger__icon\s*\{\s*transition:\s*none/.test(
+    !/@media \(prefers-reduced-motion: reduce\)\s*\{\s*\.theme-trigger__glyph :global\(\.tt-morph\),\s*\.theme-tip\s*\{\s*transition:\s*none/.test(
       source,
     ) ||
-    !/class="theme-trigger__chevron hc-chevron"/.test(source) ||
     !/@media \(prefers-reduced-motion: reduce\)\s*\{\s*\.hc-trigger,\s*\.hc-chevron,\s*\.hc-panel,\s*\.hc-panel::backdrop,\s*\.hc-row\s*\{\s*transition:\s*none/.test(
       shared,
     )
@@ -168,14 +357,23 @@ export function auditThemeSwitcher(source, shared = SHARED) {
   if (!/panel\.hidePopover\(\)/.test(source)) {
     problems.push("choosing a mode must close the popover");
   }
+  if (
+    !/trigger\.setAttribute\("aria-expanded", String\(open\)\)/.test(source)
+  ) {
+    problems.push("aria-expanded must follow the popover state");
+  }
   if (!/data-theme-trigger/.test(source) || !/data-theme-toggle/.test(source)) {
     problems.push("data-theme-trigger and data-theme-toggle must stay");
   }
   return problems;
 }
 
-test("the theme switcher keeps the premium trigger, panel and row contract", () => {
+test("the theme switcher keeps the icon-only trigger, panel and row contract", () => {
   assert.deepEqual(auditThemeSwitcher(SOURCE), []);
+});
+
+test("the sun <-> moon glyph keeps its geometry, motion, dot and a11y modes", () => {
+  assert.deepEqual(auditMorph(MORPH), []);
 });
 
 test("the choice semantics stay toggle buttons in a role=group", () => {
@@ -185,9 +383,12 @@ test("the choice semantics stay toggle buttons in a role=group", () => {
 });
 
 test("CSP and Trusted Types: no inline handlers, no innerHTML", () => {
-  assert.doesNotMatch(SOURCE, /<script[^>]*\bis:inline\b/);
-  assert.doesNotMatch(SOURCE, /\bon(click|toggle)\s*=/i);
-  assert.doesNotMatch(SOURCE, /innerHTML|insertAdjacentHTML|set:html/);
+  for (const source of [SOURCE, MORPH]) {
+    assert.doesNotMatch(source, /<script[^>]*\bis:inline\b/);
+    assert.doesNotMatch(source, /\bon(click|toggle)\s*=/i);
+    assert.doesNotMatch(source, /innerHTML|insertAdjacentHTML|set:html/);
+  }
+  assert.doesNotMatch(MORPH, /<script/);
 });
 
 test("palette is owned for light, explicit dark and OS dark", () => {
@@ -204,6 +405,105 @@ test("palette is owned for light, explicit dark and OS dark", () => {
     /prefers-color-scheme: dark\)\s*\{\s*:root:not\(\[data-theme="light"\]\) :is\(\.hc-trigger, \.hc-panel, \.hc-group\)/,
   );
   assert.match(SOURCE, /"theme-group--inline hc-group"/);
+});
+
+test("negative proof: a visible text label, a chevron or a native title in the trigger is caught", () => {
+  const label = SOURCE.replace(
+    /(<ThemeMorphIcon state="live" dot \/>\s*<\/span>)/,
+    "$1\n    <span>{L[DEFAULT_MODE]}</span>",
+  );
+  assert.notEqual(label, SOURCE);
+  assert.ok(
+    auditThemeSwitcher(label).some((p) => p.includes("visible text label")),
+  );
+  const literal = SOURCE.replace(
+    /(<ThemeMorphIcon state="live" dot \/>\s*<\/span>)/,
+    "$1\n    Theme",
+  );
+  assert.notEqual(literal, SOURCE);
+  assert.ok(
+    auditThemeSwitcher(literal).some((p) => p.includes("visible text label")),
+  );
+  const chevron = SOURCE.replace(
+    /(<ThemeMorphIcon state="live" dot \/>\s*<\/span>)/,
+    '$1\n    <span class="hc-chevron" aria-hidden="true"></span>',
+  );
+  assert.notEqual(chevron, SOURCE);
+  assert.ok(auditThemeSwitcher(chevron).some((p) => p.includes("chevron")));
+  const title = SOURCE.replace(
+    "aria-label={triggerName}",
+    "aria-label={triggerName}\n    title={L.label}",
+  );
+  assert.notEqual(title, SOURCE);
+  assert.ok(auditThemeSwitcher(title).some((p) => p.includes("native title")));
+});
+
+test("negative proof: a non-unique (literal) mask id is caught", () => {
+  const fixed = MORPH.replace(
+    "const maskId = `theme-morph-${instance}`;",
+    'const maskId = "theme-morph";',
+  );
+  assert.notEqual(fixed, MORPH);
+  assert.ok(auditMorph(fixed).some((p) => p.includes("unique")));
+  const inline = MORPH.replace("id={maskId}", 'id="theme-bite"');
+  assert.notEqual(inline, MORPH);
+  assert.ok(auditMorph(inline).some((p) => p.includes("unique")));
+});
+
+test("negative proof: an announced, instant or always-on tooltip is caught", () => {
+  const announced = SOURCE.replace(
+    '<span class="theme-tip" aria-hidden="true" data-theme-tip>',
+    '<span class="theme-tip" data-theme-tip>',
+  );
+  assert.notEqual(announced, SOURCE);
+  assert.ok(
+    auditThemeSwitcher(announced).some((p) => p.includes("aria-hidden")),
+  );
+  const instant = SOURCE.replaceAll(
+    "opacity 160ms ease-out 300ms",
+    "opacity 160ms ease-out 0ms",
+  );
+  assert.notEqual(instant, SOURCE);
+  assert.ok(auditThemeSwitcher(instant).some((p) => p.includes("300ms")));
+  const whileOpen = SOURCE.replace(
+    '.theme-trigger:focus-visible:not([aria-expanded="true"]) .theme-tip',
+    ".theme-trigger:focus-visible .theme-tip",
+  );
+  assert.notEqual(whileOpen, SOURCE);
+  assert.ok(auditThemeSwitcher(whileOpen).some((p) => p.includes("300ms")));
+});
+
+test("negative proof: a dot outside System, a lazy morph or no reduced motion is caught", () => {
+  const dot = MORPH.replace(
+    ':root:not([data-theme]) .tt-morph[data-morph="live"] .tt-dot',
+    '.tt-morph[data-morph="live"] .tt-dot',
+  );
+  assert.notEqual(dot, MORPH);
+  assert.ok(auditMorph(dot).some((p) => p.includes("System mode")));
+  const slow = MORPH.replace("--tt-duration: 500ms", "--tt-duration: 900ms");
+  assert.notEqual(slow, MORPH);
+  assert.ok(auditMorph(slow).some((p) => p.includes("450-550ms")));
+  const bouncy = MORPH.replace(
+    "cubic-bezier(0.34, 1.32, 0.52, 1)",
+    "cubic-bezier(0.34, 2.4, 0.52, 1)",
+  );
+  assert.notEqual(bouncy, MORPH);
+  assert.ok(auditMorph(bouncy).some((p) => p.includes("spring")));
+  const motion = MORPH.replace(
+    /(@media \(prefers-reduced-motion: reduce\)[\s\S]*?)transition:\s*none !important;/,
+    "$1transition: all 1s;",
+  );
+  assert.notEqual(motion, MORPH);
+  assert.ok(auditMorph(motion).some((p) => p.includes("reduced-motion")));
+  const osMoon = MORPH.replace(
+    /(@media \(prefers-color-scheme: dark\)\s*\{\s*:root:not\(\[data-theme="light"\]\) \.tt-morph\[data-morph="live"\]\s*\{[^}]*)--tt-bite:\s*none;/,
+    "$1",
+  );
+  assert.notEqual(osMoon, MORPH);
+  assert.ok(auditMorph(osMoon).some((p) => p.includes("moon")));
+  const forced = MORPH.replace("fill: Highlight;", "fill: red;");
+  assert.notEqual(forced, MORPH);
+  assert.ok(auditMorph(forced).some((p) => p.includes("forced colours")));
 });
 
 test("negative proof: rendering the check on every row is caught", () => {
@@ -248,7 +548,7 @@ test("negative proof: reordering rows or dropping the caption is caught", () => 
   assert.ok(auditThemeSwitcher(noCaption).some((p) => p.includes("caption")));
 });
 
-test("negative proof: losing the accent border, label breakpoint or chevron is caught", () => {
+test("negative proof: losing the accent border, the icon square or the mode name is caught", () => {
   const border = SHARED.replace(
     /(\.hc-row:is\(\[aria-current="page"\], \[aria-pressed="true"\]\),[^{]*\{\s*)border-color:\s*var\(--hc-accent\);/,
     "$1border-color: transparent;",
@@ -257,29 +557,12 @@ test("negative proof: losing the accent border, label breakpoint or chevron is c
   assert.ok(
     auditThemeSwitcher(SOURCE, border).some((p) => p.includes("accent border")),
   );
-  const label = SOURCE.replace(
-    "@media (min-width: 64rem)",
-    "@media (min-width: 90rem)",
+  const wide = SOURCE.replace(
+    'class="theme-trigger hc-trigger hc-trigger--icon"',
+    'class="theme-trigger hc-trigger"',
   );
-  assert.notEqual(label, SOURCE);
-  assert.ok(auditThemeSwitcher(label).some((p) => p.includes("from lg")));
-  const chevron = SOURCE.replace(
-    '<BlueSkyzIcon name="chevron-down"',
-    '<BlueSkyzIcon name="check"',
-  );
-  assert.notEqual(chevron, SOURCE);
-  assert.ok(auditThemeSwitcher(chevron).some((p) => p.includes("chevron")));
-});
-
-test("negative proof: dropping reduced motion or the visible label name is caught", () => {
-  const motion = SOURCE.replace(
-    /(@media \(prefers-reduced-motion: reduce\)[\s\S]*?)transition:\s*none !important;/,
-    "$1transition: all 1s;",
-  );
-  assert.notEqual(motion, SOURCE);
-  assert.ok(
-    auditThemeSwitcher(motion).some((p) => p.includes("reduced-motion")),
-  );
+  assert.notEqual(wide, SOURCE);
+  assert.ok(auditThemeSwitcher(wide).some((p) => p.includes("44px icon")));
   const name = SOURCE.replace(
     "const triggerName = `${L.label}: ${L[DEFAULT_MODE]}`",
     "const triggerName = `${L.label}`",
@@ -287,5 +570,13 @@ test("negative proof: dropping reduced motion or the visible label name is caugh
   assert.notEqual(name, SOURCE);
   assert.ok(
     auditThemeSwitcher(name).some((p) => p.includes("accessible name")),
+  );
+  const motion = SOURCE.replace(
+    /(@media \(prefers-reduced-motion: reduce\)[\s\S]*?)transition:\s*none !important;/,
+    "$1transition: all 1s;",
+  );
+  assert.notEqual(motion, SOURCE);
+  assert.ok(
+    auditThemeSwitcher(motion).some((p) => p.includes("reduced-motion")),
   );
 });

@@ -176,7 +176,7 @@ export function auditConsumers({ lang, theme, header }) {
   if (!/"lang-option hc-row"/.test(lang)) {
     problems.push("language rows must use the shared row");
   }
-  if (!/class="theme-trigger hc-trigger"/.test(theme)) {
+  if (!/class="theme-trigger hc-trigger hc-trigger--icon"/.test(theme)) {
     problems.push("the theme trigger must use the shared trigger");
   }
   if (!/"theme-group--panel theme-panel hc-panel"/.test(theme)) {
