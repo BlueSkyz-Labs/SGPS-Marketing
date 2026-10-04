@@ -38,6 +38,12 @@ test("security.txt declares the required RFC 9116 fields", () => {
     declared.get("canonical"),
     "https://blueskyzlabs.com/.well-known/security.txt",
   );
+  // RFC 9116 §2.5.7 Policy: points at the published security page, which must exist.
+  assert.equal(declared.get("policy"), "https://blueskyzlabs.com/en/security/");
+  assert.ok(
+    existsSync("src/pages/en/security.astro"),
+    "the Policy target page must exist",
+  );
 });
 
 test("the advisory channel is the one the site already publishes", () => {

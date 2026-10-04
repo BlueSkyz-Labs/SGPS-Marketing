@@ -40,7 +40,7 @@ None yet. S1 needs no events. Any future S2 events will be declared here first, 
 
    Review this under G3 (legal) together with the "no tracking" claim.
 
-2. **Cloudflare JavaScript Detections** is injected at the edge and blocked by the CSP (`docs/evidence/2026-10-04-post-deploy-edge-checks.md`). Turning Bot Fight Mode off is an Owner action. It also removes a bot-signal script that does not fit the claim.
+2. **Cloudflare JavaScript Detections**: CLOSED on 2026-10-04. A zone read-back showed Bot Fight Mode was already off and the injection came from standalone JavaScript Detections; `enable_js` is now `false` and no edge-injected script remains (`docs/evidence/2026-10-04-cloudflare-zone-readback.md`).
 
 ## Negative proofs required before `IMPLEMENTED`
 
