@@ -10,6 +10,14 @@
 name: Visual baseline update (temporary)
 
 on:
+  # Takeover edit 2026-10-04: workflow_dispatch only triggers from the default
+  # branch, and this temporary file lives on the candidate branch; a push
+  # trigger (narrowed to this file) lets the generator run here. Removed with
+  # the file before merge, per the header above.
+  push:
+    branches: [cursor/v10-e3-visual-gate-1488]
+    paths:
+      - ".github/workflows/visual-baseline-update.yml"
   workflow_dispatch:
     inputs:
       update_snapshots:
@@ -48,13 +56,13 @@ jobs:
         timeout-minutes: 10
         run: pnpm exec playwright install --with-deps chromium
       - name: Update visual baselines
-        if: ${{ inputs.update_snapshots }}
+        if: ${{ github.event_name == 'push' || inputs.update_snapshots }}
         run: pnpm exec playwright test --project=visual --update-snapshots
       - name: Verify committed baselines
-        if: ${{ !inputs.update_snapshots }}
+        if: ${{ github.event_name != 'push' && !inputs.update_snapshots }}
         run: pnpm exec playwright test --project=visual
       - name: Upload baselines
-        if: ${{ inputs.update_snapshots }}
+        if: ${{ github.event_name == 'push' || inputs.update_snapshots }}
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
           name: visual-baselines
