@@ -110,7 +110,7 @@ export function stageProblems(css) {
   );
   const gated = blockBody(media, "@supports (animation-timeline: view())");
   if (
-    !/\.showcase__rail--stage[^{]*\{[^}]*animation:\s*view-rise/.test(gated)
+    !/\.showcase__rail--stage[^{]*\{[^}]*animation:\s*stage-fan/.test(gated)
   ) {
     problems.push(
       "the phone stage must run only inside the motion + @supports gate",
@@ -139,11 +139,17 @@ test("the device stage is progressive enhancement only", () => {
   assert.deepEqual(stageProblems(css), []);
 });
 
+test("the stage keyframes exist in the shared grammar", () => {
+  const grammar = read("src/styles/reveal.css");
+  assert.match(grammar, /@keyframes stage-fan\b/);
+  assert.match(grammar, /@keyframes stage-caption\b/);
+});
+
 test("negative proof: an ungated stage animation is caught", () => {
   const css = read("src/components/product/ProductShowcase.astro");
   const ungated = css.replace(
     "  .showcase__caption {",
-    "  .showcase__rail--stage > li { animation: view-rise linear both; }\n  .showcase__caption {",
+    "  .showcase__rail--stage > li { animation: stage-fan linear both; }\n  .showcase__caption {",
   );
   assert.notEqual(ungated, css);
   assert.ok(stageProblems(ungated).length > 0);
