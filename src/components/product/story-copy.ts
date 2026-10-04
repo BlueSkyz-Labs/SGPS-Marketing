@@ -14,7 +14,7 @@ export const STORY_COPY = {
     teaserLink: "Follow the whole month",
   },
   vi: {
-    title: (name: string) => `Một tháng của chủ trọ, trong ${name}`,
+    title: (name: string) => `Một tháng làm chủ trọ cùng ${name}`,
     lead: "Từ việc cần làm hôm nay đến máy tính của chủ trọ, theo nhịp một tháng.",
     desktop: "Trên máy tính của chủ trọ",
     teaserLink: "Xem trọn một tháng",
