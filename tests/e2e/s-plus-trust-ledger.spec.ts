@@ -41,7 +41,8 @@ for (const locale of LOCALES) {
     ).toBeVisible();
     const links = band.getByRole("link");
     await expect(links).toHaveCount(1);
-    await expect(links.first()).toContainText(locale.link);
+    // Exact name: the copy carries no arrow glyph (F9).
+    await expect(links.first()).toHaveText(locale.link);
     await expect(links.first()).toHaveAttribute(
       "href",
       `/${locale.lang}/verify/`,
