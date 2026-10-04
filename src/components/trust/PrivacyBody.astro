@@ -3,10 +3,15 @@
  * v8 W5a: the /privacy/ page body (deck rows pri-1..6).
  * Lede, what is collected, limits, deletion, one sources line. No headings
  * below the H1, so no heading can fall off the page scale.
+ *
+ * UI upgrade F12: presentation only. The header forms the lead column; the
+ * two labelled statements render as a definition list (`TrustFacts`), then
+ * the deletion note and the sources line. No copy is added or reworded.
  */
-import Container from "@/components/layout/Container.astro";
 import PageHeader from "@/components/layout/PageHeader.astro";
 import SourcesLine from "@/components/trust/SourcesLine.astro";
+import TrustFacts from "@/components/trust/TrustFacts.astro";
+import TrustLayout from "@/components/trust/TrustLayout.astro";
 import { getClaimAnchor } from "@/lib/claims";
 import { PRIVACY_COPY } from "@/data/trust-copy";
 import type { Language } from "@/data/site";
@@ -20,37 +25,30 @@ const c = PRIVACY_COPY[lang];
 const CLAIM_ID = "privacy-no-tracking-on-this-site";
 ---
 
-<section class="py-16 lg:py-24" data-trust-page="privacy">
-  <Container>
-    <div
-      id={getClaimAnchor(CLAIM_ID)}
-      data-integrity-entry
-      class="scroll-mt-24"
-    >
-      <PageHeader title={c.title} lede={c.lede} />
-    </div>
-    <div class="mt-10 grid max-w-3xl gap-4 text-[var(--text-secondary)]">
-      <p>
-        <strong class="font-semibold text-[var(--text-primary)]">
-          {c.collectedLead}
-        </strong>{" "}
-        {c.collectedBody}
-      </p>
-      <p>
-        <strong class="font-semibold text-[var(--text-primary)]">
-          {c.limitsLead}
-        </strong>{" "}
-        {c.limitsBody}
-      </p>
-      <p>{c.deletion}</p>
-    </div>
-    <div class="mt-6 max-w-3xl">
-      <SourcesLine
-        lang={lang}
-        claimId={CLAIM_ID}
-        label={c.sourcesLabel}
-        sources={c.sources}
-      />
-    </div>
-  </Container>
-</section>
+<TrustLayout page="privacy">
+  <div
+    slot="lead"
+    id={getClaimAnchor(CLAIM_ID)}
+    data-integrity-entry
+    class="scroll-mt-24"
+  >
+    <PageHeader title={c.title} lede={c.lede} />
+  </div>
+  <TrustFacts
+    facts={[
+      { label: c.collectedLead, body: c.collectedBody },
+      { label: c.limitsLead, body: c.limitsBody },
+    ]}
+  />
+  <p class="mt-6 leading-relaxed text-pretty text-[var(--text-secondary)]">
+    {c.deletion}
+  </p>
+  <div class="mt-6">
+    <SourcesLine
+      lang={lang}
+      claimId={CLAIM_ID}
+      label={c.sourcesLabel}
+      sources={c.sources}
+    />
+  </div>
+</TrustLayout>

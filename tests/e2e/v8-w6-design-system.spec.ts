@@ -60,7 +60,12 @@ test("stray font size is detected (negative proof)", async ({ page }) => {
   await page.goto("/en/about/");
   const before = await distinctSizes(page);
   await page.evaluate(() => {
-    for (const [i, el] of [...document.querySelectorAll("main p")].entries()) {
+    // Paragraphs and links: the About page carries fewer paragraphs since the
+    // WP-D editorial pass (duplicate eyebrow removed), so links are injected
+    // too to keep the proof above the 10-size cap.
+    for (const [i, el] of [
+      ...document.querySelectorAll("main p, main a"),
+    ].entries()) {
       (el as HTMLElement).style.fontSize = `${13.1 + i * 0.37}px`;
     }
   });
