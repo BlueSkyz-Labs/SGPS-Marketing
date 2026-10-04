@@ -7,11 +7,11 @@
 
 ## Results (all clean at the final head)
 
-| Probe | Result |
-| --- | --- |
+| Probe                                                   | Result                                                                                    |
+| ------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
 | Runtime — 64 pages (4 locales × 8 routes × 2 viewports) | **all 200**, max horizontal overflow **0**, console errors **0**, sub-24 px targets **0** |
-| Axe — 89 routes × {light,dark} = **178 scans** | **zero violations at any level**, zero errored |
-| Client budget | PASS (unchanged; no client JS added by E3/E4) |
+| Axe — 89 routes × {light,dark} = **178 scans**          | **zero violations at any level**, zero errored                                            |
+| Client budget                                           | PASS (unchanged; no client JS added by E3/E4)                                             |
 
 ## What changed vs the first audit (`5afe5f54`)
 
