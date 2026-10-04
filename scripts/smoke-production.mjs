@@ -253,6 +253,29 @@ check("critical navigation links are present on the EN home", async () => {
   }
 });
 
+// RT-01 (redteam 2026-10-03): the public `www` hostname must 301 to the
+// canonical apex so the Access/canonical-host boundary cannot be bypassed.
+// Apex-only: registered exclusively when the smoke runs against the
+// production apex, so --site runs for other hosts are unaffected.
+if (site === DEFAULT_SITE) {
+  check("www hostname 301s to the apex (RT-01)", async () => {
+    const apexHost = new URL(site).host;
+    const response = await fetch(`https://www.${apexHost}/en/about/`, {
+      redirect: "manual",
+      headers: { "user-agent": "blueskyz-production-smoke" },
+    });
+    assert(
+      response.status === 301,
+      `www.${apexHost} must answer 301, got ${response.status}`,
+    );
+    const location = response.headers.get("location") ?? "";
+    assert(
+      location === `https://${apexHost}/en/about/`,
+      `www redirect must target the apex path, got ${location}`,
+    );
+  });
+}
+
 const ASSET_CONCURRENCY = 6;
 const MAX_ASSETS = 500;
 
