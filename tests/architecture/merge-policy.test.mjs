@@ -83,6 +83,30 @@ test("guard-tier, visual baselines and security docs are held for the Owner", ()
   assert.equal(isProtected("tests/architecture-notes.md"), false);
 });
 
+test("agent-instruction surfaces are held for the Owner (S09-class)", () => {
+  assert.equal(isProtected("CLAUDE.md"), true);
+  assert.equal(isProtected(".claude/AGENT_ROUTING.md"), true);
+  assert.equal(isProtected(".claude/agents/implementer.md"), true);
+  assert.equal(isProtected(".cursorrules"), true);
+  assert.equal(isProtected("GEMINI.md"), true);
+  assert.equal(isProtected("AGENTS.md"), true);
+  // Look-alikes outside the instruction surface stay free.
+  assert.equal(isProtected("docs/claude-notes.md"), false);
+  assert.equal(isProtected("claude.md.bak"), false);
+});
+
+test("negative proof: planting an instruction in CLAUDE.md without the label is blocked", () => {
+  const result = evaluateMergePolicy({
+    changedFiles: ["CLAUDE.md", ".claude/agents/implementer.md"],
+    labels: [],
+  });
+  assert.equal(result.ok, false);
+  assert.deepEqual(result.protectedFiles, [
+    ".claude/agents/implementer.md",
+    "CLAUDE.md",
+  ]);
+});
+
 test("negative proof: weakening a guard test without the label is blocked", () => {
   const result = evaluateMergePolicy({
     changedFiles: [

@@ -36,11 +36,22 @@ export const PROTECTED_PATHS = [
   //   silently accepts a visual regression.
   // - docs/security/ holds the audit-exception justifications the exception
   //   policy requires ("justified, guarded and time-boxed").
+  // - Agent-instruction surfaces (CLAUDE.md, .claude/, and the common
+  //   per-tool equivalents) are read by agent sessions as authority: a
+  //   planted instruction is indirect prompt injection into the factory
+  //   (S09-class), so they are held for the Owner like AGENTS.md.
   // tests/e2e/ intentionally stays automatic: the dev loop touches it
   // constantly and its failures are loud, not silent.
   "tests/architecture/",
   "tests/visual/",
   "docs/security/",
+  "CLAUDE.md",
+  ".claude/",
+  ".cursorrules",
+  ".cursor/",
+  "GEMINI.md",
+  ".gemini/",
+  ".codex/",
   "AGENTS.md",
   "SECURITY.md",
   "pnpm-workspace.yaml",
