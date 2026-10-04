@@ -115,7 +115,7 @@ Reject unpublished products, internal repo paths, workflow names, private eviden
 - Consumes: concierge API/adapter; falls back to deterministic search/navigation.
 - Produces: accessible question input, source-linked answer, unknown/outage states.
 
-- [ ] **Step 1: render deterministic fallback navigation/search in base HTML**
+- [x] **Step 1: render deterministic fallback navigation/search in base HTML**
 
 - [ ] **Step 2: progressively enable ask flow**
 
