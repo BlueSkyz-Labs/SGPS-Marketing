@@ -4,7 +4,7 @@
  * 1. Registry only: the story's screens resolve only from the showcase record
  *    (phone chapters, a desktop coda) and its facts only from the product
  *    record's jobs and capabilities. An unknown screen id fails.
- * 2. Motion gate: every story and teaser animation sits inside both
+ * 2. Motion gate: every story animation sits inside both
  *    `prefers-reduced-motion: no-preference` and
  *    `@supports (animation-timeline: view())`, so the CSS default is the final
  *    readable state. Keyframes live only in the shared grammar.
@@ -13,7 +13,7 @@
  * Each rule has a negative proof below.
  */
 import assert from "node:assert/strict";
-import { existsSync, readFileSync } from "node:fs";
+import { readFileSync } from "node:fs";
 import test from "node:test";
 import {
   resolveFeatureStory,
@@ -22,10 +22,8 @@ import {
 
 const read = (path) => readFileSync(path, "utf8");
 const STORY = "src/components/product/FeatureStory.astro";
-const TEASER = "src/components/product/StoryTeaser.astro";
 const SHOWCASE = "src/content/showcases/sotro.yaml";
 const PRODUCT = "src/content/products/sotro.yaml";
-const LOCALES = ["en", "vi", "zh", "zh-hant"];
 
 /** Screens (id + surface) and the story block of a showcase record. */
 export function parseShowcase(text) {
@@ -116,7 +114,7 @@ test("the schema enforces the same registry rule at build time", () => {
   assert.match(schema, /story: z/);
   assert.match(schema, /storyProblems\(value\.story, value\.screens\)/);
   // The components take chapters only through the resolver.
-  for (const path of ["src/components/product/ProductShowcase.astro", TEASER]) {
+  for (const path of ["src/components/product/ProductShowcase.astro"]) {
     assert.match(read(path), /resolveFeatureStory\(/, path);
   }
   const story = read(STORY);
@@ -180,8 +178,8 @@ export function ungatedAnimations(css) {
     .map(({ decl }) => decl);
 }
 
-test("every story and teaser animation is inside the motion + @supports gate", () => {
-  for (const path of [STORY, TEASER]) {
+test("every story animation is inside the motion + @supports gate", () => {
+  for (const path of [STORY]) {
     const source = read(path);
     const css = styles(source);
     assert.ok(animationContexts(css).length >= 3, `${path} animates`);
@@ -287,7 +285,7 @@ test("negative proof: a chapter without a heading is caught", () => {
 });
 
 test("the story ships no client script and its screens stay lazy", () => {
-  for (const path of [STORY, TEASER]) {
+  for (const path of [STORY]) {
     const source = read(path);
     assert.doesNotMatch(source, /<script\b/, path);
     const imgs = [...source.matchAll(/<img\b[\s\S]*?\/>/g)].map((m) => m[0]);
@@ -298,95 +296,4 @@ test("the story ships no client script and its screens stay lazy", () => {
       assert.match(img, /height=\{/, path);
     }
   }
-});
-
-test("the home teaser follows the flagship act on every locale", () => {
-  for (const lang of LOCALES) {
-    const source = read(`src/pages/${lang}/index.astro`);
-    const order = [
-      ...source.matchAll(/<(FlagshipTheatre|StoryTeaser|ProductHouse)\b/g),
-    ].map((m) => m[1]);
-    assert.deepEqual(
-      order,
-      ["FlagshipTheatre", "StoryTeaser", "ProductHouse"],
-      lang,
-    );
-    assert.match(
-      source,
-      new RegExp(`<StoryTeaser product=\\{flagship\\} lang="${lang}" />`),
-    );
-  }
-  assert.match(read(TEASER), /chapters\.slice\(0, 3\)/);
-  assert.match(read(TEASER), /#profile-showcase/);
-});
-
-// Home image budget (lighthouserc desktop resourceBytes.image <= 80 KB): the
-// teaser phones use teaserImage() first in srcset — the hero's already-fetched
-// 288w capture for "Today", 208w derivatives otherwise. Three 480w captures
-// pushed /en/ and /vi/ to 116 KB; three 240w ones still to 84 KB.
-function teaserDerivativeProblems(
-  teaser,
-  copy,
-  screens,
-  fileExists = existsSync,
-) {
-  const problems = [];
-  if (!/src=\{teaserImage\(screen\.src\)\.src\}/.test(teaser)) {
-    problems.push("the teaser img src must come from teaserImage()");
-  }
-  if (
-    !/srcset=\{`\$\{teaserImage\(screen\.src\)\.src\} \$\{teaserImage\(screen\.src\)\.width\}w,/.test(
-      teaser,
-    )
-  ) {
-    problems.push("the teaser srcset must offer teaserImage() first");
-  }
-  if (
-    !/"\/products\/sotro\/showcase\/op-01-home\.webp":\s*\{\s*src:\s*"\/products\/sotro\/showcase\/op-01-home-288\.webp"/.test(
-      copy,
-    )
-  ) {
-    problems.push("Today must reuse the hero's 288w capture");
-  }
-  for (const src of screens) {
-    const small = `public${src.replace(/\.webp$/, "-208.webp")}`;
-    if (!fileExists(small)) problems.push(`${small} is missing`);
-  }
-  return problems;
-}
-
-const TEASER_NEW_SCREENS = [
-  "/products/sotro/showcase/op-03-utilities.webp",
-  "/products/sotro/showcase/op-02-payments.webp",
-];
-
-test("the home teaser stays inside the image budget (reuse + 208w)", () => {
-  const teaser = read("src/components/product/StoryTeaser.astro");
-  const copy = read("src/components/product/story-copy.ts");
-  assert.deepEqual(
-    teaserDerivativeProblems(teaser, copy, TEASER_NEW_SCREENS),
-    [],
-  );
-});
-
-test("negative proof: a 480w-first teaser, a lost hero reuse or a missing 208w file is caught", () => {
-  const teaser = read("src/components/product/StoryTeaser.astro");
-  const copy = read("src/components/product/story-copy.ts");
-  const heavy = teaser.replace(
-    "src={teaserImage(screen.src).src}",
-    "src={phoneSmallSrc(screen.src)}",
-  );
-  assert.notEqual(heavy, teaser);
-  assert.ok(
-    teaserDerivativeProblems(heavy, copy, TEASER_NEW_SCREENS).length > 0,
-  );
-  const noReuse = copy.replace("op-01-home-288.webp", "op-01-home-208.webp");
-  assert.notEqual(noReuse, copy);
-  assert.ok(
-    teaserDerivativeProblems(teaser, noReuse, TEASER_NEW_SCREENS).length > 0,
-  );
-  assert.ok(
-    teaserDerivativeProblems(teaser, copy, TEASER_NEW_SCREENS, () => false)
-      .length > 0,
-  );
 });

@@ -274,8 +274,8 @@ for (const route of ["/vi/products/sotro/", "/vi/", "/en/"]) {
 for (const route of [
   "/vi/products/sotro/",
   "/en/products/sotro/",
-  "/vi/",
-  "/en/",
+  "/zh/products/sotro/",
+  "/zh-hant/products/sotro/",
 ]) {
   for (const colorScheme of ["light", "dark"] as const) {
     test(`axe ${colorScheme} ${route} with the story rendered`, async ({
@@ -283,17 +283,9 @@ for (const route of [
     }) => {
       await page.emulateMedia({ colorScheme, reducedMotion: "reduce" });
       await page.goto(route, { waitUntil: "networkidle" });
-      if (route.includes("products")) await renderStory(page);
-      else
-        await page
-          .locator("[data-story-teaser]")
-          .evaluate((el) => el.scrollIntoView());
+      await renderStory(page);
       const results = await new AxeBuilder({ page })
-        .include(
-          route.includes("products")
-            ? "[data-product-showcase]"
-            : "[data-story-teaser]",
-        )
+        .include("[data-product-showcase]")
         .withTags([
           "wcag2a",
           "wcag2aa",
@@ -309,54 +301,3 @@ for (const route of [
     });
   }
 }
-
-for (const lang of ["en", "vi", "zh", "zh-hant"]) {
-  test(`${lang} home: the teaser shows the first three chapters and links into the story`, async ({
-    page,
-  }) => {
-    await page.goto(`/${lang}/`);
-    const teaser = page.locator("[data-story-teaser]");
-    await expect(teaser).toHaveCount(1);
-    const ids = await teaser
-      .locator("[data-story-teaser-chapter]")
-      .evaluateAll((els) =>
-        els.map((el) => el.getAttribute("data-story-teaser-chapter")),
-      );
-    expect(ids).toEqual(CHAPTERS.slice(0, 3));
-    await expect(teaser.locator("h3")).toHaveCount(3);
-    for (const img of await teaser.locator("img").all()) {
-      await expect(img).toHaveAttribute("loading", "lazy");
-      await expect(img).toHaveAttribute("width", /\d+/);
-      await expect(img).toHaveAttribute("height", /\d+/);
-    }
-    const href = await teaser
-      .locator("[data-story-teaser-link]")
-      .getAttribute("href");
-    expect(href).toBe(`/${lang}/products/sotro/#profile-showcase`);
-    await page.goto(href!);
-    await expect(page.locator("#profile-showcase")).toHaveCount(1);
-    await expect(page.locator("[data-story-chapter]")).toHaveCount(5);
-  });
-}
-
-export const sameTop = (tops: number[]) =>
-  tops.length > 1 && Math.max(...tops) - Math.min(...tops) <= 1;
-
-test("negative proof: the teaser alignment predicate can fail", () => {
-  expect(sameTop([392, 405, 392])).toBe(false);
-  expect(sameTop([392])).toBe(false);
-});
-
-test("1440 home teaser: the three captions start on one line", async ({
-  page,
-}) => {
-  await page.emulateMedia({ reducedMotion: "reduce" });
-  await page.setViewportSize({ width: 1440, height: 900 });
-  await page.goto("/vi/");
-  const tops = await page
-    .locator("[data-story-teaser] .story-teaser__index")
-    .evaluateAll((els) =>
-      els.map((el) => Math.round(el.getBoundingClientRect().top)),
-    );
-  expect(sameTop(tops), JSON.stringify(tops)).toBe(true);
-});
