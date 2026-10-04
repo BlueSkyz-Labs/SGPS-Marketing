@@ -181,7 +181,7 @@ export const REQUIRED_CSP_DIRECTIVES = [
   "media-src 'self'",
   "upgrade-insecure-requests",
   "frame-ancestors 'none'",
-  "script-src 'self'",
+  "script-src 'self' 'inline-speculation-rules'",
 ];
 
 const REQUIRED_HTML_HEADERS = [
