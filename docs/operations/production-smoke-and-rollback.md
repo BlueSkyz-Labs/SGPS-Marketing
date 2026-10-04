@@ -16,13 +16,17 @@ guessing.
 ## 2. Post-deploy verification (always, in this order)
 
 1. Confirm the deployed revision: `SMOKE_COMMIT_SHA=<sha> node scripts/smoke-production.mjs`.
-   The smoke suite checks, at minimum: EN/VI/zh-Hans home 200, canonical pages,
-   legacy redirects, the branded 404 on every fallback path, the evidence
-   passport surface, published-locale sitemap and no-JS language gateway, `/.well-known/sgps.json` (schema 1.0) and
-   `/.well-known/security.txt` (Contact + Expires). It also fetches every locale home, products index and product
-   page, and requires each same-origin asset they reference to return 200 with no
-   redirect and a matching content-type; and it asserts the CSP directives, COOP,
-   CORP, nosniff and `/_astro/*` immutable caching declared in `public/_headers`.
+   The smoke suite checks, at minimum: EN/VI/zh-Hans/zh-Hant home 200, canonical pages,
+   legacy redirects, the branded 404 on five fallback paths across all four locales
+   (en, vi, zh, zh-hant), the evidence passport surface, the published-locale sitemap
+   including the F16 root gateway, the no-JS language gateway, `/.well-known/sgps.json`
+   (schema 1.0), `/.well-known/product-trust.json` (derived from the public registry)
+   and `/.well-known/security.txt` (Contact + Expires). It also fetches every locale
+   home, products index and product page, and requires each same-origin asset they
+   reference to return 200 with no redirect and a matching content-type; and it asserts
+   the full declared header set from `public/_headers` — CSP directives, COOP, CORP,
+   nosniff, X-Frame-Options, HSTS, Referrer-Policy, Permissions-Policy — plus
+   `/_astro/*` immutable caching.
 2. Spot-check the edge header set (`curl -sI https://blueskyzlabs.com/en/`):
    HSTS, CSP (`script-src 'self'`, `frame-ancestors 'none'`),
    `X-Content-Type-Options: nosniff`, `X-Frame-Options: DENY`,
