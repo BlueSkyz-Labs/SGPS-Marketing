@@ -308,6 +308,11 @@
   color: var(--text-muted);
 }
 
+/* Vietnamese: sentence case (cross-subset kerning, see .eyebrow). */
+:lang(vi) .eyebrow {
+  text-transform: none;
+}
+
 .site-container {
   width: 100%;
   max-width: var(--site-max);
@@ -996,6 +1001,12 @@ summary {
   text-transform: uppercase;
   color: var(--text-muted);
 }
+
+/* Vietnamese: sentence case (cross-subset kerning, see .eyebrow). */
+:lang(vi) .boundary-card__label {
+  text-transform: none;
+  letter-spacing: var(--tracking-eyebrow, 0.03em);
+}
 .boundary-card__text {
   margin-top: 0.5rem;
   color: var(--text-secondary);
@@ -1155,6 +1166,12 @@ summary {
      narrow cell, so it must be allowed to break rather than overflow. */
   overflow-wrap: anywhere;
 }
+
+/* Vietnamese: sentence case (cross-subset kerning, see .eyebrow). */
+:lang(vi) .bilingual-mirror__tag {
+  text-transform: none;
+  letter-spacing: var(--tracking-eyebrow, 0.03em);
+}
 .bilingual-mirror__cell p {
   margin-top: 0.375rem;
   color: var(--text-secondary);
@@ -1205,6 +1222,12 @@ summary {
   padding: 0.125rem 0.5rem;
 }
 
+/* Vietnamese: sentence case (cross-subset kerning, see .eyebrow). */
+:lang(vi) .command-navigator__kind {
+  text-transform: none;
+  letter-spacing: var(--tracking-eyebrow, 0.03em);
+}
+
 /* v3 Wave 4 — source-to-surface trace. */
 .source-trace {
   margin-top: 1.25rem;
@@ -1219,6 +1242,12 @@ summary {
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--text-muted);
+}
+
+/* Vietnamese: sentence case (cross-subset kerning, see .eyebrow). */
+:lang(vi) .source-trace__title {
+  text-transform: none;
+  letter-spacing: var(--tracking-eyebrow, 0.03em);
 }
 .source-trace__list {
   margin-top: 0.5rem;
@@ -1244,6 +1273,12 @@ summary {
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-pill);
   padding: 0.125rem 0.5rem;
+}
+
+/* Vietnamese: sentence case (cross-subset kerning, see .eyebrow). */
+:lang(vi) .source-trace__role {
+  text-transform: none;
+  letter-spacing: var(--tracking-eyebrow, 0.03em);
 }
 /* Decorative connector line between steps; empty content, zero AT impact. */
 .source-trace__step:not(:last-child)::after {
@@ -1290,6 +1325,12 @@ summary {
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--text-muted);
+}
+
+/* Vietnamese: sentence case (cross-subset kerning, see .eyebrow). */
+:lang(vi) .evidence-passport__sources-title {
+  text-transform: none;
+  letter-spacing: var(--tracking-eyebrow, 0.03em);
 }
 .evidence-passport__sources ul {
   margin-top: 0.375rem;
@@ -1340,6 +1381,12 @@ summary {
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-pill);
   padding: 0.125rem 0.5rem;
+}
+
+/* Vietnamese: sentence case (cross-subset kerning, see .eyebrow). */
+:lang(vi) .decision-room__kind {
+  text-transform: none;
+  letter-spacing: var(--tracking-eyebrow, 0.03em);
 }
 .decision-room__label {
   font-size: var(--size-3);
@@ -1579,6 +1626,12 @@ html[data-intent] [data-journey-bar] li[data-evidence-first="true"] a {
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--text-muted);
+}
+
+/* Vietnamese: sentence case (cross-subset kerning, see .eyebrow). */
+:lang(vi) .evidence-passport__page-title {
+  text-transform: none;
+  letter-spacing: var(--tracking-eyebrow, 0.03em);
 }
 
 /* Wave H8 — passport polish: the context link reads as the card's footer. */

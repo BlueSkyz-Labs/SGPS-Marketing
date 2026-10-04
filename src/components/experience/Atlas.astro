@@ -541,6 +541,12 @@ const groups = [
     letter-spacing: 0.08em;
     text-transform: uppercase;
   }
+
+  /* Vietnamese: sentence case (cross-subset kerning, see .eyebrow). */
+  :lang(vi) .atlas-label--brand {
+    text-transform: none;
+    letter-spacing: var(--tracking-eyebrow, 0.03em);
+  }
   .atlas-label--product {
     fill: var(--brand-porcelain);
     font-weight: 600;
@@ -985,6 +991,12 @@ const groups = [
     text-transform: uppercase;
     color: var(--text-secondary);
   }
+
+  /* Vietnamese: sentence case (cross-subset kerning, see .eyebrow). */
+  :lang(vi) .atlas-group__title {
+    text-transform: none;
+    letter-spacing: var(--tracking-eyebrow, 0.03em);
+  }
   .atlas-group__count {
     font-variant-numeric: tabular-nums;
     color: var(--text-muted);
@@ -1051,6 +1063,12 @@ const groups = [
     letter-spacing: 0.14em;
     text-transform: uppercase;
     color: var(--text-muted);
+  }
+
+  /* Vietnamese: sentence case (cross-subset kerning, see .eyebrow). */
+  :lang(vi) .atlas-row__kind {
+    text-transform: none;
+    letter-spacing: var(--tracking-eyebrow, 0.03em);
   }
 
   @media (prefers-reduced-motion: reduce) {
