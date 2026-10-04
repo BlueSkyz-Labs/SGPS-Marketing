@@ -13,7 +13,7 @@
  * Each rule has a negative proof below.
  */
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import test from "node:test";
 import {
   resolveFeatureStory,
@@ -318,4 +318,46 @@ test("the home teaser follows the flagship act on every locale", () => {
   }
   assert.match(read(TEASER), /chapters\.slice\(0, 3\)/);
   assert.match(read(TEASER), /#profile-showcase/);
+});
+
+// Home image budget (lighthouserc resourceBytes.image): the three teaser
+// phones ship a 240w derivative first in srcset; three 480w captures pushed
+// /en/ and /vi/ to 116 KB against the 80 KB budget.
+function teaserDerivativeProblems(teaser, screens, fileExists = existsSync) {
+  const problems = [];
+  if (!/src=\{phoneTinySrc\(screen\.src\)\}/.test(teaser)) {
+    problems.push("the teaser img src must be the 240w derivative");
+  }
+  if (!/srcset=\{`\$\{phoneTinySrc\(screen\.src\)\} 240w,/.test(teaser)) {
+    problems.push("the teaser srcset must offer the 240w derivative first");
+  }
+  for (const src of screens) {
+    const tiny = `public${src.replace(/\.webp$/, "-240.webp")}`;
+    if (!fileExists(tiny)) problems.push(`${tiny} is missing`);
+  }
+  return problems;
+}
+
+const TEASER_SCREENS = [
+  "/products/sotro/showcase/op-01-home.webp",
+  "/products/sotro/showcase/op-03-utilities.webp",
+  "/products/sotro/showcase/op-02-payments.webp",
+];
+
+test("the home teaser serves 240w derivatives within the image budget", () => {
+  const teaser = read("src/components/product/StoryTeaser.astro");
+  assert.deepEqual(teaserDerivativeProblems(teaser, TEASER_SCREENS), []);
+});
+
+test("negative proof: a 480w-first teaser or a missing 240w file is caught", () => {
+  const teaser = read("src/components/product/StoryTeaser.astro");
+  const heavy = teaser.replace(
+    "src={phoneTinySrc(screen.src)}",
+    "src={phoneSmallSrc(screen.src)}",
+  );
+  assert.notEqual(heavy, teaser);
+  assert.ok(teaserDerivativeProblems(heavy, TEASER_SCREENS).length > 0);
+  assert.ok(
+    teaserDerivativeProblems(teaser, TEASER_SCREENS, () => false).length > 0,
+  );
 });

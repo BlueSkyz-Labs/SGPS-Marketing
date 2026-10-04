@@ -6,7 +6,11 @@ import { getShowcase } from "@/lib/showcases";
 import { resolveFeatureStory, sentenceCase } from "@/lib/feature-story";
 import { productCopy } from "@/lib/product-copy";
 import { getProductProfilePath } from "@/lib/product-routes";
-import { STORY_COPY, phoneSmallSrc } from "@/components/product/story-copy";
+import {
+  STORY_COPY,
+  phoneSmallSrc,
+  phoneTinySrc,
+} from "@/components/product/story-copy";
 
 /**
  * v12 S1 home teaser: the first three chapters of the flagship's Feature
@@ -62,8 +66,8 @@ const SIZES = "(min-width: 48rem) 13rem, min(7.5rem, 30vw)";
         <li class="story-teaser__item" data-story-teaser-chapter={screen.id}>
           <figure class="story-teaser__device">
             <img
-              src={phoneSmallSrc(screen.src)}
-              srcset={`${phoneSmallSrc(screen.src)} 480w, ${screen.src} ${screen.width}w`}
+              src={phoneTinySrc(screen.src)}
+              srcset={`${phoneTinySrc(screen.src)} 240w, ${phoneSmallSrc(screen.src)} 480w, ${screen.src} ${screen.width}w`}
               sizes={SIZES}
               alt={screen.alt[lang]}
               width={screen.width}
