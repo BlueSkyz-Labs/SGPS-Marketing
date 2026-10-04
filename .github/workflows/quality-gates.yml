@@ -209,6 +209,66 @@ jobs:
       - name: Lighthouse CI (SEO, production origin)
         run: node scripts/run-lighthouse-seo.mjs
 
+  # v10 E3 visual regression gate: chromium only, Linux baselines committed
+  # in tests/visual/. Runs on every event like the engine shards (no
+  # per-event gating). A failure blocks via this job's own required status;
+  # the Browser Assurance aggregator is intentionally untouched. On failure the
+  # diff images are uploaded for review. Snapshots are never auto-updated:
+  # an intended visual change needs a PR that states why.
+  visual-gate:
+    name: Visual regression gate
+    needs: quality-gates
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - name: Checkout exact candidate
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+          fetch-depth: 0
+      - name: Set up Node 24.20.0
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+        with:
+          node-version: 24.20.0
+      - name: Activate project package manager
+        run: |
+          corepack enable
+          pnpm --version
+      - name: Install frozen dependency graph
+        run: pnpm install --frozen-lockfile
+      - name: Build browser test artifact
+        run: pnpm build
+      - name: Install Playwright chromium runtime
+        timeout-minutes: 10
+        run: |
+          set -e
+          installed=0
+          for attempt in 1 2 3; do
+            if pnpm exec playwright install --with-deps chromium; then
+              installed=1
+              break
+            fi
+            echo "Attempt $attempt failed; waiting 20s before retry..."
+            sleep 20
+          done
+          if [ "$installed" != "1" ]; then
+            echo "Playwright runtime installation failed after 3 attempts" >&2
+            exit 1
+          fi
+      - name: Visual regression gate (chromium)
+        run: pnpm exec playwright test --project=visual
+      - name: Upload diff images on failure
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: visual-gate-diffs
+          path: |
+            tests/visual/**/actual-*.png
+            tests/visual/**/diff-*.png
+            test-results/
+          retention-days: 7
+
   # The single required check. It stays named "Browser Assurance" so the
   # branch ruleset keeps working, and it fails closed: every shard and
   # Lighthouse must be `success`; failed, cancelled and skipped all fail.
