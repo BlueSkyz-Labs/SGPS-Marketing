@@ -61,6 +61,12 @@
   color: var(--text-muted);
 }
 
+/* Vietnamese: sentence case (cross-subset kerning, see .eyebrow). */
+:lang(vi) .c4-folio {
+  text-transform: none;
+  letter-spacing: var(--tracking-eyebrow, 0.03em);
+}
+
 .c4-folio__ordinal {
   font-variant-numeric: tabular-nums;
 }
@@ -285,6 +291,12 @@
   letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--text-muted);
+}
+
+/* Vietnamese: sentence case (cross-subset kerning, see .eyebrow). */
+:lang(vi) .c4-boardroom__screen-meta {
+  text-transform: none;
+  letter-spacing: var(--tracking-eyebrow, 0.03em);
 }
 
 .c4-boardroom__ordinal {
@@ -800,6 +812,12 @@
   color: var(--text-muted);
 }
 
+/* Vietnamese: sentence case (cross-subset kerning, see .eyebrow). */
+:lang(vi) .c4-dossier-sources h4 {
+  text-transform: none;
+  letter-spacing: var(--tracking-eyebrow, 0.03em);
+}
+
 .c4-dossier-sources ul {
   margin: 0;
   padding: 0;
@@ -1028,6 +1046,12 @@
   text-transform: uppercase;
   color: var(--text-secondary);
 }
+
+/* Vietnamese: sentence case (cross-subset kerning, see .eyebrow). */
+:lang(vi) .decision-room__group-label {
+  text-transform: none;
+  letter-spacing: var(--tracking-eyebrow, 0.03em);
+}
 @media print {
   .decision-room__atelier {
     display: none;
@@ -1091,6 +1115,12 @@
   text-transform: uppercase;
 }
 
+/* Vietnamese: sentence case (cross-subset kerning, see .eyebrow). */
+:lang(vi) .c4-salon__subheading {
+  text-transform: none;
+  letter-spacing: var(--tracking-eyebrow, 0.03em);
+}
+
 .c4-salon__nodes {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(min(100%, 16rem), 1fr));
@@ -1119,6 +1149,12 @@
   font-weight: 600;
   letter-spacing: 0.12em;
   text-transform: uppercase;
+}
+
+/* Vietnamese: sentence case (cross-subset kerning, see .eyebrow). */
+:lang(vi) .c4-salon__node-kind {
+  text-transform: none;
+  letter-spacing: var(--tracking-eyebrow, 0.03em);
 }
 
 .c4-salon__node-label {
@@ -1429,6 +1465,12 @@
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--text-secondary);
+}
+
+/* Vietnamese: sentence case (cross-subset kerning, see .eyebrow). */
+:lang(vi) .c4-salon__outside-label {
+  text-transform: none;
+  letter-spacing: var(--tracking-eyebrow, 0.03em);
 }
 .c4-salon__parts {
   display: flex;
