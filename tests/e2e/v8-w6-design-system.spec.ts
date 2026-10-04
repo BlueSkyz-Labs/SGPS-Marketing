@@ -61,7 +61,8 @@ test("stray font size is detected (negative proof)", async ({ page }) => {
   const before = await distinctSizes(page);
   await page.evaluate(() => {
     // Every text-bearing element in main, not only paragraphs: the page needs
-    // enough stray sizes to cross the cap however converged its scale is.
+    // enough stray sizes to cross the cap however converged its scale is
+    // (the WP-D editorial pass also left /about/ with fewer paragraphs).
     const targets = document.querySelectorAll(
       "main :is(p, li, a, h2, h3, dt, dd, span)",
     );

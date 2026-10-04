@@ -86,10 +86,18 @@ test("the panel lists every language as a link with a check on the current one",
   await expect(current).toHaveAttribute("data-language-choice", "zh-hant");
   // Visible check mark on the current row only.
   await expect(current.locator(".lang-option__check svg")).toBeVisible();
-  await expect(page.locator("header [data-language-panel] svg")).toHaveCount(
+  // Flags and the caption globe are decorative svgs now, so the "check on the
+  // current row only" assertion counts the check slot's glyphs specifically.
+  await expect(
+    page.locator("header [data-language-panel] .lang-option__check svg"),
+  ).toHaveCount(
     // one check per panel instance (desktop nav + mobile menu), never per row
     2,
   );
+  // Every row leads with exactly one decorative flag (4 rows x 2 panels).
+  await expect(
+    page.locator("header [data-language-panel] [data-flag][aria-hidden]"),
+  ).toHaveCount(8);
 });
 
 test("the popover opens and closes with pointer and keyboard, without JS", async ({
