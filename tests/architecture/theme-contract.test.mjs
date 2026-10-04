@@ -130,7 +130,9 @@ test("saved theme bootstrap is blocking and read-only", () => {
  * the switcher's own surface is white/light in the light theme. Reading the page
  * context therefore produced porcelain-on-white (1.06:1, axe serious) even after
  * the dark-mode fix. The switcher must own its palette through local properties
- * and must never bind those labels to the ambient tokens.
+ * and must never bind those labels to the ambient tokens. Since the header
+ * control family was unified, that owned palette (`--hc-*`) lives in the shared
+ * header-control.css and the switcher must carry its classes.
  */
 const SWITCHER = join(
   root,
@@ -139,6 +141,7 @@ const SWITCHER = join(
   "layout",
   "LanguageSwitcher.astro",
 );
+const SHARED = join(root, "src", "components", "layout", "header-control.css");
 
 function declarationColor(source, selector) {
   const escaped = selector.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
@@ -148,19 +151,18 @@ function declarationColor(source, selector) {
   return block?.match(/(?:^|[\s;{])color:\s*([^;]+);/)?.[1]?.trim() ?? null;
 }
 
-// The trigger draws on the header surface and may read that surface's ambient
-// tokens; the popover panel is its own surface, so every label colour inside it
-// must come from the switcher's owned `--lang-*` palette.
+// The popover panel is its own surface, so every label colour inside it must
+// come from the family's owned `--hc-*` palette.
 export function ambientTokenLabelOffenders(source) {
   const offenders = [];
   for (const selector of [
-    ".lang-panel",
-    ".lang-option",
-    ".lang-option__english",
-    ".lang-option__check",
+    ".hc-panel",
+    ".hc-row",
+    ".hc-row__sub",
+    ".hc-check",
   ]) {
     const color = declarationColor(source, selector);
-    const owned = /var\(--lang-(?:fg|fg-muted|accent)\)/.test(color ?? "");
+    const owned = /var\(--hc-(?:fg|fg-muted|accent)\)/.test(color ?? "");
     const ambient = /var\(--text-(?:primary|secondary|muted)\)/.test(
       color ?? "",
     );
@@ -173,16 +175,25 @@ export function ambientTokenLabelOffenders(source) {
 
 test("language switcher owns its palette instead of reading the page context", () => {
   const switcher = readFileSync(SWITCHER, "utf8");
-  assert.deepEqual(ambientTokenLabelOffenders(switcher), []);
-  assert.match(switcher, /--lang-fg:/, "the palette must be declared");
+  const shared = readFileSync(SHARED, "utf8");
+  assert.deepEqual(ambientTokenLabelOffenders(shared), []);
+  for (const cls of [
+    'class="lang-panel hc-panel"',
+    '"lang-option hc-row"',
+    "lang-option__english hc-row__sub",
+    'class="hc-check lang-option__check"',
+  ]) {
+    assert.ok(switcher.includes(cls), `the switcher must carry ${cls}`);
+  }
+  assert.match(shared, /--hc-fg:/, "the palette must be declared");
   assert.match(
-    switcher,
-    /:global\(\[data-theme="dark"\]\) \.lang-panel/,
+    shared,
+    /:root\[data-theme="dark"\] :is\(\.hc-trigger, \.hc-panel, \.hc-group\)/,
     "explicit dark theme must keep a dark switcher panel",
   );
   assert.match(
-    switcher,
-    /prefers-color-scheme: dark\)[\s\S]*?:global\(:root:not\(\[data-theme="light"\]\)\) \.lang-panel/,
+    shared,
+    /prefers-color-scheme: dark\)[\s\S]*?:root:not\(\[data-theme="light"\]\) :is\(\.hc-trigger, \.hc-panel, \.hc-group\)/,
     "OS dark (without a pinned theme) must keep a dark switcher panel",
   );
   // Accessible name must contain the visible code (WCAG 2.5.3 label in name).
@@ -191,13 +202,13 @@ test("language switcher owns its palette instead of reading the page context", (
 });
 
 test("RED: the ambient-token regression is detected", () => {
-  const switcher = readFileSync(SWITCHER, "utf8");
-  const mutated = switcher.replace(
-    /(\.lang-option\s*\{[^}]*?)color:\s*var\(--lang-fg\);/,
+  const shared = readFileSync(SHARED, "utf8");
+  const mutated = shared.replace(
+    /(\n\.hc-row\s*\{[^}]*?)color:\s*var\(--hc-fg\);/,
     "$1color: var(--text-primary);",
   );
-  assert.notEqual(mutated, switcher, "mutation must apply");
+  assert.notEqual(mutated, shared, "mutation must apply");
   assert.deepEqual(ambientTokenLabelOffenders(mutated), [
-    ".lang-option: var(--text-primary)",
+    ".hc-row: var(--text-primary)",
   ]);
 });
