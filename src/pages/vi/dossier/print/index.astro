@@ -1,12 +1,13 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
+import { PAGE_META } from "@/data/page-meta";
 import Container from "@/components/layout/Container.astro";
 import DossierDocument from "@/components/dossier/DossierDocument.astro";
 ---
 
 <BaseLayout
-  title="Bản tóm tắt để in"
-  description="Bản in những gì trang này đã công bố, kèm mọi liên kết nguồn và ranh giới."
+  title={PAGE_META["vi"].dossierPrint.title}
+  description={PAGE_META["vi"].dossierPrint.description}
   path="/vi/dossier/print/"
   noindex
   followLinks

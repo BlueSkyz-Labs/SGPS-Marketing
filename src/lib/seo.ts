@@ -22,10 +22,35 @@ export function siteRootUrl(siteUrl: string): string {
   return absoluteUrl(siteUrl, "/");
 }
 
+/**
+ * v12 S2: stable node ids so the page's JSON-LD blocks describe one graph
+ * (the WebSite and every SoftwareApplication point at the same Organization)
+ * instead of repeating unlinked publisher stubs. Fragment ids on the canonical
+ * root; they name entities, never routes.
+ */
+export function organizationId(siteUrl: string): string {
+  return `${siteRootUrl(siteUrl)}#organization`;
+}
+
+export function websiteId(siteUrl: string): string {
+  return `${siteRootUrl(siteUrl)}#website`;
+}
+
+/** The publisher reference every non-Organization node uses. */
+function publisherRef(siteUrl: string) {
+  return {
+    "@type": "Organization",
+    "@id": organizationId(siteUrl),
+    name: "BlueSkyz Labs",
+    url: siteRootUrl(siteUrl),
+  } as const;
+}
+
 export function organizationJsonLd(siteUrl: string) {
   return {
     "@context": "https://schema.org",
     "@type": "Organization",
+    "@id": organizationId(siteUrl),
     name: "BlueSkyz Labs",
     url: siteRootUrl(siteUrl),
     // Square BlueSkyz mark (Owner decision F11, 2026-10-01). No sameAs and no
@@ -38,14 +63,11 @@ export function websiteJsonLd(siteUrl: string) {
   return {
     "@context": "https://schema.org",
     "@type": "WebSite",
+    "@id": websiteId(siteUrl),
     name: "BlueSkyz Labs",
     url: siteRootUrl(siteUrl),
     inLanguage: SUPPORTED_LANGUAGES.map((lang) => LANGUAGES[lang].hreflang),
-    publisher: {
-      "@type": "Organization",
-      name: "BlueSkyz Labs",
-      url: siteRootUrl(siteUrl),
-    },
+    publisher: publisherRef(siteUrl),
   } as const;
 }
 
@@ -90,11 +112,8 @@ export function productJsonLd(
     // Do not invent product category/availability or OS from the masterbrand.
     // Platform evidence is owned by each product record, not a global default.
     ...(systems.length > 0 ? { operatingSystem: systems.join(", ") } : {}),
-    publisher: {
-      "@type": "Organization",
-      name: "BlueSkyz Labs",
-      url: siteUrl,
-    },
+    // Same Organization node as the site-wide block (canonical root url).
+    publisher: publisherRef(siteUrl),
     ...(product.mediaUrl
       ? {
           image: {

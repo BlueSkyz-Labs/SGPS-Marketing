@@ -179,7 +179,12 @@ test.describe("decision room", () => {
         "关于 BlueSkyz Labs",
         "BlueSkyz Labs 打造软件产品。了解我们目前在做什么，以及我们所说内容背后的公开依据，方便你自行核实。",
       ],
-      [ZH, "比较声明", "比较声明", "并排比较最多四条公开声明。不下结论。"],
+      [
+        ZH,
+        "比较声明",
+        "比较声明",
+        "并排比较最多四条 BlueSkyz Labs 公开声明，并查看每条声明的证据与来源。本页只做并列，不下结论。",
+      ],
     ] as const) {
       await page.goto(path);
       await expect(page.locator("html")).toHaveAttribute("lang", "zh-Hans");
