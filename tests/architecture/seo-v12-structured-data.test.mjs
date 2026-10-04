@@ -57,6 +57,9 @@ const appFor = (facts, lang) =>
       description: facts.shortDescription[lang] ?? facts.shortDescription.en,
       slug: facts.slug,
       platforms: facts.platforms,
+      ...(facts.applicationCategory
+        ? { applicationCategory: facts.applicationCategory }
+        : {}),
     },
     BASE,
     lang,
@@ -81,11 +84,28 @@ test("SoftwareApplication is rebuilt from registry fields only, in every locale"
   }
 });
 
+test("Sổ Trọ declares its category in the record and the node carries it", () => {
+  const sotro = publicRecords.find(({ facts }) => facts.slug === "sotro");
+  assert.ok(sotro, "sotro is a public record");
+  assert.equal(sotro.facts.applicationCategory, "BusinessApplication");
+  for (const lang of LANGS) {
+    assert.equal(
+      appFor(sotro.facts, lang).applicationCategory,
+      "BusinessApplication",
+      lang,
+    );
+  }
+});
+
 test("product pages pass registry fields, never literals, to the builder", () => {
   const callsWithRegistryFields = (src) =>
     /productJsonLd\(\s*\{\s*name: data\.name,\s*description: copy\.shortDescription,\s*slug: data\.slug,/.test(
       src,
-    ) && /platforms: data\.platforms,/.test(src);
+    ) &&
+    /platforms: data\.platforms,/.test(src) &&
+    /\.\.\.\(data\.applicationCategory\s*\?\s*\{ applicationCategory: data\.applicationCategory \}\s*:\s*\{\}\)/.test(
+      src,
+    );
   for (const lang of LANGS) {
     const src = readFileSync(`src/pages/${lang}/products/[slug].astro`, "utf8");
     assert.equal(callsWithRegistryFields(src), true, lang);
@@ -97,6 +117,16 @@ test("product pages pass registry fields, never literals, to the builder", () =>
       en.replace(
         "description: copy.shortDescription,",
         'description: "The best landlord app",',
+      ),
+    ),
+    false,
+  );
+  // negative proof: a literal category instead of the record field is rejected
+  assert.equal(
+    callsWithRegistryFields(
+      en.replace(
+        /\.\.\.\(data\.applicationCategory[\s\S]*?: \{\}\),/,
+        'applicationCategory: "BusinessApplication",',
       ),
     ),
     false,
@@ -167,10 +197,29 @@ test("negative proof: a node that departs from its record is rejected", () => {
     appRegistryProblems({ ...app, operatingSystem: "Windows" }, facts, "vi"),
     [],
   );
+  // A category the record does not declare, a different one, or a dropped one.
   assert.notDeepEqual(
     appRegistryProblems(
       { ...app, applicationCategory: "BusinessApplication" },
+      { ...facts, applicationCategory: undefined },
+      "vi",
+    ),
+    [],
+  );
+  assert.notDeepEqual(
+    appRegistryProblems(
+      { ...app, applicationCategory: "GameApplication" },
       facts,
+      "vi",
+    ),
+    [],
+  );
+  const uncategorized = { ...app };
+  delete uncategorized.applicationCategory;
+  assert.notDeepEqual(
+    appRegistryProblems(
+      uncategorized,
+      { ...facts, applicationCategory: "BusinessApplication" },
       "vi",
     ),
     [],

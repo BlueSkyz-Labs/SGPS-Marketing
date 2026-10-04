@@ -87,6 +87,9 @@ const productStructuredData = productJsonLd(
       ? { mediaCaption: proofCaptionForKind(media.kind, "zh-hant") }
       : {}),
     platforms: data.platforms,
+    ...(data.applicationCategory
+      ? { applicationCategory: data.applicationCategory }
+      : {}),
   },
   SITE.url,
   "zh-hant",

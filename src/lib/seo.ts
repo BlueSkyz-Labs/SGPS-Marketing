@@ -83,6 +83,8 @@ export function productJsonLd(
      */
     mediaCaption?: string;
     platforms: readonly string[];
+    /** schema.org category from the product record; omitted when absent. */
+    applicationCategory?: string;
   },
   siteUrl: string,
   lang: string,
@@ -110,7 +112,11 @@ export function productJsonLd(
     url: absoluteUrl(siteUrl, `/${lang}/products/${product.slug}/`),
     inLanguage: languageTag(lang),
     // Do not invent product category/availability or OS from the masterbrand.
-    // Platform evidence is owned by each product record, not a global default.
+    // Category and platform evidence are owned by each product record, never a
+    // global default: either is omitted when the record does not declare it.
+    ...(product.applicationCategory
+      ? { applicationCategory: product.applicationCategory }
+      : {}),
     ...(systems.length > 0 ? { operatingSystem: systems.join(", ") } : {}),
     // Same Organization node as the site-wide block (canonical root url).
     publisher: publisherRef(siteUrl),
