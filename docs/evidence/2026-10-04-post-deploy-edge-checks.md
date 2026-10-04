@@ -29,6 +29,8 @@ Routes: `/`, `/vi/`, `/en/`, `/vi/products/sotro/`, `/en/products/`, `/vi/journa
 
 ## Finding: Cloudflare JavaScript Detections is injected and blocked
 
+> **Corrected 2026-10-04 by `2026-10-04-cloudflare-zone-readback.md`.** An API read-back showed `fight_mode: false` and `enable_js: true`. The script came from the standalone JavaScript Detections setting, not Bot Fight Mode. `enable_js` is now `false`, and the injection is gone on `www`, `sotro` and `sotam`. Option 1 below, and its Bot Fight Mode reasoning, is superseded.
+
 Every HTML response carries an inline `<script>` that the site does not emit. It sets `window.__CF$cv$params` and loads `/cdn-cgi/challenge-platform/scripts/jsd/main.js`. This is Cloudflare **JavaScript Detections** (Bot Management / Bot Fight Mode), injected at the edge.
 
 The CSP `script-src 'self'` blocks it ("Refused to execute inline script …"). Cloudflare's own documentation describes exactly this console error for a CSP without nonces. Source: [Cloudflare docs: JavaScript Detections](https://developers.cloudflare.com/cloudflare-challenges/challenge-types/javascript-detections/), last updated Sep 2026, read 2026-10-04.
