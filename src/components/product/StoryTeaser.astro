@@ -9,7 +9,7 @@ import { getProductProfilePath } from "@/lib/product-routes";
 import {
   STORY_COPY,
   phoneSmallSrc,
-  phoneTinySrc,
+  teaserImage,
 } from "@/components/product/story-copy";
 
 /**
@@ -66,8 +66,8 @@ const SIZES = "(min-width: 48rem) 13rem, min(7.5rem, 30vw)";
         <li class="story-teaser__item" data-story-teaser-chapter={screen.id}>
           <figure class="story-teaser__device">
             <img
-              src={phoneTinySrc(screen.src)}
-              srcset={`${phoneTinySrc(screen.src)} 240w, ${phoneSmallSrc(screen.src)} 480w, ${screen.src} ${screen.width}w`}
+              src={teaserImage(screen.src).src}
+              srcset={`${teaserImage(screen.src).src} ${teaserImage(screen.src).width}w, ${phoneSmallSrc(screen.src)} 480w, ${screen.src} ${screen.width}w`}
               sizes={SIZES}
               alt={screen.alt[lang]}
               width={screen.width}

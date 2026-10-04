@@ -44,11 +44,21 @@ export const STORY_COPY = {
 /** The phone derivative next to each master (`<name>-480.webp`). */
 export const phoneSmallSrc = (src: string) =>
   src.replace(/\.webp$/, "-480.webp");
-/** The home-teaser derivative (`<name>-240.webp`): the teaser phones render at
- * most 13rem, and the home page image budget (lighthouserc) has no room for
- * three 480w captures. */
-export const phoneTinySrc = (src: string) =>
-  src.replace(/\.webp$/, "-240.webp");
+/**
+ * Home-teaser image (lighthouserc desktop budget: resourceBytes.image ≤ 80 KB
+ * on /en/ and /vi/, where ~60 KB is already spent above the teaser). Teaser
+ * phones render at most 13rem (208 px), so each ships a 208w derivative; the
+ * "Today" screen reuses the hero's 288w capture, which the page has already
+ * fetched, so it costs no extra bytes.
+ */
+const TEASER_REUSE: Record<string, { src: string; width: number }> = {
+  "/products/sotro/showcase/op-01-home.webp": {
+    src: "/products/sotro/showcase/op-01-home-288.webp",
+    width: 288,
+  },
+};
+export const teaserImage = (src: string): { src: string; width: number } =>
+  TEASER_REUSE[src] ?? { src: src.replace(/\.webp$/, "-208.webp"), width: 208 };
 /** The desktop derivative next to each master (`<name>-768.webp`). */
 export const desktopSmallSrc = (src: string) =>
   src.replace(/\.webp$/, "-768.webp");
