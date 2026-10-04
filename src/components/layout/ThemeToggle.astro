@@ -229,7 +229,11 @@ const triggerName = `${L.label}: ${L[DEFAULT_MODE]}`;
     }
   }
 
-  .theme-trigger:focus-visible:not([aria-expanded="true"]) .theme-tip {
+  /* A pointer selection returns focus to the trigger programmatically; WebKit
+     reports that as :focus-visible. data-tip-quiet (set only for pointer
+     clicks, cleared on blur) keeps the tooltip for genuine keyboard focus. */
+  .theme-trigger:focus-visible:not([aria-expanded="true"], [data-tip-quiet])
+    .theme-tip {
     opacity: 1;
     visibility: visible;
     transform: translate(-50%, 0);
@@ -319,8 +323,14 @@ const triggerName = `${L.label}: ${L[DEFAULT_MODE]}`;
     }
   }
 
+  for (const trigger of triggers) {
+    trigger.addEventListener("blur", () => {
+      trigger.removeAttribute("data-tip-quiet");
+    });
+  }
+
   for (const button of buttons) {
-    button.addEventListener("click", () => {
+    button.addEventListener("click", (event) => {
       const next = button.getAttribute("data-theme-mode") as ThemeMode | null;
       if (!next || !MODES.includes(next)) return;
       mode = next;
@@ -329,11 +339,15 @@ const triggerName = `${L.label}: ${L[DEFAULT_MODE]}`;
       const panel = button.closest<HTMLElement>("[popover]");
       if (panel) {
         panel.hidePopover();
-        document
-          .querySelector<HTMLElement>(
-            `[data-theme-trigger][popovertarget="${panel.id}"]`,
-          )
-          ?.focus();
+        const trigger = document.querySelector<HTMLElement>(
+          `[data-theme-trigger][popovertarget="${panel.id}"]`,
+        );
+        // detail > 0: a pointer click. Keyboard activation (detail 0) keeps
+        // the tooltip so keyboard users hear and see the new mode.
+        if ((event as MouseEvent).detail > 0) {
+          trigger?.setAttribute("data-tip-quiet", "");
+        }
+        trigger?.focus();
       }
     });
   }

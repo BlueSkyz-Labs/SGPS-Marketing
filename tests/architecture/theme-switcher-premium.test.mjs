@@ -219,7 +219,7 @@ export function auditThemeSwitcher(source, shared = SHARED) {
   }
   const shown = [
     /@media \(hover: hover\)\s*\{\s*\.theme-trigger:hover:not\(\[aria-expanded="true"\]\) \.theme-tip\s*\{([^}]*)\}/,
-    /\n\s*\.theme-trigger:focus-visible:not\(\[aria-expanded="true"\]\) \.theme-tip\s*\{([^}]*)\}/,
+    /\n\s*\.theme-trigger:focus-visible:not\(\[aria-expanded="true"\], \[data-tip-quiet\]\)\s+\.theme-tip\s*\{([^}]*)\}/,
   ].map((re) => source.match(re)?.[1] ?? null);
   if (
     shown.some(
@@ -232,6 +232,20 @@ export function auditThemeSwitcher(source, shared = SHARED) {
   ) {
     problems.push(
       "the tooltip must show after 300ms on hover and focus-visible, not while open",
+    );
+  }
+  // Pointer selections quiet the focus tooltip; blur clears it, so keyboard
+  // focus still shows it.
+  if (
+    !/if \(\(event as MouseEvent\)\.detail > 0\) \{\s*trigger\?\.setAttribute\("data-tip-quiet", ""\);/.test(
+      source,
+    ) ||
+    !/addEventListener\("blur", \(\) => \{\s*trigger\.removeAttribute\("data-tip-quiet"\);/.test(
+      source,
+    )
+  ) {
+    problems.push(
+      "pointer selections must quiet the focus tooltip, and blur must clear it",
     );
   }
   for (const mode of ["light", "dark", "system"]) {
@@ -466,11 +480,24 @@ test("negative proof: an announced, instant or always-on tooltip is caught", () 
   assert.notEqual(instant, SOURCE);
   assert.ok(auditThemeSwitcher(instant).some((p) => p.includes("300ms")));
   const whileOpen = SOURCE.replace(
-    '.theme-trigger:focus-visible:not([aria-expanded="true"]) .theme-tip',
-    ".theme-trigger:focus-visible .theme-tip",
+    '.theme-trigger:focus-visible:not([aria-expanded="true"], [data-tip-quiet])',
+    ".theme-trigger:focus-visible",
   );
   assert.notEqual(whileOpen, SOURCE);
   assert.ok(auditThemeSwitcher(whileOpen).some((p) => p.includes("300ms")));
+  // Pointer selection no longer quiets the tooltip, or blur never clears it.
+  const loud = SOURCE.replace(
+    'trigger?.setAttribute("data-tip-quiet", "");',
+    "",
+  );
+  assert.notEqual(loud, SOURCE);
+  assert.ok(auditThemeSwitcher(loud).some((p) => p.includes("quiet")));
+  const sticky = SOURCE.replace(
+    'trigger.removeAttribute("data-tip-quiet");',
+    "",
+  );
+  assert.notEqual(sticky, SOURCE);
+  assert.ok(auditThemeSwitcher(sticky).some((p) => p.includes("quiet")));
 });
 
 test("negative proof: a dot outside System, a lazy morph or no reduced motion is caught", () => {

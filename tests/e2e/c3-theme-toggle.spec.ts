@@ -242,10 +242,19 @@ test("the tooltip names the mode on hover and focus, never while the panel is op
   const tip = trigger.locator("[data-theme-tip]");
   await expect(tip).toHaveAttribute("aria-hidden", "true");
   await expect(tip).toBeHidden();
+  // The hover tooltip exists only for hover-capable pointers (@media
+  // (hover: hover)); touch devices (mobile project) must NOT show it on tap.
+  const canHover = await page.evaluate(
+    () => matchMedia("(hover: hover)").matches,
+  );
   await trigger.hover();
-  await expect(tip).toBeVisible();
-  // innerText: only the current mode's word is rendered (display), not all three.
-  await expect.poll(() => tip.innerText()).toBe("Giao diện: Tự động");
+  if (canHover) {
+    await expect(tip).toBeVisible();
+    // innerText: only the current mode's word is rendered (display), not all three.
+    await expect.poll(() => tip.innerText()).toBe("Giao diện: Tự động");
+  } else {
+    await expect(tip).toBeHidden();
+  }
   // The tooltip never widens the page.
   expect(
     await page.evaluate(
