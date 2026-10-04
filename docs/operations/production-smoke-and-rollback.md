@@ -16,13 +16,17 @@ guessing.
 ## 2. Post-deploy verification (always, in this order)
 
 1. Confirm the deployed revision: `SMOKE_COMMIT_SHA=<sha> node scripts/smoke-production.mjs`.
-   The smoke suite checks, at minimum: EN/VI/zh-Hans home 200, canonical pages,
-   legacy redirects, the branded 404 on every fallback path, the evidence
-   passport surface, published-locale sitemap and no-JS language gateway, `/.well-known/sgps.json` (schema 1.0) and
-   `/.well-known/security.txt` (Contact + Expires). It also fetches every locale home, products index and product
-   page, and requires each same-origin asset they reference to return 200 with no
-   redirect and a matching content-type; and it asserts the CSP directives, COOP,
-   CORP, nosniff and `/_astro/*` immutable caching declared in `public/_headers`.
+   The smoke suite checks, at minimum: EN/VI/zh-Hans/zh-Hant home 200, canonical pages,
+   legacy redirects, the branded 404 on five fallback paths across all four locales
+   (en, vi, zh, zh-hant), the evidence passport surface, the published-locale sitemap
+   including the F16 root gateway, the no-JS language gateway, `/.well-known/sgps.json`
+   (schema 1.0), `/.well-known/product-trust.json` (derived from the public registry)
+   and `/.well-known/security.txt` (Contact + Expires). It also fetches every locale
+   home, products index and product page, and requires each same-origin asset they
+   reference to return 200 with no redirect and a matching content-type; and it asserts
+   the full declared header set from `public/_headers` — CSP directives, COOP, CORP,
+   nosniff, X-Frame-Options, HSTS, Referrer-Policy, Permissions-Policy — plus
+   `/_astro/*` immutable caching.
 2. Spot-check the edge header set (`curl -sI https://blueskyzlabs.com/en/`):
    HSTS, CSP (`script-src 'self'`, `frame-ancestors 'none'`),
    `X-Content-Type-Options: nosniff`, `X-Frame-Options: DENY`,
@@ -31,9 +35,30 @@ guessing.
    with the **full 40-character deployed Git revision**, smoke result and
    canonical host read-back.
 4. Certify that exact served revision explicitly:
-   `pnpm check:deployment-evidence -- <ledger-path> --expected-sha <40-character-served-sha>`.
+   `pnpm check:deployment-evidence <ledger-path> --expected-sha <40-character-served-sha>`.
    The no-argument CI invocation validates historical ledger structure only
    and reports `current revision NOT_VERIFIED`; it is never current-runtime proof.
+
+   Execution notes (verified against the current scripts):
+
+   - **No `--` separator.** `pnpm check:deployment-evidence -- <path>` forwards a
+     literal `--` and fails with `FAIL arguments — unknown option --`. Pass the
+     path positionally; `node scripts/validate-deployment-evidence.mjs <path>
+--expected-sha <sha>` is equivalent.
+   - **The ledger filename must contain `post-merge`** (e.g.
+     `docs/evidence/<date>-golive-post-merge.md`), or always pass the path
+     explicitly — the no-argument resolution only sees `*post-merge*.md`.
+   - **The 40-character SHA must come from the provider read-back** (Cloudflare
+     dashboard → Worker → Deployments → version → commit). The smoke script only
+     echoes `SMOKE_COMMIT_SHA` into its log line; it never asserts it against the
+     served site, so the smoke output is never SHA proof.
+   - **Run the smoke without `--site`** (default `https://blueskyzlabs.com`) or
+     with exactly that value: the canonical/robots/sitemap checks compare against
+     the argument while the build bakes the apex, so any other value fails three
+     checks for a non-defect.
+   - **Certify the same SHA that is deployed**: if `public/_headers` changes
+     land between the smoke run and the certification, the served header set and
+     the certified revision diverge and the smoke correctly fails on re-run.
 
 ## 3. Observability (deliberately minimal)
 
@@ -73,8 +98,10 @@ Before changing the provider deployment:
    (Equivalent: re-run Workers Builds on that exact eligible `main` commit.)
 4. Immediately re-run §2 post-deploy verification against the rolled-back
    revision, record the full-SHA ledger entry, and certify it with
-   `pnpm check:deployment-evidence -- <ledger-path> --expected-sha <40-character-served-sha>`.
-   An eligible source target is not runtime proof.
+   `pnpm check:deployment-evidence <ledger-path> --expected-sha <40-character-served-sha>`.
+   An eligible source target is not runtime proof. The newest historical ledger
+   revision (`5194e15b…`) predates the D-0 security floor and is **not** a valid
+   rollback target — the checker enforces a target at/after the floor.
 5. Open an issue or PR describing the incident, target revision, security-floor
    qualification, provider rollback and forward-fix plan. No direct pushes to
    `main`, no bypassing protection.
