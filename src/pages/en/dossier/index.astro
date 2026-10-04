@@ -1,13 +1,14 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
+import { PAGE_META } from "@/data/page-meta";
 import Container from "@/components/layout/Container.astro";
 import PageHeader from "@/components/layout/PageHeader.astro";
 import DossierComposer from "@/components/dossier/DossierComposer.astro";
 ---
 
 <BaseLayout
-  title="Printable summary"
-  description="Select published claims and sources to print or present. Nothing is transmitted or stored."
+  title={PAGE_META["en"].dossier.title}
+  description={PAGE_META["en"].dossier.description}
   path="/en/dossier/"
 >
   <section class="py-16 lg:py-24">

@@ -4,11 +4,11 @@ import ButtonLink from "@/components/ui/ButtonLink.astro";
 import { EMPTY_STATE_COPY } from "@/data/empty-state-copy";
 import { labelFor, SHARED_LABELS, type Language } from "@/data/site";
 import { getPublicProducts } from "@/lib/products";
-import { productCopy } from "@/lib/product-copy";
+import { productPageCopy } from "@/components/product/product-page-copy";
 
 /**
  * Experience v6 S8 — About, composed only from existing authored data:
- * registry products (`productCopy`) and the "What you can check" block (v8
+ * registry products and the "What you can check" block (v8
  * abt-5; two bound claims linked to their pages). The yaml `founder_*` fields
  * are not read: founder detail is an Owner-confirmation item (audit E-26) and an
  * absent fact is omitted, never padded.
@@ -17,6 +17,11 @@ import { productCopy } from "@/lib/product-copy";
  * whole surface is the link target; each checkable claim is a full-width row
  * with a trailing arrow, so the link affordance no longer depends on an
  * underlined sentence. Copy and DOM order are unchanged.
+ *
+ * v12 S2: each card says what the product does for the visitor, with the
+ * same presentation one-liner as its profile page (`productPageCopy`, which
+ * falls back to the registry `shortDescription`), instead of the registry's
+ * internal phrasing ("Vietnam-first", "trusted history").
  */
 interface Props {
   lang: Language;
@@ -26,7 +31,7 @@ const { lang } = Astro.props;
 const products = (await getPublicProducts()).map((product) => ({
   slug: product.data.slug,
   name: product.data.name,
-  description: productCopy(product.data, lang).shortDescription,
+  description: productPageCopy(product.data, lang).oneLiner,
 }));
 ---
 

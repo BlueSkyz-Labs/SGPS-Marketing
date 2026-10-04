@@ -1,6 +1,7 @@
 ---
 // zh-Hant copy: machine-assisted (OpenCC s2twp), pending native review.
 import BaseLayout from "@/layouts/BaseLayout.astro";
+import { PAGE_META } from "@/data/page-meta";
 import Container from "@/components/layout/Container.astro";
 import PageHeader from "@/components/layout/PageHeader.astro";
 import ProductCard from "@/components/product/ProductCard.astro";
@@ -11,14 +12,16 @@ const products = await getPublicProducts();
 const allInDevelopment =
   products.length > 0 &&
   products.every((product) => product.data.lifecycle === "development");
-const emptyDescription = products.length
-  ? "以真實狀態與證據探索 BlueSkyz Labs 產品。"
-  : "產品僅在具備可核驗的公開證據時發布。";
+const emptyDescription = "產品僅在具備可核驗的公開證據時發布。";
 ---
 
 <BaseLayout
-  title="產品：Sổ Trọ 與 Sổ Tâm，開發中"
-  description={emptyDescription}
+  title={PAGE_META["zh-hant"].products.title}
+  description={
+    products.length
+      ? PAGE_META["zh-hant"].products.description
+      : emptyDescription
+  }
   path="/zh-hant/products/"
   scene="product"
 >

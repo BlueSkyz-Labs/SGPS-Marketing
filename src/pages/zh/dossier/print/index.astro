@@ -1,12 +1,13 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
+import { PAGE_META } from "@/data/page-meta";
 import Container from "@/components/layout/Container.astro";
 import DossierDocument from "@/components/dossier/DossierDocument.astro";
 ---
 
 <BaseLayout
-  title="可打印摘要"
-  description="本站已发布内容的打印视图，包含所有来源链接与边界说明。"
+  title={PAGE_META["zh"].dossierPrint.title}
+  description={PAGE_META["zh"].dossierPrint.description}
   path="/zh/dossier/print/"
   noindex
   followLinks

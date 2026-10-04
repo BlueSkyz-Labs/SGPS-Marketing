@@ -6,7 +6,7 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import test from "node:test";
 
-import { PRODUCT_META } from "../../src/data/page-meta.ts";
+import { PAGE_META, PRODUCT_META } from "../../src/data/page-meta.ts";
 import { SHARED_LABELS } from "../../src/data/site.ts";
 
 const LANGS = ["en", "vi", "zh", "zh-hant"];
@@ -19,12 +19,25 @@ const DECISION_ROOM_TITLE = {
   "zh-hant": "比較聲明",
 };
 
-const titleOf = (src) => src.match(/<BaseLayout\s+title="([^"]+)"/)?.[1];
+/**
+ * The page's <title> descriptor: an inline literal, or (v12 S2, metadata
+ * moved to src/data/page-meta.ts) exactly this locale's
+ * `PAGE_META[lang].decisionRoom.title`. Any other expression resolves to
+ * undefined and fails the pin.
+ */
+const titleOf = (src, lang) => {
+  const literal = src.match(/<BaseLayout\s+title="([^"]+)"/)?.[1];
+  if (literal) return literal;
+  const ref = new RegExp(
+    `<BaseLayout\\s+title=\\{PAGE_META\\["${lang}"\\]\\.decisionRoom\\.title\\}`,
+  );
+  return ref.test(src) ? PAGE_META[lang].decisionRoom.title : undefined;
+};
 
 test("decision-room <title> uses the public name in every locale", () => {
   for (const lang of LANGS) {
     assert.equal(
-      titleOf(read(`src/pages/${lang}/decision-room.astro`)),
+      titleOf(read(`src/pages/${lang}/decision-room.astro`), lang),
       DECISION_ROOM_TITLE[lang],
       lang,
     );
@@ -32,11 +45,20 @@ test("decision-room <title> uses the public name in every locale", () => {
 });
 
 test("negative proof: a legacy decision-room title is detected", () => {
-  const legacy = read("src/pages/en/decision-room.astro").replace(
-    "Compare claims",
-    "Decision Room",
+  const src = read("src/pages/en/decision-room.astro");
+  // a legacy inline literal
+  assert.notEqual(
+    titleOf('<BaseLayout\n  title="Decision Room"', "en"),
+    DECISION_ROOM_TITLE.en,
   );
-  assert.notEqual(titleOf(legacy), DECISION_ROOM_TITLE.en);
+  // another locale's or another page's metadata
+  assert.equal(titleOf(src.replace('["en"]', '["vi"]'), "en"), undefined);
+  assert.equal(
+    titleOf(src.replace("decisionRoom.title", "home.title"), "en"),
+    undefined,
+  );
+  // a legacy value in the metadata table
+  assert.notEqual("Decision Room", PAGE_META.en.decisionRoom.title);
 });
 
 test("vi Sổ Trọ description says 'khoản tiền chưa thu' within 120-160 chars", () => {

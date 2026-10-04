@@ -1,13 +1,14 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
+import { PAGE_META } from "@/data/page-meta";
 import Container from "@/components/layout/Container.astro";
 import PageHeader from "@/components/layout/PageHeader.astro";
 import EditionIndex from "@/components/editorial/EditionIndex.astro";
 ---
 
 <BaseLayout
-  title="Tuyển tập"
-  description="Các nhóm tuyên bố đã đăng ở đây, mỗi nhóm dẫn tới nguồn."
+  title={PAGE_META["vi"].editions.title}
+  description={PAGE_META["vi"].editions.description}
   path="/vi/editions/"
 >
   <section class="py-16 lg:py-24">

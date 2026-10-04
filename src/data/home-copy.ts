@@ -29,21 +29,42 @@ export const HOME_PRODUCT_LINE: Record<
 };
 
 /**
- * hom-6 (Sổ Trọ) and hom-14 (Sổ Tâm) one-liners, English only. The vi, zh and
- * zh-hant lines are identical to `i18n.<lang>.shortDescription` in
- * `src/content/products/{sotro,sotam}.yaml`, so callers fall back to the
- * registry copy for them; the English home line differs from the registry's
- * base `shortDescription`, so it stays here.
+ * Home one-liners under the flagship name (hero) and in the product house.
+ * v12 S2 (customer-led): the Sổ Trọ line now answers the landlord's own
+ * question (which rooms have not paid, what needs doing today), reframing the
+ * registry's first job (`jobs[0]` in `src/content/products/sotro.yaml`) and
+ * the "rooms not yet paid" state the real home capture shows. It adds no
+ * capability. Sổ Tâm keeps the registry copy except in English, where
+ * "local-first" is said in plain words. zh and zh-hant are NOT VERIFIED
+ * (native review pending).
  */
 export const HOME_ONE_LINER: Record<
   string,
   Partial<Record<Language, string>> | undefined
 > = {
   sotro: {
-    en: "For landlords in Vietnam. Track rooms, unpaid rent and what needs doing today.",
+    en: "For landlords in Vietnam: see which rooms haven't paid this month and what needs doing today.",
+    vi: "Dành cho chủ trọ ở Việt Nam: xem tháng này phòng nào chưa đóng tiền và hôm nay cần lo việc gì.",
+    zh: "给越南房东：查看本月哪些房间还没交租、今天要处理什么。",
+    "zh-hant": "給越南房東：查看本月哪些房間還沒繳租、今天要處理什麼。",
   },
   sotam: {
-    en: "A private, local-first journal for reflections and memories.",
+    en: "A private journal for your thoughts and memories, kept on your device first.",
+  },
+};
+
+/**
+ * v12 S2: one outcome line that opens the home flagship act, before the two
+ * proof points. It restates the registry's second job (`jobs[1]`: dependable
+ * room, tenant, meter and monthly charge records) as what the landlord gets.
+ * zh and zh-hant are NOT VERIFIED (native review pending).
+ */
+export const HOME_FLAGSHIP_LEAD: Record<string, Localized | undefined> = {
+  sotro: {
+    en: "Rooms, tenants, meter readings and monthly charges, kept in one dependable record.",
+    vi: "Phòng, người thuê, số điện nước và các khoản thu hằng tháng, ghi một chỗ cho gọn, cho chắc.",
+    zh: "房间、租客、水电表读数和每月费用，集中记录，清楚可靠。",
+    "zh-hant": "房間、房客、水電表度數和每月費用，集中記錄，清楚可靠。",
   },
 };
 
