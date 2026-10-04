@@ -44,8 +44,15 @@ test("GitHub source assurance is pinned and least privilege", () => {
   );
   assert.deepEqual(
     runnerLabels,
-    // Quality Gates, Browser shard (matrix), Lighthouse CI, Browser Assurance.
-    ["ubuntu-24.04", "ubuntu-24.04", "ubuntu-24.04", "ubuntu-24.04"],
+    // Quality Gates, Browser shard (matrix), Lighthouse CI, Visual
+    // regression gate (v10 E3), Browser Assurance.
+    [
+      "ubuntu-24.04",
+      "ubuntu-24.04",
+      "ubuntu-24.04",
+      "ubuntu-24.04",
+      "ubuntu-24.04",
+    ],
     "source-assurance jobs must pin an explicit Ubuntu major/minor runner label instead of mutable ubuntu-latest",
   );
   assert.doesNotMatch(workflow, /runs-on:\s*ubuntu-latest/);
@@ -72,12 +79,12 @@ test("GitHub source assurance is pinned and least privilege", () => {
   ];
   assert.equal(
     exactHeadRefs.length,
-    3,
-    "every job that checks out code (Quality Gates, the browser shards, Lighthouse) must use the exact PR head or push SHA",
+    4,
+    "every job that checks out code (Quality Gates, the browser shards, Lighthouse, the visual gate) must use the exact PR head or push SHA",
   );
   assert.equal(
     [...workflow.matchAll(/persist-credentials:\s*false/g)].length,
-    3,
+    4,
     "source-assurance checkout must not persist GitHub credentials",
   );
 
