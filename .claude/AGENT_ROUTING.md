@@ -23,7 +23,7 @@ The orchestrator (the main session) plans, decides and edits Vietnamese. It dele
 
 The Owner activated the SGPS vNext prompts for orchestration on 2026-10-04.
 
-**Exact reference:** sgps-core PR #278, head `10c69f3`. Replace it with the merge SHA once #278 merges. Until then the routing below is `MAPPED`, not `ADOPTED`. The project's SGPS release pin is unchanged (overlay only, AGENTS rule 52).
+**Exact reference:** sgps-core `main@e90a998` (PR #278 merged). This routing becomes `ADOPTED` once this file is merged on `main`. The project's SGPS release pin is unchanged (overlay only, AGENTS rule 52).
 
 Each agent loads only what the router returns for its own lane. Never paste a prompt into always-on context.
 
