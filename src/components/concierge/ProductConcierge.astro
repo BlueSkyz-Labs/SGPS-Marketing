@@ -1,0 +1,136 @@
+---
+/**
+ * C3-E Task 5 (deterministic step) — Product Concierge surface.
+ *
+ * Renders the deterministic public-corpus navigation/search in base HTML:
+ * every corpus record is an ordinary link, so the surface meets its content
+ * contract with no JavaScript at all. The tiny client module only filters the
+ * server-rendered list as the visitor types — no model, no network, no storage.
+ *
+ * All copy is existing site copy (the Command Navigator's labels); the records
+ * come verbatim from the deterministic corpus adapter.
+ */
+import type { Language } from "@/data/site";
+import { getLanguageFromPath } from "@/lib/i18n";
+import { buildConciergeCorpus } from "@/lib/concierge-corpus";
+import { getPublicProducts } from "@/lib/products";
+
+interface Props {
+  lang?: Language;
+}
+
+const lang = Astro.props.lang ?? getLanguageFromPath(Astro.url.pathname);
+
+const products = (await getPublicProducts()).map((entry) => ({
+  slug: entry.data.slug,
+  name: entry.data.name,
+  description: entry.data.shortDescription,
+}));
+const records = buildConciergeCorpus({ products, lang });
+
+const isVi = lang === "vi";
+const isZh = lang === "zh";
+const isZhHant = lang === "zh-hant";
+
+const KIND_LABELS: Record<string, string> = {
+  product: isVi ? "Sản phẩm" : isZh ? "产品" : isZhHant ? "產品" : "Product",
+  claim: isVi ? "Tin cậy" : isZh ? "信任" : isZhHant ? "信任" : "Trust",
+  route: isVi ? "Trang" : isZh ? "页面" : isZhHant ? "頁面" : "Page",
+};
+
+const navLabel = isVi
+  ? "Điều hướng nhanh"
+  : isZh
+    ? "快速导航"
+    : isZhHant
+      ? "快速導覽"
+      : "Quick navigation";
+const placeholder = isVi
+  ? "Tìm trang…"
+  : isZh
+    ? "搜索页面…"
+    : isZhHant
+      ? "搜尋頁面…"
+      : "Search pages…";
+const emptyLabel = isVi
+  ? "Không tìm thấy mục phù hợp."
+  : isZh
+    ? "未找到匹配的目的地。"
+    : isZhHant
+      ? "未找到匹配的目的地。"
+      : "No matching destinations.";
+const resultTemplate = isVi
+  ? "%n kết quả"
+  : isZh
+    ? "%n 个结果"
+    : isZhHant
+      ? "%n 個結果"
+      : "%n results";
+const resultNone = isVi
+  ? "Không có kết quả"
+  : isZh
+    ? "无结果"
+    : isZhHant
+      ? "無結果"
+      : "No results";
+---
+
+<section
+  class="concierge"
+  aria-label={navLabel}
+  data-concierge
+  data-concierge-lang={lang}
+>
+  <label class="sr-only" for={`concierge-input-${lang}`}>
+    {navLabel}
+  </label>
+  <input
+    id={`concierge-input-${lang}`}
+    class="concierge__input"
+    type="search"
+    placeholder={placeholder}
+    autocomplete="off"
+    spellcheck="false"
+    data-concierge-input
+  />
+  <p
+    class="sr-only"
+    role="status"
+    aria-live="polite"
+    data-concierge-live
+    data-live-template={resultTemplate}
+    data-live-none={resultNone}
+  ></p>
+  <ul class="concierge__list" data-concierge-list>
+    {records.map((record) => {
+      const searchText =
+        `${record.title} ${record.text} ${record.sourceIds.join(" ")}`.toLocaleLowerCase(
+          lang,
+        );
+      return (
+        <li
+          class="concierge__item"
+          data-concierge-item
+          data-concierge-kind={record.kind}
+          data-search={searchText}
+        >
+          <a class="concierge__link" href={new URL(record.publicUrl).pathname}>
+            {record.title}
+          </a>
+          <span class="concierge__kind">
+            {KIND_LABELS[record.kind] ?? record.kind}
+          </span>
+        </li>
+      );
+    })}
+  </ul>
+  <p class="concierge__empty" data-concierge-empty hidden>
+    {emptyLabel}
+  </p>
+</section>
+
+<script>
+  import { initConcierge } from "@/scripts/concierge";
+
+  initConcierge();
+</script>
