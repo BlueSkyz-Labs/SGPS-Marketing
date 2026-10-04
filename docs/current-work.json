@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.0",
-  "updatedAt": "2026-10-03",
+  "updatedAt": "2026-10-04",
   "program": "SGPS Premium Experience & Design Excellence v2.0 (God-Tier × Tier S+)",
   "status": "sgps-v2-in-progress",
   "authorities": {
@@ -331,9 +331,9 @@
     },
     {
       "id": "experience-full-v10",
-      "name": "v10 Experience FULL round: Global-Elite (BPXS §6). Plan APPROVED under Owner plan-delegation 2026-10-03; Track A E1 done, E2-E7 next; Track B Owner gates O-10.1/2/4/5/6 open, O-10.3 OFF by default, O-10.7 DEFER",
-      "status": "IN_PROGRESS",
-      "evidence": "docs/superpowers/plans/2026-10-03-v10-global-elite-experience-full.md"
+      "name": "v10 Experience FULL round: Global-Elite (BPXS §6). Plan APPROVED under Owner plan-delegation 2026-10-03; Track A E0b #457, E1, E2 #453, E3 #459, E5 #454, E6 #455 merged; E7 audit recorded at main@5afe5f54 (docs/evidence/2026-10-04-v10-e7-convergence-audit.md); E4 M02 prefetch #474 merged at main@0254921; E7 delta read-back after E4 at main@c173f16 PASS (docs/evidence/2026-10-04-v10-e7-delta-post-e4.md) — all Track A slices merged; E7 verdict CONVERGED_WITH_RESIDUALS (production runtime after O-1, field CWV, Human E4, native zh review remain owner-gated); Track B Owner gates O-10.1/2/4/5/6 open, O-10.3 OFF by default, O-10.7 DEFER",
+      "status": "MERGED",
+      "evidence": "docs/evidence/2026-10-04-v10-e7-delta-post-e4.md"
     }
   ],
   "openOwnerDecisions": [
@@ -359,7 +359,7 @@
     }
   ],
   "residualExternal": [
-    "Go-live paid readiness (2026-10-03): source stage green on cb5f9fe2 (Quality Gates + Browser Assurance 7/7, four engines executing); production anonymous verification, provider deployment proof and the pre-go-live PR speed-lane removal (#405) remain provider/owner gates. Marketing is not a payment authority (Owner D-0).",
+    "Go-live paid readiness (refreshed 2026-10-04, orchestrator, live read-back): the ONLY remaining go-live blocker is Owner gate O-1, lifting Cloudflare Access on blueskyzlabs.com (apex still 302 to Access). Closed today: RT-01 www→apex 301 Single Redirect live and verified (docs/evidence/2026-10-04-cloudflare-zone-readback.md; smoke assertion #478); Cloudflare JavaScript Detections off (enable_js=false; Bot Fight Mode was already off), so no edge-injected script remains on www/sotro/sotam; v9 T1 (commit 8f1ed5e) and T2 (#440) merged; §3C pre-cutover PASS. O-5: no blueskyzlabs.com subdomain returned 5xx on 2026-10-04 ~04:40 UTC (HSTS preload F1 still Owner). After O-1, the orchestrator runs v9 T3 (scripts/smoke-production.mjs + §3E checks) and records docs/evidence/2026-10-xx-golive-production-smoke.md. Owner decision open: Access Bypass for /.well-known/* on the apex if Access stays on (security.txt is not anonymously reachable while gated). Marketing is not a payment authority (Owner D-0).",
     "Human E4: OWNER SELF-TESTS (owner directive 2026-09-13, NON-BLOCKER). Agent-side max complete: protocol (docs/evidence/2026-09-12-v3-human-e4.md), session template + red-team template (docs/evidence/templates/). Automated substitutes already in CI (axe matrix, Lighthouse). Real-participant sessions are owner-executed.",
     "VI copy review: OWNER CROSS-CHECKS WITH ANOTHER AGENT (owner directive 2026-09-13, NON-BLOCKER). Agent fixed the 3 weakest spots + EN/VI parity guards; remainder awaits the cross-check audit.",
     "Trademark/legal clearance and specialty print (brand kit caveats).",
