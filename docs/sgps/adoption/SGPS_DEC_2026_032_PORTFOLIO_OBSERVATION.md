@@ -2,12 +2,12 @@
 
 **Status:** `MAPPED` (preparation only). Nothing is collected or changed by this file.
 
-**Canonical candidates:**
+**Canonical (merged 2026-10-04):**
 
-- sgps-core PR #262 (`SGPS-DEC-2026-032`, `DEFER`);
-- sgps-control-plane PR #76 (`FPD-2026-011`).
+- sgps-core `f3095644ba53624c8b4b3cfdf868f17c9abc50a9` (PR #262, `SGPS-DEC-2026-032`, status `DEFER`);
+- sgps-control-plane `fe312257549e4bafb0426c0debd230495a362943` (PR #76, `FPD-2026-011`).
 
-Neither is merged. Re-bind this file to the merged SHAs when they land.
+Market waves (Owner, 2026-10-04): Wave 1 Vietnam → Wave 2 Vietnamese speakers worldwide → Wave 3 neighbouring Southeast Asia (DEC-032 §8).
 
 **Owner direction:** 2026-10-04, in the SGPS-Marketing session. Measure whether going global works, in aggregate, starting with Sổ Trọ and Sổ Tâm. Cover the web and every app, stay on the Free plan, and view everything in one portal (CXO).
 

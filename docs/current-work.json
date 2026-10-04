@@ -344,7 +344,7 @@
     },
     {
       "id": "rum-provider",
-      "question": "No analytics/RUM provider is approved. Transmission stays OFF until an explicit privacy/provider decision exists. Candidate scope: SGPS-DEC-2026-032 (aggregate-only go-global observation, sgps-core #262; local mapping docs/sgps/adoption/SGPS_DEC_2026_032_PORTFOLIO_OBSERVATION.md).",
+      "question": "No analytics/RUM provider is approved. Transmission stays OFF until an explicit privacy/provider decision exists. Scope: SGPS-DEC-2026-032 (aggregate-only go-global observation, DEFER, merged sgps-core f309564; local mapping docs/sgps/adoption/SGPS_DEC_2026_032_PORTFOLIO_OBSERVATION.md).",
       "blocks": []
     },
     {
