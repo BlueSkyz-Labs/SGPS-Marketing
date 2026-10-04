@@ -141,10 +141,8 @@ const triggerName = `${current.shortLabel} · ${groupLabel}: ${current.label}`;
 
   /* ─── Trigger ───────────────────────────────────────────────────────── */
   /* Shared header-control family (same numbers as the theme toggle). The
-     switcher owns its palette: the ink-scene header re-points --text-primary
-     and --border-subtle at porcelain, which would be unreadable on this raised
-     (white in light) pill. --surface-raised and --focus-ring are theme-aware
-     and never re-pointed. */
+     trigger draws on the header surface and reads its ambient tokens; the
+     panel below owns its palette. */
   .lang-panel,
   .lang-switch {
     --lang-fg: #0b1020;
@@ -165,10 +163,10 @@ const triggerName = `${current.shortLabel} · ${groupLabel}: ${current.label}`;
     min-width: 44px;
     min-height: 44px;
     padding: 0 0.75rem;
-    border: 1px solid var(--lang-line);
+    border: 1px solid var(--border-subtle);
     border-radius: var(--radius-card, 0.75rem);
     background: var(--surface-raised);
-    color: var(--lang-fg);
+    color: var(--text-primary);
     box-shadow:
       0 1px 2px rgba(11, 16, 32, 0.05),
       0 6px 16px -10px rgba(11, 16, 32, 0.18);
@@ -190,10 +188,27 @@ const triggerName = `${current.shortLabel} · ${groupLabel}: ${current.label}`;
     box-shadow: none;
   }
 
+  /* The ink-scene header keeps --surface-raised white in light theme while
+     --text-primary is porcelain, so the trigger takes the scene's own
+     translucent surface there (identical to the theme toggle). */
+  :global(header[data-scene="ink"]) .lang-switch__trigger {
+    background: var(--surface-subtle);
+  }
+
   .lang-switch__trigger:hover,
   .lang-switch__trigger:where([aria-expanded="true"]) {
     border-color: var(--focus-ring);
     background: color-mix(in srgb, var(--focus-ring) 6%, var(--surface-raised));
+  }
+
+  :global(header[data-scene="ink"]) .lang-switch__trigger:hover,
+  :global(header[data-scene="ink"])
+    .lang-switch__trigger:where([aria-expanded="true"]) {
+    background: color-mix(
+      in srgb,
+      var(--focus-ring) 14%,
+      var(--surface-subtle)
+    );
   }
 
   .lang-switch--dark .lang-switch__trigger:hover,
@@ -260,7 +275,7 @@ const triggerName = `${current.shortLabel} · ${groupLabel}: ${current.label}`;
     width: min(20rem, calc(100vw - 1.5rem));
     overflow: visible;
     border: 1px solid var(--lang-line);
-    border-radius: var(--lang-radius-panel, 1rem);
+    border-radius: 1rem;
     background: var(--surface-raised, #ffffff);
     color: var(--lang-fg);
     box-shadow: var(--lang-shadow);
