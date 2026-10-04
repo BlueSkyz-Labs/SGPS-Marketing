@@ -35,7 +35,13 @@
     gap: 0.25rem 1rem;
     box-sizing: border-box;
     width: 100%;
-    padding: 0.5rem 1rem;
+    /* F7: text and actions sit on the site grid (same max width and gutter
+       as the header and sections) while the strip stays full width. */
+    padding-block: 0.5rem;
+    padding-inline: max(
+      var(--site-gutter, 1rem),
+      calc((100% - var(--site-max, 78.5rem)) / 2 + var(--site-gutter, 1rem))
+    );
     border-bottom: 1px solid var(--border-subtle);
     background: var(--surface-raised);
     color: var(--text-primary);
