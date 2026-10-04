@@ -124,6 +124,12 @@ const products = (await getPublicProducts()).map((product) => ({
     text-transform: uppercase;
     color: var(--text-secondary);
   }
+
+  /* Vietnamese: sentence case (cross-subset kerning, see .eyebrow). */
+  :lang(vi) .about-label {
+    text-transform: none;
+    letter-spacing: var(--tracking-eyebrow, 0.03em);
+  }
   .about-label::before {
     content: "";
     inline-size: 1.5rem;

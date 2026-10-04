@@ -211,6 +211,12 @@ const signInUrl = product.data.appAccess?.signInUrl;
     letter-spacing: 0.06em;
     text-transform: uppercase;
   }
+
+  /* Vietnamese: sentence case (cross-subset kerning, see .eyebrow). */
+  :lang(vi) .guide__meta {
+    text-transform: none;
+    letter-spacing: var(--tracking-eyebrow, 0.03em);
+  }
   .guide__num {
     color: var(--badge-ink, var(--text-secondary));
   }
