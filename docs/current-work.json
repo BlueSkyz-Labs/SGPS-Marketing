@@ -331,7 +331,7 @@
     },
     {
       "id": "experience-full-v10",
-      "name": "v10 Experience FULL round: Global-Elite (BPXS §6). Plan APPROVED under Owner plan-delegation 2026-10-03; Track A E0b #457, E1, E2 #453, E3 #459, E5 #454, E6 #455 merged; E7 audit recorded at main@5afe5f54 (docs/evidence/2026-10-04-v10-e7-convergence-audit.md); E4 M02 prefetch #474 open (local-agent lane) — the wave converges after E4 merges or is recorded NO-GO; Track B Owner gates O-10.1/2/4/5/6 open, O-10.3 OFF by default, O-10.7 DEFER",
+      "name": "v10 Experience FULL round: Global-Elite (BPXS §6). Plan APPROVED under Owner plan-delegation 2026-10-03; Track A E0b #457, E1, E2 #453, E3 #459, E5 #454, E6 #455 merged; E7 audit recorded at main@5afe5f54 (docs/evidence/2026-10-04-v10-e7-convergence-audit.md); E4 M02 prefetch #474 merged at main@0254921 — the E7 audit predates E4, so an E7 delta read-back on the post-E4 main is required before the wave is marked CONVERGED_WITH_RESIDUALS; Track B Owner gates O-10.1/2/4/5/6 open, O-10.3 OFF by default, O-10.7 DEFER",
       "status": "IN_PROGRESS",
       "evidence": "docs/superpowers/plans/2026-10-03-v10-global-elite-experience-full.md"
     }
