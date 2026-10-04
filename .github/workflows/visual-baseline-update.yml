@@ -37,6 +37,8 @@ jobs:
           pnpm install --frozen-lockfile
       - name: Install Playwright Chromium
         run: pnpm exec playwright install --with-deps chromium
+      - name: Build site (the visual gate's preview server serves ./dist)
+        run: pnpm build
       - name: Update visual snapshots (Linux)
         if: github.event_name == 'push' || inputs.update_snapshots
         run: pnpm exec playwright test --project=visual --update-snapshots
