@@ -240,6 +240,24 @@ screens:
       zh: Sổ Trọ 后台设置向导“Khởi tạo dãy trọ mới”，第 1/4 步。
       zh-hant: Sổ Trọ 後臺設定嚮導「Khởi tạo dãy trọ mới」，第 1/4 步。
 
+# Feature story (v12 S1): a landlord's month told with the screens above, in
+# the order the month runs. Each chapter names one phone screen; `fact` binds
+# the job or capability of src/content/products/sotro.yaml that the screen
+# shows (1-based). Night mode has no matching job or capability, so it carries
+# its own caption only. The coda is the owner's desktop view of the same month.
+story:
+  chapters:
+    - screen: today
+      fact: job-1
+    - screen: utilities
+      fact: capability-1
+    - screen: collect
+      fact: capability-2
+    - screen: rooms
+      fact: job-2
+    - screen: candlelight
+  coda: owner-collect
+
 guide:
   title:
     en: Getting started with Sổ Trọ
