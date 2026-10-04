@@ -83,7 +83,7 @@ export const PAGE_META: Record<Language, Record<StaticPageKey, PageMeta>> = {
     dossierPrint: {
       title: "Bản tóm tắt để in: trang in",
       description:
-        "Bản sẵn sàng để in những gì BlueSkyz Labs đã công bố trên trang web này, ghi đầy đủ mọi liên kết nguồn và mọi ranh giới.",
+        "Bản in những gì BlueSkyz Labs đã công bố trên trang web này, ghi đầy đủ mọi liên kết nguồn và mọi ranh giới để bạn tự đối chiếu.",
     },
     architecture: {
       title: "Cách trang web này được xây dựng",
@@ -153,6 +153,7 @@ export const PAGE_META: Record<Language, Record<StaticPageKey, PageMeta>> = {
         "How this website is built and served, in plain terms: static pages built from source held on GitHub and served by Cloudflare, with no intake service.",
     },
   },
+  // zh: NOT VERIFIED (native review pending).
   zh: {
     home: {
       title: "BlueSkyz Labs | Sổ Trọ 与 Sổ Tâm，开发中",
@@ -215,6 +216,7 @@ export const PAGE_META: Record<Language, Record<StaticPageKey, PageMeta>> = {
         "用通俗的话说明本网站如何构建和提供服务：静态页面由 GitHub 上的源代码构建，由 Cloudflare 提供，不设接收服务。",
     },
   },
+  // zh-hant: NOT VERIFIED (native review pending).
   "zh-hant": {
     home: {
       title: "BlueSkyz Labs | Sổ Trọ 與 Sổ Tâm，開發中",
@@ -290,7 +292,7 @@ export const PRODUCT_META: Record<string, Record<Language, PageMeta>> = {
     en: {
       title: "Sổ Trọ: a digital notebook for landlords",
       description:
-        "For landlords in Vietnam: see unpaid rent and today's tasks, turn meter readings into utility bills, and confirm receipts. Sổ Trọ is in development.",
+        "For landlords in Vietnam: see unpaid rent and today's tasks, turn meter readings into utility bills, and confirm money received. Sổ Trọ is in development.",
     },
     zh: {
       title: "Sổ Trọ：房东电子记事本",

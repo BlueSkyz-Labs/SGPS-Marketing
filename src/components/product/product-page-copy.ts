@@ -36,7 +36,7 @@ const DECK: Record<
     },
     vi: {
       oneLiner:
-        "Tiền phòng, điện nước và biên nhận của từng phòng, gọn trong một cuốn sổ dành cho chủ trọ ở Việt Nam.",
+        "Tiền thuê, điện nước và biên nhận của từng phòng, gọn trong một cuốn sổ dành cho chủ trọ ở Việt Nam.",
       whatItDoes: [
         "Xem tháng này còn ai chưa đóng tiền và hôm nay cần lo việc gì",
         "Ghi lại phòng, người thuê, số điện nước và các khoản thu hằng tháng",

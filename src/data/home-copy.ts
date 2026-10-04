@@ -43,13 +43,13 @@ export const HOME_ONE_LINER: Record<
   Partial<Record<Language, string>> | undefined
 > = {
   sotro: {
-    en: "For landlords in Vietnam: see which rooms haven't paid this month and what needs doing today.",
-    vi: "Dành cho chủ trọ ở Việt Nam: xem tháng này phòng nào chưa đóng tiền và hôm nay cần lo việc gì.",
-    zh: "给越南房东：查看本月哪些房间还没交租、今天要处理什么。",
-    "zh-hant": "給越南房東：查看本月哪些房間還沒繳租、今天要處理什麼。",
+    en: "For landlords in Vietnam: see what is still unpaid this month and what needs doing today.",
+    vi: "Dành cho chủ trọ ở Việt Nam: xem tháng này còn ai chưa đóng tiền và hôm nay cần lo việc gì.",
+    zh: "给越南房东：查看本月还有谁没交租、今天要处理什么。",
+    "zh-hant": "給越南房東：查看本月還有誰沒繳租、今天要處理什麼。",
   },
   sotam: {
-    en: "A private journal for your thoughts and memories, kept on your device first.",
+    en: "A private, local-first journal for reflections and memories.",
   },
 };
 
@@ -61,10 +61,10 @@ export const HOME_ONE_LINER: Record<
  */
 export const HOME_FLAGSHIP_LEAD: Record<string, Localized | undefined> = {
   sotro: {
-    en: "Rooms, tenants, meter readings and monthly charges, kept in one dependable record.",
-    vi: "Phòng, người thuê, số điện nước và các khoản thu hằng tháng, ghi một chỗ cho gọn, cho chắc.",
-    zh: "房间、租客、水电表读数和每月费用，集中记录，清楚可靠。",
-    "zh-hant": "房間、房客、水電表度數和每月費用，集中記錄，清楚可靠。",
+    en: "Rooms, tenants, meter readings and monthly charges, kept as dependable records.",
+    vi: "Phòng, người thuê, số điện nước và các khoản thu hằng tháng, ghi lại cho gọn, cho chắc.",
+    zh: "房间、租客、水电表读数和每月费用，记录清楚可靠。",
+    "zh-hant": "房間、房客、水電表度數和每月費用，記錄清楚可靠。",
   },
 };
 
