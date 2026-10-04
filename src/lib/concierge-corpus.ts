@@ -1,4 +1,5 @@
 import { CLAIMS } from "../data/claims.ts";
+import { getFooterLinks } from "../data/site.ts";
 import type { Language } from "../data/site.ts";
 import { getPublicClaims, type PublicProductRef } from "./claims.ts";
 import { CANONICAL_PUBLIC_SITE_ORIGIN } from "./truth.ts";
@@ -133,10 +134,16 @@ export function buildConciergeCorpus(
 
   for (const surface of [...bySurface.keys()].sort()) {
     const bucket = bySurface.get(surface)!;
+    // Localized human label from the canonical nav source (the same source the
+    // Command Navigator renders); the raw path is only a last-resort fallback
+    // and stays searchable through the record id.
+    const label = getFooterLinks(lang).find(
+      (link) => link.href === `/${lang}/${surface}/`,
+    )?.label;
     records.push({
       id: `route:${surface}`,
       kind: "route",
-      title: `/${lang}/${surface}/`,
+      title: label ?? `/${lang}/${surface}/`,
       text: bucket.statements.join(" "),
       publicUrl: publicUrl(lang, `${surface}/`),
       sourceIds: [...bucket.claimIds].sort(),

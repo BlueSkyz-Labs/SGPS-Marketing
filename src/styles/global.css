@@ -706,11 +706,18 @@ html[data-intent="evaluate-product"] [data-journey-bar] a[href$="/products/"] {
 
 .concierge__link {
   display: inline-flex;
-  min-height: 2.5rem;
+  min-height: 2.75rem;
   align-items: center;
   font-size: var(--size-3);
   color: var(--text-primary);
   text-decoration: none;
+}
+
+.concierge__title {
+  margin: 0 0 0.75rem;
+  font-size: var(--size-3);
+  font-weight: 600;
+  color: var(--text-secondary);
 }
 
 .concierge__link:hover,
@@ -729,6 +736,23 @@ html[data-intent="evaluate-product"] [data-journey-bar] a[href$="/products/"] {
   padding: 0 0.75rem;
   font-size: var(--size-2);
   color: var(--text-muted);
+}
+
+/* The interactive control is chrome; the record links stay printable. */
+@media print {
+  .concierge__input {
+    display: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .concierge__item {
+    border: 1px solid CanvasText;
+  }
+
+  .concierge__link {
+    color: LinkText;
+  }
 }
 
 .hero-mark {

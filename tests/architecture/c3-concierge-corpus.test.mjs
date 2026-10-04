@@ -189,3 +189,22 @@ test("claim records carry the canonical statement verbatim and its evidence ids"
     assert.equal(record.publicUrl, `${SITE}/en/evidence/${claim.id}/`);
   }
 });
+
+test("route records carry localized human labels, never raw paths", async () => {
+  const { getFooterLinks } = await import("../../src/data/site.ts");
+  for (const lang of ["en", "vi", "zh", "zh-hant"]) {
+    const corpus = buildConciergeCorpus({ products: PUBLIC_PRODUCTS, lang });
+    for (const record of corpus.filter((r) => r.kind === "route")) {
+      const surface = record.id.replace("route:", "");
+      const label = getFooterLinks(lang).find(
+        (link) => link.href === `/${lang}/${surface}/`,
+      )?.label;
+      assert.ok(label, `${lang}/${surface}: canonical label exists`);
+      assert.equal(record.title, label, `${lang}/${surface}: localized label`);
+      assert.ok(
+        !record.title.startsWith("/"),
+        `${lang}/${surface}: not a raw path`,
+      );
+    }
+  }
+});
