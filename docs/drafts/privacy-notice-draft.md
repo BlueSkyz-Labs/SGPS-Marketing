@@ -1,127 +1,121 @@
-# BẢN NHÁP — Thông báo quyền riêng tư (blueskyzlabs.com)
+# Thông báo quyền riêng tư (blueskyzlabs.com): bản trung lập, chờ duyệt
 
-> **Trạng thái:** NHÁP, CHƯA CÔNG BỐ. Agent soạn ngày 2026-10-04 (GMT+7) theo quyết định của Owner: agent soạn, Owner hoặc pháp chế duyệt.
+> **Trạng thái:** ĐÃ HOÀN THIỆN, CHỜ OWNER DUYỆT CÔNG BỐ. Agent viết lại ngày 2026-10-05 (GMT+7) theo chỉ đạo của Owner: "viết trung lập, an toàn".
 >
-> - Không đưa bản này lên trang `/privacy/` khi chưa có phê duyệt bằng văn bản.
-> - Mọi chỗ `[ĐIỀN: …]` là dữ kiện Owner phải cung cấp. Agent không tự bịa.
-> - Đây không phải tư vấn pháp lý.
+> - **Nguyên tắc viết.** Chỉ nêu những gì trang web thực sự làm, đã đối chiếu với mã nguồn trên `main`. Không nêu dữ kiện pháp nhân, email, con số hay căn cứ pháp lý cụ thể mà repository không chứng minh được. Chỗ nào cần dữ kiện đó, văn bản dùng cách diễn đạt trung tính.
+> - **Còn đúng một dữ kiện Owner phải cung cấp trước khi công bố:** kênh liên hệ về quyền riêng tư (§1). Nếu thiếu kênh này, người dùng không thực hiện được quyền ở §6.
+> - Đây không phải tư vấn pháp lý. Nên nhờ pháp chế rà soát nếu nhắm thị trường EU.
 >
-> **Khung tham chiếu** (truy cập 2026-10-04):
+> **Dữ kiện kỹ thuật đã xác minh trên `main` (2026-10-05):**
+>
+> - Trang không đặt cookie. Mã nguồn không có lệnh ghi cookie nào. Các tuyên bố công khai `privacy-no-tracking-on-this-site` đã có sẵn.
+> - Trang chỉ lưu lựa chọn ngôn ngữ và giao diện trong `localStorage` của trình duyệt (`src/lib/theme.ts`, `src/scripts/locale-suggestion.ts`). Gợi ý ngôn ngữ không gửi yêu cầu mạng nào.
+> - Trang không có tài khoản, biểu mẫu, công cụ phân tích, pixel quảng cáo hay script ghi phiên.
+> - Trang chạy trên Cloudflare Workers (chỉ phục vụ tệp tĩnh). `wrangler.toml` bật lưu nhật ký Workers Logs (`persist = true`, `redact_query_string = true`). Mã nguồn không cấu hình logpush hay tail consumer. Cài đặt Logpush ở cấp tài khoản chưa được xác minh, nên văn bản không khẳng định điều đó.
+>
+> **Tài liệu tham khảo** (giữ từ bản nháp 2026-10-04):
 >
 > - GDPR Điều 13: https://gdpr-info.eu/art-13-gdpr/
-> - Luật Bảo vệ dữ liệu cá nhân số 91/2025/QH15, hiệu lực 01/01/2026: https://english.luatvietnam.vn/dan-su/law-on-personal-data-protection-law-no-91-2025-qh15-405135-d1.html
-> - Thời hạn lưu nhật ký Cloudflare Workers Logs: https://developers.cloudflare.com/workers/observability/logs/workers-logs/
->
-> **Dữ kiện kỹ thuật đã xác minh** (bám theo nội dung trang hiện tại, không thêm mới):
->
-> - Trang không đặt cookie.
-> - Trang chỉ lưu lựa chọn ngôn ngữ và giao diện trong trình duyệt.
-> - Trang không có tài khoản, không có biểu mẫu, không có pixel quảng cáo hay script ghi phiên.
-> - `wrangler.toml` bật lưu nhật ký: `observability.logs.persist = true`, `invocation_logs = true`.
+> - Luật Bảo vệ dữ liệu cá nhân số 91/2025/QH15: https://english.luatvietnam.vn/dan-su/law-on-personal-data-protection-law-no-91-2025-qh15-405135-d1.html
+> - Cloudflare Workers Logs: https://developers.cloudflare.com/workers/observability/logs/workers-logs/
 
 ---
 
-## Bản tiếng Việt (nháp)
+## Bản tiếng Việt
 
-### 1. Ai chịu trách nhiệm xử lý dữ liệu
+### 1. Ai vận hành trang này
 
-- Bên kiểm soát dữ liệu: **[ĐIỀN: tên pháp nhân đầy đủ, mã số doanh nghiệp, địa chỉ trụ sở]**, hoạt động dưới thương hiệu BlueSkyz Labs.
-- Liên hệ về quyền riêng tư: **[ĐIỀN: email chuyên trách quyền riêng tư]**.
+- Trang blueskyzlabs.com do **BlueSkyz Labs** vận hành.
+- Liên hệ về quyền riêng tư: **[OWNER CUNG CẤP TRƯỚC KHI CÔNG BỐ: một kênh liên hệ riêng tư, ví dụ một địa chỉ email]**.
 
 ### 2. Chúng tôi thu thập gì
 
-- **Không cookie, không tài khoản, không biểu mẫu.** Trang không đặt cookie và không có tính năng đăng ký hay gửi biểu mẫu.
-- **Lựa chọn ngôn ngữ và giao diện** được lưu trong trình duyệt của bạn (local storage). Dữ liệu này không gửi về máy chủ của chúng tôi.
-- **Nhật ký kỹ thuật:** khi bạn truy cập, hạ tầng phân phối có thể ghi lại:
-  - địa chỉ IP;
-  - loại trình duyệt;
-  - trang được yêu cầu;
-  - thời điểm truy cập.
+- **Không cookie, không tài khoản, không biểu mẫu, không công cụ phân tích.**
+- **Lựa chọn ngôn ngữ và giao diện** được lưu trong trình duyệt của bạn (local storage) và không gửi về cho chúng tôi. Bạn có thể xoá bất cứ lúc nào bằng cách xoá dữ liệu trang web trong trình duyệt.
+- **Dữ liệu kỹ thuật:** khi bạn truy cập, hạ tầng phân phối trang có thể ghi lại các thông tin như địa chỉ IP, loại trình duyệt, trang được yêu cầu và thời điểm truy cập.
 
-### 3. Mục đích và cơ sở xử lý
+### 3. Mục đích
 
-- **Mục đích:** bảo mật, chống lạm dụng, phân phối trang ổn định và khắc phục sự cố. Không dùng cho quảng cáo, không lập hồ sơ người dùng.
-- **Cơ sở xử lý:** [ĐIỀN, pháp chế xác nhận: lợi ích hợp pháp (GDPR Điều 6(1)(f)) và căn cứ tương ứng theo Luật 91/2025/QH15].
+- Dữ liệu kỹ thuật chỉ dùng để phân phối trang, giữ an toàn, chống lạm dụng và khắc phục sự cố.
+- Chúng tôi không dùng dữ liệu này cho quảng cáo, không lập hồ sơ người dùng và không bán cho bên nào.
+- Việc xử lý dựa trên nhu cầu chính đáng trong việc vận hành và bảo vệ trang web, trong phạm vi pháp luật áp dụng cho phép.
 
-### 4. Bên nhận dữ liệu
+### 4. Bên xử lý dữ liệu thay mặt chúng tôi
 
-- **Cloudflare, Inc.** là nhà cung cấp hosting và CDN, xử lý nhật ký kỹ thuật thay mặt chúng tôi.
-- Dữ liệu có thể được xử lý ngoài Việt Nam. [ĐIỀN, pháp chế xác nhận: cơ chế chuyển dữ liệu ra nước ngoài theo Luật 91/2025/QH15].
+- **Cloudflare** cung cấp dịch vụ lưu trữ và phân phối nội dung cho trang này.
+- Cloudflare vận hành mạng lưới toàn cầu, nên dữ liệu kỹ thuật có thể được xử lý ở ngoài Việt Nam, theo chính sách bảo mật của chính Cloudflare.
 
 ### 5. Thời gian lưu
 
-- Nhật ký kỹ thuật được lưu tối đa **[ĐIỀN: số ngày]**.
-- Tham khảo: tài liệu Cloudflare nêu 3 ngày với gói Free và 7 ngày với gói Paid. Owner cần xác nhận gói đang dùng.
+- Nhật ký kỹ thuật do chúng tôi bật trên hạ tầng chỉ được lưu trong thời gian ngắn, theo thời hạn mặc định của nhà cung cấp, và tự động xoá sau đó.
 
 ### 6. Quyền của bạn
 
-Bạn có quyền:
-
-- yêu cầu được biết;
-- truy cập;
-- chỉnh sửa;
-- xóa;
-- hạn chế hoặc phản đối việc xử lý dữ liệu cá nhân của mình, trong phạm vi pháp luật cho phép.
-
-Gửi yêu cầu tới **[ĐIỀN: email]**. Chúng tôi phản hồi trong **[ĐIỀN: thời hạn]**. Bạn cũng có quyền khiếu nại tới cơ quan có thẩm quyền về bảo vệ dữ liệu cá nhân **[ĐIỀN, pháp chế xác nhận: tên cơ quan]**.
+- Trong phạm vi pháp luật áp dụng cho phép, bạn có quyền yêu cầu được biết, truy cập, chỉnh sửa, xoá, hạn chế hoặc phản đối việc xử lý dữ liệu cá nhân liên quan đến bạn.
+- Gửi yêu cầu qua kênh liên hệ ở mục 1. Chúng tôi phản hồi trong thời hạn pháp luật áp dụng quy định.
+- Bạn cũng có quyền khiếu nại tới cơ quan có thẩm quyền về bảo vệ dữ liệu cá nhân nơi bạn cư trú.
 
 ### 7. Sản phẩm
 
-Sổ Trọ và Sổ Tâm có chính sách quyền riêng tư riêng. Trang này chỉ áp dụng cho blueskyzlabs.com.
+Mỗi sản phẩm (ví dụ Sổ Trọ, Sổ Tâm) có thông báo quyền riêng tư riêng. Thông báo này chỉ áp dụng cho trang blueskyzlabs.com.
 
-### 8. Cập nhật
+### 8. Thay đổi
 
-Phiên bản ngày **[ĐIỀN]**. Khi có thay đổi quan trọng, chúng tôi cập nhật ngày tại đây.
+- Nếu sau này trang có bổ sung công cụ đo lường (ví dụ đo tốc độ tải trang ẩn danh), chúng tôi sẽ cập nhật thông báo này **trước khi** bật công cụ đó.
+- Phiên bản ngày 2026-10-05.
 
 ---
 
-## English version (draft)
+## English version
 
-### 1. Controller
+### 1. Who runs this site
 
-- **[FILL IN: full legal entity name, registration number, registered address]**, trading as BlueSkyz Labs.
-- Privacy contact: **[FILL IN: email]**.
+- blueskyzlabs.com is operated by **BlueSkyz Labs**.
+- Privacy contact: **[OWNER TO PROVIDE BEFORE PUBLISHING: a private contact channel, for example an email address]**.
 
 ### 2. What we collect
 
-- No cookies, no accounts, no forms.
-- Your language and theme choice is stored in your browser only.
-- Technical logs (IP address, browser type, page requested, time) may be recorded by our delivery infrastructure.
+- **No cookies, no accounts, no forms, no analytics.**
+- **Your language and theme choice** is stored in your browser (local storage) and is not sent to us. You can remove it at any time by clearing this site's data in your browser.
+- **Technical data:** when you visit, the delivery infrastructure may record information such as your IP address, browser type, the page requested and the time of the request.
 
-### 3. Purpose and legal basis
+### 3. Purpose
 
-- **Purpose:** security, abuse prevention, reliable delivery and troubleshooting. Never advertising or profiling.
-- **Legal basis:** [FILL IN, legal to confirm: legitimate interests (GDPR Art. 6(1)(f)) and the corresponding basis under Vietnam Law 91/2025/QH15].
+- Technical data is used only to deliver the site, keep it secure, prevent abuse and fix problems.
+- We do not use it for advertising, do not build user profiles and do not sell it.
+- Processing relies on our legitimate need to operate and protect the website, to the extent the applicable law allows.
 
-### 4. Recipients
+### 4. Who processes data for us
 
-- **Cloudflare, Inc.**, our hosting and CDN provider, processes technical logs on our behalf.
-- Processing may occur outside Vietnam. [FILL IN, legal to confirm: cross-border transfer mechanism].
+- **Cloudflare** provides hosting and content delivery for this site.
+- Cloudflare runs a global network, so technical data may be processed outside Vietnam under Cloudflare's own privacy policy.
 
 ### 5. Retention
 
-- Technical logs are kept for up to **[FILL IN: days]**.
-- Cloudflare documents 3 days on the Free plan and 7 days on Paid; the Owner confirms the plan.
+- The technical logs we enable on our infrastructure are kept only for a short period, under the provider's default retention, and are then deleted automatically.
 
 ### 6. Your rights
 
-- Rights: to be informed, access, rectification, erasure, restriction and objection, as the law allows.
-- Contact **[FILL IN: email]**; reply within **[FILL IN]**.
-- Right to complain to **[FILL IN, legal to confirm: supervisory authority]**.
+- To the extent the applicable law allows, you may ask to be informed about, access, correct, erase, restrict or object to the processing of personal data about you.
+- Send requests through the contact channel in section 1. We reply within the time the applicable law requires.
+- You may also complain to the data protection authority where you live.
 
 ### 7. Products
 
-Sổ Trọ and Sổ Tâm publish their own privacy notices. This notice covers blueskyzlabs.com only.
+Each product (for example Sổ Trọ and Sổ Tâm) has its own privacy notice. This notice covers blueskyzlabs.com only.
 
 ### 8. Changes
 
-Version dated **[FILL IN]**.
+- If the site later adds a measurement tool (for example anonymous page-speed measurement), we will update this notice **before** turning that tool on.
+- Version dated 2026-10-05.
 
 ---
 
-## Việc cần làm sau khi Owner duyệt (agent thực hiện)
+## Bước công bố (agent thực hiện sau khi Owner duyệt và cung cấp kênh liên hệ)
 
-1. Cập nhật `PRIVACY_COPY` trong `src/data/trust-copy.ts` cho cả 4 ngôn ngữ. Bản zh-Hans và zh-Hant cần người bản ngữ rà soát.
-2. Bỏ câu "Full legal wording is published when BlueSkyz approves it".
-3. Giữ nguyên tuyên bố `privacy-no-tracking-on-this-site`, vì dữ kiện vẫn đúng.
-4. Chạy lại các kiểm tra public-truth và i18n parity.
+1. **Cập nhật nội dung trang.** Sửa `PRIVACY_COPY` trong `src/data/trust-copy.ts` cho cả 4 ngôn ngữ, giữ trang `/privacy/` trong giới hạn số từ của v8. Đưa toàn văn vào một khối mở rộng (disclosure), như trang `/verify/` đang làm.
+2. **Bản tiếng Trung.** Bản zh-Hans và zh-Hant cần người bản ngữ rà soát.
+3. **Bỏ câu chờ duyệt.** Xoá câu "Full legal wording is published when BlueSkyz approves it".
+4. **Giữ tuyên bố công khai.** Giữ nguyên tuyên bố `privacy-no-tracking-on-this-site`, vì dữ kiện vẫn đúng.
+5. **Kiểm tra lại.** Chạy lại các kiểm tra public-truth, i18n parity và v8 trust-page caps.
+6. **Thứ tự với RUM.** Chỉ sau khi trang `/privacy/` đã công bố mới gỡ Cloudflare Access. Khi bật RUM, thêm Cloudflare Web Analytics vào mục 2 và mục 4 trước khi bật beacon (xem SGPS-DEC-2026-039 §3.5).
