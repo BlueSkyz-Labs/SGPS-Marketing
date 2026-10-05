@@ -197,11 +197,13 @@ export function auditConsumers({ lang, theme, header }) {
   if (!/class="theme-trigger hc-trigger hc-trigger--icon"/.test(theme)) {
     problems.push("the theme trigger must use the shared trigger");
   }
-  if (!/"theme-group--panel theme-panel hc-panel"/.test(theme)) {
-    problems.push("the theme panel must use the shared panel");
+  // SGPS-DEC-2026-037 HC-7: the appearance control is one icon, so it has
+  // no popup panel and no mode rows; the menu row uses the shared group.
+  if (/popover|hc-panel|theme-row|data-theme-mode/.test(theme)) {
+    problems.push("the theme control is one icon: no panel or mode rows");
   }
-  if (!/class="theme-row hc-row"/.test(theme)) {
-    problems.push("theme rows must use the shared row");
+  if (!/\{ "hc-group": inMenu \}/.test(theme)) {
+    problems.push("the theme menu row must use the shared group");
   }
   if (
     !/data-command-trigger[\s\S]*?class="hc-trigger hc-trigger--icon"/.test(
@@ -217,7 +219,7 @@ export function auditConsumers({ lang, theme, header }) {
       lang,
       [".lang-switch__trigger", ".lang-panel", ".lang-option"],
     ],
-    ["ThemeToggle", theme, [".theme-trigger", ".theme-panel", ".theme-row"]],
+    ["ThemeToggle", theme, [".theme-trigger"]],
   ]) {
     // The no-Popover-API fallback (lists rendered inline) is exempt: it is a
     // different layout, not a restyle of the family.
@@ -353,4 +355,27 @@ test("negative proof: ambient tokens, a small trigger or lost motion guard are c
   );
   assert.notEqual(motion, SHARED);
   assert.ok(auditShared(motion).some((p) => p.includes("reduced-motion")));
+});
+
+test("negative proof: a theme panel or mode rows coming back is caught", () => {
+  for (const planted of [
+    '<div popover="auto" class="theme-panel hc-panel"></div>',
+    '<button class="theme-row hc-row" data-theme-mode="dark"></button>',
+  ]) {
+    const mutated = THEME.replace("</div>", `${planted}</div>`);
+    assert.notEqual(mutated, THEME);
+    assert.ok(
+      auditConsumers({ lang: LANG, theme: mutated, header: HEADER }).some((p) =>
+        p.includes("one icon"),
+      ),
+      planted,
+    );
+  }
+  const noGroup = THEME.replace('{ "hc-group": inMenu }', "{}");
+  assert.notEqual(noGroup, THEME);
+  assert.ok(
+    auditConsumers({ lang: LANG, theme: noGroup, header: HEADER }).some((p) =>
+      p.includes("shared group"),
+    ),
+  );
 });

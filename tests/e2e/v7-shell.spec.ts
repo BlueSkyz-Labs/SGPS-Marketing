@@ -165,7 +165,9 @@ test.describe("v7 shell without JavaScript", () => {
     await expect(
       footer.locator('[data-language-choice="zh"]').first(),
     ).toBeVisible();
-    await expect(page.locator("[data-theme-trigger]")).toBeHidden();
-    await expect(page.locator("[data-theme-mode]").first()).toBeHidden();
+    // Header and compact-menu icons both stay hidden: they cannot act.
+    await expect(page.locator("[data-theme-trigger]")).toHaveCount(2);
+    await expect(page.locator("[data-theme-trigger]:visible")).toHaveCount(0);
+    await expect(page.locator(".theme-control:visible")).toHaveCount(0);
   });
 });

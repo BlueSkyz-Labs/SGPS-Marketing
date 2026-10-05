@@ -1,29 +1,28 @@
 /**
- * Theme switcher premium guard (shared header-control family).
+ * Theme switcher guard (shared header-control family).
  *
- * Owner decision 2026-10-04: the appearance trigger is ICON-ONLY.
- *   - trigger = the search button's 44px square (hc-trigger hc-trigger--icon):
- *     no visible text label at any breakpoint, no chevron, no native title;
- *     its accessible name is "<label>: <mode>";
+ * Owner decisions 2026-10-04 (icon-only trigger) and 2026-10-05 (ONE icon,
+ * portfolio-wide, SGPS-DEC-2026-037 HC-7):
+ *   - control = the search button's 44px square (hc-trigger hc-trigger--icon)
+ *     in the header AND the compact menu; no visible text label in the
+ *     trigger, no chevron, no native title; accessible name "<label>: <mode>";
+ *   - no popup panel, no mode rows, no role=group: a press flips the resolved
+ *     theme (nextTheme) and a press back to the OS theme returns to System;
  *   - glyph = one sun <-> moon morph (ThemeMorphIcon) showing the RESOLVED
  *     theme from CSS, a status dot only in System mode, spring-like 450-550ms
  *     motion, instant under reduced motion, system colours under forced
  *     colours; mask ids unique per rendered instance;
- *   - tooltip = CSS-only, aria-hidden, after 300ms on hover and
- *     :focus-visible, hidden while the panel is open;
- *   - panel = caption row, then Light, Dark, System rows (sun, moon, monitor);
- *   - the check mark is shown only for the current row (aria-pressed) and the
- *     current row carries a 2px accent border.
- * The choice semantics (toggle buttons with aria-pressed in a role=group) and
- * the runtime contracts (applyTheme/initTheme, popover close + focus return)
- * must survive the redesign.
+ *   - tooltip (header) = CSS-only, aria-hidden, after 300ms on hover and
+ *     :focus-visible, naming every mode;
+ *   - runtime = applyTheme/initTheme/nextTheme; System clears the stored key.
  */
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import test from "node:test";
+import { applyTheme, nextTheme } from "../../src/lib/theme.ts";
 
 const SOURCE = readFileSync("src/components/layout/ThemeToggle.astro", "utf8");
-// Trigger, panel and row styling live in the shared header-control family.
+// Trigger styling lives in the shared header-control family.
 const SHARED = readFileSync("src/components/layout/header-control.css", "utf8");
 // The sun <-> moon glyph.
 const MORPH = readFileSync(
@@ -160,13 +159,14 @@ export function auditMorph(morph) {
   return problems;
 }
 
+/** The one-icon appearance control contract. */
 export function auditThemeSwitcher(source, shared = SHARED) {
   const problems = [];
 
   // Trigger: icon only, no label, no chevron, no native title.
   const markup = triggerMarkup(source);
   if (!markup) {
-    problems.push("the header trigger must be rendered");
+    problems.push("the trigger must be rendered");
   } else {
     if (!/<ThemeMorphIcon state="live" dot \/>/.test(markup)) {
       problems.push(
@@ -188,23 +188,36 @@ export function auditThemeSwitcher(source, shared = SHARED) {
       problems.push("the tooltip must be inside the trigger and aria-hidden");
     }
   }
-  if (/data-theme-current-label|theme-trigger__label/.test(source)) {
-    problems.push("the trigger must not render a visible text label");
-  }
   if (
     !/const triggerName = `\$\{L\.label\}: \$\{L\[DEFAULT_MODE\]\}`/.test(
       source,
     ) ||
     !/aria-label=\{triggerName\}/.test(source) ||
-    !/trigger\.setAttribute\("aria-label", `\$\{caption\}: \$\{current\}`\)/.test(
+    !/`\$\{trigger\.dataset\.themeLabel \?\? ""\}: \$\{names\[mode\] \?\? ""\}`/.test(
       source,
     )
   ) {
     problems.push("the trigger accessible name must state label and mode");
   }
 
+  // One icon: no popup, no rows, no group semantics, same control in both
+  // placements.
+  if (
+    /popover|hc-panel|theme-row|data-theme-mode|data-theme-toggle|role="group"|aria-pressed/.test(
+      source,
+    )
+  ) {
+    problems.push("the theme control is one icon: no panel, group or rows");
+  }
+  if ((source.match(/<button\b/g) ?? []).length !== 1) {
+    problems.push("one button renders the control in every placement");
+  }
+  if (!/placement\?: "header" \| "menu"/.test(source)) {
+    problems.push("the control must offer the header and menu placements");
+  }
+
   // Tooltip: hidden by default, below the trigger, 300ms delay on hover
-  // (pointer devices) and focus-visible, never while the panel is open.
+  // (pointer devices) and focus-visible.
   const tip = rule(source, ".theme-tip");
   if (
     !tip ||
@@ -218,8 +231,8 @@ export function auditThemeSwitcher(source, shared = SHARED) {
     );
   }
   const shown = [
-    /@media \(hover: hover\)\s*\{\s*\.theme-trigger:hover:not\(\[aria-expanded="true"\]\) \.theme-tip\s*\{([^}]*)\}/,
-    /\n\s*\.theme-trigger:focus-visible:not\(\[aria-expanded="true"\], \[data-tip-quiet\]\)\s+\.theme-tip\s*\{([^}]*)\}/,
+    /@media \(hover: hover\)\s*\{\s*\.theme-trigger:hover \.theme-tip\s*\{([^}]*)\}/,
+    /\n\s*\.theme-trigger:focus-visible \.theme-tip\s*\{([^}]*)\}/,
   ].map((re) => source.match(re)?.[1] ?? null);
   if (
     shown.some(
@@ -231,21 +244,7 @@ export function auditThemeSwitcher(source, shared = SHARED) {
     )
   ) {
     problems.push(
-      "the tooltip must show after 300ms on hover and focus-visible, not while open",
-    );
-  }
-  // Pointer selections quiet the focus tooltip; blur clears it, so keyboard
-  // focus still shows it.
-  if (
-    !/if \(\(event as MouseEvent\)\.detail > 0\) \{\s*trigger\?\.setAttribute\("data-tip-quiet", ""\);/.test(
-      source,
-    ) ||
-    !/addEventListener\("blur", \(\) => \{\s*trigger\.removeAttribute\("data-tip-quiet"\);/.test(
-      source,
-    )
-  ) {
-    problems.push(
-      "pointer selections must quiet the focus tooltip, and blur must clear it",
+      "the tooltip must show after 300ms on hover and focus-visible",
     );
   }
   for (const mode of ["light", "dark", "system"]) {
@@ -271,87 +270,6 @@ export function auditThemeSwitcher(source, shared = SHARED) {
     problems.push("the trigger must be the family's 44px icon square");
   }
 
-  // Panel caption + row order + row glyphs.
-  if (
-    !/class="theme-group__caption hc-caption"/.test(source) ||
-    !/<span>\{L\.label\}<\/span>/.test(source)
-  ) {
-    problems.push("the panel must carry a caption row with the group label");
-  }
-  if (!/const MODES = \["light", "dark", "system"\] as const;/.test(source)) {
-    problems.push("rows must be ordered Light, Dark, System");
-  }
-  if (
-    !/const ROW_GLYPH = \{ light: "sun", dark: "moon" \} as const;/.test(
-      source,
-    ) ||
-    !/<ThemeMorphIcon state=\{ROW_GLYPH\[mode\]\} \/>/.test(source)
-  ) {
-    problems.push("the Light and Dark rows must reuse the fixed morph glyph");
-  }
-  const panel = rule(shared, ".hc-panel");
-  if (
-    !/"theme-group--panel theme-panel hc-panel"/.test(source) ||
-    !panel ||
-    !/width:\s*min\(18rem, calc\(100vw - 1\.5rem\)\)/.test(panel) ||
-    !/border-radius:\s*var\(--radius-panel\)/.test(panel) ||
-    /backdrop-filter/.test(source) ||
-    /backdrop-filter/.test(shared.replace(/\/\*[\s\S]*?\*\//g, ""))
-  ) {
-    problems.push(
-      "the panel must be a solid 18rem card with the --radius-panel radius",
-    );
-  }
-
-  // Rows: state only through aria-pressed; check only for the current row.
-  if (
-    !/aria-pressed=\{mode === DEFAULT_MODE \? "true" : "false"\}/.test(source)
-  ) {
-    problems.push("only the current row may be rendered pressed");
-  }
-  if (!/data-theme-mode=\{mode\}/.test(source)) {
-    problems.push("every row must keep data-theme-mode");
-  }
-  if (!/class="theme-row__check hc-check"\s+aria-hidden="true"/.test(source)) {
-    problems.push("the check mark is a decoration and must be aria-hidden");
-  }
-  if (
-    !/\.theme-row:not\(\[aria-pressed="true"\]\) \.theme-row__check :global\(svg\)\s*\{\s*display:\s*none/.test(
-      source,
-    )
-  ) {
-    problems.push("the check mark must be shown only for the current row");
-  }
-  const check = rule(shared, ".hc-check");
-  if (
-    !check ||
-    /display:\s*none/.test(check) ||
-    !/width:\s*1\.5rem/.test(check) ||
-    !/color:\s*var\(--hc-accent\)/.test(check)
-  ) {
-    problems.push("the check mark must be sized and use the owned accent");
-  }
-  const row = rule(shared, ".hc-row");
-  if (
-    !/class="theme-row hc-row"/.test(source) ||
-    !row ||
-    !/min-height:\s*3\.5rem/.test(row) ||
-    !/border:\s*2px solid transparent/.test(row) ||
-    !/grid-template-columns:\s*2\.25rem minmax\(0, 1fr\) 1\.5rem/.test(row)
-  ) {
-    problems.push("rows must keep the 3.5rem / 2px transparent border grid");
-  }
-  const current = shared.match(
-    /\.hc-row:is\(\[aria-current="page"\], \[aria-pressed="true"\]\),[^{]*\{([^}]*)\}/,
-  )?.[1];
-  if (
-    !current ||
-    !/border-color:\s*var\(--hc-accent\)/.test(current) ||
-    !/background:\s*var\(--hc-current-bg\)/.test(current)
-  ) {
-    problems.push("the current row must carry the accent border and tint");
-  }
-
   // Reduced motion (press feedback + tooltip here, family in the shared file).
   if (
     !/@media \(prefers-reduced-motion: reduce\)\s*\{\s*\.theme-trigger__glyph :global\(\.tt-morph\),\s*\.theme-tip\s*\{\s*transition:\s*none/.test(
@@ -364,25 +282,81 @@ export function auditThemeSwitcher(source, shared = SHARED) {
     problems.push("motion must be disabled under prefers-reduced-motion");
   }
 
-  // Runtime contract.
-  if (!/applyTheme\(mode\)/.test(source) || !/initTheme\(\)/.test(source)) {
-    problems.push("the runtime must keep applyTheme/initTheme");
-  }
-  if (!/panel\.hidePopover\(\)/.test(source)) {
-    problems.push("choosing a mode must close the popover");
-  }
+  // Runtime contract: a press goes to nextTheme, then applies and repaints.
   if (
-    !/trigger\.setAttribute\("aria-expanded", String\(open\)\)/.test(source)
+    !/mode = nextTheme\(mode, osDark\.matches\);\s*applyTheme\(mode\);\s*paint\(\);/.test(
+      source,
+    ) ||
+    !/initTheme\(\)/.test(source)
   ) {
-    problems.push("aria-expanded must follow the popover state");
+    problems.push("a press must apply nextTheme(mode, osDark) and repaint");
   }
-  if (!/data-theme-trigger/.test(source) || !/data-theme-toggle/.test(source)) {
-    problems.push("data-theme-trigger and data-theme-toggle must stay");
+  if (!/data-theme-trigger/.test(source)) {
+    problems.push("data-theme-trigger must stay");
   }
   return problems;
 }
 
-test("the theme switcher keeps the icon-only trigger, panel and row contract", () => {
+/** One press: the opposite of the resolved theme, System when it matches the OS. */
+export function auditNextTheme(next) {
+  const problems = [];
+  const table = [
+    // [mode, osDark, expected]
+    ["system", false, "dark"],
+    ["system", true, "light"],
+    ["dark", false, "system"],
+    ["light", true, "system"],
+    ["light", false, "dark"],
+    ["dark", true, "light"],
+  ];
+  for (const [mode, osDark, expected] of table) {
+    const got = next(mode, osDark);
+    if (got !== expected) {
+      problems.push(
+        `nextTheme(${mode}, osDark=${osDark}) = ${got}, want ${expected}`,
+      );
+    }
+  }
+  return problems;
+}
+
+/** System clears the stored key; light/dark store it. */
+export function auditStorage(apply) {
+  const store = new Map();
+  const attrs = new Map();
+  globalThis.localStorage = {
+    getItem: (k) => store.get(k) ?? null,
+    setItem: (k, v) => store.set(k, String(v)),
+    removeItem: (k) => store.delete(k),
+  };
+  globalThis.document = {
+    documentElement: {
+      setAttribute: (k, v) => attrs.set(k, v),
+      removeAttribute: (k) => attrs.delete(k),
+    },
+  };
+  const problems = [];
+  try {
+    apply("dark");
+    if (
+      store.get("blueskyz-theme") !== "dark" ||
+      attrs.get("data-theme") !== "dark"
+    ) {
+      problems.push("dark must be stored and pinned");
+    }
+    apply("system");
+    if (store.has("blueskyz-theme")) {
+      problems.push("System must clear the stored choice");
+    }
+    if (attrs.has("data-theme")) problems.push("System must unpin the theme");
+  } finally {
+    delete globalThis.localStorage;
+    delete globalThis.document;
+  }
+  return problems;
+}
+
+test("the appearance control is one icon in header and menu", () => {
   assert.deepEqual(auditThemeSwitcher(SOURCE), []);
 });
 
@@ -390,10 +364,9 @@ test("the sun <-> moon glyph keeps its geometry, motion, dot and a11y modes", ()
   assert.deepEqual(auditMorph(MORPH), []);
 });
 
-test("the choice semantics stay toggle buttons in a role=group", () => {
-  assert.match(SOURCE, /role="group"/);
-  assert.match(SOURCE, /<button\s+type="button"\s+data-theme-mode=\{mode\}/);
-  assert.doesNotMatch(SOURCE, /role="(listbox|option|menuitemradio)"/);
+test("a press flips the resolved theme and returns to System on an OS match", () => {
+  assert.deepEqual(auditNextTheme(nextTheme), []);
+  assert.deepEqual(auditStorage(applyTheme), []);
 });
 
 test("CSP and Trusted Types: no inline handlers, no innerHTML", () => {
@@ -418,7 +391,7 @@ test("palette is owned for light, explicit dark and OS dark", () => {
     SHARED,
     /prefers-color-scheme: dark\)\s*\{\s*:root:not\(\[data-theme="light"\]\) :is\(\.hc-trigger, \.hc-panel, \.hc-group\)/,
   );
-  assert.match(SOURCE, /"theme-group--inline hc-group"/);
+  assert.match(SOURCE, /\{ "hc-group": inMenu \}/);
 });
 
 test("negative proof: a visible text label, a chevron or a native title in the trigger is caught", () => {
@@ -464,7 +437,7 @@ test("negative proof: a non-unique (literal) mask id is caught", () => {
   assert.ok(auditMorph(inline).some((p) => p.includes("unique")));
 });
 
-test("negative proof: an announced, instant or always-on tooltip is caught", () => {
+test("negative proof: an announced, instant or missing tooltip mode is caught", () => {
   const announced = SOURCE.replace(
     '<span class="theme-tip" aria-hidden="true" data-theme-tip>',
     '<span class="theme-tip" data-theme-tip>',
@@ -479,25 +452,9 @@ test("negative proof: an announced, instant or always-on tooltip is caught", () 
   );
   assert.notEqual(instant, SOURCE);
   assert.ok(auditThemeSwitcher(instant).some((p) => p.includes("300ms")));
-  const whileOpen = SOURCE.replace(
-    '.theme-trigger:focus-visible:not([aria-expanded="true"], [data-tip-quiet])',
-    ".theme-trigger:focus-visible",
-  );
-  assert.notEqual(whileOpen, SOURCE);
-  assert.ok(auditThemeSwitcher(whileOpen).some((p) => p.includes("300ms")));
-  // Pointer selection no longer quiets the tooltip, or blur never clears it.
-  const loud = SOURCE.replace(
-    'trigger?.setAttribute("data-tip-quiet", "");',
-    "",
-  );
-  assert.notEqual(loud, SOURCE);
-  assert.ok(auditThemeSwitcher(loud).some((p) => p.includes("quiet")));
-  const sticky = SOURCE.replace(
-    'trigger.removeAttribute("data-tip-quiet");',
-    "",
-  );
-  assert.notEqual(sticky, SOURCE);
-  assert.ok(auditThemeSwitcher(sticky).some((p) => p.includes("quiet")));
+  const noSystem = SOURCE.replace('[data-theme-tip-mode="system"]', "");
+  assert.notEqual(noSystem, SOURCE);
+  assert.ok(auditThemeSwitcher(noSystem).some((p) => p.includes("every mode")));
 });
 
 test("negative proof: a dot outside System, a lazy morph or no reduced motion is caught", () => {
@@ -533,57 +490,72 @@ test("negative proof: a dot outside System, a lazy morph or no reduced motion is
   assert.ok(auditMorph(forced).some((p) => p.includes("forced colours")));
 });
 
-test("negative proof: rendering the check on every row is caught", () => {
-  const mutated = SOURCE.replace(
-    /(\.theme-row:not\(\[aria-pressed="true"\]\) \.theme-row__check :global\(svg\)\s*\{\s*)display:\s*none/,
-    "$1display: inline",
+test("negative proof: a mode panel, rows or a second button coming back is caught", () => {
+  for (const planted of [
+    ' popover="auto"',
+    ' role="group"',
+    ' data-theme-mode="dark"',
+    ' aria-pressed="true"',
+  ]) {
+    const mutated = SOURCE.replace(
+      'class="theme-trigger hc-trigger hc-trigger--icon"',
+      `class="theme-trigger hc-trigger hc-trigger--icon"${planted}`,
+    );
+    assert.notEqual(mutated, SOURCE);
+    assert.ok(
+      auditThemeSwitcher(mutated).some((p) => p.includes("one icon")),
+      planted,
+    );
+  }
+  const twoButtons = SOURCE.replace(
+    "</div>\n\n<style>",
+    '<button type="button">x</button></div>\n\n<style>',
   );
-  assert.notEqual(mutated, SOURCE);
+  assert.notEqual(twoButtons, SOURCE);
   assert.ok(
-    auditThemeSwitcher(mutated).some((p) =>
-      p.includes("only for the current row"),
-    ),
-  );
-  const alwaysPressed = SOURCE.replace(
-    /aria-pressed=\{mode === DEFAULT_MODE \? "true" : "false"\}/,
-    'aria-pressed="true"',
-  );
-  assert.notEqual(alwaysPressed, SOURCE);
-  assert.ok(
-    auditThemeSwitcher(alwaysPressed).some((p) =>
-      p.includes("only the current row"),
-    ),
+    auditThemeSwitcher(twoButtons).some((p) => p.includes("one button")),
   );
 });
 
-test("negative proof: reordering rows or dropping the caption is caught", () => {
-  const reordered = SOURCE.replace(
-    '["light", "dark", "system"] as const',
-    '["system", "light", "dark"] as const',
+test("negative proof: a broken toggle or a stored System is caught", () => {
+  // Always dark; never back to System; no flip from System.
+  assert.notDeepEqual(
+    auditNextTheme(() => "dark"),
+    [],
   );
-  assert.notEqual(reordered, SOURCE);
-  assert.ok(
-    auditThemeSwitcher(reordered).some((p) =>
-      p.includes("Light, Dark, System"),
-    ),
+  assert.notDeepEqual(
+    auditNextTheme((mode, osDark) => {
+      const resolved = mode === "system" ? (osDark ? "dark" : "light") : mode;
+      return resolved === "dark" ? "light" : "dark";
+    }),
+    [],
   );
-  const noCaption = SOURCE.replace(
-    'class="theme-group__caption hc-caption"',
-    'class="x"',
+  assert.notDeepEqual(
+    auditNextTheme((mode) => mode),
+    [],
   );
-  assert.notEqual(noCaption, SOURCE);
-  assert.ok(auditThemeSwitcher(noCaption).some((p) => p.includes("caption")));
+  // System persisted as a value instead of clearing the key.
+  assert.notDeepEqual(
+    auditStorage((mode) => {
+      if (mode !== "system") {
+        document.documentElement.setAttribute("data-theme", mode);
+      } else {
+        document.documentElement.removeAttribute("data-theme");
+      }
+      localStorage.setItem("blueskyz-theme", mode);
+    }),
+    [],
+  );
+  // The click no longer goes through nextTheme.
+  const pinned = SOURCE.replace(
+    "mode = nextTheme(mode, osDark.matches);",
+    'mode = "dark";',
+  );
+  assert.notEqual(pinned, SOURCE);
+  assert.ok(auditThemeSwitcher(pinned).some((p) => p.includes("nextTheme")));
 });
 
-test("negative proof: losing the accent border, the icon square or the mode name is caught", () => {
-  const border = SHARED.replace(
-    /(\.hc-row:is\(\[aria-current="page"\], \[aria-pressed="true"\]\),[^{]*\{\s*)border-color:\s*var\(--hc-accent\);/,
-    "$1border-color: transparent;",
-  );
-  assert.notEqual(border, SHARED);
-  assert.ok(
-    auditThemeSwitcher(SOURCE, border).some((p) => p.includes("accent border")),
-  );
+test("negative proof: losing the icon square, the mode name or reduced motion is caught", () => {
   const wide = SOURCE.replace(
     'class="theme-trigger hc-trigger hc-trigger--icon"',
     'class="theme-trigger hc-trigger"',
