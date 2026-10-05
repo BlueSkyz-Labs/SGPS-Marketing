@@ -15,6 +15,9 @@ capabilities:
   - Optional polite Zalo/SMS-style reminder messages to copy; nothing is sent automatically
 platforms:
   - web
+# schema.org SoftwareApplication category (Owner delegated best practice, 2026-10-04):
+# rent, utilities and receipts for a landlord's rental business.
+applicationCategory: BusinessApplication
 primaryAction:
   type: preview
   label: Preview Sổ Trọ

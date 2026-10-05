@@ -153,6 +153,7 @@ export function registryFacts(yaml) {
   return {
     slug: top("slug"),
     name: top("name"),
+    applicationCategory: top("applicationCategory"),
     platforms,
     shortDescription: localized,
   };
@@ -182,6 +183,7 @@ const APP_KEYS = new Set([
   "description",
   "url",
   "inLanguage",
+  "applicationCategory",
   "operatingSystem",
   "publisher",
   "image",
@@ -198,6 +200,10 @@ export function appRegistryProblems(app, facts, lang) {
   }
   if (!String(app.url ?? "").endsWith(`/${lang}/products/${facts.slug}/`)) {
     problems.push(`url ${app.url}`);
+  }
+  // Category is record-owned: present exactly when the record declares it.
+  if (app.applicationCategory !== facts.applicationCategory) {
+    problems.push(`applicationCategory ${app.applicationCategory}`);
   }
   if (app.operatingSystem !== expectedOperatingSystem(facts.platforms)) {
     problems.push(`operatingSystem ${app.operatingSystem}`);

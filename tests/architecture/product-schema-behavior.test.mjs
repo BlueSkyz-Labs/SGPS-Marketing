@@ -405,3 +405,22 @@ test("CTA verb vocabulary is bounded and fully localized", () => {
     assert.notEqual(label.zh, label.en, `${verb} must be translated for zh`);
   }
 });
+
+test("applicationCategory is optional and limited to schema.org categories", () => {
+  assert.equal(productSchema.safeParse(baseProduct()).success, true);
+  assert.equal(
+    productSchema.safeParse(
+      baseProduct({ applicationCategory: "BusinessApplication" }),
+    ).success,
+    true,
+  );
+  // negative proof: an invented or misspelled category is rejected
+  for (const value of ["Landlord", "businessapplication", ""]) {
+    assert.equal(
+      productSchema.safeParse(baseProduct({ applicationCategory: value }))
+        .success,
+      false,
+      value,
+    );
+  }
+});
