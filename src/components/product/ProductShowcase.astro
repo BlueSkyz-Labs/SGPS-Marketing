@@ -2,6 +2,11 @@
 import type { Language } from "@/lib/i18n";
 import type { ShowcaseSchema } from "@/lib/showcase-schema";
 import ShowcaseGroup from "@/components/product/ShowcaseGroup.astro";
+import FeatureStory from "@/components/product/FeatureStory.astro";
+import { STORY_COPY } from "@/components/product/story-copy";
+import { resolveFeatureStory } from "@/lib/feature-story";
+import { getPublicProducts } from "@/lib/products";
+import { productCopy } from "@/lib/product-copy";
 
 /**
  * GOLIVE W5 — real screens of a product's running application.
@@ -23,14 +28,39 @@ interface Props {
 }
 
 const { showcase, lang, productName } = Astro.props;
-const phones = showcase.screens.filter((item) => item.surface === "phone");
-const desktops = showcase.screens.filter((item) => item.surface === "desktop");
-// v8 W3: three phone captures and one desktop capture lead; the rest sit
-// behind "More screens" so the page stays a story, not a data sheet.
-const heroPhones = phones.slice(0, 3);
-const heroDesktops = desktops.slice(0, 1);
-const morePhones = phones.slice(3);
-const moreDesktops = desktops.slice(1);
+// v12 S1: when the record carries a feature story, the story leads (its
+// chapters and coda) and every screen it does not tell sits behind "More
+// screens". The story resolves only against this record's screens and the
+// product record's jobs and capabilities; anything else fails the build.
+const productData = (await getPublicProducts()).find(
+  (entry) => entry.data.slug === showcase.product,
+)?.data;
+const story =
+  showcase.story && productData
+    ? resolveFeatureStory(
+        showcase.story,
+        showcase.screens,
+        productCopy(productData, lang),
+      )
+    : null;
+const told = new Set(
+  story
+    ? [
+        ...story.chapters.map((chapter) => chapter.screen.id),
+        ...(story.coda ? [story.coda.id] : []),
+      ]
+    : [],
+);
+const untold = showcase.screens.filter((item) => !told.has(item.id));
+const phones = untold.filter((item) => item.surface === "phone");
+const desktops = untold.filter((item) => item.surface === "desktop");
+// v8 W3 (no story): three phone captures and one desktop capture lead; the
+// rest sit behind "More screens" so the page stays a story, not a data sheet.
+// With a story, nothing else leads: the story is the lead.
+const heroPhones = story ? [] : phones.slice(0, 3);
+const heroDesktops = story ? [] : desktops.slice(0, 1);
+const morePhones = story ? phones : phones.slice(3);
+const moreDesktops = story ? desktops : desktops.slice(1);
 const hasMore = morePhones.length + moreDesktops.length > 0;
 const capturedOn = showcase.capture.capturedAt.toISOString().slice(0, 10);
 
@@ -84,6 +114,7 @@ const COPY = {
 } as const satisfies Record<Language, Record<string, string>>;
 
 const t = COPY[lang];
+const heading = story ? STORY_COPY[lang].title(productName) : t.heading;
 const guideHref = showcase.guide
   ? `/${lang}/products/${showcase.product}/guide/`
   : null;
@@ -112,8 +143,13 @@ const defaultTrack = wanted
 >
   <div class="showcase__header">
     <h2 id="profile-showcase" class="type-d2 text-[var(--text-primary)]">
-      {t.heading}
+      {heading}
     </h2>
+    {story ? (
+      <p class="showcase__lead mt-4 max-w-3xl" data-story-lead>
+        {STORY_COPY[lang].lead}
+      </p>
+    ) : null}
     <p
       class="mt-3 max-w-3xl text-sm leading-relaxed text-[var(--text-muted)]"
       data-showcase-disclosure
@@ -122,8 +158,12 @@ const defaultTrack = wanted
     </p>
   </div>
 
+  {story ? <FeatureStory story={story} lang={lang} /> : null}
+
   {showcase.video ? (
-    <figure class="showcase__video view-rise m-0 mt-8">
+    <figure
+      class:list={["showcase__video view-rise m-0", story ? "mt-20" : "mt-8"]}
+    >
       <video
         controls
         playsinline
@@ -157,13 +197,15 @@ const defaultTrack = wanted
     </figure>
   ) : null}
 
-  <ShowcaseGroup
-    phones={heroPhones}
-    desktops={heroDesktops}
-    lang={lang}
-    labels={t}
-    first
-  />
+  {heroPhones.length + heroDesktops.length > 0 ? (
+    <ShowcaseGroup
+      phones={heroPhones}
+      desktops={heroDesktops}
+      lang={lang}
+      labels={t}
+      first
+    />
+  ) : null}
 
   {hasMore ? (
     <details class="showcase__more mt-10" data-showcase-more>
@@ -190,23 +232,32 @@ const defaultTrack = wanted
 <style is:inline>
   /* Below the fold: skip layout and paint until near the viewport. The
      placeholder heights are the measured section heights with the gallery
-     collapsed (Sổ Trọ, 2026-10-04: 1542-1627 px at 390, 2236-2276 px at
-     1024, 2417-2457 px at 1440 across the four locales) so the scrollbar
-     does not jump. Guarded by tests/e2e/wp-c-product-surfaces.spec.ts;
-     re-measure after any layout change. */
+     collapsed (Sổ Trọ with its Feature Story, 2026-10-04, reduced motion:
+     4431-4660 px at 390, 4554-4572 px at 1024, 4630-4648 px at 1440 across
+     the four locales) so the scrollbar does not jump. Where the sticky story
+     stage runs, each of the five chapters is 78svh tall, so the placeholder
+     follows the viewport height (measured: 1875 px + 5 x 78svh at 1024,
+     1944 px + 5 x 78svh at 1440). Guarded by
+     tests/e2e/wp-c-product-surfaces.spec.ts; re-measure after any layout
+     change. */
   .showcase {
     content-visibility: auto;
-    contain-intrinsic-size: auto 1620px;
+    contain-intrinsic-size: auto 4545px;
   }
   @media (min-width: 64rem) {
     .showcase {
-      contain-intrinsic-size: auto 2260px;
+      contain-intrinsic-size: auto 4555px;
     }
   }
   @media (min-width: 80rem) {
     .showcase {
-      contain-intrinsic-size: auto 2440px;
+      contain-intrinsic-size: auto 4635px;
     }
+  }
+  .showcase__lead {
+    font-size: var(--size-5);
+    line-height: 1.55;
+    color: var(--text-secondary);
   }
   .showcase__label {
     font-size: var(--size-1);
@@ -214,6 +265,12 @@ const defaultTrack = wanted
     letter-spacing: 0.1em;
     text-transform: uppercase;
     color: var(--text-muted);
+  }
+
+  /* Vietnamese: sentence case (cross-subset kerning, see .eyebrow). */
+  :lang(vi) .showcase__label {
+    text-transform: none;
+    letter-spacing: var(--tracking-eyebrow, 0.03em);
   }
   .showcase__video video {
     display: block;
@@ -382,25 +439,40 @@ const defaultTrack = wanted
   }
 
   /* W2 "Device stage" (Tier A, CSS only). Where scroll-driven animations
-     exist and the visitor allows motion, the three lead phones rise into the
-     stage centre-first, then left, then right, and the owner's desktop
-     capture rises after them. Keyframes are the shared grammar (`view-rise`
-     in global.css; route-local keyframes are banned by
-     c3-craft-contract.test.mjs), so only the per-phone timing lives here.
-     The CSS default (no support, reduced motion, forced colors, print, no
-     JS) is the final layout. */
+     exist and the visitor allows motion, the three lead phones enter as one
+     stacked hand (the outer two tucked behind the centre phone, tilted) and
+     fan out to the final row as the stage scrolls in; captions fade in once
+     the fan has opened, so stacked captions never overlap. The owner's
+     desktop capture rises after them. Keyframes are the shared grammar
+     (`stage-fan` / `stage-caption` in reveal.css, `view-rise` in global.css;
+     route-local keyframes are banned by c3-craft-contract.test.mjs), so only
+     the per-phone offsets and timing live here. The CSS default (no support,
+     reduced motion, forced colors, print, no JS) is the final layout. */
   @media (min-width: 64rem) and (prefers-reduced-motion: no-preference) {
     @supports (animation-timeline: view()) {
       .showcase__rail--stage > .showcase__phone {
-        animation: view-rise linear both;
+        animation: stage-fan linear both;
         animation-timeline: view();
-        animation-range: entry 10% cover 38%;
+        animation-range: entry 15% cover 42%;
+      }
+      /* Centre phone on top of the hand; outer phones offset by most of one
+         column (17rem + 3.5rem gap) so they peek out from behind it. */
+      .showcase__rail--stage > .showcase__phone:nth-child(2) {
+        position: relative;
+        z-index: 1;
       }
       .showcase__rail--stage > .showcase__phone:nth-child(1) {
-        animation-range: entry 30% cover 44%;
+        --stack-x: 15.5rem;
+        --stack-r: -7deg;
       }
       .showcase__rail--stage > .showcase__phone:nth-child(3) {
-        animation-range: entry 50% cover 50%;
+        --stack-x: -15.5rem;
+        --stack-r: 7deg;
+      }
+      .showcase__rail--stage > .showcase__phone .showcase__caption {
+        animation: stage-caption linear both;
+        animation-timeline: view();
+        animation-range: cover 30% cover 46%;
       }
       .showcase__desktops--stage > li:first-child {
         animation: view-rise linear both;
@@ -411,6 +483,7 @@ const defaultTrack = wanted
   }
   @media (forced-colors: active) {
     .showcase__rail--stage > .showcase__phone,
+    .showcase__rail--stage > .showcase__phone .showcase__caption,
     .showcase__desktops--stage > li:first-child {
       animation: none;
     }
@@ -424,6 +497,22 @@ const defaultTrack = wanted
     .showcase__phone:hover .showcase__device,
     .showcase__browser:hover {
       transform: none;
+    }
+  }
+  /* Placeholder where the sticky story stage runs (see the measured sizes
+     at the top of this style). Kept after the device stage block. */
+  @media (min-width: 64rem) and (prefers-reduced-motion: no-preference) {
+    @supports (animation-timeline: view()) and (timeline-scope: --story) {
+      .showcase:has([data-feature-story]) {
+        contain-intrinsic-size: auto calc(1870px + 390svh);
+      }
+    }
+  }
+  @media (min-width: 80rem) and (prefers-reduced-motion: no-preference) {
+    @supports (animation-timeline: view()) and (timeline-scope: --story) {
+      .showcase:has([data-feature-story]) {
+        contain-intrinsic-size: auto calc(1945px + 390svh);
+      }
     }
   }
 </style>

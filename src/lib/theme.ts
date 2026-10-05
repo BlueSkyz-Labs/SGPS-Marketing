@@ -1,6 +1,10 @@
 /**
  * W3 — theme runtime. Light/Dark/System, persisted, CSP-safe.
  *
+ * One-icon control (SGPS-DEC-2026-037 HC-7): `toggleTheme` flips the RESOLVED
+ * theme; when the new theme equals the OS preference it returns to System
+ * (stored choice cleared), so automatic behaviour needs no third option.
+ *
  * The palette is applied purely through CSS:
  *   - no attribute            → follow `prefers-color-scheme` (System), via the
  *                               media rule in global.css (no-JS first paint);
@@ -30,7 +34,10 @@ export function storedTheme(): ThemeMode | null {
   }
 }
 
-/** Apply a mode to the document and persist it. System removes the attribute. */
+/**
+ * Apply a mode to the document and persist it. System removes the attribute
+ * and the stored choice (no stored key means "follow the OS").
+ */
 export function applyTheme(mode: ThemeMode, persist = true): void {
   if (typeof document === "undefined") return;
   const root = document.documentElement;
@@ -39,11 +46,31 @@ export function applyTheme(mode: ThemeMode, persist = true): void {
   else root.removeAttribute("data-theme");
   if (persist) {
     try {
-      localStorage.setItem(STORAGE_KEY, mode);
+      if (mode === "system") localStorage.removeItem(STORAGE_KEY);
+      else localStorage.setItem(STORAGE_KEY, mode);
     } catch {
       /* storage unavailable (private mode): the session still applies */
     }
   }
+}
+
+/** The theme actually painted: the pinned mode, else the OS preference. */
+export function resolvedTheme(
+  mode: ThemeMode,
+  osDark: boolean,
+): "light" | "dark" {
+  if (mode === "light" || mode === "dark") return mode;
+  return osDark ? "dark" : "light";
+}
+
+/**
+ * The mode one press of the icon leads to: the opposite of the resolved
+ * theme, or System when that opposite is what the OS already prefers.
+ */
+export function nextTheme(mode: ThemeMode, osDark: boolean): ThemeMode {
+  const target = resolvedTheme(mode, osDark) === "dark" ? "light" : "dark";
+  const os = osDark ? "dark" : "light";
+  return target === os ? "system" : target;
 }
 
 /** Resolve the initial mode from storage (default System) and apply it. */

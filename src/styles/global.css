@@ -86,15 +86,6 @@
   --border-subtle: #cbd5e1;
   --action-primary: #1d4ed8;
   --focus-ring: #1d4ed8;
-  /* National flag artwork for the language control (decorative, theme-invariant
-     apart from a softened white). Owned here so no component carries raw hex. */
-  --flag-white: #f1f5f9;
-  --flag-red-vn: #da251d;
-  --flag-yellow-vn: #ffff00;
-  --flag-red-us: #b22234;
-  --flag-blue-us: #3c3b6e;
-  --flag-red-cn: #de2910;
-  --flag-yellow-cn: #ffde00;
   /* Kit v4 radius-md (12px); keeps cards on the canonical radius scale. */
   --radius-card: 0.75rem;
   /* Popover card radius shared by the header control panels (16px). */
@@ -174,6 +165,9 @@
      F8: one section spacing scale shared by every template (64px, 96px from
      1024px; tight: 48px, 64px). Fixed steps, no fluid clamp. */
   --section-y: 4rem;
+  /* Calm-chrome round (2026-10-04): decorative card edges are a hairline, softer
+     than control borders; controls keep --border-subtle. */
+  --border-hairline: color-mix(in srgb, var(--border-subtle) 55%, transparent);
   --section-y-tight: 3rem;
   /* F13: uppercase eyebrow tracking. Latin default; Vietnamese stacked
      diacritics and CJK need less (set per :lang below). */
@@ -306,6 +300,11 @@
   letter-spacing: var(--tracking-eyebrow);
   text-transform: uppercase;
   color: var(--text-muted);
+}
+
+/* Vietnamese: sentence case (cross-subset kerning, see .eyebrow). */
+:lang(vi) .eyebrow {
+  text-transform: none;
 }
 
 .site-container {
@@ -1089,6 +1088,12 @@ summary {
   text-transform: uppercase;
   color: var(--text-muted);
 }
+
+/* Vietnamese: sentence case (cross-subset kerning, see .eyebrow). */
+:lang(vi) .boundary-card__label {
+  text-transform: none;
+  letter-spacing: var(--tracking-eyebrow, 0.03em);
+}
 .boundary-card__text {
   margin-top: 0.5rem;
   color: var(--text-secondary);
@@ -1248,6 +1253,12 @@ summary {
      narrow cell, so it must be allowed to break rather than overflow. */
   overflow-wrap: anywhere;
 }
+
+/* Vietnamese: sentence case (cross-subset kerning, see .eyebrow). */
+:lang(vi) .bilingual-mirror__tag {
+  text-transform: none;
+  letter-spacing: var(--tracking-eyebrow, 0.03em);
+}
 .bilingual-mirror__cell p {
   margin-top: 0.375rem;
   color: var(--text-secondary);
@@ -1298,6 +1309,12 @@ summary {
   padding: 0.125rem 0.5rem;
 }
 
+/* Vietnamese: sentence case (cross-subset kerning, see .eyebrow). */
+:lang(vi) .command-navigator__kind {
+  text-transform: none;
+  letter-spacing: var(--tracking-eyebrow, 0.03em);
+}
+
 /* v3 Wave 4 — source-to-surface trace. */
 .source-trace {
   margin-top: 1.25rem;
@@ -1312,6 +1329,12 @@ summary {
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--text-muted);
+}
+
+/* Vietnamese: sentence case (cross-subset kerning, see .eyebrow). */
+:lang(vi) .source-trace__title {
+  text-transform: none;
+  letter-spacing: var(--tracking-eyebrow, 0.03em);
 }
 .source-trace__list {
   margin-top: 0.5rem;
@@ -1337,6 +1360,12 @@ summary {
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-pill);
   padding: 0.125rem 0.5rem;
+}
+
+/* Vietnamese: sentence case (cross-subset kerning, see .eyebrow). */
+:lang(vi) .source-trace__role {
+  text-transform: none;
+  letter-spacing: var(--tracking-eyebrow, 0.03em);
 }
 /* Decorative connector line between steps; empty content, zero AT impact. */
 .source-trace__step:not(:last-child)::after {
@@ -1383,6 +1412,12 @@ summary {
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--text-muted);
+}
+
+/* Vietnamese: sentence case (cross-subset kerning, see .eyebrow). */
+:lang(vi) .evidence-passport__sources-title {
+  text-transform: none;
+  letter-spacing: var(--tracking-eyebrow, 0.03em);
 }
 .evidence-passport__sources ul {
   margin-top: 0.375rem;
@@ -1433,6 +1468,12 @@ summary {
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-pill);
   padding: 0.125rem 0.5rem;
+}
+
+/* Vietnamese: sentence case (cross-subset kerning, see .eyebrow). */
+:lang(vi) .decision-room__kind {
+  text-transform: none;
+  letter-spacing: var(--tracking-eyebrow, 0.03em);
 }
 .decision-room__label {
   font-size: var(--size-3);
@@ -1672,6 +1713,12 @@ html[data-intent] [data-journey-bar] li[data-evidence-first="true"] a {
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--text-muted);
+}
+
+/* Vietnamese: sentence case (cross-subset kerning, see .eyebrow). */
+:lang(vi) .evidence-passport__page-title {
+  text-transform: none;
+  letter-spacing: var(--tracking-eyebrow, 0.03em);
 }
 
 /* Wave H8 — passport polish: the context link reads as the card's footer. */
@@ -1964,9 +2011,19 @@ dd {
     "PingFang TC", "Noto Sans TC", "Microsoft JhengHei", var(--font-sans),
     sans-serif;
 }
+/* CJK headings: strict punctuation rules, but ideographs may still break
+   (never keep-all: it forbids breaks between Han characters, so a long
+   heading overflowed 320px, WCAG 1.4.10, found by the v13 sweep).
+   auto-phrase is a progressive enhancement over normal, as in
+   display-type.css. */
 :is(:lang(zh-Hans), :lang(zh-Hant)) :is(h1, h2, h3) {
-  word-break: keep-all;
+  word-break: normal;
   line-break: strict;
+}
+@supports (word-break: auto-phrase) {
+  :is(:lang(zh-Hans), :lang(zh-Hant)) :is(h1, h2, h3) {
+    word-break: auto-phrase;
+  }
 }
 
 /* Back to top: a plain anchor at the end of long pages on phones.

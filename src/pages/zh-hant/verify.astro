@@ -1,13 +1,14 @@
 ---
 // zh-Hant copy: machine-assisted (OpenCC s2twp), pending native review.
 import BaseLayout from "@/layouts/BaseLayout.astro";
+import { PAGE_META } from "@/data/page-meta";
 import VerifyCentre from "@/components/verify/VerifyCentre.astro";
 import ProductConcierge from "@/components/concierge/ProductConcierge.astro";
 ---
 
 <BaseLayout
-  title="核驗我們的聲明：信任通道與證據"
-  description="核驗 BlueSkyz Labs 的聲明：信任通道、每項聲明背後的證據，以及自行核查的方式。"
+  title={PAGE_META["zh-hant"].verify.title}
+  description={PAGE_META["zh-hant"].verify.description}
   path="/zh-hant/verify/"
 >
   <VerifyCentre lang="zh-hant" />

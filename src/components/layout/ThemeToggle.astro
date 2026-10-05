@@ -1,32 +1,40 @@
 ---
 /**
- * Appearance control. Same visual family as LanguageSwitcher and the search
- * trigger through ONE stylesheet (./header-control.css) and the Sổ Trọ
- * appearance menu.
+ * Appearance control: ONE icon (SGPS-DEC-2026-037 HC-7, Owner 2026-10-05).
  *
- * `popover` (desktop header): a trigger showing the icon + label of the CURRENT
- * mode and a chevron, opening a native popover card with three rows
- * (Light, Dark, System). `inline` (compact menu): the same three rows, no
- * popover. The rows stay toggle buttons in a `role="group"` carrying
- * `aria-pressed`; the current row also shows a check mark and an accent border.
+ * The same 44px icon button (the search trigger's shell, shared
+ * ./header-control.css family) is rendered in the desktop header and in the
+ * compact menu. Its glyph morphs sun <-> moon to show the RESOLVED theme, with
+ * a cobalt status dot while the site follows the OS (System). A press flips
+ * the resolved theme at once; when the new theme is what the OS already
+ * prefers, the stored choice is cleared and the site follows the OS again, so
+ * "System" needs no third option and no popup list.
  *
- * Without JavaScript the server-rendered state is `system`, and the controls
- * are hidden by the <noscript> rule in BaseLayout (they cannot do anything).
+ * The accessible name is "<label>: <mode>" and a CSS-only tooltip repeats it
+ * on hover and :focus-visible (aria-hidden, never announced twice). In the
+ * compact menu the label sits visibly beside the icon instead of the tooltip.
+ *
+ * Without JavaScript the control cannot act: the <noscript> rule in
+ * BaseLayout hides it and the CSS default follows the OS.
  */
-import BlueSkyzIcon from "@/components/icon/BlueSkyzIcon.astro";
 import type { Language } from "@/lib/i18n";
+import ThemeMorphIcon from "./ThemeMorphIcon.astro";
 import "./header-control.css";
+
 interface Props {
   lang?: Language;
   /** Extra classes for the wrapper (e.g. vertical spacing inside the mobile menu). */
   class?: string;
-  /** `popover`: one header trigger that opens the three-way group. */
-  variant?: "inline" | "popover";
+  /** `header`: the bare icon. `menu`: the icon on a captioned compact-menu row. */
+  placement?: "header" | "menu";
 }
 
-const { lang = "en", class: className = "", variant = "inline" } = Astro.props;
-const asPopover = variant === "popover";
-const panelId = "theme-panel-header";
+const {
+  lang = "en",
+  class: className = "",
+  placement = "header",
+} = Astro.props;
+const inMenu = placement === "menu";
 
 const L = {
   en: { label: "Theme", system: "System", light: "Light", dark: "Dark" },
@@ -35,269 +43,216 @@ const L = {
   "zh-hant": { label: "主題", system: "跟隨系統", light: "淺色", dark: "深色" },
 }[lang];
 
-// Row order follows the Sổ Trọ control: Light, Dark, System.
 const MODES = ["light", "dark", "system"] as const;
-type Mode = (typeof MODES)[number];
 // Server-rendered state; the client paints the stored mode on load.
-const DEFAULT_MODE: Mode = "system";
-
-// 20-unit glyphs drawn to the optical size of the 24x16 trigger flag: the sun
-// core and the moon fill the same circle so no mode reads lighter.
-const ICONS: Record<Mode, string[]> = {
-  light: [
-    "M13.5 10a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Z",
-    "M10 1.75v1.5M10 16.75v1.5M1.75 10h1.5M16.75 10h1.5M4.17 4.17l1.06 1.06M14.77 14.77l1.06 1.06M15.83 4.17l-1.06 1.06M5.23 14.77l-1.06 1.06",
-  ],
-  dark: ["M17 12.4A7.25 7.25 0 0 1 7.6 3a7.25 7.25 0 1 0 9.4 9.4Z"],
-  system: [
-    "M4.25 3.25h11.5a2 2 0 0 1 2 2v7.5a2 2 0 0 1-2 2H4.25a2 2 0 0 1-2-2v-7.5a2 2 0 0 1 2-2Z",
-    "M7 17.75h6M10 14.75v3",
-  ],
-};
-
-// WCAG 2.5.3: the accessible name contains the visible label.
+const DEFAULT_MODE = "system";
 const triggerName = `${L.label}: ${L[DEFAULT_MODE]}`;
 ---
 
-{asPopover ? (
-  <button
-    type="button"
-    class="theme-trigger hc-trigger"
-    popovertarget={panelId}
-    aria-label={triggerName}
-    aria-expanded="false"
-    title={L.label}
-    data-theme-trigger
-    data-theme-current={DEFAULT_MODE}
-    style="anchor-name: --theme-anchor"
-  >
-    <span class="theme-trigger__icons hc-glyph" aria-hidden="true">
-      {MODES.map((mode) => (
-        <svg
-          viewBox="0 0 20 20"
-          class="theme-trigger__icon"
-          data-theme-icon={mode}
-          fill="none"
-          stroke="currentColor"
-          stroke-width="1.75"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          focusable="false"
-        >
-          {ICONS[mode].map((d) => (
-            <path d={d} />
-          ))}
-        </svg>
-      ))}
-    </span>
-    <span
-      class="theme-trigger__label"
-      aria-hidden="true"
-      data-theme-current-label
-    >
-      {L[DEFAULT_MODE]}
-    </span>
-    <span class="theme-trigger__chevron hc-chevron" aria-hidden="true">
-      <BlueSkyzIcon name="chevron-down" class="h-3.5 w-3.5" />
-    </span>
-  </button>
-) : null}
 <div
-  role="group"
-  id={asPopover ? panelId : undefined}
-  popover={asPopover ? "auto" : undefined}
-  aria-label={L.label}
-  style={asPopover ? "position-anchor: --theme-anchor" : undefined}
   class:list={[
-    "theme-group",
-    asPopover
-      ? "theme-group--panel theme-panel hc-panel"
-      : "theme-group--inline hc-group",
+    "theme-control",
+    `theme-control--${placement}`,
+    { "hc-group": inMenu },
     className,
   ]}
 >
-  {/* Visible caption in the panel and in the compact menu (the language row
-      above it carries the same caption); the group's aria-label names it. */}
-  <div class="theme-group__caption hc-caption" aria-hidden="true">
-    <svg
-      viewBox="0 0 20 20"
-      fill="none"
-      stroke="currentColor"
-      stroke-width="1.75"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-      focusable="false"
-    >
-      {ICONS.light.map((d) => (
-        <path d={d} />
+  {inMenu ? (
+    <span class="theme-control__label hc-row__label" aria-hidden="true">
+      {L.label}
+    </span>
+  ) : null}
+  <button
+    type="button"
+    class="theme-trigger hc-trigger hc-trigger--icon"
+    aria-label={triggerName}
+    data-theme-trigger
+    data-theme-current={DEFAULT_MODE}
+    data-theme-label={L.label}
+    data-theme-names={JSON.stringify({
+      light: L.light,
+      dark: L.dark,
+      system: L.system,
+    })}
+  >
+    <span class="theme-trigger__glyph hc-glyph" aria-hidden="true">
+      <ThemeMorphIcon state="live" dot />
+    </span>
+    {/* CSS-only tooltip, hidden until hover / :focus-visible. The text of the
+        current mode is chosen from the root attribute, like the glyph. */}
+    <span class="theme-tip" aria-hidden="true" data-theme-tip>
+      {L.label}:{" "}
+      {MODES.map((mode) => (
+        <span class="theme-tip__mode" data-theme-tip-mode={mode}>
+          {L[mode]}
+        </span>
       ))}
-    </svg>
-    <span>{L.label}</span>
-  </div>
-  {MODES.map((mode) => (
-    <button
-      type="button"
-      data-theme-mode={mode}
-      data-theme-toggle
-      aria-pressed={mode === DEFAULT_MODE ? "true" : "false"}
-      class="theme-row hc-row"
-    >
-      <span class="theme-row__icon hc-row__lead" aria-hidden="true">
-        <svg
-          viewBox="0 0 20 20"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="1.75"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          focusable="false"
-        >
-          {ICONS[mode].map((d) => (
-            <path d={d} />
-          ))}
-        </svg>
-      </span>
-      <span class="theme-row__label hc-row__label" data-theme-row-label>
-        {L[mode]}
-      </span>
-      <span class="theme-row__check hc-check" aria-hidden="true">
-        <BlueSkyzIcon name="check" class="h-5 w-5" />
-      </span>
-    </button>
-  ))}
+    </span>
+  </button>
 </div>
 
 <style>
-  /* Trigger, panel, caption and row styling come from the shared
-     header-control.css; only the appearance-specific parts live here. */
-
-  /* One icon per mode, stacked; only the current mode's icon is shown. */
-  .theme-trigger__icons {
-    position: relative;
+  /* Trigger styling comes from the shared header-control.css (the trigger is
+     the search button's 44px square); only appearance-specific parts live
+     here. */
+  .theme-control {
+    display: inline-flex;
   }
 
-  .theme-trigger__icon {
-    position: absolute;
-    inset: 0;
+  /* Compact menu: one row, label left, the same icon right. */
+  .theme-control--menu {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    padding: 0.25rem 0.25rem 0.25rem 0.75rem;
+  }
+
+  .theme-trigger {
+    position: relative;
+    /* The status dot's ring follows the trigger fill in every state. */
+    --tt-ring: var(--hc-surface);
+  }
+
+  .theme-trigger:hover {
+    --tt-ring: color-mix(
+      in srgb,
+      var(--hc-accent) var(--hc-tint),
+      var(--hc-surface)
+    );
+  }
+
+  /* Optical size: an open sun reads lighter than the closed magnifier at
+     the same box, so this glyph gets 22px instead of the family's 20px. */
+  .theme-trigger__glyph {
+    width: 1.375rem;
+    height: 1.375rem;
+  }
+
+  /* Press feedback: the glyph gives way a touch and springs back. */
+  .theme-trigger__glyph :global(.tt-morph) {
     width: 100%;
     height: 100%;
-    opacity: 0;
-    transform: rotate(-90deg) scale(0.5);
-    transition:
-      opacity 240ms ease-out,
-      transform 240ms ease-out;
+    transition: scale 420ms cubic-bezier(0.34, 1.32, 0.52, 1);
   }
 
-  .theme-trigger[data-theme-current="light"] [data-theme-icon="light"],
-  .theme-trigger[data-theme-current="dark"] [data-theme-icon="dark"],
-  .theme-trigger[data-theme-current="system"] [data-theme-icon="system"] {
-    opacity: 1;
-    transform: none;
+  .theme-trigger:active .theme-trigger__glyph :global(.tt-morph) {
+    scale: 0.86;
+    transition-duration: 90ms;
   }
 
-  /* The visible label shows from lg; below it the icon + chevron remain and the
-     accessible name still says the mode. */
-  .theme-trigger__label {
-    display: none;
+  /* ─── Tooltip ─── below the trigger, inverted surface, shown after a short
+     delay on hover (pointer devices) and on :focus-visible. */
+  .theme-tip {
+    position: absolute;
+    top: calc(100% + 0.5rem);
+    left: 50%;
+    z-index: 1;
+    padding: 0.375rem 0.625rem;
+    border-radius: var(--radius-sm, 0.375rem);
+    background: var(--hc-fg);
+    color: var(--hc-surface);
+    box-shadow: 0 6px 18px -8px rgba(11, 16, 32, 0.45);
+    font-size: var(--size-1);
+    font-weight: 600;
+    line-height: 1.2;
     white-space: nowrap;
+    pointer-events: none;
+    opacity: 0;
+    visibility: hidden;
+    transform: translate(-50%, -0.25rem);
+    transition:
+      opacity 120ms ease-out,
+      transform 120ms ease-out,
+      visibility 0s linear 120ms;
   }
 
-  @media (min-width: 64rem) {
-    .theme-trigger__label {
-      display: inline;
-    }
-  }
-
-  /* Without anchor positioning the panel sits under the header's right edge. */
-  @supports not (anchor-name: --theme-probe) {
-    .theme-panel {
-      inset: 4.5rem 1rem auto auto;
-    }
-  }
-
-  @media (max-width: 40rem) {
-    .theme-panel {
-      inset: auto 0.75rem 0.75rem 0.75rem;
-    }
-  }
-
-  /* The check is rendered in every row but shown only for the current one, so
-     the state has a single source (aria-pressed) that JS repaints. */
-  .theme-row:not([aria-pressed="true"]) .theme-row__check :global(svg) {
+  .theme-tip__mode {
     display: none;
+  }
+
+  /* The compact menu shows the label beside the icon instead. */
+  .theme-control--menu .theme-tip {
+    display: none;
+  }
+
+  :global(:root[data-theme="light"]) [data-theme-tip-mode="light"],
+  :global(:root[data-theme="dark"]) [data-theme-tip-mode="dark"],
+  :global(:root:not([data-theme])) [data-theme-tip-mode="system"] {
+    display: inline;
+  }
+
+  @media (hover: hover) {
+    .theme-trigger:hover .theme-tip {
+      opacity: 1;
+      visibility: visible;
+      transform: translate(-50%, 0);
+      transition:
+        opacity 160ms ease-out 300ms,
+        transform 220ms cubic-bezier(0.2, 0.9, 0.3, 1) 300ms,
+        visibility 0s linear 300ms;
+    }
+  }
+
+  .theme-trigger:focus-visible .theme-tip {
+    opacity: 1;
+    visibility: visible;
+    transform: translate(-50%, 0);
+    transition:
+      opacity 160ms ease-out 300ms,
+      transform 220ms cubic-bezier(0.2, 0.9, 0.3, 1) 300ms,
+      visibility 0s linear 300ms;
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .theme-trigger__icon {
+    .theme-trigger__glyph :global(.tt-morph),
+    .theme-tip {
       transition: none !important;
+    }
+  }
+
+  @media (forced-colors: active) {
+    .theme-tip {
+      border: 1px solid CanvasText;
+      background: Canvas;
+      color: CanvasText;
     }
   }
 </style>
 
 <script>
-  import { applyTheme, initTheme, type ThemeMode } from "@/lib/theme";
+  import {
+    applyTheme,
+    initTheme,
+    nextTheme,
+    type ThemeMode,
+  } from "@/lib/theme";
 
-  const MODES: ThemeMode[] = ["system", "light", "dark"];
   let mode: ThemeMode = initTheme();
-  const buttons = [
-    ...document.querySelectorAll<HTMLButtonElement>("[data-theme-toggle]"),
-  ];
+  const osDark = window.matchMedia("(prefers-color-scheme: dark)");
   const triggers = [
-    ...document.querySelectorAll<HTMLElement>("[data-theme-trigger]"),
+    ...document.querySelectorAll<HTMLButtonElement>("[data-theme-trigger]"),
   ];
-
-  function labelOf(next: ThemeMode): string {
-    const row = buttons.find((b) => b.dataset.themeMode === next);
-    return row?.querySelector("[data-theme-row-label]")?.textContent ?? "";
-  }
 
   function paint(): void {
-    for (const button of buttons) {
-      const active = button.getAttribute("data-theme-mode") === mode;
-      button.setAttribute("aria-pressed", String(active));
-    }
-    const current = labelOf(mode);
     for (const trigger of triggers) {
+      const names = JSON.parse(trigger.dataset.themeNames ?? "{}") as Record<
+        ThemeMode,
+        string
+      >;
       trigger.setAttribute("data-theme-current", mode);
-      const group = trigger.getAttribute("popovertarget");
-      const caption = group
-        ? (document.getElementById(group)?.getAttribute("aria-label") ?? "")
-        : "";
-      // WCAG 2.5.3: the accessible name keeps the visible label.
-      trigger.setAttribute("aria-label", `${caption}: ${current}`);
-      const visible = trigger.querySelector("[data-theme-current-label]");
-      if (visible) visible.textContent = current;
+      trigger.setAttribute(
+        "aria-label",
+        `${trigger.dataset.themeLabel ?? ""}: ${names[mode] ?? ""}`,
+      );
     }
   }
 
-  for (const button of buttons) {
-    button.addEventListener("click", () => {
-      const next = button.getAttribute("data-theme-mode") as ThemeMode | null;
-      if (!next || !MODES.includes(next)) return;
-      mode = next;
+  for (const trigger of triggers) {
+    trigger.addEventListener("click", () => {
+      mode = nextTheme(mode, osDark.matches);
       applyTheme(mode);
       paint();
-      const panel = button.closest<HTMLElement>("[popover]");
-      if (panel) {
-        panel.hidePopover();
-        document
-          .querySelector<HTMLElement>(
-            `[data-theme-trigger][popovertarget="${panel.id}"]`,
-          )
-          ?.focus();
-      }
-    });
-  }
-
-  // Keep the trigger's expanded state truthful (native popover, no JS needed to open).
-  for (const panel of document.querySelectorAll<HTMLElement>(".theme-panel")) {
-    panel.addEventListener("toggle", (event) => {
-      const open = (event as ToggleEvent).newState === "open";
-      for (const trigger of triggers) {
-        if (trigger.getAttribute("popovertarget") === panel.id) {
-          trigger.setAttribute("aria-expanded", String(open));
-        }
-      }
     });
   }
 

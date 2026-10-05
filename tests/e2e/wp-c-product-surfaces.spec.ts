@@ -63,12 +63,20 @@ async function showcaseHeights(page: Page) {
   });
 }
 
-for (const width of [390, 1440]) {
+// v12 S1: the sticky story stage (motion allowed, >= 64rem) makes the
+// section taller, so its placeholder is checked separately at 1440.
+const PLACEHOLDER_CASES = [
+  { width: 390, reducedMotion: "reduce" },
+  { width: 1440, reducedMotion: "reduce" },
+  { width: 1440, reducedMotion: "no-preference" },
+] as const;
+
+for (const { width, reducedMotion } of PLACEHOLDER_CASES) {
   for (const lang of ["vi", "en"]) {
-    test(`${lang} ${width}: showcase placeholder matches its real height`, async ({
+    test(`${lang} ${width} ${reducedMotion}: showcase placeholder matches its real height`, async ({
       page,
     }) => {
-      await page.emulateMedia({ reducedMotion: "reduce" });
+      await page.emulateMedia({ reducedMotion });
       await page.setViewportSize({ width, height: 900 });
       await page.goto(`/${lang}/products/sotro/`);
       const { placeholder, real } = await showcaseHeights(page);

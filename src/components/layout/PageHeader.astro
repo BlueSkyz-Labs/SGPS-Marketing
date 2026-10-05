@@ -68,6 +68,12 @@ const {
     text-transform: uppercase;
     color: var(--text-secondary);
   }
+
+  /* Vietnamese: sentence case (cross-subset kerning, see .eyebrow). */
+  :lang(vi) .page-header__eyebrow {
+    text-transform: none;
+    letter-spacing: var(--tracking-eyebrow, 0.03em);
+  }
   /* A short cobalt hairline leads the label: the one accent in the header. */
   .page-header__eyebrow::before {
     content: "";

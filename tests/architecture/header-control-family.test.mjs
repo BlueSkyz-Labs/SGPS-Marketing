@@ -12,6 +12,8 @@
  *     OS dark and the ink header scene, and never reads `--text-*`;
  *   - the panel uses the `--radius-panel` token and no blur material
  *     (ADR 0012: the header is the sole translucent surface);
+ *   - triggers rest quietly (no edge/fill/shadow) and hover restores the
+ *     accent edge;
  *   - triggers keep the 44px floor, rows the 3.5rem row, both the 3px focus
  *     ring, and motion stops under prefers-reduced-motion.
  */
@@ -57,6 +59,22 @@ export function auditShared(css) {
     !/font-weight:\s*600/.test(trigger)
   ) {
     problems.push("the trigger must keep the shared 44px family geometry");
+  }
+  // Calm-chrome round: no edge/fill/shadow at rest; hover/open restore the edge.
+  const quiet = rule(css, '.hc-trigger:not(:hover, [aria-expanded="true"])');
+  if (
+    !quiet ||
+    !/border-color:\s*transparent/.test(quiet) ||
+    !/background:\s*transparent/.test(quiet) ||
+    !/box-shadow:\s*none/.test(quiet)
+  ) {
+    problems.push("the trigger must rest quietly (no edge, fill or shadow)");
+  }
+  const hover = strip(css).match(
+    /\.hc-trigger:hover,\s*\.hc-trigger\[aria-expanded="true"\]\s*\{([^}]*)\}/,
+  )?.[1];
+  if (!hover || !/border-color:\s*var\(--hc-accent\)/.test(hover)) {
+    problems.push("hover and the open state must restore the accent edge");
   }
   const focus = rule(css, ".hc-trigger:focus-visible");
   if (!focus || !/outline:\s*3px solid var\(--hc-accent\)/.test(focus)) {
@@ -176,14 +194,16 @@ export function auditConsumers({ lang, theme, header }) {
   if (!/"lang-option hc-row"/.test(lang)) {
     problems.push("language rows must use the shared row");
   }
-  if (!/class="theme-trigger hc-trigger"/.test(theme)) {
+  if (!/class="theme-trigger hc-trigger hc-trigger--icon"/.test(theme)) {
     problems.push("the theme trigger must use the shared trigger");
   }
-  if (!/"theme-group--panel theme-panel hc-panel"/.test(theme)) {
-    problems.push("the theme panel must use the shared panel");
+  // SGPS-DEC-2026-037 HC-7: the appearance control is one icon, so it has
+  // no popup panel and no mode rows; the menu row uses the shared group.
+  if (/popover|hc-panel|theme-row|data-theme-mode/.test(theme)) {
+    problems.push("the theme control is one icon: no panel or mode rows");
   }
-  if (!/class="theme-row hc-row"/.test(theme)) {
-    problems.push("theme rows must use the shared row");
+  if (!/\{ "hc-group": inMenu \}/.test(theme)) {
+    problems.push("the theme menu row must use the shared group");
   }
   if (
     !/data-command-trigger[\s\S]*?class="hc-trigger hc-trigger--icon"/.test(
@@ -199,7 +219,7 @@ export function auditConsumers({ lang, theme, header }) {
       lang,
       [".lang-switch__trigger", ".lang-panel", ".lang-option"],
     ],
-    ["ThemeToggle", theme, [".theme-trigger", ".theme-panel", ".theme-row"]],
+    ["ThemeToggle", theme, [".theme-trigger"]],
   ]) {
     // The no-Popover-API fallback (lists rendered inline) is exempt: it is a
     // different layout, not a restyle of the family.
@@ -230,6 +250,23 @@ test("search, language and theme all consume the shared family", () => {
 
 test("the panel radius is a token, not a literal", () => {
   assert.match(GLOBAL, /--radius-panel:\s*1rem;/);
+});
+
+test("negative proof: a loud resting trigger or a lost hover edge is caught", () => {
+  const loud = SHARED.replace(
+    '.hc-trigger:not(:hover, [aria-expanded="true"]) {\n  border-color: transparent;',
+    '.hc-trigger:not(:hover, [aria-expanded="true"]) {\n  border-color: var(--hc-line);',
+  );
+  assert.notEqual(loud, SHARED);
+  assert.ok(auditShared(loud).some((p) => p.includes("rest quietly")));
+  const noEdge = SHARED.replace(
+    /(\.hc-trigger\[aria-expanded="true"\]\s*\{[^}]*?)border-color:\s*var\(--hc-accent\);/,
+    "$1",
+  );
+  assert.notEqual(noEdge, SHARED);
+  assert.ok(
+    auditShared(noEdge).some((p) => p.includes("restore the accent edge")),
+  );
 });
 
 test("negative proof: a component re-declaring trigger styling is caught", () => {
@@ -318,4 +355,27 @@ test("negative proof: ambient tokens, a small trigger or lost motion guard are c
   );
   assert.notEqual(motion, SHARED);
   assert.ok(auditShared(motion).some((p) => p.includes("reduced-motion")));
+});
+
+test("negative proof: a theme panel or mode rows coming back is caught", () => {
+  for (const planted of [
+    '<div popover="auto" class="theme-panel hc-panel"></div>',
+    '<button class="theme-row hc-row" data-theme-mode="dark"></button>',
+  ]) {
+    const mutated = THEME.replace("</div>", `${planted}</div>`);
+    assert.notEqual(mutated, THEME);
+    assert.ok(
+      auditConsumers({ lang: LANG, theme: mutated, header: HEADER }).some((p) =>
+        p.includes("one icon"),
+      ),
+      planted,
+    );
+  }
+  const noGroup = THEME.replace('{ "hc-group": inMenu }', "{}");
+  assert.notEqual(noGroup, THEME);
+  assert.ok(
+    auditConsumers({ lang: LANG, theme: noGroup, header: HEADER }).some((p) =>
+      p.includes("shared group"),
+    ),
+  );
 });

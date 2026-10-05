@@ -14,7 +14,7 @@ import {
   type ResolvedClaim,
 } from "@/lib/claims";
 import { getShowcase } from "@/lib/showcases";
-import { HOME_PROOF_POINTS } from "@/data/home-copy";
+import { HOME_FLAGSHIP_LEAD, HOME_PROOF_POINTS } from "@/data/home-copy";
 import { productTransitionStyle } from "@/lib/product-transition";
 
 /**
@@ -87,6 +87,11 @@ const proofPoints: string[] =
   data.slug === "sotro"
     ? HOME_PROOF_POINTS.map((point) => point[lang])
     : capabilities.slice(0, 2);
+// v12 S2: on the home act, one outcome line (the registry's second job,
+// reframed for the customer) leads into the two proof points.
+const flagshipLead = compact
+  ? HOME_FLAGSHIP_LEAD[data.slug]?.[lang]
+  : undefined;
 const hasCapture =
   compact &&
   (await getShowcase(data.slug))?.data.screens.some(
@@ -105,8 +110,8 @@ const ctaIsExternal = cta.external || /^https?:\/\//i.test(cta.href);
 
 <section
   class:list={[
-    "c2-flagship-theatre c2-product-house border-b border-[var(--border-subtle)]",
-    compact ? "py-12 lg:py-14" : "py-16 lg:py-24",
+    // Calm-chrome round (2026-10-04): acts are separated by space, not rules.
+    "c2-flagship-theatre c2-product-house section-y",
   ]}
   aria-labelledby="flagship-theatre-title"
   data-flagship-theatre
@@ -117,7 +122,7 @@ const ctaIsExternal = cta.external || /^https?:\/\//i.test(cta.href);
         <>
           <ProductStatus label={data.publicLabel} lang={lang} />
           <p
-            class="mt-4 text-sm font-semibold uppercase tracking-[0.16em] text-[var(--brand-cobalt)]"
+            class="mt-4 text-sm font-semibold uppercase tracking-[0.16em] text-[var(--brand-cobalt)] [&:lang(vi)]:normal-case [&:lang(vi)]:tracking-[var(--tracking-eyebrow)]"
             data-flagship-eyebrow
           >
             {labelFor(SHARED_LABELS.flagshipEyebrow, lang)}
@@ -157,6 +162,14 @@ const ctaIsExternal = cta.external || /^https?:\/\//i.test(cta.href);
       {!compact ? (
         <p class="mt-4 max-w-xl text-lg text-[var(--text-secondary)]">
           {copy.shortDescription}
+        </p>
+      ) : null}
+      {flagshipLead ? (
+        <p
+          class="c2-flagship-theatre__lead mt-4 max-w-xl text-lg text-pretty text-[var(--text-secondary)]"
+          data-flagship-lead
+        >
+          {flagshipLead}
         </p>
       ) : null}
       {!compact && copy.jobs.length > 0 ? (
@@ -383,7 +396,7 @@ const ctaIsExternal = cta.external || /^https?:\/\//i.test(cta.href);
     display: flex;
     gap: 0.75rem;
     padding: 0.875rem 1rem;
-    border: 1px solid var(--border-subtle);
+    border: 1px solid var(--border-hairline);
     border-radius: var(--radius-md);
     background: var(--surface-subtle);
     min-height: 0;
@@ -412,7 +425,7 @@ const ctaIsExternal = cta.external || /^https?:\/\//i.test(cta.href);
     flex: none;
     width: 0.75em;
     height: 0.75em;
-    color: var(--action-primary);
+    color: var(--text-muted);
     transition: transform var(--motion-quick) var(--ease-standard);
   }
   .c2-flagship-theatre__title-link:hover .c2-flagship-theatre__title-arrow,
@@ -434,6 +447,11 @@ const ctaIsExternal = cta.external || /^https?:\/\//i.test(cta.href);
     display: grid;
     gap: 0.75rem;
   }
+  /* v12 S2: with the outcome lead above it, the list keeps a clear step
+     (the list's own margin reset would otherwise butt it against the lead). */
+  .c2-flagship-theatre__lead + .c2-flagship-theatre__proof {
+    margin-top: 1.5rem;
+  }
   .c2-flagship-theatre__proof-item {
     display: flex;
     align-items: flex-start;
@@ -448,7 +466,7 @@ const ctaIsExternal = cta.external || /^https?:\/\//i.test(cta.href);
     border-radius: var(--radius-md);
     background: var(--surface-subtle);
     border: 1px solid var(--border-subtle);
-    color: var(--action-primary);
+    color: var(--text-secondary);
   }
   .c2-flagship-theatre__proof-text {
     min-width: 0;

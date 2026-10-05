@@ -1,13 +1,14 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
+import { PAGE_META } from "@/data/page-meta";
 import Container from "@/components/layout/Container.astro";
 import PageHeader from "@/components/layout/PageHeader.astro";
 import EditionIndex from "@/components/editorial/EditionIndex.astro";
 ---
 
 <BaseLayout
-  title="合集"
-  description="本站已发布的声明分组，每组都链接到其来源。"
+  title={PAGE_META["zh"].editions.title}
+  description={PAGE_META["zh"].editions.description}
   path="/zh/editions/"
 >
   <section class="py-16 lg:py-24">

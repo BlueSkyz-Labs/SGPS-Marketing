@@ -1,14 +1,15 @@
 ---
 // zh-Hant copy: machine-assisted (OpenCC s2twp), pending native review.
 import BaseLayout from "@/layouts/BaseLayout.astro";
+import { PAGE_META } from "@/data/page-meta";
 import Container from "@/components/layout/Container.astro";
 import PageHeader from "@/components/layout/PageHeader.astro";
 import DossierComposer from "@/components/dossier/DossierComposer.astro";
 ---
 
 <BaseLayout
-  title="可列印摘要"
-  description="選擇已發布的聲明與來源，用於列印或簡報。不傳輸，也不儲存。"
+  title={PAGE_META["zh-hant"].dossier.title}
+  description={PAGE_META["zh-hant"].dossier.description}
   path="/zh-hant/dossier/"
 >
   <section class="py-16 lg:py-24">

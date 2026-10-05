@@ -34,3 +34,11 @@ The previous root path always redirected to English and v3 prohibited all localS
 - Exact VN-country routing remains optional until the static deployment has an approved edge country signal; the site does not weaken privacy or add a location service to manufacture it.
 - Chinese SEO/content cannot be accidentally published before review.
 - Critical content and navigation on localized pages continue to work without JavaScript; only the root preference gateway requires JavaScript for automatic selection and provides explicit no-JS language links.
+
+## Amendment — 2026-10-05: no flags, globe + language code
+
+- Item 9 ("language identity never uses country flags") is re-affirmed by the Owner on 2026-10-05 as a portfolio-wide rule (`SGPS-DEC-2026-037`, sgps-core PR #280).
+- It reverses the flag presentation introduced with the shared header control family (#494).
+- The language trigger is a brand-tinted globe plus the language code (`VI`, `EN`, `简`, `繁`) at every width. Codes are language codes, never country codes.
+- Panel rows show the native name, led by a decorative code chip.
+- Flags are reserved for a future market or region selector, which is a separate preference from language.

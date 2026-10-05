@@ -84,6 +84,9 @@ const productStructuredData = productJsonLd(
     mediaUrl: media?.src,
     ...(media ? { mediaCaption: proofCaptionForKind(media.kind, "zh") } : {}),
     platforms: data.platforms,
+    ...(data.applicationCategory
+      ? { applicationCategory: data.applicationCategory }
+      : {}),
   },
   SITE.url,
   "zh",
