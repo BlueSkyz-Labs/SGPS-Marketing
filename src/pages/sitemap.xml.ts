@@ -2,16 +2,26 @@ import type { APIRoute } from "astro";
 import { SITE } from "@/data/site";
 import { getPublicProducts } from "@/lib/products";
 import { getGuideProducts } from "@/lib/showcases";
-import { absoluteUrl, PUBLIC_STATIC_PATHS } from "@/lib/seo";
+import { absoluteUrl, isNoindexPath, PUBLIC_STATIC_PATHS } from "@/lib/seo";
 import { getEvidencePassportIds } from "@/lib/claims";
 import { EDITIONS } from "@/data/editions";
 import { SUPPORTED_LANGUAGES } from "@/lib/i18n";
 import { isNonProductionSiteUrl } from "@/lib/truth";
+import { lastmodForPath } from "@/lib/git-lastmod";
 
 export const prerender = true;
 
+/** `lastmod` comes from git per route and is omitted when not accurate
+ * (shallow clone, no history); it is never the build time. */
 function urlEntry(loc: string): string {
-  return `  <url>\n    <loc>${loc}</loc>\n  </url>`;
+  const path = new URL(loc).pathname;
+  const lastmod = lastmodForPath(path);
+  return [
+    "  <url>",
+    `    <loc>${loc}</loc>`,
+    ...(lastmod ? [`    <lastmod>${lastmod}</lastmod>`] : []),
+    "  </url>",
+  ].join("\n");
 }
 
 export const GET: APIRoute = async () => {
@@ -26,7 +36,11 @@ export const GET: APIRoute = async () => {
   const locs = isNonProductionSiteUrl(SITE.url)
     ? []
     : [
-        ...PUBLIC_STATIC_PATHS.map((path) => absoluteUrl(SITE.url, path)),
+        // Language gateway (Owner decision F16, 2026-10-01): indexable.
+        absoluteUrl(SITE.url, "/"),
+        ...PUBLIC_STATIC_PATHS.filter((path) => !isNoindexPath(path)).map(
+          (path) => absoluteUrl(SITE.url, path),
+        ),
         ...SUPPORTED_LANGUAGES.flatMap((lang) =>
           products.map((product) =>
             absoluteUrl(SITE.url, `/${lang}/products/${product.slug}/`),

@@ -1,3 +1,5 @@
+import { formatDisplayDate } from "./display-date.ts";
+
 export const PORTFOLIO_LANGUAGE_TARGETS = [
   "en",
   "vi",
@@ -137,4 +139,12 @@ export function getAlternatePath(
 
 export function stripLanguagePrefix(pathname: string): string {
   return pathname.replace(/^\/(en|vi|zh-hant|zh)(?=\/|$)/, "") || "/";
+}
+
+/**
+ * The one visible-date formatter (v8 W7). Locale-aware through `Intl.DateTimeFormat`
+ * (vi "12 tháng 9, 2026", zh/zh-hant "2026年9月12日"); non-ISO input is returned unchanged.
+ */
+export function formatDate(locale: Language, iso: string): string {
+  return formatDisplayDate(iso, locale);
 }

@@ -1,8 +1,14 @@
 ---
-import type { Language } from "@/data/site";
-import { LIFECYCLE_LADDER, lifecycleLabel } from "@/lib/product-copy";
+import { EMPTY_STATE_COPY } from "@/data/empty-state-copy";
+import { labelFor, type Language } from "@/data/site";
+import { lifecycleLabel } from "@/lib/product-copy";
 import type { Lifecycle } from "@/lib/product-schema";
 
+/**
+ * Current stage only. The stage ladder and a "next" stage are internal
+ * vocabulary and read as a roadmap commitment no dated fact backs, so the
+ * visitor surface states what is recorded now and nothing about what follows.
+ */
 interface Props {
   lifecycle: Lifecycle;
   lang: Language;
@@ -10,27 +16,20 @@ interface Props {
 
 const { lifecycle, lang } = Astro.props;
 const heading = {
-  en: "Lifecycle",
-  vi: "Vòng đời",
-  zh: "生命周期",
-  "zh-hant": "生命週期",
+  en: "Stage",
+  vi: "Giai đoạn",
+  zh: "阶段",
+  "zh-hant": "階段",
 }[lang];
 ---
 
-<section class="product-ladder" aria-label={heading}>
-  <p class="product-ladder__caption">
-    {heading}: <strong>{lifecycleLabel(lifecycle, lang)}</strong>
+<section class="product-ladder" aria-label={heading} data-product-ladder>
+  <p class="product-ladder__summary">
+    <span class="product-ladder__term">
+      {labelFor(EMPTY_STATE_COPY.ladderCurrent, lang)}
+    </span>
+    <strong>{lifecycleLabel(lifecycle, lang)}</strong>
   </p>
-  <ol class="product-ladder__stages">
-    {LIFECYCLE_LADDER.map((stage) => (
-      <li
-        class="product-ladder__stage"
-        aria-current={stage === lifecycle ? "step" : undefined}
-      >
-        {lifecycleLabel(stage, lang)}
-      </li>
-    ))}
-  </ol>
 </section>
 
 <style>
@@ -38,46 +37,30 @@ const heading = {
     margin-top: 1rem;
   }
 
-  .product-ladder__caption {
-    margin: 0 0 0.5rem;
-    color: var(--text-muted);
-    font-size: 0.75rem;
+  .product-ladder__summary {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.25rem 0.75rem;
+    margin: 0;
+    color: var(--text-secondary);
+    font-size: var(--size-2);
   }
 
-  .product-ladder__caption strong {
+  .product-ladder__summary strong {
     color: var(--text-primary);
   }
 
-  .product-ladder__stages {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, 8rem), 1fr));
-    gap: 0.5rem;
-    padding: 0;
-    list-style: none;
-  }
-
-  .product-ladder__stage {
-    min-width: 0;
-    border-top: 2px solid var(--border-subtle);
-    padding-top: 0.35rem;
+  .product-ladder__term {
     color: var(--text-muted);
-    font-size: 0.75rem;
+    font-size: var(--size-1);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
   }
 
-  .product-ladder__stage[aria-current="step"] {
-    border-color: var(--action-primary);
-    color: var(--text-primary);
-    font-weight: 600;
-  }
-
-  @media (forced-colors: active) {
-    .product-ladder__stage {
-      border-color: CanvasText;
-      color: CanvasText;
-    }
-
-    .product-ladder__stage[aria-current="step"] {
-      border-color: Highlight;
-    }
+  /* Vietnamese: sentence case (cross-subset kerning, see .eyebrow). */
+  :lang(vi) .product-ladder__term {
+    text-transform: none;
+    letter-spacing: var(--tracking-eyebrow, 0.03em);
   }
 </style>

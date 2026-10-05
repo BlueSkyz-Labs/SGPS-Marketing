@@ -1,21 +1,22 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
+import { PAGE_META } from "@/data/page-meta";
 import Container from "@/components/layout/Container.astro";
 import PageHeader from "@/components/layout/PageHeader.astro";
 import ArchitectureSalon from "@/components/architecture/ArchitectureSalon.astro";
+import { ARCHITECTURE_COPY } from "@/data/architecture-copy";
+
+const copy = ARCHITECTURE_COPY["vi"];
 ---
 
 <BaseLayout
-  title="Kiến trúc"
-  description="Trang này được dựng thế nào, qua năm góc nhìn tĩnh lặng dẫn xuất từ mô hình kiến trúc chuẩn."
+  title={PAGE_META["vi"].architecture.title}
+  description={PAGE_META["vi"].architecture.description}
   path="/vi/architecture/"
 >
   <section class="py-16 lg:py-24">
     <Container>
-      <PageHeader
-        title="Kiến trúc"
-        lede="Trang này được dựng thế nào, qua năm góc nhìn tĩnh lặng dẫn xuất từ mô hình kiến trúc chuẩn."
-      />
+      <PageHeader title={copy.title} lede={copy.lede} />
       <div class="mt-12">
         <ArchitectureSalon lang="vi" />
       </div>

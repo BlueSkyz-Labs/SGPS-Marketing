@@ -1,0 +1,74 @@
+{
+  "schema_version": 1,
+  "decision": "SGPS-DEC-2026-028",
+  "owner_directive_date": "2026-10-03",
+  "applicability": "MANDATORY",
+  "canonical": {
+    "candidate_pr": 257,
+    "candidate_head": "278abbcfc789ea2081c9653bfe4e6c1697071c69",
+    "merged_sha": "3a71af89fe6c525c63c3242c88417a0e3ffa76a5",
+    "status": "CANONICAL_MERGED"
+  },
+  "critical_journeys": [
+    "landing page first usable render",
+    "primary navigation",
+    "product detail pages",
+    "CTA/contact handoff where enabled",
+    "locale/theme route transitions"
+  ],
+  "reuse_existing_evidence": [
+    "existing Lighthouse CI",
+    "Experience v10 baseline",
+    "axe/redirect/engine verification",
+    "field CWV only when privacy-approved"
+  ],
+  "budgets": {
+    "web_field_baseline": {
+      "lcp_ms_p75": 2500,
+      "inp_ms_p75": 200,
+      "cls_p75": 0.1
+    },
+    "platform_rule": "Use platform-native responsiveness/jank/service latency evidence; stricter Product Truth wins.",
+    "friction_rule": "Every blocking wait/confirmation/re-auth/repeated-entry/context-switch must have user-value, correctness, safety, security, compliance or irreversible-risk justification."
+  },
+  "gate": {
+    "fail_closed": true,
+    "exact_revision_required": true,
+    "missing_evidence": "NON_PASS",
+    "budget_relaxation_to_pass": "PROHIBITED"
+  },
+  "evidence": {
+    "status": "PASS",
+    "scope": "lab (Lighthouse CI desktop + mobile routes + DEC-028 budget step) on the exact main head; field CWV is NOT_VERIFIED until a privacy-approved RUM/CrUX source exists (owner decision rum-provider)",
+    "exact_revision": "ecc67e794bf349258089323d7b1dcdf4d1d1e109",
+    "artifacts": [
+      "https://github.com/BlueSkyz-Labs/SGPS-Marketing/actions/runs/37184402684 (push run on main@ecc67e7, completed/success: 'Experience performance budget' step success, 'Lighthouse CI (mobile routes)' success, 'Lighthouse CI (desktop)' success, 'Browser Assurance' aggregator success)",
+      "docs/evidence/2026-10-04-v10-e7-delta-post-e4.md"
+    ],
+    "field_evidence": {
+      "status": "NOT_VERIFIED",
+      "owner_gate": "rum-provider (docs/current-work.json openOwnerDecisions)"
+    }
+  },
+  "negative_proof": {
+    "required": true,
+    "status": "PASS",
+    "artifact": "tests/architecture/performance-budget.test.mjs (3 budget-breach cases) and tests/architecture/friction-invariants.test.mjs (spinner, spin keyframe, dialog without Escape test, 900 ms transition), run by the architecture suite inside 'Quality Gates' on https://github.com/BlueSkyz-Labs/SGPS-Marketing/actions/runs/37184402684; J3 step-count break recorded in PR #457"
+  },
+  "positive_proof": {
+    "required": true,
+    "status": "PASS",
+    "artifact": "https://github.com/BlueSkyz-Labs/SGPS-Marketing/actions/runs/37184402684 'Experience performance budget' step success on main@ecc67e7; tests/e2e/friction-step-counts.spec.ts in the Browser Assurance matrix"
+  },
+  "go_live": {
+    "state": "READY",
+    "reason": "Lab evidence, negative and positive proof bound to main@ecc67e7. Residual: field CWV (p75) NOT_VERIFIED until rum-provider is decided; this does not relax any budget.",
+    "bound_at": "2026-10-04"
+  },
+  "gaps": {
+    "disposition": "ADOPT",
+    "lifecycle": "ADOPTED_LAB_VERIFIED",
+    "adopted": true
+  },
+  "tracking_issue": 451
+}

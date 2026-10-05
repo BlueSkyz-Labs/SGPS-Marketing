@@ -3,7 +3,7 @@ import type { CollectionEntry } from "astro:content";
 import { SHARED_LABELS, labelFor, type Language } from "@/data/site";
 import {
   getProductProfilePath,
-  getProductIconPath,
+  getProductIconThumbPath,
 } from "@/lib/product-routes";
 import { platformLabel, productCopy } from "@/lib/product-copy";
 import { resolveLifecycleCta } from "@/lib/lifecycle-cta";
@@ -13,14 +13,16 @@ interface Props {
   product: CollectionEntry<"products">;
   lang: Language;
   emphasis?: "default" | "hero";
+  /** Products index only: real capture (when one exists) or icon composition. */
+  showThumb?: boolean;
 }
 
-const { product, lang, emphasis = "default" } = Astro.props;
+const { product, lang, emphasis = "default", showThumb = false } = Astro.props;
 const { data } = product;
 const profileHref = getProductProfilePath(lang, data.slug);
 const copy = productCopy(data, lang);
 const profileLabel = labelFor(SHARED_LABELS.viewProfile, lang);
-const iconHref = getProductIconPath(data.slug);
+const iconHref = getProductIconThumbPath(data.slug);
 // Single source for the card's action verb + destination (plan v5 W3.2).
 const cta = resolveLifecycleCta(
   {
@@ -28,131 +30,274 @@ const cta = resolveLifecycleCta(
     lifecycle: data.lifecycle,
     availability: data.availability,
     primaryActionHref: data.primaryAction.href,
+    productName: data.name,
   },
   lang,
 );
+// Real in-repo capture per slug; any product without one gets the icon composition.
+const CAPTURES: Record<string, { src: string; width: number; height: number }> =
+  {
+    sotro: {
+      src: "/products/sotro/showcase/op-01-home-288.webp",
+      width: 288,
+      height: 532,
+    },
+  };
+const capture = showThumb ? CAPTURES[data.slug] : undefined;
 const showProfileLink = cta.href !== profileHref;
 const ctaIsExternal = cta.external || /^https?:\/\//i.test(cta.href);
 ---
 
-<article
-  data-product-card
-  data-product-tier={data.featuredTier}
-  class:list={[
-    "min-w-0 max-w-full rounded-[var(--radius-card)] border border-[var(--border-subtle)] bg-[var(--surface-raised)] p-4 sm:p-6 transition-[transform,box-shadow,border-color] duration-200 ease-[var(--motion-ease-standard)] hover:-translate-y-0.5 hover:border-[color-mix(in_srgb,var(--brand-cobalt)_38%,var(--border-subtle))] hover:shadow-[0_18px_44px_-14px_color-mix(in_srgb,var(--brand-cobalt)_30%,transparent)] motion-reduce:transition-none motion-reduce:hover:translate-y-0 motion-reduce:hover:shadow-none",
-    emphasis === "hero" && "md:p-8",
-  ]}
->
-  <!-- Icon + Status Badge Header -->
-  <header class="flex flex-wrap items-start justify-between gap-3">
-    <div class="relative flex-shrink-0">
-      <!-- Squircle icon container with ambient drop-shadow -->
+<!-- F6: the shell is the size container the card's thumb/body layout
+     queries (a card cannot query itself); the card fills it, so the action row
+     (mt-auto) sits on one baseline in every card of a row. -->
+<div class="product-card-shell">
+  <article
+    data-product-card
+    data-product-tier={data.featuredTier}
+    class:list={[
+      "product-card flex min-w-0 max-w-full flex-col rounded-[var(--radius-card)] border border-[var(--border-hairline)] bg-[var(--surface-raised)] p-4 sm:p-6 transition-[transform,box-shadow,border-color] duration-200 ease-[var(--motion-ease-standard)] hover:-translate-y-0.5 hover:border-[color-mix(in_srgb,var(--brand-cobalt)_38%,var(--border-subtle))] hover:shadow-[0_18px_44px_-14px_color-mix(in_srgb,var(--brand-cobalt)_30%,transparent)] motion-reduce:transition-none motion-reduce:hover:translate-y-0 motion-reduce:hover:shadow-none",
+      emphasis === "hero" && "md:p-8",
+    ]}
+  >
+    {showThumb && (
       <div
-        class="size-12 sm:size-14 rounded-[1.25rem] overflow-hidden bg-white/5 backdrop-blur-sm shadow-[0_8px_24px_-6px_rgba(11,16,32,0.35)] ring-1 ring-inset ring-white/5"
+        class="product-thumb mb-4"
+        data-product-thumb={capture ? "capture" : "icon"}
         aria-hidden="true"
       >
-        <img
-          src={iconHref}
-          alt=""
-          class="w-full h-full object-cover"
-          loading="lazy"
-          decoding="async"
-        />
-        <!-- Subtle ambient glow matched to brand cobalt -->
-        <div
-          class="absolute inset-0 bg-gradient-to-br from-[color-mix(in_srgb,var(--brand-cobalt)_18%,transparent)] to-transparent pointer-events-none"
-          aria-hidden="true"
-        />
+        {capture ? (
+          <img
+            src={capture.src}
+            width={capture.width}
+            height={capture.height}
+            alt=""
+            class="product-thumb__capture"
+            loading="lazy"
+            decoding="async"
+          />
+        ) : (
+          <img
+            src={iconHref}
+            width="112"
+            height="112"
+            alt=""
+            class="product-thumb__icon"
+            loading="lazy"
+            decoding="async"
+          />
+        )}
       </div>
+    )}
+
+    <!-- Icon + Status Badge Header -->
+    <header class="flex flex-wrap items-start justify-between gap-3">
+      {!showThumb && (
+        <div class="relative flex-shrink-0">
+          <!-- Squircle icon container with ambient drop-shadow -->
+          <div
+            class="size-12 sm:size-14 rounded-[1.25rem] overflow-hidden bg-[var(--surface-3)] shadow-[0_8px_24px_-6px_rgba(11,16,32,0.35)] ring-1 ring-inset ring-white/5"
+            aria-hidden="true"
+          >
+            <img
+              src={iconHref}
+              alt=""
+              class="w-full h-full object-cover"
+              loading="lazy"
+              decoding="async"
+            />
+            <!-- Subtle ambient glow matched to brand cobalt -->
+            <div
+              class="absolute inset-0 bg-gradient-to-br from-[color-mix(in_srgb,var(--brand-cobalt)_18%,transparent)] to-transparent pointer-events-none"
+              aria-hidden="true"
+            />
+          </div>
+        </div>
+      )}
+
+      <!-- Static lifecycle status badge -->
+      <span
+        data-product-status={data.publicLabel}
+        class="inline-flex max-w-full min-w-0 items-center gap-1.5 rounded-[var(--radius-card)] border border-[var(--border-subtle)] px-2.5 py-1 text-xs font-semibold tracking-wide text-[var(--action-primary)] [overflow-wrap:anywhere] sm:px-3"
+      >
+        {copy.statusLabel}
+      </span>
+    </header>
+
+    <!-- Product Name + Tagline -->
+    <div class="product-card__body mt-4 min-w-0">
+      <h3
+        class:list={[
+          "font-semibold tracking-[-0.02em] leading-tight text-[var(--text-primary)]",
+          emphasis === "hero" ? "text-2xl sm:text-3xl" : "text-xl",
+        ]}
+      >
+        <a
+          href={profileHref}
+          class="inline-flex min-h-11 max-w-full min-w-0 items-center text-inherit no-underline [overflow-wrap:anywhere] hover:underline"
+          data-product-continuity="card"
+          style={productTransitionStyle("card", data.slug)}
+        >
+          {data.name}
+        </a>
+      </h3>
+      <p class="mt-2 text-sm leading-relaxed text-[var(--text-secondary)] min-w-0 [overflow-wrap:anywhere]">
+        {copy.shortDescription}
+      </p>
     </div>
 
-    <!-- Static lifecycle status badge -->
-    <span
-      data-product-status={data.publicLabel}
-      class="inline-flex max-w-full min-w-0 items-center gap-1.5 rounded-[var(--radius-card)] border border-[var(--border-subtle)] px-2.5 py-1 text-xs font-semibold tracking-wide text-[var(--action-primary)] [overflow-wrap:anywhere] sm:px-3"
+    <!-- Platform Chips (only platforms the record actually declares) -->
+    <div
+      class="mt-4 flex flex-wrap items-center gap-2"
+      role="group"
+      aria-label={labelFor(SHARED_LABELS.platforms, lang)}
     >
-      {copy.statusLabel}
-    </span>
-  </header>
+      {data.platforms?.map((platform: string) => (
+        <span class="inline-flex max-w-full min-w-0 items-center gap-1.5 rounded-full border border-[var(--border-subtle)] bg-[var(--surface-subtle)] px-2.5 py-0.5 text-xs font-medium text-[var(--text-secondary)] [overflow-wrap:anywhere]">
+          {platformLabel(platform, lang)}
+        </span>
+      ))}
+    </div>
 
-  <!-- Product Name + Tagline -->
-  <div class="mt-4 min-w-0">
-    <h3
-      class:list={[
-        "font-semibold tracking-[-0.02em] leading-tight text-[var(--text-primary)]",
-        emphasis === "hero" ? "text-2xl sm:text-3xl" : "text-xl",
-      ]}
-    >
+    <!-- Micro-tick Action Links (verb + destination from the lifecycle mapper) -->
+    <div class="product-card__actions mt-auto flex flex-wrap items-center gap-3 pt-5">
+      {showProfileLink && (
+        <a
+          href={profileHref}
+          class="inline-flex min-h-11 max-w-full min-w-0 items-center gap-1.5 [overflow-wrap:anywhere] btn-secondary"
+        >
+          {profileLabel}
+        </a>
+      )}
+
       <a
-        href={profileHref}
-        class="inline-flex min-h-11 max-w-full min-w-0 items-center text-inherit no-underline [overflow-wrap:anywhere] hover:underline"
-        data-product-continuity="card"
-        style={productTransitionStyle("card", data.slug)}
+        href={cta.href}
+        rel={ctaIsExternal ? "noopener noreferrer" : undefined}
+        data-product-cta={cta.verb}
+        aria-label={`${cta.label}: ${data.name}`}
+        class="inline-flex min-h-11 max-w-full min-w-0 items-center gap-1.5 [overflow-wrap:anywhere] btn-secondary"
       >
-        {data.name}
+        {cta.label}
       </a>
-    </h3>
-    <p class="mt-2 text-sm leading-relaxed text-[var(--text-secondary)] min-w-0 [overflow-wrap:anywhere]">
-      {copy.shortDescription}
-    </p>
-  </div>
 
-  <!-- Platform Chips (only platforms the record actually declares) -->
-  <div
-    class="mt-4 flex flex-wrap items-center gap-2"
-    aria-label={labelFor(SHARED_LABELS.platforms, lang)}
-  >
-    {data.platforms?.map((platform: string) => (
-      <span class="inline-flex max-w-full min-w-0 items-center gap-1.5 rounded-full border border-[var(--border-subtle)] bg-[var(--surface-subtle)] px-2.5 py-0.5 text-xs font-medium text-[var(--text-secondary)] [overflow-wrap:anywhere]">
-        {platformLabel(platform, lang)}
-      </span>
-    ))}
-  </div>
+      {data.secondaryAction && (
+        <a
+          href={data.secondaryAction.href}
+          rel={
+            /^https?:\/\//i.test(data.secondaryAction.href)
+              ? "noopener noreferrer"
+              : undefined
+          }
+          class="inline-flex min-h-11 max-w-full min-w-0 items-center gap-1.5 [overflow-wrap:anywhere] btn-secondary"
+        >
+          {data.secondaryAction.label}
+        </a>
+      )}
+    </div>
+  </article>
+</div>
 
-  <!-- Micro-tick Action Links (verb + destination from the lifecycle mapper) -->
-  <div class="mt-5 flex flex-wrap items-center gap-3">
-    {showProfileLink && (
-      <a
-        href={profileHref}
-        class="inline-flex min-h-11 max-w-full min-w-0 items-center gap-1.5 rounded-full border border-[var(--border-subtle)] bg-transparent px-3 py-1.5 text-sm font-semibold text-[var(--action-primary)] no-underline [overflow-wrap:anywhere] hover:bg-[color-mix(in_srgb,var(--action-primary)_8%,transparent)] hover:border-[var(--action-primary)] active:scale-[0.98] transition-[transform,border-color,background-color] duration-100 ease-[var(--motion-ease-standard)]"
-      >
-        <span
-          aria-hidden="true"
-          class="size-1.5 shrink-0 rounded-full bg-current opacity-60"
-        />
-        {profileLabel}
-      </a>
-    )}
+<style>
+  /* F6: every card is a size container; the thumb/body split follows the
+     card's own width, not the viewport (one column by default). */
+  .product-card-shell {
+    container: product-card / inline-size;
+    display: flex;
+    min-width: 0;
+    max-width: 100%;
+  }
+  .product-card {
+    flex: 1 1 auto;
+  }
+  .product-thumb {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    height: 12rem;
+    overflow: hidden;
+    border-radius: calc(var(--radius-card) - 2px);
+    border: 1px solid var(--border-subtle);
+    background:
+      radial-gradient(
+        ellipse at 50% 0%,
+        color-mix(in srgb, var(--brand-cobalt) 16%, transparent),
+        transparent 70%
+      ),
+      var(--surface-subtle);
+    box-shadow: inset 0 1px 0 var(--specular);
+    --specular: color-mix(in srgb, white 70%, transparent);
+  }
+  :global([data-theme="dark"]) .product-thumb {
+    --specular: color-mix(in srgb, white 9%, transparent);
+  }
+  @media (prefers-color-scheme: dark) {
+    :global(:root:not([data-theme="light"])) .product-thumb {
+      --specular: color-mix(in srgb, white 9%, transparent);
+    }
+  }
 
-    <a
-      href={cta.href}
-      rel={ctaIsExternal ? "noopener noreferrer" : undefined}
-      data-product-cta={cta.verb}
-      class="inline-flex min-h-11 max-w-full min-w-0 items-center gap-1.5 rounded-full border border-[var(--border-subtle)] bg-transparent px-3 py-1.5 text-sm font-semibold text-[var(--text-secondary)] no-underline [overflow-wrap:anywhere] hover:text-[var(--text-primary)] hover:border-[var(--text-secondary)] active:scale-[0.98] transition-[transform,border-color,color] duration-100 ease-[var(--motion-ease-standard)]"
-    >
-      <span
-        aria-hidden="true"
-        class="size-1.5 shrink-0 rounded-full border border-current opacity-40"
-      />
-      {cta.label}
-    </a>
-
-    {data.secondaryAction && (
-      <a
-        href={data.secondaryAction.href}
-        rel={
-          /^https?:\/\//i.test(data.secondaryAction.href)
-            ? "noopener noreferrer"
-            : undefined
-        }
-        class="inline-flex min-h-11 max-w-full min-w-0 items-center gap-1.5 rounded-full border border-[var(--border-subtle)] bg-transparent px-3 py-1.5 text-sm font-medium text-[var(--text-muted)] no-underline [overflow-wrap:anywhere] hover:text-[var(--text-secondary)] hover:border-[var(--text-muted)] active:scale-[0.98] transition-[transform,border-color,color] duration-100 ease-[var(--motion-ease-standard)]"
-      >
-        <span
-          aria-hidden="true"
-          class="size-1.5 shrink-0 rounded-full border border-current opacity-30"
-        />
-        {data.secondaryAction.label}
-      </a>
-    )}
-  </div>
-</article>
+  /* A real capture, framed like the showcase phones and faded at the stage
+     floor instead of being cut hard. */
+  .product-thumb__capture {
+    width: 9.5rem;
+    height: calc(100% - 1.5rem);
+    margin-top: 1.5rem;
+    object-fit: cover;
+    object-position: top;
+    border-radius: var(--radius-media) var(--radius-media) 0 0;
+    border: 1px solid var(--border-subtle);
+    border-bottom: 0;
+    box-shadow: 0 12px 32px -12px rgba(11, 16, 32, 0.4);
+    mask-image: linear-gradient(to bottom, #000 50%, transparent 100%);
+  }
+  .product-thumb__icon {
+    align-self: center;
+    width: 6rem;
+    height: 6rem;
+    border-radius: var(--radius-media);
+    box-shadow: 0 14px 36px -10px rgba(11, 16, 32, 0.4);
+    outline: 1px solid var(--border-subtle);
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .product-thumb__capture,
+    .product-thumb__icon {
+      transition: transform var(--motion-base, 320ms)
+        var(--ease-emphasized, ease);
+    }
+    .product-card:hover .product-thumb__capture,
+    .product-card:focus-within .product-thumb__capture {
+      transform: translateY(-0.5rem);
+    }
+    .product-card:hover .product-thumb__icon,
+    .product-card:focus-within .product-thumb__icon {
+      transform: translateY(-0.25rem);
+    }
+  }
+  @container product-card (min-width: 32rem) {
+    .product-card:has(> .product-thumb) {
+      display: grid;
+      grid-template-columns: minmax(0, 14rem) minmax(0, 1fr);
+      grid-template-rows: auto auto auto 1fr;
+      column-gap: 1.75rem;
+    }
+    .product-card > * {
+      grid-column: 2;
+    }
+    .product-card > .product-thumb {
+      grid-column: 1;
+      grid-row: 1 / -1;
+      height: auto;
+      min-height: 16rem;
+      margin-bottom: 0;
+    }
+    .product-card > .product-card__actions {
+      align-self: end;
+    }
+  }
+  @media (forced-colors: active) {
+    .product-thumb__capture {
+      mask-image: none;
+    }
+  }
+</style>

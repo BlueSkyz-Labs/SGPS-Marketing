@@ -1,0 +1,13 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { PAGE_META } from "@/data/page-meta";
+import VerifyCentre from "@/components/verify/VerifyCentre.astro";
+---
+
+<BaseLayout
+  title={PAGE_META["vi"].verify.title}
+  description={PAGE_META["vi"].verify.description}
+  path="/vi/verify/"
+>
+  <VerifyCentre lang="vi" />
+</BaseLayout>

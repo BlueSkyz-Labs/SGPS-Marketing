@@ -1,31 +1,24 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
+import { PAGE_META } from "@/data/page-meta";
 import Container from "@/components/layout/Container.astro";
 import PageHeader from "@/components/layout/PageHeader.astro";
 import DossierComposer from "@/components/dossier/DossierComposer.astro";
-import DossierSources from "@/components/dossier/DossierSources.astro";
-import BoardroomDeck from "@/components/dossier/BoardroomDeck.astro";
 ---
 
 <BaseLayout
-  title="公开档案"
-  description="用本站已发布的声明与证据组装会议视图。不传输任何数据，也不存储任何内容。"
+  title={PAGE_META["zh"].dossier.title}
+  description={PAGE_META["zh"].dossier.description}
   path="/zh/dossier/"
 >
   <section class="py-16 lg:py-24">
     <Container>
       <PageHeader
-        title="公开档案"
-        lede="用本站已发布的声明与证据组装会议视图。不传输任何数据，也不存储任何内容。"
+        title="可打印摘要"
+        lede="选择已发布的声明与来源，用于打印或展示。内容不会离开本页，也不会被保存。"
       />
       <div class="mt-12">
         <DossierComposer lang="zh" />
-      </div>
-      <div class="mt-12">
-        <DossierSources lang="zh" />
-      </div>
-      <div class="mt-12">
-        <BoardroomDeck lang="zh" />
       </div>
     </Container>
   </section>

@@ -46,19 +46,16 @@ async function ratioOf(page: Page, selector: string) {
   }, selector);
 }
 
-test("flagship CTA carries white text on the action fill in dark", async ({
+test("hero primary CTA carries white text on its fill in dark", async ({
   page,
 }) => {
   await page.goto("/en/", { waitUntil: "networkidle" });
   await page.evaluate(() => document.fonts.ready);
-  const measured = await ratioOf(
-    page,
-    "[data-flagship-theatre] a.bg-\\[var\\(--action-fill\\)\\]",
-  );
-  expect(measured, "flagship CTA must exist").not.toBeNull();
+  const measured = await ratioOf(page, "[data-hero-primary]");
+  expect(measured, "hero primary CTA must exist").not.toBeNull();
   expect(
     measured!.ratio,
-    `flagship CTA ${measured!.color} on ${measured!.background}`,
+    `hero primary CTA ${measured!.color} on ${measured!.background}`,
   ).toBeGreaterThanOrEqual(4.5);
 });
 
@@ -78,21 +75,7 @@ test("trust-ledger chips keep 4.5:1 in dark", async ({ page }) => {
   }
 });
 
-test("pressed intent chip and decision-room tile stay readable in dark", async ({
-  page,
-}) => {
-  await page.goto("/en/", { waitUntil: "networkidle" });
-  const intent = page.locator("[data-intent-option]").first();
-  if (await intent.count()) {
-    await intent.click();
-    const measured = await ratioOf(page, ".intent-chip[aria-pressed='true']");
-    expect(measured, "pressed intent chip").not.toBeNull();
-    expect(
-      measured!.ratio,
-      `intent chip ${measured!.color} on ${measured!.background}`,
-    ).toBeGreaterThanOrEqual(4.5);
-  }
-
+test("pressed decision-room tile stays readable in dark", async ({ page }) => {
   await page.goto("/en/decision-room/", { waitUntil: "networkidle" });
   const add = page.locator("[data-decision-add]").first();
   await add.click();

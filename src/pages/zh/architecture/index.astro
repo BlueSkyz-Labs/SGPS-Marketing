@@ -1,21 +1,22 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
+import { PAGE_META } from "@/data/page-meta";
 import Container from "@/components/layout/Container.astro";
 import PageHeader from "@/components/layout/PageHeader.astro";
 import ArchitectureSalon from "@/components/architecture/ArchitectureSalon.astro";
+import { ARCHITECTURE_COPY } from "@/data/architecture-copy";
+
+const copy = ARCHITECTURE_COPY["zh"];
 ---
 
 <BaseLayout
-  title="架构"
-  description="本站如何构建：派生自规范架构模型的五个静态视角。"
+  title={PAGE_META["zh"].architecture.title}
+  description={PAGE_META["zh"].architecture.description}
   path="/zh/architecture/"
 >
   <section class="py-16 lg:py-24">
     <Container>
-      <PageHeader
-        title="架构"
-        lede="本站如何构建：派生自规范架构模型的五个静态视角。"
-      />
+      <PageHeader title={copy.title} lede={copy.lede} />
       <div class="mt-12">
         <ArchitectureSalon lang="zh" />
       </div>

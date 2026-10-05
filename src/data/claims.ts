@@ -29,11 +29,27 @@ export interface ProductClaimBinding {
   capabilityId: string;
 }
 
+/**
+ * Short label for a claim. EN/VI are authored; zh/zh-hant, when present, are
+ * an exact leading cut of the full statement (never new prose).
+ */
+export interface ClaimTitleLabel {
+  en: string;
+  vi: string;
+  zh?: string | undefined;
+  "zh-hant"?: string | undefined;
+}
+
 export interface PublicClaim {
   id: string;
   kind: ClaimKind;
   surface: string;
   statement: LocalizedStatement;
+  /**
+   * Short label used only for the EN/VI evidence page <title> (SEO length).
+   * Derived from, and never a replacement for, the full `statement`.
+   */
+  titleLabel?: ClaimTitleLabel | undefined;
   evidenceIds: string[];
   boundaryId?: string | undefined;
   reviewId?: string | undefined;
@@ -81,6 +97,12 @@ export const CLAIMS: readonly PublicClaim[] = [
       "zh-hant":
         "安全報告透過 GitHub 私有管道送達維護者，絕不會透過公開 issue 提出。",
     },
+    titleLabel: {
+      en: "Security reports go through a private GitHub channel",
+      vi: "Báo cáo bảo mật qua kênh GitHub riêng tư",
+      zh: "安全报告通过 GitHub 私有渠道送达维护者",
+      "zh-hant": "安全報告透過 GitHub 私有管道送達維護者",
+    },
     evidenceIds: ["ev-security-advisory", "ev-security-route"],
     boundaryId: "bnd-security-reporting",
     reviewId: "security-private-reporting",
@@ -91,10 +113,16 @@ export const CLAIMS: readonly PublicClaim[] = [
     surface: "privacy",
     statement: {
       en: "This site sets no cookies. It stores explicitly selected language and theme preferences in this browser, without tracking or profiling.",
-      vi: "Trang này không đặt cookie. Trang chỉ lưu lựa chọn ngôn ngữ và giao diện do khách truy cập chủ động chọn trong trình duyệt, không theo dõi hay lập hồ sơ.",
+      vi: "Trang web này không đặt cookie. Trang web chỉ lưu lựa chọn ngôn ngữ và giao diện do khách truy cập chủ động chọn trong trình duyệt, không theo dõi hay lập hồ sơ.",
       zh: "本站不设置 Cookie；仅在访客明确选择语言或主题时于浏览器本地保存偏好，不进行跟踪或行为画像。",
       "zh-hant":
-        "本站不設定 Cookie；僅在訪客明確選擇語言或主題時於瀏覽器本地儲存偏好，不進行跟蹤或行為畫像。",
+        "本站不設定 Cookie；僅在訪客明確選擇語言或主題時於瀏覽器本地儲存偏好，不進行追蹤或行為剖析。",
+    },
+    titleLabel: {
+      en: "No cookies; only chosen language and theme are stored",
+      vi: "Không đặt cookie; chỉ lưu ngôn ngữ và giao diện đã chọn",
+      zh: "本站不设置 Cookie",
+      "zh-hant": "本站不設定 Cookie",
     },
     evidenceIds: ["ev-privacy-route", "ev-security-route"],
     boundaryId: "bnd-privacy-collection",
@@ -108,8 +136,24 @@ export const CLAIMS: readonly PublicClaim[] = [
       en: "A product appears in the public registry only when its public evidence is ready to verify.",
       vi: "Sản phẩm chỉ xuất hiện trong danh mục công khai khi bằng chứng công khai của nó sẵn sàng để xác minh.",
       zh: "产品仅在其公开证据可核验时才会出现在公开登记表中。",
-      "zh-hant": "產品僅在其公開證據可核驗時才會出現在公開登記表中。",
+      "zh-hant": "產品僅在其公開證據可核驗時才會出現在公開登錄名單中。",
+    },
+    titleLabel: {
+      en: "Registry lists only products with verifiable evidence",
+      vi: "Danh mục chỉ công bố sản phẩm có bằng chứng xác minh được",
     },
     evidenceIds: ["ev-products-route"],
   },
 ];
+
+/**
+ * The short label a page uses to refer back to a claim whose full statement it
+ * already shows once. Falls back to the full statement when no short form
+ * exists for the locale, so a reference can never become blank or invented.
+ */
+export function claimShortLabel(
+  claim: Pick<PublicClaim, "statement" | "titleLabel">,
+  lang: keyof LocalizedStatement,
+): string {
+  return claim.titleLabel?.[lang] ?? claim.statement[lang];
+}

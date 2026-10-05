@@ -1,0 +1,78 @@
+---
+/**
+ * v8 W5a: the /security/ page body (deck rows sec-1..7).
+ * One lede, one action, what we do not offer, why private + limit, sources.
+ * The page's claim anchor wraps the header so `#claim-…` deep links land at
+ * the top of the page.
+ *
+ * UI upgrade F12: presentation only. The header and the one action form the
+ * lead column; the three authored statements render as a definition list
+ * (`TrustFacts`) followed by the sources line. No copy is added or reworded.
+ */
+import PageHeader from "@/components/layout/PageHeader.astro";
+import SafeAction from "@/components/integrity/SafeAction.astro";
+import SourcesLine from "@/components/trust/SourcesLine.astro";
+import TrustFacts from "@/components/trust/TrustFacts.astro";
+import TrustLayout from "@/components/trust/TrustLayout.astro";
+import { getClaimAnchor } from "@/lib/claims";
+import { SECURITY_COPY } from "@/data/trust-copy";
+import { SITE, SECURITY_ADVISORY_URL, type Language } from "@/data/site";
+
+interface Props {
+  lang: Language;
+}
+
+const { lang } = Astro.props;
+const c = SECURITY_COPY[lang];
+const CLAIM_ID = "security-reporting-is-private";
+---
+
+<TrustLayout page="security">
+  <Fragment slot="lead">
+    <div
+      id={getClaimAnchor(CLAIM_ID)}
+      data-integrity-entry
+      class="scroll-mt-24"
+    >
+      <PageHeader title={c.title} lede={c.lede} />
+    </div>
+    {SITE.securityEmail ? (
+      <p class="mt-8 text-[var(--text-secondary)]">
+        {c.emailLabel}{" "}
+        <a
+          href={`mailto:${SITE.securityEmail}`}
+          class="inline-flex min-h-11 items-center font-semibold text-[var(--action-primary)] no-underline hover:underline"
+        >
+          {SITE.securityEmail}
+        </a>
+        .
+      </p>
+    ) : null}
+    <div class="mt-8">
+      <SafeAction
+        href={SECURITY_ADVISORY_URL}
+        label={c.cta}
+        boundary="private-reporting"
+        lang={lang}
+        note={c.note}
+        fit
+      />
+    </div>
+  </Fragment>
+  <TrustFacts
+    facts={[
+      { label: c.offerLead, body: c.offerBody, marker: "security-offer" },
+      { label: c.whyLabel, body: c.whyBody },
+      { label: c.limitLabel, body: c.limitBody },
+    ]}
+  />
+  <div class="mt-6">
+    <SourcesLine
+      lang={lang}
+      claimId={CLAIM_ID}
+      label={c.sourcesLabel}
+      sources={c.sources}
+      reviewedLabel={c.reviewed}
+    />
+  </div>
+</TrustLayout>

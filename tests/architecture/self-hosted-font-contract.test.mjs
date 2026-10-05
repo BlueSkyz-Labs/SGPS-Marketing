@@ -7,8 +7,8 @@ const layout = readFileSync("src/layouts/BaseLayout.astro", "utf8");
 const fontFaces = css.match(/@font-face\s*\{[^}]+\}/g) ?? [];
 
 test("self-hosted Inter subsets are licensed, subsetted and discovered once", () => {
-  const latin = "public/fonts/inter-latin-opsz-v5.3.0.woff2";
-  const vietnamese = "public/fonts/inter-vietnamese-opsz-v5.3.0.woff2";
+  const latin = "public/fonts/inter-latin-wght-v5.3.0.woff2";
+  const vietnamese = "public/fonts/inter-vietnamese-wght-v5.3.0.woff2";
   assert.ok(statSync(latin).size + statSync(vietnamese).size <= 100_000);
   assert.match(
     readFileSync("public/fonts/OFL.txt", "utf8"),
@@ -18,7 +18,7 @@ test("self-hosted Inter subsets are licensed, subsetted and discovered once", ()
     assert.ok(
       fontFaces.some(
         (face) =>
-          face.includes(`inter-${subset}-opsz-v5.3.0.woff2`) &&
+          face.includes(`inter-${subset}-wght-v5.3.0.woff2`) &&
           /unicode-range\s*:/.test(face),
       ),
       `${subset} Inter face must be subsetted by unicode range`,
@@ -37,7 +37,7 @@ test("self-hosted Inter subsets are licensed, subsetted and discovered once", ()
     /rel="preload"[^>]*as="font"/,
     "font preloads double-fetch on WebKit; inject them engine-aware instead",
   );
-  assert.doesNotMatch(layout, /inter-(latin|vietnamese)-opsz-v5\.3\.0\.woff2/);
+  assert.doesNotMatch(layout, /inter-(latin|vietnamese)-wght-v5\.3\.0\.woff2/);
   const bootstrap = readFileSync("public/theme-init.js", "utf8");
   assert.match(
     bootstrap,
@@ -45,5 +45,5 @@ test("self-hosted Inter subsets are licensed, subsetted and discovered once", ()
     "theme-init.js must gate the font preload on the engine that reuses it",
   );
   assert.match(bootstrap, /rel = "preload"/);
-  assert.match(bootstrap, /inter-\$\{subset\}-opsz-v5\.3\.0\.woff2/);
+  assert.match(bootstrap, /inter-\$\{subset\}-wght-v5\.3\.0\.woff2/);
 });

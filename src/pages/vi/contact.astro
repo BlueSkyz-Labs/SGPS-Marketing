@@ -1,31 +1,34 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
+import { PAGE_META } from "@/data/page-meta";
 import Container from "@/components/layout/Container.astro";
 import PageHeader from "@/components/layout/PageHeader.astro";
 import SafeAction from "@/components/integrity/SafeAction.astro";
-import { SITE, SECURITY_ADVISORY_URL } from "@/data/site";
+import ProductSignInLane from "@/components/empty-state/ProductSignInLane.astro";
+import BusinessRouteState from "@/components/empty-state/BusinessRouteState.astro";
+import { EMPTY_STATE_COPY } from "@/data/empty-state-copy";
+import { SITE, SECURITY_ADVISORY_URL, labelFor } from "@/data/site";
 
 const hasBusinessEmail = Boolean(SITE.contactEmail);
 ---
 
 <BaseLayout
-  title="Liên hệ"
-  description="Liên hệ BlueSkyz Labs cho kinh doanh, bảo mật hoặc thông tin chung."
+  title={PAGE_META["vi"]["contact"].title}
+  description={PAGE_META["vi"]["contact"].description}
   path="/vi/contact/"
 >
   <section class="py-16 lg:py-24">
     <Container>
       <PageHeader
         eyebrow="Liên hệ"
-        title="Đi đúng kênh bạn cần"
-        lede="Tiếp cận BlueSkyz qua kênh phù hợp với nhu cầu của bạn. Địa chỉ email sẽ xuất hiện khi BlueSkyz công bố chúng."
+        title="Liên hệ BlueSkyz"
+        lede={labelFor(EMPTY_STATE_COPY.contactLede, "vi")}
       />
       <ul class="mt-12 grid gap-4 sm:grid-cols-2">
         <li class="flex min-w-0 flex-col rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-raised)] p-6">
           <h2 class="text-lg font-semibold tracking-tight">Bảo mật</h2>
           <p class="mt-2 flex-1 text-sm leading-relaxed text-[var(--text-secondary)]">
-            Nếu phát hiện lỗ hổng nghi vấn, hãy sử dụng kênh báo cáo riêng tư
-            trên GitHub.
+            Nếu bạn nghi ngờ có lỗ hổng bảo mật, hãy báo riêng qua GitHub.
           </p>
           <div class="mt-5">
             <SafeAction
@@ -36,12 +39,13 @@ const hasBusinessEmail = Boolean(SITE.contactEmail);
             />
           </div>
         </li>
-        <li class="flex flex-col rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-raised)] p-6">
-          <h2 class="text-lg font-semibold tracking-tight">
-            Kinh doanh / chung
-          </h2>
-          <p class="mt-2 flex-1 text-sm leading-relaxed text-[var(--text-secondary)]">
-            {hasBusinessEmail ? (
+        <ProductSignInLane lang="vi" />
+        {hasBusinessEmail ? (
+          <li class="flex min-w-0 flex-col rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-raised)] p-6 sm:col-span-2">
+            <h2 class="text-lg font-semibold tracking-tight">
+              Kinh doanh / chung
+            </h2>
+            <p class="mt-2 flex-1 text-sm leading-relaxed text-[var(--text-secondary)]">
               <>
                 Email{" "}
                 <a
@@ -52,11 +56,15 @@ const hasBusinessEmail = Boolean(SITE.contactEmail);
                 </a>{" "}
                 cho các yêu cầu kinh doanh.
               </>
-            ) : (
-              "Email liên hệ kinh doanh chưa được xác minh. Bạn có thể xem trang Về chúng tôi để biết thông tin đã công bố. Kênh báo cáo bảo mật riêng tư chỉ dành cho lỗ hổng nghi vấn, không phải kênh liên hệ kinh doanh hoặc hỗ trợ thông thường."
-            )}
-          </p>
-        </li>
+            </p>
+          </li>
+        ) : (
+          <BusinessRouteState
+            lang="vi"
+            heading="Kinh doanh / chung"
+            boundary="Hợp tác và câu hỏi chung. Kênh báo cáo bảo mật riêng tư chỉ dành cho lỗ hổng bảo mật, không dùng cho hợp tác hay hỗ trợ thông thường."
+          />
+        )}
       </ul>
     </Container>
   </section>

@@ -5,8 +5,7 @@ lifecycle: development
 availability: preview
 publicLabel: In development
 audience:
-  - professional
-  - business
+  - individual
 jobs:
   - See what remains unpaid this month and what needs attention today
   - Maintain dependable room, tenant, meter, and monthly charge records
@@ -16,6 +15,9 @@ capabilities:
   - Optional polite Zalo/SMS-style reminder messages to copy; nothing is sent automatically
 platforms:
   - web
+# schema.org SoftwareApplication category (Owner delegated best practice, 2026-10-04):
+# rent, utilities and receipts for a landlord's rental business.
+applicationCategory: BusinessApplication
 primaryAction:
   type: preview
   label: Preview Sổ Trọ
@@ -55,7 +57,7 @@ lastReviewedAt: 2026-09-30
 # is an Owner feedback checkpoint (plan v5 W3.4).
 i18n:
   vi:
-    shortDescription: "Sổ tay điện tử cho chủ nhà trọ ở Việt Nam: phòng, tiền phòng còn thiếu, lịch sử ghi chép đáng tin cậy và việc cần làm hôm nay."
+    shortDescription: "Dành cho chủ trọ ở Việt Nam. Theo dõi phòng, tiền chưa thu và việc cần làm hôm nay."
     jobs:
       - "Xem tháng này còn ai chưa đóng tiền và hôm nay cần lo việc gì"
       - "Ghi lại phòng, người thuê, số điện nước và các khoản thu hằng tháng cho gọn, cho chắc"
@@ -65,23 +67,23 @@ i18n:
       - "Mẫu tin nhắn nhắc lịch sự kiểu Zalo/SMS để sao chép; không tự động gửi"
     primaryActionLabel: "Xem trước Sổ Trọ"
   zh:
-    shortDescription: "面向越南房东的数字笔记本：房间、应收租金、可信的历史记录与今日待办。"
+    shortDescription: "给越南房东。记录房间、未收房租和今天要做的事。"
     jobs:
-      - "查看本月尚未收取的款项以及今天需要处理的事项"
-      - "维护可靠的房间、租客、表计读数与每月费用记录"
+      - "本月还有哪些款项没收？今天要处理什么？"
+      - "把房间、租客、水电表读数和每月费用记得清楚可靠"
     capabilities:
-      - "根据表计读数计算水电费用，并清楚说明阶梯电价的各档明细"
-      - "收据，以及在记录已收款项之前单独的一步确认"
-      - "可选的、礼貌的 Zalo/短信风格提醒消息，供复制使用；不会自动发送"
+      - "根据电表、水表读数计算水电费，并清楚列出阶梯电价的各档明细"
+      - "收据；并在记为已收款之前，单独增加一步确认"
+      - "可选的礼貌提醒消息模板（Zalo/短信风格），由你自行复制使用；不会自动发送"
     primaryActionLabel: "预览 Sổ Trọ"
   # zh-Hant copy: machine-assisted (OpenCC s2twp), pending native review.
   zh-hant:
-    shortDescription: "面向越南房東的數位筆記本：房間、應收租金、可信的歷史記錄與今日待辦。"
+    shortDescription: "給越南房東。記錄房間、未收租金和今天要做的事。"
     jobs:
-      - "檢視本月尚未收取的款項以及今天需要處理的事項"
-      - "維護可靠的房間、租客、表計讀數與每月費用記錄"
+      - "本月還有哪些款項未收？今天要處理什麼？"
+      - "把房間、房客、水電表度數和每月費用記得清楚可靠"
     capabilities:
-      - "開發範圍：可追溯的水電費用與租賃記錄"
-      - "開發範圍：可審計的收據與人工確認的付款狀態"
-      - "可選的 Zalo/簡訊模板：複製後自行打開發送，不會自動傳送"
+      - "依電表、水表度數計算水電費，並清楚列出階梯式電價各級明細"
+      - "收據；並在記為已收款之前，多一道獨立的確認步驟"
+      - "可選用的禮貌提醒訊息範本（Zalo／簡訊風格），由你自行複製使用；不會自動傳送"
     primaryActionLabel: "預覽 Sổ Trọ"

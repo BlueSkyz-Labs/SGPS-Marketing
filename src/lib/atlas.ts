@@ -1,6 +1,6 @@
 import { PRINCIPLE_MATRIX, type Language } from "@/data/experience";
 import { TRUST_LEDGER } from "@/data/trust-ledger";
-import { getPublicClaims } from "@/lib/claims";
+import { claimShortLabel, getPublicClaims } from "@/lib/claims";
 import { getProductProfilePath } from "@/lib/product-routes";
 import type { ProductEntry } from "@/lib/products";
 
@@ -11,7 +11,8 @@ export interface AtlasNode {
   id: string;
   kind: AtlasNodeKind;
   label: string;
-  href: string;
+  /** Absent when no page explains the node (principle nodes since abt-4). */
+  href?: string;
 }
 
 export interface AtlasEdge {
@@ -50,7 +51,9 @@ export function buildAtlasModel(
       id,
       kind: "principle",
       label: principle.name[lang],
-      href: "#house-title",
+      // Deliberately unlinked: since abt-4 = A no page renders
+      // PRINCIPLE_MATRIX, and a link that resolves but explains nothing is a
+      // dead end (v9 F9 / F-11).
     });
     edges.push({ from: "brand", to: id });
   }
@@ -79,7 +82,7 @@ export function buildAtlasModel(
     nodes.push({
       id: claimId,
       kind: "claim",
-      label: resolved.claim.statement[lang],
+      label: claimShortLabel(resolved.claim, lang),
       href: `/${lang}/${resolved.claim.surface}/`,
     });
     edges.push({ from: "brand", to: claimId });

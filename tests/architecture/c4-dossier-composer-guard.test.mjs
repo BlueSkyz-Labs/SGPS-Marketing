@@ -54,19 +54,48 @@ test("the composer never transmits, persists or loads remote code", () => {
   }
 });
 
-test("the composer reads only allowlisted public ids from the URL", () => {
+test("the composer reads URL state only through the bounded parser", () => {
   const source = readFileSync(MODULE, "utf8");
-  // state may arrive only through validated query parameters
+  const parser = readFileSync("src/lib/dossier-url-state.ts", "utf8");
+
   assert.match(
     source,
-    /URLSearchParams|searchParams/,
-    "selection must be read from validated URL parameters",
+    /parseDossierSearch\(window\.location\.search,\s*SELECTION_PARAM\)/,
+    "composer must delegate URL-carried state to the bounded parser",
   );
+  assert.doesNotMatch(
+    source,
+    /new URLSearchParams\(/,
+    "composer must not bypass the bounded URL-state parser",
+  );
+  assert.match(
+    parser,
+    /if \(search\.length > DOSSIER_QUERY_MAX_LENGTH\)/,
+    "whole-query length must be checked before URLSearchParams",
+  );
+  assert.match(
+    parser,
+    /new URLSearchParams\(search\)/,
+    "bounded parser must be the URLSearchParams boundary",
+  );
+  // v7 B-06: the URL is written, but only through the bounded writer in the
+  // library - never by the composer itself, and never with pushState.
   assert.equal(
-    /history\.(pushState|replaceState)/.test(source) &&
-      !/URLSearchParams|searchParams/.test(source),
+    /history\./.test(source),
     false,
-    "URL state must be parsed, never trusted",
+    "composer must not touch history directly; it delegates to the bounded writer",
+  );
+  assert.match(source, /writeSelectionToUrl\(window,\s*SELECTION_PARAM/);
+  assert.match(parser, /history\.replaceState\(/);
+  assert.equal(
+    /pushState|location\.(assign|replace|href)/.test(parser),
+    false,
+    "the writer is replaceState-only: no new history entry, no navigation",
+  );
+  assert.match(
+    parser,
+    /parseDossierSearch\(search,\s*selectionParam\)/,
+    "the writer must verify its output through the bounded parser",
   );
 });
 

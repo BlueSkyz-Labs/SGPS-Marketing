@@ -13,9 +13,9 @@ const isZhHant = lang === "zh-hant";
 const kicker = isVi
   ? "Bạn đang quan tâm điều gì?"
   : isZh
-    ? "您关注什么？"
+    ? "你关注什么？"
     : isZhHant
-      ? "您關注什麼？"
+      ? "你關注什麼？"
       : "What brings you here?";
 
 const intents = [
@@ -32,7 +32,7 @@ const intents = [
   {
     id: "understand-blueskyz",
     label: isVi
-      ? "Tìm hiểu BlueSkyz"
+      ? "Về BlueSkyz"
       : isZh
         ? "了解 BlueSkyz"
         : isZhHant
@@ -66,10 +66,7 @@ const intents = [
   class="mt-8 flex flex-col gap-3 border-b border-[var(--border-subtle)] pb-8 sm:mt-10 sm:flex-row sm:items-center sm:justify-between"
   data-intent-lens
 >
-  <p
-    id="intent-lens-label"
-    class="text-xs font-semibold tracking-[0.18em] text-[var(--text-muted)] uppercase"
-  >
+  <p id="intent-lens-label" class="eyebrow">
     {kicker}
   </p>
   <div

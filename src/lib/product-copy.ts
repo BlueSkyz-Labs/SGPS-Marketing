@@ -101,12 +101,17 @@ const LIFECYCLE_LABELS: Record<Lifecycle, Record<Language, string>> = {
   },
   development: {
     en: "Development",
-    vi: "Phát triển",
+    vi: "Đang phát triển",
     zh: "开发",
     "zh-hant": "開發",
   },
   beta: { en: "Beta", vi: "Beta", zh: "测试版", "zh-hant": "測試版" },
-  active: { en: "Live", vi: "Vận hành", zh: "上线", "zh-hant": "上線" },
+  active: {
+    en: "Live",
+    vi: "Đang hoạt động",
+    zh: "上线",
+    "zh-hant": "上線",
+  },
   maintenance: {
     en: "Maintenance",
     vi: "Bảo trì",
@@ -151,10 +156,10 @@ export function proofCaptionForKind(
 
 const PLATFORM_LABELS: Record<string, Record<Language, string>> = {
   web: {
-    en: "Web / PWA",
-    vi: "Web / PWA",
-    zh: "Web / PWA",
-    "zh-hant": "Web / PWA",
+    en: "Web",
+    vi: "Web",
+    zh: "网页",
+    "zh-hant": "網頁",
   },
   "browser-extension": {
     en: "Browser extension",

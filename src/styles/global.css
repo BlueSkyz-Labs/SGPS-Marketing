@@ -1,6 +1,8 @@
 @import "tailwindcss";
 @import "@/styles/cinematic-product-house.css";
 @import "@/styles/c4-quiet-authority.css";
+@import "@/styles/reveal.css";
+@import "@/styles/display-type.css";
 
 @theme {
   --color-ink: #0b1020;
@@ -20,7 +22,7 @@
   font-style: normal;
   font-display: swap;
   font-weight: 100 900;
-  src: url("/fonts/inter-vietnamese-opsz-v5.3.0.woff2") format("woff2");
+  src: url("/fonts/inter-vietnamese-wght-v5.3.0.woff2") format("woff2");
   unicode-range:
     U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1,
     U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329,
@@ -31,7 +33,7 @@
   font-style: normal;
   font-display: swap;
   font-weight: 100 900;
-  src: url("/fonts/inter-latin-opsz-v5.3.0.woff2") format("woff2");
+  src: url("/fonts/inter-latin-wght-v5.3.0.woff2") format("woff2");
   unicode-range:
     U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC,
     U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212,
@@ -57,14 +59,26 @@
   --brand-porcelain: #f7f8fa;
   --brand-cobalt: #2564ff;
   --surface-primary: var(--brand-porcelain);
+  /* Alternate section band: identical to the page in light, one step lifted in
+     dark so sections separate by surface instead of hairlines alone. */
+  --surface-band: var(--brand-porcelain);
+  /* Grid contract (Experience v6 S6): every shell and section container shares
+     one max width and one gutter scale, so header, hero, sections and footer
+     start on the same left edge at every viewport. */
+  --site-max: var(--container-wide);
+  --site-gutter: 1.25rem;
   /* Frosted header surface: the same scene token at 82% so a translucent
      surface can never drift away from the scene's text colour. */
-  --surface-primary-glass: rgba(247, 248, 250, 0.82);
+  --surface-primary-glass: rgba(247, 248, 250, 0.88);
   --surface-subtle: #f1f5f9;
   --surface-inverse: var(--brand-ink);
   /* Raised cards/controls: white on porcelain, slate-900 on ink. Components
      must use this token, never a literal white that ignores the theme. */
+  --surface-1: #f7f8fa;
+  --surface-2: #ffffff;
+  --surface-3: #f1f5f9;
   --surface-raised: #ffffff;
+  --measure-short: 30ch;
   --text-primary: var(--brand-ink);
   --text-secondary: #334155;
   /* Brand slate_500 (#64748B) fails AA on Porcelain; UI muted stays #475569. */
@@ -74,6 +88,8 @@
   --focus-ring: #1d4ed8;
   /* Kit v4 radius-md (12px); keeps cards on the canonical radius scale. */
   --radius-card: 0.75rem;
+  /* Popover card radius shared by the header control panels (16px). */
+  --radius-panel: 1rem;
   --font-sans:
     "Inter Variable", "Inter Fallback", Inter, ui-sans-serif, system-ui,
     sans-serif;
@@ -107,6 +123,30 @@
   --bsl-border: #cbd5e1;
   --bsl-shadow-subtle: 0 8px 28px rgba(11, 16, 32, 0.12);
   --radius-sm: 0.5rem;
+  /* v8 W6 type scale: nine steps, no fluid or fractional sizes. */
+  --size-1: 0.75rem;
+  --size-2: 0.875rem;
+  --size-3: 1rem;
+  --size-4: 1.125rem;
+  --size-5: 1.25rem;
+  --size-6: 1.5rem;
+  --size-7: 2rem;
+  --size-8: 2.75rem;
+  --size-9: 4rem;
+  --lh-1: 1.5;
+  --lh-2: 1.5;
+  --lh-3: 1.6;
+  --lh-4: 1.55;
+  --lh-5: 1.4;
+  --lh-6: 1.33;
+  --lh-7: 1.2;
+  --lh-8: 1.12;
+  --lh-9: 1.08;
+  /* Two container widths only: reading and wide. */
+  --container-reading: 45rem;
+  --container-wide: 78.5rem;
+  --radius-media: 20px;
+  --radius-pill: 999px;
   --radius-md: 0.75rem;
   --radius-lg: 1.25rem;
   --motion-fast: 120ms;
@@ -121,6 +161,24 @@
   --motion-distance-sm: 0.25rem;
   --motion-distance-md: 0.5rem;
   --motion-distance-lg: 1.25rem;
+  /* UI upgrade WP-A — shell rhythm, eyebrow and surface tokens.
+     F8: one section spacing scale shared by every template (64px, 96px from
+     1024px; tight: 48px, 64px). Fixed steps, no fluid clamp. */
+  --section-y: 4rem;
+  /* Calm-chrome round (2026-10-04): decorative card edges are a hairline, softer
+     than control borders; controls keep --border-subtle. */
+  --border-hairline: color-mix(in srgb, var(--border-subtle) 55%, transparent);
+  --section-y-tight: 3rem;
+  /* F13: uppercase eyebrow tracking. Latin default; Vietnamese stacked
+     diacritics and CJK need less (set per :lang below). */
+  --tracking-eyebrow: 0.12em;
+  /* F2: the footer is always an ink surface (its text is porcelain in both
+     themes); dark deepens it one step below the page so it reads as its own
+     plane, and draws a hairline edge. */
+  --surface-footer: var(--brand-ink);
+  --footer-edge: transparent;
+  /* Specular hairline (Brand Kit v4): a 1px light edge on raised surfaces. */
+  --specular: rgba(255, 255, 255, 0.7);
   /* F-24: numeral text sitting on the cobalt tints must clear 4.5:1 in both
      themes; `--brand-cobalt` (#2564ff) only reached 3.78:1 on the light tint. */
   --badge-ink: #1d4ed8;
@@ -137,9 +195,13 @@
 [data-theme="dark"] {
   color-scheme: dark;
   --surface-primary: var(--brand-ink);
-  --surface-primary-glass: rgba(11, 16, 32, 0.82);
+  --surface-primary-glass: rgba(11, 16, 32, 0.88);
   --surface-subtle: #0f172a;
+  --surface-band: #0d1426;
   --surface-inverse: var(--brand-porcelain);
+  --surface-1: #0b1020;
+  --surface-2: #0f172a;
+  --surface-3: #151e36;
   --surface-raised: #0f172a;
   --text-primary: #ffffff;
   --text-secondary: #cbd5e1;
@@ -152,6 +214,9 @@
   --badge-ink: #93c5fd;
   --action-fill: #2564ff;
   --action-primary-hover: #1d4ed8;
+  --surface-footer: #060a16;
+  --footer-edge: #334155;
+  --specular: rgba(255, 255, 255, 0.09);
 }
 
 [data-theme="light"] {
@@ -164,9 +229,13 @@
   :root:not([data-theme="light"]) {
     color-scheme: dark;
     --surface-primary: var(--brand-ink);
-    --surface-primary-glass: rgba(11, 16, 32, 0.82);
+    --surface-primary-glass: rgba(11, 16, 32, 0.88);
     --surface-subtle: #0f172a;
+    --surface-band: #0d1426;
     --surface-inverse: var(--brand-porcelain);
+    --surface-1: #0b1020;
+    --surface-2: #0f172a;
+    --surface-3: #151e36;
     --surface-raised: #0f172a;
     --text-primary: #ffffff;
     --text-secondary: #cbd5e1;
@@ -179,23 +248,70 @@
     --badge-ink: #93c5fd;
     --action-fill: #2564ff;
     --action-primary-hover: #1d4ed8;
+    --surface-footer: #060a16;
+    --footer-edge: #334155;
+    --specular: rgba(255, 255, 255, 0.09);
   }
 }
 
-/* Specular hairline border: subtle top highlight, degrades gracefully. */
-.border-specular {
-  border: 1px solid var(--bsl-border);
-  border-top-color: color-mix(
-    in srgb,
-    var(--brand-white, #fff) 40%,
-    transparent
-  );
+@media (min-width: 640px) {
+  :root {
+    --site-gutter: 1.5rem;
+  }
 }
 
-@media (forced-colors: active) {
-  .border-specular {
-    border-top-color: Highlight;
+@media (min-width: 1024px) {
+  :root {
+    --site-gutter: 2rem;
+    --section-y: 6rem;
+    --section-y-tight: 4rem;
   }
+}
+
+/* F13: eyebrow tracking per script. `:lang()` matches each element's own
+   language, so an English island inside a Vietnamese page resets to Latin. */
+:lang(en) {
+  --tracking-eyebrow: 0.12em;
+}
+:lang(vi) {
+  --tracking-eyebrow: 0.06em;
+}
+:lang(zh) {
+  --tracking-eyebrow: 0.04em;
+}
+
+/* F8: section rhythm utilities. Templates opt in; components that cannot
+   import global classes consume `var(--section-y, 4rem)` directly. */
+.section-y {
+  padding-block: var(--section-y);
+}
+.section-y-tight {
+  padding-block: var(--section-y-tight);
+}
+.page-top {
+  padding-top: var(--section-y);
+}
+
+/* F13: one eyebrow treatment (small caps label above a heading). */
+.eyebrow {
+  font-size: var(--size-1);
+  font-weight: 600;
+  line-height: var(--lh-1);
+  letter-spacing: var(--tracking-eyebrow);
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+/* Vietnamese: sentence case (cross-subset kerning, see .eyebrow). */
+:lang(vi) .eyebrow {
+  text-transform: none;
+}
+
+.site-container {
+  width: 100%;
+  max-width: var(--site-max);
+  margin-inline: auto;
+  padding-inline: var(--site-gutter);
 }
 
 html {
@@ -251,7 +367,10 @@ body {
   transform: translateY(-200%);
   border-radius: 0.5rem;
   background: var(--surface-inverse);
-  color: var(--brand-porcelain);
+  /* Paired with --surface-inverse: both flip together between themes, so the
+     text must be the opposite surface (porcelain on ink, ink on porcelain). */
+  color: var(--surface-primary);
+  outline: 2px solid var(--surface-primary);
   padding: 0.75rem 1rem;
   text-decoration: none;
 }
@@ -304,11 +423,10 @@ body {
       color-mix(in srgb, var(--brand-cobalt) 28%, transparent),
       transparent 70%
     ),
-    linear-gradient(
-      90deg,
-      transparent 48%,
-      color-mix(in srgb, var(--brand-cobalt) 18%, transparent) 62%,
-      transparent 76%
+    radial-gradient(
+      30rem 20rem at 50% 100%,
+      color-mix(in srgb, var(--brand-cobalt) 12%, transparent),
+      transparent 72%
     );
 }
 
@@ -409,7 +527,7 @@ body {
   gap: 0.5rem;
   padding: 0.25rem 0;
   color: var(--text-secondary);
-  font-size: 0.8125rem;
+  font-size: var(--size-2);
   letter-spacing: 0.01em;
   text-decoration: none;
   transition: color var(--motion-confirmation-duration)
@@ -422,7 +540,7 @@ body {
 
 .experience-spine__index {
   color: var(--text-muted);
-  font-size: 0.6875rem;
+  font-size: var(--size-1);
   letter-spacing: 0.14em;
 }
 
@@ -434,11 +552,11 @@ body {
 
   .experience-spine__link {
     padding: 0.375rem 0;
-    font-size: 0.875rem;
+    font-size: var(--size-2);
   }
 
   .experience-spine__index {
-    font-size: 0.6875rem;
+    font-size: var(--size-1);
     letter-spacing: 0.08em;
   }
 }
@@ -449,7 +567,7 @@ body {
   }
 
   .experience-spine__link {
-    font-size: 0.8125rem;
+    font-size: var(--size-2);
   }
 }
 
@@ -467,8 +585,7 @@ body {
 #hero-title,
 #house-title,
 #trust-title,
-#about-title,
-#next-title {
+#about-title {
   scroll-margin-top: 4rem;
 }
 
@@ -482,7 +599,7 @@ body {
   border-radius: 0.5rem;
   background: var(--surface-raised);
   color: var(--text-secondary);
-  font-size: 0.875rem;
+  font-size: var(--size-2);
   font-weight: 500;
   cursor: pointer;
   transition:
@@ -530,6 +647,64 @@ html[data-intent="evaluate-product"] [data-journey-bar] a[href$="/products/"] {
   animation-timing-function: var(--motion-ease-standard);
 }
 
+/* W4 Living Maison: moving between rooms. The incoming page is revealed by a
+   soft horizon edge travelling top to bottom (the shell at the top settles
+   first, the room below follows) while the outgoing page dims. Same 320ms
+   continuity budget, CSS only, no client router. Engines without
+   cross-document View Transitions navigate normally; engines without CSS
+   masks keep the plain cross-fade; reduced motion skips it entirely (the
+   reduce block below and this no-preference guard). */
+@media (prefers-reduced-motion: no-preference) {
+  ::view-transition-new(root) {
+    animation: maison-horizon-in var(--motion-continuity-duration)
+      var(--motion-ease-standard) both;
+    -webkit-mask-image: linear-gradient(
+      180deg,
+      #000 0%,
+      #000 40%,
+      transparent 60%,
+      transparent 100%
+    );
+    mask-image: linear-gradient(
+      180deg,
+      #000 0%,
+      #000 40%,
+      transparent 60%,
+      transparent 100%
+    );
+    -webkit-mask-size: 100% 250%;
+    mask-size: 100% 250%;
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+  }
+  ::view-transition-old(root) {
+    animation: maison-room-out var(--motion-continuity-duration)
+      var(--motion-ease-standard) both;
+  }
+}
+
+@keyframes maison-horizon-in {
+  from {
+    -webkit-mask-position: 0 100%;
+    mask-position: 0 100%;
+    opacity: 0.4;
+  }
+  to {
+    -webkit-mask-position: 0 0;
+    mask-position: 0 0;
+    opacity: 1;
+  }
+}
+
+@keyframes maison-room-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   ::view-transition-group(*),
   ::view-transition-old(*),
@@ -540,7 +715,11 @@ html[data-intent="evaluate-product"] [data-journey-bar] a[href$="/products/"] {
 
 /* S+ Command Navigator (Task 9) — native dialog command palette. */
 .command-navigator {
-  width: min(92vw, 34rem);
+  /* Tailwind preflight zeroes the native dialog's margin:auto, which pinned
+     the palette to the top-left. Centre it and offset it from the top. */
+  margin: 12vh auto 0;
+  width: min(100% - 2rem, 34rem);
+  max-height: calc(100dvh - 12vh - 1rem);
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-md);
   background: var(--surface-raised);
@@ -568,14 +747,15 @@ html[data-intent="evaluate-product"] [data-journey-bar] a[href$="/products/"] {
   border-radius: 0.5rem;
   background: var(--surface-raised);
   padding: 0 0.75rem;
-  font-size: 0.9375rem;
+  font-size: var(--size-3);
   color: var(--text-primary);
 }
 
 .command-navigator__list {
   list-style: none;
   margin: 0;
-  padding: 0;
+  /* Room for the focus ring: the list scrolls, so it would clip it. */
+  padding: 4px;
   max-height: 18rem;
   overflow-y: auto;
 }
@@ -585,10 +765,14 @@ html[data-intent="evaluate-product"] [data-journey-bar] a[href$="/products/"] {
   min-height: 2.5rem;
   align-items: center;
   border-radius: 0.5rem;
-  padding: 0 0.75rem;
-  font-size: 0.9375rem;
+  padding: 0.5rem 0.75rem;
+  font-size: var(--size-3);
   color: var(--text-primary);
   text-decoration: none;
+}
+
+.command-navigator__list a:focus-visible {
+  outline-offset: -2px;
 }
 
 .command-navigator__list a:hover,
@@ -599,35 +783,8 @@ html[data-intent="evaluate-product"] [data-journey-bar] a[href$="/products/"] {
 .command-navigator__empty {
   margin: 0;
   padding: 0.5rem 0.75rem 0.25rem;
-  font-size: 0.875rem;
+  font-size: var(--size-2);
   color: var(--text-muted);
-}
-
-.hero-mark-stage {
-  position: relative;
-  display: grid;
-  place-items: center;
-  min-height: 16rem;
-}
-
-.hero-mark-stage::after {
-  content: "";
-  position: absolute;
-  left: 12%;
-  right: 12%;
-  bottom: 18%;
-  height: 2px;
-  border-radius: 999px;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    color-mix(in srgb, var(--brand-cobalt) 85%, white),
-    transparent
-  );
-  box-shadow:
-    0 0 28px color-mix(in srgb, var(--brand-cobalt) 70%, transparent),
-    0 0 64px color-mix(in srgb, var(--brand-cobalt) 40%, transparent);
-  opacity: 0.9;
 }
 
 .hero-mark {
@@ -659,10 +816,6 @@ html[data-intent="evaluate-product"] [data-journey-bar] a[href$="/products/"] {
 
   .hero-mark {
     animation: mark-settle 900ms cubic-bezier(0.22, 1, 0.36, 1) both;
-  }
-
-  .hero-mark-stage::after {
-    animation: flare-settle 1100ms cubic-bezier(0.22, 1, 0.36, 1) both;
   }
 
   @keyframes reveal-rise {
@@ -708,18 +861,6 @@ html[data-intent="evaluate-product"] [data-journey-bar] a[href$="/products/"] {
       transform: translate3d(0, 0, 0) scale(1);
     }
   }
-
-  @keyframes flare-settle {
-    from {
-      opacity: 0;
-      transform: scaleX(0.55);
-    }
-
-    to {
-      opacity: 0.9;
-      transform: scaleX(1);
-    }
-  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -745,8 +886,7 @@ html[data-intent="evaluate-product"] [data-journey-bar] a[href$="/products/"] {
   .reveal,
   .brand-signal,
   .hero-atmosphere,
-  .hero-mark,
-  .hero-mark-stage::after {
+  .hero-mark {
     animation: none;
     transform: none;
     opacity: 1;
@@ -792,20 +932,17 @@ html[data-intent="evaluate-product"] [data-journey-bar] a[href$="/products/"] {
     box-shadow 150ms var(--motion-ease-standard, ease);
 }
 
-[data-fidelity-tier="cinematic"] .horizon-field__line {
-  animation: horizon-drift 6s ease-in-out infinite;
-}
+/* The horizon lines are decorative and stay still. Two motion contracts meet
+   here: reveal.css forbids infinite loops, and the cinematic fidelity contract
+   forbids long one-shot animations (>= 2s) that are not ambient loops. A
+   decorative drift satisfies neither, so it is removed (v7 B-22). */
 
-@keyframes horizon-drift {
-  0%,
-  100% {
-    opacity: 0.85;
-    transform: translateX(0);
-  }
-  50% {
-    opacity: 0.5;
-    transform: translateX(2px);
-  }
+/* Every enabled control that acts like a button signals it. Tailwind v4
+   preflight resets buttons to cursor:default. */
+button:not(:disabled),
+summary,
+[role="button"]:not([aria-disabled="true"]) {
+  cursor: pointer;
 }
 
 /* Mobile nav disclosure: hide default marker for consistent control chrome. */
@@ -822,9 +959,9 @@ summary {
   align-items: center;
   gap: 0.4em;
   border: 1px solid var(--border-subtle);
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   padding: 0.125rem 0.625rem;
-  font-size: 0.8125rem;
+  font-size: var(--size-2);
   font-weight: 600;
   color: var(--text-primary);
   background: var(--surface-subtle);
@@ -852,11 +989,17 @@ summary {
   }
 }
 .boundary-card__label {
-  font-size: 0.75rem;
+  font-size: var(--size-1);
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--text-muted);
+}
+
+/* Vietnamese: sentence case (cross-subset kerning, see .eyebrow). */
+:lang(vi) .boundary-card__label {
+  text-transform: none;
+  letter-spacing: var(--tracking-eyebrow, 0.03em);
 }
 .boundary-card__text {
   margin-top: 0.5rem;
@@ -871,7 +1014,7 @@ summary {
   gap: 0.5rem;
 }
 .safe-action__context {
-  font-size: 0.8125rem;
+  font-size: var(--size-2);
   color: var(--text-muted);
   line-height: 1.5;
 }
@@ -879,14 +1022,14 @@ summary {
 /* v3 Wave 2 — integrity lens, evidence depth, bilingual mirror. */
 .integrity-lens,
 .bilingual-mirror {
-  max-width: 72rem;
+  max-width: var(--site-max);
   margin: 0 auto;
-  padding: 2.5rem 1.5rem;
+  padding: 2.5rem var(--site-gutter);
   border-top: 1px solid var(--border-subtle);
 }
 .integrity-lens__title,
 .bilingual-mirror__title {
-  font-size: 1.125rem;
+  font-size: var(--size-4);
   font-weight: 600;
   letter-spacing: -0.01em;
   color: var(--text-primary);
@@ -956,7 +1099,7 @@ summary {
 }
 .evidence-details__more > summary {
   cursor: pointer;
-  font-size: 0.875rem;
+  font-size: var(--size-2);
   font-weight: 600;
   color: var(--action-primary);
   min-height: 2.75rem;
@@ -971,14 +1114,14 @@ summary {
 .evidence-details__review,
 .evidence-details__boundary {
   margin-top: 0.75rem;
-  font-size: 0.8125rem;
+  font-size: var(--size-2);
   color: var(--text-muted);
   line-height: 1.5;
 }
 .bilingual-mirror__note {
   margin-top: 0.5rem;
   color: var(--text-muted);
-  font-size: 0.875rem;
+  font-size: var(--size-2);
   line-height: 1.6;
 }
 .bilingual-mirror__pairs {
@@ -1008,7 +1151,7 @@ summary {
 }
 .bilingual-mirror__tag {
   display: inline-block;
-  font-size: 0.6875rem;
+  font-size: var(--size-1);
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -1016,6 +1159,12 @@ summary {
   /* The tag is an inline-block label; at 200% text it can be wider than a
      narrow cell, so it must be allowed to break rather than overflow. */
   overflow-wrap: anywhere;
+}
+
+/* Vietnamese: sentence case (cross-subset kerning, see .eyebrow). */
+:lang(vi) .bilingual-mirror__tag {
+  text-transform: none;
+  letter-spacing: var(--tracking-eyebrow, 0.03em);
 }
 .bilingual-mirror__cell p {
   margin-top: 0.375rem;
@@ -1057,14 +1206,20 @@ summary {
 }
 .command-navigator__kind {
   flex: none;
-  font-size: 0.625rem;
+  font-size: var(--size-1);
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--text-muted);
   border: 1px solid var(--border-subtle);
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   padding: 0.125rem 0.5rem;
+}
+
+/* Vietnamese: sentence case (cross-subset kerning, see .eyebrow). */
+:lang(vi) .command-navigator__kind {
+  text-transform: none;
+  letter-spacing: var(--tracking-eyebrow, 0.03em);
 }
 
 /* v3 Wave 4 — source-to-surface trace. */
@@ -1072,15 +1227,21 @@ summary {
   margin-top: 1.25rem;
   background: var(--surface-subtle);
   border: 1px solid var(--border-subtle);
-  border-radius: 0.75rem;
+  border-radius: var(--radius-card);
   padding: 1rem 1.25rem;
 }
 .source-trace__title {
-  font-size: 0.8125rem;
+  font-size: var(--size-2);
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--text-muted);
+}
+
+/* Vietnamese: sentence case (cross-subset kerning, see .eyebrow). */
+:lang(vi) .source-trace__title {
+  text-transform: none;
+  letter-spacing: var(--tracking-eyebrow, 0.03em);
 }
 .source-trace__list {
   margin-top: 0.5rem;
@@ -1093,19 +1254,25 @@ summary {
   align-items: baseline;
   gap: 0.625rem;
   color: var(--text-secondary);
-  font-size: 0.875rem;
+  font-size: var(--size-2);
   line-height: 1.5;
 }
 .source-trace__role {
   flex: none;
-  font-size: 0.6875rem;
+  font-size: var(--size-1);
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--text-muted);
   border: 1px solid var(--border-subtle);
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   padding: 0.125rem 0.5rem;
+}
+
+/* Vietnamese: sentence case (cross-subset kerning, see .eyebrow). */
+:lang(vi) .source-trace__role {
+  text-transform: none;
+  letter-spacing: var(--tracking-eyebrow, 0.03em);
 }
 /* Decorative connector line between steps; empty content, zero AT impact. */
 .source-trace__step:not(:last-child)::after {
@@ -1127,7 +1294,7 @@ summary {
 }
 .evidence-passport__claim {
   margin-top: 0.5rem;
-  font-size: 1.25rem;
+  font-size: var(--size-5);
   font-weight: 600;
   letter-spacing: -0.01em;
   color: var(--text-primary);
@@ -1140,18 +1307,24 @@ summary {
   gap: 0.75rem;
 }
 .evidence-passport__review {
-  font-size: 0.8125rem;
+  font-size: var(--size-2);
   color: var(--text-muted);
 }
 .evidence-passport__sources {
   margin-top: 1.25rem;
 }
 .evidence-passport__sources-title {
-  font-size: 0.8125rem;
+  font-size: var(--size-2);
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--text-muted);
+}
+
+/* Vietnamese: sentence case (cross-subset kerning, see .eyebrow). */
+:lang(vi) .evidence-passport__sources-title {
+  text-transform: none;
+  letter-spacing: var(--tracking-eyebrow, 0.03em);
 }
 .evidence-passport__sources ul {
   margin-top: 0.375rem;
@@ -1169,16 +1342,10 @@ summary {
 .decision-room {
   max-width: 56rem;
 }
-.decision-room__title {
-  font-size: 1.125rem;
-  font-weight: 700;
-  letter-spacing: -0.01em;
-  color: var(--text-primary);
-}
 .decision-room__lede {
   margin-top: 0.375rem;
   max-width: 44rem;
-  font-size: 0.9375rem;
+  font-size: var(--size-3);
   color: var(--text-muted);
 }
 .decision-room__items {
@@ -1193,40 +1360,49 @@ summary {
   align-items: flex-start;
   gap: 0.5rem;
   border: 1px solid var(--border-subtle);
-  border-radius: 0.75rem;
+  border-radius: var(--radius-card);
   background: var(--surface-raised);
   padding: 1.25rem;
   scroll-margin-top: 6rem;
   box-shadow: var(--elevation-1);
 }
 .decision-room__kind {
-  font-size: 0.6875rem;
+  font-size: var(--size-1);
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--text-muted);
   border: 1px solid var(--border-subtle);
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   padding: 0.125rem 0.5rem;
 }
+
+/* Vietnamese: sentence case (cross-subset kerning, see .eyebrow). */
+:lang(vi) .decision-room__kind {
+  text-transform: none;
+  letter-spacing: var(--tracking-eyebrow, 0.03em);
+}
 .decision-room__label {
-  font-size: 1rem;
+  font-size: var(--size-3);
   font-weight: 600;
   letter-spacing: -0.01em;
   color: var(--text-primary);
 }
 .decision-room__summary {
-  font-size: 0.875rem;
+  font-size: var(--size-2);
   color: var(--text-secondary);
 }
 .decision-room__boundary {
-  font-size: 0.8125rem;
+  font-size: var(--size-2);
   color: var(--text-muted);
   border-left: 2px solid var(--border-subtle);
   padding-left: 0.625rem;
 }
 .decision-room__source {
-  font-size: 0.875rem;
+  display: inline-flex;
+  align-items: center;
+  min-height: 1.5rem; /* WCAG 2.5.8 target size */
+  font-size: var(--size-2);
   font-weight: 600;
   color: var(--action-primary);
   text-decoration: underline;
@@ -1240,7 +1416,7 @@ summary {
   border-radius: 0.5rem;
   background: var(--surface-subtle);
   padding: 0 1rem;
-  font-size: 0.875rem;
+  font-size: var(--size-2);
   font-weight: 600;
   color: var(--text-primary);
 }
@@ -1252,42 +1428,116 @@ summary {
   opacity: 0.5;
 }
 .decision-room__empty {
-  margin-top: 1.5rem;
-  font-size: 0.9375rem;
+  margin: 0;
+  font-size: var(--size-3);
   color: var(--text-muted);
 }
-.decision-room__board {
+/* The comparison tray sits below the item grid. Empty, it is a single line;
+   it never reserves a box, so adding items cannot move anything above it. */
+.decision-room__tray {
   margin-top: 1.5rem;
-  border-top: 1px solid var(--border-subtle);
-  padding-top: 1.25rem;
+}
+@media (min-width: 1024px) {
+  .decision-room {
+    max-width: 72rem;
+  }
+  .decision-room__tray:has(.decision-room__board:not([hidden])) {
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-card);
+    background: var(--surface-subtle);
+    padding: 1.25rem;
+  }
+}
+.decision-room__board-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 1rem;
 }
 .decision-room__board-title {
-  font-size: 1rem;
+  margin: 0;
+  font-size: var(--size-3);
   font-weight: 600;
   color: var(--text-primary);
 }
+.decision-room__count {
+  margin: 0;
+  font-size: var(--size-2);
+  font-variant-numeric: tabular-nums;
+  color: var(--text-secondary);
+}
+.decision-room__limit:not([data-active="true"]) {
+  visibility: hidden;
+}
+.decision-room__limit {
+  margin: 0.75rem 0 0;
+  border-inline-start: 3px solid var(--action-primary);
+  padding: 0.5rem 0.75rem;
+  font-size: var(--size-2);
+  color: var(--text-primary);
+  background: var(--surface-raised);
+}
 .decision-room__rows {
-  margin-top: 0.75rem;
+  margin: 0.75rem 0 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: 1fr;
+}
+@media (min-width: 1024px) {
+  /* Truly side by side: one column per compared item, up to four. */
+  .decision-room__rows {
+    grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+    align-items: stretch;
+  }
+}
+.decision-room__row {
   display: flex;
   flex-direction: column;
+  align-items: flex-start;
   gap: 0.5rem;
-}
-.decision-room__rows li {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.75rem;
-  align-items: center;
-  justify-content: space-between;
   border: 1px solid var(--border-subtle);
   border-radius: 0.5rem;
+  background: var(--surface-raised);
   padding: 0.75rem 1rem;
 }
 .decision-room__row-label {
-  font-size: 0.9375rem;
+  font-size: var(--size-3);
+  font-weight: 600;
   color: var(--text-primary);
 }
+.decision-room__row-summary {
+  font-size: var(--size-2);
+  color: var(--text-secondary);
+}
+.decision-room__row .decision-room__remove {
+  margin-top: auto;
+}
+/* The boundary stays with its item card above; the tray compares the fact,
+   the summary and the source, which keeps the reserved height bounded. */
+.decision-room__row .decision-room__boundary {
+  display: none;
+}
+/* Below the wide breakpoint rows stay compact: label and Remove only. */
+@media (max-width: 1023.98px) {
+  .decision-room__row-summary,
+  .decision-room__row .decision-room__boundary,
+  .decision-room__row .decision-room__source {
+    display: none;
+  }
+  .decision-room__row {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .decision-room__row .decision-room__remove {
+    margin-top: 0;
+  }
+}
 .decision-room__reset {
-  margin-top: 1rem;
+  margin-inline-start: auto;
 }
 
 /* v3 G5 — mission emphasis: reorder or emphasize only, never hide. */
@@ -1343,19 +1593,21 @@ html[data-intent] [data-journey-bar] li[data-evidence-first="true"] a {
   transform: translateY(-1px);
 }
 .decision-room__add[aria-pressed="true"] {
-  background: color-mix(
-    in srgb,
-    var(--brand-cobalt) 10%,
-    var(--surface-raised)
-  );
-  box-shadow: inset 0 0 0 1px var(--action-primary);
+  background: color-mix(in srgb, var(--brand-cobalt) 8%, var(--surface-raised));
+  box-shadow: inset 0 0 0 2px var(--action-primary);
+}
+/* Pressed is shown by a check mark as well as colour (WCAG 1.4.1). */
+.decision-room__add[aria-pressed="true"]::before {
+  content: "\2713";
+  margin-inline-end: 0.5rem;
+  font-weight: 700;
 }
 
 /* Wave UI-4 — integrity lens legend. */
 .integrity-lens__legend {
   margin-top: 0.5rem;
   max-width: 44rem;
-  font-size: 0.875rem;
+  font-size: var(--size-2);
   line-height: 1.6;
   color: var(--text-muted);
 }
@@ -1363,11 +1615,17 @@ html[data-intent] [data-journey-bar] li[data-evidence-first="true"] a {
 /* Wave H7 — page-level heading for the evidence passport document. */
 .evidence-passport__page-title {
   margin-bottom: 0.75rem;
-  font-size: 0.9375rem;
+  font-size: var(--size-3);
   font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--text-muted);
+}
+
+/* Vietnamese: sentence case (cross-subset kerning, see .eyebrow). */
+:lang(vi) .evidence-passport__page-title {
+  text-transform: none;
+  letter-spacing: var(--tracking-eyebrow, 0.03em);
 }
 
 /* Wave H8 — passport polish: the context link reads as the card's footer. */
@@ -1477,5 +1735,294 @@ h3 {
   to {
     opacity: 1;
     transform: none;
+  }
+}
+
+/* Experience v6 S6 — dark composed as its own stage/surface system.
+   The hero is a deeper stage than the page; alternate sections sit on a lifted
+   band; no vertical light band crosses the hero on narrow screens. */
+[data-theme="dark"] .hero-plane--ink {
+  background:
+    radial-gradient(
+      60rem 34rem at 82% 40%,
+      color-mix(in srgb, var(--brand-cobalt) 30%, transparent),
+      transparent 64%
+    ),
+    linear-gradient(165deg, #0a1124 0%, #060a16 55%, #04060d 100%);
+  box-shadow: inset 0 -1px 0
+    color-mix(in srgb, var(--brand-cobalt) 38%, transparent);
+}
+
+[data-theme="dark"] main > section:not(.hero-plane):nth-of-type(even) {
+  background: var(--surface-band);
+  /* Explicit text colour: the banded surface never relies on colour inherited
+     from the root, so the section pairs text and surface in one rule. */
+  color: var(--text-primary);
+}
+
+/* F1: product-house sections render inside the page Container, so a plain
+   background stopped at the container edge and the heading sat on the slab
+   edge. The band is painted as a border-image outset instead: it bleeds to the
+   viewport edges without changing the DOM, and an outset is ink overflow, so
+   it never creates horizontal scroll. The container hairline gives way to the
+   surface step plus a full-width specular top edge (the same 1px highlight
+   dark cards carry). Adjacent product-house sections alternate (band, page, band ...). */
+[data-theme="dark"] .c2-product-house {
+  color: var(--text-primary);
+  border-image: linear-gradient(
+      color-mix(in srgb, var(--brand-porcelain) 7%, var(--surface-band)) 0 1px,
+      var(--surface-band) 1px
+    )
+    fill 0 / 0 / 0 100vmax;
+}
+/* `border-image-source`, not the `border-image: none` shorthand: the CSS
+   minifier collapses that shorthand to an empty, invalid declaration. */
+[data-theme="dark"] .c2-product-house + .c2-product-house {
+  border-image-source: none;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .hero-plane--ink {
+    background:
+      radial-gradient(
+        60rem 34rem at 82% 40%,
+        color-mix(in srgb, var(--brand-cobalt) 30%, transparent),
+        transparent 64%
+      ),
+      linear-gradient(165deg, #0a1124 0%, #060a16 55%, #04060d 100%);
+    box-shadow: inset 0 -1px 0
+      color-mix(in srgb, var(--brand-cobalt) 38%, transparent);
+  }
+
+  :root:not([data-theme="light"])
+    main
+    > section:not(.hero-plane):nth-of-type(even) {
+    background: var(--surface-band);
+    color: var(--text-primary);
+  }
+
+  :root:not([data-theme="light"]) .c2-product-house {
+    color: var(--text-primary);
+    border-image: linear-gradient(
+        color-mix(in srgb, var(--brand-porcelain) 7%, var(--surface-band)) 0 1px,
+        var(--surface-band) 1px
+      )
+      fill 0 / 0 / 0 100vmax;
+  }
+  :root:not([data-theme="light"]) .c2-product-house + .c2-product-house {
+    border-image-source: none;
+  }
+}
+
+/* v8 W6: the footer link size comes from the type scale. */
+.footer-nav-link {
+  font-size: var(--size-3);
+}
+
+/* F2: footer plane. Ink in light (already distinct from porcelain); in dark the
+   tokens deepen it below the page and draw a hairline so it never merges with
+   the last section. */
+.site-footer {
+  background-color: var(--surface-footer);
+  border-top: 1px solid var(--footer-edge);
+}
+
+/* F11: the tagline sits on the nine-step scale (24px, 32px from 640px). */
+.footer-tagline {
+  font-size: var(--size-6);
+  line-height: var(--lh-6);
+}
+@media (min-width: 640px) {
+  .footer-tagline {
+    font-size: var(--size-7);
+    line-height: var(--lh-7);
+  }
+}
+
+/* ------------------------------------------------------------------------
+   v8 W6 — design system pass: one grid, one scale, one family.
+   ------------------------------------------------------------------------ */
+
+/* Containers: exactly two widths (wide via --site-max, and reading). */
+.site-container--reading {
+  max-width: var(--container-reading);
+}
+
+/* Buttons: primary (solid cobalt, ButtonLink), secondary (outline, no dot) and
+   on-ink. `.btn-secondary` is the same secondary for next-step chips. */
+.btn-secondary {
+  display: inline-flex;
+  min-height: 2.75rem;
+  min-width: 0;
+  max-width: 100%;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-pill);
+  background: transparent;
+  padding: 0.5rem 1.25rem;
+  color: var(--text-primary);
+  font-size: var(--size-2);
+  font-weight: 600;
+  text-decoration: none;
+  overflow-wrap: anywhere;
+  transition:
+    border-color 150ms,
+    background-color 150ms,
+    transform 150ms;
+}
+.btn-secondary:hover {
+  border-color: var(--text-secondary);
+  background: var(--surface-subtle);
+}
+@media (prefers-reduced-motion: no-preference) {
+  .btn-secondary:active {
+    transform: scale(0.98);
+  }
+}
+button:not(:disabled),
+[role="button"]:not([aria-disabled="true"]),
+summary {
+  cursor: pointer;
+}
+
+/* Dark elevation: cards sit on surface-2 with a 1px top highlight. The hero
+   keeps the only glow. */
+[data-theme="dark"] [class*="bg-[var(--surface-raised)]"] {
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) [class*="bg-[var(--surface-raised)]"] {
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  }
+}
+
+/* Type: balanced headings, pretty body; CJK stacks and strict breaking. */
+h1,
+h2 {
+  text-wrap: balance;
+}
+p,
+li,
+dd {
+  text-wrap: pretty;
+}
+:lang(zh-Hans) {
+  font-family:
+    "PingFang SC", "Noto Sans SC", "Microsoft YaHei", var(--font-sans),
+    sans-serif;
+}
+:lang(zh-Hant) {
+  font-family:
+    "PingFang TC", "Noto Sans TC", "Microsoft JhengHei", var(--font-sans),
+    sans-serif;
+}
+/* CJK headings: strict punctuation rules, but ideographs may still break
+   (never keep-all: it forbids breaks between Han characters, so a long
+   heading overflowed 320px, WCAG 1.4.10, found by the v13 sweep).
+   auto-phrase is a progressive enhancement over normal, as in
+   display-type.css. */
+:is(:lang(zh-Hans), :lang(zh-Hant)) :is(h1, h2, h3) {
+  word-break: normal;
+  line-break: strict;
+}
+@supports (word-break: auto-phrase) {
+  :is(:lang(zh-Hans), :lang(zh-Hant)) :is(h1, h2, h3) {
+    word-break: auto-phrase;
+  }
+}
+
+/* Back to top: a plain anchor at the end of long pages on phones.
+   F10: it renders right before the footer, so on phones it becomes the
+   footer's top row (same ink plane, aligned to the site grid, a 44px pill on
+   the trailing edge) instead of floating between the journey bar and the
+   footer. Its own nav landmark stays. */
+.back-to-top-nav {
+  display: none;
+}
+@media (max-width: 767px) {
+  .back-to-top-nav {
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
+    max-width: var(--site-max);
+    margin-inline: auto;
+    padding: var(--space-4) var(--site-gutter) 0;
+    /* The full-width plane (and its dark hairline edge) comes from a
+       border-image outset, which is ink overflow: the strip keeps the grid
+       without a wrapper element and never adds horizontal scroll. */
+    border-image: linear-gradient(
+        var(--footer-edge) 0 1px,
+        var(--surface-footer) 1px
+      )
+      fill 0 / 0 / 0 100vmax;
+    color: var(--brand-porcelain);
+  }
+  .back-to-top-nav + .site-footer {
+    border-top-color: transparent;
+  }
+  .back-to-top {
+    display: inline-flex;
+    min-height: 2.75rem;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    border: 1px solid
+      color-mix(in srgb, var(--brand-porcelain) 28%, transparent);
+    border-radius: var(--radius-pill);
+    padding-inline: var(--space-4);
+    color: color-mix(in srgb, var(--brand-porcelain) 86%, white);
+    font-size: var(--size-2);
+    font-weight: 600;
+    text-decoration: none;
+    transition: border-color var(--motion-fast) var(--motion-ease-standard);
+  }
+  .back-to-top:hover {
+    border-color: var(--brand-porcelain);
+  }
+  .back-to-top__icon {
+    width: 1rem;
+    height: 1rem;
+    transform: rotate(-90deg);
+  }
+}
+@media (max-width: 767px) and (forced-colors: active) {
+  .back-to-top-nav {
+    border-image-source: none;
+  }
+  .back-to-top {
+    border-color: LinkText;
+  }
+}
+
+/* Print: black on white, no atmosphere or sail, visible link targets and every
+   <details> unfolded (V7-C-03). */
+@media print {
+  .hero-plane,
+  .hero-plane * {
+    background: #fff !important;
+    color: #000 !important;
+    text-shadow: none !important;
+    box-shadow: none !important;
+  }
+  .hero-atmosphere,
+  svg:has(.sail-outline),
+  .sail-layer,
+  .back-to-top-nav {
+    display: none !important;
+  }
+  main a:not(.btn-secondary) {
+    text-decoration: underline !important;
+  }
+  details::details-content {
+    content-visibility: visible !important;
+    display: block !important;
+  }
+  details > :not(summary) {
+    display: block !important;
+  }
+  details > summary {
+    list-style: none;
   }
 }

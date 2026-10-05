@@ -14,6 +14,12 @@ export interface TrustLedgerEntry {
  * S+ Verifiable Trust Ledger (Task 4).
  * Every entry must be derivable from facts already encoded by this site.
  * A missing fact is `not-published` — never a guessed assurance status.
+ *
+ * Support is `not-published` while `SITE.contactEmail` is absent: the /support
+ * page says no general support mailbox is published, so the ledger must not
+ * call the lane "available". Its summary reuses that page's own wording. This
+ * is the build-default truth; a build that publishes a mailbox is described by
+ * the /support page itself, and the ledger only ever understates.
  */
 export const TRUST_LEDGER: TrustLedgerEntry[] = [
   {
@@ -32,10 +38,10 @@ export const TRUST_LEDGER: TrustLedgerEntry[] = [
       "zh-hant": "隱私",
     },
     summary: {
-      en: "What is collected on this corporate site, how it is handled, and how to ask questions about it.",
-      vi: "Cách dữ liệu trang doanh nghiệp này được xử lý và cách đặt câu hỏi về dữ liệu.",
-      zh: "关于本站点如何收集与处理数据，以及如何咨询相关信息。",
-      "zh-hant": "關於本站點如何收集與處理資料，以及如何諮詢相關資訊。",
+      en: "What this site collects and does not collect.",
+      vi: "Trang web này thu thập gì và không thu thập gì.",
+      zh: "本站收集什么、不收集什么。",
+      "zh-hant": "本站蒐集什麼、不蒐集什麼。",
     },
     evidenceKind: "route",
   },
@@ -50,17 +56,16 @@ export const TRUST_LEDGER: TrustLedgerEntry[] = [
     },
     label: { en: "Security", vi: "Bảo mật", zh: "安全", "zh-hant": "安全" },
     summary: {
-      en: "A private vulnerability reporting channel via GitHub Security Advisories — no public issues for security reports.",
-      vi: "Kênh báo cáo lỗ hổng riêng tư qua GitHub Security Advisories — không mở issue công khai cho báo cáo bảo mật.",
-      zh: "通过 GitHub Security Advisories 提供的私密漏洞报告渠道 — 安全报告不公开开 issue。",
-      "zh-hant":
-        "透過 GitHub Security Advisories 提供的私密漏洞報告管道 — 安全報告不公開開 issue。",
+      en: "How to report a vulnerability privately.",
+      vi: "Cách báo cáo lỗ hổng riêng tư.",
+      zh: "如何私下报告漏洞。",
+      "zh-hant": "如何私下通報漏洞。",
     },
     evidenceKind: "private-reporting",
   },
   {
     id: "support",
-    state: "available",
+    state: "not-published",
     href: {
       en: "/en/support/",
       vi: "/vi/support/",
@@ -69,10 +74,10 @@ export const TRUST_LEDGER: TrustLedgerEntry[] = [
     },
     label: { en: "Support", vi: "Hỗ trợ", zh: "支持", "zh-hant": "支援" },
     summary: {
-      en: "Working help and recourse paths — real routes, not slogans.",
-      vi: "Đường dẫn trợ giúp và khắc phục đang hoạt động — tuyến đường thật, không phải khẩu hiệu.",
-      zh: "提供有效的帮助与求助途径 — 真实渠道，而非口号。",
-      "zh-hant": "提供有效的協助與求助途徑 — 真實管道，而非口號。",
+      en: "No general support mailbox has been published yet. Security reporting is for vulnerabilities only.",
+      vi: "Hiện chưa có hộp thư hỗ trợ chung. Kênh báo cáo bảo mật chỉ dành cho lỗ hổng bảo mật.",
+      zh: "目前尚未公布通用支持邮箱。安全漏洞报告仅用于漏洞。",
+      "zh-hant": "目前尚未公布通用支援信箱。資安通報僅用於漏洞。",
     },
     evidenceKind: "route",
   },

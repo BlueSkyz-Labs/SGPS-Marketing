@@ -56,7 +56,7 @@ test("/security/ exposes private vulnerability reporting CTA", async ({
 }) => {
   await page.goto("/en/security/");
   const link = page.getByRole("link", {
-    name: /Open private vulnerability reporting/i,
+    name: /Report a vulnerability/i,
   });
   await expect(link).toBeVisible();
   await expect(link).toHaveAttribute(
@@ -65,9 +65,11 @@ test("/security/ exposes private vulnerability reporting CTA", async ({
   );
 });
 
-test("/en/about/ shows approved founder title", async ({ page }) => {
+test("/en/about/ omits the founder line until the Owner confirms it (E-26)", async ({
+  page,
+}) => {
   await page.goto("/en/about/");
-  await expect(page.getByText(/Tony Nguyen — Founder & CEO/i)).toBeVisible();
+  await expect(page.locator("main")).not.toContainText(/tony nguyen|founder/i);
 });
 
 for (const [from, to] of LEGACY_REDIRECTS) {
@@ -87,7 +89,9 @@ for (const [from, to] of LEGACY_REDIRECTS) {
 test("/privacy/ summarizes practical trust answers", async ({ page }) => {
   await page.goto("/en/privacy/");
   await expect(page.getByText(/What is collected/i)).toBeVisible();
-  await expect(page.getByText(/Deletion and product privacy/i)).toBeVisible();
+  await expect(
+    page.getByText(/no account on this site to export or delete/i),
+  ).toBeVisible();
 });
 
 test("homepage omits flagship proof without verified screenshot", async ({

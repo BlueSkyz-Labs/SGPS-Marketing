@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.0",
-  "updatedAt": "2026-09-29",
+  "updatedAt": "2026-10-05",
   "program": "SGPS Premium Experience & Design Excellence v2.0 (God-Tier × Tier S+)",
   "status": "sgps-v2-in-progress",
   "authorities": {
@@ -19,19 +19,20 @@
     "architectureModel": "architecture/sgps-model.json",
     "experienceConvergenceV5Plan": "docs/superpowers/plans/2026-09-27-experience-design-convergence-v5.md",
     "experienceDesignAuditBaseline": "docs/evidence/2026-09-27-experience-design-audit-baseline.md",
-    "experienceV5ExecutionPack": "docs/superpowers/plans/experience-v5/README.md"
+    "experienceV5ExecutionPack": "docs/superpowers/plans/experience-v5/README.md",
+    "experienceFullV6Plan": "docs/superpowers/plans/2026-10-01-experience-full-v6.md"
   },
   "waves": [
     {
       "id": "brand-kit-v4-standardization",
-      "name": "Brand Kit v4 Aesthetic Standardization & Living Maison — tokens (#301), header shell (#306), bento ProductCard (#307), and the scoped device-frame surface (#308) are merged; v5/W7 extends them without duplicating ownership",
-      "status": "IN_PROGRESS",
+      "name": "Brand Kit v4 Aesthetic Standardization & Living Maison — tokens (#301), header shell (#306), bento ProductCard (#307), and the scoped device-frame surface (#308) are merged; v5/W7 extends them without duplicating ownership (reconciled 2026-10-03: 0 unchecked tasks remain in the plan; delivered through the listed PRs and the wave programs)",
+      "status": "MERGED",
       "evidence": "docs/superpowers/plans/2026-09-27-brand-kit-v4-standardization.md"
     },
     {
       "id": "sgps-premium-v2",
-      "name": "SGPS Premium Experience & Design Excellence v2.0",
-      "status": "PLANNED",
+      "name": "SGPS Premium Experience & Design Excellence v2.0 — SUPERSEDED-BY-SUCCESSORS (reconciled 2026-10-03; router status uses the schema token `MERGED`; see tests/architecture/current-work-router.test.mjs): phases 1–3 and 5 delivered or superseded by the v5/v8/v6 programs (#302 → #439); the VietQR engine tasks are superseded by the #302 P0 VietQR removal and the Owner D-0 payment boundary and must not be implemented; Phase 4 Task 10 (44px lattice) delivered and re-verified in the W11 matrix; Task 9 'micro-tick' by-name absent — its intent is covered by the live design-system interaction layer (c3-craft + c3-microinteractions specs), not re-implemented",
+      "status": "MERGED",
       "evidence": "docs/superpowers/plans/2026-09-27-sgps-premium-experience-excellence-v2.md"
     },
     {
@@ -39,6 +40,12 @@
       "name": "Experience & Design Convergence v5 — Wave 0 source slice merged via #302; W7.1–W7.4 (#307/#327/#328/#326), W7.6 (#316), W7.8 (#329) and W7.12 (#325) are merged, together with the two-product export guard (#330), Wave 3 product profiles (#332), typed proof media (#336) and the a11y fixes #342 and #346, on main@396f6c2. W7.11 read-back is recorded separately. No source merge alone establishes served-SHA/anonymous/E4.",
       "status": "PLANNED",
       "evidence": "docs/superpowers/plans/2026-09-27-experience-design-convergence-v5.md"
+    },
+    {
+      "id": "experience-full-v6",
+      "name": "SGPS:Experience FULL v6 — Owner re-cut of 2026-09-30 — DELIVERED (reconciled 2026-10-03): slices S0–S8 verified on main (S0 #382 security contrast, S1 #384 hero/home clarity, S2 real Sổ Trọ captures in Hero.astro, S3 /verify in all four locales, S4 Plus Jakarta Sans + OFL licence, S5 branded gateway, S6 theme system, S7 Reveal components, S8 purposeful empty states); per-slice artifact evidence in docs/evidence/2026-10-03-experience-v6-slice-reconciliation.md; S9-equivalent audit = docs/evidence/2026-10-01-experience-v8-verification.md. Human E4, native language review and production anonymous verification stay NOT VERIFIED",
+      "status": "MERGED",
+      "evidence": "docs/evidence/2026-10-03-experience-v6-slice-reconciliation.md"
     },
     {
       "id": "v3-w1-w8",
@@ -321,6 +328,24 @@
       "name": "C4-E Decision Atelier Task 3 (#229) 32c6a7c",
       "status": "MERGED",
       "evidence": "docs/evidence/2026-09-24-current-work-router-readback.md"
+    },
+    {
+      "id": "experience-full-v10",
+      "name": "v10 Experience FULL round: Global-Elite (BPXS §6). Plan APPROVED under Owner plan-delegation 2026-10-03; Track A E0b #457, E1, E2 #453, E3 #459, E5 #454, E6 #455 merged; E7 audit recorded at main@5afe5f54 (docs/evidence/2026-10-04-v10-e7-convergence-audit.md); E4 M02 prefetch #474 merged at main@0254921; E7 delta read-back after E4 at main@c173f16 PASS (docs/evidence/2026-10-04-v10-e7-delta-post-e4.md) — all Track A slices merged; E7 verdict CONVERGED_WITH_RESIDUALS (production runtime after O-1, field CWV, Human E4, native zh review remain owner-gated); Track B Owner gates O-10.1/2/4/5/6 open, O-10.3 OFF by default, O-10.7 DEFER",
+      "status": "MERGED",
+      "evidence": "docs/evidence/2026-10-04-v10-e7-delta-post-e4.md"
+    },
+    {
+      "id": "v12-showcase-story-content-seo",
+      "name": "v12 Showcase story, customer-led content and SEO: calm-chrome #507 70062f0, S2 #508 94c31b2, S1 Feature Story #509 5c4e1d0, applicationCategory #510 6518532",
+      "status": "MERGED",
+      "evidence": "docs/evidence/2026-10-05-v12-convergence.md"
+    },
+    {
+      "id": "v13-experience-global-enterprise",
+      "name": "v13 Experience Global Enterprise: SGPS-DEC-2026-037 header controls (#512 d24a5af, #513 dc3e128), WCAG 2.2 AA lock-in #514 f3a2d35; W3/W4 NO-GO; W5 blocked on Sổ Tâm screens",
+      "status": "MERGED",
+      "evidence": "docs/evidence/2026-10-05-v13-convergence.md"
     }
   ],
   "openOwnerDecisions": [
@@ -331,7 +356,7 @@
     },
     {
       "id": "rum-provider",
-      "question": "No analytics/RUM provider is approved. Transmission stays OFF until an explicit privacy/provider decision exists.",
+      "question": "No analytics/RUM provider is approved. Transmission stays OFF until an explicit privacy/provider decision exists. Scope: SGPS-DEC-2026-032 (aggregate-only go-global observation, DEFER, merged sgps-core f309564; local mapping docs/sgps/adoption/SGPS_DEC_2026_032_PORTFOLIO_OBSERVATION.md).",
       "blocks": []
     },
     {
@@ -346,6 +371,7 @@
     }
   ],
   "residualExternal": [
+    "Go-live paid readiness (refreshed 2026-10-04, orchestrator, live read-back): the ONLY remaining go-live blocker is Owner gate O-1, lifting Cloudflare Access on blueskyzlabs.com (apex still 302 to Access). Closed today: RT-01 www→apex 301 Single Redirect live and verified (docs/evidence/2026-10-04-cloudflare-zone-readback.md; smoke assertion #478); Cloudflare JavaScript Detections off (enable_js=false; Bot Fight Mode was already off), so no edge-injected script remains on www/sotro/sotam; v9 T1 (commit 8f1ed5e) and T2 (#440) merged; §3C pre-cutover PASS. O-5: no blueskyzlabs.com subdomain returned 5xx on 2026-10-04 ~04:40 UTC (HSTS preload F1 still Owner). After O-1, the orchestrator runs v9 T3 (scripts/smoke-production.mjs + §3E checks) and records docs/evidence/2026-10-xx-golive-production-smoke.md. Owner decision open: Access Bypass for /.well-known/* on the apex if Access stays on (security.txt is not anonymously reachable while gated). Marketing is not a payment authority (Owner D-0).",
     "Human E4: OWNER SELF-TESTS (owner directive 2026-09-13, NON-BLOCKER). Agent-side max complete: protocol (docs/evidence/2026-09-12-v3-human-e4.md), session template + red-team template (docs/evidence/templates/). Automated substitutes already in CI (axe matrix, Lighthouse). Real-participant sessions are owner-executed.",
     "VI copy review: OWNER CROSS-CHECKS WITH ANOTHER AGENT (owner directive 2026-09-13, NON-BLOCKER). Agent fixed the 3 weakest spots + EN/VI parity guards; remainder awaits the cross-check audit.",
     "Trademark/legal clearance and specialty print (brand kit caveats).",
@@ -357,6 +383,7 @@
     "Lane-helguard guard: helper now emits 'LOCAL-AHEAD skip' and exits 0 on local-ahead branches; reset incident documented (operational, not committed)."
   ],
   "nextActionable": [
+    "2026-10-03 W11 phase-2 + v6 slice reconciliation (main@cb5f9fe2; four-engine push run 37040590095 = 7/7 success with firefox, webkit, chromium and mobile-chromium all executing): #432 (F-01 firefox touch-floor harness), #433 (F-02 Windows guard separator), #438 (R2 VI calibration) and #439 (W11 verification record + blur-branch spec portability) merged with landing verified; evidence = docs/evidence/2026-10-01-experience-v8-verification.md. v6 slices S0–S8 verified present on main by artifact and slice PRs (S0 #382, S1 #384); the S9-equivalent convergence audit is the W11 record. F-06 (pnpm test:e2e silent no-op on Windows) fixed in PR #441 — protected path, waits for the owner-approved label. The paid-go-live security hardening wave is active in its own lane (#436, #437; issues #362/#366/#370/#372/#376/#377); do not duplicate it. Remaining: owner gates (native review R4, Human E4, #281 mailbox, C3-F release source, Cloudflare Access launch approval, provider deployment proof, pre-go-live PR speed-lane removal #405).",
     "2026-09-29 source checkpoint (W7.1–W7.4 recorded at main@747a754; router refreshed at main@396f6c2): W7.1–W7.4 passed exact-head Quality Gates + Browser Assurance and merged (#307 head f515c88/run 36445569860 → 8d34a43; #327 head 6b54622/run 36450306540 → 5bba833; #328 head d08a8d6/run 36465628539 → 61c729e; #326 head 6ac1c29/run 36466326395 → 747a754). W7.11 baseline/target and ADOPTED ≠ CONVERGED record is docs/evidence/2026-09-29-w7-sgps-experience-readback.md (scoped to main@747a754); do not call the global experience converged. Merged since that checkpoint, in order: #329 W7.8 (577a099), #316 W7.6 (ddd6974), #325 W7.12 (64049d3), #330 export guard (7099714), #332 profiles (0db62e8), #336 typed proof media (2595d76), #343 audit round 2 and kit integrity lock (18f9ec9), #342 F-21/F-23 (1eb41ba), #345 protected-path merge policy (298c39c), #346 F-27/F-28/F-33 (396f6c2). The W7.13 built-output guard is recorded DONE in the W7 plan (#318). Remaining measured a11y and gate work (F-29 contrast, W1.3/W1.4 gates) is tracked in docs/evidence/2026-09-29-experience-v5-audit-r2.md; open PR heads are deliberately not listed here because they change faster than this router. Public registry remains Sổ Trọ + Sổ Tâm only; Cloudflare Access remains Owner-only. Human E4, native VI/ZH review, served-SHA/anonymous access, owner sign-in confirmation, #281 mailbox/provider, product screenshots/facts, legal/trademark and provider/privacy gates remain external or NOT VERIFIED. Do not restart #302 or add Marketing payment authority.",
     "C3-D Tasks 1–5 are merged and verified: Task 5 PR #276 exact-head Source Assurance run 36216346386 passed; main e3a3c6f exact post-merge Source Assurance run 36231546326 passed; Cloudflare deployment 7af4f796 has version 8d12ab41 at 100%. Anonymous public smoke remains blocked by owner-only Cloudflare Access.",
     "Blocked on owner fact: C3-F Task 2 and later (release source adapter, publication surface) — no authored public release source exists. C4-D Tasks 2 and 4 (Architecture Salon surface, Provenance Lens) are already landed (see the c4-d-salon wave), so the earlier suggestion here is superseded.",

@@ -1,28 +1,35 @@
 import { expect, test } from "@playwright/test";
 
-test("the primary action stays a text-named pill with a decorative registry icon", async ({
+test("the primary actions stay text-named pills with a decorative registry icon", async ({
   page,
 }) => {
   await page.goto("/en/");
 
-  const action = page
-    .getByRole("link", {
-      name: "Explore products",
-      exact: true,
-    })
-    .first();
-  await expect(action).toBeVisible();
-  await expect(action).toHaveText("Explore products");
-  await expect(action.locator(".btn__icon[aria-hidden='true']")).toHaveCount(1);
+  // Experience v6 S1: the hero primary is the lifecycle-mapped action and is a
+  // pill at every viewport; the header CTA pill is checked where it is shown.
+  const actions = [
+    page.locator("[data-hero-primary]"),
+    page.locator("header a", { hasText: "Explore products" }).first(),
+  ];
+  for (const action of actions) {
+    if (!(await action.isVisible())) continue;
+    await expect(action.locator(".btn__icon[aria-hidden='true']")).toHaveCount(
+      1,
+    );
+    const name = (await action.innerText()).trim();
+    expect(name.length).toBeGreaterThan(0);
 
-  const geometry = await action.evaluate((element) => {
-    const style = getComputedStyle(element);
-    return {
-      radius: Number.parseFloat(style.borderTopLeftRadius),
-      height: element.getBoundingClientRect().height,
-    };
-  });
-  expect(geometry.radius).toBeGreaterThanOrEqual(geometry.height / 2);
+    const geometry = await action.evaluate((element) => {
+      const style = getComputedStyle(element);
+      return {
+        radius: Number.parseFloat(style.borderTopLeftRadius),
+        height: element.getBoundingClientRect().height,
+      };
+    });
+    expect(geometry.radius).toBeGreaterThanOrEqual(geometry.height / 2);
+  }
+  await expect(actions[0]).toBeVisible();
+  await expect(actions[0]).toHaveText(/^See \S/);
 });
 
 test("the search trigger adds a decorative icon without replacing its label", async ({

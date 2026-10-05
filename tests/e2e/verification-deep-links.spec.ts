@@ -19,7 +19,9 @@ test.describe("verification deep links", () => {
   test("evidence anchors deep-link to real evidence steps", async ({
     page,
   }) => {
-    await page.goto("/en/security/#claim-security-reporting-is-private");
+    // Experience v6 S3: source-to-surface evidence steps live on /verify (the
+    // security page keeps the claim anchor and the evidence links).
+    await page.goto("/en/verify/#evidence-ev-security-route");
     const evidence = page.locator("#evidence-ev-security-route");
     await expect(evidence).toBeVisible();
     await expect(evidence).toHaveAttribute("data-trace-step", "evidence");
@@ -53,8 +55,23 @@ test.describe("verification deep links", () => {
     const anchor = page.locator("#claim-security-reporting-is-private");
     await expect(anchor).toBeVisible();
     await expect(page.locator("html")).toHaveAttribute("lang", "vi");
+    await page.goto("/vi/verify/#evidence-ev-security-route");
+    await expect(page.locator("html")).toHaveAttribute("lang", "vi");
     await expect(page.locator("#evidence-ev-security-route")).toBeVisible();
   });
+
+  for (const lang of ["en", "vi", "zh", "zh-hant"]) {
+    test(`/${lang}/verify/ evidence deep links resolve once and open their layer`, async ({
+      page,
+    }) => {
+      await page.goto(`/${lang}/verify/#evidence-ev-security-route`);
+      await expect(page.locator("#evidence-ev-security-route")).toHaveCount(1);
+      await expect(page.locator("#evidence-ev-security-route")).toBeVisible();
+      await expect(
+        page.locator('#evidence-ev-security-route[data-trace-step="evidence"]'),
+      ).toBeVisible();
+    });
+  }
 
   test("privacy canvas mirrors the contract", async ({ page }) => {
     await page.goto("/en/privacy/#claim-privacy-no-tracking-on-this-site");

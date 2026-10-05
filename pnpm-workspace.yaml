@@ -17,3 +17,11 @@ overrides:
   sharp: 0.35.4
   unifont>undici: 8.10.2
   miniflare>undici: 7.29.1
+  basic-ftp: 6.2.1
+  devalue: 5.9.4
+
+# Dependency-audit exceptions: each one is justified, guarded and time-boxed in
+# docs/security/audit-exceptions.json (tests/architecture/audit-exceptions.test.mjs).
+auditConfig:
+  ignoreGhsas:
+    - GHSA-ch52-4w7c-c8xp

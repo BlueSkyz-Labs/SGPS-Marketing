@@ -44,8 +44,15 @@ test("GitHub source assurance is pinned and least privilege", () => {
   );
   assert.deepEqual(
     runnerLabels,
-    // Quality Gates, Browser shard (matrix), Lighthouse CI, Browser Assurance.
-    ["ubuntu-24.04", "ubuntu-24.04", "ubuntu-24.04", "ubuntu-24.04"],
+    // Quality Gates, Browser shard (matrix), Lighthouse CI, Visual
+    // regression gate (v10 E3), Browser Assurance.
+    [
+      "ubuntu-24.04",
+      "ubuntu-24.04",
+      "ubuntu-24.04",
+      "ubuntu-24.04",
+      "ubuntu-24.04",
+    ],
     "source-assurance jobs must pin an explicit Ubuntu major/minor runner label instead of mutable ubuntu-latest",
   );
   assert.doesNotMatch(workflow, /runs-on:\s*ubuntu-latest/);
@@ -72,24 +79,26 @@ test("GitHub source assurance is pinned and least privilege", () => {
   ];
   assert.equal(
     exactHeadRefs.length,
-    3,
-    "every job that checks out code (Quality Gates, the browser shards, Lighthouse) must use the exact PR head or push SHA",
+    4,
+    "every job that checks out code (Quality Gates, the browser shards, Lighthouse, the visual gate) must use the exact PR head or push SHA",
   );
   assert.equal(
     [...workflow.matchAll(/persist-credentials:\s*false/g)].length,
-    3,
+    4,
     "source-assurance checkout must not persist GitHub credentials",
   );
 
-  // Browser assurance is sharded per engine. Each shard must build, install
-  // its own runtime and then run the repository Playwright matrix slice; the
-  // shard list itself is locked to E2E_PROJECTS by browser-assurance-matrix.
+  // Browser assurance is sharded per engine. Each shard must build, launch-test
+  // the digest-pinned Playwright runtime bundled in its container image and
+  // then run the repository Playwright matrix slice. The shard list, the image
+  // digest and the ban on runtime browser downloads are locked by
+  // browser-assurance-matrix.
   const browserJob = (workflow.split("\n  browser-shards:")[1] ?? "").split(
     "\n  lighthouse:",
   )[0];
   const buildIndex = browserJob.indexOf("run: pnpm build");
   const installIndex = browserJob.indexOf(
-    'pnpm exec playwright install --with-deps "$SHARD_BROWSER"',
+    "name: Verify digest-pinned Playwright runtime",
   );
   const playwrightIndex = browserJob.indexOf("run: pnpm test:e2e");
   assert.ok(
@@ -98,7 +107,7 @@ test("GitHub source assurance is pinned and least privilege", () => {
   );
   assert.ok(
     installIndex > buildIndex,
-    "each browser shard must install its Playwright runtime after the build",
+    "each browser shard must verify its pinned Playwright runtime after the build",
   );
   assert.ok(
     playwrightIndex > installIndex,

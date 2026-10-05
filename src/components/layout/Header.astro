@@ -4,10 +4,9 @@ import BlueSkyzIcon from "@/components/icon/BlueSkyzIcon.astro";
 import Container from "@/components/layout/Container.astro";
 import LanguageSwitcher from "@/components/layout/LanguageSwitcher.astro";
 import ThemeToggle from "@/components/layout/ThemeToggle.astro";
+import "@/components/layout/header-control.css";
 import ButtonLink from "@/components/ui/ButtonLink.astro";
-import { SITE, SHARED_LABELS, labelFor, getNav } from "@/data/site";
-import { emptyRegistryPrimaryCta } from "@/lib/act";
-import { getPublicProducts } from "@/lib/products";
+import { SHARED_LABELS, labelFor, getNav } from "@/data/site";
 import { getLanguageFromPath } from "@/lib/i18n";
 import { DEFAULT_SCENE, lockupSurface, type Scene } from "@/lib/scene";
 
@@ -25,18 +24,12 @@ const NAV = getNav(lang);
 const isActive = (href: string): boolean =>
   currentPath.replace(/\/+$/, "") === href.replace(/\/+$/, "");
 
-const hasPublicProducts = (await getPublicProducts()).length > 0;
-const primaryCta = hasPublicProducts
-  ? SITE.contactEmail
-    ? {
-        href: `/${lang}/contact/`,
-        label: labelFor(SHARED_LABELS.contactUs, lang),
-      }
-    : {
-        href: `/${lang}/products/`,
-        label: labelFor(SHARED_LABELS.exploreProducts, lang),
-      }
-  : emptyRegistryPrimaryCta(SITE.contactEmail, lang);
+// Owner decision 2026-10-01 (v7 A-12): the one filled CTA leads to Products;
+// About is the plain link. Desktop header budget stays six controls (lockup,
+// About, search, language, theme, CTA). Every other route stays in the
+// compact menu and the footer.
+const primaryCta = NAV[0]!;
+const primaryLink = NAV[1]!;
 ---
 
 <header
@@ -50,30 +43,30 @@ const primaryCta = hasPublicProducts
       aria-label={labelFor(SHARED_LABELS.primaryNav, lang)}
       class="hidden flex-wrap items-center gap-2 md:flex"
     >
+      <a
+        href={primaryLink.href}
+        aria-current={isActive(primaryLink.href) ? "page" : undefined}
+        class="inline-flex min-h-11 items-center px-3 text-sm font-medium text-[var(--text-secondary)] no-underline hover:text-[var(--text-primary)]"
+      >
+        {primaryLink.label}
+      </a>
       <button
         type="button"
         data-command-trigger
         aria-keyshortcuts="Control+K Meta+K"
-        class="inline-flex min-h-11 items-center gap-2 rounded-lg border border-[var(--border-subtle)] px-3 text-sm font-medium text-[var(--text-secondary)] transition-colors hover:text-[var(--text-primary)]"
+        title={`${labelFor(SHARED_LABELS.search, lang)} (Ctrl / ⌘K)`}
+        class="hc-trigger hc-trigger--icon"
       >
-        <BlueSkyzIcon name="search" class="h-4 w-4 shrink-0" />
-        {labelFor(SHARED_LABELS.search, lang)}
-        <kbd class="rounded border border-[var(--border-subtle)] bg-[var(--surface-subtle)] px-1.5 py-0.5 text-[0.65rem] font-medium">
-          Ctrl / ⌘K
-        </kbd>
+        <BlueSkyzIcon name="search" class="hc-glyph" />
+        <span class="sr-only">{labelFor(SHARED_LABELS.search, lang)}</span>
       </button>
-      {NAV.map((item) => (
-        <a
-          href={item.href}
-          aria-current={isActive(item.href) ? "page" : undefined}
-          class="inline-flex min-h-11 items-center px-3 text-sm font-medium text-[var(--text-secondary)] no-underline hover:text-[var(--text-primary)]"
-        >
-          {item.label}
-        </a>
-      ))}
       <LanguageSwitcher placement="header" />
-      <ThemeToggle lang={lang} />
-      <ButtonLink href={primaryCta.href} variant="primary">
+      <ThemeToggle lang={lang} placement="header" />
+      <ButtonLink
+        href={primaryCta.href}
+        variant="primary"
+        aria-current={isActive(primaryCta.href) ? "page" : undefined}
+      >
         {primaryCta.label}
       </ButtonLink>
     </nav>
@@ -82,7 +75,7 @@ const primaryCta = hasPublicProducts
       <summary class="inline-flex min-h-11 min-w-11 list-none items-center justify-center rounded-lg border border-[var(--border-subtle)] px-3 text-sm font-medium">
         {labelFor(SHARED_LABELS.menu, lang)}
       </summary>
-      <div class="absolute right-0 z-20 mt-2 w-56 rounded-lg border border-[var(--border-subtle)] bg-[var(--surface-primary)] p-3 shadow-sm">
+      <div class="absolute right-0 z-20 mt-2 w-64 rounded-lg border border-[var(--border-subtle)] bg-[var(--surface-primary)] p-3 shadow-sm">
         <nav
           aria-label={labelFor(SHARED_LABELS.mobileNav, lang)}
           class="flex flex-col gap-2"
@@ -105,11 +98,9 @@ const primaryCta = hasPublicProducts
               {item.label}
             </a>
           ))}
+          <hr class="my-1 border-[var(--border-subtle)]" />
           <LanguageSwitcher placement="menu" />
-          <ThemeToggle lang={lang} />
-          <ButtonLink href={primaryCta.href} class="w-full">
-            {primaryCta.label}
-          </ButtonLink>
+          <ThemeToggle lang={lang} placement="menu" />
         </nav>
       </div>
     </details>

@@ -1,6 +1,8 @@
 ---
 import { getEvidencePassport, getClaimAnchor } from "@/lib/claims";
+import { formatDisplayDate } from "@/lib/display-date";
 import TruthState from "./TruthState.astro";
+import { SOURCE_LINKED_LEGEND } from "@/data/integrity";
 import BoundaryCard from "./BoundaryCard.astro";
 import type { Language } from "@/data/site";
 
@@ -8,32 +10,37 @@ interface Props {
   id: string;
   lang: Language;
   products: { slug: string; name: string }[];
+  /** The evidence page makes the claim its document title (the one H1). */
+  claimAs?: "h1" | "h2";
 }
 
-const { id, lang, products } = Astro.props;
+const { id, lang, products, claimAs = "h2" } = Astro.props;
+const ClaimHeading = claimAs;
+// Never skip a level: under an H1 claim the sources heading is an H2.
+const SourcesHeading = claimAs === "h1" ? "h2" : "h3";
 const passport = getEvidencePassport(id, products);
 
 const LABELS = {
   en: {
-    kind: "Evidence passport",
+    kind: "Evidence for this claim",
     sources: "Public sources",
     reviewed: "Reviewed",
     context: "View in context",
   },
   vi: {
-    kind: "Hộ chiếu bằng chứng",
+    kind: "Bằng chứng cho tuyên bố này",
     sources: "Nguồn công khai",
     reviewed: "Đã xem xét",
     context: "Xem trong ngữ cảnh",
   },
   zh: {
-    kind: "证据档案",
+    kind: "这条说法的证据",
     sources: "公开来源",
     reviewed: "已审阅",
     context: "在原文中查看",
   },
   "zh-hant": {
-    kind: "證據檔案",
+    kind: "這項說法的證據",
     sources: "公開來源",
     reviewed: "已審閱",
     context: "在原文中檢視",
@@ -45,20 +52,30 @@ const labels = LABELS[lang];
 
 {passport ? (
   <article class="evidence-passport" data-evidence-passport={passport.id}>
-    <h2 id={getClaimAnchor(passport.id)} class="evidence-passport__claim">
+    <ClaimHeading
+      id={getClaimAnchor(passport.id)}
+      class="evidence-passport__claim"
+    >
       {passport.claim[lang]}
-    </h2>
+    </ClaimHeading>
     <p class="evidence-passport__meta">
       <TruthState state={passport.state} lang={lang} />
       {passport.reviewedOn ? (
         <span class="evidence-passport__review" data-passport-review>
           {labels.reviewed}:{" "}
-          <time datetime={passport.reviewedOn}>{passport.reviewedOn}</time>
+          <time datetime={passport.reviewedOn}>
+            {formatDisplayDate(passport.reviewedOn, lang)}
+          </time>
         </span>
       ) : null}
     </p>
+    {passport.state === "source-linked" ? (
+      <p class="integrity-lens__legend">{SOURCE_LINKED_LEGEND[lang]}</p>
+    ) : null}
     <div class="evidence-passport__sources">
-      <h3 class="evidence-passport__sources-title">{labels.sources}</h3>
+      <SourcesHeading class="evidence-passport__sources-title">
+        {labels.sources}
+      </SourcesHeading>
       <ul>
         {passport.evidence.map((ref) => (
           <li id={`evidence-${ref.id}`}>

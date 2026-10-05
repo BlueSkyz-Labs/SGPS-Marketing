@@ -8,9 +8,7 @@ test("horizon signature renders on /en/ without hiding H1 or CTA", async ({
   await expect(horizon).toBeAttached();
   await expect(horizon).toHaveAttribute("aria-hidden", "true");
   await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
-  await expect(
-    page.getByRole("link", { name: /About BlueSkyz/i }).first(),
-  ).toBeVisible();
+  await expect(page.locator("[data-hero-primary]")).toBeVisible();
 });
 
 test("horizon signature renders on /vi/ with equivalent composition", async ({
@@ -21,9 +19,7 @@ test("horizon signature renders on /vi/ with equivalent composition", async ({
   await expect(horizon).toBeAttached();
   await expect(horizon).toHaveAttribute("aria-hidden", "true");
   await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
-  await expect(
-    page.getByRole("link", { name: /Về BlueSkyz|Bảo mật/i }).first(),
-  ).toBeVisible();
+  await expect(page.locator("[data-hero-primary]")).toBeVisible();
 });
 
 test("320px hero keeps no horizontal overflow with the horizon", async ({

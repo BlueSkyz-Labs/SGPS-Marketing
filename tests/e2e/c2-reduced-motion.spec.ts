@@ -18,12 +18,18 @@ for (const reducedMotion of ["reduce", "no-preference"] as const) {
       await page.goto("/en/");
       const h1 = page.locator("#hero-title");
       await expect(h1).toBeVisible();
-      await expect(h1).toContainText(/Intelligence|Trí tuệ/i);
-      await expect(h1).toContainText(/Impact|Tác động/i);
+      // Experience v6 S1: registry-backed promise, one primary + one quiet link.
+      await expect(h1).toContainText(
+        /We build intelligent products|Intelligence/i,
+      );
 
-      const actions = page.locator(".hero-actions a");
-      await expect(actions).toHaveCount(2);
-      for (let index = 0; index < 2; index += 1) {
+      // v8 W2: the one primary action sits in the flagship caption; the orphan
+      // "Explore products" link is gone, so the hero has exactly one action.
+      const actions = page.locator(
+        "[data-hero-flagship] [data-hero-primary], .hero-actions a",
+      );
+      await expect(actions).toHaveCount(1);
+      for (let index = 0; index < 1; index += 1) {
         await expect(actions.nth(index)).toBeVisible();
         const href = await actions.nth(index).getAttribute("href");
         expect(href?.startsWith("/")).toBe(true);
@@ -66,6 +72,10 @@ test("the hero carries the same content with motion enabled", async ({
 }) => {
   await page.emulateMedia({ reducedMotion: "no-preference" });
   await page.goto("/en/");
-  await expect(page.locator("#hero-title")).toContainText(/Impact|Tác động/i);
-  await expect(page.locator(".hero-actions a")).toHaveCount(2);
+  await expect(page.locator("#hero-title")).toContainText(
+    /We build intelligent products|Intelligence/i,
+  );
+  await expect(
+    page.locator("[data-hero-flagship] [data-hero-primary], .hero-actions a"),
+  ).toHaveCount(1);
 });

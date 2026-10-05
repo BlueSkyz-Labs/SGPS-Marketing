@@ -69,35 +69,6 @@ export const EXPERIENCE_STAGES: ExperienceStage[] = [
 
 export type DimensionKey = "product" | "people" | "evidence" | "impact";
 
-export const PRINCIPLE_DIMENSION_KEYS: DimensionKey[] = [
-  "product",
-  "people",
-  "evidence",
-  "impact",
-];
-
-export const PRINCIPLE_DIMENSION_LABELS: Record<DimensionKey, LocalizedText> = {
-  product: {
-    en: "In the product",
-    vi: "Trong sản phẩm",
-    zh: "产品之中",
-    "zh-hant": "產品之中",
-  },
-  people: {
-    en: "For people",
-    vi: "Cho con người",
-    zh: "以人为本",
-    "zh-hant": "以人為本",
-  },
-  evidence: { en: "Evidence", vi: "Bằng chứng", zh: "证据", "zh-hant": "證據" },
-  impact: {
-    en: "Real-world impact",
-    vi: "Tác động thực tế",
-    zh: "实际影响",
-    "zh-hant": "實際影響",
-  },
-};
-
 export interface PrincipleMatrixEntry {
   id: string;
   name: LocalizedText;
@@ -151,10 +122,10 @@ const PRINCIPLE_DIMENSIONS: Record<
       "zh-hant": "讓使用和維護我們所構建產品的人少一些猜測。",
     },
     evidence: {
-      en: "Evidence lives in tests, reviews, and versioned decisions — not slogans.",
-      vi: "Bằng chứng nằm ở kiểm thử, soát xét và các quyết định được phiên bản hóa — không phải khẩu hiệu.",
-      zh: "证据存在于测试、审阅与版本化的决策之中 — 而非口号。",
-      "zh-hant": "證據存在於測試、審閱與版本化的決策之中 — 而非口號。",
+      en: "Evidence lives in tests, reviews, and versioned decisions.",
+      vi: "Bằng chứng nằm ở kiểm thử, soát xét và các quyết định có phiên bản.",
+      zh: "证据存在于测试、审阅与版本化的决策之中。",
+      "zh-hant": "證據存在於測試、審閱與版本化的決策之中。",
     },
     impact: {
       en: "Compounds over time: small correct choices are cheaper to live with.",
@@ -191,16 +162,16 @@ const PRINCIPLE_DIMENSIONS: Record<
   },
   Trust: {
     product: {
-      en: "Security and privacy treated as first-class routes, not afterthoughts.",
-      vi: "Bảo mật và quyền riêng tư là ưu tiên hàng đầu — không phải phần thêm vào.",
-      zh: "将安全与隐私视为核心路径，而非事后补充。",
-      "zh-hant": "將安全與隱私視為核心路徑，而非事後補充。",
+      en: "The privacy and security pages state what is and is not provided.",
+      vi: "Trang quyền riêng tư và trang bảo mật nêu rõ những gì có và không có.",
+      zh: "隐私与安全页面写明提供什么、不提供什么。",
+      "zh-hant": "隱私與安全頁面寫明提供什麼、不提供什麼。",
     },
     people: {
-      en: "Working recourse paths when something goes wrong.",
-      vi: "Các đường dẫn khắc phục thực sự khi có vấn đề.",
-      zh: "出现问题时具备可用的补救路径。",
-      "zh-hant": "出現問題時具備可用的補救路徑。",
+      en: "No general support mailbox has been published yet. Security reporting is for vulnerabilities only.",
+      vi: "Hiện chưa có hộp thư hỗ trợ chung. Kênh báo cáo bảo mật chỉ dành cho lỗ hổng bảo mật.",
+      zh: "目前尚未公布通用支持邮箱。安全漏洞报告仅用于漏洞。",
+      "zh-hant": "目前尚未公布通用支援信箱。資安通報僅用於漏洞。",
     },
     evidence: {
       en: "Reportable channels and public routes you can check today.",
@@ -319,7 +290,7 @@ export const MISSIONS: Mission[] = [
         path: "/architecture/",
         label: {
           en: "Architecture",
-          vi: "Kiến trúc",
+          vi: "Cách trang web này được xây dựng",
           zh: "架构",
           "zh-hant": "架構",
         },
@@ -356,10 +327,10 @@ export const MISSIONS: Mission[] = [
       {
         path: "/decision-room/",
         label: {
-          en: "Decision Room",
-          vi: "Phòng Quyết định",
-          zh: "决策室",
-          "zh-hant": "決策室",
+          en: "Compare claims",
+          vi: "So sánh tuyên bố",
+          zh: "比较声明",
+          "zh-hant": "比較聲明",
         },
         evidenceFirst: true,
       },
@@ -397,7 +368,7 @@ export const MISSIONS: Mission[] = [
     id: "understand-architecture",
     label: {
       en: "Understand architecture",
-      vi: "Tìm hiểu kiến trúc",
+      vi: "Tìm hiểu cách trang web này được xây dựng",
       zh: "了解架构",
       "zh-hant": "了解架構",
     },
@@ -406,7 +377,7 @@ export const MISSIONS: Mission[] = [
         path: "/architecture/",
         label: {
           en: "Architecture",
-          vi: "Kiến trúc",
+          vi: "Cách trang web này được xây dựng",
           zh: "架构",
           "zh-hant": "架構",
         },
@@ -462,10 +433,10 @@ export const MISSIONS: Mission[] = [
       {
         path: "/decision-room/",
         label: {
-          en: "Decision Room",
-          vi: "Phòng Quyết định",
-          zh: "决策室",
-          "zh-hant": "決策室",
+          en: "Compare claims",
+          vi: "So sánh tuyên bố",
+          zh: "比较声明",
+          "zh-hant": "比較聲明",
         },
         evidenceFirst: true,
       },

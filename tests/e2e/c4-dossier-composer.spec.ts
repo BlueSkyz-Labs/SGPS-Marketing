@@ -56,6 +56,78 @@ test.describe("C4-C dossier composer", () => {
     await expect(page.locator("[data-dossier-counter]")).toHaveText("1");
   });
 
+  test("oversized URL state is rejected as one bounded localized indicator", async ({
+    page,
+  }) => {
+    const oversized = "x".repeat(2049);
+    await page.goto(`/en/dossier/?items=${oversized}`);
+
+    await expect(page.locator("[data-dossier-preview]")).toHaveAttribute(
+      "data-empty",
+      "",
+    );
+    await expect(page.locator("[data-dossier-counter]")).toHaveText("0");
+
+    const unknown = page.locator("[data-dossier-unknown]");
+    await expect(unknown).toBeVisible();
+    await expect(unknown.locator("li")).toHaveCount(1);
+    await expect(unknown.locator("li")).toHaveAttribute(
+      "data-dossier-request-rejected",
+      "items-too-long",
+    );
+    await expect(unknown).toContainText(
+      "The requested selection was too large and was ignored.",
+    );
+  });
+
+  test("too many tokens fail closed instead of partially accepting valid ids", async ({
+    page,
+  }) => {
+    const tokens = Array.from({ length: 65 }, (_, index) =>
+      index === 0 ? CLAIM : `unknown-${index}`,
+    );
+    await page.goto(`/en/dossier/?items=${tokens.join(",")}`);
+
+    await expect(
+      page.locator(
+        `[data-dossier-preview] [data-dossier-entry-item="${CLAIM}"]`,
+      ),
+    ).toHaveCount(0);
+    await expect(page.locator("[data-dossier-counter]")).toHaveText("0");
+    const unknown = page.locator("[data-dossier-unknown]");
+    await expect(unknown.locator("li")).toHaveCount(1);
+    await expect(unknown.locator("li")).toHaveAttribute(
+      "data-dossier-request-rejected",
+      "too-many-items",
+    );
+  });
+
+  test("duplicate ids are deduplicated before selection/render work", async ({
+    page,
+  }) => {
+    await page.goto(`/en/dossier/?items=${CLAIM},${CLAIM},${CLAIM}`);
+    await expect(
+      page.locator(
+        `[data-dossier-preview] [data-dossier-entry-item="${CLAIM}"]`,
+      ),
+    ).toHaveCount(1);
+    await expect(page.locator("[data-dossier-counter]")).toHaveText("1");
+    await expect(page.locator("[data-dossier-unknown]")).toBeHidden();
+  });
+
+  test("selector-like unknown input is rendered only as text", async ({
+    page,
+  }) => {
+    const payload = String.raw`";][data-x=evil]\\foo`;
+    await page.goto(`/en/dossier/?items=${encodeURIComponent(payload)}`);
+
+    const unknown = page.locator("[data-dossier-unknown]");
+    await expect(unknown).toBeVisible();
+    await expect(unknown.locator("li")).toHaveCount(1);
+    await expect(unknown.locator("li")).toHaveText(payload);
+    await expect(page.locator("[data-dossier-counter]")).toHaveText("0");
+  });
+
   test("a reload without parameters returns the safe default", async ({
     page,
   }) => {
@@ -104,25 +176,15 @@ test.describe("C4-C dossier composer", () => {
     });
   }
 
-  test("the dossier footer exposes canonical ordinary source links at 390px", async ({
+  test("every published item is listed once with an ordinary source link at 390px", async ({
     page,
   }) => {
     await page.setViewportSize({ width: 390, height: 844 });
     await page.goto("/en/dossier/");
-    const sources = page.locator("[data-dossier-sources]");
-    await expect(sources).toBeVisible();
-    await expect(sources).toContainText("Security reporting route");
-    const links = sources.locator("[data-dossier-source-link]");
-    await expect(links).toHaveCount(4);
-    await expect(sources.locator("[data-dossier-freshness]")).toHaveCount(1);
-    await expect(sources.locator("[data-dossier-freshness]")).toHaveAttribute(
-      "data-dossier-freshness",
-      "2026-09-12",
-    );
-    await expect(sources.locator("[data-dossier-source-unknown]")).toHaveCount(
-      1,
-    );
-    for (let index = 0; index < 4; index += 1) {
+    await expect(page.locator("[data-dossier-sources]")).toHaveCount(0);
+    const links = page.locator(".c4-dossier__source");
+    expect(await links.count()).toBeGreaterThanOrEqual(4);
+    for (let index = 0; index < (await links.count()); index += 1) {
       const link = links.nth(index);
       const href = await link.getAttribute("href");
       expect(
@@ -130,18 +192,21 @@ test.describe("C4-C dossier composer", () => {
         "every source is an ordinary absolute or root-relative link",
       ).toMatch(/^(https:\/\/|\/(?!\/))/);
       expect(await link.evaluate((element) => element.tagName)).toBe("A");
+      const contained = await link.evaluate((element) => {
+        const box = element.getBoundingClientRect();
+        return box.left >= 0 && box.right <= window.innerWidth + 1;
+      });
+      expect(contained, "the source link stays inside 390px").toBe(true);
     }
-    const contained = await sources.evaluate((element) => {
-      const box = element.getBoundingClientRect();
-      return box.left >= 0 && box.right <= window.innerWidth + 1;
-    });
-    expect(contained, "the sources footer stays inside 390px").toBe(true);
   });
 
-  test("the composer states that it is presentation only", async ({ page }) => {
+  test("the page states that nothing leaves it and nothing is stored", async ({
+    page,
+  }) => {
     await page.goto("/en/dossier/");
-    const note = await page.locator(".c4-dossier__note").innerText();
-    expect(note).toContain("exactly as published");
+    await expect(page.locator("main")).toContainText(
+      "Nothing leaves this page and nothing is stored.",
+    );
   });
 
   test("the composer stays inside 320px and 390px", async ({ page }) => {

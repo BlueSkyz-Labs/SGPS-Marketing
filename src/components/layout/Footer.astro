@@ -2,22 +2,16 @@
 import BrandLockup from "@/components/brand/BrandLockup.astro";
 import Container from "@/components/layout/Container.astro";
 import LanguageSwitcher from "@/components/layout/LanguageSwitcher.astro";
-import { SITE, SHARED_LABELS, labelFor, getFooterLinks } from "@/data/site";
+import { SITE, SHARED_LABELS, labelFor, getFooterGroups } from "@/data/site";
 import { getLanguageFromPath } from "@/lib/i18n";
 
 const currentPath = Astro.url.pathname;
 const lang = getLanguageFromPath(currentPath);
 const isVi = lang === "vi";
-const FOOTER_LINKS = getFooterLinks(lang);
+const FOOTER_GROUPS = getFooterGroups(lang);
 
 const taglineLead = isVi ? "Trí tuệ. Nâng tầm." : SITE.taglineLead;
 const taglineAccent = isVi ? "Tác động." : SITE.taglineAccent;
-const proposition = isVi
-  ? "Chúng tôi xây dựng những sản phẩm thông minh để trao quyền cho con người và nâng tầm cách công việc được thực hiện."
-  : SITE.proposition;
-const motto = isVi
-  ? "Xây dựng với sự rõ ràng. Mở rộng với sự tự tin."
-  : SITE.motto;
 
 // C4-A S6 — colophon: identity + language only. Every public trust/security
 // route already exists exactly once in the footer navigation; repeating them
@@ -32,44 +26,55 @@ const languageName = isVi
 ---
 
 <!-- Always ink: its text is porcelain in both themes. --surface-inverse flips
-     to porcelain in dark mode, which made every footer label invisible. -->
-<footer class="mt-auto bg-[var(--brand-ink)] text-[var(--brand-porcelain)]">
-  <Container class="flex flex-col gap-10 py-14">
+     to porcelain in dark mode, which made every footer label invisible.
+     `site-footer` (global.css) deepens the ink and adds a hairline edge in
+     dark, where the page itself is ink (F2). -->
+<footer class="site-footer mt-auto bg-[var(--brand-ink)] text-[var(--brand-porcelain)]">
+  <Container class="flex flex-col gap-8 py-10 sm:gap-10 sm:py-14">
     <div class="flex flex-wrap items-center justify-between gap-6">
       <BrandLockup size="footer" />
       <LanguageSwitcher variant="dark" placement="footer" />
     </div>
-    <div class="grid gap-8 sm:grid-cols-[minmax(0,1fr)_minmax(0,1.25fr)]">
-      <nav aria-label={labelFor(SHARED_LABELS.footerNav, lang)}>
-        <ul class="flex flex-wrap gap-x-7 gap-y-1 sm:grid sm:grid-cols-2 sm:gap-x-6 sm:gap-y-1">
-          {FOOTER_LINKS.map((item) => (
-            <li>
-              <a
-                href={item.href}
-                class="footer-nav-link inline-flex min-h-11 items-center text-[0.9375rem] text-[color-mix(in_srgb,var(--brand-porcelain)_86%,white)] no-underline transition-colors hover:text-white"
-              >
-                {item.label}
-              </a>
-            </li>
-          ))}
-        </ul>
+    <div class="footer-body grid gap-8 sm:gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.6fr)] lg:gap-16">
+      <p
+        lang={isVi ? undefined : "en"}
+        class="footer-tagline max-w-sm font-semibold text-[var(--brand-porcelain)]"
+      >
+        {taglineLead}{" "}
+        <span class="text-[color-mix(in_srgb,var(--brand-cobalt)_70%,white)]">
+          {taglineAccent}
+        </span>
+      </p>
+      <nav
+        aria-label={labelFor(SHARED_LABELS.footerNav, lang)}
+        class="grid grid-cols-2 gap-x-6 gap-y-8 sm:grid-cols-3 sm:gap-x-8"
+      >
+        {FOOTER_GROUPS.map((group, index) => (
+          <div>
+            <p
+              id={`footer-group-${index}`}
+              class="text-xs font-semibold tracking-[var(--tracking-eyebrow)] text-[color-mix(in_srgb,var(--brand-porcelain)_72%,white)] uppercase [&:lang(vi)]:normal-case"
+            >
+              {group.label}
+            </p>
+            <ul
+              aria-labelledby={`footer-group-${index}`}
+              class="mt-3 flex flex-col gap-1"
+            >
+              {group.links.map((item) => (
+                <li>
+                  <a
+                    href={item.href}
+                    class="footer-nav-link inline-flex min-h-11 items-center leading-snug text-[color-mix(in_srgb,var(--brand-porcelain)_86%,white)] no-underline transition-colors hover:text-white"
+                  >
+                    {item.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
       </nav>
-      <div class="flex flex-col gap-3.5 sm:border-l sm:border-white/10 sm:pl-8">
-        <p class="max-w-2xl text-sm text-[color-mix(in_srgb,var(--brand-porcelain)_72%,white)]">
-          <span class="font-medium text-[var(--brand-porcelain)]">
-            {taglineLead}{" "}
-            <span class="text-[color-mix(in_srgb,var(--brand-cobalt)_70%,white)]">
-              {taglineAccent}
-            </span>
-          </span>
-        </p>
-        <p class="max-w-2xl text-sm text-[color-mix(in_srgb,var(--brand-porcelain)_72%,white)]">
-          {proposition}
-        </p>
-        <p class="text-xs tracking-[0.12em] text-[color-mix(in_srgb,var(--brand-porcelain)_58%,white)] uppercase">
-          {motto}
-        </p>
-      </div>
     </div>
     <div class="c4-colophon" data-c4-colophon>
       <span class="c4-colophon__identity">{SITE.name}</span>

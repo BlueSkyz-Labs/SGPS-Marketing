@@ -51,6 +51,10 @@ test("prefix rules match whole path segments, not look-alike names", () => {
   assert.equal(isProtected(".github/CODEOWNERS"), true);
   assert.equal(isProtected("docs/decisions/0013-new.md"), true);
   assert.equal(
+    isProtected("docs/evidence/product-source-qualification.json"),
+    true,
+  );
+  assert.equal(
     isProtected("brand/blueskyz-production-v4/07_DESIGN_TOKENS/tokens.css"),
     true,
   );
@@ -61,6 +65,60 @@ test("prefix rules match whole path segments, not look-alike names", () => {
     isProtected("public/brand/blueskyz/v4/tokens/tokens.css"),
     false,
   );
+});
+
+test("guard-tier, visual baselines and security docs are held for the Owner", () => {
+  assert.equal(isProtected("tests/architecture/merge-policy.test.mjs"), true);
+  assert.equal(isProtected("tests/architecture/new-guard.test.mjs"), true);
+  assert.equal(
+    isProtected(
+      "tests/visual/visual-regression.spec.ts-snapshots/en-1440px-light-visual-linux.png",
+    ),
+    true,
+  );
+  assert.equal(isProtected("docs/security/audit-exceptions.json"), true);
+  // The dev-loop e2e tree stays automatic.
+  assert.equal(isProtected("tests/e2e/v10-e4-prefetch.spec.ts"), false);
+  // Look-alike names outside the trees stay free.
+  assert.equal(isProtected("tests/architecture-notes.md"), false);
+});
+
+test("agent-instruction surfaces are held for the Owner (S09-class)", () => {
+  assert.equal(isProtected("CLAUDE.md"), true);
+  assert.equal(isProtected(".claude/AGENT_ROUTING.md"), true);
+  assert.equal(isProtected(".claude/agents/implementer.md"), true);
+  assert.equal(isProtected(".cursorrules"), true);
+  assert.equal(isProtected("GEMINI.md"), true);
+  assert.equal(isProtected("AGENTS.md"), true);
+  // Look-alikes outside the instruction surface stay free.
+  assert.equal(isProtected("docs/claude-notes.md"), false);
+  assert.equal(isProtected("claude.md.bak"), false);
+});
+
+test("negative proof: planting an instruction in CLAUDE.md without the label is blocked", () => {
+  const result = evaluateMergePolicy({
+    changedFiles: ["CLAUDE.md", ".claude/agents/implementer.md"],
+    labels: [],
+  });
+  assert.equal(result.ok, false);
+  assert.deepEqual(result.protectedFiles, [
+    ".claude/agents/implementer.md",
+    "CLAUDE.md",
+  ]);
+});
+
+test("negative proof: weakening a guard test without the label is blocked", () => {
+  const result = evaluateMergePolicy({
+    changedFiles: [
+      "src/pages/en/index.astro",
+      "tests/architecture/merge-policy.test.mjs",
+    ],
+    labels: ["documentation"],
+  });
+  assert.equal(result.ok, false);
+  assert.deepEqual(result.protectedFiles, [
+    "tests/architecture/merge-policy.test.mjs",
+  ]);
 });
 
 test("Quality Gates runs the policy from the base commit and reruns on label changes", () => {
@@ -93,7 +151,9 @@ test("Quality Gates runs the policy from the base commit and reruns on label cha
   const policyIndex = quality.indexOf(
     "Merge policy (protected paths need the owner-approved label)",
   );
-  const packageManagerIndex = quality.indexOf("Activate project package manager");
+  const packageManagerIndex = quality.indexOf(
+    "Activate project package manager",
+  );
   const installIndex = quality.indexOf("Install frozen dependency graph");
 
   assert.ok(policyIndex !== -1, "Quality Gates must contain merge policy");

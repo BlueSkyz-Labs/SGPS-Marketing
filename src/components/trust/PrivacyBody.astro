@@ -1,0 +1,54 @@
+---
+/**
+ * v8 W5a: the /privacy/ page body (deck rows pri-1..6).
+ * Lede, what is collected, limits, deletion, one sources line. No headings
+ * below the H1, so no heading can fall off the page scale.
+ *
+ * UI upgrade F12: presentation only. The header forms the lead column; the
+ * two labelled statements render as a definition list (`TrustFacts`), then
+ * the deletion note and the sources line. No copy is added or reworded.
+ */
+import PageHeader from "@/components/layout/PageHeader.astro";
+import SourcesLine from "@/components/trust/SourcesLine.astro";
+import TrustFacts from "@/components/trust/TrustFacts.astro";
+import TrustLayout from "@/components/trust/TrustLayout.astro";
+import { getClaimAnchor } from "@/lib/claims";
+import { PRIVACY_COPY } from "@/data/trust-copy";
+import type { Language } from "@/data/site";
+
+interface Props {
+  lang: Language;
+}
+
+const { lang } = Astro.props;
+const c = PRIVACY_COPY[lang];
+const CLAIM_ID = "privacy-no-tracking-on-this-site";
+---
+
+<TrustLayout page="privacy">
+  <div
+    slot="lead"
+    id={getClaimAnchor(CLAIM_ID)}
+    data-integrity-entry
+    class="scroll-mt-24"
+  >
+    <PageHeader title={c.title} lede={c.lede} />
+  </div>
+  <TrustFacts
+    facts={[
+      { label: c.collectedLead, body: c.collectedBody },
+      { label: c.limitsLead, body: c.limitsBody },
+    ]}
+  />
+  <p class="mt-6 leading-relaxed text-pretty text-[var(--text-secondary)]">
+    {c.deletion}
+  </p>
+  <div class="mt-6">
+    <SourcesLine
+      lang={lang}
+      claimId={CLAIM_ID}
+      label={c.sourcesLabel}
+      sources={c.sources}
+    />
+  </div>
+</TrustLayout>

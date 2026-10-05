@@ -20,7 +20,7 @@ test.describe("C4-A optical typography", () => {
           const el = document.querySelector(sel);
           return el ? Number.parseFloat(getComputedStyle(el).fontSize) : 0;
         };
-        return { h1: px("h1"), h2: px(`${"[data-one-house-editorial]"} h2`) };
+        return { h1: px("h1"), h2: px("[data-flagship-theatre] h2") };
       });
       expect(sizes.h1).toBeGreaterThan(0);
       expect(sizes.h2).toBeGreaterThan(0);
@@ -46,7 +46,7 @@ test.describe("C4-A optical typography", () => {
       await page.setViewportSize({ width: 1440, height: 900 });
       await page.goto(route);
       const width = await page.evaluate(() => {
-        const p = document.querySelector(`${"[data-one-house-editorial]"} p`);
+        const p = document.querySelector("[data-hero] p.hero-tagline");
         return p ? p.getBoundingClientRect().width : 0;
       });
       expect(width).toBeGreaterThan(0);
@@ -57,14 +57,22 @@ test.describe("C4-A optical typography", () => {
       await page.setViewportSize({ width: 1440, height: 900 });
       await page.goto(route);
       const clipped = await page.evaluate(() => {
-        const h2 = document.querySelector(`${"[data-one-house-editorial]"} h2`);
-        if (!h2) return true;
-        const cs = getComputedStyle(h2);
-        const vertical =
-          h2.scrollHeight > h2.clientHeight + 1 && cs.overflowY === "hidden";
-        const horizontal =
-          h2.scrollWidth > h2.clientWidth + 1 && cs.overflowX === "hidden";
-        return vertical || horizontal;
+        // Experience v6 S1: measured on the hero H1 and the flagship H2.
+        const headings = [
+          document.querySelector("h1"),
+          document.querySelector("[data-flagship-theatre] h2"),
+        ];
+        return headings.some((heading) => {
+          if (!heading) return true;
+          const cs = getComputedStyle(heading);
+          const vertical =
+            heading.scrollHeight > heading.clientHeight + 1 &&
+            cs.overflowY === "hidden";
+          const horizontal =
+            heading.scrollWidth > heading.clientWidth + 1 &&
+            cs.overflowX === "hidden";
+          return vertical || horizontal;
+        });
       });
       expect(clipped).toBe(false);
     });

@@ -1,31 +1,39 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
+import { PAGE_META } from "@/data/page-meta";
 import Container from "@/components/layout/Container.astro";
 import PageHeader from "@/components/layout/PageHeader.astro";
 import ProductCard from "@/components/product/ProductCard.astro";
 import ProofFirstEmptyState from "@/components/product/ProofFirstEmptyState.astro";
 import { getPublicProducts } from "@/lib/products";
-import IntentControl from "@/components/experience/IntentControl.astro";
-import Atlas from "@/components/experience/Atlas.astro";
 
 const products = await getPublicProducts();
-const emptyDescription = products.length
-  ? "Explore BlueSkyz Labs products with truthful status and evidence."
-  : "Products are published only with verifiable public evidence.";
+const allInDevelopment =
+  products.length > 0 &&
+  products.every((product) => product.data.lifecycle === "development");
+const emptyDescription =
+  "Products are published only with verifiable public evidence.";
 ---
 
 <BaseLayout
-  title="Products"
-  description={emptyDescription}
+  title={PAGE_META["en"].products.title}
+  description={
+    products.length ? PAGE_META["en"].products.description : emptyDescription
+  }
   path="/en/products/"
-  surface="products"
   scene="product"
 >
   <section class="py-16 lg:py-20">
     <Container>
       <PageHeader
-        title="Products you can verify"
-        lede="Products appear here when they are ready to evaluate. We publish only what you can verify."
+        title="Our products"
+        lede={
+          products.length === 0
+            ? "Products appear here when they are ready to evaluate. We publish only what you can verify."
+            : allInDevelopment
+              ? "Both are in development. Each page states its status."
+              : "Each product page states its status and what backs it."
+        }
       />
       {products.length === 0 ? (
         <div class="mt-12">
@@ -35,25 +43,20 @@ const emptyDescription = products.length
         <section class="mt-12" aria-labelledby="published-products">
           <h2
             id="published-products"
-            class="text-xs font-semibold tracking-[0.18em] text-[var(--text-secondary)] uppercase"
+            class:list={[
+              "text-xs font-semibold tracking-[0.18em] text-[var(--text-secondary)] uppercase [&:lang(vi)]:normal-case [&:lang(vi)]:tracking-[var(--tracking-eyebrow)]",
+              allInDevelopment && "sr-only",
+            ]}
           >
-            Published products
+            {allInDevelopment ? "In development" : "Products"}
           </h2>
           <div class="mt-6 grid gap-4 md:grid-cols-2">
             {products.map((product) => (
-              <ProductCard product={product} lang="en" />
+              <ProductCard product={product} lang="en" showThumb />
             ))}
           </div>
         </section>
       )}
-    </Container>
-  </section>
-  {/* C2: discovery surfaces re-homed from the homepage (design §8) — Intent Lens sits
-      with product evaluation; Atlas remains the deliberate exploration tool. */}
-  <section class="border-t border-[var(--border-subtle)] py-16 lg:py-20">
-    <Container>
-      <IntentControl lang="en" />
-      <Atlas lang="en" />
     </Container>
   </section>
 </BaseLayout>

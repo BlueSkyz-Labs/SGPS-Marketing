@@ -1,22 +1,20 @@
 ---
 // zh-Hant copy: machine-assisted (OpenCC s2twp), pending native review.
 import BaseLayout from "@/layouts/BaseLayout.astro";
+import { PAGE_META } from "@/data/page-meta";
 import Container from "@/components/layout/Container.astro";
 import PageHeader from "@/components/layout/PageHeader.astro";
 import DecisionRoom from "@/components/experience/DecisionRoom.astro";
 ---
 
 <BaseLayout
-  title="決策室"
-  description="將最多四項公開事實並列對照 — 有來源的聲明、信任路徑，以及確保其嚴謹的邊界說明。不作結論，不提建議。"
+  title={PAGE_META["zh-hant"].decisionRoom.title}
+  description={PAGE_META["zh-hant"].decisionRoom.description}
   path="/zh-hant/decision-room/"
 >
   <section class="py-16 lg:py-24">
     <Container>
-      <PageHeader
-        title="依據來源作判斷，不替你下結論"
-        lede="本頁面將公開事實並列呈現，不作結論，也不建議你選擇。"
-      />
+      <PageHeader title="比較聲明" />
       <div class="mt-12">
         <DecisionRoom lang="zh-hant" />
       </div>

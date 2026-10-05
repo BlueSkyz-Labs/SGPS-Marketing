@@ -172,6 +172,25 @@ const appAccess = z.object({
   ios: mobileApp.optional(),
 });
 
+/**
+ * schema.org SoftwareApplication category (v12 S2). Product-owned, never a
+ * masterbrand default: a record without it gets no category in its JSON-LD.
+ * Limited to the schema.org application categories search engines document.
+ */
+export const applicationCategory = z.enum([
+  "BusinessApplication",
+  "FinanceApplication",
+  "LifestyleApplication",
+  "HealthApplication",
+  "EducationalApplication",
+  "DeveloperApplication",
+  "UtilitiesApplication",
+  "SecurityApplication",
+  "DriverApplication",
+  "CommunicationApplication",
+  "ReferenceApplication",
+]);
+
 export const productSchema = z
   .object({
     slug: z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/),
@@ -180,11 +199,12 @@ export const productSchema = z
     lifecycle,
     availability,
     publicLabel,
-    audience: z.array(audience).min(1),
+    audience: z.array(audience).min(1).optional(),
     jobs: z.array(z.string().min(1)).min(1),
     /** Verified product capabilities — distinct from customer jobs-to-be-done. */
     capabilities: z.array(z.string().min(1).max(120)).min(2).max(3).optional(),
     platforms: z.array(platform).min(1),
+    applicationCategory: applicationCategory.optional(),
     primaryAction: action,
     secondaryAction: action.optional(),
     appAccess: appAccess.optional(),

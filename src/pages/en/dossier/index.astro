@@ -1,31 +1,24 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
+import { PAGE_META } from "@/data/page-meta";
 import Container from "@/components/layout/Container.astro";
 import PageHeader from "@/components/layout/PageHeader.astro";
 import DossierComposer from "@/components/dossier/DossierComposer.astro";
-import DossierSources from "@/components/dossier/DossierSources.astro";
-import BoardroomDeck from "@/components/dossier/BoardroomDeck.astro";
 ---
 
 <BaseLayout
-  title="Public Dossier"
-  description="Assemble a boardroom-ready view from statements and evidence this site already publishes. Nothing is transmitted and nothing is stored."
+  title={PAGE_META["en"].dossier.title}
+  description={PAGE_META["en"].dossier.description}
   path="/en/dossier/"
 >
   <section class="py-16 lg:py-24">
     <Container>
       <PageHeader
-        title="Public Dossier"
-        lede="Assemble a boardroom-ready view from statements and evidence this site already publishes. Nothing is transmitted and nothing is stored."
+        title="Printable summary"
+        lede="Pick published claims and sources to print or present. Nothing leaves this page and nothing is stored."
       />
       <div class="mt-12">
         <DossierComposer lang="en" />
-      </div>
-      <div class="mt-12">
-        <DossierSources lang="en" />
-      </div>
-      <div class="mt-12">
-        <BoardroomDeck lang="en" />
       </div>
     </Container>
   </section>

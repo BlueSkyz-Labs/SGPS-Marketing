@@ -1,0 +1,37 @@
+---
+/**
+ * Experience v6 S7 — the only motion script (budget: 2 KB source, guarded).
+ * Baseline is the final state: nothing is hidden or animated until this runs,
+ * and only when the visitor allows motion. It toggles one attribute:
+ *   html[data-motion="on"]      -> lets the hero mark draw (CSS-only otherwise)
+ *   .reveal-planes[data-revealed] -> "false" while armed below the fold, then
+ *                                   "true" once, never re-armed.
+ */
+---
+
+<script>
+  const d = document.documentElement;
+  if (!matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    d.dataset.motion = "on";
+    const els = document.querySelectorAll<HTMLElement>(".reveal-planes");
+    if ("IntersectionObserver" in window && els.length) {
+      const io = new IntersectionObserver(
+        (entries) =>
+          entries.forEach((e) => {
+            if (!e.isIntersecting) return;
+            (e.target as HTMLElement).dataset.revealed = "true";
+            io.unobserve(e.target);
+          }),
+        { threshold: 0.15 },
+      );
+      els.forEach((el) => {
+        // Only elements that start below the fold are armed; anything
+        // visible at load (possible LCP) is never hidden.
+        if (el.getBoundingClientRect().top > innerHeight) {
+          el.dataset.revealed = "false";
+          io.observe(el);
+        }
+      });
+    }
+  }
+</script>

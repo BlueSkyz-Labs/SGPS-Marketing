@@ -70,16 +70,22 @@ function auditBrowserAssurance(workflow) {
   }
 
   if (!shards.includes(`image: ${PLAYWRIGHT_IMAGE}`)) {
-    problems.push("browser shards must use the approved digest-pinned Playwright image");
+    problems.push(
+      "browser shards must use the approved digest-pinned Playwright image",
+    );
   }
   if (!shards.includes("options: --user 1001")) {
     problems.push("browser shards must not run the Playwright image as root");
   }
   if (!shards.includes("PLAYWRIGHT_BROWSERS_PATH: /ms-playwright")) {
-    problems.push("browser shards must use the browsers bundled in the pinned image");
+    problems.push(
+      "browser shards must use the browsers bundled in the pinned image",
+    );
   }
   if (/playwright\s+install(?:\s|$)/m.test(shards)) {
-    problems.push("browser shards must not download Playwright browsers at runtime");
+    problems.push(
+      "browser shards must not download Playwright browsers at runtime",
+    );
   }
   for (const variable of PLAYWRIGHT_DOWNLOAD_HOST_VARS) {
     if (workflow.includes(variable)) {
@@ -87,7 +93,21 @@ function auditBrowserAssurance(workflow) {
     }
   }
   if (!shards.includes("Verify digest-pinned Playwright runtime")) {
-    problems.push("browser shards must launch-test the bundled runtime before E2E");
+    problems.push(
+      "browser shards must launch-test the bundled runtime before E2E",
+    );
+  }
+  // Every shard runs on every event (pull_request and push). No per-event or
+  // per-entry gating may skip an engine, and no step may be conditional.
+  if (/pr_lane|RUN_SHARD|github\.event_name\s*[!=]=/.test(shards)) {
+    problems.push(
+      "shards must not gate any engine on the event or a lane flag",
+    );
+  }
+  if (/^\s*if:/m.test(shards)) {
+    problems.push(
+      "shard steps must not be conditional: every engine runs on every event",
+    );
   }
 
   if (!/run:\s*pnpm lighthouse\s*$/m.test(lighthouse)) {
@@ -181,6 +201,42 @@ test("negative proof: unpinned Playwright runtime or download-host override is c
   );
 });
 
+test("negative proof: a matrix that skips any engine on pull_request is caught", () => {
+  const lane = WORKFLOW.replace(
+    "            browser: chromium\n    steps:\n",
+    "            browser: chromium\n    env:\n      RUN_SHARD: ${{ github.event_name != 'pull_request' || matrix.pr_lane }}\n    steps:\n",
+  );
+  assert.notEqual(lane, WORKFLOW);
+  assert.ok(
+    auditBrowserAssurance(lane).some((problem) =>
+      problem.includes("must not gate any engine"),
+    ),
+  );
+  for (const project of ["chromium", "firefox", "webkit", "mobile-chromium"]) {
+    const flagged = WORKFLOW.replace(
+      new RegExp(`(- project: ${project}\\n {12}browser: \\w+)`),
+      "$1\n            pr_lane: false",
+    );
+    assert.notEqual(flagged, WORKFLOW, project);
+    assert.ok(
+      auditBrowserAssurance(flagged).some((problem) =>
+        problem.includes("must not gate any engine"),
+      ),
+      `${project} lane flag must fail`,
+    );
+  }
+  const skipped = WORKFLOW.replace(
+    "      - name: Build browser test artifact\n",
+    "      - name: Build browser test artifact\n        if: ${{ github.event_name != 'pull_request' }}\n",
+  );
+  assert.notEqual(skipped, WORKFLOW);
+  assert.ok(
+    auditBrowserAssurance(skipped).some((problem) =>
+      problem.includes("must not be conditional"),
+    ),
+  );
+});
+
 test("negative proof: an aggregator that cannot fail closed is caught", () => {
   const withoutAlways = WORKFLOW.replace("    if: ${{ always() }}\n", "");
   assert.notEqual(withoutAlways, WORKFLOW);
@@ -266,3 +322,12 @@ test(
     }
   },
 );
+
+test("run-e2e main-module guard is cross-platform (pathToFileURL, F-06)", () => {
+  const src = readFileSync("scripts/run-e2e.mjs", "utf8");
+  assert.match(src, /pathToFileURL\(process\.argv\[1\]\)\.href/);
+  assert.doesNotMatch(src, /file:\/\/\$\{process\.argv\[1\]\}/);
+  // negative proof: the legacy Windows-broken guard is rejected
+  const legacy = "import.meta.url === `file://${process.argv[1]}`";
+  assert.match(legacy, /file:\/\/\$\{process\.argv\[1\]\}/);
+});

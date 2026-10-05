@@ -1,4 +1,5 @@
 ---
+import ButtonLink from "@/components/ui/ButtonLink.astro";
 import type { Language } from "@/data/site";
 
 interface Props {
@@ -6,12 +7,15 @@ interface Props {
   label: string;
   boundary: "external" | "mailto" | "private-reporting";
   lang: Language;
+  /** Replaces the destination context line with a plainer one-line note. */
+  note?: string;
+  /** Size the action to its label instead of the full column. */
+  fit?: boolean;
 }
 
-const { href, label, boundary, lang } = Astro.props;
+const { href, label, boundary, lang, note, fit = false } = Astro.props;
 
-const isExternal = /^https?:\/\//i.test(href);
-const host = isExternal ? new URL(href).host : "";
+const host = /^https?:\/\//i.test(href) ? new URL(href).host : "";
 const mailTarget = href.replace(/^mailto:/i, "");
 
 /** Visible destination context — no click interception, no modal. */
@@ -25,8 +29,8 @@ const CONTEXT = {
   mailto: {
     en: `Opens your email app — ${mailTarget}`,
     vi: `Mở ứng dụng email — ${mailTarget}`,
-    zh: `打开您的邮件应用 — ${mailTarget}`,
-    "zh-hant": `開啟您的電子郵件應用程式 — ${mailTarget}`,
+    zh: `打开你的邮件应用 — ${mailTarget}`,
+    "zh-hant": `開啟你的電子郵件應用程式 — ${mailTarget}`,
   },
   "private-reporting": {
     en: "Opens GitHub private vulnerability reporting — visible only to maintainers",
@@ -38,13 +42,8 @@ const CONTEXT = {
 ---
 
 <div class="safe-action" data-safe-action={boundary}>
-  <a
-    href={href}
-    rel={isExternal ? "noopener noreferrer" : undefined}
-    class="inline-flex min-h-11 items-center gap-1.5 rounded-lg bg-[var(--action-primary)] px-5 text-sm font-semibold text-white no-underline transition-opacity hover:opacity-90"
-  >
+  <ButtonLink href={href} class={fit ? "self-start" : ""}>
     {label}
-    <span aria-hidden="true">→</span>
-  </a>
-  <p class="safe-action__context">{CONTEXT[boundary][lang]}</p>
+  </ButtonLink>
+  <p class="safe-action__context">{note ?? CONTEXT[boundary][lang]}</p>
 </div>

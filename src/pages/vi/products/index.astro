@@ -1,31 +1,39 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
+import { PAGE_META } from "@/data/page-meta";
 import Container from "@/components/layout/Container.astro";
 import PageHeader from "@/components/layout/PageHeader.astro";
 import ProductCard from "@/components/product/ProductCard.astro";
 import ProofFirstEmptyState from "@/components/product/ProofFirstEmptyState.astro";
 import { getPublicProducts } from "@/lib/products";
-import IntentControl from "@/components/experience/IntentControl.astro";
-import Atlas from "@/components/experience/Atlas.astro";
 
 const products = await getPublicProducts();
-const emptyDescription = products.length
-  ? "Khám phá sản phẩm BlueSkyz Labs với trạng thái và bằng chứng trung thực."
-  : "Sản phẩm chỉ được công bố kèm bằng chứng công khai có thể xác minh.";
+const allInDevelopment =
+  products.length > 0 &&
+  products.every((product) => product.data.lifecycle === "development");
+const emptyDescription =
+  "Sản phẩm chỉ được công bố kèm bằng chứng công khai có thể xác minh.";
 ---
 
 <BaseLayout
-  title="Sản phẩm"
-  description={emptyDescription}
+  title={PAGE_META["vi"].products.title}
+  description={
+    products.length ? PAGE_META["vi"].products.description : emptyDescription
+  }
   path="/vi/products/"
-  surface="products"
   scene="product"
 >
   <section class="py-16 lg:py-20">
     <Container>
       <PageHeader
-        title="Sản phẩm bạn có thể xác minh"
-        lede="Sản phẩm xuất hiện ở đây khi chúng sẵn sàng đánh giá. Chúng tôi chỉ công bố những gì bạn có thể xác minh."
+        title="Sản phẩm của BlueSkyz"
+        lede={
+          products.length === 0
+            ? "Sản phẩm xuất hiện ở đây khi chúng sẵn sàng đánh giá. Chúng tôi chỉ công bố những gì bạn có thể xác minh."
+            : allInDevelopment
+              ? "Cả hai đang phát triển. Mỗi trang đều nêu trạng thái."
+              : "Mỗi trang nói rõ trạng thái và căn cứ của sản phẩm đó."
+        }
       />
       {products.length === 0 ? (
         <div class="mt-12">
@@ -35,25 +43,20 @@ const emptyDescription = products.length
         <section class="mt-12" aria-labelledby="published-products">
           <h2
             id="published-products"
-            class="text-xs font-semibold tracking-[0.18em] text-[var(--text-secondary)] uppercase"
+            class:list={[
+              "text-xs font-semibold tracking-[0.18em] text-[var(--text-secondary)] uppercase [&:lang(vi)]:normal-case [&:lang(vi)]:tracking-[var(--tracking-eyebrow)]",
+              allInDevelopment && "sr-only",
+            ]}
           >
-            Sản phẩm đã công bố
+            {allInDevelopment ? "Đang phát triển" : "Sản phẩm"}
           </h2>
           <div class="mt-6 grid gap-4 md:grid-cols-2">
             {products.map((product) => (
-              <ProductCard product={product} lang="vi" />
+              <ProductCard product={product} lang="vi" showThumb />
             ))}
           </div>
         </section>
       )}
-    </Container>
-  </section>
-  {/* C2: discovery surfaces re-homed from the homepage (design §8) — Intent Lens sits
-      with product evaluation; Atlas remains the deliberate exploration tool. */}
-  <section class="border-t border-[var(--border-subtle)] py-16 lg:py-20">
-    <Container>
-      <IntentControl lang="vi" />
-      <Atlas lang="vi" />
     </Container>
   </section>
 </BaseLayout>

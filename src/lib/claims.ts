@@ -15,6 +15,8 @@ import {
   CLAIMS,
   EVIDENCE_INDEX,
   INTEGRITY_ENTRY_INDEX,
+  claimShortLabel,
+  type ClaimTitleLabel,
   type PublicClaim,
 } from "../data/claims.ts";
 import type {
@@ -24,6 +26,9 @@ import type {
   TruthState,
 } from "../data/integrity.ts";
 import type { Language } from "../data/site.ts";
+
+/** Short claim label for pages that already state the claim in full. */
+export { claimShortLabel };
 
 export interface PublicProductRef {
   slug: string;
@@ -246,7 +251,14 @@ export function getClaimTrace(
     {
       kind: "claim",
       id: resolved.claim.id,
-      label: resolved.claim.statement,
+      // The page that shows this trace already states the claim in full; the
+      // trace refers back to it by its short label instead of repeating it.
+      label: {
+        en: claimShortLabel(resolved.claim, "en"),
+        vi: claimShortLabel(resolved.claim, "vi"),
+        zh: claimShortLabel(resolved.claim, "zh"),
+        "zh-hant": claimShortLabel(resolved.claim, "zh-hant"),
+      },
     },
   ];
 
@@ -290,6 +302,8 @@ export function getClaimTrace(
 export interface EvidencePassportModel {
   id: string;
   claim: LocalizedText;
+  /** EN/VI short <title> label; the page body keeps the full claim. */
+  titleLabel?: ClaimTitleLabel | undefined;
   state: TruthState;
   evidence: EvidenceReference[];
   boundaryId?: string | undefined;
@@ -315,6 +329,7 @@ export function getEvidencePassport(
   return {
     id: resolved.claim.id,
     claim: resolved.claim.statement,
+    titleLabel: resolved.claim.titleLabel,
     state: resolved.truthState,
     evidence: resolved.evidence,
     boundaryId: resolved.boundaryId,

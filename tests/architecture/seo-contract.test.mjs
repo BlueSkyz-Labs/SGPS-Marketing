@@ -40,8 +40,8 @@ test("BaseLayout emits complete locale-safe SEO metadata", () => {
   assert.match(layout, /<html lang=\{htmlLang\} dir="ltr">/);
   assert.match(
     layout,
-    /htmlLang = currentLang === "zh-hant" \? "zh-Hant" : currentLang/,
-    'Traditional Chinese pages must declare <html lang="zh-Hant">',
+    /currentLang === "zh-hant"\s*\?\s*"zh-Hant"\s*:\s*currentLang === "zh"\s*\?\s*"zh-Hans"\s*:\s*currentLang/,
+    "Chinese pages must declare their script subtag (zh-Hans / zh-Hant)",
   );
   assert.match(layout, /"zh-hant": "zh_TW"/);
   assert.match(layout, /rel="canonical"/);

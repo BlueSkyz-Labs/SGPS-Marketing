@@ -1,32 +1,25 @@
 ---
 // zh-Hant copy: machine-assisted (OpenCC s2twp), pending native review.
 import BaseLayout from "@/layouts/BaseLayout.astro";
+import { PAGE_META } from "@/data/page-meta";
 import Container from "@/components/layout/Container.astro";
 import PageHeader from "@/components/layout/PageHeader.astro";
 import DossierComposer from "@/components/dossier/DossierComposer.astro";
-import DossierSources from "@/components/dossier/DossierSources.astro";
-import BoardroomDeck from "@/components/dossier/BoardroomDeck.astro";
 ---
 
 <BaseLayout
-  title="公開檔案"
-  description="用本站已發布的聲明與證據組裝會議檢視。不傳輸任何資料，也不儲存任何內容。"
+  title={PAGE_META["zh-hant"].dossier.title}
+  description={PAGE_META["zh-hant"].dossier.description}
   path="/zh-hant/dossier/"
 >
   <section class="py-16 lg:py-24">
     <Container>
       <PageHeader
-        title="公開檔案"
-        lede="用本站已發布的聲明與證據組裝會議檢視。不傳輸任何資料，也不儲存任何內容。"
+        title="可列印摘要"
+        lede="選擇已發布的聲明與來源，用於列印或簡報。內容不會離開本頁，也不會被儲存。"
       />
       <div class="mt-12">
         <DossierComposer lang="zh-hant" />
-      </div>
-      <div class="mt-12">
-        <DossierSources lang="zh-hant" />
-      </div>
-      <div class="mt-12">
-        <BoardroomDeck lang="zh-hant" />
       </div>
     </Container>
   </section>

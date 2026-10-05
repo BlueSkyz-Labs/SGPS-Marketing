@@ -1,4 +1,8 @@
 import type { Language } from "../lib/i18n";
+import {
+  parseDossierSearch,
+  writeSelectionToUrl,
+} from "../lib/dossier-url-state";
 
 /**
  * C4-C Task 2 — local dossier composer.
@@ -41,13 +45,8 @@ function allowlistedIds(form: HTMLFormElement): Set<string> {
   return ids;
 }
 
-function requestedIds(): string[] {
-  const raw = new URLSearchParams(window.location.search).get(SELECTION_PARAM);
-  if (!raw) return [];
-  return raw
-    .split(",")
-    .map((value) => value.trim())
-    .filter((value) => value.length > 0);
+function requestedSelection() {
+  return parseDossierSearch(window.location.search, SELECTION_PARAM);
 }
 
 function entryTemplate(id: string): HTMLTemplateElement | null {
@@ -56,7 +55,7 @@ function entryTemplate(id: string): HTMLTemplateElement | null {
   );
 }
 
-function render(elements: ComposerElements): void {
+function render(elements: ComposerElements): string[] {
   const selected = [
     ...elements.form.querySelectorAll<HTMLInputElement>("[data-dossier-item]"),
   ]
@@ -70,21 +69,35 @@ function render(elements: ComposerElements): void {
     elements.preview.append(template.content.cloneNode(true));
   }
   elements.counter.textContent = String(selected.length);
+  // Present exists only while there is something to present: at 0 selections
+  // the control is hidden and the deck is told to close.
+  const present = document.querySelector<HTMLElement>("[data-dossier-present]");
+  if (present) {
+    present.hidden = selected.length === 0;
+    // Read by the deck on start-up, so script order never matters.
+    present.dataset.selectedIds = selected.join(",");
+  }
+  document.dispatchEvent(
+    new CustomEvent("boardroom:set", { detail: { ids: selected } }),
+  );
   elements.preview.toggleAttribute("data-empty", selected.length === 0);
+  return selected;
 }
 
 function applyUrlState(elements: ComposerElements): void {
   const allowed = allowlistedIds(elements.form);
-  const requested = requestedIds();
+  const requested = requestedSelection();
   const accepted: string[] = [];
   const rejected: string[] = [];
 
-  for (const id of requested) {
-    if (allowed.has(id)) {
-      accepted.push(id);
-    } else {
-      // Fail closed: an id outside the rendered allowlist is reported, never composed.
-      rejected.push(id);
+  if (requested.status === "ok") {
+    for (const id of requested.ids) {
+      if (allowed.has(id)) {
+        accepted.push(id);
+      } else {
+        // Fail closed: an id outside the rendered allowlist is reported, never composed.
+        rejected.push(id);
+      }
     }
   }
 
@@ -95,12 +108,26 @@ function applyUrlState(elements: ComposerElements): void {
   }
 
   elements.unknown.replaceChildren();
-  for (const id of rejected) {
+  if (requested.status === "rejected") {
     const item = document.createElement("li");
-    item.textContent = id;
+    item.dataset.dossierRequestRejected = requested.reason;
+    item.textContent =
+      elements.unknown.dataset.dossierInvalidMessage ??
+      "Selection request rejected.";
     elements.unknown.append(item);
+  } else {
+    for (const id of rejected) {
+      const item = document.createElement("li");
+      item.textContent = id;
+      elements.unknown.append(item);
+    }
   }
-  elements.unknown.toggleAttribute("hidden", rejected.length === 0);
+  const hideUnknown = requested.status !== "rejected" && rejected.length === 0;
+  elements.unknown.toggleAttribute("hidden", hideUnknown);
+  // The heading lives in the wrapper; it must follow the list, never outlive it.
+  elements.unknown
+    .closest<HTMLElement>("[data-dossier-unknown-block]")
+    ?.toggleAttribute("hidden", hideUnknown);
 }
 
 export function initDossierComposer(): void {
@@ -110,7 +137,19 @@ export function initDossierComposer(): void {
   applyUrlState(elements);
   render(elements);
 
-  elements.form.addEventListener("change", () => render(elements));
+  document
+    .querySelector("[data-dossier-present]")
+    ?.addEventListener("click", () =>
+      document.dispatchEvent(new CustomEvent("boardroom:open")),
+    );
+  document.addEventListener("boardroom:closed", () =>
+    document.querySelector<HTMLElement>("[data-dossier-present]")?.focus(),
+  );
+
+  elements.form.addEventListener("change", () => {
+    // Replace, never push: Back must leave the page, not step through ticks.
+    writeSelectionToUrl(window, SELECTION_PARAM, render(elements));
+  });
   elements.form.addEventListener("submit", (event) => {
     // Composition is local: the form must never navigate or transmit.
     event.preventDefault();

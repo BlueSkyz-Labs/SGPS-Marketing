@@ -1,158 +1,76 @@
 ---
 import type { Language } from "@/data/site";
 import type { ProductEntry } from "@/lib/products";
+import { AVAILABILITY } from "./product-page-copy";
 
 /**
- * Owner 2026-09-28 — "Truy cập ứng dụng": a direct sign-in link to the running
- * web app and the native Android/iOS apps shown honestly as in development.
- * Static, no client script. The sign-in button renders only when the record
- * carries an Owner-supplied `appAccess.signInUrl`; a native app links to a
- * store only when it is `available` with a store URL (schema-enforced).
+ * v8 W3: one "Availability" line replaces the separate Access, Current stage,
+ * Platforms and Audience blocks. An in-development native app is plain text
+ * with no store link; a store link renders only for an app that is
+ * `available` with a store URL (schema-enforced). Static, no client script.
+ * The sign-in link is a plain text link rendered by the page.
  */
 interface Props {
   appAccess: ProductEntry["data"]["appAccess"];
-  productName: string;
   lang: Language;
-  showSignIn?: boolean;
+  /** The record lists the web platform. */
+  web?: boolean;
 }
 
-const { appAccess, productName, lang, showSignIn = true } = Astro.props;
-
-const LABELS = {
-  heading: {
-    en: "Use the app",
-    vi: "Truy cập ứng dụng",
-    zh: "使用应用",
-    "zh-hant": "使用應用程式",
-  },
-  signIn: { en: "Sign in", vi: "Đăng nhập", zh: "登录", "zh-hant": "登入" },
-  signInHint: {
-    en: "Opens the web app sign-in page",
-    vi: "Mở thẳng trang đăng nhập của ứng dụng web",
-    zh: "直接打开网页应用的登录页面",
-    "zh-hant": "直接開啟網頁應用程式的登入頁面",
-  },
-  inDevelopment: {
-    en: "In development",
-    vi: "Đang phát triển",
-    zh: "开发中",
-    "zh-hant": "開發中",
-  },
-  getOn: { en: "Get it on", vi: "Tải trên", zh: "下载于", "zh-hant": "下載於" },
-} as const;
+const { appAccess, lang, web = true } = Astro.props;
+const A = AVAILABILITY;
 
 const STORES = [
   { key: "android", name: "Android", store: "Google Play" },
   { key: "ios", name: "iOS", store: "App Store" },
 ] as const;
-
-const signInUrl = showSignIn ? appAccess?.signInUrl : undefined;
 const apps = STORES.flatMap((s) => {
   const app = appAccess?.[s.key];
   return app ? [{ ...s, app }] : [];
 });
-const headingId = "profile-app-access";
+const live = apps.filter((a) => a.app.state === "available" && a.app.storeUrl);
+const pending = apps.filter((a) => !live.includes(a));
+const nativeName =
+  pending.length === STORES.length
+    ? A.native[lang]
+    : pending.map((a) => a.name).join(" · ");
+const colon = A.colon[lang];
 ---
 
-{signInUrl || apps.length > 0 ? (
-  <section class="app-access mt-10" aria-labelledby={headingId} data-app-access>
-    <h2
-      id={headingId}
-      class="text-xl font-semibold tracking-tight text-[var(--text-primary)]"
-    >
-      {LABELS.heading[lang]}
-    </h2>
-    <div class="app-access__row mt-4">
-      {signInUrl ? (
+{web || apps.length > 0 ? (
+  <p
+    class="app-access mt-5 text-sm leading-relaxed text-[var(--text-secondary)]"
+    data-app-access
+  >
+    {web ? (
+      <span>
+        {A.web[lang]}
+        {colon}
+        {A.inDevelopment[lang]}
+      </span>
+    ) : null}
+    {pending.length > 0 ? (
+      <>
+        {web ? <span aria-hidden="true"> · </span> : null}
+        <span data-mobile-state="in-development">
+          {nativeName}
+          {colon}
+          {A.inDevelopment[lang]}, {A.noStore[lang]}
+        </span>
+      </>
+    ) : null}
+    {live.map(({ key, name, store, app }) => (
+      <>
+        <span aria-hidden="true"> · </span>
         <a
-          class="app-access__signin"
-          href={signInUrl}
+          href={app.storeUrl}
           rel="noopener noreferrer"
-          data-app-signin
+          data-mobile-app={key}
+          data-mobile-state="available"
         >
-          <span>
-            {LABELS.signIn[lang]} · {productName}
-          </span>
-          <span class="app-access__hint">{LABELS.signInHint[lang]}</span>
+          {name} · {store}
         </a>
-      ) : null}
-      {apps.map(({ key, name, store, app }) =>
-        app.state === "available" && app.storeUrl ? (
-          <a
-            class="app-access__store"
-            href={app.storeUrl}
-            rel="noopener noreferrer"
-            data-mobile-app={key}
-            data-mobile-state="available"
-          >
-            <span class="app-access__platform">{name}</span>
-            <span class="app-access__hint">
-              {LABELS.getOn[lang]} {store}
-            </span>
-          </a>
-        ) : (
-          <p
-            class="app-access__store app-access__store--pending"
-            data-mobile-app={key}
-            data-mobile-state="in-development"
-          >
-            <span class="app-access__platform">{name}</span>
-            <span class="app-access__hint">{LABELS.inDevelopment[lang]}</span>
-          </p>
-        ),
-      )}
-    </div>
-  </section>
+      </>
+    ))}
+  </p>
 ) : null}
-
-<style>
-  .app-access__row {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.75rem;
-  }
-  .app-access__signin,
-  .app-access__store {
-    display: inline-flex;
-    min-height: 2.75rem;
-    flex-direction: column;
-    justify-content: center;
-    border-radius: var(--radius-card);
-    border: 1px solid var(--border-subtle);
-    background: var(--surface-raised);
-    padding: 0.625rem 1.125rem;
-    color: var(--text-primary);
-    font-size: 0.9375rem;
-    font-weight: 600;
-    line-height: 1.3;
-    text-decoration: none;
-  }
-  .app-access__signin {
-    border-color: transparent;
-    background: var(--brand-cobalt);
-    color: #ffffff;
-  }
-  .app-access__signin .app-access__hint {
-    color: color-mix(in srgb, #ffffff 82%, transparent);
-  }
-  .app-access__signin:focus-visible,
-  .app-access__store:focus-visible {
-    outline: 2px solid var(--brand-cobalt);
-    outline-offset: 2px;
-  }
-  .app-access__store--pending {
-    margin: 0;
-    border-style: dashed;
-  }
-  .app-access__hint {
-    color: var(--text-muted);
-    font-size: 0.75rem;
-    font-weight: 500;
-  }
-  @media (forced-colors: active) {
-    .app-access__signin,
-    .app-access__store {
-      border: 1px solid CanvasText;
-    }
-  }
-</style>

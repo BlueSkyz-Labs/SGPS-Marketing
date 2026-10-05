@@ -1,0 +1,42 @@
+---
+import { EMPTY_STATE_COPY } from "@/data/empty-state-copy";
+import { SITE, labelFor, type Language } from "@/data/site";
+import { emptyRegistryPrimaryCta } from "@/lib/act";
+
+/**
+ * Contact lane for the business route while no mailbox is published.
+ * One calm state line plus a soft-land link (Act path via `src/lib/act.ts`);
+ * never an address. The boundary sentence stays page-authored and is passed in.
+ */
+interface Props {
+  lang: Language;
+  heading: string;
+  boundary: string;
+}
+
+const { lang, heading, boundary } = Astro.props;
+const soft = emptyRegistryPrimaryCta(SITE.contactEmail, lang);
+---
+
+<li
+  class="flex min-w-0 flex-col gap-2 rounded-xl border border-dashed border-[var(--border-subtle)] p-6 sm:col-span-2"
+  data-contact-lane="business-state"
+>
+  <div class="flex flex-wrap items-center gap-x-3 gap-y-1">
+    <h2 class="text-lg font-semibold tracking-tight">{heading}</h2>
+    <p class="text-xs font-semibold tracking-wide text-[var(--text-secondary)] uppercase [&:lang(vi)]:normal-case [&:lang(vi)]:tracking-[var(--tracking-eyebrow)]">
+      {labelFor(EMPTY_STATE_COPY.notPublished, lang)}
+    </p>
+  </div>
+  <p class="text-sm leading-relaxed text-[var(--text-secondary)]">
+    {labelFor(EMPTY_STATE_COPY.businessPending, lang)} {boundary}
+  </p>
+  <p class="mt-1">
+    <a
+      href={soft.href}
+      class="inline-flex min-h-11 items-center text-sm font-semibold text-[var(--action-primary)] no-underline hover:underline"
+    >
+      {soft.label}
+    </a>
+  </p>
+</li>

@@ -12,13 +12,16 @@ const ROOT = "/en/";
 
 /** Critical content that must always render, even with JS disabled. */
 const CRITICAL = [
-  { selector: "#hero-title", text: /Intelligence|Trí tuệ/i },
-  { selector: ".hero-actions", text: /./ },
+  {
+    selector: "#hero-title",
+    text: /We build intelligent products|Intelligence|Trí tuệ/i,
+  },
+  { selector: "[data-hero-primary]", text: /./ },
 ];
 
 /** Action links that must remain reachable at every tier. */
 const ACTIONS = [
-  "[data-journey-bar] a",
+  "[data-hero-primary]",
   'a[href="/en/products/"]',
   'a[href="/en/about/"]',
 ];

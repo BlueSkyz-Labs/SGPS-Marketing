@@ -4,10 +4,10 @@ test.describe("executive-to-evidence reading depth", () => {
   test("executive summary stays visible while evidence is disclosed", async ({
     page,
   }) => {
-    await page.goto("/en/security/");
+    await page.goto("/en/verify/");
     const details = page
       .locator(
-        '[data-integrity-lens][data-surface="security"] [data-evidence-details]',
+        '[data-trust-ledger] [data-trust-surface="security"] [data-evidence-details]',
       )
       .first();
     const executive = details.locator(".evidence-details__summary");
@@ -20,18 +20,18 @@ test.describe("executive-to-evidence reading depth", () => {
     await expect(evidenceLink).toBeVisible();
   });
 
-  test("trust ledger rows expose evidence through the same control", async ({
+  test("the home keeps one quiet proof link instead of ledger rows", async ({
     page,
   }) => {
+    // Experience v6 S1: the home proof band is a heading, one line and one link;
+    // the ledger rows and their evidence disclosures return on /verify (S3).
+    // Evidence disclosure stays covered on /security/ and /privacy/ above/below.
     await page.goto("/en/");
-    const ledger = page.locator("[data-trust-ledger]");
-    await expect(ledger).toBeVisible();
-    const firstRow = ledger.locator("[data-trust-surface]").first();
-    await expect(firstRow.locator(".evidence-details__summary")).toBeVisible();
-    await firstRow.getByText("See the evidence").click();
-    await expect(
-      firstRow.locator(".evidence-details__list a").first(),
-    ).toBeVisible();
+    await expect(page.locator("[data-trust-ledger]")).toHaveCount(0);
+    const band = page.locator("[data-trust-band]");
+    await expect(band).toBeVisible();
+    await expect(band.getByRole("link")).toHaveCount(1);
+    await expect(band.getByRole("link")).toHaveAttribute("href", "/en/verify/");
   });
 
   test("print output keeps the evidence readable (chromium)", async ({
@@ -39,24 +39,24 @@ test.describe("executive-to-evidence reading depth", () => {
     browserName,
   }) => {
     test.skip(browserName !== "chromium", "print reveal verified on chromium");
-    await page.goto("/en/security/");
+    await page.goto("/en/verify/");
     await page.emulateMedia({ media: "print" });
     const evidenceLink = page
       .locator(
-        '[data-integrity-lens][data-surface="security"] .evidence-details__list a',
+        '[data-trust-ledger] [data-trust-surface="security"] .evidence-details__list a',
       )
       .first();
     await expect(evidenceLink).toBeVisible();
   });
 
   test("VI evidence depth is localized", async ({ page }) => {
-    await page.goto("/vi/privacy/");
+    await page.goto("/vi/verify/");
     const details = page
       .locator(
-        '[data-integrity-lens][data-surface="privacy"] [data-evidence-details]',
+        '[data-trust-ledger] [data-trust-surface="privacy"] [data-evidence-details]',
       )
       .first();
-    await expect(details.getByText("Xem bằng chứng")).toBeVisible();
+    await expect(details.locator("summary")).toBeVisible();
   });
 });
 
@@ -64,9 +64,9 @@ test.describe("evidence depth without JavaScript", () => {
   test.use({ javaScriptEnabled: false });
 
   test("native details disclose evidence statically", async ({ page }) => {
-    await page.goto("/en/security/");
+    await page.goto("/en/verify/");
     const details = page
-      .locator('[data-integrity-lens][data-surface="security"] details')
+      .locator('[data-trust-ledger] [data-trust-surface="security"] details')
       .first();
     await expect(details).toBeVisible();
     await details.locator("summary").click();

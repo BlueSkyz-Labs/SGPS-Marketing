@@ -1,0 +1,399 @@
+---
+/**
+ * v8 W5a — the verification page (/{locale}/verify/), deck rows ver-1..8.
+ *
+ * Presentation only: claims, evidence references and the trust lanes come from
+ * the canonical data modules. Nothing here authors or strengthens a claim.
+ * Each claim is shown once with its limit and its sources inline (sources rail
+ * on the right from 1024 px). "What backs it" lists the three trust lanes, one
+ * pointer leads to Compare claims, and the claim map sits in a native
+ * <details> that is closed by default and complete without JavaScript.
+ */
+import Container from "@/components/layout/Container.astro";
+import PageHeader from "@/components/layout/PageHeader.astro";
+import TrustLedger from "@/components/experience/TrustLedger.astro";
+import Atlas from "@/components/experience/Atlas.astro";
+import DeepLinkOpener from "@/components/verify/DeepLinkOpener.astro";
+import SourcesLine from "@/components/trust/SourcesLine.astro";
+import { getClaimAnchor, getPublicClaims } from "@/lib/claims";
+import { getPublicProducts } from "@/lib/products";
+import type { Language } from "@/data/site";
+import type { SourceRef } from "@/data/trust-copy";
+
+interface Props {
+  lang: Language;
+}
+
+const { lang } = Astro.props;
+
+const products = (await getPublicProducts()).map((product) => ({
+  slug: product.data.slug,
+  name: product.data.name,
+}));
+// Only claims the registry publishes are shown (fail-closed).
+const published = new Set(
+  getPublicClaims(products).map((resolved) => resolved.claim.id),
+);
+
+interface ClaimCopy {
+  id: string;
+  statement: string;
+  limit?: string;
+  sources: SourceRef[];
+}
+
+interface VerifyCopy {
+  title: string;
+  lede: string;
+  claims: string;
+  limit: string;
+  sources: string;
+  backs: string;
+  comparePre: string;
+  compareLink: string;
+  map: string;
+  items: ClaimCopy[];
+}
+
+const COPY: Record<Language, VerifyCopy> = {
+  en: {
+    title: "Verify",
+    lede: "Check our claims against public sources.",
+    claims: "What we claim",
+    limit: "Limit:",
+    sources: "Sources:",
+    backs: "What backs it",
+    comparePre: "To compare claims side by side, use",
+    compareLink: "Compare claims",
+    map: "Map of our claims",
+    items: [
+      {
+        id: "security-reporting-is-private",
+        statement:
+          "Security reports go to the maintainers through a private GitHub channel, never a public issue.",
+        limit:
+          "no bug bounty, response-time commitment or right to public disclosure.",
+        sources: [
+          {
+            id: "ev-security-advisory",
+            label: "GitHub private vulnerability reporting",
+          },
+          { id: "ev-security-route", label: "Security route" },
+        ],
+      },
+      {
+        id: "privacy-no-tracking-on-this-site",
+        statement:
+          "This site sets no cookies. It stores only the language and theme you choose, in your browser.",
+        limit:
+          "network data such as IP addresses is still handled by the infrastructure.",
+        sources: [
+          { id: "ev-privacy-route", label: "Privacy route" },
+          { id: "ev-security-route", label: "Security route" },
+        ],
+      },
+      {
+        id: "registry-publishes-only-proven-products",
+        statement:
+          "A product is listed here only when its public evidence is ready to check.",
+        sources: [{ id: "ev-products-route", label: "Products page" }],
+      },
+    ],
+  },
+  vi: {
+    title: "Xác minh",
+    lede: "Đối chiếu các tuyên bố của chúng tôi với nguồn công khai.",
+    claims: "Chúng tôi nói gì",
+    limit: "Giới hạn:",
+    sources: "Nguồn:",
+    backs: "Căn cứ là gì",
+    comparePre: "Để xem các tuyên bố cạnh nhau, dùng",
+    compareLink: "So sánh tuyên bố",
+    map: "Sơ đồ các tuyên bố",
+    items: [
+      {
+        id: "security-reporting-is-private",
+        statement:
+          "Báo cáo bảo mật đến người bảo trì qua kênh GitHub riêng tư, không bao giờ qua issue công khai.",
+        limit:
+          "không có thưởng lỗ hổng, cam kết thời gian phản hồi hay quyền công bố công khai.",
+        sources: [
+          {
+            id: "ev-security-advisory",
+            label: "Báo cáo lỗ hổng riêng tư của GitHub",
+          },
+          { id: "ev-security-route", label: "Trang Bảo mật" },
+        ],
+      },
+      {
+        id: "privacy-no-tracking-on-this-site",
+        statement:
+          "Trang web này không đặt cookie. Chỉ lưu ngôn ngữ và giao diện bạn chọn trong trình duyệt.",
+        limit: "dữ liệu mạng như địa chỉ IP vẫn do hạ tầng xử lý.",
+        sources: [
+          { id: "ev-privacy-route", label: "Trang Quyền riêng tư" },
+          { id: "ev-security-route", label: "Trang Bảo mật" },
+        ],
+      },
+      {
+        id: "registry-publishes-only-proven-products",
+        statement:
+          "Sản phẩm chỉ được liệt kê khi bằng chứng công khai sẵn sàng để kiểm chứng.",
+        sources: [{ id: "ev-products-route", label: "Trang Sản phẩm" }],
+      },
+    ],
+  },
+  zh: {
+    title: "核实",
+    lede: "对照公开来源，检查我们的声明。",
+    claims: "我们说了什么",
+    limit: "限制：",
+    sources: "来源：",
+    backs: "依据是什么",
+    comparePre: "要并排比较，请用",
+    compareLink: "比较声明",
+    map: "我们的声明图谱",
+    items: [
+      {
+        id: "security-reporting-is-private",
+        statement:
+          "安全报告通过 GitHub 私有渠道送达维护者，绝不通过公开 issue。",
+        limit: "不含漏洞赏金、响应时限承诺或公开披露权。",
+        sources: [
+          { id: "ev-security-advisory", label: "GitHub 私密漏洞报告" },
+          { id: "ev-security-route", label: "安全页面" },
+        ],
+      },
+      {
+        id: "privacy-no-tracking-on-this-site",
+        statement: "本站不设置 Cookie，只在浏览器中保存你选择的语言和主题。",
+        limit: "IP 地址等网络数据仍由基础设施处理。",
+        sources: [
+          { id: "ev-privacy-route", label: "隐私页面" },
+          { id: "ev-security-route", label: "安全页面" },
+        ],
+      },
+      {
+        id: "registry-publishes-only-proven-products",
+        statement: "只有公开证据可核验时，产品才会列在这里。",
+        sources: [{ id: "ev-products-route", label: "产品页面" }],
+      },
+    ],
+  },
+  "zh-hant": {
+    title: "查證",
+    lede: "對照公開來源，檢查我們的聲明。",
+    claims: "我們說了什麼",
+    limit: "限制：",
+    sources: "來源：",
+    backs: "依據是什麼",
+    comparePre: "要並排比較，請用",
+    compareLink: "比較聲明",
+    map: "我們的聲明圖譜",
+    items: [
+      {
+        id: "security-reporting-is-private",
+        statement:
+          "資安通報透過 GitHub 私有管道送達維護者，絕不透過公開 issue。",
+        limit: "不含漏洞賞金、回應時限承諾或公開揭露權。",
+        sources: [
+          { id: "ev-security-advisory", label: "GitHub 私密漏洞通報" },
+          { id: "ev-security-route", label: "資訊安全頁面" },
+        ],
+      },
+      {
+        id: "privacy-no-tracking-on-this-site",
+        statement: "本站不設定 Cookie，只在瀏覽器中儲存你選擇的語言與主題。",
+        limit: "IP 位址等網路資料仍由基礎設施處理。",
+        sources: [
+          { id: "ev-privacy-route", label: "隱私權頁面" },
+          { id: "ev-security-route", label: "資訊安全頁面" },
+        ],
+      },
+      {
+        id: "registry-publishes-only-proven-products",
+        statement: "只有公開證據可查證時，產品才會列在這裡。",
+        sources: [{ id: "ev-products-route", label: "產品頁面" }],
+      },
+    ],
+  },
+};
+
+const c = COPY[lang];
+const items = c.items.filter((item) => published.has(item.id));
+
+// Claims can share evidence; emit each evidence anchor id once per page (first
+// claim wins) so deep links stay unique and resolvable.
+const seen = new Set<string>();
+const omitByClaim = new Map<string, string[]>();
+for (const item of items) {
+  omitByClaim.set(
+    item.id,
+    item.sources.filter((source) => seen.has(source.id)).map((s) => s.id),
+  );
+  for (const source of item.sources) seen.add(source.id);
+}
+---
+
+<section class="py-16 lg:py-24" data-verify-centre>
+  <Container>
+    <PageHeader title={c.title} lede={c.lede} />
+
+    {items.length > 0 ? (
+      <div class="mt-12">
+        <h2 class="text-xl font-semibold tracking-tight sm:text-2xl">
+          {c.claims}
+        </h2>
+        <ul class="verify-claims mt-6" data-evidence-teaser>
+          {items.map((item) => (
+            <li
+              class="verify-claim"
+              data-evidence-teaser-item
+              data-claim-id={item.id}
+            >
+              <div class="verify-claim__main">
+                <h3
+                  class="verify-claim__statement"
+                  id={getClaimAnchor(item.id)}
+                >
+                  {item.statement}
+                </h3>
+                {item.limit ? (
+                  <p class="verify-claim__limit">
+                    <strong>{c.limit}</strong> {item.limit}
+                  </p>
+                ) : null}
+              </div>
+              <SourcesLine
+                lang={lang}
+                claimId={item.id}
+                label={c.sources}
+                sources={item.sources}
+                omitAnchorIds={omitByClaim.get(item.id) ?? []}
+                class="verify-claim__sources"
+              />
+            </li>
+          ))}
+        </ul>
+      </div>
+    ) : null}
+
+    <div class="mt-12 max-w-3xl">
+      <h2 class="text-xl font-semibold tracking-tight sm:text-2xl">
+        {c.backs}
+      </h2>
+      <TrustLedger lang={lang} compare={false} />
+    </div>
+
+    <p class="mt-10 max-w-3xl text-[var(--text-secondary)]">
+      {c.comparePre}{" "}
+      <a
+        href={`/${lang}/decision-room/`}
+        class="inline-flex min-h-11 items-center font-semibold text-[var(--action-primary)] underline underline-offset-4 hover:no-underline"
+        data-verify-room
+      >
+        {c.compareLink} →
+      </a>
+    </p>
+
+    <details class="verify-layer mt-10 max-w-3xl" data-verify-layer="atlas">
+      <summary class="verify-layer__summary">{c.map}</summary>
+      <div class="verify-layer__body">
+        <Atlas lang={lang} />
+      </div>
+    </details>
+  </Container>
+</section>
+
+<DeepLinkOpener />
+
+<style>
+  .verify-claims {
+    display: grid;
+    gap: 2rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .verify-claim {
+    display: grid;
+    gap: 0.5rem;
+    min-width: 0;
+  }
+
+  .verify-claim__main {
+    min-width: 0;
+    max-width: 46rem;
+  }
+
+  .verify-claim__statement {
+    margin: 0;
+    font-size: var(--size-4);
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    line-height: 1.4;
+    color: var(--text-primary);
+    overflow-wrap: anywhere;
+    text-wrap: balance;
+    scroll-margin-top: 6rem;
+  }
+
+  .verify-claim__limit {
+    margin: 0.5rem 0 0;
+    font-size: var(--size-3);
+    line-height: 1.6;
+    color: var(--text-secondary);
+  }
+
+  .verify-claim__limit strong {
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+
+  @media (min-width: 1024px) {
+    .verify-claim {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 28rem);
+      column-gap: 3rem;
+      align-items: start;
+    }
+  }
+
+  .verify-layer {
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-card);
+    background: var(--surface-raised);
+  }
+
+  .verify-layer__summary {
+    display: flex;
+    align-items: center;
+    min-height: 2.75rem;
+    padding: 0.5rem 1.25rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    cursor: pointer;
+  }
+
+  .verify-layer__summary:focus-visible {
+    outline: 2px solid var(--action-primary);
+    outline-offset: 2px;
+  }
+
+  .verify-layer__body {
+    padding: 0 1.25rem 1.25rem;
+    min-width: 0;
+  }
+
+  .verify-layer__body :global(#atlas-title) {
+    font-size: var(--size-5);
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    line-height: 1.3;
+  }
+
+  .verify-layer__body :global(.atlas-section) {
+    padding-block: 1rem;
+    border-bottom: 0;
+  }
+</style>

@@ -21,50 +21,50 @@ const items = buildDecisionItems(products);
 
 const COPY = {
   en: {
-    heading: "Decision Room",
-    lede: "Place up to four public facts side by side — sourced statements, trust routes, and the boundaries that keep them honest. No verdicts, no suggestions.",
+    heading: "Compare claims",
+    lede: "Choose up to four public claims to view side by side. Nothing is ranked or recommended.",
     add: "Compare",
     remove: "Remove",
     reset: "Clear comparison",
     boardTitle: "Comparison",
-    empty: "Nothing selected yet. Choose up to four items below.",
-    source: "View source",
+    empty: "Nothing selected yet. Choose up to four items.",
+    source: "Open source",
     count: "{n}/{max} compared",
     full: "Comparison holds up to {max} items.",
   },
   vi: {
-    heading: "Phòng Quyết định",
-    lede: "Đặt tối đa bốn dữ kiện công khai cạnh nhau — tuyên bố có nguồn, các tuyến tin cậy, và ranh giới để giữ chúng trung thực. Không điểm số, không đề xuất.",
+    heading: "So sánh tuyên bố",
+    lede: "Chọn tối đa 4 tuyên bố công khai để xem cạnh nhau. Không xếp hạng, không đề xuất.",
     add: "So sánh",
     remove: "Bỏ",
     reset: "Xóa so sánh",
     boardTitle: "So sánh",
-    empty: "Chưa chọn mục nào. Chọn tối đa bốn mục bên dưới.",
-    source: "Xem nguồn",
+    empty: "Chưa chọn gì. Chọn tối đa 4 mục.",
+    source: "Mở nguồn",
     count: "Đang so sánh {n}/{max}",
     full: "So sánh tối đa {max} mục.",
   },
   zh: {
-    heading: "决策室",
-    lede: "将最多四项公开事实并列对照 — 有来源的声明、信任路径，以及确保其严谨的边界说明。不作结论，不提建议。",
+    heading: "比较声明",
+    lede: "选择最多四条公开声明并排查看。不排名，不推荐。",
     add: "对比",
     remove: "移除",
     reset: "清空对比",
     boardTitle: "对比栏",
-    empty: "尚未选择任何项目。请在下方选择最多四项。",
-    source: "查看来源",
+    empty: "尚未选择。请最多选四项。",
+    source: "打开来源",
     count: "已对比 {n}/{max} 项",
     full: "对比栏最多容纳 {max} 项。",
   },
   "zh-hant": {
-    heading: "決策室",
-    lede: "將最多四項公開事實並列對照 — 有來源的聲明、信任路徑，以及確保其嚴謹的邊界說明。不作結論，不提建議。",
+    heading: "比較聲明",
+    lede: "選擇最多四則公開聲明並排檢視。不排名，不推薦。",
     add: "對比",
     remove: "移除",
     reset: "清空對比",
     boardTitle: "對比欄",
-    empty: "尚未選擇任何專案。請在下方選擇最多四項。",
-    source: "檢視來源",
+    empty: "尚未選擇。請最多選四項。",
+    source: "開啟來源",
     count: "已對比 {n}/{max} 項",
     full: "對比欄最多容納 {max} 項。",
   },
@@ -101,11 +101,8 @@ const ATELIER_COPY = {
       availability: "Availability",
     },
     handoff: {
-      select: "Include in a dossier",
-      empty:
-        "Nothing is selected. Tick the items you want and the dossier will carry only those.",
-      action: "Open the dossier with {n} selected",
-      report: "{n} selection(s) cannot be included in a dossier.",
+      action: "Add selection to summary",
+      report: "{n} selection(s) cannot be added to a summary.",
     },
     reasons: {
       "in-scope":
@@ -139,7 +136,7 @@ const ATELIER_COPY = {
       explore: "Khám phá",
       evaluate: "Đánh giá",
       verify: "Kiểm chứng",
-      architecture: "Kiến trúc",
+      architecture: "Cách trang web này được xây dựng",
       "work-with-blueskyz": "Làm việc với BlueSkyz",
     },
     constraintsLabels: {
@@ -148,11 +145,8 @@ const ATELIER_COPY = {
       availability: "Sẵn sàng",
     },
     handoff: {
-      select: "Đưa vào hồ sơ",
-      empty:
-        "Chưa chọn gì. Hãy tick đúng những mục bạn muốn — hồ sơ chỉ mang những mục đó.",
-      action: "Mở hồ sơ với {n} mục đã chọn",
-      report: "{n} lựa chọn không thể đưa vào hồ sơ.",
+      action: "Thêm lựa chọn vào bản tóm tắt",
+      report: "{n} lựa chọn không thể thêm vào bản tóm tắt.",
     },
     reasons: {
       "in-scope":
@@ -195,10 +189,8 @@ const ATELIER_COPY = {
       availability: "可用性",
     },
     handoff: {
-      select: "加入档案",
-      empty: "尚未选择。请勾选你想要的条目，档案只会包含这些条目。",
-      action: "打开包含 {n} 个所选条目的档案",
-      report: "有 {n} 个选择无法加入档案。",
+      action: "将所选内容加入摘要",
+      report: "有 {n} 个选择无法加入摘要。",
     },
     reasons: {
       "in-scope": "列出原因：它是符合该目标的已发布条目。",
@@ -240,10 +232,8 @@ const ATELIER_COPY = {
       availability: "可用性",
     },
     handoff: {
-      select: "加入檔案",
-      empty: "尚未選擇。請勾選你想要的條目，檔案只會包含這些條目。",
-      action: "開啟包含 {n} 個所選條目的檔案",
-      report: "有 {n} 個選擇無法加入檔案。",
+      action: "將所選內容加入摘要",
+      report: "有 {n} 個選擇無法加入摘要。",
     },
     reasons: {
       "in-scope": "列出原因：它是符合該目標的已發布條目。",
@@ -292,8 +282,8 @@ const domId = (id: string): string =>
   data-msg-none={atelierCopy.noneMatch}
   aria-labelledby="decision-room-title"
 >
-  <h2 id="decision-room-title" class="decision-room__title">
-    {copy.heading}
+  <h2 id="decision-room-title" class="sr-only">
+    {copy.boardTitle}
   </h2>
   <p class="decision-room__lede">{copy.lede}</p>
 
@@ -371,17 +361,6 @@ const domId = (id: string): string =>
         data-has-evidence={item.evidenceHref ? "" : undefined}
         data-has-boundary={item.boundaryText ? "" : undefined}
       >
-        {item.kind === "claim" ? (
-          <label class="decision-room__select">
-            <input
-              type="checkbox"
-              autocomplete="off"
-              data-atelier-item-select
-              value={item.id}
-            />
-            <span>{atelierCopy.handoff.select}</span>
-          </label>
-        ) : null}
         <span class="decision-room__kind">{KIND_LABELS[item.kind][lang]}</span>
         <h3 class="decision-room__label">{item.label[lang]}</h3>
         {item.summary ? (
@@ -408,6 +387,7 @@ const domId = (id: string): string =>
           class="decision-room__add"
           data-decision-add={item.id}
           aria-pressed="false"
+          aria-label={`${copy.add}: ${item.label[lang]}`}
         >
           {copy.add}
         </button>
@@ -415,47 +395,85 @@ const domId = (id: string): string =>
     ))}
   </div>
 
-  <p class="decision-room__empty" data-decision-empty-state>
-    {copy.empty}
-  </p>
-
-  <div class="decision-room__board" data-decision-board hidden>
-    <h3 class="decision-room__board-title">{copy.boardTitle}</h3>
-    <ul class="decision-room__rows">
-      {items.map((item) => (
-        <li data-decision-row={item.id} hidden>
-          <span class="decision-room__row-label">{item.label[lang]}</span>
-          <button
-            type="button"
-            class="decision-room__remove"
-            data-decision-remove={item.id}
-          >
-            {copy.remove}
-          </button>
-        </li>
-      ))}
-    </ul>
-  </div>
-
-  <button type="button" class="decision-room__reset" data-decision-reset hidden>
-    {copy.reset}
-  </button>
-
-  <div class="decision-room__handoff" data-atelier-handoff>
-    <p class="decision-room__handoff-empty" data-atelier-handoff-empty>
-      {atelierCopy.handoff.empty}
+  <div class="decision-room__tray" data-decision-tray>
+    <p class="decision-room__empty" data-decision-empty-state>
+      {copy.empty}
     </p>
-    <a
-      class="decision-room__handoff-link"
-      data-atelier-handoff-link
-      hidden
-      href="#"
-    ></a>
-    <p
-      class="decision-room__handoff-report"
-      data-atelier-handoff-report
-      hidden
-    ></p>
+
+    <div class="decision-room__board" data-decision-board hidden>
+      <div class="decision-room__board-head">
+        <p class="decision-room__board-title">{copy.boardTitle}</p>
+        <p class="decision-room__count" data-decision-count></p>
+        <button
+          type="button"
+          class="decision-room__reset"
+          data-decision-reset
+          hidden
+        >
+          {copy.reset}
+        </button>
+      </div>
+      <p
+        class="decision-room__limit"
+        id="decision-room-limit"
+        data-decision-limit
+        data-active="false"
+      >
+        {copy.full.replace("{max}", String(MAX_COMPARISON))}
+      </p>
+      <div class="decision-room__handoff" data-atelier-handoff>
+        <a
+          class="decision-room__handoff-link"
+          data-atelier-handoff-link
+          hidden
+          href="#"
+        ></a>
+        <p
+          class="decision-room__handoff-report"
+          data-atelier-handoff-report
+          hidden
+        ></p>
+      </div>
+      <ul class="decision-room__rows">
+        {items.map((item) => (
+          <li class="decision-room__row" data-decision-row={item.id} hidden>
+            <span class="decision-room__row-label">{item.label[lang]}</span>
+            {item.summary ? (
+              <span class="decision-room__row-summary">
+                {item.summary[lang]}
+              </span>
+            ) : null}
+            {item.boundaryText ? (
+              <span class="decision-room__boundary">
+                {item.boundaryText[lang]}
+              </span>
+            ) : null}
+            {item.evidenceHref ? (
+              <a
+                href={item.evidenceHref[lang]}
+                rel={
+                  /^https?:\/\//i.test(item.evidenceHref[lang])
+                    ? "noopener noreferrer"
+                    : undefined
+                }
+                class="decision-room__source"
+                aria-label={`${copy.source}: ${item.label[lang]}`}
+              >
+                {copy.source} →
+              </a>
+            ) : null}
+            <button
+              type="button"
+              class="decision-room__remove"
+              data-decision-remove={item.id}
+              aria-label={`${copy.remove}: ${item.label[lang]}`}
+            >
+              {copy.remove}
+            </button>
+          </li>
+        ))}
+      </ul>
+    </div>
   </div>
 
   <p class="sr-only" role="status" aria-live="polite" data-decision-live></p>
@@ -465,8 +483,12 @@ const domId = (id: string): string =>
   <style>
     [data-decision-add],
     [data-decision-reset],
+    [data-decision-remove],
     [data-atelier-handoff-link] {
       display: none !important;
+    }
+    .decision-room__tray {
+      min-height: 0 !important;
     }
   </style>
 </noscript>

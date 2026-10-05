@@ -7,10 +7,6 @@ const ledgerComponent = readFileSync(
   "src/components/experience/TrustLedger.astro",
   "utf8",
 );
-const trustSection = readFileSync(
-  "src/components/sections/Trust.astro",
-  "utf8",
-);
 const atlasSource = readFileSync("src/lib/atlas.ts", "utf8");
 const atlasComponent = readFileSync(
   "src/components/experience/Atlas.astro",
@@ -93,12 +89,7 @@ test("every ledger entry is localized in both languages", () => {
   assert.equal(en, vi, "EN and VI string counts must match");
 });
 
-test("the trust section renders through the ledger model", () => {
-  assert.match(
-    trustSection,
-    /TrustLedger/,
-    "Trust section must render the ledger component",
-  );
+test("the trust ledger component renders through the ledger model", () => {
   assert.match(
     ledgerComponent,
     /@\/data\/trust-ledger/,

@@ -43,16 +43,16 @@ export const SHARED_LABELS = {
     "zh-hant": "旗艦產品",
   },
   jobsHeading: {
-    en: "What it helps people do",
-    vi: "Việc sản phẩm hỗ trợ",
-    zh: "可完成的工作",
-    "zh-hant": "可完成的工作",
+    en: "What it helps you do",
+    vi: "Giúp bạn làm gì",
+    zh: "能帮你做什么",
+    "zh-hant": "能幫你做什麼",
   },
   scopeHeading: {
-    en: "Development scope",
-    vi: "Phạm vi phát triển",
-    zh: "开发范围",
-    "zh-hant": "開發範圍",
+    en: "What we're building",
+    vi: "Đang xây dựng những gì",
+    zh: "正在开发的内容",
+    "zh-hant": "開發中的內容",
   },
   search: { en: "Search", vi: "Tìm", zh: "搜索", "zh-hant": "搜尋" },
   searchPages: {
@@ -70,7 +70,7 @@ export const SHARED_LABELS = {
   },
   aboutBlueSkyz: {
     en: "About BlueSkyz",
-    vi: "Tìm hiểu BlueSkyz",
+    vi: "Về BlueSkyz",
     zh: "关于 BlueSkyz",
     "zh-hant": "關於 BlueSkyz",
   },
@@ -93,24 +93,29 @@ export const SHARED_LABELS = {
     zh: "精选产品",
     "zh-hant": "精選產品",
   },
-  featuredBody: {
-    en: "Explore products in development. Availability and supporting material are described individually.",
-    vi: "Khám phá các sản phẩm đang phát triển. Trạng thái và tư liệu tham khảo được ghi rõ cho từng sản phẩm.",
-    zh: "探索开发中的产品。每款产品均分别说明其状态与参考资料。",
-    "zh-hant": "探索開發中的產品。每款產品均分別說明其狀態與參考資料。",
-  },
   continuationHeading: {
-    en: "The rest of the house, in development",
-    vi: "Những sản phẩm khác đang được phát triển",
-    zh: "其他正在开发的产品",
-    "zh-hant": "其他正在開發的產品",
+    en: "Also in development",
+    vi: "Cũng đang phát triển",
+    zh: "同样在开发中",
+    "zh-hant": "同樣在開發中",
   },
-  continuationBody: {
-    en: "Each product shows its recorded stage — concept, prototype or development — its platform and an honest next step.",
-    vi: "Mỗi sản phẩm hiển thị đúng giai đoạn đã ghi nhận — ý tưởng, nguyên mẫu hay phát triển — cùng nền tảng và bước tiếp theo trung thực.",
-    zh: "每款产品均标明其记录的阶段（概念、原型或开发）、平台以及如实的下一步。",
-    "zh-hant":
-      "每款產品均標明其記錄的階段（概念、原型或開發）、平台以及如實的下一步。",
+  trustHeading: {
+    en: "Check what we say",
+    vi: "Kiểm chứng điều chúng tôi nói",
+    zh: "核实我们所说的",
+    "zh-hant": "查證我們所說的",
+  },
+  trustBody: {
+    en: "Our public claims link to the sources behind them.",
+    vi: "Các tuyên bố công khai của chúng tôi đều dẫn tới nguồn đã công bố.",
+    zh: "我们的公开声明都链接到其依据来源。",
+    "zh-hant": "我們的公開聲明都連結到其依據來源。",
+  },
+  trustCta: {
+    en: "Check our claims",
+    vi: "Xem các tuyên bố",
+    zh: "查看依据",
+    "zh-hant": "查看依據",
   },
   viewProfile: {
     en: "View profile",
@@ -119,6 +124,20 @@ export const SHARED_LABELS = {
     "zh-hant": "檢視產品簡介",
   },
   signIn: { en: "Sign in", vi: "Đăng nhập", zh: "登录", "zh-hant": "登入" },
+  /** Qualified label: the sign-in page is for existing users, not an open sign-up. */
+  signInExisting: {
+    en: "Sign in (existing users)",
+    vi: "Đăng nhập (người dùng hiện có)",
+    zh: "登录（现有用户）",
+    "zh-hant": "登入（現有使用者）",
+  },
+  /** Same wording as the product showcase guide link. */
+  readGuide: {
+    en: "Read the getting-started guide",
+    vi: "Xem hướng dẫn bắt đầu",
+    zh: "阅读入门指南",
+    "zh-hant": "閱讀入門指南",
+  },
   proofCaption: {
     en: "Brand identity artwork — not a screenshot of the running application.",
     vi: "Hình ảnh nhận diện thương hiệu — không phải ảnh chụp giao diện ứng dụng.",
@@ -145,18 +164,10 @@ export const SHARED_LABELS = {
     "zh-hant": "下一步",
   },
   houseIndex: {
-    en: "House index",
-    vi: "Mục lục ngôi nhà",
+    en: "Site index",
+    vi: "Mục lục trang",
     zh: "网站目录",
     "zh-hant": "網站目錄",
-  },
-  // Accessible name for the One House principle matrix — the four principles
-  // render as cards, so the list needs a locale-aware label of its own.
-  brandPrinciples: {
-    en: "Brand principles",
-    vi: "Nguyên tắc thương hiệu",
-    zh: "品牌原则",
-    "zh-hant": "品牌原則",
   },
   platforms: { en: "Platforms", vi: "Nền tảng", zh: "平台", "zh-hant": "平台" },
 } as const satisfies Record<string, LocalizedLabel>;
@@ -181,6 +192,11 @@ interface NavLabels {
   privacy: string;
   security: string;
   architecture: string;
+  verify: string;
+  /** Existing /editions page title (no new copy). */
+  editions: string;
+  /** Existing /dossier page title (no new copy). */
+  dossier: string;
 }
 
 const NAV_LABELS: Record<Language, NavLabels> = {
@@ -191,7 +207,10 @@ const NAV_LABELS: Record<Language, NavLabels> = {
     support: "Support",
     privacy: "Privacy",
     security: "Security",
-    architecture: "Architecture",
+    architecture: "How this site is built",
+    verify: "Verify",
+    editions: "Collections",
+    dossier: "Printable summary",
   },
   vi: {
     products: "Sản phẩm",
@@ -200,7 +219,10 @@ const NAV_LABELS: Record<Language, NavLabels> = {
     support: "Hỗ trợ",
     privacy: "Quyền riêng tư",
     security: "Bảo mật",
-    architecture: "Kiến trúc",
+    architecture: "Cách trang web này được xây dựng",
+    verify: "Xác minh",
+    editions: "Tuyển tập",
+    dossier: "Bản tóm tắt để in",
   },
   zh: {
     products: "产品",
@@ -209,7 +231,10 @@ const NAV_LABELS: Record<Language, NavLabels> = {
     support: "支持",
     privacy: "隐私",
     security: "安全",
-    architecture: "架构",
+    architecture: "本站如何构建",
+    verify: "核实",
+    editions: "合集",
+    dossier: "可打印摘要",
   },
   "zh-hant": {
     products: "產品",
@@ -218,7 +243,10 @@ const NAV_LABELS: Record<Language, NavLabels> = {
     support: "支援",
     privacy: "隱私",
     security: "安全",
-    architecture: "架構",
+    architecture: "本站如何建置",
+    verify: "查證",
+    editions: "合集",
+    dossier: "可列印摘要",
   },
 };
 
@@ -240,7 +268,52 @@ export function getFooterLinks(lang: Language): NavItem[] {
     { label: l.support, href: `/${lang}/support/` },
     { label: l.privacy, href: `/${lang}/privacy/` },
     { label: l.security, href: `/${lang}/security/` },
+    { label: l.verify, href: `/${lang}/verify/` },
     { label: l.architecture, href: `/${lang}/architecture/` },
+    { label: l.editions, href: `/${lang}/editions/` },
+    { label: l.dossier, href: `/${lang}/dossier/` },
+  ];
+}
+
+export interface FooterGroup {
+  /** Existing site strings only (brand name, "Trust", "Evidence"). */
+  label: string;
+  links: NavItem[];
+}
+
+const FOOTER_GROUP_LABELS: Record<
+  "trust" | "evidence",
+  Record<Language, string>
+> = {
+  trust: { en: "Trust", vi: "Tin cậy", zh: "信任", "zh-hant": "信任" },
+  evidence: {
+    en: "Evidence",
+    vi: "Bằng chứng",
+    zh: "证据",
+    "zh-hant": "證據",
+  },
+};
+
+/** The footer links grouped by intent; same set and order as getFooterLinks. */
+export function getFooterGroups(lang: Language): FooterGroup[] {
+  const byPath = new Map(
+    getFooterLinks(lang).map((link) => [link.href.split("/")[2], link]),
+  );
+  const pick = (...slugs: string[]): NavItem[] =>
+    slugs.map((slug) => byPath.get(slug)!);
+  return [
+    {
+      label: SITE.name,
+      links: pick("products", "about", "contact", "support"),
+    },
+    {
+      label: FOOTER_GROUP_LABELS.trust[lang],
+      links: pick("privacy", "security", "verify", "architecture"),
+    },
+    {
+      label: FOOTER_GROUP_LABELS.evidence[lang],
+      links: pick("editions", "dossier"),
+    },
   ];
 }
 
@@ -263,3 +336,19 @@ export const BRAND_PRINCIPLES = [
     summary: "Real value. Real change.",
   },
 ] as const;
+
+/**
+ * The brand line per locale. zh and zh-hant reuse the renderings already
+ * published in the home hero (`src/content/pages/<lang>/index.yaml`, the Hero
+ * company fallback and `docs/notes/zh-localization-glossary.md`); nothing here
+ * is new copy. Consumers render `lead` then `accent`.
+ */
+export const BRAND_TAGLINE: Record<
+  "en" | "vi" | "zh" | "zh-hant",
+  { lead: string; accent: string }
+> = {
+  en: { lead: SITE.taglineLead, accent: SITE.taglineAccent },
+  vi: { lead: "Trí tuệ. Nâng tầm.", accent: "Tác động." },
+  zh: { lead: "智能。提升。", accent: "影响。" },
+  "zh-hant": { lead: "智慧。提升。", accent: "影響。" },
+};

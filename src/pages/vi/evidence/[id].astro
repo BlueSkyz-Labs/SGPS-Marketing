@@ -19,21 +19,28 @@ const products = (await getPublicProducts()).map((product) => ({
   name: product.data.name,
 }));
 const passport = getEvidencePassport(id ?? "", products);
-const title = passport ? `Bằng chứng: ${passport.claim.vi}` : "Bằng chứng";
+const title = passport
+  ? `Bằng chứng: ${passport.titleLabel?.vi ?? passport.claim.vi}`
+  : "Bằng chứng";
 ---
 
 <BaseLayout
   title={title}
-  description={passport?.claim.vi ?? "Hộ chiếu bằng chứng"}
+  description={passport?.claim.vi ?? "Bằng chứng cho tuyên bố này"}
   path={`/vi/evidence/${id}/`}
 >
   <section class="py-16 lg:py-24">
     <Container>
       <div class="max-w-3xl">
-        <h1 class="evidence-passport__page-title" data-passport-page-title>
-          Hộ chiếu bằng chứng
-        </h1>
-        <EvidencePassport id={id ?? ""} lang="vi" products={products} />
+        <p class="evidence-passport__page-title" data-passport-page-title>
+          Bằng chứng cho tuyên bố này
+        </p>
+        <EvidencePassport
+          id={id ?? ""}
+          lang="vi"
+          products={products}
+          claimAs="h1"
+        />
       </div>
     </Container>
   </section>

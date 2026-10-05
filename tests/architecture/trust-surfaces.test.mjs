@@ -34,8 +34,6 @@ test("trust section links meet touch-target floor", () => {
     "utf8",
   );
   assert.match(evidenceDetails, /min-h-11/);
-  const trust = readFileSync("src/components/sections/Trust.astro", "utf8");
-  assert.match(trust, /TrustLedger/);
 });
 
 test("security surface exposes actionable private reporting CTA", () => {
@@ -60,32 +58,42 @@ test("contact security lane deep-links advisory when email unset", () => {
   assert.match(rootStub, /Astro\.redirect\("\/en\/contact\/"\)/);
 });
 
-test("flagship proof section is evidence-gated and optional", () => {
-  assert.equal(existsSync("src/components/sections/FlagshipProof.astro"), true);
-  const proof = readFileSync(
-    "src/components/sections/FlagshipProof.astro",
+test("flagship act is evidence-gated, wired on the home, and the retired shelf stays gone", () => {
+  const theatre = readFileSync(
+    "src/components/product/FlagshipTheatre.astro",
     "utf8",
   );
-  assert.match(proof, /proof\.media/);
-  assert.match(proof, /media\.src/);
-  assert.match(proof, /data-flagship-proof/);
-  assert.match(proof, /capabilities\.slice/);
-  assert.doesNotMatch(proof, /jobs\.slice/);
-  // The flagship act must stay wired on the locale homepage. C2 replaces the
-  // C1.1 shelf (FlagshipProof) with the cinematic FlagshipTheatre; both satisfy
-  // the evidence-gated contract, so this guard survives the C2 migration.
+  assert.match(theatre, /proof\.media/);
+  assert.match(theatre, /data-flagship-theatre/);
+  assert.match(theatre, /capabilities\.slice/);
+  assert.equal(
+    existsSync("src/components/sections/FlagshipProof.astro"),
+    false,
+  );
+  assert.equal(
+    existsSync("src/components/sections/FeaturedProducts.astro"),
+    false,
+  );
   const home = readFileSync("src/pages/en/index.astro", "utf8");
   assert.match(home, /getFlagshipProduct/);
-  assert.match(home, /FlagshipTheatre|FlagshipProof/);
-  // The retired C1.1 shelf must not come back through the legacy root path.
+  assert.match(home, /FlagshipTheatre/);
   const legacyHome = readFileSync("src/pages/index.astro", "utf8");
   assert.doesNotMatch(legacyHome, /FlagshipProof|FeaturedProducts/);
 });
 
-test("about page publishes approved founder title without invented biography", () => {
-  const about = readFileSync("src/pages/about.astro", "utf8");
-  assert.match(about, /Tony Nguyen — Founder/);
-  assert.doesNotMatch(about, /global offices|bank-grade|military-grade/i);
+test("about page omits the unconfirmed founder line and invents no biography", () => {
+  // Experience v6 S8 (audit E-26): founder detail publishes only when the
+  // Owner confirms it, so neither the legacy redirect nor the locale pages
+  // carry the literal.
+  for (const path of [
+    "src/pages/about.astro",
+    "src/pages/en/about.astro",
+    "src/components/empty-state/AboutComposition.astro",
+  ]) {
+    const about = readFileSync(path, "utf8");
+    assert.doesNotMatch(about, /Tony Nguyen|Founder/);
+    assert.doesNotMatch(about, /global offices|bank-grade|military-grade/i);
+  }
 });
 
 test("SECURITY.md advisory URL matches site constant", () => {

@@ -1,4 +1,5 @@
 ---
+import BlueSkyzIcon from "@/components/icon/BlueSkyzIcon.astro";
 import Container from "@/components/layout/Container.astro";
 import {
   getJourneyActions,
@@ -35,9 +36,7 @@ const renderedActions =
     data-mission-evidence={JSON.stringify(missionEvidence)}
   >
     <Container class="flex flex-col gap-3 py-6 sm:flex-row sm:items-center sm:justify-between">
-      <p class="text-xs font-semibold tracking-[0.18em] text-[var(--text-muted)] uppercase">
-        {navLabel}
-      </p>
+      <p class="eyebrow">{navLabel}</p>
       <ul class="flex flex-wrap gap-3">
         {renderedActions.map((action) => (
           <li
@@ -49,9 +48,10 @@ const renderedActions =
               href={action.href}
             >
               {action.label}
-              <span aria-hidden="true" class="text-[var(--action-primary)]">
-                →
-              </span>
+              <BlueSkyzIcon
+                name="arrow-right"
+                class="size-4 shrink-0 text-[var(--action-primary)]"
+              />
             </a>
           </li>
         ))}

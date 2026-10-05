@@ -3,11 +3,22 @@
  * Locale suggestion host (ADR 0009, no-cookie variant).
  *
  * Renders nothing server-side: with JavaScript disabled the banner is simply
- * absent. The external script builds the region; this file owns its styling.
- * Fixed at the bottom so inserting it never shifts layout.
+ * absent. public/locale-suggestion-early.js builds the region before first
+ * paint, the bundled script binds it; this file owns its styling.
+ * Placement (Experience v6 S5): an in-flow strip directly under the header,
+ * never a fixed/absolute overlay, so it can never cover first-viewport content
+ * such as the hero or its call to action. It is a compact single band; the
+ * one-time push it causes is bounded by its own height and it is removed by
+ * either action.
  */
 ---
 
+<!--
+  Synchronous same-origin script (CSP script-src 'self', like theme-init.js):
+  decides and inserts the strip before first paint so it causes no layout
+  shift. The bundled module script below attaches the interactions.
+-->
+<script is:inline src="/locale-suggestion-early.js"></script>
 <script>
   import { initLocaleSuggestion } from "@/scripts/locale-suggestion";
 
@@ -16,31 +27,34 @@
 
 <style is:global>
   .locale-suggestion {
-    position: fixed;
-    inset: auto 1rem 1rem 1rem;
-    z-index: 40;
+    position: relative;
     display: flex;
     flex-wrap: wrap;
     align-items: center;
     justify-content: space-between;
-    gap: 0.75rem 1rem;
-    max-width: 40rem;
-    margin-inline: auto;
-    padding: 0.75rem 1rem;
-    border: 1px solid var(--border-subtle);
-    border-radius: var(--radius-card, 0.75rem);
-    background: var(--surface-raised);
-    color: var(--text-primary);
-    box-shadow: 0 12px 32px -12px rgba(11, 16, 32, 0.35);
-    transition:
-      opacity 200ms ease-out,
-      transform 200ms ease-out;
+    gap: 0.25rem 1rem;
+    box-sizing: border-box;
+    width: 100%;
+    /* F7: text and actions sit on the site grid (same max width and gutter
+       as the header and sections) while the strip stays full width. */
+    padding-block: 0.5rem;
+    padding-inline: max(
+      var(--site-gutter, 1rem),
+      calc((100% - var(--site-max, 78.5rem)) / 2 + var(--site-gutter, 1rem))
+    );
+    /* Calm-chrome round (2026-10-04): a whisper under the header, not a second
+       call to action. Same surface as the page, hairline edge, muted copy. */
+    border-bottom: 1px solid
+      color-mix(in srgb, var(--border-subtle) 60%, transparent);
+    background: var(--surface-primary);
+    color: var(--text-secondary);
+    transition: opacity 200ms ease-out;
   }
 
   .locale-suggestion__text {
     margin: 0;
-    font-size: 0.95rem;
-    font-weight: 600;
+    font-size: var(--size-2);
+    font-weight: 500;
   }
 
   .locale-suggestion__actions {
@@ -55,22 +69,30 @@
     justify-content: center;
     min-width: 44px;
     min-height: 44px;
-    padding: 0 1rem;
-    border: 1px solid var(--border-subtle);
+    padding: 0 0.75rem;
+    border: 0;
     border-radius: var(--radius-sm, 0.5rem);
     background: transparent;
-    color: var(--text-primary);
+    color: var(--text-secondary);
     font: inherit;
-    font-size: 0.875rem;
-    font-weight: 600;
+    font-size: var(--size-2);
+    font-weight: 500;
     text-decoration: none;
     cursor: pointer;
   }
 
+  /* The suggested language reads as the one link: underlined, primary ink,
+     never a solid blue fill competing with the page's primary action. */
   .locale-suggestion__accept {
-    border-color: var(--action-fill);
-    background: var(--action-fill);
-    color: #ffffff;
+    color: var(--text-primary);
+    font-weight: 600;
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.25em;
+  }
+
+  .locale-suggestion__button:hover {
+    color: var(--text-primary);
   }
 
   .locale-suggestion__button:focus-visible {
@@ -81,7 +103,6 @@
   @starting-style {
     .locale-suggestion {
       opacity: 0;
-      transform: translateY(0.5rem);
     }
   }
 
@@ -93,7 +114,7 @@
 
   @media (forced-colors: active) {
     .locale-suggestion {
-      border-color: CanvasText;
+      border-bottom-color: CanvasText;
     }
   }
 </style>

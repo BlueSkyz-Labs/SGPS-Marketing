@@ -1,28 +1,134 @@
 ---
+/**
+ * Inner-page header (UI upgrade F3).
+ *
+ * The page H1 steps up to the 44 px display size from 768 px so it reads
+ * clearly above the 32 px section H2s (it stays on the 32 px display step on
+ * phones). Sizes come only from the nine-step scale (v8 W6). The eyebrow is
+ * optional and should be omitted when it repeats the H1. `numeral` renders a
+ * short code (the 404) as a quiet display numeral; its text is unchanged.
+ * `rule` closes the header with a hairline for the editorial trust pages.
+ */
 interface Props {
   eyebrow?: string;
   title: string;
   lede?: string;
+  eyebrowVariant?: "label" | "numeral";
+  rule?: boolean;
 }
 
-const { eyebrow, title, lede } = Astro.props;
+const {
+  eyebrow,
+  title,
+  lede,
+  eyebrowVariant = "label",
+  rule = false,
+} = Astro.props;
 ---
 
-<header class="max-w-3xl">
+<header
+  class:list={["page-header", rule && "page-header--rule"]}
+  data-page-header
+>
   {eyebrow ? (
-    <p class="text-xs font-semibold tracking-[0.18em] text-[var(--text-secondary)] uppercase">
+    <p
+      class:list={[
+        "page-header__eyebrow",
+        eyebrowVariant === "numeral" && "page-header__eyebrow--numeral",
+      ]}
+    >
       {eyebrow}
     </p>
   ) : null}
-  <h1
-    class:list={[
-      "text-4xl font-semibold tracking-tight text-balance sm:text-5xl",
-      eyebrow && "mt-3",
-    ]}
-  >
-    {title}
-  </h1>
-  {lede ? (
-    <p class="mt-5 text-lg text-[var(--text-secondary)] text-pretty">{lede}</p>
-  ) : null}
+  <h1 class="page-header__title type-d2 text-balance">{title}</h1>
+  {lede ? <p class="page-header__lede text-pretty">{lede}</p> : null}
 </header>
+
+<style>
+  .page-header {
+    max-width: 48rem;
+  }
+  /* The closing hairline spans the content column; the text keeps its measure. */
+  .page-header--rule {
+    max-width: none;
+    padding-block-end: 2rem;
+    border-block-end: 1px solid var(--border-subtle);
+  }
+  .page-header__title {
+    max-width: 48rem;
+  }
+  .page-header__eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin: 0 0 1rem;
+    font-size: var(--size-1);
+    font-weight: 600;
+    letter-spacing: var(--tracking-eyebrow, 0.12em);
+    text-transform: uppercase;
+    color: var(--text-secondary);
+  }
+
+  /* Vietnamese: sentence case (cross-subset kerning, see .eyebrow). */
+  :lang(vi) .page-header__eyebrow {
+    text-transform: none;
+    letter-spacing: var(--tracking-eyebrow, 0.03em);
+  }
+  /* A short cobalt hairline leads the label: the one accent in the header. */
+  .page-header__eyebrow::before {
+    content: "";
+    inline-size: 1.5rem;
+    border-block-start: 1px solid var(--action-primary);
+    flex: none;
+  }
+  :lang(vi) .page-header__eyebrow {
+    letter-spacing: 0.06em;
+  }
+  :lang(zh) .page-header__eyebrow {
+    letter-spacing: 0.04em;
+  }
+  .page-header__eyebrow--numeral {
+    font-size: var(--size-9);
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: -0.03em;
+    color: var(--action-primary);
+    font-variant-numeric: tabular-nums;
+  }
+  .page-header__eyebrow--numeral::before {
+    content: none;
+  }
+  .page-header__lede {
+    margin: 1.25rem 0 0;
+    max-width: 42rem;
+    font-size: var(--size-4);
+    line-height: 1.6;
+    color: var(--text-secondary);
+  }
+  @media (min-width: 48rem) {
+    .page-header__title {
+      font-size: var(--size-8);
+      line-height: var(--type-d1-leading, 1.08);
+      letter-spacing: var(--type-d1-tracking, -0.02em);
+    }
+    :lang(vi) .page-header__title {
+      line-height: 1.16;
+      letter-spacing: -0.015em;
+    }
+    :lang(zh) .page-header__title {
+      line-height: 1.3;
+      letter-spacing: 0;
+    }
+    .page-header__lede {
+      margin-block-start: 1.5rem;
+    }
+  }
+  @media (forced-colors: active) {
+    .page-header__eyebrow::before {
+      border-color: CanvasText;
+    }
+    .page-header__eyebrow--numeral {
+      color: CanvasText;
+    }
+  }
+</style>

@@ -3,6 +3,7 @@ import type { CollectionEntry } from "astro:content";
 import { SHARED_LABELS, labelFor, type Language } from "@/data/site";
 import { getProductProfilePath } from "@/lib/product-routes";
 import ProductStatus from "@/components/product/ProductStatus.astro";
+import FlagshipCapture from "@/components/product/FlagshipCapture.astro";
 import ProductVisual from "@/components/product/ProductVisual.astro";
 import ProductProofLink from "@/components/integrity/ProductProofLink.astro";
 import { productCopy, proofCaptionForKind } from "@/lib/product-copy";
@@ -12,6 +13,8 @@ import {
   type PublicProductRef,
   type ResolvedClaim,
 } from "@/lib/claims";
+import { getShowcase } from "@/lib/showcases";
+import { HOME_FLAGSHIP_LEAD, HOME_PROOF_POINTS } from "@/data/home-copy";
 import { productTransitionStyle } from "@/lib/product-transition";
 
 /**
@@ -20,6 +23,10 @@ import { productTransitionStyle } from "@/lib/product-transition";
  * product truth of its own: every visible fact comes from the record. With
  * `product === null` it renders nothing — the homepage falls back honestly
  * rather than fabricating a product moment.
+ *
+ * Experience v6 S2: on the home (`compact`) the act shows a real, labelled
+ * capture of the running app from the product's showcase record instead of
+ * identity artwork; the default (profile/fixture) rendering is unchanged.
  *
  * Wave 2 Task 2.2 — cinematic presentation frame:
  *   The record's brand-identity artwork is shown inside decorative browser
@@ -37,6 +44,11 @@ interface Props {
    * while the production registry stays owner-gated and empty. */
   claims?: readonly ResolvedClaim[] | undefined;
   lang: Language;
+  /** Experience v6 S1: the hero already owns status, promise, jobs and the
+   * primary action, so the home passes `compact` and the act keeps only the
+   * name (linked through the lifecycle mapper), record-backed capabilities and
+   * the visual. Default rendering is unchanged. */
+  compact?: boolean;
 }
 
 const {
@@ -44,6 +56,7 @@ const {
   products,
   claims = getPublicClaims([...products]),
   lang,
+  compact = false,
 } = Astro.props;
 
 if (!product) {
@@ -63,9 +76,27 @@ const cta = resolveLifecycleCta(
     lifecycle: data.lifecycle,
     availability: data.availability,
     primaryActionHref: data.primaryAction.href,
+    productName: data.name,
   },
   lang,
 );
+// v8 W2: the compact (home) act keeps two proof points as a vertical list with
+// an icon and one line each (deck hom-8, hom-9), Sổ Trọ only; any other
+// product falls back to its record capabilities, capped at two.
+const proofPoints: string[] =
+  data.slug === "sotro"
+    ? HOME_PROOF_POINTS.map((point) => point[lang])
+    : capabilities.slice(0, 2);
+// v12 S2: on the home act, one outcome line (the registry's second job,
+// reframed for the customer) leads into the two proof points.
+const flagshipLead = compact
+  ? HOME_FLAGSHIP_LEAD[data.slug]?.[lang]
+  : undefined;
+const hasCapture =
+  compact &&
+  (await getShowcase(data.slug))?.data.screens.some(
+    (screen: { id: string }) => screen.id === "owner-collect",
+  );
 const showProfileCta = cta.href !== profileHref;
 const ctaIsExternal = cta.external || /^https?:\/\//i.test(cta.href);
 
@@ -78,29 +109,70 @@ const ctaIsExternal = cta.external || /^https?:\/\//i.test(cta.href);
 ---
 
 <section
-  class="c2-flagship-theatre c2-product-house border-b border-[var(--border-subtle)] py-16 lg:py-24"
+  class:list={[
+    // Calm-chrome round (2026-10-04): acts are separated by space, not rules.
+    "c2-flagship-theatre c2-product-house section-y",
+  ]}
   aria-labelledby="flagship-theatre-title"
   data-flagship-theatre
 >
   <div class="grid gap-10 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:items-center">
     <div class="c2-flagship-theatre__copy">
-      <ProductStatus label={data.publicLabel} lang={lang} />
-      <p
-        class="mt-4 text-sm font-semibold uppercase tracking-[0.16em] text-[var(--brand-cobalt)]"
-        data-flagship-eyebrow
-      >
-        {labelFor(SHARED_LABELS.flagshipEyebrow, lang)}
-      </p>
-      <h2
-        id="flagship-theatre-title"
-        class="mt-2 text-3xl font-semibold tracking-tight sm:text-4xl"
-      >
-        {data.name}
+      {!compact ? (
+        <>
+          <ProductStatus label={data.publicLabel} lang={lang} />
+          <p
+            class="mt-4 text-sm font-semibold uppercase tracking-[0.16em] text-[var(--brand-cobalt)] [&:lang(vi)]:normal-case [&:lang(vi)]:tracking-[var(--tracking-eyebrow)]"
+            data-flagship-eyebrow
+          >
+            {labelFor(SHARED_LABELS.flagshipEyebrow, lang)}
+          </p>
+        </>
+      ) : null}
+      <h2 id="flagship-theatre-title" class="type-d2 mt-2">
+        {compact ? (
+          <a
+            href={cta.href}
+            rel={ctaIsExternal ? "noopener noreferrer" : undefined}
+            class="c2-flagship-theatre__title-link inline-flex min-h-11 items-center gap-2 text-inherit no-underline hover:underline"
+            data-flagship-title-link
+          >
+            {data.name}
+            {/* v10 E6 BB-02: the heading is a link; the arrow makes that visible
+                without hover. Decorative: the name is the accessible text. */}
+            <svg
+              class="c2-flagship-theatre__title-arrow"
+              aria-hidden="true"
+              viewBox="0 0 24 24"
+              width="24"
+              height="24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M5 12h14M13 6l6 6-6 6" />
+            </svg>
+          </a>
+        ) : (
+          data.name
+        )}
       </h2>
-      <p class="mt-4 max-w-xl text-lg text-[var(--text-secondary)]">
-        {copy.shortDescription}
-      </p>
-      {copy.jobs.length > 0 ? (
+      {!compact ? (
+        <p class="mt-4 max-w-xl text-lg text-[var(--text-secondary)]">
+          {copy.shortDescription}
+        </p>
+      ) : null}
+      {flagshipLead ? (
+        <p
+          class="c2-flagship-theatre__lead mt-4 max-w-xl text-lg text-pretty text-[var(--text-secondary)]"
+          data-flagship-lead
+        >
+          {flagshipLead}
+        </p>
+      ) : null}
+      {!compact && copy.jobs.length > 0 ? (
         <div class="mt-6">
           <h3 class="text-sm font-semibold text-[var(--text-primary)]">
             {labelFor(SHARED_LABELS.jobsHeading, lang)}
@@ -112,7 +184,54 @@ const ctaIsExternal = cta.external || /^https?:\/\//i.test(cta.href);
           </ul>
         </div>
       ) : null}
-      {capabilities.length > 0 ? (
+      {compact && proofPoints.length > 0 ? (
+        <ul class="c2-flagship-theatre__proof mt-6" data-home-proof-list>
+          {proofPoints.map((point: string, i: number) => (
+            <li class="c2-flagship-theatre__proof-item">
+              <span class="c2-flagship-theatre__proof-icon" aria-hidden="true">
+                {i === 0 ? (
+                  <svg
+                    viewBox="0 0 24 24"
+                    width="20"
+                    height="20"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.75"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path d="M13 2 4 14h7l-1 8 9-12h-7z" />
+                  </svg>
+                ) : (
+                  <svg
+                    viewBox="0 0 24 24"
+                    width="20"
+                    height="20"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.75"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path d="M6 3h12v18l-3-2-3 2-3-2-3 2zM9 8h6M9 12h6" />
+                  </svg>
+                )}
+              </span>
+              <span class="c2-flagship-theatre__proof-text">
+                {point}
+                <ProductProofLink
+                  slug={data.slug}
+                  capability={copy.capabilityKeys[i] ?? point}
+                  products={products}
+                  claims={claims}
+                  lang={lang}
+                />
+              </span>
+            </li>
+          ))}
+        </ul>
+      ) : null}
+      {!compact && capabilities.length > 0 ? (
         <div class="mt-6">
           <h3 class="mb-3 text-sm font-semibold text-[var(--text-primary)]">
             {labelFor(SHARED_LABELS.scopeHeading, lang)}
@@ -141,26 +260,51 @@ const ctaIsExternal = cta.external || /^https?:\/\//i.test(cta.href);
           </div>
         </div>
       ) : null}
-      <div class="mt-8 flex flex-wrap items-center gap-3">
-        <a
-          href={cta.href}
-          rel={ctaIsExternal ? "noopener noreferrer" : undefined}
-          data-product-cta={cta.verb}
-          class="inline-flex min-h-11 max-w-full items-center justify-center rounded-[var(--radius-sm)] bg-[var(--action-fill)] px-4 py-2.5 font-medium text-white no-underline hover:bg-[var(--action-primary-hover)] sm:px-5"
-        >
-          {cta.label}
-        </a>
-        {showProfileCta ? (
+      {!compact ? (
+        <div class="mt-8 flex flex-wrap items-center gap-3">
           <a
-            href={profileHref}
-            class="inline-flex min-h-11 max-w-full items-center justify-center rounded-[var(--radius-sm)] border border-[var(--border-subtle)] px-4 py-2.5 font-medium text-[var(--text-primary)] no-underline hover:bg-[var(--bg-subtle)] sm:px-5"
+            href={cta.href}
+            rel={ctaIsExternal ? "noopener noreferrer" : undefined}
+            data-product-cta={cta.verb}
+            class="inline-flex min-h-11 max-w-full items-center justify-center rounded-[var(--radius-sm)] bg-[var(--action-fill)] px-4 py-2.5 font-medium text-white no-underline hover:bg-[var(--action-primary-hover)] sm:px-5"
           >
-            {viewProfileLabel}
+            {cta.label}
           </a>
-        ) : null}
-      </div>
+          {showProfileCta ? (
+            <a
+              href={profileHref}
+              class="inline-flex min-h-11 max-w-full items-center justify-center rounded-[var(--radius-sm)] border border-[var(--border-subtle)] px-4 py-2.5 font-medium text-[var(--text-primary)] no-underline hover:bg-[var(--bg-subtle)] sm:px-5"
+            >
+              {viewProfileLabel}
+            </a>
+          ) : null}
+        </div>
+      ) : null}
     </div>
-    {media ? (
+    {hasCapture ? (
+      <div class="c2-flagship-theatre__backlight">
+        <div
+          class="c2-flagship-theatre__ink-stage c2-flagship-theatre__capture-stage"
+          data-flagship-ink-stage
+        >
+          <FlagshipCapture
+            slug={data.slug}
+            screen="owner-collect"
+            lang={lang}
+            showLabel={false}
+            sizes="(min-width: 1024px) 34rem, 92vw"
+            smallSrc={
+              data.slug === "sotro"
+                ? {
+                    src: "/products/sotro/showcase/mgr-02-payments-768.webp",
+                    width: 768,
+                  }
+                : undefined
+            }
+          />
+        </div>
+      </div>
+    ) : media ? (
       <div class="c2-flagship-theatre__backlight">
         <figure
           class="c2-flagship-theatre__ink-stage m-0"
@@ -226,10 +370,14 @@ const ctaIsExternal = cta.external || /^https?:\/\//i.test(cta.href);
     background: transparent;
   }
 
+  .c2-flagship-theatre__capture-stage {
+    padding: 0.75rem 0.75rem 1rem;
+  }
+
   .c2-flagship-theatre__ink-stage figcaption {
     padding: 0.75rem 1rem 1rem;
     color: color-mix(in srgb, var(--brand-porcelain) 82%, transparent);
-    font-size: 0.875rem;
+    font-size: var(--size-2);
   }
 
   /* ---- Micro-feature cards (capability bullets re-presented) ---- */
@@ -248,7 +396,7 @@ const ctaIsExternal = cta.external || /^https?:\/\//i.test(cta.href);
     display: flex;
     gap: 0.75rem;
     padding: 0.875rem 1rem;
-    border: 1px solid var(--border-subtle);
+    border: 1px solid var(--border-hairline);
     border-radius: var(--radius-md);
     background: var(--surface-subtle);
     min-height: 0;
@@ -256,7 +404,7 @@ const ctaIsExternal = cta.external || /^https?:\/\//i.test(cta.href);
 
   .c2-flagship-theatre__feature-index {
     flex: none;
-    font-size: 0.75rem;
+    font-size: var(--size-1);
     font-weight: 700;
     color: var(--text-muted);
     font-variant-numeric: tabular-nums;
@@ -266,10 +414,65 @@ const ctaIsExternal = cta.external || /^https?:\/\//i.test(cta.href);
   .c2-flagship-theatre__feature-text {
     flex: 1;
     min-width: 0;
-    font-size: 0.875rem;
+    font-size: var(--size-2);
     color: var(--text-secondary);
     line-height: 1.5;
     overflow-wrap: anywhere;
+  }
+
+  /* ---- v10 E6 BB-02: visible link affordance on the compact heading ---- */
+  .c2-flagship-theatre__title-arrow {
+    flex: none;
+    width: 0.75em;
+    height: 0.75em;
+    color: var(--text-muted);
+    transition: transform var(--motion-quick) var(--ease-standard);
+  }
+  .c2-flagship-theatre__title-link:hover .c2-flagship-theatre__title-arrow,
+  .c2-flagship-theatre__title-link:focus-visible
+    .c2-flagship-theatre__title-arrow {
+    transform: translateX(0.15em);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .c2-flagship-theatre__title-arrow {
+      transition: none;
+    }
+  }
+
+  /* ---- v8 W2: compact proof list (icon + one line each) ---- */
+  .c2-flagship-theatre__proof {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 0.75rem;
+  }
+  /* v12 S2: with the outcome lead above it, the list keeps a clear step
+     (the list's own margin reset would otherwise butt it against the lead). */
+  .c2-flagship-theatre__lead + .c2-flagship-theatre__proof {
+    margin-top: 1.5rem;
+  }
+  .c2-flagship-theatre__proof-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+  .c2-flagship-theatre__proof-icon {
+    flex: none;
+    display: inline-grid;
+    place-items: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: var(--radius-md);
+    background: var(--surface-subtle);
+    border: 1px solid var(--border-subtle);
+    color: var(--text-secondary);
+  }
+  .c2-flagship-theatre__proof-text {
+    min-width: 0;
+    padding-top: 0.45rem;
+    color: var(--text-secondary);
+    line-height: 1.5;
   }
 
   /* ---- Reduced motion: neutralise all decorative layers ---- */

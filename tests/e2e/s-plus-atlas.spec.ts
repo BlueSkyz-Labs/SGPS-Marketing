@@ -1,10 +1,11 @@
 import { expect, test } from "@playwright/test";
+import { openVerifyLayer } from "./verify-helpers.ts";
 import { hasPublicProducts } from "./product-helpers.ts";
 
 test("atlas renders truth-derived nodes with decorative SVG hidden from AT", async ({
   page,
 }) => {
-  await page.goto("/en/products/");
+  await openVerifyLayer(page, "/en/verify/", "atlas");
   const atlas = page.locator("[data-atlas]");
   await expect(atlas).toBeVisible();
 
@@ -48,7 +49,7 @@ test("zero public products means zero product nodes (honest empty state)", async
     hasPublicProducts,
     "Public products are published; empty state test only applies when registry is empty",
   );
-  await page.goto("/en/products/");
+  await openVerifyLayer(page, "/en/verify/", "atlas");
   const atlas = page.locator("[data-atlas]");
   await expect(
     atlas.locator("[data-atlas-node][data-atlas-kind='product']"),
@@ -59,7 +60,7 @@ test("zero public products means zero product nodes (honest empty state)", async
 });
 
 test("atlas node links resolve to real destinations", async ({ page }) => {
-  await page.goto("/en/products/");
+  await openVerifyLayer(page, "/en/verify/", "atlas");
   const atlas = page.locator("[data-atlas]");
   const links = atlas.locator("[data-atlas-node] a");
   const hrefs = await links.evaluateAll((elements) =>
@@ -78,13 +79,24 @@ test("atlas node links resolve to real destinations", async ({ page }) => {
   expect(
     await atlas.locator("[data-atlas-node] a[href='/en/privacy/']").count(),
   ).toBeGreaterThanOrEqual(1);
+  // v7 B-17: "#house-title" is not rendered on the home page (OneHouse is not
+  // mounted there), so no atlas link may carry it. Existence of every remaining
+  // link target is checked in tests/architecture/v7-truth-content.test.mjs.
   await expect(
-    atlas.locator("[data-atlas-node] a[href='#house-title']").first(),
-  ).toHaveCount(1);
+    atlas.locator("[data-atlas-node] a[href*='#house-title']"),
+  ).toHaveCount(0);
+  // v9 F9: no page renders the principles since abt-4, so principle rows show
+  // their label as plain text and carry no link.
+  const principles = atlas.locator(
+    "[data-atlas-node][data-atlas-kind='principle']",
+  );
+  await expect(principles).toHaveCount(4);
+  await expect(principles.locator("a")).toHaveCount(0);
+  await expect(principles.locator(".atlas-row__label")).toHaveCount(4);
 });
 
-test("atlas is localized on /vi/products/", async ({ page }) => {
-  await page.goto("/vi/products/");
+test("atlas is localized on /vi/verify/", async ({ page }) => {
+  await openVerifyLayer(page, "/vi/verify/", "atlas");
   const atlas = page.locator("[data-atlas]");
   await expect(atlas).toBeVisible();
   await expect(
@@ -94,11 +106,11 @@ test("atlas is localized on /vi/products/", async ({ page }) => {
   ).toHaveCount(1);
 });
 
-test("320px product index keeps no horizontal overflow with atlas", async ({
+test("320px /verify keeps no horizontal overflow with atlas open", async ({
   page,
 }) => {
   await page.setViewportSize({ width: 320, height: 720 });
-  await page.goto("/en/products/");
+  await openVerifyLayer(page, "/en/verify/", "atlas");
   await expect(page.locator("[data-atlas]")).toBeVisible();
   expect(
     await page.evaluate(
@@ -112,7 +124,7 @@ test("320px product index keeps no horizontal overflow with atlas", async ({
 test("atlas renders without JavaScript", async ({ browser }) => {
   const context = await browser.newContext({ javaScriptEnabled: false });
   const page = await context.newPage();
-  await page.goto("/en/products/");
+  await openVerifyLayer(page, "/en/verify/", "atlas");
   const atlas = page.locator("[data-atlas]");
   await expect(atlas).toBeVisible();
   expect(

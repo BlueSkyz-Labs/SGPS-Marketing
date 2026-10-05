@@ -8,6 +8,20 @@
  * Usage:
  *   node scripts/smoke-production.mjs [--site https://blueskyzlabs.com]
  */
+import { readFileSync } from "node:fs";
+import {
+  assetProblem,
+  buildHeaderExpectations,
+  extractProductPaths,
+  extractSameOriginAssetPaths,
+  htmlHeaderProblems,
+  immutableAssetHeaderProblems,
+} from "./smoke-assets.mjs";
+import {
+  SUPPORTED_LANGUAGES,
+  isLocalizedCanonicalRoute,
+} from "./smoke-locales.mjs";
+
 const DEFAULT_SITE = "https://blueskyzlabs.com";
 
 function resolveSite() {
@@ -63,6 +77,11 @@ check("zh-Hans home responds 200", async () => {
   assert(response.status === 200, `status ${response.status}`);
 });
 
+check("zh-Hant home responds 200", async () => {
+  const response = await get("/zh-hant/");
+  assert(response.status === 200, `status ${response.status}`);
+});
+
 for (const path of [
   "/en/privacy/",
   "/en/security/",
@@ -73,6 +92,9 @@ for (const path of [
   "/zh/privacy/",
   "/zh/security/",
   "/zh/support/",
+  "/zh-hant/privacy/",
+  "/zh-hant/security/",
+  "/zh-hant/support/",
 ]) {
   check(`${path} responds 200`, async () => {
     const response = await get(path);
@@ -123,15 +145,22 @@ check("root serves the bounded language gateway", async () => {
   const response = await get("/");
   assert(response.status === 200, `status ${response.status}`);
   const html = await response.text();
+  // Owner 2026-10-01 (F16): the gateway is the indexable x-default language
+  // selector, so production must not mark it noindex and it is self-canonical.
   assert(
-    /<meta\s+name="robots"\s+content="noindex, follow"/i.test(html),
-    "root gateway must stay out of the canonical search index",
+    !/<meta\s+name="robots"[^>]*noindex/i.test(html),
+    "root gateway must be indexable as the x-default language selector",
+  );
+  assert(
+    /<link\s+rel="canonical"\s+href="https:\/\/[^"]+\/"/i.test(html),
+    "root gateway must declare its own canonical URL",
   );
   assert(
     html.includes('data-language-choice="vi"') &&
       html.includes('data-language-choice="en"') &&
-      html.includes('data-language-choice="zh"'),
-    "root gateway must expose explicit VI/EN/zh choices",
+      html.includes('data-language-choice="zh"') &&
+      html.includes('data-language-choice="zh-hant"'),
+    "root gateway must expose explicit VI/EN/zh/zh-hant choices",
   );
 });
 
@@ -153,8 +182,10 @@ check("sitemap lists only canonical localized routes", async () => {
     `expected at least the 21 canonical URLs, got ${locs.length}`,
   );
   assert(
-    locs.every((loc) => /\/(en|vi|zh)\//.test(loc)),
-    "sitemap must only list localized canonical routes",
+    locs.every(
+      (loc) => loc === `${site}/` || isLocalizedCanonicalRoute(loc, site),
+    ),
+    "sitemap must list only the root gateway and same-origin localized canonical routes",
   );
 });
 
@@ -188,6 +219,16 @@ check("public SGPS manifest is served", async () => {
   );
 });
 
+check("public product-trust manifest is served", async () => {
+  const response = await get("/.well-known/product-trust.json");
+  assert(response.status === 200, `expected 200, got ${response.status}`);
+  const body = await response.text();
+  assert(
+    body.includes('"derivedFrom": "public-registry"'),
+    "product-trust manifest must be derived from the public registry",
+  );
+});
+
 check("machine-readable security policy is served", async () => {
   const response = await get("/.well-known/security.txt");
   assert(response.status === 200, `expected 200, got ${response.status}`);
@@ -201,6 +242,8 @@ check("branded 404 is served on unknown paths", async () => {
     "/en/no-such-page/",
     "/vi/khong-ton-tai/",
     "/no-such-root/",
+    "/zh/no-such-page/",
+    "/zh-hant/no-such-page/",
   ]) {
     const response = await get(path);
     assert(
@@ -209,7 +252,9 @@ check("branded 404 is served on unknown paths", async () => {
     );
     const html = await response.text();
     assert(
-      html.includes("Page not found") || html.includes("không tìm thấy"),
+      /page not found|không tìm thấy|未找到页面|找不到页面|未找到頁面|找不到頁面/i.test(
+        html,
+      ),
       `${path}: branded 404 content missing`,
     );
     assert(
@@ -225,6 +270,150 @@ check("critical navigation links are present on the EN home", async () => {
   for (const href of ["/en/products/", "/en/about/", "/en/contact/"]) {
     assert(html.includes(`href="${href}"`), `missing link ${href}`);
   }
+});
+
+// RT-01 (redteam 2026-10-03): the public `www` hostname must 301 to the
+// canonical apex so the Access/canonical-host boundary cannot be bypassed.
+// Apex-only: registered exclusively when the smoke runs against the
+// production apex, so --site runs for other hosts are unaffected.
+if (site === DEFAULT_SITE) {
+  check("www hostname 301s to the apex (RT-01)", async () => {
+    const apexHost = new URL(site).host;
+    const response = await fetch(`https://www.${apexHost}/en/about/`, {
+      redirect: "manual",
+      headers: { "user-agent": "blueskyz-production-smoke" },
+    });
+    assert(
+      response.status === 301,
+      `www.${apexHost} must answer 301, got ${response.status}`,
+    );
+    const location = response.headers.get("location") ?? "";
+    assert(
+      location === `https://${apexHost}/en/about/`,
+      `www redirect must target the apex path, got ${location}`,
+    );
+  });
+}
+
+const ASSET_CONCURRENCY = 6;
+const MAX_ASSETS = 500;
+
+async function mapBounded(items, limit, worker) {
+  const results = new Array(items.length);
+  let next = 0;
+  const lanes = Array.from(
+    { length: Math.min(limit, items.length) },
+    async () => {
+      while (next < items.length) {
+        const index = next++;
+        results[index] = await worker(items[index]);
+      }
+    },
+  );
+  await Promise.all(lanes);
+  return results;
+}
+
+async function fetchHtml(path) {
+  const response = await get(path);
+  assert(response.status === 200, `${path}: status ${response.status}`);
+  return response.text();
+}
+
+check(
+  "built pages reference only reachable same-origin assets (no redirects, right type)",
+  async () => {
+    const pages = [];
+    for (const locale of SUPPORTED_LANGUAGES) {
+      pages.push(`/${locale}/`);
+      const indexPath = `/${locale}/products/`;
+      pages.push(indexPath);
+      const productPaths = extractProductPaths(
+        await fetchHtml(indexPath),
+        locale,
+      );
+      assert(productPaths.length > 0, `${indexPath}: no product pages linked`);
+      pages.push(...productPaths);
+    }
+    const assets = new Map();
+    for (const path of [...new Set(pages)]) {
+      const html = await fetchHtml(path);
+      for (const asset of extractSameOriginAssetPaths(
+        html,
+        `${site}${path}`,
+        site,
+      )) {
+        if (!assets.has(asset)) assets.set(asset, path);
+      }
+    }
+    assert(assets.size > 0, "no same-origin assets found on any page");
+    assert(
+      assets.size <= MAX_ASSETS,
+      `asset count ${assets.size} exceeds the smoke bound ${MAX_ASSETS}`,
+    );
+    const offenders = (
+      await mapBounded([...assets.keys()], ASSET_CONCURRENCY, async (asset) => {
+        try {
+          const response = await get(asset);
+          await response.body?.cancel();
+          const problem = assetProblem({
+            pathname: new URL(asset, site).pathname,
+            status: response.status,
+            contentType: response.headers.get("content-type"),
+            location: response.headers.get("location"),
+          });
+          return problem
+            ? `${asset} (from ${assets.get(asset)}): ${problem}`
+            : null;
+        } catch (error) {
+          return `${asset}: ${error.message}`;
+        }
+      })
+    ).filter(Boolean);
+    assert(
+      offenders.length === 0,
+      `${offenders.length}/${assets.size} asset(s) unhealthy:\n  ${offenders.join("\n  ")}`,
+    );
+  },
+);
+
+const headerExpectations = buildHeaderExpectations(
+  readFileSync(new URL("../public/_headers", import.meta.url), "utf8"),
+);
+
+check(
+  "HTML routes carry the expected CSP, COOP, CORP and nosniff",
+  async () => {
+    const failures = [];
+    for (const path of ["/en/", "/vi/", "/en/products/"]) {
+      const response = await get(path);
+      assert(response.status === 200, `${path}: status ${response.status}`);
+      await response.body?.cancel();
+      for (const problem of htmlHeaderProblems(
+        (name) => response.headers.get(name),
+        headerExpectations,
+      )) {
+        failures.push(`${path}: ${problem}`);
+      }
+    }
+    assert(failures.length === 0, failures.join("; "));
+  },
+);
+
+check("hashed /_astro/ assets are served immutable", async () => {
+  const html = await fetchHtml("/en/");
+  const asset = extractSameOriginAssetPaths(html, `${site}/en/`, site).find(
+    (path) => path.startsWith("/_astro/"),
+  );
+  assert(asset, "no /_astro/ asset referenced from /en/");
+  const response = await get(asset);
+  await response.body?.cancel();
+  assert(response.status === 200, `${asset}: status ${response.status}`);
+  const problems = immutableAssetHeaderProblems(
+    (name) => response.headers.get(name),
+    headerExpectations,
+  );
+  assert(problems.length === 0, `${asset}: ${problems.join("; ")}`);
 });
 
 const commitSha = process.env.SMOKE_COMMIT_SHA ?? process.env.GITHUB_SHA;

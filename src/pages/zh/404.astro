@@ -7,7 +7,7 @@ import PageHeader from "@/components/layout/PageHeader.astro";
 
 <BaseLayout
   title="未找到页面"
-  description="您请求的页面无法找到。"
+  description="你请求的页面无法找到。"
   path="/zh/404/"
   noindex={true}
 >
@@ -15,8 +15,9 @@ import PageHeader from "@/components/layout/PageHeader.astro";
     <Container>
       <PageHeader
         eyebrow="404"
-        title="未找到页面"
-        lede="您请求的页面不存在或已被迁移。以下为可用路径。"
+        eyebrowVariant="numeral"
+        title="找不到页面"
+        lede="页面可能已经移动。你可以试试下面的链接。"
       />
       <div class="mt-10 flex flex-wrap gap-3">
         <ButtonLink href="/zh/" variant="primary">

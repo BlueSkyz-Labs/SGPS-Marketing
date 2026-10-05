@@ -1,32 +1,41 @@
 ---
 // zh-Hant copy: machine-assisted (OpenCC s2twp), pending native review.
 import BaseLayout from "@/layouts/BaseLayout.astro";
+import { PAGE_META } from "@/data/page-meta";
 import Container from "@/components/layout/Container.astro";
 import PageHeader from "@/components/layout/PageHeader.astro";
 import ProductCard from "@/components/product/ProductCard.astro";
 import ProofFirstEmptyState from "@/components/product/ProofFirstEmptyState.astro";
 import { getPublicProducts } from "@/lib/products";
-import IntentControl from "@/components/experience/IntentControl.astro";
-import Atlas from "@/components/experience/Atlas.astro";
 
 const products = await getPublicProducts();
-const emptyDescription = products.length
-  ? "以真實狀態與證據探索 BlueSkyz Labs 產品。"
-  : "產品僅在具備可核驗的公開證據時發布。";
+const allInDevelopment =
+  products.length > 0 &&
+  products.every((product) => product.data.lifecycle === "development");
+const emptyDescription = "產品僅在具備可核驗的公開證據時發布。";
 ---
 
 <BaseLayout
-  title="產品"
-  description={emptyDescription}
+  title={PAGE_META["zh-hant"].products.title}
+  description={
+    products.length
+      ? PAGE_META["zh-hant"].products.description
+      : emptyDescription
+  }
   path="/zh-hant/products/"
-  surface="products"
   scene="product"
 >
   <section class="py-16 lg:py-20">
     <Container>
       <PageHeader
-        title="可供核驗的產品"
-        lede="產品將在可評估時展示於此。我們只發布您可以核驗的內容。"
+        title="我們的產品"
+        lede={
+          products.length === 0
+            ? "產品將在可評估時展示於此。我們只發布你可以核驗的內容。"
+            : allInDevelopment
+              ? "兩項產品都在開發中。每個頁面都說明其狀態。"
+              : "每個頁面都註明產品狀態與依據。"
+        }
       />
       {products.length === 0 ? (
         <div class="mt-12">
@@ -36,25 +45,20 @@ const emptyDescription = products.length
         <section class="mt-12" aria-labelledby="published-products">
           <h2
             id="published-products"
-            class="text-xs font-semibold tracking-[0.18em] text-[var(--text-secondary)] uppercase"
+            class:list={[
+              "text-xs font-semibold tracking-[0.18em] text-[var(--text-secondary)] uppercase [&:lang(vi)]:normal-case [&:lang(vi)]:tracking-[var(--tracking-eyebrow)]",
+              allInDevelopment && "sr-only",
+            ]}
           >
-            已發布的產品
+            {allInDevelopment ? "開發中" : "產品"}
           </h2>
           <div class="mt-6 grid gap-4 md:grid-cols-2">
             {products.map((product) => (
-              <ProductCard product={product} lang="zh-hant" />
+              <ProductCard product={product} lang="zh-hant" showThumb />
             ))}
           </div>
         </section>
       )}
-    </Container>
-  </section>
-  {/* C2: discovery surfaces re-homed from the homepage (design §8) — Intent Lens sits
-      with product evaluation; Atlas remains the deliberate exploration tool. */}
-  <section class="border-t border-[var(--border-subtle)] py-16 lg:py-20">
-    <Container>
-      <IntentControl lang="zh-hant" />
-      <Atlas lang="zh-hant" />
     </Container>
   </section>
 </BaseLayout>

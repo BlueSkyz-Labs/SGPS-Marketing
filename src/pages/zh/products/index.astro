@@ -1,31 +1,38 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
+import { PAGE_META } from "@/data/page-meta";
 import Container from "@/components/layout/Container.astro";
 import PageHeader from "@/components/layout/PageHeader.astro";
 import ProductCard from "@/components/product/ProductCard.astro";
 import ProofFirstEmptyState from "@/components/product/ProofFirstEmptyState.astro";
 import { getPublicProducts } from "@/lib/products";
-import IntentControl from "@/components/experience/IntentControl.astro";
-import Atlas from "@/components/experience/Atlas.astro";
 
 const products = await getPublicProducts();
-const emptyDescription = products.length
-  ? "以真实状态与证据探索 BlueSkyz Labs 产品。"
-  : "产品仅在具备可核验的公开证据时发布。";
+const allInDevelopment =
+  products.length > 0 &&
+  products.every((product) => product.data.lifecycle === "development");
+const emptyDescription = "产品仅在具备可核验的公开证据时发布。";
 ---
 
 <BaseLayout
-  title="产品"
-  description={emptyDescription}
+  title={PAGE_META["zh"].products.title}
+  description={
+    products.length ? PAGE_META["zh"].products.description : emptyDescription
+  }
   path="/zh/products/"
-  surface="products"
   scene="product"
 >
   <section class="py-16 lg:py-20">
     <Container>
       <PageHeader
-        title="可供核验的产品"
-        lede="产品将在可评估时展示于此。我们只发布您可以核验的内容。"
+        title="我们的产品"
+        lede={
+          products.length === 0
+            ? "产品将在可评估时展示于此。我们只发布你可以核验的内容。"
+            : allInDevelopment
+              ? "两款产品都在开发中。每个页面都说明其状态。"
+              : "每个页面都写明产品状态及其依据。"
+        }
       />
       {products.length === 0 ? (
         <div class="mt-12">
@@ -35,25 +42,20 @@ const emptyDescription = products.length
         <section class="mt-12" aria-labelledby="published-products">
           <h2
             id="published-products"
-            class="text-xs font-semibold tracking-[0.18em] text-[var(--text-secondary)] uppercase"
+            class:list={[
+              "text-xs font-semibold tracking-[0.18em] text-[var(--text-secondary)] uppercase [&:lang(vi)]:normal-case [&:lang(vi)]:tracking-[var(--tracking-eyebrow)]",
+              allInDevelopment && "sr-only",
+            ]}
           >
-            已发布的产品
+            {allInDevelopment ? "开发中" : "产品"}
           </h2>
           <div class="mt-6 grid gap-4 md:grid-cols-2">
             {products.map((product) => (
-              <ProductCard product={product} lang="zh" />
+              <ProductCard product={product} lang="zh" showThumb />
             ))}
           </div>
         </section>
       )}
-    </Container>
-  </section>
-  {/* C2: discovery surfaces re-homed from the homepage (design §8) — Intent Lens sits
-      with product evaluation; Atlas remains the deliberate exploration tool. */}
-  <section class="border-t border-[var(--border-subtle)] py-16 lg:py-20">
-    <Container>
-      <IntentControl lang="zh" />
-      <Atlas lang="zh" />
     </Container>
   </section>
 </BaseLayout>

@@ -118,11 +118,7 @@ test("rendered showcase and guide always carry the capture disclosure", () => {
   assert.match(COMPONENT, /data-showcase-disclosure/);
   assert.match(COMPONENT, /\{t\.disclosure\}/);
   assert.match(GUIDE, /data-showcase-disclosure/);
-  for (const phrase of [
-    "illustrative demo data",
-    "dữ liệu minh hoạ",
-    "示例演示数据",
-  ]) {
+  for (const phrase of ["sample data", "dữ liệu mẫu", "示例数据", "範例資料"]) {
     assert.ok(COMPONENT.includes(phrase), `showcase disclosure: ${phrase}`);
   }
   assert.doesNotMatch(COMPONENT, /<script\b(?![^>]*application\/ld\+json)/);
@@ -167,4 +163,133 @@ test("negative proof: a size mismatch is caught", () => {
     { width: actual.width + 1, height: actual.height },
     actual,
   );
+});
+
+// v8 hotfix: phone captures render at most 24rem, so each one ships a 480w
+// derivative (`<name>-480.webp`) that ShowcaseGroup offers through srcset.
+// Without it the 780px masters compete with the LCP text's fonts on mobile.
+function phoneDerivativeProblems(text, fileExists = existsSync) {
+  const blocks = text.split(/^\s+- id:\s*/m).slice(1);
+  const problems = [];
+  for (const block of blocks) {
+    if (!/^\s+surface:\s*phone\s*$/m.test(block)) continue;
+    const src = block.match(/^\s+src:\s*(\S+\.webp)\s*$/m)?.[1];
+    if (!src) continue;
+    const small = src.replace(/\.webp$/, "-480.webp");
+    if (!fileExists(`public${small}`)) problems.push(`${small} is missing`);
+    else if (webpSize(`public${small}`).width !== 480) {
+      problems.push(`${small} is not 480px wide`);
+    }
+  }
+  return problems;
+}
+
+test("every phone capture has a 480w derivative offered via srcset", () => {
+  for (const { name, text } of records()) {
+    assert.deepEqual(phoneDerivativeProblems(text), [], name);
+  }
+  const group = readFileSync(
+    "src/components/product/ShowcaseGroup.astro",
+    "utf8",
+  );
+  assert.match(group, /srcset=\{`\$\{phoneSmallSrc\(item\.src\)\} 480w/);
+  assert.match(group, /sizes=\{PHONE_SIZES\}/);
+});
+
+test("negative proof: a phone capture without a 480w derivative is caught", () => {
+  const { text } = records().find(({ text: t }) => /surface:\s*phone/.test(t));
+  const problems = phoneDerivativeProblems(text, (path) =>
+    path.endsWith("-480.webp") ? false : existsSync(path),
+  );
+  assert.ok(problems.length > 0, "a missing derivative must be reported");
+});
+
+// DEC-025 calibration: desktop captures are 1920px masters, so each ships a
+// 768w derivative (`<name>-768.webp`) that ShowcaseGroup offers through
+// srcset. Without it a phone downloads every 1920px master the lazy-load
+// distance reaches, which blew the product page's image budget.
+function desktopDerivativeProblems(text, fileExists = existsSync) {
+  const blocks = text.split(/^\s+- id:\s*/m).slice(1);
+  const problems = [];
+  for (const block of blocks) {
+    if (!/^\s+surface:\s*desktop\s*$/m.test(block)) continue;
+    const src = block.match(/^\s+src:\s*(\S+\.webp)\s*$/m)?.[1];
+    if (!src) continue;
+    const small = src.replace(/\.webp$/, "-768.webp");
+    if (!fileExists(`public${small}`)) problems.push(`${small} is missing`);
+    else if (webpSize(`public${small}`).width !== 768) {
+      problems.push(`${small} is not 768px wide`);
+    }
+  }
+  return problems;
+}
+
+test("every desktop capture has a 768w derivative offered via srcset", () => {
+  for (const { name, text } of records()) {
+    assert.deepEqual(desktopDerivativeProblems(text), [], name);
+  }
+  const group = readFileSync(
+    "src/components/product/ShowcaseGroup.astro",
+    "utf8",
+  );
+  assert.match(
+    group,
+    /srcset=\{`\$\{desktopSmallSrc\(item\.src\)\} 768w, \$\{item\.src\} \$\{item\.width\}w`\}/,
+  );
+  assert.match(
+    group,
+    /sizes=\{index === 0 \? DESKTOP_SIZES_FULL : DESKTOP_SIZES_HALF\}/,
+  );
+});
+
+test("negative proof: a desktop capture without a 768w derivative is caught", () => {
+  const { text } = records().find(({ text: t }) =>
+    /surface:\s*desktop/.test(t),
+  );
+  const problems = desktopDerivativeProblems(text, (path) =>
+    path.endsWith("-768.webp") ? false : existsSync(path),
+  );
+  assert.ok(problems.length > 0, "a missing derivative must be reported");
+});
+
+// v8 hotfix: Lighthouse's simulated LCP waits on every request that starts
+// before the hero text paints. The product profile therefore (a) uses the
+// 112px icon derivative in its header, (b) fetches the hidden endorsed lockup
+// variants lazily, and (c) keeps far-below phone cards out of the first
+// paint's request graph with content-visibility.
+const PROFILE_LOCALES = ["en", "vi", "zh", "zh-hant"];
+
+function profileProblems(page) {
+  const problems = [];
+  if (!/getProductIconThumbPath\(data\.slug\)/.test(page)) {
+    problems.push("header icon must use the 112px derivative");
+  }
+  if (/\/icon\.png/.test(page)) problems.push("header loads the icon master");
+  for (const m of page.matchAll(
+    /<img\s+src=\{`[^`]*lockup_(?:light|dark)\.svg`\}[^>]*?>/gs,
+  )) {
+    if (!/loading="lazy"/.test(m[0])) problems.push("lockup must be lazy");
+  }
+  return problems;
+}
+
+test("product profile keeps non-LCP requests out of the first paint", () => {
+  for (const locale of PROFILE_LOCALES) {
+    const page = readFileSync(
+      `src/pages/${locale}/products/[slug].astro`,
+      "utf8",
+    );
+    assert.deepEqual(profileProblems(page), [], locale);
+  }
+  assert.match(
+    COMPONENT,
+    /\.showcase__phone\s*\{[^}]*content-visibility:\s*auto/s,
+  );
+});
+
+test("negative proof: eager master icon and eager lockups are caught", () => {
+  const page = readFileSync("src/pages/vi/products/[slug].astro", "utf8")
+    .replace("getProductIconThumbPath(data.slug)", "`/products/x/icon.png`")
+    .replaceAll('loading="lazy"', 'loading="eager"');
+  assert.ok(profileProblems(page).length >= 2);
 });

@@ -1,20 +1,20 @@
 import { expect, test } from "@playwright/test";
 
 const EN = {
-  establishes: "What this establishes",
-  notEstablishes: "What this does not establish",
+  establishes: "What this covers",
+  notEstablishes: "What this does not cover",
 };
 const VI = {
-  establishes: "Điều được xác lập",
-  notEstablishes: "Điều không được xác lập",
+  establishes: "Phạm vi áp dụng",
+  notEstablishes: "Ngoài phạm vi",
 };
 
-test.describe("boundary cards on trust routes", () => {
+test.describe("boundary cards on evidence pages", () => {
   for (const [route, labels] of [
-    ["/en/security/", EN],
-    ["/en/privacy/", EN],
-    ["/vi/security/", VI],
-    ["/vi/privacy/", VI],
+    ["/en/evidence/security-reporting-is-private/", EN],
+    ["/en/evidence/privacy-no-tracking-on-this-site/", EN],
+    ["/vi/evidence/security-reporting-is-private/", VI],
+    ["/vi/evidence/privacy-no-tracking-on-this-site/", VI],
   ] as const) {
     test(`${route} shows both boundary concepts`, async ({ page }) => {
       await page.goto(route);
@@ -32,7 +32,7 @@ test.describe("boundary cards on trust routes", () => {
   test("reading order is establishes before does-not-establish", async ({
     page,
   }) => {
-    await page.goto("/en/security/");
+    await page.goto("/en/evidence/security-reporting-is-private/");
     const headings = await page
       .locator("[data-boundary-card] h2")
       .allTextContents();
@@ -43,7 +43,10 @@ test.describe("boundary cards on trust routes", () => {
   test("boundary copy avoids unsupported assurance wording", async ({
     page,
   }) => {
-    for (const route of ["/en/security/", "/en/privacy/"]) {
+    for (const route of [
+      "/en/evidence/security-reporting-is-private/",
+      "/en/evidence/privacy-no-tracking-on-this-site/",
+    ]) {
       await page.goto(route);
       const text = await page.locator("[data-boundary-card]").innerText();
       expect(text).not.toMatch(/certified|guaranteed|trust score|score/i);
@@ -52,7 +55,7 @@ test.describe("boundary cards on trust routes", () => {
 
   test("320px keeps the boundary card readable", async ({ page }) => {
     await page.setViewportSize({ width: 320, height: 900 });
-    await page.goto("/vi/security/");
+    await page.goto("/vi/evidence/security-reporting-is-private/");
     await expect(page.locator("[data-boundary-card]")).toBeVisible();
     const overflow = await page.evaluate(
       () =>
@@ -67,7 +70,7 @@ test.describe("boundary cards without JavaScript", () => {
   test.use({ javaScriptEnabled: false });
 
   test("privacy boundary renders statically", async ({ page }) => {
-    await page.goto("/en/privacy/");
+    await page.goto("/en/evidence/privacy-no-tracking-on-this-site/");
     await expect(
       page.getByRole("heading", { level: 2, name: EN.notEstablishes }),
     ).toBeVisible();

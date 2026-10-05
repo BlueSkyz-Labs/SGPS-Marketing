@@ -51,101 +51,117 @@ function readElements(): BoardroomElements | null {
   };
 }
 
+/**
+ * The deck is closed until the composer asks for it: `boardroom:set` carries
+ * the selected entry ids (the same single list the composer renders), and
+ * `boardroom:open` / `boardroom:close` show or hide the presentation. With no
+ * selection there is nothing to present, so the deck never opens.
+ */
 export function initBoardroomMode(): void {
   const elements = readElements();
   if (!elements) return;
   const el = elements;
 
-  const count = Math.max(1, el.screens.length);
+  let ids: string[] = [];
+  let visible: HTMLElement[] = [];
   let current = 0;
 
-  // Presentation mode is progressive enhancement: until this attribute flips,
-  // the stylesheet leaves every screen readable, so a visitor without
-  // JavaScript still reads the whole dossier.
   el.deck.setAttribute("data-boardroom-ready", "true");
 
   function show(index: number, moveFocus = false) {
-    const target = Math.max(0, Math.min(count - 1, index));
-    current = target;
+    const count = Math.max(1, visible.length);
+    current = Math.max(0, Math.min(count - 1, index));
 
-    el.screens.forEach((screen, i) => {
-      const active = i === current;
+    el.screens.forEach((screen) => {
+      const active = screen === visible[current];
       screen.classList.toggle("c4-boardroom__screen--active", active);
-      // Inactive screens are display:none, so their links are already out of
-      // the tab order; no focus trap is needed to contain the mode.
       screen.setAttribute("aria-hidden", active ? "false" : "true");
     });
 
     // Focus moves only on explicit navigation: moving it on page load would
     // hijack the visitor's reading position.
     if (moveFocus) {
-      el.screens[current]
+      visible[current]
         ?.querySelector<HTMLElement>(".c4-boardroom__screen-heading")
         ?.focus();
     }
 
-    if (el.progressCurrent) {
-      el.progressCurrent.textContent = String(current + 1);
-    }
-    if (el.progressTotal) {
-      el.progressTotal.textContent = String(count);
-    }
-
+    el.progressCurrent.textContent = String(current + 1);
+    el.progressTotal.textContent = String(count);
     el.prevBtn.disabled = current <= 0 || count <= 1;
     el.nextBtn.disabled = current >= count - 1 || count <= 1;
   }
 
-  // Initialize first screen
-  show(0);
+  function refilter() {
+    const wanted = new Set(ids);
+    visible = el.screens.filter((screen) =>
+      wanted.has(screen.getAttribute("data-boardroom-id") ?? ""),
+    );
+  }
+
+  function close() {
+    el.deck.hidden = true;
+    el.screens.forEach((screen) => {
+      screen.classList.remove("c4-boardroom__screen--active");
+      screen.setAttribute("aria-hidden", "true");
+    });
+    document.dispatchEvent(new CustomEvent("boardroom:closed"));
+  }
+
+  ids = (
+    document.querySelector<HTMLElement>("[data-dossier-present]")?.dataset
+      .selectedIds ?? ""
+  )
+    .split(",")
+    .filter(Boolean);
+  refilter();
+
+  document.addEventListener("boardroom:set", (event) => {
+    const detail = (event as CustomEvent<{ ids?: string[] }>).detail;
+    ids = Array.isArray(detail?.ids) ? detail.ids : [];
+    refilter();
+    if (ids.length === 0) {
+      if (!el.deck.hidden) close();
+      return;
+    }
+    if (!el.deck.hidden) show(current);
+  });
+
+  document.addEventListener("boardroom:open", () => {
+    if (visible.length === 0) return;
+    el.deck.hidden = false;
+    show(0, true);
+    el.deck.scrollIntoView({ block: "start" });
+  });
+
+  document.addEventListener("boardroom:close", () => {
+    if (!el.deck.hidden) close();
+  });
 
   el.prevBtn.addEventListener("click", () => {
     if (current > 0) show(current - 1, true);
   });
 
   el.nextBtn.addEventListener("click", () => {
-    if (current < count - 1) show(current + 1, true);
+    if (current < visible.length - 1) show(current + 1, true);
   });
 
-  el.exitBtn.addEventListener("click", () => {
-    // Exit presentation: leave the deck readable (all screens remain in the
-    // document), disable the controls and return focus to the exit button so
-    // the keyboard path stays reachable.
-    el.screens.forEach((screen) => {
-      screen.classList.remove("c4-boardroom__screen--active");
-      screen.setAttribute("aria-hidden", "true");
-    });
-    el.prevBtn.disabled = true;
-    el.nextBtn.disabled = true;
-    if (el.progressCurrent) el.progressCurrent.textContent = "—";
-    el.exitBtn.focus();
-  });
+  el.exitBtn.addEventListener("click", close);
 
   // Arrow navigation on the deck only (not globally) to avoid intercepting page scroll.
-  function onKey(event: KeyboardEvent) {
+  el.deck.addEventListener("keydown", (event: KeyboardEvent) => {
     if (event.defaultPrevented) return;
-    if (event.key === "ArrowLeft") {
-      if (current > 0) {
-        event.preventDefault();
-        show(current - 1, true);
-      }
-      return;
-    }
-    if (event.key === "ArrowRight") {
-      if (current < count - 1) {
-        event.preventDefault();
-        show(current + 1, true);
-      }
-      return;
-    }
-    if (event.key === "Escape") {
-      // Exit mode: same behavior as exit button.
+    if (event.key === "ArrowLeft" && current > 0) {
       event.preventDefault();
-      el.exitBtn.click();
-      return;
+      show(current - 1, true);
+    } else if (event.key === "ArrowRight" && current < visible.length - 1) {
+      event.preventDefault();
+      show(current + 1, true);
+    } else if (event.key === "Escape") {
+      event.preventDefault();
+      close();
     }
-  }
-
-  el.deck.addEventListener("keydown", onKey);
+  });
 }
 
 initBoardroomMode();

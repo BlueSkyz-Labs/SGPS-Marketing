@@ -1,21 +1,22 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
+import { PAGE_META } from "@/data/page-meta";
 import Container from "@/components/layout/Container.astro";
 import PageHeader from "@/components/layout/PageHeader.astro";
 import ArchitectureSalon from "@/components/architecture/ArchitectureSalon.astro";
+import { ARCHITECTURE_COPY } from "@/data/architecture-copy";
+
+const copy = ARCHITECTURE_COPY["en"];
 ---
 
 <BaseLayout
-  title="Architecture"
-  description="How this site is built, in five calm views derived from the canonical architecture model."
+  title={PAGE_META["en"].architecture.title}
+  description={PAGE_META["en"].architecture.description}
   path="/en/architecture/"
 >
   <section class="py-16 lg:py-24">
     <Container>
-      <PageHeader
-        title="Architecture"
-        lede="How this site is built, in five calm views derived from the canonical architecture model."
-      />
+      <PageHeader title={copy.title} lede={copy.lede} />
       <div class="mt-12">
         <ArchitectureSalon lang="en" />
       </div>

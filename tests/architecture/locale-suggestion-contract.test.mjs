@@ -10,6 +10,7 @@
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import test from "node:test";
+import vm from "node:vm";
 
 const {
   suggestLanguage,
@@ -17,7 +18,8 @@ const {
   LOCALE_SUGGESTION_COPY,
   keepLabel,
 } = await import("../../src/lib/locale-suggestion.ts");
-const { SUPPORTED_LANGUAGES } = await import("../../src/lib/i18n.ts");
+const { SUPPORTED_LANGUAGES, getAlternatePath } =
+  await import("../../src/lib/i18n.ts");
 
 const SCRIPT = readFileSync("src/scripts/locale-suggestion.ts", "utf8");
 const LIB = readFileSync("src/lib/locale-suggestion.ts", "utf8");
@@ -25,6 +27,7 @@ const HOST = readFileSync(
   "src/components/layout/LocaleSuggestion.astro",
   "utf8",
 );
+const EARLY = readFileSync("public/locale-suggestion-early.js", "utf8");
 const LAYOUT = readFileSync("src/layouts/BaseLayout.astro", "utf8");
 
 const stripComments = (text) =>
@@ -97,17 +100,33 @@ test("the only storage key is blueskyz.ui.language, reads and writes guarded", (
   assert.match(SCRIPT, /catch \{\s*return;/);
 });
 
-test("banner is external-script only, fixed, accessible and reduced-motion safe", () => {
-  assert.doesNotMatch(HOST, /is:inline/);
+test("banner is external-script only, in-flow (never an overlay), accessible and reduced-motion safe", () => {
+  // No inline CODE (CSP script-src 'self'); the only is:inline script is the
+  // same-origin early file referenced by src.
+  assert.doesNotMatch(HOST, /<script\s+is:inline(?![^>]*\ssrc=)/);
+  assert.match(
+    HOST,
+    /<script is:inline src="\/locale-suggestion-early\.js"><\/script>/,
+  );
   assert.match(HOST, /<script>\s*import \{ initLocaleSuggestion \}/);
   assert.match(LAYOUT, /<LocaleSuggestion \/>/);
   assert.match(SCRIPT, /setAttribute\("role", "region"\)/);
   assert.match(SCRIPT, /setAttribute\("aria-label", copy\.question\)/);
-  assert.match(HOST, /position: fixed/);
+  // S5 placement: an in-flow strip under the header, never a fixed/sticky/
+  // absolute overlay that could cover first-viewport content.
+  assert.doesNotMatch(HOST, /position:\s*(?:fixed|sticky|absolute)/);
+  assert.match(SCRIPT, /header\.after\(region\)/);
   assert.match(HOST, /min-height: 44px/);
   assert.match(HOST, /prefers-reduced-motion: reduce[\s\S]*transition: none/);
-  assert.match(HOST, /var\(--surface-raised\)/);
+  // Themed surface token (calm-chrome round 2026-10-04: the page surface), never a
+  // hard-coded white.
+  assert.match(HOST, /background:\s*var\(--surface-(?:primary|raised)\)/);
   assert.doesNotMatch(HOST, /background:\s*(?:white|#fff)/i);
+});
+
+test("negative proof: an overlay placement is detected by the placement audit", () => {
+  const overlay = "position: fixed; inset: auto 1rem 1rem 1rem;";
+  assert.match(overlay, /position:\s*(?:fixed|sticky|absolute)/);
 });
 
 test("dismiss stores the CURRENT language via the existing key", () => {
@@ -189,4 +208,128 @@ test("explicitPathLanguage: only explicit locale URLs", () => {
   assert.equal(explicitPathLanguage("/"), null);
   assert.equal(explicitPathLanguage("/about/"), null);
   assert.equal(explicitPathLanguage("/english/"), null);
+});
+
+test("early (pre-paint) script obeys the same no-tracking and storage rules", () => {
+  assert.deepEqual(auditNoTracking(EARLY), []);
+  assert.deepEqual(auditNoAutoNavigation(EARLY), []);
+  // It may only READ the one key; it never writes storage.
+  assert.doesNotMatch(
+    stripComments(EARLY),
+    /setItem|removeItem|localStorage\.clear/,
+  );
+  assert.match(EARLY, /var KEY = "blueskyz\.ui\.language"/);
+  assert.match(EARLY, /catch \{\s*return;/);
+});
+
+/** Run the early script in a sandbox and return the inserted strip's facts. */
+function runEarly(options) {
+  return runEarlyWith(EARLY, options);
+}
+
+function runEarlyWith(
+  source,
+  { path, languages, stored, storageThrows = false } = {
+    path: "/en/",
+    languages: ["vi-VN"],
+  },
+) {
+  const inserted = [];
+  const el = () => {
+    const node = {
+      attrs: {},
+      children: [],
+      setAttribute(k, v) {
+        node.attrs[k] = v;
+      },
+      appendChild(c) {
+        node.children.push(c);
+      },
+    };
+    return node;
+  };
+  const script = {
+    parentNode: { insertBefore: (n) => inserted.push(n) },
+  };
+  const context = {
+    document: {
+      currentScript: script,
+      querySelector: () => null,
+      createElement: el,
+    },
+    window: {
+      location: { pathname: path },
+      localStorage: {
+        getItem: () => {
+          if (storageThrows) throw new Error("denied");
+          return stored ?? null;
+        },
+      },
+    },
+    navigator: { languages, language: languages?.[0] },
+  };
+  vm.runInNewContext(source, context);
+  const node = inserted[0];
+  if (!node) return null;
+  return {
+    target: node.attrs["data-locale-suggestion"],
+    question: node.attrs["aria-label"],
+    href: node.children[1].children[0].href,
+    accept: node.children[1].children[0].textContent,
+    keep: node.children[1].children[1].textContent,
+  };
+}
+
+test("parity: early script decides and words the strip exactly like the lib", () => {
+  const vectors = [
+    ["/en/", ["vi-VN", "en-US"], null],
+    ["/en/about/", ["vi-VN"], null],
+    ["/vi/", ["en-US", "vi-VN"], null],
+    ["/vi/", ["vi-VN", "en-US"], null],
+    ["/en/", ["zh-CN"], null],
+    ["/en/", ["zh-TW"], null],
+    ["/zh/", ["zh-HK"], null],
+    ["/zh-hant/", ["zh-Hant"], null],
+    ["/vi/", ["zh", "en"], null],
+    ["/vi/", ["zh-Foo", "en"], null],
+    ["/en/", ["fr-FR", "vi"], null],
+    ["/en/", ["fr-FR", "de"], null],
+    ["/en/", ["vi-VN"], "en"],
+    ["/en/", ["vi-VN"], "klingon"],
+    ["/", ["vi-VN"], null],
+    ["/about/", ["vi-VN"], null],
+  ];
+  for (const [path, languages, stored] of vectors) {
+    const page = explicitPathLanguage(path);
+    const expectedTarget = page
+      ? suggestLanguage(stored, languages, page)
+      : null;
+    const got = runEarly({ path, languages, stored });
+    if (!expectedTarget) {
+      assert.equal(got, null, `${path} ${languages} ${stored}`);
+      continue;
+    }
+    assert.equal(got.target, expectedTarget, `${path} ${languages}`);
+    assert.equal(got.question, LOCALE_SUGGESTION_COPY[expectedTarget].question);
+    assert.equal(got.accept, LOCALE_SUGGESTION_COPY[expectedTarget].accept);
+    assert.equal(got.keep, keepLabel(expectedTarget, page));
+    assert.equal(got.href, getAlternatePath(path, expectedTarget));
+  }
+});
+
+test("early script fails closed when storage is unreadable", () => {
+  assert.equal(
+    runEarly({ path: "/en/", languages: ["vi-VN"], storageThrows: true }),
+    null,
+  );
+});
+
+test("negative proof: a drifted early script is caught by the parity check", () => {
+  const drifted = EARLY.replace(
+    'question: "Xem trang bằng Tiếng Việt?"',
+    'question: "Drift?"',
+  );
+  assert.notEqual(drifted, EARLY);
+  const sandboxed = runEarlyWith(drifted);
+  assert.notEqual(sandboxed.question, LOCALE_SUGGESTION_COPY.vi.question);
 });

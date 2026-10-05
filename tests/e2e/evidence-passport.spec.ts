@@ -12,9 +12,13 @@ test.describe("evidence passport", () => {
     await page.goto(EN);
     const passport = page.locator(`[data-evidence-passport="${ID}"]`);
     await expect(passport).toBeVisible();
+    // v7 D-18: the claim is the one H1; the label is its eyebrow.
     await expect(
-      page.getByRole("heading", { level: 1, name: "Evidence passport" }),
+      page.getByRole("heading", { level: 1, name: /private GitHub channel/ }),
     ).toBeVisible();
+    await expect(page.locator("[data-passport-page-title]")).toHaveText(
+      "Evidence for this claim",
+    );
     await expect(passport).toContainText("private GitHub channel");
     await expect(
       passport.locator('[data-truth-state="source-linked"]'),
@@ -29,8 +33,11 @@ test.describe("evidence passport", () => {
     );
     await expect(passport.locator("[data-boundary-card]")).toBeVisible();
     await expect(passport.locator("[data-passport-review]")).toHaveText(
-      /2026-09-12/,
+      /September 12, 2026/,
     );
+    await expect(
+      passport.locator("[data-passport-review] time"),
+    ).toHaveAttribute("datetime", "2026-09-12");
     const context = passport.getByRole("link", { name: /View in context/i });
     await expect(context).toHaveAttribute("href", "/en/security/");
   });
@@ -61,7 +68,7 @@ test.describe("evidence passport", () => {
     page,
   }) => {
     await page.goto(VI);
-    await expect(page.getByText("Hộ chiếu bằng chứng")).toBeVisible();
+    await expect(page.getByText("Bằng chứng cho tuyên bố này")).toBeVisible();
     await expect(
       page.locator(`link[rel="alternate"][hreflang="en"]`),
     ).toHaveAttribute(
@@ -81,22 +88,22 @@ test.describe("evidence passport", () => {
   }) => {
     await page.goto(ZH);
     const passport = page.locator(`[data-evidence-passport="${ID}"]`);
-    await expect(page.locator("html")).toHaveAttribute("lang", "zh");
-    await expect(page).toHaveTitle(/证据档案：/);
+    await expect(page.locator("html")).toHaveAttribute("lang", "zh-Hans");
+    await expect(page).toHaveTitle(/证据：/);
     await expect(page.locator('meta[name="description"]')).toHaveAttribute(
       "content",
       "安全报告通过 GitHub 私有渠道送达维护者，绝不会通过公开 issue 提出。",
     );
-    await expect(
-      page.getByRole("heading", { level: 1, name: "证据档案" }),
-    ).toBeVisible();
+    await expect(page.locator("[data-passport-page-title]")).toHaveText(
+      "这条说法的证据",
+    );
     await expect(
       passport.getByRole("heading", {
-        level: 2,
+        level: 1,
         name: "安全报告通过 GitHub 私有渠道送达维护者，绝不会通过公开 issue 提出。",
       }),
     ).toBeVisible();
-    await expect(passport.getByText("公开来源")).toBeVisible();
+    await expect(passport.getByText("公开来源", { exact: true })).toBeVisible();
     await expect(
       passport.getByRole("link", { name: "在原文中查看 →" }),
     ).toHaveAttribute("href", "/zh/security/");

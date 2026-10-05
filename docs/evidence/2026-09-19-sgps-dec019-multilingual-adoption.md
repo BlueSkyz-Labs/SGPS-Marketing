@@ -6,6 +6,17 @@
 **Initial record:** 2026-09-19. **Reconciled against:** `main@3c4f846e17841b383b8579fcdf11ae18bb36092b` and merged PR #192.  
 **Stage:** production public site; this document describes source/routing evidence, not a release or native-linguistic certification.
 
+## Update 2026-10-04: zh-Hant is now first-class in source
+
+This record predates #358 (`d906532`). Since then, `zh-Hant` ships as a first-class runtime locale:
+
+- `src/lib/i18n.ts` marks it `FIRST_CLASS`;
+- the route segment is `/zh-hant/`;
+- the hreflang code is `zh-Hant`;
+- canonical, hreflang and sitemap parity hold on the production-origin build (`docs/evidence/2026-10-04-pre-golive-redteam-v11.md`).
+
+The `ARCHITECTURE_READY` line for zh-Hant below is history. Native zh-Hans and zh-Hant linguistic review remains NOT VERIFIED and owner-gated (v9 F2). Effective context: `docs/sgps/EFFECTIVE_SGPS_CONTEXT.md`.
+
 ## Locale readiness — do not conflate source shipment with full SGPS verification
 
 - `en`: Published first-class source; existing production locale.
