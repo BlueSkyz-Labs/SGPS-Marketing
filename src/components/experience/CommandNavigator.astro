@@ -2,12 +2,35 @@
 import { buildNavigatorIndex } from "@/lib/navigator";
 import { getPublicProducts } from "@/lib/products";
 import { getLanguageFromPath } from "@/lib/i18n";
+import { buildConciergeCorpus } from "@/lib/concierge-corpus";
 
 const lang = getLanguageFromPath(Astro.url.pathname);
 const isVi = lang === "vi";
 const isZh = lang === "zh";
 const isZhHant = lang === "zh-hant";
-const items = buildNavigatorIndex(lang, await getPublicProducts());
+const publicProducts = await getPublicProducts();
+const items = buildNavigatorIndex(lang, publicProducts);
+
+// C3-E deterministic step: the concierge corpus feeds this navigator instead of
+// rendering a second surface. Each corpus record's verbatim canonical text
+// joins the search text of the navigator item at the same path, so visitors
+// can find a product or surface by what its published claims say. Claim
+// records are skipped: their evidence-passport items already carry the same
+// statement as their label. No item, link or visible copy is added, and a
+// record without a matching item is dropped rather than invented.
+const corpusText = new Map<string, string>();
+for (const record of buildConciergeCorpus({
+  lang,
+  products: publicProducts.map((entry) => ({
+    slug: entry.data.slug,
+    name: entry.data.name,
+    description: entry.data.shortDescription,
+  })),
+})) {
+  if (record.kind === "claim") continue;
+  const path = new URL(record.publicUrl).pathname;
+  corpusText.set(path, `${corpusText.get(path) ?? ""} ${record.text}`.trim());
+}
 
 const KIND_LABELS: Record<string, string> = {
   route: isVi ? "Trang" : isZh ? "页面" : isZhHant ? "頁面" : "Page",
@@ -75,7 +98,9 @@ const resultNone = isVi
     <ul class="command-navigator__list" data-command-list>
       {items.map((item) => {
         const searchText =
-          `${item.label} ${item.aliases.join(" ")}`.toLocaleLowerCase(lang);
+          `${item.label} ${item.aliases.join(" ")} ${corpusText.get(item.href) ?? ""}`
+            .trim()
+            .toLocaleLowerCase(lang);
         return (
           <li
             data-command-item
