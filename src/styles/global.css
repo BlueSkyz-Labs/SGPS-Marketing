@@ -1927,9 +1927,19 @@ dd {
     "PingFang TC", "Noto Sans TC", "Microsoft JhengHei", var(--font-sans),
     sans-serif;
 }
+/* CJK headings: strict punctuation rules, but ideographs may still break
+   (never keep-all: it forbids breaks between Han characters, so a long
+   heading overflowed 320px, WCAG 1.4.10, found by the v13 sweep).
+   auto-phrase is a progressive enhancement over normal, as in
+   display-type.css. */
 :is(:lang(zh-Hans), :lang(zh-Hant)) :is(h1, h2, h3) {
-  word-break: keep-all;
+  word-break: normal;
   line-break: strict;
+}
+@supports (word-break: auto-phrase) {
+  :is(:lang(zh-Hans), :lang(zh-Hant)) :is(h1, h2, h3) {
+    word-break: auto-phrase;
+  }
 }
 
 /* Back to top: a plain anchor at the end of long pages on phones.
