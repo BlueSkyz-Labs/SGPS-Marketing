@@ -37,6 +37,21 @@ test("a surface is found by what its published claims say", async ({
   ).toHaveCount(1);
 });
 
+// Round-4 fix proof: the corpus feed must use each locale's OWN copy. The
+// Vietnamese phrase below exists only in the VI shortDescription, so this
+// fails if the feed ever reads the English-only top-level field again.
+test("a product is found by its locale's own description", async ({ page }) => {
+  await page.goto("/vi/");
+  await page.keyboard.press("Control+k");
+  await page.locator("[data-command-input]").fill("chủ trọ");
+  const items = page.locator(visible);
+  await expect(items).toHaveCount(1);
+  await expect(items.first().locator("a")).toHaveAttribute(
+    "href",
+    "/vi/products/sotro/",
+  );
+});
+
 test("/verify/ renders no separate concierge surface", async ({ page }) => {
   for (const lang of ["en", "vi", "zh", "zh-hant"]) {
     await page.goto(`/${lang}/verify/`);
