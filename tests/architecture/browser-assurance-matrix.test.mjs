@@ -97,6 +97,32 @@ function auditBrowserAssurance(workflow) {
       "browser shards must launch-test the bundled runtime before E2E",
     );
   }
+  // Round-4: the visual gate must carry the SAME digest-pinned runtime — it
+  // previously downloaded browsers on a plain runner, outside this audit.
+  const visual = jobBlock(workflow, "visual-gate");
+  if (!visual.includes(`image: ${PLAYWRIGHT_IMAGE}`)) {
+    problems.push(
+      "visual gate must use the approved digest-pinned Playwright image",
+    );
+  }
+  if (!visual.includes("options: --user 1001")) {
+    problems.push("visual gate must not run the Playwright image as root");
+  }
+  if (!visual.includes("PLAYWRIGHT_BROWSERS_PATH: /ms-playwright")) {
+    problems.push(
+      "visual gate must use the browsers bundled in the pinned image",
+    );
+  }
+  if (/playwright\s+install(?:\s|$)/m.test(visual)) {
+    problems.push(
+      "visual gate must not download Playwright browsers at runtime",
+    );
+  }
+  if (!visual.includes("digest-pinned Playwright runtime")) {
+    problems.push(
+      "visual gate must launch-test the bundled runtime before the visual run",
+    );
+  }
   // Every shard runs on every event (pull_request and push). No per-event or
   // per-entry gating may skip an engine, and no step may be conditional.
   if (/pr_lane|RUN_SHARD|github\.event_name\s*[!=]=/.test(shards)) {
@@ -198,6 +224,36 @@ test("negative proof: unpinned Playwright runtime or download-host override is c
     auditBrowserAssurance(runtimeDownload).some((problem) =>
       problem.includes("must not download Playwright browsers"),
     ),
+  );
+});
+
+test("negative proof: an unpinned visual gate is caught", () => {
+  const unpinnedVisual = WORKFLOW.replace(
+    [
+      "    container:",
+      `      image: ${PLAYWRIGHT_IMAGE}`,
+      "      options: --user 1001",
+      "    env:",
+      "      PLAYWRIGHT_BROWSERS_PATH: /ms-playwright",
+      "    # Steps use bash-only options (set -o pipefail); pin bash in the container.",
+      "    defaults:",
+      "      run:",
+      "        shell: bash",
+      "    timeout-minutes: 30",
+    ].join("\n"),
+    "    timeout-minutes: 30",
+  );
+  assert.notEqual(
+    unpinnedVisual,
+    WORKFLOW,
+    "mutation must change the workflow",
+  );
+  const problems = auditBrowserAssurance(unpinnedVisual);
+  assert.ok(
+    problems.some((problem) =>
+      problem.includes("visual gate must use the approved digest-pinned"),
+    ),
+    `expected a visual-gate pin problem, got: ${problems.join("; ")}`,
   );
 });
 
