@@ -117,6 +117,8 @@ Reject unpublished products, internal repo paths, workflow names, private eviden
 
 - [x] **Step 1: render deterministic fallback navigation/search in base HTML**
 
+  **Owner decision 2026-10-05 (#499):** the deterministic step lives in the existing Command Navigator, not in a second surface on `/verify/`. A separate surface duplicated the navigator's labels and filter, and pushed `/verify/` over its v8 word caps (`/vi/verify/` was already at 215/215). The corpus adapter now widens the navigator's search text with each product's and surface's verbatim canonical text. It adds no item, link or visible copy. `src/components/concierge/ProductConcierge.astro` and its client module are removed. A future ask flow (Steps 2–4) needs its own placement decision once the runtime ADR is accepted.
+
 - [ ] **Step 2: progressively enable ask flow**
 
 - [ ] **Step 3: make every answer citation inspectable**

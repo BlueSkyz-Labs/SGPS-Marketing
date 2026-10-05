@@ -235,7 +235,7 @@
     },
     {
       "id": "c3-e-concierge",
-      "name": "C3-E Verifiable Product Concierge - Task 1 ADR drafted (#492, owner label pending); Tasks 2-3 (deterministic corpus adapter + citation policy, 19 tests) + Task 5 Step 1 (concierge surface on /verify/, 7 e2e) source-complete (PRs pending); runtime Tasks 4+ remain blocked pending ADR acceptance",
+      "name": "C3-E Verifiable Product Concierge - Task 1 ADR drafted (#492, owner label pending); Tasks 2-3 (deterministic corpus adapter + citation policy, 19 tests) + Task 5 Step 1 folded into the Command Navigator search per Owner decision 2026-10-05 (no separate /verify/ surface; #499); runtime Tasks 4+ remain blocked pending ADR acceptance",
       "status": "BLOCKED",
       "evidence": "docs/superpowers/plans/2026-09-13-c3-e-verifiable-concierge.md"
     },

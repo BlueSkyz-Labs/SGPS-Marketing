@@ -1,126 +1,45 @@
 import { expect, test } from "@playwright/test";
 
 /*
- * C3-E Task 5 (deterministic step): the Product Concierge surface on /verify/.
+ * C3-E deterministic step (Owner decision 2026-10-05): the concierge corpus
+ * feeds the existing Command Navigator instead of a second surface on /verify/.
+ * Corpus text only widens what the navigator's search matches; it adds no item,
+ * link or visible copy. No model, no network.
  *
- * The server-rendered corpus list is the no-JS baseline — every record is an
- * ordinary same-origin link. The tiny client module only filters that list.
- * No model, no network: these tests never exercise a provider.
+ * Negative proof: on a build without the corpus feed, "landlord" and "cookies"
+ * match no product or route, so the first two tests fail.
  */
 
-test.describe("C3-E concierge surface (deterministic)", () => {
-  test("the corpus navigation renders as same-origin links on /verify/", async ({
-    page,
-  }) => {
-    await page.goto("/en/verify/");
-    const surface = page.locator("[data-concierge]");
-    await expect(surface).toBeVisible();
+test.use({ viewport: { width: 1280, height: 800 } });
 
-    const items = surface.locator("[data-concierge-item]");
-    expect(await items.count()).toBeGreaterThanOrEqual(7);
+const visible = "[data-command-item]:not([hidden])";
 
-    const hrefs = await surface
-      .locator("a")
-      .evaluateAll((links) =>
-        links.map((link) => link.getAttribute("href") ?? ""),
-      );
-    expect(hrefs.length).toBeGreaterThanOrEqual(7);
-    for (const href of hrefs) {
-      expect(href.startsWith("/en/")).toBe(true);
-    }
-  });
+test("a product is found by its published description", async ({ page }) => {
+  await page.goto("/en/");
+  await page.keyboard.press("Control+k");
+  await page.locator("[data-command-input]").fill("landlord");
+  const items = page.locator(visible);
+  await expect(items).toHaveCount(1);
+  await expect(items.first().locator("a")).toHaveAttribute(
+    "href",
+    "/en/products/sotro/",
+  );
+});
 
-  test("with JavaScript the list is filter-first: hidden until the visitor types", async ({
-    page,
-  }) => {
-    await page.goto("/en/verify/");
-    const list = page.locator("[data-concierge-list]");
-    await expect(list).toBeHidden();
-    const input = page.locator("[data-concierge-input]");
-    await input.fill("sổ");
-    await expect(list).toBeVisible();
-    await input.fill("");
-    await expect(list).toBeHidden();
-  });
+test("a surface is found by what its published claims say", async ({
+  page,
+}) => {
+  await page.goto("/en/");
+  await page.keyboard.press("Control+k");
+  await page.locator("[data-command-input]").fill("cookies");
+  await expect(
+    page.locator(`${visible}:has(a[href="/en/privacy/"])`),
+  ).toHaveCount(1);
+});
 
-  test("typing filters the list and hides unrelated records", async ({
-    page,
-  }) => {
-    await page.goto("/en/verify/");
-    const input = page.locator("[data-concierge-input]");
-    await input.fill("security");
-
-    const securityItem = page.locator(
-      '[data-concierge-item]:has(a[href="/en/evidence/security-reporting-is-private/"])',
-    );
-    await expect(securityItem).toBeVisible();
-
-    const sotroItem = page.locator(
-      '[data-concierge-item]:has(a[href="/en/products/sotro/"])',
-    );
-    await expect(sotroItem).toBeHidden();
-  });
-
-  test("no match shows the empty state and announces it", async ({ page }) => {
-    await page.goto("/en/verify/");
-    const input = page.locator("[data-concierge-input]");
-    await input.fill("zzzzzz");
-
-    await expect(page.locator("[data-concierge-empty]")).toBeVisible();
-    await expect(page.locator("[data-concierge-live]")).toHaveText(
-      "No results",
-    );
-  });
-
-  test("clearing the input restores the full baseline list", async ({
-    page,
-  }) => {
-    await page.goto("/en/verify/");
-    const input = page.locator("[data-concierge-input]");
-    await input.fill("security");
-    await input.fill("");
-    const items = page.locator("[data-concierge-item]");
-    expect(await items.count()).toBeGreaterThanOrEqual(7);
-    await expect(page.locator("[data-concierge-empty]")).toBeHidden();
-  });
-
-  test("the filter is diacritic-insensitive on the Vietnamese surface", async ({
-    page,
-  }) => {
-    await page.goto("/vi/verify/");
-    const surface = page.locator("[data-concierge]");
-    await expect(surface).toBeVisible();
-    await page.locator("[data-concierge-input]").fill("so tro");
-    const sotroItem = page.locator(
-      '[data-concierge-item]:has(a[href="/vi/products/sotro/"])',
-    );
-    await expect(sotroItem).toBeVisible();
-  });
-
-  test("keyboard: focusing the input and typing filters without a mouse", async ({
-    page,
-  }) => {
-    await page.goto("/en/verify/");
-    await page.locator("[data-concierge-input]").focus();
-    await page.keyboard.type("privacy");
-    const privacyItem = page.locator(
-      '[data-concierge-item]:has(a[href="/en/evidence/privacy-no-tracking-on-this-site/"])',
-    );
-    await expect(privacyItem).toBeVisible();
-  });
-
-  test("no-JS: the full corpus navigation still meets the content contract", async ({
-    browser,
-  }) => {
-    const context = await browser.newContext({ javaScriptEnabled: false });
-    const page = await context.newPage();
-    await page.goto("/en/verify/");
-    const items = page.locator("[data-concierge-item]");
-    expect(await items.count()).toBeGreaterThanOrEqual(7);
-    const visible = await items.evaluateAll(
-      (nodes) => nodes.filter((node) => !(node as HTMLElement).hidden).length,
-    );
-    expect(visible).toBeGreaterThanOrEqual(7);
-    await context.close();
-  });
+test("/verify/ renders no separate concierge surface", async ({ page }) => {
+  for (const lang of ["en", "vi", "zh", "zh-hant"]) {
+    await page.goto(`/${lang}/verify/`);
+    await expect(page.locator("[data-concierge]")).toHaveCount(0);
+  }
 });
