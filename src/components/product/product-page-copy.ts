@@ -7,6 +7,10 @@ import { productCopy } from "@/lib/product-copy";
  * (sro-*, stm-*). zh and zh-hant lines are deck suggestions and stay NOT
  * VERIFIED for native review.
  *
+ * v12 S2: the Sổ Trọ lead is the customer outcome (rent, meter readings and
+ * receipts per room in one notebook), built only from the record's jobs and
+ * capabilities; the list below gives the detail and the screens the proof.
+ *
  * The record fields (`shortDescription`, `jobs`, `capabilities`) are canonical
  * claim/proof bindings; `jobs`/`capabilities` are mirrored against the vendored
  * upstream profile, so the five "What it does" lines live here for every
@@ -21,7 +25,7 @@ const DECK: Record<
   sotro: {
     en: {
       oneLiner:
-        "For landlords in Vietnam. Track rooms, unpaid rent and what needs doing today.",
+        "Rent, meter readings and receipts for every room, in one notebook made for landlords in Vietnam.",
       whatItDoes: [
         "See who has not paid this month and what needs doing today",
         "Keep room, tenant, meter and monthly charge records",
@@ -32,7 +36,7 @@ const DECK: Record<
     },
     vi: {
       oneLiner:
-        "Dành cho chủ trọ ở Việt Nam. Theo dõi phòng, tiền chưa thu và việc cần làm hôm nay.",
+        "Tiền thuê, điện nước và biên nhận của từng phòng, gọn trong một cuốn sổ dành cho chủ trọ ở Việt Nam.",
       whatItDoes: [
         "Xem tháng này còn ai chưa đóng tiền và hôm nay cần lo việc gì",
         "Ghi lại phòng, người thuê, số điện nước và các khoản thu hằng tháng",
@@ -42,7 +46,8 @@ const DECK: Record<
       ],
     },
     zh: {
-      oneLiner: "给越南房东。记录房间、未收房租和今天要做的事。",
+      oneLiner:
+        "每个房间的房租、水电表读数和收据，都记在一本为越南房东打造的记事本里。",
       whatItDoes: [
         "查看本月谁还没付款、今天要处理什么",
         "记录房间、租客、水电表和每月费用",
@@ -52,7 +57,8 @@ const DECK: Record<
       ],
     },
     "zh-hant": {
-      oneLiner: "給越南房東。記錄房間、未收租金和今天要做的事。",
+      oneLiner:
+        "每個房間的租金、水電表度數和收據，都記在一本為越南房東打造的記事本裡。",
       whatItDoes: [
         "查看本月誰還沒付款、今天要處理什麼",
         "記錄房間、房客、水電表和每月費用",

@@ -1,6 +1,7 @@
 ---
 // zh-Hant copy: machine-assisted (OpenCC s2twp), pending native review.
 import BaseLayout from "@/layouts/BaseLayout.astro";
+import { PAGE_META } from "@/data/page-meta";
 import Container from "@/components/layout/Container.astro";
 import PageHeader from "@/components/layout/PageHeader.astro";
 import ArchitectureSalon from "@/components/architecture/ArchitectureSalon.astro";
@@ -10,8 +11,8 @@ const copy = ARCHITECTURE_COPY["zh-hant"];
 ---
 
 <BaseLayout
-  title={copy.title}
-  description={copy.description}
+  title={PAGE_META["zh-hant"].architecture.title}
+  description={PAGE_META["zh-hant"].architecture.description}
   path="/zh-hant/architecture/"
 >
   <section class="py-16 lg:py-24">

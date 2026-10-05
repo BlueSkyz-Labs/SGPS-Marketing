@@ -57,4 +57,10 @@ const heading = {
     letter-spacing: 0.04em;
     text-transform: uppercase;
   }
+
+  /* Vietnamese: sentence case (cross-subset kerning, see .eyebrow). */
+  :lang(vi) .product-ladder__term {
+    text-transform: none;
+    letter-spacing: var(--tracking-eyebrow, 0.03em);
+  }
 </style>

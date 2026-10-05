@@ -1,0 +1,220 @@
+---
+/**
+ * The appearance glyph: ONE drawing that is a sun (core disc + 8 rays) or a
+ * moon (the same disc, grown and turned, with a mask "bite" slid in).
+ *
+ * `state="live"` (header trigger) shows the RESOLVED theme from CSS alone:
+ * `:root[data-theme]` or, when no theme is pinned, `prefers-color-scheme`.
+ * It needs no script, so it is right on the first paint (public/theme-init.js
+ * pins the attribute before paint) and follows an OS switch live. A pinned
+ * attribute flip morphs it; reduced motion makes the change instant.
+ * `state="sun"` / `state="moon"` are the fixed drawings used by the rows.
+ *
+ * The status dot (`dot`) marks System mode: it shows only while no theme is
+ * pinned (`:root:not([data-theme])`), so the glyph keeps the resolved theme
+ * and the dot tells that it is automatic.
+ *
+ * Mask ids are unique per rendered instance: a per-page counter on
+ * Astro.locals (the header and the mobile menu both render the control).
+ */
+interface Props {
+  state: "live" | "sun" | "moon";
+  /** Render the System status dot (live trigger only). */
+  dot?: boolean;
+  class?: string;
+}
+
+const { state, dot = false, class: className = "" } = Astro.props;
+const locals = Astro.locals as Record<string, unknown>;
+const instance = (Number(locals.themeMorphCount) || 0) + 1;
+locals.themeMorphCount = instance;
+const maskId = `theme-morph-${instance}`;
+---
+
+<svg
+  viewBox="0 0 24 24"
+  class:list={["tt-morph", className]}
+  data-morph={state}
+  fill="none"
+  aria-hidden="true"
+  focusable="false"
+>
+  <defs>
+    <mask
+      id={maskId}
+      maskUnits="userSpaceOnUse"
+      x="-6"
+      y="-6"
+      width="36"
+      height="36"
+    >
+      <rect x="-6" y="-6" width="36" height="36" fill="#fff"></rect>
+      <circle
+        class="tt-bite"
+        cx="16.53"
+        cy="10.35"
+        r="4.8"
+        fill="#000"
+      ></circle>
+    </mask>
+  </defs>
+  <circle class="tt-halo" cx="12" cy="12" r="8.25"></circle>
+  <g
+    class="tt-rays"
+    stroke="currentColor"
+    stroke-width="1.75"
+    stroke-linecap="round"
+  >
+    <path d="M12 2.6v2.3M12 19.1v2.3M2.6 12h2.3M19.1 12h2.3M5.35 5.35l1.63 1.63M17.02 17.02l1.63 1.63M18.65 5.35l-1.63 1.63M6.98 17.02l-1.63 1.63"></path>
+  </g>
+  <g class="tt-body">
+    <circle
+      class="tt-core"
+      cx="12"
+      cy="12"
+      r="4.4"
+      fill="currentColor"
+      mask={`url(#${maskId})`}
+    ></circle>
+  </g>
+  {dot ? <circle class="tt-dot" cx="20.4" cy="20.2" r="3" /> : null}
+</svg>
+
+<style is:global>
+  /* Sun is the drawn default. The moon is the same parts transformed, set
+     through custom properties on the <svg> so every trigger condition (fixed
+     moon, pinned dark, OS dark) flips ONE set of values. */
+  .tt-morph {
+    --tt-spring: cubic-bezier(0.34, 1.32, 0.52, 1);
+    --tt-glide: cubic-bezier(0.55, 0, 0.15, 1);
+    --tt-duration: 500ms;
+    /* Sun values. Returning to sun, the rays bloom just after the bite has
+       slid away. */
+    --tt-rays: none;
+    --tt-rays-opacity: 1;
+    --tt-rays-delay: 70ms;
+    --tt-body: none;
+    --tt-bite: translate(8px, -3px);
+
+    display: block;
+    overflow: visible;
+  }
+
+  /* Moon: the rays turn a quarter and shrink away, the disc grows and turns
+     -25deg, the bite slides in. translate() centres the crescent's mass
+     (geometric centroid is offset by (-1.7, 1.7) units; ~2/3 corrected). */
+  .tt-morph[data-morph="moon"],
+  :root[data-theme="dark"] .tt-morph[data-morph="live"] {
+    --tt-rays: rotate(90deg) scale(0);
+    --tt-rays-opacity: 0;
+    --tt-rays-delay: 0ms;
+    --tt-body: translate(1.1px, -1.1px) rotate(-25deg) scale(1.8);
+    --tt-bite: none;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) .tt-morph[data-morph="live"] {
+      --tt-rays: rotate(90deg) scale(0);
+      --tt-rays-opacity: 0;
+      --tt-rays-delay: 0ms;
+      --tt-body: translate(1.1px, -1.1px) rotate(-25deg) scale(1.8);
+      --tt-bite: none;
+    }
+  }
+
+  .tt-morph :is(.tt-rays, .tt-body, .tt-bite, .tt-halo) {
+    transform-box: view-box;
+    transform-origin: 12px 12px;
+  }
+
+  .tt-morph .tt-rays {
+    opacity: var(--tt-rays-opacity);
+    transform: var(--tt-rays);
+    transition:
+      transform var(--tt-duration) var(--tt-spring) var(--tt-rays-delay),
+      opacity 180ms ease-out var(--tt-rays-delay);
+  }
+
+  .tt-morph .tt-body {
+    transform: var(--tt-body);
+    transition: transform var(--tt-duration) var(--tt-spring);
+  }
+
+  .tt-morph .tt-bite {
+    transform: var(--tt-bite);
+    transition: transform calc(var(--tt-duration) - 40ms) var(--tt-glide);
+  }
+
+  /* A restrained halo: cobalt, live sun only, on hover / focus. */
+  .tt-morph .tt-halo {
+    fill: var(--hc-accent, #1d4ed8);
+    opacity: 0;
+    transform: scale(0.55);
+    transition:
+      opacity 220ms ease-out,
+      transform 320ms var(--tt-spring);
+  }
+
+  :root[data-theme="light"]
+    :is(.hc-trigger:hover, .hc-trigger:focus-visible)
+    .tt-morph[data-morph="live"]
+    .tt-halo {
+    opacity: 0.16;
+    transform: none;
+  }
+
+  @media (prefers-color-scheme: light) {
+    :root:not([data-theme="dark"])
+      :is(.hc-trigger:hover, .hc-trigger:focus-visible)
+      .tt-morph[data-morph="live"]
+      .tt-halo {
+      opacity: 0.16;
+      transform: none;
+    }
+  }
+
+  /* System status dot: shown only while no theme is pinned. */
+  .tt-morph .tt-dot {
+    fill: var(--hc-accent, #1d4ed8);
+    stroke: var(--tt-ring, var(--hc-surface, #ffffff));
+    stroke-width: 1.5px;
+    opacity: 0;
+    transform-box: fill-box;
+    transform-origin: center;
+    transform: scale(0.4);
+    transition:
+      opacity 200ms ease-out,
+      transform 320ms var(--tt-spring);
+  }
+
+  :root:not([data-theme]) .tt-morph[data-morph="live"] .tt-dot {
+    opacity: 1;
+    transform: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .tt-morph,
+    .tt-morph * {
+      transition: none !important;
+    }
+  }
+
+  @media (forced-colors: active) {
+    .tt-morph {
+      color: CanvasText;
+    }
+
+    .hc-trigger .tt-morph {
+      color: ButtonText;
+    }
+
+    .tt-morph .tt-halo {
+      display: none;
+    }
+
+    .tt-morph .tt-dot {
+      fill: Highlight;
+      stroke: ButtonFace;
+    }
+  }
+</style>

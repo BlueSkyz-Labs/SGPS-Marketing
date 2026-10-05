@@ -6,6 +6,7 @@ YAML/JSON entries are added only after the public-product audit passes.
 
 - Identity, jobs-to-be-done, platforms, CTA, proof, endorsement, provenance.
 - **Public** entries also require **2–3 verified `capabilities`** (product abilities), distinct from `jobs` (customer jobs).
+- Optional `applicationCategory` is a schema.org application category (for example `BusinessApplication`). It feeds the product's SoftwareApplication JSON-LD; leave it out rather than guess, and the JSON-LD then carries no category.
 - Optional `proof.media` must be a **local** object:
 
 ```yaml

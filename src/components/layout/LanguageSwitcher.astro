@@ -1,8 +1,14 @@
 ---
 /**
- * Language switcher — compact trigger + native Popover panel.
+ * Language switcher — globe + language code trigger, native Popover panel.
  *
- * The trigger (globe + short code) is a real <button popovertarget>, and the
+ * Visual family shared with the theme control and the search trigger through
+ * ONE stylesheet (./header-control.css: hc-trigger / hc-panel / hc-row).
+ * Language identity never uses country flags (ADR 0009, re-affirmed by the
+ * Owner on 2026-10-05 for the portfolio): flags name countries, not languages.
+ * The trigger is a brand-tinted globe + the ISO 639-1 code (VI, EN) + chevron
+ * at every width; each panel row leads with a brand-tinted code chip and the
+ * native name. The trigger is a real <button popovertarget>, and the
  * panel is a `popover` element, so the disclosure opens, light-dismisses and
  * closes on Escape with no JavaScript and under `script-src 'self'`. Every row
  * is a plain <a href hreflang lang> to the same page in that language. The
@@ -17,6 +23,7 @@ import {
   type Language,
 } from "@/lib/i18n";
 import { languageTransitionStyle } from "@/lib/route-transition";
+import "./header-control.css";
 
 interface Props {
   /** `dark` sits on the always-ink footer; `light` follows the header scene. */
@@ -41,6 +48,7 @@ const panelId = `lang-panel-${placement}`;
 const anchor = `--lang-anchor-${placement}`;
 // WCAG 2.5.3: the accessible name contains the visible short code.
 const triggerName = `${current.shortLabel} · ${groupLabel}: ${current.label}`;
+const isMenu = placement === "menu";
 ---
 
 <div
@@ -48,24 +56,44 @@ const triggerName = `${current.shortLabel} · ${groupLabel}: ${current.label}`;
     "lang-switch",
     `lang-switch--${variant}`,
     `lang-switch--${placement}`,
+    { "hc-group": isMenu, "hc-on-ink": variant === "dark" },
   ]}
   data-language-switcher
   data-current-language={currentLang}
 >
+  {/* In the compact menu the trigger is a row of the shared row system under
+      the same caption the panel uses; elsewhere it is the header pill. */}
+  {isMenu ? (
+    <div class="hc-caption" aria-hidden="true">
+      <BlueSkyzIcon name="globe" />
+      <span>{groupLabel}</span>
+    </div>
+  ) : null}
   <button
     type="button"
-    class="lang-switch__trigger"
+    class:list={[
+      "lang-switch__trigger",
+      isMenu ? "hc-row hc-row--disclosure" : "hc-trigger",
+    ]}
     popovertarget={panelId}
     aria-label={triggerName}
     aria-expanded="false"
     data-language-trigger
     style={`anchor-name: ${anchor}`}
   >
-    <BlueSkyzIcon name="globe" class="h-5 w-5 shrink-0" />
+    <span class="lang-switch__globe hc-glyph" aria-hidden="true">
+      <BlueSkyzIcon name="globe" />
+    </span>
     <span class="lang-switch__code" lang={current.hreflang}>
       {current.shortLabel}
     </span>
-    <span class="lang-switch__chevron" aria-hidden="true">
+    <span
+      class:list={["lang-switch__name", { "hc-row__label": isMenu }]}
+      lang={current.hreflang}
+    >
+      {current.label}
+    </span>
+    <span class="hc-chevron" aria-hidden="true">
       <BlueSkyzIcon name="chevron-down" class="h-3.5 w-3.5" />
     </span>
   </button>
@@ -73,11 +101,17 @@ const triggerName = `${current.shortLabel} · ${groupLabel}: ${current.label}`;
   <nav
     id={panelId}
     popover="auto"
-    class="lang-panel"
+    class="lang-panel hc-panel"
     aria-label={groupLabel}
     data-language-panel
     style={`position-anchor: ${anchor}`}
   >
+    {/* Visible caption only: the nav's aria-label already names the panel, so
+        the caption is aria-hidden to avoid announcing the name twice. */}
+    <div class="hc-caption lang-panel__caption" aria-hidden="true">
+      <BlueSkyzIcon name="globe" />
+      <span>{groupLabel}</span>
+    </div>
     <ul class="lang-panel__list" role="list">
       {SUPPORTED_LANGUAGES.map((lang) => {
         const config = LANGUAGES[lang];
@@ -93,19 +127,24 @@ const triggerName = `${current.shortLabel} · ${groupLabel}: ${current.label}`;
               aria-current={isActive ? "page" : undefined}
               style={languageTransitionStyle(lang)}
               class:list={[
-                "lang-option",
+                "lang-option hc-row",
                 isActive ? "lang-option--current" : "lang-option--idle",
               ]}
             >
-              <span class="lang-option__text">
-                <span class="lang-option__native">{config.label}</span>
+              <span class="hc-row__lead lang-chip" aria-hidden="true">
+                {config.shortLabel}
+              </span>
+              <span class="hc-row__text">
+                <span class="lang-option__native hc-row__label">
+                  {config.label}
+                </span>
                 {showEnglish ? (
-                  <span class="lang-option__english" lang="en">
+                  <span class="lang-option__english hc-row__sub" lang="en">
                     {config.englishLabel}
                   </span>
                 ) : null}
               </span>
-              <span class="lang-option__check" aria-hidden="true">
+              <span class="hc-check lang-option__check" aria-hidden="true">
                 {isActive ? (
                   <BlueSkyzIcon name="check" class="h-5 w-5" />
                 ) : null}
@@ -119,68 +158,22 @@ const triggerName = `${current.shortLabel} · ${groupLabel}: ${current.label}`;
 </div>
 
 <style>
-  /* ─── Root ──────────────────────────────────────────────────────────── */
+  /* Trigger, panel, caption and row styling come from the shared
+     header-control.css; only the switcher-specific layout lives here. */
   .lang-switch {
     display: inline-flex;
     align-self: flex-start;
   }
 
-  /* ─── Trigger ───────────────────────────────────────────────────────── */
-  /* The trigger draws directly on the header (or footer) surface, so it reads
-     that surface's own ambient tokens. The panel below is a separate surface
-     in the top layer and owns its palette. */
-  .lang-switch__trigger {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.375rem;
-    min-width: 44px;
-    min-height: 44px;
-    padding: 0 0.625rem;
-    border: 1px solid var(--border-subtle);
-    border-radius: var(--radius-sm, 0.5rem);
-    background: transparent;
-    color: var(--text-primary);
-    font: inherit;
-    font-size: var(--size-2);
-    font-weight: 700;
-    letter-spacing: 0.04em;
-    line-height: 1;
-    cursor: pointer;
-    transition:
-      background-color 150ms var(--motion-ease-standard, ease),
-      border-color 150ms var(--motion-ease-standard, ease);
+  /* Compact menu: a full-width captioned row group, like the theme rows. */
+  .lang-switch--menu {
+    display: grid;
+    align-self: stretch;
   }
 
-  .lang-switch--dark .lang-switch__trigger {
-    border-color: rgba(247, 248, 250, 0.28);
-    color: var(--brand-porcelain, #f7f8fa);
-  }
-
-  .lang-switch__trigger:hover,
-  .lang-switch__trigger:where([aria-expanded="true"]) {
-    background: color-mix(in srgb, currentColor 9%, transparent);
-    border-color: color-mix(in srgb, currentColor 45%, transparent);
-  }
-
-  .lang-switch__trigger:focus-visible {
-    outline: 3px solid var(--focus-ring, #1d4ed8);
-    outline-offset: 2px;
-  }
-
-  .lang-switch--dark .lang-switch__trigger:focus-visible {
-    outline-color: #3b82f6;
-  }
-
-  .lang-switch__chevron {
-    display: inline-flex;
-    flex-shrink: 0;
-    opacity: 0.7;
-    transition: transform 160ms var(--motion-ease-standard, ease);
-  }
-
-  .lang-switch__trigger:where([aria-expanded="true"]) .lang-switch__chevron {
-    transform: rotate(180deg);
+  /* Brand colour lives in the globe, never in a national symbol. */
+  .lang-switch__globe {
+    color: var(--hc-accent);
   }
 
   .lang-switch__code {
@@ -189,95 +182,54 @@ const triggerName = `${current.shortLabel} · ${groupLabel}: ${current.label}`;
     text-align: center;
   }
 
-  /* ─── Panel ─────────────────────────────────────────────────────────── */
-  /* Owned palette: the header re-points --text-*, --border-subtle and
-     --surface-subtle on the ink scene, which would put porcelain text on this
-     light surface. --surface-raised is theme-aware and not re-pointed. */
-  .lang-panel {
-    --lang-fg: #0b1020;
-    --lang-fg-muted: #475569;
-    --lang-line: #cbd5e1;
-    --lang-hover: #f1f5f9;
-    --lang-current-bg: rgba(29, 78, 216, 0.09);
-    --lang-accent: #1d4ed8;
-    --lang-shadow:
-      0 1px 2px rgba(11, 16, 32, 0.06), 0 18px 44px -12px rgba(11, 16, 32, 0.28);
+  /* Header and footer pill: the code at every width; the native name is only
+     in the accessible name and the panel rows. */
+  .lang-switch__name {
+    display: none;
+    white-space: nowrap;
+  }
 
-    /* Reset the UA popover box, then size it. */
-    position: fixed;
-    inset: auto;
+  /* Panel row lead: the language code on a brand tint. The text is the
+     family foreground, so it keeps AA contrast on the tint in every theme. */
+  .lang-chip {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 2rem;
+    height: 1.5rem;
+    padding: 0 0.375rem;
+    border-radius: var(--radius-sm);
+    background: color-mix(in srgb, var(--hc-accent) 16%, transparent);
+    box-shadow: inset 0 0 0 1px
+      color-mix(in srgb, var(--hc-accent) 30%, transparent);
+    color: var(--hc-fg);
+    font-size: var(--size-1);
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    line-height: 1;
+  }
+
+  /* Menu row: globe | native name | chevron at every width. */
+  .lang-switch--menu .lang-switch__code {
+    display: none;
+  }
+
+  .lang-switch--menu .lang-switch__name {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .lang-panel__list {
+    display: grid;
+    gap: 0.125rem;
     margin: 0;
-    padding: 0.375rem;
-    width: min(19rem, calc(100vw - 1.5rem));
-    overflow: visible;
-    border: 1px solid var(--lang-line);
-    border-radius: var(--radius-card, 0.75rem);
-    background: var(--surface-raised, #ffffff);
-    color: var(--lang-fg);
-    box-shadow: var(--lang-shadow);
-
-    /* Entrance: opacity + a short rise, driven by transitions only. */
-    opacity: 0;
-    transform: translateY(-0.375rem) scale(0.98);
-    transform-origin: top right;
-    transition:
-      opacity 170ms var(--motion-ease-standard, ease),
-      transform 170ms var(--motion-ease-standard, ease),
-      overlay 170ms allow-discrete,
-      display 170ms allow-discrete;
+    padding: 0;
+    list-style: none;
   }
 
-  :global([data-theme="dark"]) .lang-panel {
-    --lang-fg: #ffffff;
-    --lang-fg-muted: #94a3b8;
-    --lang-line: #334155;
-    --lang-hover: rgba(255, 255, 255, 0.08);
-    --lang-current-bg: rgba(59, 130, 246, 0.18);
-    --lang-accent: #3b82f6;
-    --lang-shadow:
-      0 1px 2px rgba(0, 0, 0, 0.4), 0 22px 48px -12px rgba(0, 0, 0, 0.7);
-  }
-
-  @media (prefers-color-scheme: dark) {
-    :global(:root:not([data-theme="light"])) .lang-panel {
-      --lang-fg: #ffffff;
-      --lang-fg-muted: #94a3b8;
-      --lang-line: #334155;
-      --lang-hover: rgba(255, 255, 255, 0.08);
-      --lang-current-bg: rgba(59, 130, 246, 0.18);
-      --lang-accent: #3b82f6;
-      --lang-shadow:
-        0 1px 2px rgba(0, 0, 0, 0.4), 0 22px 48px -12px rgba(0, 0, 0, 0.7);
-    }
-  }
-
-  .lang-panel:popover-open {
-    opacity: 1;
-    transform: none;
-  }
-
-  @starting-style {
-    .lang-panel:popover-open {
-      opacity: 0;
-      transform: translateY(-0.375rem) scale(0.98);
-    }
-  }
-
-  /* ADR 0012: the header is the sole translucent surface, so the panel is a
-     solid raised surface with a soft shadow instead of a blur material. */
-
-  /* Anchor the panel under (or above, in the footer) its trigger. Without
-     anchor positioning the popover stays a centred, fully usable panel. */
+  /* The footer sits low on the page: open the panel above its trigger. */
   @supports (anchor-name: --lang-probe) {
-    .lang-panel {
-      top: calc(anchor(bottom) + 0.5rem);
-      right: anchor(right);
-      position-try-fallbacks:
-        flip-block,
-        flip-inline,
-        flip-block flip-inline;
-    }
-
     .lang-switch--footer .lang-panel {
       top: auto;
       bottom: calc(anchor(top) + 0.5rem);
@@ -287,37 +239,10 @@ const triggerName = `${current.shortLabel} · ${groupLabel}: ${current.label}`;
     }
   }
 
-  /* Phones: a bottom sheet is easier to reach than a corner popover. */
   @media (max-width: 40rem) {
-    .lang-panel,
     .lang-switch--footer .lang-panel {
       inset: auto 0.75rem 0.75rem 0.75rem;
-      position-try-fallbacks: none;
-      width: auto;
       transform-origin: bottom center;
-      transform: translateY(0.75rem);
-    }
-
-    .lang-panel::backdrop {
-      background: rgba(11, 16, 32, 0);
-      transition:
-        background-color 170ms var(--motion-ease-standard, ease),
-        overlay 170ms allow-discrete,
-        display 170ms allow-discrete;
-    }
-
-    .lang-panel:popover-open::backdrop {
-      background: rgba(11, 16, 32, 0.45);
-    }
-
-    @starting-style {
-      .lang-panel:popover-open::backdrop {
-        background: rgba(11, 16, 32, 0);
-      }
-
-      .lang-panel:popover-open {
-        transform: translateY(0.75rem);
-      }
     }
   }
 
@@ -333,110 +258,12 @@ const triggerName = `${current.shortLabel} · ${groupLabel}: ${current.label}`;
     }
 
     .lang-panel {
+      display: grid;
       position: static;
       width: auto;
       opacity: 1;
       transform: none;
       box-shadow: none;
-    }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .lang-panel,
-    .lang-panel::backdrop,
-    .lang-switch__trigger,
-    .lang-switch__chevron {
-      transition: none !important;
-    }
-  }
-
-  /* ─── Rows ──────────────────────────────────────────────────────────── */
-  .lang-panel__list {
-    display: grid;
-    gap: 0.125rem;
-    margin: 0;
-    padding: 0;
-    list-style: none;
-  }
-
-  .lang-option {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) auto;
-    align-items: center;
-    gap: 0.75rem;
-    min-height: 3.25rem;
-    padding: 0.5rem 0.75rem;
-    border-radius: calc(var(--radius-card, 0.75rem) - 0.25rem);
-    color: var(--lang-fg);
-    text-decoration: none;
-    transition: background-color 120ms var(--motion-ease-standard, ease);
-  }
-
-  /* Neutralise the header's tactile nav-link lift inside the panel. */
-  .lang-option:hover,
-  .lang-option:focus-visible {
-    transform: none;
-    text-shadow: none;
-    background: var(--lang-hover);
-  }
-
-  .lang-option:focus-visible {
-    outline: 3px solid var(--lang-accent);
-    outline-offset: -3px;
-  }
-
-  .lang-option--current {
-    background: var(--lang-current-bg);
-  }
-
-  .lang-option--current:hover,
-  .lang-option--current:focus-visible {
-    background: var(--lang-current-bg);
-  }
-
-  .lang-option__text {
-    display: grid;
-    gap: 0.125rem;
-    min-width: 0;
-  }
-
-  .lang-option__native {
-    font-size: var(--size-3);
-    font-weight: 600;
-    line-height: 1.25;
-  }
-
-  .lang-option--current .lang-option__native {
-    font-weight: 700;
-  }
-
-  .lang-option__english {
-    color: var(--lang-fg-muted);
-    font-size: var(--size-1);
-    line-height: 1.25;
-  }
-
-  .lang-option__check {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 1.5rem;
-    height: 1.5rem;
-    color: var(--lang-accent);
-  }
-
-  .lang-option__check :global(svg) {
-    stroke-width: 2.25;
-  }
-
-  @media (forced-colors: active) {
-    .lang-panel {
-      border-color: CanvasText;
-    }
-
-    .lang-option--current {
-      outline: 2px solid Highlight;
-      outline-offset: -2px;
     }
   }
 </style>

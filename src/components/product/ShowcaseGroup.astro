@@ -18,10 +18,11 @@ interface Props {
 
 const { phones, desktops, lang, labels, first = false } = Astro.props;
 
-// Phone captures render at most 17rem in the rail (24rem in the desktop grid),
-// so phones get the 480w derivative next to each master (`<name>-480.webp`).
-// Without it the 780px masters compete with the LCP text's fonts.
-const PHONE_SIZES = "(min-width: 64rem) 24rem, min(72vw, 17rem)";
+// Phone captures render at most 17rem, in the rail and in the centred desktop
+// stage alike, so phones get the 480w derivative next to each master
+// (`<name>-480.webp`). Without it the 780px masters compete with the LCP
+// text's fonts.
+const PHONE_SIZES = "(min-width: 64rem) 17rem, min(72vw, 17rem)";
 // The rail's static tabindex="0" is kept on purpose (v8 W10): it scrolls only
 // below 64rem, where keyboard users need to focus it. At >= 64rem it is a plain
 // grid and stays a focus stop, because CSS cannot set tabindex and no showcase
@@ -40,7 +41,7 @@ const desktopSmallSrc = (src: string) => src.replace(/\.webp$/, "-768.webp");
   <div class:list={[first ? "mt-10" : "mt-8"]}>
     <h3 class="showcase__label">{labels.phone}</h3>
     <ul
-      class="showcase__rail"
+      class:list={["showcase__rail", first && "showcase__rail--stage"]}
       role="list"
       tabindex="0"
       aria-label={labels.phoneRail}
@@ -60,13 +61,11 @@ const desktopSmallSrc = (src: string) => src.replace(/\.webp$/, "-768.webp");
                 decoding="async"
               />
             </div>
-            <figcaption class="mt-4">
-              <span class="block text-base font-semibold text-[var(--text-primary)]">
+            <figcaption class="showcase__caption">
+              <strong class="font-semibold text-[var(--text-primary)]">
                 {item.title[lang]}
-              </span>
-              <span class="mt-1 block text-sm leading-relaxed text-[var(--text-secondary)]">
-                {item.caption[lang]}
-              </span>
+              </strong>
+              <span> — {item.caption[lang]}</span>
             </figcaption>
           </figure>
         </li>
@@ -78,7 +77,10 @@ const desktopSmallSrc = (src: string) => src.replace(/\.webp$/, "-768.webp");
 {desktops.length > 0 ? (
   <div class="mt-12">
     <h3 class="showcase__label">{labels.desktop}</h3>
-    <ul class="showcase__desktops" role="list">
+    <ul
+      class:list={["showcase__desktops", first && "showcase__desktops--stage"]}
+      role="list"
+    >
       {desktops.map((item, index) => (
         <li class="view-rise">
           <figure class="m-0">
@@ -99,13 +101,11 @@ const desktopSmallSrc = (src: string) => src.replace(/\.webp$/, "-768.webp");
                 decoding="async"
               />
             </div>
-            <figcaption class="mt-4">
-              <span class="block text-base font-semibold text-[var(--text-primary)]">
+            <figcaption class="showcase__caption">
+              <strong class="font-semibold text-[var(--text-primary)]">
                 {item.title[lang]}
-              </span>
-              <span class="mt-1 block text-sm leading-relaxed text-[var(--text-secondary)]">
-                {item.caption[lang]}
-              </span>
+              </strong>
+              <span> — {item.caption[lang]}</span>
             </figcaption>
           </figure>
         </li>

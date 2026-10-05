@@ -118,7 +118,9 @@ test("banner is external-script only, in-flow (never an overlay), accessible and
   assert.match(SCRIPT, /header\.after\(region\)/);
   assert.match(HOST, /min-height: 44px/);
   assert.match(HOST, /prefers-reduced-motion: reduce[\s\S]*transition: none/);
-  assert.match(HOST, /var\(--surface-raised\)/);
+  // Themed surface token (calm-chrome round 2026-10-04: the page surface), never a
+  // hard-coded white.
+  assert.match(HOST, /background:\s*var\(--surface-(?:primary|raised)\)/);
   assert.doesNotMatch(HOST, /background:\s*(?:white|#fff)/i);
 });
 

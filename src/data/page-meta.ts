@@ -15,7 +15,18 @@ export interface PageMeta {
 }
 
 export type StaticPageKey =
-  "home" | "about" | "contact" | "privacy" | "support";
+  | "home"
+  | "about"
+  | "contact"
+  | "privacy"
+  | "support"
+  | "products"
+  | "verify"
+  | "decisionRoom"
+  | "editions"
+  | "dossier"
+  | "dossierPrint"
+  | "architecture";
 
 export const PAGE_META: Record<Language, Record<StaticPageKey, PageMeta>> = {
   vi: {
@@ -35,7 +46,7 @@ export const PAGE_META: Record<Language, Record<StaticPageKey, PageMeta>> = {
         "Cách liên hệ BlueSkyz Labs: báo lỗ hổng bảo mật riêng tư qua GitHub. Hộp thư cho hợp tác và câu hỏi chung sẽ được đăng tại đây khi sẵn sàng.",
     },
     privacy: {
-      title: "Quyền riêng tư: không dùng cookie, chỉ lưu ngôn ngữ và giao diện",
+      title: "Quyền riêng tư: không dùng cookie",
       description:
         "Trang web này không đặt cookie và chỉ lưu ngôn ngữ, giao diện do bạn chọn trong trình duyệt. Xem chúng tôi thu thập gì và không thu thập gì.",
     },
@@ -43,6 +54,41 @@ export const PAGE_META: Record<Language, Record<StaticPageKey, PageMeta>> = {
       title: "Hỗ trợ: cách được trợ giúp",
       description:
         "Cách nhận trợ giúp cho Sổ Trọ và Sổ Tâm. Hiện chưa có hộp thư hỗ trợ chung; kênh báo cáo bảo mật riêng tư chỉ dành cho lỗ hổng bảo mật.",
+    },
+    products: {
+      title: "Sản phẩm: Sổ Trọ và Sổ Tâm, đang phát triển",
+      description:
+        "Xem Sổ Trọ và Sổ Tâm giúp bạn được gì: sổ ghi tiền phòng, điện nước cho chủ trọ ở Việt Nam và nhật ký riêng tư ưu tiên lưu trên máy. Cả hai đang phát triển.",
+    },
+    verify: {
+      title: "Xác minh: tự kiểm chứng điều chúng tôi nói",
+      description:
+        "Tự kiểm chứng những gì BlueSkyz Labs công bố: từng tuyên bố công khai, bằng chứng và nguồn đằng sau, cùng các cách để bạn tự kiểm tra.",
+    },
+    decisionRoom: {
+      title: "So sánh tuyên bố",
+      description:
+        "So sánh tối đa 4 tuyên bố công khai của BlueSkyz Labs cạnh nhau, kèm bằng chứng và nguồn của từng tuyên bố. Trang chỉ đặt cạnh nhau, không kết luận.",
+    },
+    editions: {
+      title: "Tuyển tập",
+      description:
+        "Tuyển tập gom các tuyên bố BlueSkyz Labs đã đăng trên trang web này, mỗi tuyên bố đều dẫn tới nguồn để bạn tự kiểm chứng.",
+    },
+    dossier: {
+      title: "Bản tóm tắt để in",
+      description:
+        "Chọn các tuyên bố đã công bố của BlueSkyz Labs cùng nguồn, rồi in hoặc trình bày thành một bản tóm tắt. Những gì bạn chọn không được gửi đi hay lưu lại.",
+    },
+    dossierPrint: {
+      title: "Bản tóm tắt để in: trang in",
+      description:
+        "Bản in những gì BlueSkyz Labs đã công bố trên trang web này, ghi đầy đủ mọi liên kết nguồn và mọi ranh giới để bạn tự đối chiếu.",
+    },
+    architecture: {
+      title: "Cách trang web này được xây dựng",
+      description:
+        "Cách trang web này được xây dựng và phân phối, nói dễ hiểu: các trang tĩnh dựng từ mã nguồn trên GitHub, do Cloudflare phân phối, không có dịch vụ tiếp nhận.",
     },
   },
   en: {
@@ -62,7 +108,7 @@ export const PAGE_META: Record<Language, Record<StaticPageKey, PageMeta>> = {
         "How to reach BlueSkyz Labs: private vulnerability reporting for security issues today, and a business mailbox once one is published.",
     },
     privacy: {
-      title: "Privacy: no cookies, only your language and theme",
+      title: "Privacy: no cookies, only language and theme",
       description:
         "This site sets no cookies and stores only the language and theme you choose, in your browser. See what we collect and what we do not.",
     },
@@ -71,7 +117,43 @@ export const PAGE_META: Record<Language, Record<StaticPageKey, PageMeta>> = {
       description:
         "How to get help with Sổ Trọ and Sổ Tâm. No general support mailbox has been published yet; private security reporting is for vulnerabilities only.",
     },
+    products: {
+      title: "Products: Sổ Trọ and Sổ Tâm, in development",
+      description:
+        "See what Sổ Trọ and Sổ Tâm do for you: a rent and meter notebook for landlords in Vietnam, and a private local-first journal. Both are in development.",
+    },
+    verify: {
+      title: "Verify our claims: trust routes and evidence",
+      description:
+        "Check what BlueSkyz Labs says for yourself: each public claim, the evidence and sources behind it, and the routes to verify it on your own.",
+    },
+    decisionRoom: {
+      title: "Compare claims",
+      description:
+        "Compare up to four public BlueSkyz Labs claims side by side, with the evidence and source for each. The page lines them up; it gives no verdicts.",
+    },
+    editions: {
+      title: "Collections",
+      description:
+        "Collections gather statements BlueSkyz Labs has already published on this site, each one linked to its sources so you can check it yourself.",
+    },
+    dossier: {
+      title: "Printable summary",
+      description:
+        "Pick published BlueSkyz Labs claims and their sources, then print or present them as one summary. Nothing you select is transmitted or stored.",
+    },
+    dossierPrint: {
+      title: "Printable summary: print view",
+      description:
+        "A print-ready view of what BlueSkyz Labs has already published on this site, with every source link and every boundary stated in full.",
+    },
+    architecture: {
+      title: "How this site is built",
+      description:
+        "How this website is built and served, in plain terms: static pages built from source held on GitHub and served by Cloudflare, with no intake service.",
+    },
   },
+  // zh: NOT VERIFIED (native review pending).
   zh: {
     home: {
       title: "BlueSkyz Labs | Sổ Trọ 与 Sổ Tâm，开发中",
@@ -98,7 +180,43 @@ export const PAGE_META: Record<Language, Record<StaticPageKey, PageMeta>> = {
       description:
         "如何获得 Sổ Trọ 与 Sổ Tâm 的帮助：目前尚未公布通用支持邮箱。安全漏洞请走私密报告通道，而非支持渠道。",
     },
+    products: {
+      title: "产品：Sổ Trọ 与 Sổ Tâm，开发中",
+      description:
+        "看看 Sổ Trọ 与 Sổ Tâm 能为你做什么：为越南房东记录房租和水电的记事本，以及本地优先的私密日记。两者均在开发中。",
+    },
+    verify: {
+      title: "核验我们的声明：信任通道与证据",
+      description:
+        "自行核验 BlueSkyz Labs 的说法：每项公开声明、其背后的证据与来源，以及你可以自己动手核查的途径。",
+    },
+    decisionRoom: {
+      title: "比较声明",
+      description:
+        "并排比较最多四条 BlueSkyz Labs 公开声明，并查看每条声明的证据与来源。本页只做并列，不下结论。",
+    },
+    editions: {
+      title: "声明合集",
+      description:
+        "合集汇总了 BlueSkyz Labs 已在本站发布的声明，每条声明都链接到其来源，方便你自行核实。",
+    },
+    dossier: {
+      title: "可打印摘要",
+      description:
+        "挑选 BlueSkyz Labs 已发布的声明及其来源，打印或展示为一份摘要。你的选择不会被传输或保存。",
+    },
+    dossierPrint: {
+      title: "可打印摘要：打印视图",
+      description:
+        "BlueSkyz Labs 已在本站发布内容的打印视图，完整列出所有来源链接与边界说明。",
+    },
+    architecture: {
+      title: "本站如何构建",
+      description:
+        "用通俗的话说明本网站如何构建和提供服务：静态页面由 GitHub 上的源代码构建，由 Cloudflare 提供，不设接收服务。",
+    },
   },
+  // zh-hant: NOT VERIFIED (native review pending).
   "zh-hant": {
     home: {
       title: "BlueSkyz Labs | Sổ Trọ 與 Sổ Tâm，開發中",
@@ -125,6 +243,41 @@ export const PAGE_META: Record<Language, Record<StaticPageKey, PageMeta>> = {
       description:
         "如何取得 Sổ Trọ 與 Sổ Tâm 的協助：目前尚未公布通用支援信箱。資安漏洞請走私密通報管道，而非支援管道。",
     },
+    products: {
+      title: "產品：Sổ Trọ 與 Sổ Tâm，開發中",
+      description:
+        "看看 Sổ Trọ 與 Sổ Tâm 能為你做什麼：為越南房東記錄租金和水電的記事本，以及本機優先的私密日記。兩者都在開發中。",
+    },
+    verify: {
+      title: "核驗我們的聲明：信任通道與證據",
+      description:
+        "自行核驗 BlueSkyz Labs 的說法：每項公開聲明、其背後的證據與來源，以及你可以自己動手核查的途徑。",
+    },
+    decisionRoom: {
+      title: "比較聲明",
+      description:
+        "並排比較最多四則 BlueSkyz Labs 公開聲明，並查看每則聲明的證據與來源。本頁只做並列，不下結論。",
+    },
+    editions: {
+      title: "聲明合集",
+      description:
+        "合集彙整了 BlueSkyz Labs 已在本站發布的聲明，每則聲明都連結到其來源，方便你自行查證。",
+    },
+    dossier: {
+      title: "可列印摘要",
+      description:
+        "挑選 BlueSkyz Labs 已發布的聲明及其來源，列印或簡報成一份摘要。你的選擇不會被傳輸或儲存。",
+    },
+    dossierPrint: {
+      title: "可列印摘要：列印檢視",
+      description:
+        "BlueSkyz Labs 已在本站發布內容的列印檢視，完整列出所有來源連結與邊界說明。",
+    },
+    architecture: {
+      title: "本站如何建置",
+      description:
+        "用淺白的話說明本網站如何建置與提供服務：靜態頁面由 GitHub 上的原始碼建置，由 Cloudflare 提供，不設收件服務。",
+    },
   },
 };
 
@@ -139,7 +292,7 @@ export const PRODUCT_META: Record<string, Record<Language, PageMeta>> = {
     en: {
       title: "Sổ Trọ: a digital notebook for landlords",
       description:
-        "Sổ Trọ is a Vietnam-first digital notebook for landlords: rooms, unpaid rent, utility charges from meter readings and receipts. In development.",
+        "For landlords in Vietnam: see unpaid rent and today's tasks, turn meter readings into utility bills, and confirm money received. Sổ Trọ is in development.",
     },
     zh: {
       title: "Sổ Trọ：房东电子记事本",

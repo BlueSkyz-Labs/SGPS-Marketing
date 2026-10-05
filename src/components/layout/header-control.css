@@ -1,0 +1,423 @@
+/*
+ * Header control family: the ONE source for the header triggers (search,
+ * language, theme), their popover panels and the choice rows inside them
+ * (panel and compact menu). LanguageSwitcher, ThemeToggle and Header import
+ * this file and add the classes; their own <style> blocks only keep what is
+ * genuinely component-specific (breakpoint label swaps, the stacked theme
+ * icon, footer placement). Same shape as the Sổ Trọ HEADER_CONTROL_CLASS.
+ *
+ * Palette: owned `--hc-*` properties, never the ambient `--text-*` tokens (the
+ * ink header re-points those at porcelain, which is unreadable on a light
+ * panel). Three palettes cover every scene:
+ *   - light: white raised trigger, slate hairline;
+ *   - dark: navy raised trigger, porcelain text. Used for the dark theme,
+ *     OS dark, the ink header scene in either theme and the ink footer;
+ *   - panels follow the theme only (they are their own surface in the top
+ *     layer), the inline menu group follows the menu surface (scene + theme).
+ * Every hairline is >= 3:1 against its surface; text is >= 4.5:1.
+ *
+ * ADR 0012: the header is the sole translucent surface. Triggers and panels
+ * are solid tinted surfaces with a soft shadow and no backdrop-filter.
+ */
+
+/* ─── Palette ─────────────────────────────────────────────────────────── */
+.hc-trigger,
+.hc-panel,
+.hc-group {
+  --hc-fg: #0b1020;
+  --hc-fg-muted: #475569;
+  --hc-surface: #ffffff;
+  /* #7c8ba2: 3.46:1 on white, 3.25:1 on the porcelain header. */
+  --hc-line: color-mix(in srgb, #64748b 50%, #94a3b8);
+  --hc-tint: 6%;
+  --hc-hover: #f1f5f9;
+  --hc-current-bg: rgba(29, 78, 216, 0.09);
+  --hc-accent: #1d4ed8;
+  --hc-trigger-shadow:
+    0 1px 2px rgba(11, 16, 32, 0.05), 0 6px 16px -10px rgba(11, 16, 32, 0.18);
+  --hc-shadow:
+    0 1px 2px rgba(11, 16, 32, 0.06), 0 18px 44px -12px rgba(11, 16, 32, 0.28);
+}
+
+:root[data-theme="dark"] :is(.hc-trigger, .hc-panel, .hc-group),
+header[data-scene="ink"] :is(.hc-trigger, .hc-group),
+.hc-on-ink .hc-trigger {
+  --hc-fg: #f7f8fa;
+  --hc-fg-muted: #94a3b8;
+  --hc-surface: #1e293b;
+  /* #728299: >= 3.5:1 on the ink header (glass over porcelain included) and
+     3.74:1 on the navy trigger fill. */
+  --hc-line: color-mix(in srgb, #64748b 70%, #94a3b8);
+  --hc-tint: 14%;
+  --hc-hover: rgba(255, 255, 255, 0.08);
+  --hc-current-bg: rgba(59, 130, 246, 0.18);
+  --hc-accent: #3b82f6;
+  --hc-trigger-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.35), 0 6px 16px -10px rgba(0, 0, 0, 0.6);
+  --hc-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.4), 0 22px 48px -12px rgba(0, 0, 0, 0.7);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) :is(.hc-trigger, .hc-panel, .hc-group) {
+    --hc-fg: #f7f8fa;
+    --hc-fg-muted: #94a3b8;
+    --hc-surface: #1e293b;
+    --hc-line: color-mix(in srgb, #64748b 70%, #94a3b8);
+    --hc-tint: 14%;
+    --hc-hover: rgba(255, 255, 255, 0.08);
+    --hc-current-bg: rgba(59, 130, 246, 0.18);
+    --hc-accent: #3b82f6;
+    --hc-trigger-shadow:
+      0 1px 2px rgba(0, 0, 0, 0.35), 0 6px 16px -10px rgba(0, 0, 0, 0.6);
+    --hc-shadow:
+      0 1px 2px rgba(0, 0, 0, 0.4), 0 22px 48px -12px rgba(0, 0, 0, 0.7);
+  }
+}
+
+/* The dark panel sits a step below the navy trigger so rows read as inset. */
+:root[data-theme="dark"] .hc-panel {
+  --hc-surface: #0f172a;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .hc-panel {
+    --hc-surface: #0f172a;
+  }
+}
+
+/* ─── Glyphs ──────────────────────────────────────────────────────────── */
+/* One stroke weight in screen pixels for every line glyph in the family,
+   whatever grid it is drawn on (registry icons use 24 units, theme icons 20). */
+:is(.hc-glyph, .hc-chevron, .hc-check, .hc-caption, .hc-row__lead)
+  :is(path, circle, line, rect, polyline, polygon, ellipse) {
+  vector-effect: non-scaling-stroke;
+}
+
+.hc-glyph,
+.hc-glyph svg,
+.hc-row__lead > svg {
+  stroke-width: 1.75px;
+}
+
+.hc-glyph {
+  display: block;
+  flex-shrink: 0;
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.hc-chevron {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  opacity: 0.7;
+  transition: transform 160ms var(--motion-ease-standard, ease);
+}
+
+.hc-chevron svg {
+  width: 14px;
+  height: 14px;
+  stroke-width: 1.5px;
+}
+
+:is(.hc-trigger, .hc-row)[aria-expanded="true"] .hc-chevron {
+  transform: rotate(180deg);
+}
+
+/* ─── Trigger ─────────────────────────────────────────────────────────── */
+.hc-trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0 0.75rem;
+  border: 1px solid var(--hc-line);
+  border-radius: var(--radius-md);
+  background: var(--hc-surface);
+  color: var(--hc-fg);
+  box-shadow: var(--hc-trigger-shadow);
+  font: inherit;
+  font-size: var(--size-2);
+  font-weight: 600;
+  line-height: 1;
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    background-color 150ms var(--motion-ease-standard, ease),
+    border-color 150ms var(--motion-ease-standard, ease);
+}
+
+/* Quiet resting state (calm-chrome round, 2026-10-04; Linear-style softened
+   chrome): at rest a trigger carries no edge, fill or shadow, so the header
+   reads as one calm line of text and icons. Hover, an open panel and keyboard
+   focus bring the edge back; forced colours keep the CanvasText edge (below).
+   The family geometry above is unchanged, so nothing shifts on hover. */
+.hc-trigger:not(:hover, [aria-expanded="true"]) {
+  border-color: transparent;
+  background: transparent;
+  box-shadow: none;
+}
+
+/* Icon-only trigger (search): a 44px square. */
+.hc-trigger--icon {
+  width: 44px;
+  padding: 0;
+}
+
+.hc-trigger:focus-visible {
+  outline: 3px solid var(--hc-accent);
+  outline-offset: 2px;
+  /* The craft layer lifts the search trigger on focus; this family does not. */
+  transform: none;
+  box-shadow: var(--hc-trigger-shadow);
+  border-color: var(--hc-line);
+}
+
+/* One hover grammar for every trigger: accent hairline + tint, no lift. */
+.hc-trigger:hover,
+.hc-trigger[aria-expanded="true"] {
+  transform: none;
+  border-color: var(--hc-accent);
+  background: color-mix(
+    in srgb,
+    var(--hc-accent) var(--hc-tint),
+    var(--hc-surface)
+  );
+  box-shadow: var(--hc-trigger-shadow);
+}
+
+/* ─── Panel ───────────────────────────────────────────────────────────── */
+.hc-panel {
+  /* Reset the UA popover box, then size it. */
+  position: fixed;
+  inset: auto;
+  margin: 0;
+  padding: 0.5rem;
+  width: min(18rem, calc(100vw - 1.5rem));
+  overflow: visible;
+  border: 1px solid var(--hc-line);
+  border-radius: var(--radius-panel);
+  background: var(--hc-surface);
+  color: var(--hc-fg);
+  box-shadow: var(--hc-shadow);
+  gap: 0.125rem;
+
+  /* Entrance: opacity + a short rise, driven by transitions only. */
+  opacity: 0;
+  transform: translateY(-0.375rem) scale(0.98);
+  transform-origin: top right;
+  transition:
+    opacity 170ms var(--motion-ease-standard, ease),
+    transform 170ms var(--motion-ease-standard, ease),
+    overlay 170ms allow-discrete,
+    display 170ms allow-discrete;
+}
+
+/* `display` only on the open state: the UA hides a closed popover, and an
+   author `display` on the base rule would override that. */
+.hc-panel:popover-open {
+  display: grid;
+  opacity: 1;
+  transform: none;
+}
+
+@starting-style {
+  .hc-panel:popover-open {
+    opacity: 0;
+    transform: translateY(-0.375rem) scale(0.98);
+  }
+}
+
+/* Anchor under the trigger; each component names its anchor. */
+@supports (anchor-name: --hc-probe) {
+  .hc-panel {
+    top: calc(anchor(bottom) + 0.5rem);
+    right: anchor(right);
+    position-try-fallbacks:
+      flip-block,
+      flip-inline,
+      flip-block flip-inline;
+  }
+}
+
+/* Phones: a bottom sheet is easier to reach than a corner popover. */
+@media (max-width: 40rem) {
+  .hc-panel {
+    inset: auto 0.75rem 0.75rem 0.75rem;
+    position-try-fallbacks: none;
+    width: auto;
+    transform-origin: bottom center;
+    transform: translateY(0.75rem);
+  }
+
+  .hc-panel::backdrop {
+    background: rgba(11, 16, 32, 0);
+    transition:
+      background-color 170ms var(--motion-ease-standard, ease),
+      overlay 170ms allow-discrete,
+      display 170ms allow-discrete;
+  }
+
+  .hc-panel:popover-open::backdrop {
+    background: rgba(11, 16, 32, 0.45);
+  }
+
+  @starting-style {
+    .hc-panel:popover-open::backdrop {
+      background: rgba(11, 16, 32, 0);
+    }
+
+    .hc-panel:popover-open {
+      transform: translateY(0.75rem);
+    }
+  }
+}
+
+/* ─── Caption + inline group ─────────────────────────────────────────── */
+.hc-group {
+  display: grid;
+  gap: 0.125rem;
+  color: var(--hc-fg);
+}
+
+.hc-caption {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem 0.25rem;
+  color: var(--hc-fg-muted);
+  font-size: var(--size-1);
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+.hc-caption svg {
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  stroke-width: 1.5px;
+}
+
+/* ─── Rows ────────────────────────────────────────────────────────────── */
+.hc-row {
+  display: grid;
+  grid-template-columns: 2.25rem minmax(0, 1fr) 1.5rem;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  min-height: 3.5rem;
+  padding: 0.5rem 0.75rem;
+  border: 2px solid transparent;
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--hc-fg);
+  font: inherit;
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    background-color 120ms var(--motion-ease-standard, ease),
+    border-color 120ms var(--motion-ease-standard, ease);
+}
+
+/* Neutralise the header's tactile nav-link lift and menu slide in rows. */
+.hc-row:hover,
+.hc-row:focus-visible,
+.hc-row[aria-expanded="true"] {
+  transform: none;
+  text-shadow: none;
+  background: var(--hc-hover);
+}
+
+.hc-row:focus-visible {
+  outline: 3px solid var(--hc-accent);
+  outline-offset: -3px;
+}
+
+/* Same press feedback for link rows and button rows. */
+.hc-row:active:not(:disabled) {
+  opacity: 0.8;
+  transform: none;
+}
+
+/* The current choice: aria state is the single source (aria-current on the
+   language links, aria-pressed on the theme buttons). */
+.hc-row:is([aria-current="page"], [aria-pressed="true"]),
+.hc-row:is([aria-current="page"], [aria-pressed="true"]):hover,
+.hc-row:is([aria-current="page"], [aria-pressed="true"]):focus-visible {
+  border-color: var(--hc-accent);
+  background: var(--hc-current-bg);
+}
+
+.hc-row__lead {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--hc-accent);
+}
+
+.hc-row__lead > svg {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.hc-row__text {
+  display: grid;
+  gap: 0.125rem;
+  min-width: 0;
+}
+
+.hc-row__label {
+  font-size: var(--size-3);
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+.hc-row:is([aria-current="page"], [aria-pressed="true"]) .hc-row__label {
+  font-weight: 700;
+}
+
+.hc-row__sub {
+  color: var(--hc-fg-muted);
+  font-size: var(--size-1);
+  line-height: 1.25;
+}
+
+.hc-check {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  color: var(--hc-accent);
+}
+
+.hc-check svg {
+  stroke-width: 2px;
+}
+
+/* ─── Motion + forced colours ────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .hc-trigger,
+  .hc-chevron,
+  .hc-panel,
+  .hc-panel::backdrop,
+  .hc-row {
+    transition: none !important;
+  }
+}
+
+@media (forced-colors: active) {
+  .hc-trigger,
+  .hc-panel {
+    border-color: CanvasText;
+  }
+
+  .hc-row:is([aria-current="page"], [aria-pressed="true"]) {
+    border-color: Highlight;
+  }
+}

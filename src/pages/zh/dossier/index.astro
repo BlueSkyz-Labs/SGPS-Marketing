@@ -1,13 +1,14 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
+import { PAGE_META } from "@/data/page-meta";
 import Container from "@/components/layout/Container.astro";
 import PageHeader from "@/components/layout/PageHeader.astro";
 import DossierComposer from "@/components/dossier/DossierComposer.astro";
 ---
 
 <BaseLayout
-  title="可打印摘要"
-  description="选择已发布的声明与来源，用于打印或展示。不传输，也不保存。"
+  title={PAGE_META["zh"].dossier.title}
+  description={PAGE_META["zh"].dossier.description}
   path="/zh/dossier/"
 >
   <section class="py-16 lg:py-24">

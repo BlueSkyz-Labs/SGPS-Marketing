@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.0",
-  "updatedAt": "2026-10-04",
+  "updatedAt": "2026-10-05",
   "program": "SGPS Premium Experience & Design Excellence v2.0 (God-Tier × Tier S+)",
   "status": "sgps-v2-in-progress",
   "authorities": {
@@ -334,6 +334,18 @@
       "name": "v10 Experience FULL round: Global-Elite (BPXS §6). Plan APPROVED under Owner plan-delegation 2026-10-03; Track A E0b #457, E1, E2 #453, E3 #459, E5 #454, E6 #455 merged; E7 audit recorded at main@5afe5f54 (docs/evidence/2026-10-04-v10-e7-convergence-audit.md); E4 M02 prefetch #474 merged at main@0254921; E7 delta read-back after E4 at main@c173f16 PASS (docs/evidence/2026-10-04-v10-e7-delta-post-e4.md) — all Track A slices merged; E7 verdict CONVERGED_WITH_RESIDUALS (production runtime after O-1, field CWV, Human E4, native zh review remain owner-gated); Track B Owner gates O-10.1/2/4/5/6 open, O-10.3 OFF by default, O-10.7 DEFER",
       "status": "MERGED",
       "evidence": "docs/evidence/2026-10-04-v10-e7-delta-post-e4.md"
+    },
+    {
+      "id": "v12-showcase-story-content-seo",
+      "name": "v12 Showcase story, customer-led content and SEO: calm-chrome #507 70062f0, S2 #508 94c31b2, S1 Feature Story #509 5c4e1d0, applicationCategory #510 6518532",
+      "status": "MERGED",
+      "evidence": "docs/evidence/2026-10-05-v12-convergence.md"
+    },
+    {
+      "id": "v13-experience-global-enterprise",
+      "name": "v13 Experience Global Enterprise: SGPS-DEC-2026-037 header controls (#512 d24a5af, #513 dc3e128), WCAG 2.2 AA lock-in #514 f3a2d35; W3/W4 NO-GO; W5 blocked on Sổ Tâm screens",
+      "status": "MERGED",
+      "evidence": "docs/evidence/2026-10-05-v13-convergence.md"
     }
   ],
   "openOwnerDecisions": [

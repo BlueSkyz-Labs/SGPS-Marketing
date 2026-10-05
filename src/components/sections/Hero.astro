@@ -105,7 +105,10 @@ const supportingLine = flagship ? null : proposition;
   </div>
   <!-- Plain container, not the rise wrapper: the LCP headline lives inside it and must
        not animate or move, so no ancestor may carry the 400 ms rise either. -->
-  <div class="site-container relative grid grid-cols-[minmax(0,1fr)] gap-8 py-10 sm:py-14 md:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] md:items-center md:gap-10 lg:py-8">
+  <div
+    class="site-container relative grid hero-grid py-10 sm:py-14 lg:py-12"
+    data-hero-layout={flagship && cta ? "flagship" : "company"}
+  >
     <div class="hero-content" data-hero>
       <h1
         id="hero-title"
@@ -134,20 +137,20 @@ const supportingLine = flagship ? null : proposition;
       ) : null}
       {productLine && lineFirst && lineSecond ? (
         <p
-          class="hero-product-line hero-tagline mt-4 max-w-xl text-base leading-relaxed text-[color-mix(in_srgb,var(--brand-porcelain)_82%,transparent)]"
+          class="hero-product-line hero-tagline mt-4 max-w-xl text-base text-[color-mix(in_srgb,var(--brand-porcelain)_82%,transparent)]"
           data-hero-product-line
         >
           <span class="whitespace-pre-wrap">{productLine.lead}</span>
           <a
             href={getProductProfilePath(lang, lineFirst.data.slug)}
-            class="inline-flex min-h-11 items-center align-middle font-semibold text-[var(--brand-porcelain)] underline underline-offset-4 hover:no-underline"
+            class="hero-inline-link"
           >
             {lineFirst.data.name}
           </a>
           <span class="whitespace-pre-wrap">{productLine.a}</span>
           <a
             href={getProductProfilePath(lang, lineSecond.data.slug)}
-            class="inline-flex min-h-11 items-center align-middle font-semibold text-[var(--brand-porcelain)] underline underline-offset-4 hover:no-underline"
+            class="hero-inline-link"
           >
             {lineSecond.data.name}
           </a>
@@ -169,35 +172,75 @@ const supportingLine = flagship ? null : proposition;
         </div>
       ) : null}
     </div>
+    <!-- F4: in DOM order the flagship name and its one action come before the
+         capture, so on a phone they sit under the H1 inside the first screen.
+         The wrapper is `display: contents`; the grid places body and stage, so
+         reading order and visual order agree at every width (no CSS order). -->
     {flagship && cta ? (
-      <div class="hero-stage">
-        <div class="hero-visual" aria-hidden="true">
-          <picture>
-            <source
-              type="image/avif"
-              media="(min-width: 1024px)"
-              srcset="/brand/blueskyz/v4/hero/prismatic-r4d-mark-560.avif 560w, /brand/blueskyz/v4/hero/prismatic-r4d-mark-840.avif 840w"
-              sizes="26rem"
-            />
-            <source
-              type="image/webp"
-              media="(min-width: 1024px)"
-              srcset="/brand/blueskyz/v4/hero/prismatic-r4d-mark-560.webp 560w, /brand/blueskyz/v4/hero/prismatic-r4d-mark-840.webp 840w"
-              sizes="26rem"
-            />
+      <div class="hero-flagship" data-hero-flagship>
+        <div class="hero-flagship__body">
+          <p class="hero-product flex flex-wrap items-center gap-x-3 gap-y-2">
             <img
-              class="hero-mark"
-              src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+              class="size-9 rounded-lg"
+              src={getProductIconThumbPath(flagship.data.slug)}
               alt=""
-              width="560"
-              height="560"
+              width="36"
+              height="36"
               decoding="async"
-              fetchpriority="low"
             />
-          </picture>
-          <SailReveal handoff />
+            <span class="text-lg font-semibold text-[var(--brand-porcelain)]">
+              {flagship.data.name}
+            </span>
+            <span
+              data-product-status={flagship.data.publicLabel}
+              class="inline-flex rounded-full border border-white/30 px-3 py-1 text-xs font-semibold tracking-wide text-[var(--brand-porcelain)]"
+            >
+              {copy?.statusLabel}
+            </span>
+          </p>
+          <p class="hero-tagline mt-2 max-w-md text-sm leading-relaxed text-[color-mix(in_srgb,var(--brand-porcelain)_82%,transparent)]">
+            {flagshipLine}
+          </p>
+          <ButtonLink
+            href={cta.href}
+            data-product-cta={cta.verb}
+            data-hero-primary
+            class="hero-flagship__cta mt-4"
+            aria-label={`${cta.label}: ${flagship.data.name}`}
+          >
+            {cta.label}
+          </ButtonLink>
         </div>
-        <div class="hero-flagship" data-hero-flagship>
+        <div class="hero-stage">
+          <!-- W1 "Horizon & Sail": the prismatic mark rises behind the capture
+               like a sun on the horizon; decorative, desktop only. -->
+          <div class="hero-visual" aria-hidden="true">
+            <picture>
+              <source
+                type="image/avif"
+                media="(min-width: 1024px)"
+                srcset="/brand/blueskyz/v4/hero/prismatic-r4d-mark-560.avif 560w, /brand/blueskyz/v4/hero/prismatic-r4d-mark-840.avif 840w"
+                sizes="24rem"
+              />
+              <source
+                type="image/webp"
+                media="(min-width: 1024px)"
+                srcset="/brand/blueskyz/v4/hero/prismatic-r4d-mark-560.webp 560w, /brand/blueskyz/v4/hero/prismatic-r4d-mark-840.webp 840w"
+                sizes="24rem"
+              />
+              <img
+                class="hero-mark"
+                src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+                alt=""
+                width="560"
+                height="560"
+                decoding="async"
+                fetchpriority="low"
+              />
+            </picture>
+            <SailReveal handoff />
+          </div>
+          <span class="hero-stage__horizon" aria-hidden="true"></span>
           <div class="hero-focal" data-hero-focal>
             <FlagshipCapture
               slug={flagship.data.slug}
@@ -205,7 +248,7 @@ const supportingLine = flagship ? null : proposition;
               lang={lang}
               priority
               lowPriority
-              sizes="(min-width: 768px) 17.5rem, 13.75rem"
+              sizes="(min-width: 1024px) 18rem, (min-width: 768px) 17.5rem, 13.75rem"
               smallSrc={
                 flagship.data.slug === "sotro"
                   ? [
@@ -223,39 +266,6 @@ const supportingLine = flagship ? null : proposition;
               class="hero-flagship__capture"
             />
           </div>
-          <div class="hero-flagship__body">
-            <p class="hero-product flex flex-wrap items-center gap-x-3 gap-y-2">
-              <img
-                class="size-9 rounded-lg"
-                src={getProductIconThumbPath(flagship.data.slug)}
-                alt=""
-                width="36"
-                height="36"
-                decoding="async"
-              />
-              <span class="text-lg font-semibold text-[var(--brand-porcelain)]">
-                {flagship.data.name}
-              </span>
-              <span
-                data-product-status={flagship.data.publicLabel}
-                class="inline-flex rounded-full border border-white/30 px-3 py-1 text-xs font-semibold tracking-wide text-[var(--brand-porcelain)]"
-              >
-                {copy?.statusLabel}
-              </span>
-            </p>
-            <p class="hero-tagline mt-2 text-sm leading-relaxed text-[color-mix(in_srgb,var(--brand-porcelain)_82%,transparent)]">
-              {flagshipLine}
-            </p>
-            <ButtonLink
-              href={cta.href}
-              data-product-cta={cta.verb}
-              data-hero-primary
-              class="hero-flagship__cta mt-4"
-              aria-label={`${cta.label}: ${flagship.data.name}`}
-            >
-              {cta.label}
-            </ButtonLink>
-          </div>
         </div>
       </div>
     ) : null}
@@ -263,6 +273,46 @@ const supportingLine = flagship ? null : proposition;
 </section>
 
 <style>
+  /* ---- Layout -------------------------------------------------------------
+     One column on phones in DOM order: promise, product line, flagship name +
+     CTA, then the capture. From 768 px the promise and the flagship body share
+     the left column and the capture stage spans both rows on the right. */
+  .hero-grid {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: 2rem;
+  }
+  .hero-flagship {
+    display: contents;
+  }
+  .hero-flagship__body {
+    min-width: 0;
+    width: 100%;
+  }
+  /* Product line: plain inline links (no inline-flex box, so every line keeps
+     the same pitch). Vertical padding on an inline box does not change the line
+     box, so the target still measures >= 44 px tall (the project's 44 x 44
+     target standard, above WCAG 2.5.8) while the line-height alone sets the
+     rhythm. */
+  .hero-product-line {
+    line-height: 1.625;
+  }
+  .hero-inline-link {
+    padding-block: 0.85rem;
+    font-weight: 600;
+    color: var(--brand-porcelain);
+    text-decoration-line: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.25em;
+    text-decoration-color: color-mix(
+      in srgb,
+      var(--brand-porcelain) 55%,
+      transparent
+    );
+  }
+  .hero-inline-link:hover {
+    text-decoration-color: currentColor;
+  }
+
   .hero-stage {
     position: relative;
     display: grid;
@@ -270,28 +320,9 @@ const supportingLine = flagship ? null : proposition;
     justify-items: center;
     min-width: 0;
   }
-  /* The sail is atmosphere: reduced scale, behind the capture, desktop and
-     tablet only (hidden below md; the hero atmosphere glow stays). */
-  .hero-stage :global(.hero-visual) {
-    position: absolute;
-    inset: 38% auto auto 50%;
-    transform: translate(-50%, -50%);
-    width: min(26rem, 120%);
-    z-index: 0;
-    opacity: 0.55;
-  }
-  .hero-flagship {
-    position: relative;
-    z-index: 1;
-    display: grid;
-    grid-template-columns: minmax(0, 1fr);
-    justify-items: center;
-    gap: 1rem;
-    width: 100%;
-    max-width: 22rem;
-    min-width: 0;
-  }
   .hero-focal {
+    position: relative;
+    z-index: 2;
     width: 13.75rem;
     max-width: 100%;
   }
@@ -303,10 +334,6 @@ const supportingLine = flagship ? null : proposition;
     aspect-ratio: 780 / 1440;
     object-fit: contain;
   }
-  .hero-flagship__body {
-    min-width: 0;
-    width: 100%;
-  }
   /* The CTA is never allowed to break inside a word. Full width on phones. */
   .hero-flagship :global(.hero-flagship__cta) {
     width: 100%;
@@ -315,12 +342,110 @@ const supportingLine = flagship ? null : proposition;
     hyphens: none;
     text-align: center;
   }
+  .hero-stage__horizon {
+    display: none;
+  }
+
   @media (min-width: 768px) {
+    .hero-grid[data-hero-layout="flagship"] {
+      grid-template-columns: minmax(0, 1.08fr) minmax(0, 0.92fr);
+      grid-template-areas:
+        "copy stage"
+        "body stage";
+      /* The stage spans both rows; its extra height is shared by the two rows,
+         so the promise (bottom of row 1) and the body (top of row 2) stay a
+         centred group beside the capture. */
+      grid-template-rows: auto auto;
+      column-gap: 2.5rem;
+      row-gap: 1.75rem;
+      align-items: start;
+    }
+    .hero-grid[data-hero-layout="flagship"] > .hero-content {
+      grid-area: copy;
+      align-self: end;
+    }
+    .hero-flagship__body {
+      grid-area: body;
+    }
+    .hero-stage {
+      grid-area: stage;
+      align-self: center;
+    }
     .hero-focal {
       width: 17.5rem;
     }
     .hero-flagship :global(.hero-flagship__cta) {
       width: auto;
+    }
+    /* Restrained 3D: the capture turns a few degrees toward the promise. A
+       static transform (no layout box change, CLS 0); the slot stays reserved. */
+    .hero-focal {
+      transform: perspective(2000px) rotateY(-8deg);
+      transform-origin: 60% 50%;
+    }
+    .hero-flagship :global(.flagship-capture__image) {
+      box-shadow:
+        0 1px 0 0 color-mix(in srgb, var(--brand-porcelain) 30%, transparent)
+          inset,
+        0 2px 6px color-mix(in srgb, #000 30%, transparent),
+        0 36px 72px -24px color-mix(in srgb, #000 70%, transparent),
+        0 24px 64px -32px
+          color-mix(in srgb, var(--brand-cobalt) 55%, transparent);
+    }
+  }
+
+  /* ---- W1 Horizon & Sail (desktop) ----------------------------------------
+     The mark sits up and to the right of the capture so its whole silhouette
+     reads, and it rises out of a cobalt horizon line like a sun: the lower edge
+     fades into the line instead of being cut by the capture. */
+  .hero-stage :global(.hero-visual) {
+    position: absolute;
+    z-index: 0;
+    pointer-events: none;
+  }
+  @media (min-width: 1024px) {
+    /* 18rem so the tilted capture still renders >= 280 px wide. */
+    .hero-focal {
+      justify-self: start;
+      width: 18rem;
+      margin-inline-start: 6%;
+    }
+    .hero-stage :global(.hero-visual) {
+      top: -1.5rem;
+      right: -3rem;
+      width: 24rem;
+      opacity: 0.92;
+      /* The sail stands on the horizon line at 88.5 % of its box. */
+      mask-image: linear-gradient(180deg, #000 0 87%, transparent 95%);
+    }
+    .hero-stage__horizon {
+      display: block;
+      position: absolute;
+      z-index: 1;
+      top: calc(-1.5rem + 24rem * 0.885);
+      left: -10%;
+      right: -6rem;
+      height: 1px;
+      pointer-events: none;
+      background: linear-gradient(
+        90deg,
+        transparent 0%,
+        color-mix(in srgb, var(--brand-cobalt) 70%, transparent) 22%,
+        color-mix(in srgb, var(--brand-porcelain) 85%, transparent) 62%,
+        color-mix(in srgb, var(--brand-cobalt) 70%, transparent) 86%,
+        transparent 100%
+      );
+      box-shadow: 0 0 18px
+        color-mix(in srgb, var(--brand-cobalt) 50%, transparent);
+    }
+  }
+
+  @media (forced-colors: active) {
+    .hero-stage__horizon {
+      display: none;
+    }
+    .hero-focal {
+      transform: none;
     }
   }
 </style>
