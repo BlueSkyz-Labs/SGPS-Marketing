@@ -88,8 +88,7 @@ header[data-scene="ink"] :is(.hc-trigger, .hc-group),
 
 /* ─── Glyphs ──────────────────────────────────────────────────────────── */
 /* One stroke weight in screen pixels for every line glyph in the family,
-   whatever grid it is drawn on (registry icons use 24 units, theme icons 20).
-   Flags keep their own fills and hairline. */
+   whatever grid it is drawn on (registry icons use 24 units, theme icons 20). */
 :is(.hc-glyph, .hc-chevron, .hc-check, .hc-caption, .hc-row__lead)
   :is(path, circle, line, rect, polyline, polygon, ellipse) {
   vector-effect: non-scaling-stroke;
@@ -129,9 +128,6 @@ header[data-scene="ink"] :is(.hc-trigger, .hc-group),
 
 /* ─── Trigger ─────────────────────────────────────────────────────────── */
 .hc-trigger {
-  /* A 24x16 flag carries the same optical weight as a 20px line glyph. */
-  --flag-width: 1.5rem;
-
   display: inline-flex;
   align-items: center;
   justify-content: center;
