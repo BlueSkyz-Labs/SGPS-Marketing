@@ -1,6 +1,6 @@
 # v13: Experience — Global Enterprise (SGPS-Marketing)
 
-**Status:** **APPROVED — ACTIVE.**
+**Status:** **CONVERGED_WITH_RESIDUALS (2026-10-05).** W1 and W2 landed; W3 and W4 are recorded NO-GO; W5 is BLOCKED_OWNER_FACT. Evidence: `docs/evidence/2026-10-05-v13-convergence.md`.
 
 **Date:** 2026-10-05 (GMT+7).
 
