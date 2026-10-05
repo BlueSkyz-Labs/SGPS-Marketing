@@ -57,13 +57,13 @@ If no decision exists, mark C3-E blocked and stop runtime implementation.
 - Consumes: canonical public product, claim/evidence, support/security/privacy, release and route selectors.
 - Produces: bounded public corpus records `{id, kind, title, text, publicUrl, freshness?, sourceIds[]}`.
 
-- [ ] **Step 1: write negative leakage tests first**
+- [x] **Step 1: write negative leakage tests first**
 
 Reject unpublished products, internal repo paths, workflow names, private evidence, secrets, and unsupported public claims.
 
-- [ ] **Step 2: prove RED, implement serializer, prove GREEN**
+- [x] **Step 2: prove RED, implement serializer, prove GREEN**
 
-- [ ] **Step 3: verify deterministic stable ids and ordering**
+- [x] **Step 3: verify deterministic stable ids and ordering**
 
 ### Task 3: Define retrieval and citation policy
 
@@ -76,11 +76,11 @@ Reject unpublished products, internal repo paths, workflow names, private eviden
 
 - Produces policy functions for corpus allowlist, minimum source support, answerable/out-of-scope classification, and citation requirements.
 
-- [ ] **Step 1: write tests for supported, ambiguous, unknown, adversarial, and prompt-injection queries**
+- [x] **Step 1: write tests for supported, ambiguous, unknown, adversarial, and prompt-injection queries**
 
-- [ ] **Step 2: implement fail-closed policy before any model integration**
+- [x] **Step 2: implement fail-closed policy before any model integration**
 
-- [ ] **Step 3: reject answer objects missing source ids or containing unapproved source ids**
+- [x] **Step 3: reject answer objects missing source ids or containing unapproved source ids**
 
 ### Task 4: Implement runtime adapter behind approved ADR
 
@@ -115,7 +115,9 @@ Reject unpublished products, internal repo paths, workflow names, private eviden
 - Consumes: concierge API/adapter; falls back to deterministic search/navigation.
 - Produces: accessible question input, source-linked answer, unknown/outage states.
 
-- [ ] **Step 1: render deterministic fallback navigation/search in base HTML**
+- [x] **Step 1: render deterministic fallback navigation/search in base HTML**
+
+  **Owner decision 2026-10-05 (#499):** the deterministic step lives in the existing Command Navigator, not in a second surface on `/verify/`. A separate surface duplicated the navigator's labels and filter, and pushed `/verify/` over its v8 word caps (`/vi/verify/` was already at 215/215). The corpus adapter now widens the navigator's search text with each product's and surface's verbatim canonical text. It adds no item, link or visible copy. `src/components/concierge/ProductConcierge.astro` and its client module are removed. A future ask flow (Steps 2–4) needs its own placement decision once the runtime ADR is accepted.
 
 - [ ] **Step 2: progressively enable ask flow**
 
