@@ -1,6 +1,6 @@
 # v12: Showcase story, customer-led content and SEO (SGPS-Marketing)
 
-**Status:** **APPROVED — ACTIVE.**
+**Status:** **CONVERGED (2026-10-05).** S1 and S2 are on main (#507, #508, #509, #510). Evidence: `docs/evidence/2026-10-05-v12-convergence.md`. The remaining items are Owner or external steps (§7).
 
 **Date:** 2026-10-04 (GMT+7).
 
