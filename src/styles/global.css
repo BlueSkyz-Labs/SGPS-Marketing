@@ -86,15 +86,6 @@
   --border-subtle: #cbd5e1;
   --action-primary: #1d4ed8;
   --focus-ring: #1d4ed8;
-  /* National flag artwork for the language control (decorative, theme-invariant
-     apart from a softened white). Owned here so no component carries raw hex. */
-  --flag-white: #f1f5f9;
-  --flag-red-vn: #da251d;
-  --flag-yellow-vn: #ffff00;
-  --flag-red-us: #b22234;
-  --flag-blue-us: #3c3b6e;
-  --flag-red-cn: #de2910;
-  --flag-yellow-cn: #ffde00;
   /* Kit v4 radius-md (12px); keeps cards on the canonical radius scale. */
   --radius-card: 0.75rem;
   /* Popover card radius shared by the header control panels (16px). */
@@ -1927,9 +1918,19 @@ dd {
     "PingFang TC", "Noto Sans TC", "Microsoft JhengHei", var(--font-sans),
     sans-serif;
 }
+/* CJK headings: strict punctuation rules, but ideographs may still break
+   (never keep-all: it forbids breaks between Han characters, so a long
+   heading overflowed 320px, WCAG 1.4.10, found by the v13 sweep).
+   auto-phrase is a progressive enhancement over normal, as in
+   display-type.css. */
 :is(:lang(zh-Hans), :lang(zh-Hant)) :is(h1, h2, h3) {
-  word-break: keep-all;
+  word-break: normal;
   line-break: strict;
+}
+@supports (word-break: auto-phrase) {
+  :is(:lang(zh-Hans), :lang(zh-Hant)) :is(h1, h2, h3) {
+    word-break: auto-phrase;
+  }
 }
 
 /* Back to top: a plain anchor at the end of long pages on phones.
