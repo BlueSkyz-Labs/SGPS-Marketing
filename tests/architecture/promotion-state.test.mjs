@@ -7,6 +7,7 @@ import {
   STATUS,
   evaluateDeployment,
   evaluatePromotionState,
+  evaluateProviderDeployment,
   evaluatePublicTruth,
   evaluateSource,
 } from "../../scripts/check-promotion-state.mjs";
@@ -20,7 +21,7 @@ const workflow = read(".github/workflows/quality-gates.yml");
 test("real repository yields no FAIL in any assurance stage", () => {
   const state = evaluatePromotionState({ root: ROOT });
 
-  assert.equal(state.stages.length, 3);
+  assert.equal(state.stages.length, 4);
   for (const stage of state.stages) {
     assert.notEqual(
       stage.status,
@@ -31,16 +32,32 @@ test("real repository yields no FAIL in any assurance stage", () => {
   assert.equal(state.exitCode, 0);
 });
 
-test("source and deployment stages hold on the real repository", () => {
+test("source and deployment-contract stages hold on the real repository", () => {
   const state = evaluatePromotionState({ root: ROOT });
   const byName = Object.fromEntries(
     state.stages.map((stage) => [stage.stage, stage]),
   );
 
   assert.equal(byName.source.status, STATUS.PASS);
-  assert.equal(byName.deployment.status, STATUS.PASS);
+  assert.equal(byName["deployment-contract"].status, STATUS.PASS);
+  // Authoritative provider deployment is NOT_VERIFIED offline by design.
+  assert.equal(byName["provider-deployment"].status, STATUS.BLOCKED_OWNER_FACT);
   // Owner facts are not committed yet, so public truth is honestly blocked.
   assert.notEqual(byName["public-truth"].status, STATUS.FAIL);
+});
+
+test("provider deployment is unknown offline, never PASS and never FAIL (#372)", () => {
+  const result = evaluateProviderDeployment();
+
+  assert.equal(result.stage, "provider-deployment");
+  assert.equal(result.status, STATUS.BLOCKED_OWNER_FACT);
+  assert.notEqual(result.status, STATUS.PASS);
+  assert.notEqual(result.status, STATUS.FAIL);
+  assert.ok(
+    result.findings.some((item) =>
+      item.subject.includes("cloudflare-workers-builds"),
+    ),
+  );
 });
 
 test("a synthetic source stage with a missing script yields FAIL", () => {
@@ -158,7 +175,8 @@ test("CLI exits 0 and prints the per-stage summary", () => {
   );
 
   assert.match(output, /source\s+PASS/);
-  assert.match(output, /deployment\s+PASS/);
+  assert.match(output, /deployment-contract\s+PASS/);
+  assert.match(output, /provider-deployment\s+BLOCKED_OWNER_FACT/);
   assert.match(output, /Promotion assurance: no FAIL/);
   assert.match(output, /BLOCKED_OWNER_FACT/);
 });

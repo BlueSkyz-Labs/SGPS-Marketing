@@ -121,3 +121,47 @@ test("GitHub source assurance is pinned and least privilege", () => {
   assert.doesNotMatch(workflow, /CLOUDFLARE|wrangler|deploy:workers/);
   assert.doesNotMatch(workflow, /permissions:\s*write-all|contents:\s*write/);
 });
+
+test("base merge-policy precedes candidate package-manager execution (#376)", () => {
+  const workflow = readIfPresent(".github/workflows/quality-gates.yml");
+  // Scope to the Quality Gates job: later jobs (browser shards, Lighthouse)
+  // legitimately install their own runtimes after Quality Gates passes.
+  const job = (workflow.split("\n  quality-gates:")[1] ?? "").split(
+    /\n  [a-z-]+:/,
+  )[0];
+  assert.ok(job.length > 0, "quality-gates job must exist");
+
+  const policyIndex = job.indexOf("name: Merge policy");
+  assert.ok(policyIndex >= 0, "merge-policy step must exist");
+
+  const activations = [
+    "corepack enable",
+    "pnpm --version",
+    "pnpm install --frozen-lockfile",
+  ];
+  for (const activation of activations) {
+    const at = job.indexOf(activation);
+    assert.ok(at >= 0, `${activation} must exist in the Quality Gates job`);
+    assert.ok(
+      policyIndex < at,
+      `merge-policy must precede ${activation} (#376 trust ordering)`,
+    );
+  }
+});
+
+test("negative proof: package-manager activation before policy fails the guard", () => {
+  const reordered = [
+    "  quality-gates:",
+    "      - name: Activate project package manager",
+    "        run: |",
+    "          corepack enable",
+    "      - name: Merge policy",
+  ].join("\n");
+  const policyIndex = reordered.indexOf("name: Merge policy");
+  const activationIndex = reordered.indexOf("corepack enable");
+  assert.equal(
+    policyIndex < activationIndex,
+    false,
+    "pre-policy package-manager execution must be rejected",
+  );
+});
