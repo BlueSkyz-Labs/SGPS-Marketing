@@ -4,7 +4,9 @@
  * Mirrors the Command Navigator's filter semantics (diacritic-insensitive,
  * substring match over server-rendered data-search text) with no model, no
  * network and no storage. The server-rendered list is the no-JS baseline;
- * this module only hides what does not match.
+ * this module only hides what does not match. Once it runs the surface is
+ * filter-first: the list appears when the visitor types and leaves again when
+ * the input is cleared, so the host page keeps its density budget.
  */
 function normalize(value: string): string {
   return value
@@ -32,8 +34,11 @@ export function initConcierge(root: ParentNode = document): void {
     return;
   }
 
+  surface.setAttribute("data-concierge-filter-first", "");
+
   const applyFilter = (query: string): void => {
     const needle = normalize(query.trim());
+    surface.toggleAttribute("data-concierge-active", needle.length > 0);
     let visibleCount = 0;
     for (const item of items) {
       const haystack = item.getAttribute("data-search") ?? "";

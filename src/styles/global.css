@@ -829,6 +829,14 @@ html[data-intent="evaluate-product"] [data-journey-bar] a[href$="/products/"] {
   display: none;
 }
 
+/* Filter-first once the module runs: the list stays out of the page until the
+   visitor types, so the verify page keeps its v8 density caps. Without
+   JavaScript the attribute is never set and the full list is the baseline. */
+.concierge[data-concierge-filter-first]:not([data-concierge-active])
+  .concierge__list {
+  display: none;
+}
+
 .concierge__link {
   display: inline-flex;
   min-height: 2.75rem;

@@ -30,6 +30,19 @@ test.describe("C3-E concierge surface (deterministic)", () => {
     }
   });
 
+  test("with JavaScript the list is filter-first: hidden until the visitor types", async ({
+    page,
+  }) => {
+    await page.goto("/en/verify/");
+    const list = page.locator("[data-concierge-list]");
+    await expect(list).toBeHidden();
+    const input = page.locator("[data-concierge-input]");
+    await input.fill("sổ");
+    await expect(list).toBeVisible();
+    await input.fill("");
+    await expect(list).toBeHidden();
+  });
+
   test("typing filters the list and hides unrelated records", async ({
     page,
   }) => {

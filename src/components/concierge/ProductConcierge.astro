@@ -81,12 +81,12 @@ const resultNone = isVi
   data-concierge
   data-concierge-lang={lang}
 >
-  <h2 class="concierge__title">{navLabel}</h2>
-  <label class="sr-only" for={`concierge-input-${lang}`}>
+  <h2 class="concierge__title" id={`concierge-title-${lang}`}>
     {navLabel}
-  </label>
+  </h2>
   <input
     id={`concierge-input-${lang}`}
+    aria-labelledby={`concierge-title-${lang}`}
     class="concierge__input"
     type="search"
     placeholder={placeholder}
