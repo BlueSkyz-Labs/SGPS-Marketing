@@ -142,16 +142,28 @@ test("header expectations are read from public/_headers", () => {
   assert.ok(routes.get("/*")?.get("content-security-policy"));
   assert.match(routes.get("/_astro/*").get("cache-control"), /immutable/);
   const expectations = buildHeaderExpectations(HEADERS_TEXT);
-  assert.deepEqual(expectations.exactHeaders, {
+  const { "permissions-policy": permissionsPolicy, ...stableHeaders } =
+    expectations.exactHeaders;
+  assert.deepEqual(stableHeaders, {
     "cross-origin-opener-policy": "same-origin",
     "cross-origin-resource-policy": "same-site",
     "x-content-type-options": "nosniff",
+    "x-frame-options": "DENY",
+    "strict-transport-security": "max-age=31536000; includeSubDomains",
+    "referrer-policy": "strict-origin-when-cross-origin",
   });
+  // The Permissions-Policy opt-out list churns (interest-cohort -> browsing-
+  // topics); assert its semantics instead of pinning the literal so this
+  // test cannot race an in-flight header fix.
+  assert.match(
+    permissionsPolicy,
+    /^camera=\(\), microphone=\(\), geolocation=\(\), payment=\(\)/,
+  );
   assert.deepEqual(expectations.cspDirectives, [
     "media-src 'self'",
     "upgrade-insecure-requests",
     "frame-ancestors 'none'",
-    "script-src 'self'",
+    "script-src 'self' 'inline-speculation-rules'",
   ]);
 });
 

@@ -98,12 +98,18 @@ test("radii use the three radius tokens or the small control allowlist", () => {
   assert.match(css, /--radius-card:\s*0\.75rem/);
   assert.match(css, /--radius-media:\s*20px/);
   assert.match(css, /--radius-pill:\s*999px/);
+  assert.match(css, /--radius-panel:\s*1rem/);
 });
 
 test("negative proof: a stray radius is detected", () => {
   assert.deepEqual(strayRadii(".x{border-radius: 13px;}"), ["13px"]);
   assert.deepEqual(strayRadii(".x{border-radius: 999px;}"), ["999px"]);
   assert.deepEqual(strayRadii(".x{border-radius: var(--radius-pill);}"), []);
+  // The header-control popover radius is the --radius-panel token; the literal
+  // and its neighbours stay stray.
+  assert.deepEqual(strayRadii(".x{border-radius: 1rem;}"), ["1rem"]);
+  assert.deepEqual(strayRadii(".x{border-radius: 1.1rem;}"), ["1.1rem"]);
+  assert.deepEqual(strayRadii(".x{border-radius: var(--radius-panel);}"), []);
 });
 
 test("no outline pill carries an inline dot", () => {
@@ -192,6 +198,52 @@ test("header material follows ADR 0012 (blur branch): alpha >= 0.86, solid fallb
   );
 });
 
+/**
+ * CJK headings keep strict punctuation breaking but may break between
+ * ideographs: `keep-all` forbids that and overflowed 320px (WCAG 1.4.10);
+ * `break-all` would split Latin words. auto-phrase is optional enhancement.
+ */
+export function cjkHeadingProblems(css) {
+  const problems = [];
+  const rule = css.match(
+    /:is\(:lang\(zh-Hans\), :lang\(zh-Hant\)\) :is\(h1, h2, h3\) \{([^}]*)\}/,
+  )?.[1];
+  if (!rule) return ["the CJK heading rule is missing"];
+  if (!/word-break:\s*normal;/.test(rule)) {
+    problems.push("CJK headings use word-break: normal");
+  }
+  if (!/line-break:\s*strict;/.test(rule)) {
+    problems.push("CJK headings keep line-break: strict");
+  }
+  if (
+    /keep-all|break-all/.test(
+      css.match(/:lang\(zh-Han[st]\)[^{]*\{[^}]*\}/g)?.join("") ?? "",
+    )
+  ) {
+    problems.push("no keep-all or break-all on CJK text");
+  }
+  return problems;
+}
+
+test("negative proof: keep-all, break-all or a lost strict rule on CJK headings is caught", () => {
+  const css = readFileSync("src/styles/global.css", "utf8");
+  for (const [from, to] of [
+    [
+      "word-break: normal;\n  line-break: strict;",
+      "word-break: keep-all;\n  line-break: strict;",
+    ],
+    [
+      "word-break: normal;\n  line-break: strict;",
+      "word-break: break-all;\n  line-break: strict;",
+    ],
+    ["word-break: normal;\n  line-break: strict;", "word-break: normal;"],
+  ]) {
+    const mutated = css.replace(from, to);
+    assert.notEqual(mutated, css);
+    assert.notDeepEqual(cjkHeadingProblems(mutated), [], to);
+  }
+});
+
 test("dark surfaces, CJK stacks, balance/pretty and print rules exist", () => {
   const css = readFileSync("src/styles/global.css", "utf8");
   for (const n of [1, 2, 3]) assert.match(css, new RegExp(`--surface-${n}:`));
@@ -204,7 +256,7 @@ test("dark surfaces, CJK stacks, balance/pretty and print rules exist", () => {
     css,
     /:lang\(zh-Hant\)\s*\{[^}]*PingFang TC[^}]*Noto Sans TC[^}]*Microsoft JhengHei/,
   );
-  assert.match(css, /word-break:\s*keep-all;\s*line-break:\s*strict/);
+  assert.deepEqual(cjkHeadingProblems(css), []);
   assert.match(css, /text-wrap:\s*balance/);
   assert.match(css, /text-wrap:\s*pretty/);
   assert.match(

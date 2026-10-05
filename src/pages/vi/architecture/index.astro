@@ -1,5 +1,6 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
+import { PAGE_META } from "@/data/page-meta";
 import Container from "@/components/layout/Container.astro";
 import PageHeader from "@/components/layout/PageHeader.astro";
 import ArchitectureSalon from "@/components/architecture/ArchitectureSalon.astro";
@@ -9,8 +10,8 @@ const copy = ARCHITECTURE_COPY["vi"];
 ---
 
 <BaseLayout
-  title={copy.title}
-  description={copy.description}
+  title={PAGE_META["vi"].architecture.title}
+  description={PAGE_META["vi"].architecture.description}
   path="/vi/architecture/"
 >
   <section class="py-16 lg:py-24">

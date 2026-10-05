@@ -35,17 +35,26 @@
     gap: 0.25rem 1rem;
     box-sizing: border-box;
     width: 100%;
-    padding: 0.5rem 1rem;
-    border-bottom: 1px solid var(--border-subtle);
-    background: var(--surface-raised);
-    color: var(--text-primary);
+    /* F7: text and actions sit on the site grid (same max width and gutter
+       as the header and sections) while the strip stays full width. */
+    padding-block: 0.5rem;
+    padding-inline: max(
+      var(--site-gutter, 1rem),
+      calc((100% - var(--site-max, 78.5rem)) / 2 + var(--site-gutter, 1rem))
+    );
+    /* Calm-chrome round (2026-10-04): a whisper under the header, not a second
+       call to action. Same surface as the page, hairline edge, muted copy. */
+    border-bottom: 1px solid
+      color-mix(in srgb, var(--border-subtle) 60%, transparent);
+    background: var(--surface-primary);
+    color: var(--text-secondary);
     transition: opacity 200ms ease-out;
   }
 
   .locale-suggestion__text {
     margin: 0;
     font-size: var(--size-2);
-    font-weight: 600;
+    font-weight: 500;
   }
 
   .locale-suggestion__actions {
@@ -60,22 +69,30 @@
     justify-content: center;
     min-width: 44px;
     min-height: 44px;
-    padding: 0 1rem;
-    border: 1px solid var(--border-subtle);
+    padding: 0 0.75rem;
+    border: 0;
     border-radius: var(--radius-sm, 0.5rem);
     background: transparent;
-    color: var(--text-primary);
+    color: var(--text-secondary);
     font: inherit;
     font-size: var(--size-2);
-    font-weight: 600;
+    font-weight: 500;
     text-decoration: none;
     cursor: pointer;
   }
 
+  /* The suggested language reads as the one link: underlined, primary ink,
+     never a solid blue fill competing with the page's primary action. */
   .locale-suggestion__accept {
-    border-color: var(--action-fill);
-    background: var(--action-fill);
-    color: #ffffff;
+    color: var(--text-primary);
+    font-weight: 600;
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.25em;
+  }
+
+  .locale-suggestion__button:hover {
+    color: var(--text-primary);
   }
 
   .locale-suggestion__button:focus-visible {

@@ -112,20 +112,21 @@ test("compact header keeps 44px targets and the full route list in the menu", as
   }
 });
 
-test("desktop theme trigger opens the three-way group with pressed state and focus ring", async ({
+test("desktop theme icon flips the theme on Enter with no popup (HC-7)", async ({
   page,
 }) => {
+  await page.emulateMedia({ colorScheme: "light" });
   await page.setViewportSize(VIEWPORTS[0]);
   await page.goto("/en/");
-  const trigger = page.locator("header [data-theme-trigger]");
+  const trigger = page.locator("header [data-theme-trigger]").first();
   await expect(trigger).toBeVisible();
   const box = await trigger.boundingBox();
   expect(box!.width).toBeGreaterThanOrEqual(44);
   expect(box!.height).toBeGreaterThanOrEqual(44);
   await trigger.focus();
   await page.keyboard.press("Enter");
-  const group = page.getByRole("group", { name: "Theme" });
-  await expect(group.getByRole("button")).toHaveCount(3);
-  await page.keyboard.press("Escape");
-  await expect(group.getByRole("button")).toHaveCount(0);
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
+  await expect(page.getByRole("group", { name: "Theme" })).toHaveCount(0);
+  await expect(page.locator("[popover]:popover-open")).toHaveCount(0);
+  await expect(trigger).toBeFocused();
 });

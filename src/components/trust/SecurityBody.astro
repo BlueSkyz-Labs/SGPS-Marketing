@@ -4,11 +4,16 @@
  * One lede, one action, what we do not offer, why private + limit, sources.
  * The page's claim anchor wraps the header so `#claim-…` deep links land at
  * the top of the page.
+ *
+ * UI upgrade F12: presentation only. The header and the one action form the
+ * lead column; the three authored statements render as a definition list
+ * (`TrustFacts`) followed by the sources line. No copy is added or reworded.
  */
-import Container from "@/components/layout/Container.astro";
 import PageHeader from "@/components/layout/PageHeader.astro";
 import SafeAction from "@/components/integrity/SafeAction.astro";
 import SourcesLine from "@/components/trust/SourcesLine.astro";
+import TrustFacts from "@/components/trust/TrustFacts.astro";
+import TrustLayout from "@/components/trust/TrustLayout.astro";
 import { getClaimAnchor } from "@/lib/claims";
 import { SECURITY_COPY } from "@/data/trust-copy";
 import { SITE, SECURITY_ADVISORY_URL, type Language } from "@/data/site";
@@ -22,8 +27,8 @@ const c = SECURITY_COPY[lang];
 const CLAIM_ID = "security-reporting-is-private";
 ---
 
-<section class="py-16 lg:py-24" data-trust-page="security">
-  <Container>
+<TrustLayout page="security">
+  <Fragment slot="lead">
     <div
       id={getClaimAnchor(CLAIM_ID)}
       data-integrity-entry
@@ -32,7 +37,7 @@ const CLAIM_ID = "security-reporting-is-private";
       <PageHeader title={c.title} lede={c.lede} />
     </div>
     {SITE.securityEmail ? (
-      <p class="mt-8 max-w-3xl text-[var(--text-secondary)]">
+      <p class="mt-8 text-[var(--text-secondary)]">
         {c.emailLabel}{" "}
         <a
           href={`mailto:${SITE.securityEmail}`}
@@ -43,7 +48,7 @@ const CLAIM_ID = "security-reporting-is-private";
         .
       </p>
     ) : null}
-    <div class="mt-8 max-w-3xl">
+    <div class="mt-8">
       <SafeAction
         href={SECURITY_ADVISORY_URL}
         label={c.cta}
@@ -53,33 +58,21 @@ const CLAIM_ID = "security-reporting-is-private";
         fit
       />
     </div>
-    <div class="mt-10 grid max-w-3xl gap-4 text-[var(--text-secondary)]">
-      <p data-security-offer>
-        <strong class="font-semibold text-[var(--text-primary)]">
-          {c.offerLead}
-        </strong>{" "}
-        {c.offerBody}
-      </p>
-      <p>
-        <strong class="font-semibold text-[var(--text-primary)]">
-          {c.whyLabel}
-        </strong>{" "}
-        {c.whyBody}
-        <br />
-        <strong class="font-semibold text-[var(--text-primary)]">
-          {c.limitLabel}
-        </strong>{" "}
-        {c.limitBody}
-      </p>
-    </div>
-    <div class="mt-6 max-w-3xl">
-      <SourcesLine
-        lang={lang}
-        claimId={CLAIM_ID}
-        label={c.sourcesLabel}
-        sources={c.sources}
-        reviewedLabel={c.reviewed}
-      />
-    </div>
-  </Container>
-</section>
+  </Fragment>
+  <TrustFacts
+    facts={[
+      { label: c.offerLead, body: c.offerBody, marker: "security-offer" },
+      { label: c.whyLabel, body: c.whyBody },
+      { label: c.limitLabel, body: c.limitBody },
+    ]}
+  />
+  <div class="mt-6">
+    <SourcesLine
+      lang={lang}
+      claimId={CLAIM_ID}
+      label={c.sourcesLabel}
+      sources={c.sources}
+      reviewedLabel={c.reviewed}
+    />
+  </div>
+</TrustLayout>

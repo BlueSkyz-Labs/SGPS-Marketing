@@ -29,6 +29,29 @@ export const PROTECTED_PATHS = [
   "brand/",
   "docs/decisions/",
   "docs/evidence/product-source-qualification.json",
+  // Security-assurance roots whose weakening would be SILENT:
+  // - tests/architecture/ is the deterministic guard tier (189 guards); a
+  //   weakened guard produces false-green with no visible failure.
+  // - tests/visual/ holds the committed Linux baselines; replacing them
+  //   silently accepts a visual regression.
+  // - docs/security/ holds the audit-exception justifications the exception
+  //   policy requires ("justified, guarded and time-boxed").
+  // - Agent-instruction surfaces (CLAUDE.md, .claude/, and the common
+  //   per-tool equivalents) are read by agent sessions as authority: a
+  //   planted instruction is indirect prompt injection into the factory
+  //   (S09-class), so they are held for the Owner like AGENTS.md.
+  // tests/e2e/ intentionally stays automatic: the dev loop touches it
+  // constantly and its failures are loud, not silent.
+  "tests/architecture/",
+  "tests/visual/",
+  "docs/security/",
+  "CLAUDE.md",
+  ".claude/",
+  ".cursorrules",
+  ".cursor/",
+  "GEMINI.md",
+  ".gemini/",
+  ".codex/",
   "AGENTS.md",
   "SECURITY.md",
   "pnpm-workspace.yaml",
@@ -39,6 +62,9 @@ export const PROTECTED_PATHS = [
   "eslint.config.mjs",
   "playwright.config.ts",
   "lighthouserc.json",
+  "lighthouserc.mobile.json",
+  "performance-budget.json",
+  "lighthouserc.seo.json",
 ];
 
 export function isProtected(path) {

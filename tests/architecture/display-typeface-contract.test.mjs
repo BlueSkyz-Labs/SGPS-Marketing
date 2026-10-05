@@ -1,26 +1,30 @@
 import assert from "node:assert/strict";
-import { readFileSync, readdirSync, statSync } from "node:fs";
+import { readFileSync, readdirSync } from "node:fs";
 import { join } from "node:path";
 import { test } from "node:test";
 
 /**
- * Experience v6 S4 guard: the second (display) typeface is self-hosted, OFL,
- * subsetted, inside the byte budget, metric-matched, and reaches ONLY h1/h2
- * display headings (`.type-d1`, `.type-d2`, `.hero-headline`). Each blocking
- * check is a pure function, and the negative-proof test feeds it a mutated
- * input to show it turns RED.
+ * Display type guard (Experience v6 S4, calm-chrome round 2026-10-04).
+ *
+ * Display headings use the already-loaded Inter Variable at a light display
+ * weight: no second web face, zero added font bytes. The display token reaches
+ * ONLY h1/h2 display headings (`.type-d1`, `.type-d2`, `.hero-headline`).
+ * Each blocking check is a pure function, and the negative-proof test feeds it
+ * a mutated input to show it turns RED.
  */
 const CSS_PATH = "src/styles/display-type.css";
 const FONT_DIR = "public/fonts";
-const SUBSETS = ["latin", "latin-ext", "vietnamese"];
-const FILE = (subset) => `plus-jakarta-sans-${subset}-700-v5.3.0.woff2`;
-// Plan section 8 budget: 90 KB of added font bytes (all three subsets).
-const ADDED_BYTES_BUDGET = 90_000;
-// The two subsets a /vi/ or /en/ route actually requests.
-const ROUTE_BYTES_BUDGET = 30_000;
 const DISPLAY_SELECTORS = [".type-d1", ".type-d2", ".hero-headline"];
+// Inter is instanced to wght 400-700; the quiet display band keeps headings
+// light (Stripe-style lightness) without dropping below body emphasis.
+const DISPLAY_WEIGHT_MIN = 480;
+const DISPLAY_WEIGHT_MAX = 600;
+// Only the brand text face ships; a display face would add bytes again.
+const ALLOWED_FONT_FILE =
+  /^inter-(latin|vietnamese)-wght-v\d+\.\d+\.\d+\.woff2$/;
 
 const read = (path) => readFileSync(path, "utf8");
+const stripComments = (css) => css.replace(/\/\*[\s\S]*?\*\//g, "");
 
 /** Forward-slash paths so assertions are separator-independent. */
 const toPosix = (path) => path.replaceAll("\\", "/");
@@ -34,54 +38,49 @@ function walk(dir, out = []) {
   return out;
 }
 
-function fontFaces(css) {
-  return css.match(/@font-face\s*\{[^}]+\}/g) ?? [];
-}
-
-function checkFontFaces(css) {
-  const faces = fontFaces(css).filter((face) =>
-    face.includes('"Display Face"'),
+/** No display web face: the display token resolves to the loaded Inter face. */
+function checkNoDisplayWebFace(css) {
+  const code = stripComments(css);
+  assert.doesNotMatch(code, /@font-face/, "display-type.css declares no faces");
+  assert.doesNotMatch(code, /"Display Face"|plus-jakarta/i);
+  const token = code.match(/--font-display\s*:\s*([^;]+);/)?.[1] ?? "";
+  assert.match(
+    token.trim(),
+    /^"Inter Variable",\s*"Inter Fallback"/,
+    "--font-display must start with the loaded Inter face and its metric fallback",
   );
-  assert.equal(faces.length, SUBSETS.length, "one @font-face per subset");
-  for (const subset of SUBSETS) {
-    const face = faces.find((f) => f.includes(FILE(subset)));
-    assert.ok(face, `${subset} subset must be declared`);
-    assert.match(face, /font-display\s*:\s*swap/);
-    assert.match(face, /unicode-range\s*:/);
-    assert.match(face, /format\("woff2"\)/);
-    assert.match(face, /font-weight\s*:\s*700\s*;/);
-  }
-  const fallback = fontFaces(css).find((f) => f.includes('"Display Fallback"'));
-  assert.ok(fallback, "a metric-matched fallback face is required");
-  for (const metric of [
-    "size-adjust",
-    "ascent-override",
-    "descent-override",
-    "line-gap-override",
-  ]) {
-    assert.match(fallback, new RegExp(`${metric}\\s*:`));
+}
+
+/** Zero added font bytes: only the Inter text subsets are shipped. */
+function checkFontFiles(names) {
+  const woff2 = names.filter((n) => n.endsWith(".woff2"));
+  assert.ok(woff2.length > 0, "Inter subsets must be present");
+  for (const name of woff2) {
+    assert.match(name, ALLOWED_FONT_FILE, `unexpected web font ${name}`);
   }
 }
 
-function checkBytes(sizeOf) {
-  const sizes = Object.fromEntries(SUBSETS.map((s) => [s, sizeOf(FILE(s))]));
-  const total = Object.values(sizes).reduce((a, b) => a + b, 0);
-  assert.ok(total <= ADDED_BYTES_BUDGET, `added fonts ${total} B over budget`);
+/** Display rules use the weight token, and the token sits in the quiet band. */
+function checkDisplayWeight(css) {
+  const code = stripComments(css);
+  const value = Number(code.match(/--display-weight\s*:\s*(\d+)\s*;/)?.[1]);
+  assert.ok(Number.isFinite(value), "--display-weight token is required");
   assert.ok(
-    sizes.latin + sizes.vietnamese <= ROUTE_BYTES_BUDGET,
-    "latin + vietnamese (the /vi/ route) over the per-route budget",
+    value >= DISPLAY_WEIGHT_MIN && value <= DISPLAY_WEIGHT_MAX,
+    `--display-weight ${value} outside ${DISPLAY_WEIGHT_MIN}-${DISPLAY_WEIGHT_MAX}`,
   );
-}
-
-function checkLicense(text) {
-  assert.match(text, /SIL OPEN FONT LICENSE Version 1\.1/);
-  assert.match(text, /Plus Jakarta Sans Project Authors/);
+  const rule =
+    code.match(
+      /\.type-d1,\s*\.type-d2,\s*\.hero-headline\s*\{([^}]*)\}/,
+    )?.[1] ?? "";
+  assert.match(rule, /font-family\s*:\s*var\(--font-display\)/);
+  assert.match(rule, /font-weight\s*:\s*var\(--display-weight\)/);
 }
 
 // Every rule that sets font-family: var(--font-display*) must be scoped to the
 // display selectors only (never body, h3+, p, eyebrow, button...).
 function checkDisplayScope(css) {
-  const stripped = css.replace(/\/\*[\s\S]*?\*\//g, "");
+  const stripped = stripComments(css);
   const rules = [
     ...stripped.matchAll(/([^{}@]+)\{([^{}]*font-family\s*:[^{}]*)\}/g),
   ];
@@ -105,8 +104,8 @@ function checkNoOtherUsage(files) {
     if (toPosix(path) === CSS_PATH) continue;
     assert.doesNotMatch(
       text,
-      /--font-display|"Display Face"|plus-jakarta/,
-      `${path} must not reference the display face directly`,
+      /--font-display|--display-weight|"Display Face"|plus-jakarta/,
+      `${path} must not reference the display token directly`,
     );
   }
 }
@@ -122,9 +121,24 @@ function checkHeadingOnly(files) {
 
 function checkNoCulturalNames(css) {
   assert.doesNotMatch(
-    css.replace(/\/\*[\s\S]*?\*\//g, ""),
+    stripComments(css),
     /son-mai|lacquer|chu-dau|dong-ho|maison/i,
   );
+}
+
+/** The engine-gated Inter preload stays; no display-face preload returns. */
+function checkPreload(layoutSrc, bootstrap) {
+  assert.doesNotMatch(
+    layoutSrc,
+    /\.woff2/,
+    "font preloads live in theme-init.js (engine-aware), not in the HTML",
+  );
+  assert.match(bootstrap, /AppleWebKit/, "preload must stay engine-gated");
+  assert.ok(
+    bootstrap.includes("inter-${subset}-wght-v5.3.0"),
+    "Inter preload must remain",
+  );
+  assert.doesNotMatch(bootstrap, /plus-jakarta|Display Face/);
 }
 
 const css = read(CSS_PATH);
@@ -132,21 +146,21 @@ const sources = walk("src")
   .filter((p) => /\.(astro|css|ts|mjs)$/.test(p))
   .map((p) => [p, read(p)]);
 const templates = sources.filter(([p]) => p.endsWith(".astro"));
+const fontNames = readdirSync(FONT_DIR);
 
-test("display face declares licensed, subsetted, swap-loaded faces with fallback metrics", () => {
-  checkFontFaces(css);
+test("display type uses the loaded Inter face, no second web face", () => {
+  checkNoDisplayWebFace(css);
 });
 
-test("display font bytes stay inside the plan budget", () => {
-  checkBytes((name) => statSync(join(FONT_DIR, name)).size);
+test("display headings add zero font bytes (only Inter subsets ship)", () => {
+  checkFontFiles(fontNames);
 });
 
-test("display face ships with its OFL licence", () => {
-  checkLicense(read(join(FONT_DIR, "OFL-PlusJakartaSans.txt")));
-  assert.match(read(join(FONT_DIR, "README.md")), /Plus Jakarta Sans/);
+test("display weight is a token inside the quiet band", () => {
+  checkDisplayWeight(css);
 });
 
-test("display face is applied to h1/h2 display headings only", () => {
+test("display token is applied to h1/h2 display headings only", () => {
   checkDisplayScope(css);
   checkNoOtherUsage(sources);
   checkHeadingOnly(templates);
@@ -155,8 +169,8 @@ test("display face is applied to h1/h2 display headings only", () => {
 
 // Windows regression pin: walk() yields OS-native separators, so the
 // allowlisted stylesheet must still be skipped after normalization, and a
-// non-allowlisted file that references the face must still fail.
-test("display-face usage guard is separator-independent", () => {
+// non-allowlisted file that references the token must still fail.
+test("display-token usage guard is separator-independent", () => {
   checkNoOtherUsage([
     ["src\\styles\\display-type.css", "a{font-family:var(--font-display)}"],
   ]);
@@ -167,80 +181,74 @@ test("display-face usage guard is separator-independent", () => {
   );
 });
 
-/** Display preload must exist, be engine-gated, and precede the Inter loop. */
-function checkDisplayPreload(layoutSrc, bootstrap) {
-  assert.doesNotMatch(
-    layoutSrc,
-    /plus-jakarta-sans/,
-    "font preloads live in theme-init.js (engine-aware), not in the HTML",
-  );
-  assert.match(bootstrap, /AppleWebKit/, "preload must stay engine-gated");
-  const display = bootstrap.indexOf("plus-jakarta-sans-${subset}-700-v5.3.0");
-  const inter = bootstrap.indexOf("inter-${subset}-wght-v5.3.0");
-  assert.ok(display > -1, "display face (LCP H1) must be preloaded");
-  assert.ok(inter > -1, "Inter preload must remain");
-  assert.ok(display < inter, "display preload must precede Inter");
-}
-
-test("display face is preloaded first (measured LCP evidence) and never reaches CJK", () => {
-  checkDisplayPreload(
+test("Inter preload stays engine-gated and display type never reaches CJK", () => {
+  checkPreload(
     read("src/layouts/BaseLayout.astro"),
     read("public/theme-init.js"),
   );
-  const cjk =
-    css
-      .replace(/\/\*[\s\S]*?\*\//g, "")
-      .match(/:lang\(zh\)[^{]*\{[^}]*\}/)?.[0] ?? "";
+  const cjk = stripComments(css).match(/:lang\(zh\)[^{]*\{[^}]*\}/)?.[0] ?? "";
   assert.match(cjk, /font-family\s*:\s*var\(--font-display-cjk\)/);
   assert.match(cjk, /line-break\s*:\s*strict/);
   assert.doesNotMatch(cjk, /break-all/);
 });
 
 test("negative proof: each blocking check turns RED on a broken invariant", () => {
-  // Display preload removed, or moved after Inter.
   const boot = read("public/theme-init.js");
   const layoutSrc = read("src/layouts/BaseLayout.astro");
+  // Inter preload removed, a display-face preload re-added, or the engine gate dropped.
   assert.throws(() =>
-    checkDisplayPreload(layoutSrc, boot.replaceAll("plus-jakarta-sans-", "x-")),
+    checkPreload(layoutSrc, boot.replaceAll("inter-${subset}", "x-${subset}")),
   );
-  const D = "plus-jakarta-sans-${subset}-700-v5.3.0";
-  const I = "inter-${subset}-wght-v5.3.0";
   assert.throws(() =>
-    checkDisplayPreload(
+    checkPreload(
       layoutSrc,
-      boot.replace(D, "@@").replace(I, D).replace("@@", I),
+      `${boot}\npreload("/fonts/plus-jakarta-sans-latin-700.woff2")`,
     ),
   );
-  // Oversized font file.
-  assert.throws(() => checkBytes(() => 60_000));
-  // Missing font-display: swap.
   assert.throws(() =>
-    checkFontFaces(
-      css.replaceAll("font-display: swap;", "font-display: block;"),
+    checkPreload(layoutSrc, boot.replaceAll("AppleWebKit", "Gecko")),
+  );
+  // A second web face declared, or the token pointed away from Inter.
+  assert.throws(() =>
+    checkNoDisplayWebFace(
+      `${css}\n@font-face{font-family:"Display Face";src:url(/fonts/plus-jakarta-sans-latin-700.woff2)}`,
     ),
   );
-  // Dropped unicode-range subsetting.
   assert.throws(() =>
-    checkFontFaces(css.replaceAll("unicode-range:", "data-range:")),
+    checkNoDisplayWebFace(
+      css.replace('"Inter Variable", "Inter Fallback",', '"Other Face",'),
+    ),
   );
-  // Fallback metrics removed.
+  // An extra display font file shipped.
   assert.throws(() =>
-    checkFontFaces(css.replaceAll("size-adjust", "x-adjust")),
+    checkFontFiles([...fontNames, "plus-jakarta-sans-latin-700-v5.3.0.woff2"]),
   );
-  // Licence missing / wrong.
-  assert.throws(() => checkLicense("Copyright only"));
-  // Display face leaking into body text.
+  // Heavy display weight, missing token, or a literal weight on the display rule.
+  assert.throws(() =>
+    checkDisplayWeight(
+      css.replace(/--display-weight:\s*\d+;/, "--display-weight: 700;"),
+    ),
+  );
+  assert.throws(() =>
+    checkDisplayWeight(css.replace(/--display-weight:\s*\d+;/, "")),
+  );
+  assert.throws(() =>
+    checkDisplayWeight(
+      css.replace("font-weight: var(--display-weight);", "font-weight: 700;"),
+    ),
+  );
+  // Display token leaking into body text.
   assert.throws(() =>
     checkDisplayScope(`${css}\nbody { font-family: var(--font-display); }`),
   );
   assert.throws(() =>
     checkDisplayScope(`${css}\nh3 { font-family: var(--font-display); }`),
   );
-  // Another stylesheet or template using the face directly.
+  // Another stylesheet or template using the token directly.
   assert.throws(() =>
     checkNoOtherUsage([
       ...sources,
-      ["src/x.css", "p{font-family:var(--font-display)}"],
+      ["src/x.css", "p{font-weight:var(--display-weight)}"],
     ]),
   );
   // Display class on a paragraph.

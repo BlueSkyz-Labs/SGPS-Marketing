@@ -1,13 +1,14 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
+import { PAGE_META } from "@/data/page-meta";
 import Container from "@/components/layout/Container.astro";
 import PageHeader from "@/components/layout/PageHeader.astro";
 import EditionIndex from "@/components/editorial/EditionIndex.astro";
 ---
 
 <BaseLayout
-  title="Collections"
-  description="Groups of statements already published here, each linked to its sources."
+  title={PAGE_META["en"].editions.title}
+  description={PAGE_META["en"].editions.description}
   path="/en/editions/"
 >
   <section class="py-16 lg:py-24">

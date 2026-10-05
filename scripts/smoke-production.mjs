@@ -92,6 +92,9 @@ for (const path of [
   "/zh/privacy/",
   "/zh/security/",
   "/zh/support/",
+  "/zh-hant/privacy/",
+  "/zh-hant/security/",
+  "/zh-hant/support/",
 ]) {
   check(`${path} responds 200`, async () => {
     const response = await get(path);
@@ -179,8 +182,10 @@ check("sitemap lists only canonical localized routes", async () => {
     `expected at least the 21 canonical URLs, got ${locs.length}`,
   );
   assert(
-    locs.every((loc) => isLocalizedCanonicalRoute(loc, site)),
-    "sitemap must only list same-origin localized canonical routes",
+    locs.every(
+      (loc) => loc === `${site}/` || isLocalizedCanonicalRoute(loc, site),
+    ),
+    "sitemap must list only the root gateway and same-origin localized canonical routes",
   );
 });
 
@@ -214,6 +219,16 @@ check("public SGPS manifest is served", async () => {
   );
 });
 
+check("public product-trust manifest is served", async () => {
+  const response = await get("/.well-known/product-trust.json");
+  assert(response.status === 200, `expected 200, got ${response.status}`);
+  const body = await response.text();
+  assert(
+    body.includes('"derivedFrom": "public-registry"'),
+    "product-trust manifest must be derived from the public registry",
+  );
+});
+
 check("machine-readable security policy is served", async () => {
   const response = await get("/.well-known/security.txt");
   assert(response.status === 200, `expected 200, got ${response.status}`);
@@ -227,6 +242,8 @@ check("branded 404 is served on unknown paths", async () => {
     "/en/no-such-page/",
     "/vi/khong-ton-tai/",
     "/no-such-root/",
+    "/zh/no-such-page/",
+    "/zh-hant/no-such-page/",
   ]) {
     const response = await get(path);
     assert(
@@ -235,7 +252,9 @@ check("branded 404 is served on unknown paths", async () => {
     );
     const html = await response.text();
     assert(
-      html.includes("Page not found") || html.includes("không tìm thấy"),
+      /page not found|không tìm thấy|未找到页面|找不到页面|未找到頁面|找不到頁面/i.test(
+        html,
+      ),
       `${path}: branded 404 content missing`,
     );
     assert(
@@ -252,6 +271,29 @@ check("critical navigation links are present on the EN home", async () => {
     assert(html.includes(`href="${href}"`), `missing link ${href}`);
   }
 });
+
+// RT-01 (redteam 2026-10-03): the public `www` hostname must 301 to the
+// canonical apex so the Access/canonical-host boundary cannot be bypassed.
+// Apex-only: registered exclusively when the smoke runs against the
+// production apex, so --site runs for other hosts are unaffected.
+if (site === DEFAULT_SITE) {
+  check("www hostname 301s to the apex (RT-01)", async () => {
+    const apexHost = new URL(site).host;
+    const response = await fetch(`https://www.${apexHost}/en/about/`, {
+      redirect: "manual",
+      headers: { "user-agent": "blueskyz-production-smoke" },
+    });
+    assert(
+      response.status === 301,
+      `www.${apexHost} must answer 301, got ${response.status}`,
+    );
+    const location = response.headers.get("location") ?? "";
+    assert(
+      location === `https://${apexHost}/en/about/`,
+      `www redirect must target the apex path, got ${location}`,
+    );
+  });
+}
 
 const ASSET_CONCURRENCY = 6;
 const MAX_ASSETS = 500;

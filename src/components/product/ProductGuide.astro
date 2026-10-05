@@ -76,7 +76,7 @@ const signInUrl = product.data.appAccess?.signInUrl;
     </a>
     <header class="mt-6 max-w-3xl">
       <p class="guide__status">{t.status}</p>
-      <h1 class="type-d2 mt-3 text-[var(--text-primary)]">
+      <h1 class="type-d2 guide__title mt-3 text-[var(--text-primary)]">
         {guide.title[lang]}
       </h1>
       <p class="mt-5 text-lg leading-relaxed text-[var(--text-secondary)]">
@@ -146,6 +146,13 @@ const signInUrl = product.data.appAccess?.signInUrl;
 </article>
 
 <style>
+  /* F3: the guide H1 steps up to the d1 size from 768 px so it outranks the
+     step headings; phones keep 32 px. */
+  @media (min-width: 768px) {
+    .guide__title {
+      font-size: var(--size-8);
+    }
+  }
   .guide__back {
     display: inline-flex;
     min-height: 2.75rem;
@@ -203,6 +210,12 @@ const signInUrl = product.data.appAccess?.signInUrl;
     font-weight: 600;
     letter-spacing: 0.06em;
     text-transform: uppercase;
+  }
+
+  /* Vietnamese: sentence case (cross-subset kerning, see .eyebrow). */
+  :lang(vi) .guide__meta {
+    text-transform: none;
+    letter-spacing: var(--tracking-eyebrow, 0.03em);
   }
   .guide__num {
     color: var(--badge-ink, var(--text-secondary));

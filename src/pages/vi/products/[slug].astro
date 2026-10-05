@@ -25,6 +25,7 @@ import { safeJsonLd, productJsonLd } from "@/lib/seo";
 import { productBreadcrumbJsonLd } from "@/lib/breadcrumbs";
 import { getPublicProducts } from "@/lib/products";
 import { productMeta } from "@/data/page-meta";
+import { productTransitionStyle } from "@/lib/product-transition";
 import { labelFor, SITE } from "@/data/site";
 
 /**
@@ -83,6 +84,9 @@ const productStructuredData = productJsonLd(
     mediaUrl: media?.src,
     ...(media ? { mediaCaption: proofCaptionForKind(media.kind, "vi") } : {}),
     platforms: data.platforms,
+    ...(data.applicationCategory
+      ? { applicationCategory: data.applicationCategory }
+      : {}),
   },
   SITE.url,
   "vi",
@@ -158,7 +162,13 @@ const isIdentityArt = media?.kind === "identity-art";
         </div>
         <div class="min-w-0">
           <div class="flex flex-wrap items-center gap-x-4 gap-y-2">
-            <h1 class="type-d2 text-[var(--text-primary)]">{data.name}</h1>
+            <h1
+              class="type-d2 profile-title text-[var(--text-primary)]"
+              style={productTransitionStyle("card", data.slug)}
+              data-product-profile-title
+            >
+              {data.name}
+            </h1>
             <ProductStatus label={data.publicLabel} lang="vi" />
           </div>
           <!-- Endorsed lockup: hidden on phones (the page header already names the studio). -->
@@ -233,16 +243,21 @@ const isIdentityArt = media?.kind === "identity-art";
       ) : null}
 
       {page.whatItDoes.length > 0 ? (
-        <section class="mt-14" aria-labelledby="profile-jobs">
+        <section class="profile-jobs mt-14" aria-labelledby="profile-jobs">
           <h2
             id="profile-jobs"
             class="text-xl font-semibold tracking-tight text-[var(--text-primary)] sm:text-2xl"
           >
             {PAGE_LABELS.whatItDoes[lang]}
           </h2>
-          <ul class="profile-does mt-5 max-w-3xl" data-what-it-does>
-            {page.whatItDoes.map((item) => (
-              <li>{item}</li>
+          <ul class="profile-does mt-6" data-what-it-does>
+            {page.whatItDoes.map((item, index) => (
+              <li class="profile-does__tile">
+                <span class="profile-does__index" aria-hidden="true">
+                  {String(index + 1).padStart(2, "0")}
+                </span>
+                <span class="profile-does__text">{item}</span>
+              </li>
             ))}
           </ul>
         </section>
@@ -317,15 +332,90 @@ const isIdentityArt = media?.kind === "identity-art";
     min-width: 2.75rem;
     justify-content: center;
   }
-  .profile-does {
-    margin: 0;
-    padding-left: 1.25rem;
-    list-style: disc;
-    color: var(--text-secondary);
-    font-size: var(--size-3);
-    line-height: 1.6;
+  /* F3: the profile H1 steps up to the d1 size from 768 px so it outranks
+     the 32 px section headings; phones keep 32 px. */
+  @media (min-width: 768px) {
+    .profile-title {
+      font-size: var(--size-8);
+    }
   }
-  .profile-does li + li {
-    margin-top: 0.5rem;
+  /* F14: what it does as feature tiles (record strings only). Each tile
+     follows the section's width through a container query; one column by
+     default. */
+  .profile-jobs {
+    container: profile-jobs / inline-size;
+  }
+  .profile-does {
+    display: grid;
+    gap: 0.75rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .profile-does__tile {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+    min-width: 0;
+    padding: 1.125rem 1.25rem;
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md, 0.75rem);
+    background: var(--surface-raised);
+    box-shadow:
+      inset 0 1px 0 var(--specular),
+      0 14px 32px -26px color-mix(in srgb, #0b1020 55%, transparent);
+  }
+  .profile-does__tile {
+    --specular: color-mix(in srgb, white 70%, transparent);
+  }
+  :global([data-theme="dark"]) .profile-does__tile {
+    --specular: color-mix(in srgb, white 9%, transparent);
+  }
+  @media (prefers-color-scheme: dark) {
+    :global(:root:not([data-theme="light"])) .profile-does__tile {
+      --specular: color-mix(in srgb, white 9%, transparent);
+    }
+  }
+  .profile-does__index {
+    flex: none;
+    padding-top: 0.2rem;
+    font-size: var(--size-1);
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.04em;
+    color: var(--action-primary);
+  }
+  .profile-does__text {
+    min-width: 0;
+    color: var(--text-primary);
+    font-size: var(--size-3);
+    line-height: 1.55;
+    overflow-wrap: anywhere;
+  }
+  @container profile-jobs (min-width: 36rem) {
+    .profile-does {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .profile-does__tile:last-child:nth-child(odd) {
+      grid-column: 1 / -1;
+    }
+  }
+  /* Wide: a six-track grid keeps any last row of two or one tiles full-width
+     instead of leaving a hole. */
+  @container profile-jobs (min-width: 60rem) {
+    .profile-does {
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+    }
+    .profile-does__tile,
+    .profile-does__tile:last-child:nth-child(odd) {
+      grid-column: span 2;
+    }
+    .profile-does__tile:nth-last-child(2):nth-child(3n + 1),
+    .profile-does__tile:last-child:nth-child(3n + 2) {
+      grid-column: span 3;
+    }
+    .profile-does__tile:last-child:nth-child(3n + 1) {
+      grid-column: 1 / -1;
+    }
   }
 </style>

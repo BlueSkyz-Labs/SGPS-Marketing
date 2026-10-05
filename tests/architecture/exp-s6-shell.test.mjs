@@ -54,5 +54,7 @@ test("header: one Products CTA, About as the plain link, compact theme trigger",
   assert.match(header, /const primaryLink = NAV\[1\]!;/);
   assert.doesNotMatch(header, /emptyRegistryPrimaryCta/);
   assert.doesNotMatch(header, /exploreProducts/);
-  assert.match(header, /variant="popover"/);
+  // SGPS-DEC-2026-037 HC-7: one icon in the header and the compact menu.
+  assert.match(header, /<ThemeToggle lang=\{lang\} placement="header" \/>/);
+  assert.match(header, /<ThemeToggle lang=\{lang\} placement="menu" \/>/);
 });

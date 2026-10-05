@@ -6,7 +6,7 @@ import LocaleSuggestion from "@/components/layout/LocaleSuggestion.astro";
 import CommandNavigator from "@/components/experience/CommandNavigator.astro";
 import JourneyBar from "@/components/experience/JourneyBar.astro";
 import IntegrityLens from "@/components/integrity/IntegrityLens.astro";
-import { SITE } from "@/data/site";
+import { SITE, getNav } from "@/data/site";
 import {
   absoluteUrl,
   canonicalForPath,
@@ -61,6 +61,21 @@ const {
  * names the brand (home) is used as authored. */
 const fullTitle = title.includes(SITE.name) ? title : `${title} | ${SITE.name}`;
 const currentLang = getLanguageFromPath(path);
+/** v10 E4 (M02): prefetch rules are emitted only on the production origin.
+ * Non-production origins (localhost previews, CI e2e over HTTP) make engines
+ * deny the prefetches and log console errors ("URL must be secure (HTTPS)"),
+ * which would red the no-console-errors gate; the same origin gate as
+ * `noindex` above. */
+const prefetchRules = isNonProductionSiteUrl(SITE.url)
+  ? null
+  : JSON.stringify({
+      prefetch: [
+        {
+          urls: getNav(currentLang).map((item) => item.href),
+          eagerness: "moderate",
+        },
+      ],
+    }).replace(/</g, "\\u003c");
 /** Chinese locales are routed as `zh` / `zh-hant` but tagged with their BCP-47
  * script subtag (matches hreflang). CSS `:lang(zh)` matches both. */
 const htmlLang =
@@ -107,13 +122,24 @@ const robotsContent =
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <script is:inline src="/theme-init.js"></script>
+    {/* v10 E4 / M02 — opt-in navigation prefetch for the tiny allowlist of
+        approved high-intent routes (the shared nav: products / about / contact
+        for the current locale). Prefetch only — never prerender — and the
+        allowlist is derived from the single nav source (`getNav`), so no
+        private or product-detail route can enter it. CSP allows this one
+        inline rule set via the `'inline-speculation-rules'` keyword
+        (public/_headers); engines without the Speculation Rules API ignore
+        it. Chromium skips prefetches under Data Saver. */}
+    {prefetchRules && (
+      <script is:inline type="speculationrules" set:html={prefetchRules} />
+    )}
     <!-- Without JavaScript the theme controls cannot do anything, so they are
          hidden. The language switcher needs no rule: its native popover opens
          and closes without JavaScript. -->
     <noscript>
       <style>
         [data-theme-trigger],
-        [role="group"]:has([data-theme-mode]) {
+        .theme-control {
           display: none !important;
         }
       </style>

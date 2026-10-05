@@ -57,10 +57,10 @@ export const EMPTY_STATE_COPY = {
     "zh-hant": "資安通報透過 GitHub 私有管道提交。",
   },
   aboutCheckCta: {
-    en: "See our claims and sources →",
-    vi: "Xem các tuyên bố và nguồn →",
-    zh: "查看我们的声明与依据 →",
-    "zh-hant": "查看我們的聲明與依據 →",
+    en: "See our claims and sources",
+    vi: "Xem các tuyên bố và nguồn",
+    zh: "查看我们的声明与依据",
+    "zh-hant": "查看我們的聲明與依據",
   },
   aboutWhatWeMake: {
     en: "What we are building",

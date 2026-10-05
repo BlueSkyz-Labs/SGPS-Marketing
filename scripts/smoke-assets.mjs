@@ -181,13 +181,17 @@ export const REQUIRED_CSP_DIRECTIVES = [
   "media-src 'self'",
   "upgrade-insecure-requests",
   "frame-ancestors 'none'",
-  "script-src 'self'",
+  "script-src 'self' 'inline-speculation-rules'",
 ];
 
 const REQUIRED_HTML_HEADERS = [
   "cross-origin-opener-policy",
   "cross-origin-resource-policy",
   "x-content-type-options",
+  "x-frame-options",
+  "strict-transport-security",
+  "referrer-policy",
+  "permissions-policy",
 ];
 
 export function cspDirectives(value) {

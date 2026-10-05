@@ -1,5 +1,6 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
+import { PAGE_META } from "@/data/page-meta";
 import Container from "@/components/layout/Container.astro";
 import PageHeader from "@/components/layout/PageHeader.astro";
 import ProductCard from "@/components/product/ProductCard.astro";
@@ -10,14 +11,15 @@ const products = await getPublicProducts();
 const allInDevelopment =
   products.length > 0 &&
   products.every((product) => product.data.lifecycle === "development");
-const emptyDescription = products.length
-  ? "Explore BlueSkyz Labs products with truthful status and evidence."
-  : "Products are published only with verifiable public evidence.";
+const emptyDescription =
+  "Products are published only with verifiable public evidence.";
 ---
 
 <BaseLayout
-  title="Products: Sổ Trọ and Sổ Tâm, in development"
-  description={emptyDescription}
+  title={PAGE_META["en"].products.title}
+  description={
+    products.length ? PAGE_META["en"].products.description : emptyDescription
+  }
   path="/en/products/"
   scene="product"
 >
@@ -42,7 +44,7 @@ const emptyDescription = products.length
           <h2
             id="published-products"
             class:list={[
-              "text-xs font-semibold tracking-[0.18em] text-[var(--text-secondary)] uppercase",
+              "text-xs font-semibold tracking-[0.18em] text-[var(--text-secondary)] uppercase [&:lang(vi)]:normal-case [&:lang(vi)]:tracking-[var(--tracking-eyebrow)]",
               allInDevelopment && "sr-only",
             ]}
           >

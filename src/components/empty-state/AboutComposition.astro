@@ -1,16 +1,27 @@
 ---
+import BlueSkyzIcon from "@/components/icon/BlueSkyzIcon.astro";
 import ButtonLink from "@/components/ui/ButtonLink.astro";
 import { EMPTY_STATE_COPY } from "@/data/empty-state-copy";
 import { labelFor, SHARED_LABELS, type Language } from "@/data/site";
 import { getPublicProducts } from "@/lib/products";
-import { productCopy } from "@/lib/product-copy";
+import { productPageCopy } from "@/components/product/product-page-copy";
 
 /**
  * Experience v6 S8 — About, composed only from existing authored data:
- * registry products (`productCopy`) and the "What you can check" block (v8
+ * registry products and the "What you can check" block (v8
  * abt-5; two bound claims linked to their pages). The yaml `founder_*` fields
  * are not read: founder detail is an Owner-confirmation item (audit E-26) and an
  * absent fact is omitted, never padded.
+ *
+ * UI upgrade F12 (presentation only): products render as hairline cards whose
+ * whole surface is the link target; each checkable claim is a full-width row
+ * with a trailing arrow, so the link affordance no longer depends on an
+ * underlined sentence. Copy and DOM order are unchanged.
+ *
+ * v12 S2: each card says what the product does for the visitor, with the
+ * same presentation one-liner as its profile page (`productPageCopy`, which
+ * falls back to the registry `shortDescription`), instead of the registry's
+ * internal phrasing ("Vietnam-first", "trusted history").
  */
 interface Props {
   lang: Language;
@@ -20,66 +31,69 @@ const { lang } = Astro.props;
 const products = (await getPublicProducts()).map((product) => ({
   slug: product.data.slug,
   name: product.data.name,
-  description: productCopy(product.data, lang).shortDescription,
+  description: productPageCopy(product.data, lang).oneLiner,
 }));
 ---
 
-<div class="mt-12 grid gap-10 md:grid-cols-2 md:gap-14" data-about-composition>
+<div class="about-grid" data-about-composition>
   {products.length > 0 ? (
     <section aria-labelledby="about-make">
-      <h2
-        id="about-make"
-        class="text-xs font-semibold tracking-[0.18em] text-[var(--text-secondary)] uppercase"
-      >
+      <h2 id="about-make" class="about-label">
         {labelFor(EMPTY_STATE_COPY.aboutWhatWeMake, lang)}
       </h2>
-      <ul class="mt-4 grid gap-5">
+      <ul class="about-products">
         {products.map((product) => (
-          <li class="border-l-2 border-[var(--border-subtle)] pl-4">
+          <li class="about-product">
             <a
               href={`/${lang}/products/${product.slug}/`}
-              class="inline-flex min-h-11 items-center text-lg font-semibold tracking-tight text-[var(--text-primary)] no-underline hover:underline"
+              class="about-product__name"
             >
               {product.name}
+              <BlueSkyzIcon
+                name="arrow-right"
+                class="about-arrow h-4 w-4 shrink-0"
+              />
             </a>
-            <p class="text-sm leading-relaxed text-[var(--text-secondary)]">
-              {product.description}
-            </p>
+            <p class="about-product__desc text-pretty">{product.description}</p>
           </li>
         ))}
       </ul>
     </section>
   ) : null}
   <section aria-labelledby="about-check" data-about-check>
-    <h2
-      id="about-check"
-      class="text-xs font-semibold tracking-[0.18em] text-[var(--text-secondary)] uppercase"
-    >
+    <h2 id="about-check" class="about-label">
       {labelFor(EMPTY_STATE_COPY.aboutCheck, lang)}
     </h2>
-    <ul class="mt-4 grid gap-3 text-sm text-[var(--text-secondary)]">
+    <ul class="about-checks">
       <li data-claim-id="privacy-no-tracking-on-this-site">
-        <a
-          href={`/${lang}/privacy/`}
-          class="inline-flex min-h-11 items-center underline"
-        >
-          {labelFor(EMPTY_STATE_COPY.aboutCheckNoCookies, lang)}
+        <a href={`/${lang}/privacy/`} class="about-check">
+          <span class="text-pretty">
+            {labelFor(EMPTY_STATE_COPY.aboutCheckNoCookies, lang)}
+          </span>
+          <BlueSkyzIcon
+            name="arrow-right"
+            class="about-arrow h-4 w-4 shrink-0"
+          />
         </a>
       </li>
       <li data-claim-id="security-reporting-is-private">
-        <a
-          href={`/${lang}/security/`}
-          class="inline-flex min-h-11 items-center underline"
-        >
-          {labelFor(EMPTY_STATE_COPY.aboutCheckSecurity, lang)}
+        <a href={`/${lang}/security/`} class="about-check">
+          <span class="text-pretty">
+            {labelFor(EMPTY_STATE_COPY.aboutCheckSecurity, lang)}
+          </span>
+          <BlueSkyzIcon
+            name="arrow-right"
+            class="about-arrow h-4 w-4 shrink-0"
+          />
         </a>
       </li>
     </ul>
     <a
       href={`/${lang}/verify/`}
-      class="mt-3 inline-flex min-h-11 items-center text-sm font-semibold text-[var(--text-primary)] underline"
+      class="about-verify inline-flex items-center gap-2"
     >
       {labelFor(EMPTY_STATE_COPY.aboutCheckCta, lang)}
+      <BlueSkyzIcon name="arrow-right" class="about-arrow h-4 w-4 shrink-0" />
     </a>
   </section>
 </div>
@@ -91,3 +105,158 @@ const products = (await getPublicProducts()).map((product) => ({
     {labelFor(SHARED_LABELS.contactUs, lang)}
   </ButtonLink>
 </div>
+
+<style>
+  .about-grid {
+    display: grid;
+    gap: 3rem;
+    margin-block-start: 3rem;
+  }
+  @media (min-width: 48rem) {
+    .about-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 3.5rem;
+    }
+  }
+  .about-label {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin: 0;
+    font-size: var(--size-1);
+    font-weight: 600;
+    letter-spacing: var(--tracking-eyebrow, 0.12em);
+    text-transform: uppercase;
+    color: var(--text-secondary);
+  }
+
+  /* Vietnamese: sentence case (cross-subset kerning, see .eyebrow). */
+  :lang(vi) .about-label {
+    text-transform: none;
+    letter-spacing: var(--tracking-eyebrow, 0.03em);
+  }
+  .about-label::before {
+    content: "";
+    inline-size: 1.5rem;
+    border-block-start: 1px solid var(--action-primary);
+    flex: none;
+  }
+  :lang(vi) .about-label {
+    letter-spacing: 0.06em;
+  }
+  :lang(zh) .about-label {
+    letter-spacing: 0.04em;
+  }
+  .about-products,
+  .about-checks {
+    display: grid;
+    margin: 1.25rem 0 0;
+    padding: 0;
+    list-style: none;
+  }
+  .about-products {
+    gap: 1rem;
+  }
+  .about-product {
+    position: relative;
+    padding: 1.25rem 1.5rem 1.5rem;
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-card);
+    background: var(--surface-raised);
+    transition: border-color 150ms var(--brand-ease-standard, ease);
+  }
+  .about-product:hover {
+    border-color: var(--text-secondary);
+  }
+  .about-product__name {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: 2.75rem;
+    font-size: var(--size-4);
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    color: var(--text-primary);
+    text-decoration: none;
+  }
+  /* The whole card is the target; the name stays the accessible link text. */
+  .about-product__name::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+  }
+  .about-product__name:focus-visible {
+    outline: none;
+  }
+  .about-product__name:focus-visible::after {
+    outline: 2px solid var(--brand-cobalt);
+    outline-offset: 2px;
+  }
+  .about-product__desc {
+    margin: 0;
+    font-size: var(--size-2);
+    line-height: 1.6;
+    color: var(--text-secondary);
+  }
+  /* The icon is rendered by a child component, so it is styled through
+     :global() under this component's scoped ancestors. */
+  .about-grid :global(.about-arrow) {
+    color: var(--action-primary);
+    transition: translate 150ms var(--brand-ease-standard, ease);
+  }
+  .about-product:hover :global(.about-arrow),
+  .about-check:hover :global(.about-arrow) {
+    translate: 0.1875rem 0;
+  }
+  .about-checks {
+    border-block-end: 1px solid var(--border-subtle);
+  }
+  .about-check {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    min-height: 2.75rem;
+    padding-block: 1rem;
+    border-block-start: 1px solid var(--border-subtle);
+    color: var(--text-primary);
+    text-decoration: none;
+  }
+  .about-check:hover span {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .about-verify {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.75rem;
+    margin-block-start: 0.75rem;
+    font-size: var(--size-2);
+    font-weight: 600;
+    color: var(--action-primary);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .about-verify:hover {
+    text-decoration: none;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .about-product,
+    .about-grid :global(.about-arrow) {
+      transition: none;
+    }
+    .about-product:hover :global(.about-arrow),
+    .about-check:hover :global(.about-arrow) {
+      translate: none;
+    }
+  }
+  @media (forced-colors: active) {
+    .about-label::before {
+      border-color: CanvasText;
+    }
+    .about-grid :global(.about-arrow) {
+      color: LinkText;
+    }
+  }
+</style>

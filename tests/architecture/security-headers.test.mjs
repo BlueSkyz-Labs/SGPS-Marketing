@@ -9,6 +9,10 @@ test("static responses carry a safe baseline header set", () => {
   assert.match(headers, /Referrer-Policy:\s*strict-origin-when-cross-origin/);
   assert.match(headers, /Permissions-Policy:/);
   assert.match(headers, /payment=\(\)/);
+  // interest-cohort (FLoC) was removed from the Permissions-Policy spec; the
+  // Topics API successor is opted out instead.
+  assert.doesNotMatch(headers, /interest-cohort/);
+  assert.match(headers, /browsing-topics=\(\)/);
   assert.match(
     headers,
     /Strict-Transport-Security:\s*max-age=31536000;\s*includeSubDomains/,
@@ -42,6 +46,11 @@ test("static responses carry a safe baseline header set", () => {
   assert.match(cspLine, /media-src 'self'(?:;|$)/);
   assert.match(headers, /Cross-Origin-Opener-Policy:\s*same-origin\s*$/m);
   assert.match(headers, /Cross-Origin-Resource-Policy:\s*same-site\s*$/m);
+  // RT-07: Trusted Types enforcement (guarded by tests/architecture/trusted-types-sink-ban.test.mjs).
+  assert.match(
+    cspLine,
+    /(?:^|[\s;])require-trusted-types-for 'script'(?:[\s;]|$)/,
+  );
   assert.match(
     headers,
     /^\/_astro\/\*\n\s+Cache-Control:\s*public, max-age=31536000, immutable\s*$/m,
@@ -57,6 +66,8 @@ test("header hardening negative proofs: weakened variants are detected", () => {
   const hasUpgrade = (h) =>
     /(?:^|[\s;])upgrade-insecure-requests(?:[\s;]|$)/.test(csp(h));
   const hasMedia = (h) => /media-src 'self'(?:;|$)/.test(csp(h));
+  const hasTrustedTypes = (h) =>
+    /(?:^|[\s;])require-trusted-types-for 'script'(?:[\s;]|$)/.test(csp(h));
   const hasCoop = (h) =>
     /Cross-Origin-Opener-Policy:\s*same-origin\s*$/m.test(h);
   const hasCorp = (h) =>
@@ -69,6 +80,13 @@ test("header hardening negative proofs: weakened variants are detected", () => {
   assert.ok(hasCorp(headers) && hasAstroCache(headers));
   assert.equal(
     hasUpgrade(headers.replace("; upgrade-insecure-requests", "")),
+    false,
+  );
+  assert.ok(hasTrustedTypes(headers));
+  assert.equal(
+    hasTrustedTypes(
+      headers.replace("; require-trusted-types-for 'script'", ""),
+    ),
     false,
   );
   assert.equal(hasMedia(headers.replace(" media-src 'self';", "")), false);

@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "decision": "SGPS-DEC-2026-025 / Experience 1.5",
+  "contract": "docs/performance/experience-performance-friction-contract.md",
+  "environment": "Lighthouse mobile emulation (lighthouserc.mobile.json), production build, median of >= 3 runs per route",
+  "minRuns": 3,
+  "warnRatio": 0.85,
+  "routes": ["/en/", "/vi/", "/en/products/", "/vi/products/sotro/"],
+  "timing": {
+    "largest-contentful-paint": 2500,
+    "cumulative-layout-shift": 0.05,
+    "total-blocking-time": 200
+  },
+  "resourceBytes": {
+    "document": 20480,
+    "script": 25600,
+    "stylesheet": 35840,
+    "font": 71680,
+    "image": 81920,
+    "total": 225280
+  },
+  "zeroCounts": {
+    "third-party": 0,
+    "render-blocking": 0
+  },
+  "routeOverrides": {
+    "/vi/products/sotro/": {
+      "resourceBytes": {
+        "image": 131072,
+        "total": 262144
+      },
+      "reason": "Showcase phone captures just below the fold are fetched by Chrome's native lazy-load distance threshold. After desktop captures moved to 768w derivatives, CI (exact head 07fe766, Lighthouse job 111290412367) measured image 114349 B and total 228416 B (was 181611 / 295564). Ceilings set at ~1.15x that CI measurement.",
+      "evidence": "docs/performance/experience-performance-friction-contract.md §2.2"
+    }
+  }
+}
