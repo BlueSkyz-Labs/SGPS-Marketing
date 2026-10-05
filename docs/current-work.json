@@ -340,6 +340,12 @@
       "name": "v12 Showcase story, customer-led content and SEO: calm-chrome #507 70062f0, S2 #508 94c31b2, S1 Feature Story #509 5c4e1d0, applicationCategory #510 6518532",
       "status": "MERGED",
       "evidence": "docs/evidence/2026-10-05-v12-convergence.md"
+    },
+    {
+      "id": "v13-experience-global-enterprise",
+      "name": "v13 Experience Global Enterprise: SGPS-DEC-2026-037 header controls (#512 d24a5af, #513 dc3e128), WCAG 2.2 AA lock-in #514 f3a2d35; W3/W4 NO-GO; W5 blocked on Sổ Tâm screens",
+      "status": "MERGED",
+      "evidence": "docs/evidence/2026-10-05-v13-convergence.md"
     }
   ],
   "openOwnerDecisions": [
