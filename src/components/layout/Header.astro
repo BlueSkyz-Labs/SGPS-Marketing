@@ -61,7 +61,7 @@ const primaryLink = NAV[1]!;
         <span class="sr-only">{labelFor(SHARED_LABELS.search, lang)}</span>
       </button>
       <LanguageSwitcher placement="header" />
-      <ThemeToggle lang={lang} variant="popover" />
+      <ThemeToggle lang={lang} placement="header" />
       <ButtonLink
         href={primaryCta.href}
         variant="primary"
@@ -100,7 +100,7 @@ const primaryLink = NAV[1]!;
           ))}
           <hr class="my-1 border-[var(--border-subtle)]" />
           <LanguageSwitcher placement="menu" />
-          <ThemeToggle lang={lang} />
+          <ThemeToggle lang={lang} placement="menu" />
         </nav>
       </div>
     </details>
