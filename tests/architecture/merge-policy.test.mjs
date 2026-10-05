@@ -141,6 +141,30 @@ test("Quality Gates runs the policy from the base commit and reruns on label cha
     workflow,
     /run:[^\n]*github\.event\.pull_request\.labels/,
   );
+
+  const qualityStart = workflow.indexOf("\n  quality-gates:\n");
+  const browserStart = workflow.indexOf("\n  browser-shards:\n");
+  const quality = workflow.slice(
+    qualityStart,
+    browserStart === -1 ? workflow.length : browserStart,
+  );
+  const policyIndex = quality.indexOf(
+    "Merge policy (protected paths need the owner-approved label)",
+  );
+  const packageManagerIndex = quality.indexOf(
+    "Activate project package manager",
+  );
+  const installIndex = quality.indexOf("Install frozen dependency graph");
+
+  assert.ok(policyIndex !== -1, "Quality Gates must contain merge policy");
+  assert.ok(
+    packageManagerIndex > policyIndex,
+    "merge policy must run before candidate package-manager activation",
+  );
+  assert.ok(
+    installIndex > packageManagerIndex,
+    "dependency install must run after package-manager activation",
+  );
 });
 
 const PKG = {
