@@ -2,15 +2,24 @@
 /**
  * Promotion assurance state - offline, deterministic, read-only.
  *
- * Models three independent assurance stages so a PASS in one stage can never
- * be read as a PASS in another (plan Task 4):
+ * Models four independent assurance stages so a PASS in one stage can never
+ * be read as a PASS in another (plan Task 4, #372):
  *
- *   source       package.json scripts plus the CI Quality Gates workflow
- *                actually enforce the offline source gates.
- *   deployment   scripts/deploy-workers.mjs runs validate:public-truth
- *                before build and carries no plaintext secret material.
- *   public-truth scripts/validate-public-truth.mjs exists and
- *                src/data/site.ts holds no fabricated owner facts.
+ *   source               package.json scripts plus the CI Quality Gates workflow
+ *                        actually enforce the offline source gates.
+ *   deployment-contract  scripts/deploy-workers.mjs runs validate:public-truth
+ *                        before build and carries no plaintext secret material.
+ *                        This is the repository one-shot/recovery contract only;
+ *                        it is NOT provider deployment assurance.
+ *   provider-deployment  the authoritative Cloudflare Workers Builds stored
+ *                        trigger (production branch, build command, preview
+ *                        isolation, served revision). Offline Source Assurance
+ *                        cannot inspect provider configuration, so this stage
+ *                        is always BLOCKED_OWNER_FACT here — never PASS, never
+ *                        FAIL — until fresh provider read-back (#375) is
+ *                        independently supplied by the Owner/admin.
+ *   public-truth         scripts/validate-public-truth.mjs exists and
+ *                        src/data/site.ts holds no fabricated owner facts.
  *
  * Status vocabulary:
  *   PASS                every requirement of that stage holds.
@@ -20,9 +29,11 @@
  *                       is proven): the owner must supply the fact.
  *
  * Stage authority:
- *   source        repository source + .github/workflows/quality-gates.yml
- *   deployment    scripts/deploy-workers.mjs (the supported deploy path)
- *   public-truth  scripts/validate-public-truth.mjs + src/data/site.ts
+ *   source               repository source + .github/workflows/quality-gates.yml
+ *   deployment-contract  scripts/deploy-workers.mjs (the supported one-shot
+ *                        deploy path — a source contract, not provider proof)
+ *   provider-deployment  Cloudflare dashboard read-back (owner/admin only)
+ *   public-truth         scripts/validate-public-truth.mjs + src/data/site.ts
  *
  * Two requirement shapes need a note:
  *   - `install` is satisfied by a frozen-lockfile install step in CI or by
@@ -46,7 +57,12 @@ export const STATUS = {
   BLOCKED_OWNER_FACT: "BLOCKED_OWNER_FACT",
 };
 
-export const STAGES = ["source", "deployment", "public-truth"];
+export const STAGES = [
+  "source",
+  "deployment-contract",
+  "provider-deployment",
+  "public-truth",
+];
 
 /** Offline source gates that CI must run on every candidate. */
 export const CI_ENFORCED_SCRIPTS = [
@@ -190,13 +206,13 @@ export function evaluateDeployment({ deployScript = "" } = {}) {
   if (deployScript.trim() === "") {
     findings.push(
       fail(
-        "deployment",
+        "deployment-contract",
         DEPLOY_SCRIPT,
         "deploy script is missing or empty",
         "restore scripts/deploy-workers.mjs",
       ),
     );
-    return stageResult("deployment", findings);
+    return stageResult("deployment-contract", findings);
   }
 
   const truthIndex = deployScript.search(TRUTH_INVOCATION);
@@ -205,7 +221,7 @@ export function evaluateDeployment({ deployScript = "" } = {}) {
   if (truthIndex === -1) {
     findings.push(
       fail(
-        "deployment",
+        "deployment-contract",
         DEPLOY_SCRIPT,
         "validate:public-truth is not run before deploy",
         "run `pnpm validate:public-truth` before build in the deploy script",
@@ -214,7 +230,7 @@ export function evaluateDeployment({ deployScript = "" } = {}) {
   } else if (buildIndex === -1) {
     findings.push(
       fail(
-        "deployment",
+        "deployment-contract",
         DEPLOY_SCRIPT,
         "no build step exists to order public-truth before",
         "run `pnpm build` after validate:public-truth in the deploy script",
@@ -223,7 +239,7 @@ export function evaluateDeployment({ deployScript = "" } = {}) {
   } else if (truthIndex > buildIndex) {
     findings.push(
       fail(
-        "deployment",
+        "deployment-contract",
         DEPLOY_SCRIPT,
         "validate:public-truth runs after build",
         "move validate:public-truth ahead of build in the deploy script",
@@ -235,7 +251,7 @@ export function evaluateDeployment({ deployScript = "" } = {}) {
     if (pattern.test(deployScript)) {
       findings.push(
         fail(
-          "deployment",
+          "deployment-contract",
           DEPLOY_SCRIPT,
           `plaintext secret material detected (${kind})`,
           "read the value from provider/CI secret storage instead",
@@ -244,7 +260,26 @@ export function evaluateDeployment({ deployScript = "" } = {}) {
     }
   }
 
-  return stageResult("deployment", findings);
+  return stageResult("deployment-contract", findings);
+}
+
+/**
+ * #372: authoritative provider deployment is NOT_VERIFIED by offline Source
+ * Assurance. This stage reports BLOCKED_OWNER_FACT (unknown, never PASS)
+ * until the Owner/admin supplies fresh provider read-back (issue #375:
+ * production branch, stored build command, preview isolation, served
+ * revision). It never FAILs: unavailable provider state must not fail
+ * ordinary source PRs.
+ */
+export function evaluateProviderDeployment() {
+  return stageResult("provider-deployment", [
+    blockedOwnerFact(
+      "provider-deployment",
+      "cloudflare-workers-builds",
+      "no fresh provider read-back supplied; stored production trigger is NOT_VERIFIED",
+      "owner/admin records production branch, build command, preview isolation and served revision (issue #375)",
+    ),
+  ]);
 }
 
 /**
@@ -386,12 +421,14 @@ export function evaluatePromotionState({ root = process.cwd() } = {}) {
     deployScript: readText(DEPLOY_SCRIPT) ?? "",
   });
 
+  const providerDeployment = evaluateProviderDeployment();
+
   const publicTruth = evaluatePublicTruth({
     siteSource: readText(SITE_DATA) ?? "",
     truthScriptPresent: readText(TRUTH_SCRIPT) !== null,
   });
 
-  const stages = [source, deployment, publicTruth];
+  const stages = [source, deployment, providerDeployment, publicTruth];
   const findings = stages.flatMap((stage) => stage.findings);
   const exitCode = findings.some((item) => item.status === STATUS.FAIL) ? 1 : 0;
 

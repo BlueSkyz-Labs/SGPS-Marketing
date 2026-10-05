@@ -36,6 +36,10 @@ jobs:
         with:
           node-version: 24.20.0
       - name: Merge policy (protected paths need the owner-approved label)
+        # Trust ordering (#376): the BASE-commit policy runs before ANY
+        # candidate package-manager activation. This step uses only the
+        # runner's `node` (pinned above) and `git` — no corepack/pnpm/npm
+        # and no candidate package script may execute before it.
         # Auto-merge lands a PR once required checks pass, so this required job
         # also holds governance, supply-chain, deployment and gate roots until
         # the Owner labels the PR. The policy file is read from the BASE commit
@@ -121,6 +125,10 @@ jobs:
       options: --user 1001
     env:
       PLAYWRIGHT_BROWSERS_PATH: /ms-playwright
+    # Shard steps use bash-only options (set -o pipefail); pin bash in the container.
+    defaults:
+      run:
+        shell: bash
     strategy:
       fail-fast: false
       matrix:
