@@ -189,6 +189,25 @@ test("lockfile and routine dependency bumps flow without the label", () => {
   );
 });
 
+// Round-4 review: a registry-redirect .npmrc (or a foreign lockfile) would
+// silently repoint dependency resolution and previously auto-passed the gate.
+test("supply-chain config surfaces are held for the Owner (round-4)", () => {
+  const result = evaluateMergePolicy({
+    changedFiles: [".npmrc", ".yarnrc.yml"],
+    labels: [],
+  });
+  assert.equal(result.ok, false);
+  assert.deepEqual(result.protectedFiles, [".npmrc", ".yarnrc.yml"]);
+  const approved = evaluateMergePolicy({
+    changedFiles: [".npmrc"],
+    labels: [APPROVAL_LABEL],
+  });
+  assert.equal(approved.ok, true);
+  assert.equal(isProtected("pnpm-lock.yaml"), false);
+  assert.equal(isProtected("package-lock.json"), true);
+  assert.equal(isProtected("yarn.lock"), true);
+});
+
 test("negative proof: gate-weakening or supply-chain package.json changes are held", () => {
   assert.deepEqual(
     packageJsonRisks(

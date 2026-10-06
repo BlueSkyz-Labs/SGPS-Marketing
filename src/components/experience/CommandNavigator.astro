@@ -18,13 +18,16 @@ const items = buildNavigatorIndex(lang, publicProducts);
 // records are skipped: their evidence-passport items already carry the same
 // statement as their label. No item, link or visible copy is added, and a
 // record without a matching item is dropped rather than invented.
+// The product description fed to the corpus is the locale's own copy (the
+// top-level field is English-only); the top-level value is only a fallback.
 const corpusText = new Map<string, string>();
 for (const record of buildConciergeCorpus({
   lang,
   products: publicProducts.map((entry) => ({
     slug: entry.data.slug,
     name: entry.data.name,
-    description: entry.data.shortDescription,
+    description:
+      entry.data.i18n?.[lang]?.shortDescription ?? entry.data.shortDescription,
   })),
 })) {
   if (record.kind === "claim") continue;

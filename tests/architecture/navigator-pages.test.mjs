@@ -60,3 +60,20 @@ test("verify aliases only reuse wording already on the site", () => {
   }
   assert.ok(source.includes("Xem các tuyên bố"));
 });
+
+// Round-4 review: the concierge corpus feed must use each locale's own copy —
+// the top-level shortDescription is English-only, so feeding it put English
+// sentences into the VI/ZH search text (attribute-only, but wrong-language).
+test("the concierge corpus feed prefers each locale's product copy", () => {
+  const component = read("src/components/experience/CommandNavigator.astro");
+  assert.match(
+    component,
+    /entry\.data\.i18n\?\.\[lang\]\?\.shortDescription \?\?\s*\n?\s*entry\.data\.shortDescription/,
+    "the feed must prefer the locale's shortDescription with the top-level as fallback",
+  );
+  assert.doesNotMatch(
+    component,
+    /description:\s*entry\.data\.shortDescription,/,
+    "the bare English-only description must not feed the corpus",
+  );
+});

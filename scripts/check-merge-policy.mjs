@@ -59,6 +59,16 @@ export const PROTECTED_PATHS = [
   "wrangler.toml",
   "public/_headers",
   "public/_redirects",
+  // Supply-chain config surfaces: a registry-redirect `.npmrc` or a foreign
+  // lockfile silently repoints dependency resolution and would auto-merge
+  // (round-4 review proved the gate passes such a PR today). pnpm-lock.yaml
+  // intentionally stays automatic per the standing policy (lockfile-only
+  // dependency flows); package.json content rules still hold dep additions,
+  // overrides, script changes and major bumps.
+  ".npmrc",
+  ".yarnrc.yml",
+  "package-lock.json",
+  "yarn.lock",
   "eslint.config.mjs",
   "playwright.config.ts",
   "lighthouserc.json",

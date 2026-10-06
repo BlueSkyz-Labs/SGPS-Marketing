@@ -223,6 +223,15 @@ jobs:
     name: Visual regression gate
     needs: quality-gates
     runs-on: ubuntu-24.04
+    container:
+      image: mcr.microsoft.com/playwright:v1.63.0-noble@sha256:eff16c30e6f3f4af0a03fa4b706120d5e9b0891c344a27d64559aff5900a4a27
+      options: --user 1001
+    env:
+      PLAYWRIGHT_BROWSERS_PATH: /ms-playwright
+    # Steps use bash-only options (set -o pipefail); pin bash in the container.
+    defaults:
+      run:
+        shell: bash
     timeout-minutes: 30
     steps:
       - name: Checkout exact candidate
@@ -243,23 +252,18 @@ jobs:
         run: pnpm install --frozen-lockfile
       - name: Build browser test artifact
         run: pnpm build
-      - name: Install Playwright chromium runtime
-        timeout-minutes: 10
+      - name: Assert digest-pinned Playwright runtime (no download path)
         run: |
-          set -e
-          installed=0
-          for attempt in 1 2 3; do
-            if pnpm exec playwright install --with-deps chromium; then
-              installed=1
-              break
-            fi
-            echo "Attempt $attempt failed; waiting 20s before retry..."
-            sleep 20
-          done
-          if [ "$installed" != "1" ]; then
-            echo "Playwright runtime installation failed after 3 attempts" >&2
+          set -euo pipefail
+          if env | grep -Eq '^PLAYWRIGHT_(DOWNLOAD_HOST|CHROMIUM_DOWNLOAD_HOST|FIREFOX_DOWNLOAD_HOST|WEBKIT_DOWNLOAD_HOST)='; then
+            echo "Unapproved Playwright browser download-host override detected" >&2
             exit 1
           fi
+          test "$PLAYWRIGHT_BROWSERS_PATH" = "/ms-playwright"
+          node -e "require('@playwright/test').chromium.launch()
+            .then((browser)=>browser.close())
+            .then(()=>console.log('chromium digest-pinned runtime launched successfully'))
+            .catch((error)=>{console.error(error);process.exit(1);});"
       - name: Visual regression gate (chromium)
         run: pnpm exec playwright test --project=visual
       - name: Upload diff images on failure

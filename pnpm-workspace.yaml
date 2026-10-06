@@ -19,9 +19,20 @@ overrides:
   miniflare>undici: 7.29.1
   basic-ftp: 6.2.1
   devalue: 5.9.4
+  # 2026-10-06 advisory batch (pnpm audit --audit-level=moderate):
+  # proxy-addr CRITICAL IP spoofing via IPv4-mapped IPv6 trust subnet;
+  # source-map-js HIGH event-loop DoS; compression HIGH memory DoS;
+  # smol-toml MODERATE quadratic parse; postcss-selector-parser MODERATE
+  # quadratic selector parsing. All five have patched releases; pinned.
+  proxy-addr: 2.0.8
+  source-map-js: 1.2.2
+  compression: 1.8.2
+  smol-toml: 1.9.0
+  postcss-selector-parser: 7.1.6
 
 # Dependency-audit exceptions: each one is justified, guarded and time-boxed in
 # docs/security/audit-exceptions.json (tests/architecture/audit-exceptions.test.mjs).
 auditConfig:
   ignoreGhsas:
     - GHSA-ch52-4w7c-c8xp
+    - GHSA-hp3w-g68c-fv3c
