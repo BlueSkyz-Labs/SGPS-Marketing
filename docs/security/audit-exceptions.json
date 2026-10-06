@@ -3,20 +3,6 @@
   "policy": "A dependency-audit exception is allowed only when no patched version exists, the vulnerable code is proven unreachable in this build, an exposure guard test keeps it unreachable, and the exception expires. Adding, extending or widening an exception changes pnpm-workspace.yaml, a protected path, and needs the Owner owner-approved label.",
   "exceptions": [
     {
-      "ghsa": "GHSA-ch52-4w7c-c8xp",
-      "package": "http-cache-semantics",
-      "vulnerableRange": "<=4.2.0",
-      "patchedVersions": "none published (npm registry latest 4.2.0, checked 2026-10-03)",
-      "severity": "high",
-      "summary": "max-stale handling can disclose cross-user cached responses",
-      "path": "astro > http-cache-semantics",
-      "exposure": "Imported only by node_modules/astro/dist/assets/build/remote.js, the build-time cache for remote images in astro:assets. This site configures no image.remotePatterns or image.domains and imports nothing from astro:assets, so the remote-image path never runs. The output is static Workers assets, so the package never runs at request time or in the browser.",
-      "exposureGuard": "tests/architecture/audit-exceptions.test.mjs",
-      "recorded": "2026-10-03",
-      "expires": "2026-11-03",
-      "removeWhen": "a patched http-cache-semantics or an astro release without it is available; then override or bump and delete this entry"
-    },
-    {
       "ghsa": "GHSA-hp3w-g68c-fv3c",
       "package": "sprintf-js",
       "vulnerableRange": "<=1.0.3",
