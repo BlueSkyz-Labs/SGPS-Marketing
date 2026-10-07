@@ -71,8 +71,8 @@ export const SHARED_LABELS = {
   aboutBlueSkyz: {
     en: "About BlueSkyz",
     vi: "Về BlueSkyz",
-    zh: "关于 BlueSkyz",
-    "zh-hant": "關於 BlueSkyz",
+    zh: "关于我们",
+    "zh-hant": "關於我們",
   },
   security: { en: "Security", vi: "Bảo mật", zh: "安全", "zh-hant": "安全" },
   exploreProducts: {
