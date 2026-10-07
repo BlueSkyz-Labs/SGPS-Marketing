@@ -1,8 +1,9 @@
 ---
 import BlueSkyzIcon from "@/components/icon/BlueSkyzIcon.astro";
 import ButtonLink from "@/components/ui/ButtonLink.astro";
+import ProductStatus from "@/components/product/ProductStatus.astro";
 import { EMPTY_STATE_COPY } from "@/data/empty-state-copy";
-import { labelFor, SHARED_LABELS, type Language } from "@/data/site";
+import { SITE, labelFor, SHARED_LABELS, type Language } from "@/data/site";
 import { getPublicProducts } from "@/lib/products";
 import { productPageCopy } from "@/components/product/product-page-copy";
 
@@ -32,9 +33,14 @@ const products = (await getPublicProducts()).map((product) => ({
   slug: product.data.slug,
   name: product.data.name,
   description: productPageCopy(product.data, lang).oneLiner,
+  publicLabel: product.data.publicLabel,
 }));
 ---
 
+<p class="about-founded" data-organization-founding-year>
+  {labelFor(SHARED_LABELS.operatingSince, lang)}{" "}
+  <time datetime={String(SITE.foundedYear)}>{SITE.foundedYear}</time>
+</p>
 <div class="about-grid" data-about-composition>
   {products.length > 0 ? (
     <section aria-labelledby="about-make">
@@ -43,7 +49,7 @@ const products = (await getPublicProducts()).map((product) => ({
       </h2>
       <ul class="about-products">
         {products.map((product) => (
-          <li class="about-product">
+          <li class="about-product" data-about-product>
             <a
               href={`/${lang}/products/${product.slug}/`}
               class="about-product__name"
@@ -54,6 +60,7 @@ const products = (await getPublicProducts()).map((product) => ({
                 class="about-arrow h-4 w-4 shrink-0"
               />
             </a>
+            <ProductStatus label={product.publicLabel} lang={lang} />
             <p class="about-product__desc text-pretty">{product.description}</p>
           </li>
         ))}
@@ -97,6 +104,20 @@ const products = (await getPublicProducts()).map((product) => ({
     </a>
   </section>
 </div>
+{SITE.founderEmail ? (
+  <p
+    class="mt-8 text-sm text-[var(--text-secondary)]"
+    data-public-email-role="founder"
+  >
+    {labelFor(SHARED_LABELS.strategicContact, lang)}{" "}
+    <a
+      href={`mailto:${SITE.founderEmail}`}
+      class="font-semibold text-[var(--action-primary)] no-underline hover:underline"
+    >
+      {SITE.founderEmail}
+    </a>
+  </p>
+) : null}
 <div class="mt-12 flex flex-wrap gap-3">
   <ButtonLink href={`/${lang}/products/`}>
     {labelFor(SHARED_LABELS.exploreProducts, lang)}
@@ -107,6 +128,11 @@ const products = (await getPublicProducts()).map((product) => ({
 </div>
 
 <style>
+  .about-founded {
+    margin: 0 0 3rem;
+    color: var(--text-secondary);
+    font-size: var(--size-2);
+  }
   .about-grid {
     display: grid;
     gap: 3rem;
@@ -183,8 +209,16 @@ const products = (await getPublicProducts()).map((product) => ({
   .about-product__name::after {
     content: "";
     position: absolute;
+    z-index: 0;
     inset: 0;
     border-radius: inherit;
+  }
+  .about-product [data-product-status] {
+    position: relative;
+    z-index: 1;
+    margin-inline-start: 0.75rem;
+    pointer-events: none;
+    vertical-align: middle;
   }
   .about-product__name:focus-visible {
     outline: none;

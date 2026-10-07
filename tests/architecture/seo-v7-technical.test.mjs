@@ -25,7 +25,7 @@ const sitemap = readFileSync("src/pages/sitemap.xml.ts", "utf8");
 // --- gateway JSON-LD ------------------------------------------------------
 
 const gatewayEmitsSiteLd = (src) =>
-  /organizationJsonLd\(SITE\.url\)/.test(src) &&
+  /organizationJsonLd\(SITE\.url,\s*SITE\.foundedYear\)/.test(src) &&
   /websiteJsonLd\(SITE\.url\)/.test(src) &&
   /type="application\/ld\+json"/.test(src) &&
   /safeJsonLd\(data\)/.test(src);
@@ -43,7 +43,9 @@ test("negative proof: a gateway without the builders or the script is rejected",
     false,
   );
   assert.equal(
-    gatewayEmitsSiteLd(gateway.replace("organizationJsonLd(SITE.url)", "null")),
+    gatewayEmitsSiteLd(
+      gateway.replace("organizationJsonLd(SITE.url, SITE.foundedYear)", "null"),
+    ),
     false,
   );
   assert.equal(
@@ -242,7 +244,9 @@ test("negative proof: an alternate filter that keeps the current locale is detec
 // SEO-12/21: noindex 404 pages carry no hreflang and no site-level JSON-LD.
 const guards404 = (src) =>
   /const isNotFoundPage = \/\\\/404\\\/\?\$\/\.test\(path\)/.test(src) &&
-  /isNotFoundPage\s*\?\s*\[\]\s*:\s*\[organizationJsonLd/.test(src) &&
+  /isNotFoundPage\s*\?\s*\[\]\s*:\s*\[\s*organizationJsonLd\(SITE\.url,\s*SITE\.foundedYear\)/.test(
+    src,
+  ) &&
   /\{isNotFoundPage\s*\?\s*null\s*:\s*hreflangLinks/.test(src) &&
   /\{isNotFoundPage \? null : \(\s*<link\s+rel="alternate"\s+hreflang="x-default"/.test(
     src,
@@ -266,8 +270,8 @@ test("404 pages drop hreflang, x-default and Organization/WebSite JSON-LD", () =
 
 test("negative proof: restoring site JSON-LD on 404 is rejected", () => {
   const broken = layout.replace(
-    /isNotFoundPage\s*\?\s*\[\]\s*:\s*\[organizationJsonLd/,
-    "[organizationJsonLd",
+    /isNotFoundPage\s*\?\s*\[\]\s*:\s*\[\s*organizationJsonLd\(SITE\.url,\s*SITE\.foundedYear\)/,
+    "[organizationJsonLd(SITE.url, SITE.foundedYear)",
   );
   assert.notEqual(broken, layout);
   assert.equal(guards404(broken), false);

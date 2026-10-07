@@ -1,7 +1,11 @@
+import { publicMailboxForRole } from "../lib/public-mailbox.ts";
+
 const localFallback = "http://localhost:4321";
 
 export const SITE = {
   name: "BlueSkyz Labs",
+  /** Owner-confirmed operating year; do not infer this from domain history. */
+  foundedYear: 2026,
   /** Primary hero line — BlueSkyz Labs Production Brand Kit v4. */
   taglineLead: "Intelligence. Elevated.",
   taglineAccent: "Impact.",
@@ -11,15 +15,33 @@ export const SITE = {
   supporting: "A higher perspective builds a brighter tomorrow.",
   motto: "Build with clarity. Scale with confidence.",
   url: import.meta.env?.PUBLIC_SITE_URL?.trim() || localFallback,
-  contactEmail: import.meta.env?.PUBLIC_CONTACT_EMAIL?.trim() || null,
-  securityEmail: import.meta.env?.PUBLIC_SECURITY_EMAIL?.trim() || null,
+  contactEmail: publicMailboxForRole(
+    import.meta.env?.PUBLIC_CONTACT_EMAIL,
+    "contact",
+  ),
+  supportEmail: publicMailboxForRole(
+    import.meta.env?.PUBLIC_SUPPORT_EMAIL,
+    "support",
+  ),
+  privacyEmail: publicMailboxForRole(
+    import.meta.env?.PUBLIC_PRIVACY_EMAIL,
+    "privacy",
+  ),
+  securityEmail: publicMailboxForRole(
+    import.meta.env?.PUBLIC_SECURITY_EMAIL,
+    "security",
+  ),
+  founderEmail: publicMailboxForRole(
+    import.meta.env?.PUBLIC_FOUNDER_EMAIL,
+    "founder",
+  ),
 } as const;
 
 /** Public GitHub private vulnerability reporting (SECURITY.md). */
 export const SECURITY_ADVISORY_URL =
   "https://github.com/BlueSkyz-Labs/SGPS-Marketing/security/advisories/new";
 
-import type { Language } from "@/lib/i18n";
+import type { Language } from "../lib/i18n.ts";
 
 /** Locale set is owned by `@/lib/i18n`; re-exported so existing importers keep working. */
 export type { Language };
@@ -170,6 +192,36 @@ export const SHARED_LABELS = {
     "zh-hant": "網站目錄",
   },
   platforms: { en: "Platforms", vi: "Nền tảng", zh: "平台", "zh-hant": "平台" },
+  operatingSince: {
+    en: "Operating since",
+    vi: "Bắt đầu hoạt động từ năm",
+    zh: "开始运营于",
+    "zh-hant": "開始營運於",
+  },
+  strategicContact: {
+    en: "Business / product contact",
+    vi: "Liên hệ kinh doanh / sản phẩm",
+    zh: "商务 / 产品联系",
+    "zh-hant": "商務 / 產品聯絡",
+  },
+  generalContact: {
+    en: "Business / general",
+    vi: "Kinh doanh / chung",
+    zh: "商务 / 一般咨询",
+    "zh-hant": "商務 / 一般諮詢",
+  },
+  productSupport: {
+    en: "Product support",
+    vi: "Hỗ trợ sản phẩm",
+    zh: "产品支持",
+    "zh-hant": "產品支援",
+  },
+  privacyContact: {
+    en: "Privacy enquiries",
+    vi: "Liên hệ về quyền riêng tư",
+    zh: "隐私咨询",
+    "zh-hant": "隱私諮詢",
+  },
 } as const satisfies Record<string, LocalizedLabel>;
 
 export function labelFor(

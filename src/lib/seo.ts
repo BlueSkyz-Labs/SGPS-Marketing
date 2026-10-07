@@ -46,13 +46,15 @@ function publisherRef(siteUrl: string) {
   } as const;
 }
 
-export function organizationJsonLd(siteUrl: string) {
+export function organizationJsonLd(siteUrl: string, foundedYear?: number) {
   return {
     "@context": "https://schema.org",
     "@type": "Organization",
     "@id": organizationId(siteUrl),
     name: "BlueSkyz Labs",
     url: siteRootUrl(siteUrl),
+    // Passed from SITE.foundedYear by each page and rendered visibly there.
+    ...(foundedYear ? { foundingDate: String(foundedYear) } : {}),
     // Square BlueSkyz mark (Owner decision F11, 2026-10-01). No sameAs and no
     // contactPoint: those stay absent until the Owner supplies real profiles.
     logo: absoluteUrl(siteUrl, ORGANIZATION_LOGO_PATH),

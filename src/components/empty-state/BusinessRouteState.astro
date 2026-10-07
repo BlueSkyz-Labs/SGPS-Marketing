@@ -15,7 +15,10 @@ interface Props {
 }
 
 const { lang, heading, boundary } = Astro.props;
-const soft = emptyRegistryPrimaryCta(SITE.contactEmail, lang);
+const soft = emptyRegistryPrimaryCta(
+  SITE.contactEmail || SITE.supportEmail,
+  lang,
+);
 ---
 
 <li

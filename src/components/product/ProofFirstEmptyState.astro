@@ -8,8 +8,9 @@ interface Props {
 }
 
 const { lang } = Astro.props;
-const primary = emptyRegistryPrimaryCta(SITE.contactEmail, lang);
-const secondary = emptyRegistrySecondaryCta(SITE.contactEmail, lang);
+const publicContactEmail = SITE.contactEmail || SITE.supportEmail;
+const primary = emptyRegistryPrimaryCta(publicContactEmail, lang);
+const secondary = emptyRegistrySecondaryCta(publicContactEmail, lang);
 
 const COPY = {
   heading: {

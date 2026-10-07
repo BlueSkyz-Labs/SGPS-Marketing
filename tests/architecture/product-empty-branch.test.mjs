@@ -80,11 +80,11 @@ test("the empty state states the publication rule in every language with locale 
   }
   assert.match(
     component,
-    /emptyRegistryPrimaryCta\(SITE\.contactEmail, lang\)/,
+    /emptyRegistryPrimaryCta\(publicContactEmail, lang\)/,
   );
   assert.match(
     component,
-    /emptyRegistrySecondaryCta\(SITE\.contactEmail, lang\)/,
+    /emptyRegistrySecondaryCta\(publicContactEmail, lang\)/,
   );
   assert.doesNotMatch(component, /has no products|không có sản phẩm/i);
 });
