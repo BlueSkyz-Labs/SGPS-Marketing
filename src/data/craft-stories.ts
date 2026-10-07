@@ -43,7 +43,7 @@ export const CRAFT_STORIES: readonly CraftStoryDraft[] = [
       },
       limitations: {
         en: "No bug bounty, no response time commitment and no certification are claimed. This site does not itself receive reports — it states the private channel and its boundary.",
-        vi: "Không có bug bounty, không cam kết thời gian phản hồi và không có chứng nhận nào được tuyên bố. Trang web này không tự tiếp nhận báo cáo — nó nêu kênh riêng và ranh giới của kênh đó.",
+        vi: "Không có chương trình thưởng lỗ hổng, không cam kết thời gian phản hồi và không có chứng nhận nào được tuyên bố. Trang web này không tự tiếp nhận báo cáo — nó nêu kênh riêng và ranh giới của kênh đó.",
         zh: "不声称漏洞赏金、响应时限或任何认证。本站自身不接收报告——它只说明私密渠道及其边界。",
         "zh-hant":
           "不聲稱漏洞賞金、回應時限或任何認證。本站自身不接收報告——它只說明私密管道及其邊界。",
