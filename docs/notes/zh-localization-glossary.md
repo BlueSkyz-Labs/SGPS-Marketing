@@ -66,7 +66,7 @@ translation — an added 认证 is a fabricated claim, not a phrasing choice.
 ## Tone rules
 
 1. Prefer 动词+宾语 (“探索产品”) over noun-stacking for actions.
-2. Address the visitor as 您 implicitly; avoid 你.
+2. Use 你 (OG-10, pinned by w7-localization.test.mjs): zh and zh-hant both use 你; 您 appears only on the Owner allow-list.
 3. Keep technical nouns stable: 证据, 来源, 边界, 声明, 产品, 能力 — never swap in synonyms mid-surface.
 4. Do not localize proper nouns: BlueSkyz Labs, ApexAgent, Sổ Tâm, Sổ Trọ, FluentArc, Vững Tay Lái.
 5. Numbers, dates and currency stay locale-formatted by the presentation layer, not by the string itself.
