@@ -4,6 +4,8 @@ import Container from "@/components/layout/Container.astro";
 import EvidencePassport from "@/components/integrity/EvidencePassport.astro";
 import { getEvidencePassport, getEvidencePassportIds } from "@/lib/claims";
 import { getPublicProducts } from "@/lib/products";
+import { claimReviewJsonLd } from "@/lib/seo";
+import { SITE } from "@/data/site";
 
 export async function getStaticPaths() {
   const products = (await getPublicProducts()).map((product) => ({
@@ -22,12 +24,30 @@ const passport = getEvidencePassport(id ?? "", products);
 const title = passport
   ? `Bằng chứng: ${passport.titleLabel?.vi ?? passport.claim.vi}`
   : "Bằng chứng";
+/** ClaimReview only when a review with evidence exists; the state's honest
+ * label is the rating (no scores, per the site's truth-state grammar). */
+const CLAIM_STATE_LABELS: Record<string, string> = {
+  reviewed: "Đã xem xét",
+  "source-linked": "Đã gắn nguồn",
+};
+const claimReview =
+  passport && passport.state in CLAIM_STATE_LABELS
+    ? [
+        claimReviewJsonLd(SITE.url, `/vi/evidence/${id}/`, {
+          claimText: passport.claim.vi ?? passport.claim.en,
+          lang: "vi",
+          stateLabel: CLAIM_STATE_LABELS[passport.state],
+          reviewedOn: passport.reviewedOn,
+        }),
+      ]
+    : [];
 ---
 
 <BaseLayout
   title={title}
   description={passport?.claim.vi ?? "Bằng chứng cho tuyên bố này"}
   path={`/vi/evidence/${id}/`}
+  extraJsonLd={claimReview}
 >
   <section class="py-16 lg:py-24">
     <Container>
