@@ -132,6 +132,67 @@ export function productJsonLd(
   };
 }
 
+/**
+ * Per-page WebPage node (SEO completeness, 2026-10-08). Emitted by BaseLayout
+ * for every non-404 page alongside Organization + WebSite + BreadcrumbList.
+ */
+export function webPageJsonLd(
+  siteUrl: string,
+  path: string,
+  name: string,
+  description: string,
+  lang: string,
+) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    name,
+    description,
+    url: canonicalForPath(path, siteUrl),
+    inLanguage: languageTag(lang),
+    isPartOf: { "@type": "WebSite", "@id": websiteId(siteUrl) },
+  };
+}
+
+/**
+ * ClaimReview for evidence passport pages (SEO P1, 2026-10-08).
+ *
+ * The site's truth states describe publication reality only — no scoring, no
+ * confidence percentages, no certification language. The rating therefore
+ * carries no numeric value: `alternateName` is the state's honest label.
+ * Only call for states where a review with evidence actually exists
+ * ("reviewed", "source-linked"); other states have no review to report.
+ */
+export function claimReviewJsonLd(
+  siteUrl: string,
+  pagePath: string,
+  review: {
+    claimText: string;
+    lang: string;
+    stateLabel: string;
+    reviewedOn?: string | undefined;
+  },
+) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "ClaimReview",
+    url: canonicalForPath(pagePath, siteUrl),
+    claimReviewed: review.claimText,
+    inLanguage: languageTag(review.lang),
+    author: publisherRef(siteUrl),
+    reviewRating: {
+      "@type": "Rating",
+      alternateName: review.stateLabel,
+    },
+    itemReviewed: {
+      "@type": "Claim",
+      text: review.claimText,
+      author: publisherRef(siteUrl),
+    },
+    ...(review.reviewedOn ? { datePublished: review.reviewedOn } : {}),
+  };
+}
+
 /** BCP-47 tag for a routed language (`zh` is Simplified, `zh-hant` Traditional). */
 function languageTag(lang: string): string {
   return (
