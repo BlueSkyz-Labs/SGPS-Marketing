@@ -1,6 +1,8 @@
 # Go-live readiness record — audited head `11d5aec5`
 
-**Status: AGENT-SIDE COMPLETE — the only remaining act is the Owner's.**
+**Historical status at 2026-10-05:** agent-side checks were complete and the
+owner actions below were still pending. For the latest public runtime
+observation, see [2026-10-07-golive-runtime-observation.md](2026-10-07-golive-runtime-observation.md).
 Every claim below was produced by execution against the exact revision
 `11d5aec58d6e8a58da49e403c176c0c522f57e99` (fresh worktree, production-origin
 build). Evidence classes: EXACT_HEAD + RUNTIME_VERIFIED where stated.
@@ -44,3 +46,13 @@ smoke runs without `--site`; rollback target at/after the D-0 floor.
 Human E4 self-tests, VI copy cross-check, trademark/legal clearance,
 specialty print, native zh copy review of one claim titleLabel — all
 recorded as non-blockers per `docs/current-work.json`.
+
+## Addendum — 2026-10-07
+
+Cloudflare Access is now lifted on the public path observed: the apex returned
+HTTP 200 and `www` redirected to the apex. The production smoke passed 37/37
+checks. The served revision was not read back from Cloudflare, so this does not
+complete §3E or certify a deployment. Production contact, support, and security
+routes currently contain no `mailto:` links; mailbox readiness remains open.
+See [the observation record](2026-10-07-golive-runtime-observation.md) for the
+full result and remaining provider gates.
