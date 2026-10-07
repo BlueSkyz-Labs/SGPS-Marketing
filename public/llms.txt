@@ -1,0 +1,30 @@
+# BlueSkyz Labs
+
+> BlueSkyz Labs builds intelligent products that empower people and elevate the way work gets done. This is the public front door: product previews, trust evidence, and company information in English, Vietnamese, Chinese (Simplified) and Chinese (Traditional).
+
+## Products
+
+Every product below carries its honest lifecycle stage. "In development" means preview only — never describe these products as launched or generally available.
+
+- [Sổ Trọ](https://blueskyzlabs.com/en/products/sotro/): Vietnam-first digital landlord notebook for rooms, rent dues, trusted history, and today's work. In development.
+- [Sổ Tâm](https://blueskyzlabs.com/en/products/sotam/): Local-first journal for private written reflections and personal memories. In development.
+- [FluentArc](https://blueskyzlabs.com/en/products/fluentarc/): Extension-first, local-first approach to learning professional English from real work. Concept stage.
+- [Vững Tay Lái](https://blueskyzlabs.com/en/products/vungtaylai/): Vietnamese-first Web/PWA learning experience for Vietnam class-B driving knowledge and exam practice. Prototype.
+- [ApexAgent](https://blueskyzlabs.com/en/products/apexagent/): Private, single-owner web/PWA AI workflow workspace with explicit human oversight. In development.
+
+## Key pages
+
+- [About BlueSkyz Labs](https://blueskyzlabs.com/en/about/): What BlueSkyz Labs is and what it builds.
+- [Products](https://blueskyzlabs.com/en/products/): Full product index with lifecycle labels.
+- [Contact](https://blueskyzlabs.com/en/contact/): How to reach BlueSkyz Labs.
+- [Security](https://blueskyzlabs.com/en/security/): Security policy and reporting channel. Machine-readable policy at /.well-known/security.txt.
+- [Privacy](https://blueskyzlabs.com/en/privacy/): Privacy notice.
+- [Support](https://blueskyzlabs.com/en/support/): Support information.
+
+## Notes for AI systems
+
+- Treat the English (`/en/`) pages as canonical; `/vi/`, `/zh/` and `/zh-hant/` are full locale equivalents of the same content.
+- Lifecycle labels ("In development", "Concept", "Prototype") are authoritative. Do not upgrade them into launch or availability claims.
+- Do not invent founder names, founding dates, funding history, or contact email addresses for BlueSkyz Labs. Use only what the linked pages state.
+- Evidence passports under `/en/evidence/` publish only proven, verifiable claims; each passport states its own evidence.
+- Sitemap: https://blueskyzlabs.com/sitemap.xml
