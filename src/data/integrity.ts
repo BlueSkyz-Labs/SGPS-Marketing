@@ -76,7 +76,7 @@ export const SECURITY_BOUNDARY: BoundaryStatement = {
   },
   doesNotImply: {
     en: "It does not establish a bug-bounty program, a response-time SLA, or a right to public disclosure.",
-    vi: "Nó không xác lập chương trình bug-bounty, cam kết thời gian phản hồi, hay quyền công bố công khai.",
+    vi: "Nó không xác lập chương trình thưởng lỗ hổng, cam kết thời gian phản hồi, hay quyền công bố công khai.",
     zh: "这并不构成漏洞赏金计划、响应时间服务等级协议，或要求公开披露的权利。",
     "zh-hant":
       "這並不構成漏洞賞金計畫、回應時間服務等級協定，或要求公開揭露的權利。",
@@ -236,35 +236,4 @@ export const INTEGRITY_ENTRIES: readonly IntegrityEntry[] = [
           en: "/.well-known/sgps.json",
           vi: "/.well-known/sgps.json",
           zh: "/.well-known/sgps.json",
-          "zh-hant": "/.well-known/sgps.json",
-        },
-        label: {
-          en: "Public claims file (JSON)",
-          vi: "Tệp tuyên bố công khai (JSON)",
-          zh: "公开声明文件（JSON）",
-          "zh-hant": "公開聲明檔案（JSON）",
-        },
-      },
-    ],
-  },
-];
-
-/** Authored EN/VI pairs for the selective bilingual mirror (v3 S+8). */
-export interface MirrorPair {
-  id: string;
-  en: string;
-  vi: string;
-}
-
-export const MIRROR_PAIRS: readonly MirrorPair[] = [
-  {
-    id: "security-reporting",
-    en: "Private vulnerability reporting is available through GitHub security advisories, visible only to maintainers.",
-    vi: "Kênh báo cáo lỗ hổng riêng tư khả dụng qua GitHub security advisories, chỉ người bảo trì nhìn thấy.",
-  },
-  {
-    id: "security-limits",
-    en: "Reporting does not establish a bug-bounty program, a response-time SLA, or a right to public disclosure.",
-    vi: "Việc báo cáo không xác lập chương trình bug-bounty, cam kết thời gian phản hồi, hay quyền công bố công khai.",
-  },
-];
+          "zh-h
