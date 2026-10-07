@@ -53,9 +53,23 @@ export function organizationJsonLd(siteUrl: string) {
     "@id": organizationId(siteUrl),
     name: "BlueSkyz Labs",
     url: siteRootUrl(siteUrl),
-    // Square BlueSkyz mark (Owner decision F11, 2026-10-01). No sameAs and no
-    // contactPoint: those stay absent until the Owner supplies real profiles.
+    // Square BlueSkyz mark (Owner decision F11, 2026-10-01).
     logo: absoluteUrl(siteUrl, ORGANIZATION_LOGO_PATH),
+    // Owner-confirmed entity facts (2026-10-07, #523): founder, founding
+    // year, location and contact mailbox are real. sameAs stays absent until
+    // the Owner supplies real external profiles.
+    foundingDate: "2026",
+    founder: {
+      "@type": "Person",
+      name: "Tony Nguyen",
+      jobTitle: "Founder & CEO",
+    },
+    address: {
+      "@type": "PostalAddress",
+      addressLocality: "Ho Chi Minh City",
+      addressCountry: "VN",
+    },
+    email: "hello@blueskyzlabs.com",
   } as const;
 }
 
@@ -263,3 +277,4 @@ export const PUBLIC_STATIC_PATHS = [
 export function isNoindexPath(path: string): boolean {
   return /^\/(en|vi|zh|zh-hant)\/dossier\/print\/$/.test(path);
 }
+
