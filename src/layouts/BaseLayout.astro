@@ -105,7 +105,7 @@ const ogImageMeta = ogImage === defaultOgImagePath() ? DEFAULT_OG_IMAGE : null;
 const ogImageAlt = DEFAULT_OG_IMAGE_ALT[currentLang];
 const structuredData: Record<string, unknown>[] = isNotFoundPage
   ? []
-  : [organizationJsonLd(SITE.url, SITE.foundedYear), websiteJsonLd(SITE.url)];
+  : [organizationJsonLd(SITE.url), websiteJsonLd(SITE.url)];
 const breadcrumb = breadcrumbJsonLd(currentLang, path, SITE.url);
 if (breadcrumb) structuredData.push(breadcrumb);
 const robotsNoindex = noindex || isNonProductionSiteUrl(SITE.url);

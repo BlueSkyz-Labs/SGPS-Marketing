@@ -15,7 +15,7 @@ const sitemap = readFileSync("src/pages/sitemap.xml.ts", "utf8");
 
 const TITLE = "BlueSkyz Labs | Choose your language";
 const DESCRIPTION =
-  "BlueSkyz Labs: We build intelligent products that empower people and elevate the way work gets done. Operating since 2026. Choose from four languages.";
+  "Choose a language for BlueSkyz Labs, which is building Sổ Trọ and Sổ Tâm, both in development: English, Tiếng Việt, 简体中文 or 繁體中文.";
 
 const gatewayIsIndexable = (src) =>
   !/content="noindex, follow"/.test(src) &&
@@ -30,10 +30,7 @@ test("gateway is indexable with a self canonical and the non-prod gate intact", 
 
 test("gateway title and description are the approved single strings", () => {
   assert.ok(gateway.includes(`const title = "${TITLE}"`));
-  assert.match(
-    gateway,
-    /const description =\s*`\$\{SITE\.name\}: \$\{SITE\.proposition\} Operating since \$\{SITE\.foundedYear\}\. Choose from four languages\.`;/,
-  );
+  assert.ok(gateway.includes(DESCRIPTION));
   assert.ok([...DESCRIPTION].length <= 160);
   assert.equal(TITLE.split(" | ").length, 2);
 });

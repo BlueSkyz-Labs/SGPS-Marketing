@@ -12,7 +12,7 @@
 
 - Assert the root gateway contains the organization name, mission, year, and ordinary About link in its static HTML.
 - Assert all About locales render the year and mission and derive product names/status from the public product registry.
-- Assert Organization JSON-LD derives `foundingDate` from the same year and omits founder/contactPoint/email when no eligible fact is present.
+- Assert the visible operating year is not emitted as a Schema.org `foundingDate`; omit founder/contactPoint/email when no eligible fact is present.
 - Exercise role-mailbox matching: accepted role + canonical domain passes; wrong role, privileged role, malformed address, and another domain return no public mailbox.
 - Assert DEC-038 mappings are applied at Contact, Support, Privacy, Security, and About.
 - Run the new architecture test and targeted E2E tests; confirm they fail before implementation.
@@ -21,10 +21,10 @@
 
 **Files:** `src/data/site.ts`, `src/lib/seo.ts`, `.env.example`.
 
-- Add the owner-confirmed `foundedYear: 2026` to `SITE`.
+- Add the owner-confirmed `operatingSinceYear: 2026` to `SITE`.
 - Add a small pure email-role projection helper; do not add a second organization registry or accept a role based on the local-part alone.
 - Expose only the role-aligned values needed by current public routes. Keep optional values blank in `.env.example` with the #281 verification prerequisite.
-- Extend Organization JSON-LD from the shared year and retain `safeJsonLd` and stable entity identity.
+- Keep the operating year out of Organization JSON-LD; retain `safeJsonLd` and stable entity identity.
 - Re-run Task 1's focused tests and fix only implementation defects.
 
 ## Task 3 — Render visible organization facts and registry products

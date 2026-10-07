@@ -5,7 +5,7 @@ const localFallback = "http://localhost:4321";
 export const SITE = {
   name: "BlueSkyz Labs",
   /** Owner-confirmed operating year; do not infer this from domain history. */
-  foundedYear: 2026,
+  operatingSinceYear: 2026,
   /** Primary hero line — BlueSkyz Labs Production Brand Kit v4. */
   taglineLead: "Intelligence. Elevated.",
   taglineAccent: "Impact.",

@@ -8,11 +8,11 @@ import { organizationJsonLd } from "../../src/lib/seo.ts";
 const LOCALES = ["en", "vi", "zh", "zh-hant"];
 const read = (path) => readFileSync(path, "utf8");
 
-test("Owner-confirmed operating year is shared by visible pages and Organization JSON-LD", () => {
+test("Owner-confirmed operating year is visible without asserting founding date", () => {
   const site = read("src/data/site.ts");
-  assert.match(site, /foundedYear:\s*2026/);
-  const organization = organizationJsonLd("https://blueskyzlabs.com", 2026);
-  assert.equal(organization.foundingDate, "2026");
+  assert.match(site, /operatingSinceYear:\s*2026/);
+  const organization = organizationJsonLd("https://blueskyzlabs.com");
+  assert.equal("foundingDate" in organization, false);
   assert.equal(organization.name, "BlueSkyz Labs");
   assert.equal("founder" in organization, false);
   assert.equal("contactPoint" in organization, false);
@@ -20,17 +20,17 @@ test("Owner-confirmed operating year is shared by visible pages and Organization
   assert.equal("sameAs" in organization, false);
 
   const gateway = read("src/pages/index.astro");
-  assert.match(gateway, /SITE\.foundedYear/);
+  assert.match(gateway, /SITE\.operatingSinceYear/);
   assert.match(gateway, /SITE\.proposition/);
   assert.match(gateway, /href="\/en\/about\/"/);
-  assert.match(gateway, /organizationJsonLd\(SITE\.url, SITE\.foundedYear\)/);
+  assert.match(gateway, /organizationJsonLd\(SITE\.url\)/);
   assert.match(
     read("src/layouts/BaseLayout.astro"),
-    /organizationJsonLd\(SITE\.url, SITE\.foundedYear\)/,
+    /organizationJsonLd\(SITE\.url\)/,
   );
   assert.match(
     read("src/components/empty-state/AboutComposition.astro"),
-    /SITE\.foundedYear/,
+    /SITE\.operatingSinceYear/,
   );
   for (const locale of LOCALES) {
     assert.match(

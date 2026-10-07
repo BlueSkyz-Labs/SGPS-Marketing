@@ -18,13 +18,11 @@ import { isNonProductionSiteUrl } from "@/lib/truth";
 // English-first and single-language: preserve the language selector while
 // exposing the same organization facts as About to crawlers and no-JS users.
 const title = "BlueSkyz Labs | Choose your language";
-const description = `${SITE.name}: ${SITE.proposition} Operating since ${SITE.foundedYear}. Choose from four languages.`;
+const description =
+  "Choose a language for BlueSkyz Labs, which is building Sổ Trọ and Sổ Tâm, both in development: English, Tiếng Việt, 简体中文 or 繁體中文.";
 // Google reads the site name from WebSite markup on the domain root, so the
 // gateway carries the same Organization and WebSite JSON-LD as every page.
-const structuredData = [
-  organizationJsonLd(SITE.url, SITE.foundedYear),
-  websiteJsonLd(SITE.url),
-];
+const structuredData = [organizationJsonLd(SITE.url), websiteJsonLd(SITE.url)];
 const canonical = canonicalForPath("/", SITE.url);
 // Brand Kit v4 website Open Graph card (1200x630), same committed asset as every
 // BaseLayout page, so a shared gateway link carries the kit card.
@@ -271,7 +269,9 @@ const robotsNoindex = isNonProductionSiteUrl(SITE.url);
         <p>{SITE.proposition}</p>
         <p>
           Operating since{" "}
-          <time datetime={String(SITE.foundedYear)}>{SITE.foundedYear}</time>
+          <time datetime={String(SITE.operatingSinceYear)}>
+            {SITE.operatingSinceYear}
+          </time>
         </p>
         <a href="/en/about/">About BlueSkyz Labs</a>
       </section>

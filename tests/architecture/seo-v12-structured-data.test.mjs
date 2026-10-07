@@ -134,12 +134,11 @@ test("product pages pass registry fields, never literals, to the builder", () =>
 });
 
 test("site-wide Organization and WebSite are valid and share one Organization id", () => {
-  const org = organizationJsonLd(BASE, SITE.foundedYear);
+  const org = organizationJsonLd(BASE);
   const site = websiteJsonLd(BASE);
   assert.deepEqual(jsonLdProblems(org), []);
   assert.deepEqual(jsonLdProblems(site), []);
   assert.equal(org["@id"], `${BASE}/#organization`);
-  assert.equal(org.foundingDate, String(SITE.foundedYear));
   assert.equal(site.publisher["@id"], organizationId(BASE));
   for (const { facts } of publicRecords) {
     assert.equal(appFor(facts, "en").publisher["@id"], org["@id"]);

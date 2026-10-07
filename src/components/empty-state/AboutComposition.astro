@@ -39,7 +39,9 @@ const products = (await getPublicProducts()).map((product) => ({
 
 <p class="about-founded" data-organization-founding-year>
   {labelFor(SHARED_LABELS.operatingSince, lang)}{" "}
-  <time datetime={String(SITE.foundedYear)}>{SITE.foundedYear}</time>
+  <time datetime={String(SITE.operatingSinceYear)}>
+    {SITE.operatingSinceYear}
+  </time>
 </p>
 <div class="about-grid" data-about-composition>
   {products.length > 0 ? (
