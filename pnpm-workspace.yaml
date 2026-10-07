@@ -14,7 +14,7 @@ overrides:
   lighthouse: 13.4.1
   uuid: 11.1.1
   qs: 6.16.0
-  sharp: 0.35.4
+  sharp: 0.35.5
   unifont>undici: 8.10.2
   miniflare>undici: 7.29.1
   basic-ftp: 6.2.1
