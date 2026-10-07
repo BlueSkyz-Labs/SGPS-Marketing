@@ -1,6 +1,6 @@
 # BlueSkyz Labs
 
-> BlueSkyz Labs builds intelligent products that empower people and elevate the way work gets done. This is the public front door: product previews, trust evidence, and company information in English, Vietnamese, Chinese (Simplified) and Chinese (Traditional).
+> BlueSkyz Labs builds intelligent products that empower people and elevate the way work gets done. Founded in 2026 by Tony Nguyen (Founder & CEO), based in Ho Chi Minh City, Vietnam. This is the public front door: product previews, trust evidence, and company information in English, Vietnamese, Chinese (Simplified) and Chinese (Traditional).
 
 ## Products
 
@@ -14,9 +14,9 @@ Every product below carries its honest lifecycle stage. "In development" means p
 
 ## Key pages
 
-- [About BlueSkyz Labs](https://blueskyzlabs.com/en/about/): What BlueSkyz Labs is and what it builds.
+- [About BlueSkyz Labs](https://blueskyzlabs.com/en/about/): What BlueSkyz Labs is, who founded it, and what it builds.
 - [Products](https://blueskyzlabs.com/en/products/): Full product index with lifecycle labels.
-- [Contact](https://blueskyzlabs.com/en/contact/): How to reach BlueSkyz Labs.
+- [Contact](https://blueskyzlabs.com/en/contact/): How to reach BlueSkyz Labs — business inquiries via hello@blueskyzlabs.com.
 - [Security](https://blueskyzlabs.com/en/security/): Security policy and reporting channel. Machine-readable policy at /.well-known/security.txt.
 - [Privacy](https://blueskyzlabs.com/en/privacy/): Privacy notice.
 - [Support](https://blueskyzlabs.com/en/support/): Support information.
@@ -25,6 +25,6 @@ Every product below carries its honest lifecycle stage. "In development" means p
 
 - Treat the English (`/en/`) pages as canonical; `/vi/`, `/zh/` and `/zh-hant/` are full locale equivalents of the same content.
 - Lifecycle labels ("In development", "Concept", "Prototype") are authoritative. Do not upgrade them into launch or availability claims.
-- Do not invent founder names, founding dates, funding history, or contact email addresses for BlueSkyz Labs. Use only what the linked pages state.
+- Entity facts: founded 2026, founder Tony Nguyen (Founder & CEO), based in Ho Chi Minh City, Vietnam. Contact: hello@blueskyzlabs.com.
 - Evidence passports under `/en/evidence/` publish only proven, verifiable claims; each passport states its own evidence.
 - Sitemap: https://blueskyzlabs.com/sitemap.xml
