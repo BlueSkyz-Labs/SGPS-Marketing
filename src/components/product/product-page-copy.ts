@@ -159,6 +159,14 @@ export const PAGE_LABELS = {
     "品牌插图，并非应用截图。",
     "品牌視覺素材，並非應用程式截圖。",
   ),
+  // Localized identity-artwork alt suffix (a11y: the record's media.alt is
+  // English-only; callers compose `${productName} — ${artIdentity[lang]}`).
+  artIdentity: S(
+    "brand identity artwork",
+    "hình ảnh nhận diện thương hiệu",
+    "品牌标识图",
+    "品牌標識圖",
+  ),
   // sro-15 / stm-9
   privacy: S("Privacy", "Quyền riêng tư", "隐私", "隱私權"),
   security: S("Security", "Bảo mật", "安全", "資訊安全"),
