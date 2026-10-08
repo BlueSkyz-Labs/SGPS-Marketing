@@ -13,12 +13,29 @@ type ProductMedia = NonNullable<
  */
 interface Props {
   media: ProductMedia;
+  /** Localized override; falls back to the record's media.alt (English). */
+  alt?: string;
   loading?: "eager" | "lazy";
   transitionStyle?: string;
   continuity?: "media";
 }
 
-const { media, loading = "lazy", transitionStyle, continuity } = Astro.props;
+const { media, alt = media.alt, loading = "lazy", transitionStyle, continuity } = Astro.props;
+/**
+ * Perf 2026-10-08: identity art ships WebP derivatives (`identity-480.webp`,
+ * `identity-768.webp`, `identity.webp`) next to the PNG master. The PNG stays
+ * as `src` fallback (and for the provenance tests that pin it); browsers take
+ * the WebP from `srcset` — mobile drops from ~60KB to ~10KB.
+ */
+const webpSrc = (src: string, suffix: string) =>
+  src.replace(/\.png$/, `${suffix}.webp`);
+const srcSet = [
+  `${webpSrc(media.src, "-480")} 480w`,
+  `${webpSrc(media.src, "-768")} 768w`,
+  `${webpSrc(media.src, "")} ${media.width}w`,
+].join(", ");
+/** Identity art renders full-width of its figure (max-w-4xl stage). */
+const SIZES = "(min-width: 64rem) 56rem, calc(100vw - 2.5rem)";
 ---
 
 <div
@@ -30,7 +47,9 @@ const { media, loading = "lazy", transitionStyle, continuity } = Astro.props;
 >
   <img
     src={media.src}
-    alt={media.alt}
+    srcset={srcSet}
+    sizes={SIZES}
+    alt={alt}
     width={media.width}
     height={media.height}
     class="c3-product-visual__image"
