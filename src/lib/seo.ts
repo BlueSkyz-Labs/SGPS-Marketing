@@ -163,6 +163,12 @@ export function webPageJsonLd(
  * Only call for states where a review with evidence actually exists
  * ("reviewed", "source-linked"); other states have no review to report.
  */
+export type ClaimReviewState = "reviewed" | "source-linked";
+
+export function isClaimReviewState(state: string): state is ClaimReviewState {
+  return state === "reviewed" || state === "source-linked";
+}
+
 export function claimReviewJsonLd(
   siteUrl: string,
   pagePath: string,

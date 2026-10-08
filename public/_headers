@@ -10,19 +10,18 @@
 
 # Astro emits content-hashed filenames under /_astro/, so they are immutable.
 /_astro/*
-  Cache-Control: public, max-age=3153600, immutable
+  Cache-Control: public, max-age=31536000, immutable
 
-# Versioned font files, product art, icons and brand SVGs are content-stable:
-# a new asset ships under a new filename, so these are immutable too.
-# (Perf audit 2026-10-08: repeat-visit win on every page.)
-/fonts/*
-  Cache-Control: public, max-age=3153600, immutable
+# Font filenames include their upstream version; the stable public assets below
+# can be replaced in place, so let browsers refresh them regularly.
+/fonts/*.woff2
+  Cache-Control: public, max-age=31536000, immutable
 /products/*
-  Cache-Control: public, max-age=3153600, immutable
+  Cache-Control: public, max-age=3600
 /icons/*
-  Cache-Control: public, max-age=3153600, immutable
+  Cache-Control: public, max-age=3600
 /brand/*
-  Cache-Control: public, max-age=3153600, immutable
+  Cache-Control: public, max-age=3600
 
 # Stable workers.dev host (baked SITE.url may be a custom domain while this host still serves the same dist).
 https://blueskyz-web.thinhnguyen-km10.workers.dev/*

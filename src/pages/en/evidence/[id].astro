@@ -4,7 +4,7 @@ import Container from "@/components/layout/Container.astro";
 import EvidencePassport from "@/components/integrity/EvidencePassport.astro";
 import { getEvidencePassport, getEvidencePassportIds } from "@/lib/claims";
 import { getPublicProducts } from "@/lib/products";
-import { claimReviewJsonLd } from "@/lib/seo";
+import { claimReviewJsonLd, isClaimReviewState } from "@/lib/seo";
 import { SITE } from "@/data/site";
 
 export async function getStaticPaths() {
@@ -26,15 +26,15 @@ const title = passport
   : "Evidence";
 /** ClaimReview only when a review with evidence exists; the state's honest
  * label is the rating (no scores, per the site's truth-state grammar). */
-const CLAIM_STATE_LABELS: Record<string, string> = {
+const CLAIM_STATE_LABELS = {
   reviewed: "Reviewed",
   "source-linked": "Source-linked",
-};
+} as const;
 const claimReview =
-  passport && passport.state in CLAIM_STATE_LABELS
+  passport && isClaimReviewState(passport.state)
     ? [
         claimReviewJsonLd(SITE.url, `/en/evidence/${id}/`, {
-          claimText: passport.claim.en ?? passport.claim.en,
+          claimText: passport.claim.en,
           lang: "en",
           stateLabel: CLAIM_STATE_LABELS[passport.state],
           reviewedOn: passport.reviewedOn,

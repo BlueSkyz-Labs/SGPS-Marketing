@@ -114,9 +114,11 @@ const structuredData: Record<string, unknown>[] = isNotFoundPage
       websiteJsonLd(SITE.url),
       webPageJsonLd(SITE.url, path, fullTitle, description, currentLang),
     ];
-const breadcrumb = breadcrumbJsonLd(currentLang, path, SITE.url);
-if (breadcrumb) structuredData.push(breadcrumb);
-for (const node of extraJsonLd) structuredData.push(node);
+if (!isNotFoundPage) {
+  const breadcrumb = breadcrumbJsonLd(currentLang, path, SITE.url);
+  if (breadcrumb) structuredData.push(breadcrumb);
+  for (const node of extraJsonLd) structuredData.push(node);
+}
 const robotsNoindex = noindex || isNonProductionSiteUrl(SITE.url);
 /** Non-production origins never follow; only a deliberate noindex may. */
 const robotsContent =

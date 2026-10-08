@@ -20,7 +20,13 @@ interface Props {
   continuity?: "media";
 }
 
-const { media, alt = media.alt, loading = "lazy", transitionStyle, continuity } = Astro.props;
+const {
+  media,
+  alt = media.alt,
+  loading = "lazy",
+  transitionStyle,
+  continuity,
+} = Astro.props;
 /**
  * Perf 2026-10-08: identity art ships WebP derivatives (`identity-480.webp`,
  * `identity-768.webp`, `identity.webp`) next to the PNG master. The PNG stays
