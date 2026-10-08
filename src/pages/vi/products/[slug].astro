@@ -273,7 +273,10 @@ const isIdentityArt = media?.kind === "identity-art";
 
       {media && showcase ? (
         <figure class="m-0 mt-14 max-w-4xl" data-profile-identity-stage>
-          <ProductVisual media={media} alt={`${data.name} \u2014 ${PAGE_LABELS.artIdentity[lang]}`} />
+          <ProductVisual
+            media={media}
+            alt={`${data.name} \u2014 ${PAGE_LABELS.artIdentity[lang]}`}
+          />
           <figcaption class="mt-3 text-sm text-[var(--text-muted)]">
             {PAGE_LABELS.artCaption[lang]}
           </figcaption>

@@ -20,7 +20,13 @@ interface Props {
   continuity?: "media";
 }
 
-const { media, alt = media.alt, loading = "lazy", transitionStyle, continuity } = Astro.props;
+const {
+  media,
+  alt = media.alt,
+  loading = "lazy",
+  transitionStyle,
+  continuity,
+} = Astro.props;
 ---
 
 <div
