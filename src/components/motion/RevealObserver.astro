@@ -24,11 +24,20 @@
           }),
         { threshold: 0.15 },
       );
+      // Elite 2026-10-08: staggered entrances. Elements inside a
+      // [data-reveal-group] get --reveal-i (0-5) for cascading delays.
+      const groups = new Map<Element, number>();
       els.forEach((el) => {
         // Only elements that start below the fold are armed; anything
         // visible at load (possible LCP) is never hidden.
         if (el.getBoundingClientRect().top > innerHeight) {
           el.dataset.revealed = "false";
+          const group = el.closest("[data-reveal-group]");
+          if (group) {
+            const i = Math.min(groups.get(group) ?? 0, 5);
+            (el as HTMLElement).style.setProperty("--reveal-i", String(i));
+            groups.set(group, i + 1);
+          }
           io.observe(el);
         }
       });
