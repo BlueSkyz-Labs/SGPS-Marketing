@@ -176,8 +176,8 @@ const PRINCIPLE_DIMENSIONS: Record<
     evidence: {
       en: "Reportable channels and public routes you can check today.",
       vi: "Kênh báo cáo và các đường dẫn công khai có thể kiểm tra ngay hôm nay.",
-      zh: "今日即可核查的举报渠道与公开路径。",
-      "zh-hant": "今日即可核查的舉報管道與公開路徑。",
+      zh: "今日即可核查的报告渠道与公开路径。",
+      "zh-hant": "今日即可核查的報告管道與公開路徑。",
     },
     impact: {
       en: "Trust compounds through consistency, not promises.",

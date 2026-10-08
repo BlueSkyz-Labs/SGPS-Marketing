@@ -64,7 +64,7 @@ i18n:
     primaryActionLabel: "预览 FluentArc"
   # zh-Hant copy: machine-assisted (OpenCC s2twp), pending native review.
   zh-hant:
-    shortDescription: "以瀏覽器擴充功能為先、本地優先的方式，從真實工作和經過篩選的核心內容中學習職場英語。"
+    shortDescription: "以瀏覽器擴充功能為先、本機優先的方式，從真實工作和經過篩選的核心內容中學習職場英語。"
     jobs:
       - "將工作中遇到的英語轉化為可複用的職場表達"
       - "透過回憶與應用練習職場與 IT 英語"

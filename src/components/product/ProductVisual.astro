@@ -13,12 +13,20 @@ type ProductMedia = NonNullable<
  */
 interface Props {
   media: ProductMedia;
+  /** Localized override; falls back to the record's media.alt (English). */
+  alt?: string;
   loading?: "eager" | "lazy";
   transitionStyle?: string;
   continuity?: "media";
 }
 
-const { media, loading = "lazy", transitionStyle, continuity } = Astro.props;
+const {
+  media,
+  alt = media.alt,
+  loading = "lazy",
+  transitionStyle,
+  continuity,
+} = Astro.props;
 ---
 
 <div
@@ -30,7 +38,7 @@ const { media, loading = "lazy", transitionStyle, continuity } = Astro.props;
 >
   <img
     src={media.src}
-    alt={media.alt}
+    alt={alt}
     width={media.width}
     height={media.height}
     class="c3-product-visual__image"
