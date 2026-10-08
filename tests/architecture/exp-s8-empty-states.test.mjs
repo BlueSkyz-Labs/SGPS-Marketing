@@ -110,4 +110,3 @@ test("negative proof: detectors flag an injected e-mail, phone, founder and 151-
   assert.ok(wordCount(Array(151).fill("w").join(" ")) > 150);
   assert.ok(wordCount(Array(150).fill("w").join(" ")) <= 150);
 });
-

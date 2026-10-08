@@ -90,4 +90,3 @@ export const EMPTY_STATE_COPY = {
     "zh-hant": "目前階段",
   },
 } as const satisfies Record<string, LocalizedLabel>;
-

@@ -47,8 +47,7 @@ const products = (await getPublicProducts()).map((product) => ({
 
 const aboutEntry = await getEntry("pages", `${lang}-about`);
 const aboutContent = aboutEntry?.data.sections?.content as
-  | AboutContent
-  | undefined;
+  AboutContent | undefined;
 const founderName =
   typeof aboutContent?.founder_name === "string"
     ? aboutContent.founder_name
@@ -71,9 +70,7 @@ const founderLocation =
       <h2 id="about-founder" class="about-label">
         {founderName}
       </h2>
-      {founderTitle && (
-        <p class="about-founder__title">{founderTitle}</p>
-      )}
+      {founderTitle && <p class="about-founder__title">{founderTitle}</p>}
       <p class="about-founder__meta text-pretty">
         {labelFor(EMPTY_STATE_COPY.aboutFounded, lang)} {foundedYear} ·{" "}
         {founderLocation}

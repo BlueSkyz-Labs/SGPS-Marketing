@@ -277,4 +277,3 @@ export const PUBLIC_STATIC_PATHS = [
 export function isNoindexPath(path: string): boolean {
   return /^\/(en|vi|zh|zh-hant)\/dossier\/print\/$/.test(path);
 }
-
