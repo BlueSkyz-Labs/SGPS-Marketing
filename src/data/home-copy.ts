@@ -73,8 +73,8 @@ export const HOME_PROOF_POINTS: Localized[] = [
   {
     en: "Electricity bills from meter readings, with each tier shown",
     vi: "Tính tiền điện từ số công tơ, hiện rõ từng bậc giá",
-    zh: "根据电表读数计算电费，并列出每一档",
-    "zh-hant": "依電表度數計算電費，並列出每一級",
+    zh: "根据电表读数计算电费，并清楚列出每一档",
+    "zh-hant": "依電表度數計算電費，並清楚列出每一級",
   },
   {
     en: "Receipts, with a separate step to confirm money received",
