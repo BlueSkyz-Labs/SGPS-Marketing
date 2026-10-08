@@ -3,11 +3,10 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
 import { PAGE_META } from "@/data/page-meta";
 import Container from "@/components/layout/Container.astro";
 import PageHeader from "@/components/layout/PageHeader.astro";
-import SafeAction from "@/components/integrity/SafeAction.astro";
 import ProductSignInLane from "@/components/empty-state/ProductSignInLane.astro";
 import PublicContactEmails from "@/components/empty-state/PublicContactEmails.astro";
 import { EMPTY_STATE_COPY } from "@/data/empty-state-copy";
-import { SECURITY_ADVISORY_URL, labelFor } from "@/data/site";
+import { labelFor } from "@/data/site";
 ---
 
 <BaseLayout
@@ -23,19 +22,16 @@ import { SECURITY_ADVISORY_URL, labelFor } from "@/data/site";
         lede={labelFor(EMPTY_STATE_COPY.contactLede, "vi")}
       />
       <ul class="mt-12 grid gap-4 sm:grid-cols-2">
-        <li class="flex min-w-0 flex-col rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-raised)] p-6">
-          <h2 class="text-lg font-semibold tracking-tight">Bảo mật</h2>
-          <p class="mt-2 flex-1 text-sm leading-relaxed text-[var(--text-secondary)]">
-            Nếu bạn nghi ngờ có lỗ hổng bảo mật, hãy báo riêng qua GitHub.
+        <li class="flex min-w-0 flex-col justify-center rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-raised)] p-6">
+          <a
+            href="/vi/security/"
+            class="inline-flex min-h-11 items-center gap-2 text-lg font-semibold tracking-tight text-[var(--action-primary)] no-underline hover:underline"
+          >
+            Bảo mật →
+          </a>
+          <p class="mt-2 text-sm leading-relaxed text-[var(--text-secondary)]">
+            Xem trang Bảo mật
           </p>
-          <div class="mt-5">
-            <SafeAction
-              href={SECURITY_ADVISORY_URL}
-              label="Mở báo cáo lỗ hổng riêng tư"
-              boundary="private-reporting"
-              lang="vi"
-            />
-          </div>
         </li>
         <ProductSignInLane lang="vi" />
         <PublicContactEmails
