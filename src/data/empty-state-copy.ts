@@ -9,10 +9,10 @@ import type { LocalizedLabel } from "@/data/site";
  */
 export const EMPTY_STATE_COPY = {
   contactLede: {
-    en: "Our business inbox is on its way. For now, here is how to reach us.",
-    vi: "Hộp thư công việc của chúng tôi sắp sẵn sàng. Hiện tại, đây là cách liên hệ với chúng tôi.",
-    zh: "我们的商务邮箱即将就绪。目前，你可以通过以下方式联系我们。",
-    "zh-hant": "我們的商務電子信箱即將就緒。目前，你可以透過以下方式聯絡我們。",
+    en: "For business enquiries or other requests, choose the appropriate contact route below.",
+    vi: "Để liên hệ kinh doanh hoặc gửi yêu cầu khác, hãy chọn kênh phù hợp bên dưới.",
+    zh: "如需商务或其他咨询，请从下方选择合适的联系渠道。",
+    "zh-hant": "如需商務或其他諮詢，請從下方選擇合適的聯絡管道。",
   },
   signInHeading: {
     en: "Product sign-in",
