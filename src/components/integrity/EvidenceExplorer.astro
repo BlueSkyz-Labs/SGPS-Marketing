@@ -95,7 +95,6 @@ const graphJson = passport
       id: passport.id,
       claim: passport.claim[lang],
       state: passport.state,
-      reviewedOn: passport.reviewedOn ?? null,
       evidence: passport.evidence.map((ref) => ({
         id: ref.id,
         label: ref.label[lang],
@@ -113,7 +112,10 @@ const graphJson = passport
     data-evidence-explorer
     data-msg-expand={labels.expand}
     data-msg-collapse={labels.collapse}
-    data-msg-steps={labels.steps}
+    data-msg-claim={labels.stepClaim}
+    data-msg-sources={labels.stepSources}
+    data-msg-state={labels.stepState}
+    data-msg-boundary={labels.stepBoundary}
   >
     {/* Static baseline: full passport as semantic HTML (SEO + no-JS) */}
     <ClaimHeading
@@ -182,7 +184,11 @@ const graphJson = passport
 
     {/* Graph data for the client enhancer */}
     {graphJson ? (
-      <script type="application/json" data-evidence-graph set:html={graphJson} />
+      <script
+        type="application/json"
+        data-evidence-graph
+        set:html={graphJson}
+      />
     ) : null}
   </article>
 ) : null}
@@ -201,12 +207,15 @@ const graphJson = passport
     margin-block: 1.5rem;
   }
   .evidence-explorer__chain-title {
-    font-size: 0.875rem;
+    font-size: var(--size-2);
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.08em;
     color: var(--text-muted);
     margin-bottom: 0.75rem;
+  }
+  :lang(vi) .evidence-explorer__chain-title {
+    text-transform: none;
   }
   .evidence-explorer__steps {
     list-style: none;

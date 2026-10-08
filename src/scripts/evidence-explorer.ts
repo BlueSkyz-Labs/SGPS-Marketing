@@ -24,7 +24,6 @@ interface EvidenceGraph {
   id: string;
   claim: string;
   state: string;
-  reviewedOn: string | null;
   evidence: EvidenceRef[];
   hasBoundary: boolean;
 }
@@ -65,14 +64,18 @@ function enhance(root: HTMLElement): void {
 
   const msgExpand = root.dataset.msgExpand ?? "Show details";
   const msgCollapse = root.dataset.msgCollapse ?? "Hide details";
+  const msgClaim = root.dataset.msgClaim ?? "Claim";
+  const msgSources = root.dataset.msgSources ?? "Sources";
+  const msgState = root.dataset.msgState ?? "Verification state";
+  const msgBoundary = root.dataset.msgBoundary ?? "Boundary";
 
   // Build steps: claim → sources → state → boundary (if present)
-  const steps: { key: string; title: string; body: HTMLElement }[] = [];
+  const steps: { label: string; title: string; body: HTMLElement }[] = [];
 
   // Step 1: claim (already visible as heading; step links to it)
   const claimStep = document.createElement("div");
   claimStep.textContent = graph.claim;
-  steps.push({ key: "claim", title: "1", body: claimStep });
+  steps.push({ label: msgClaim, title: "1", body: claimStep });
 
   // Step 2: sources
   const sourcesDiv = document.createElement("div");
@@ -87,31 +90,38 @@ function enhance(root: HTMLElement): void {
     sourcesUl.appendChild(li);
   }
   sourcesDiv.appendChild(sourcesUl);
-  steps.push({ key: "sources", title: "2", body: sourcesDiv });
+  steps.push({ label: msgSources, title: "2", body: sourcesDiv });
 
   // Step 3: state
   const stateDiv = document.createElement("div");
-  stateDiv.textContent = graph.state;
-  if (graph.reviewedOn) {
-    const t = document.createElement("time");
-    t.dateTime = graph.reviewedOn;
-    t.textContent = ` — ${graph.reviewedOn}`;
-    stateDiv.appendChild(t);
+  stateDiv.textContent =
+    root.querySelector(".truth-state__label")?.textContent?.trim() ??
+    graph.state;
+  const reviewedTime = root.querySelector<HTMLTimeElement>(
+    "[data-passport-review] time",
+  );
+  if (reviewedTime) {
+    stateDiv.append(
+      document.createTextNode(" — "),
+      reviewedTime.cloneNode(true),
+    );
   }
-  steps.push({ key: "state", title: "3", body: stateDiv });
+  steps.push({ label: msgState, title: "3", body: stateDiv });
 
   // Step 4: boundary (if present)
   if (graph.hasBoundary) {
     const bDiv = document.createElement("div");
-    const staticBoundary = root.querySelector("[data-evidence-static-boundary]");
+    const staticBoundary = root.querySelector(
+      "[data-evidence-static-boundary]",
+    );
     if (staticBoundary) {
       bDiv.appendChild(staticBoundary.cloneNode(true));
     }
-    steps.push({ key: "boundary", title: "4", body: bDiv });
+    steps.push({ label: msgBoundary, title: "4", body: bDiv });
   }
 
   // Render stepper
-  stepsOl.innerHTML = "";
+  stepsOl.replaceChildren();
   const buttons: HTMLButtonElement[] = [];
   steps.forEach((step, i) => {
     const li = document.createElement("li");
@@ -122,6 +132,8 @@ function enhance(root: HTMLElement): void {
     btn.className = "evidence-explorer__step-btn";
     btn.setAttribute("aria-expanded", "false");
     btn.setAttribute("aria-controls", `ee-panel-${graph.id}-${i}`);
+    btn.dataset.stepLabel = step.label;
+    btn.setAttribute("aria-label", `${msgExpand}: ${step.label}`);
 
     const num = document.createElement("span");
     num.className = "evidence-explorer__step-num";
@@ -130,7 +142,7 @@ function enhance(root: HTMLElement): void {
 
     const label = document.createElement("span");
     label.className = "evidence-explorer__step-label";
-    label.textContent = step.key;
+    label.textContent = step.label;
 
     const chev = document.createElement("span");
     chev.className = "evidence-explorer__step-chev";
@@ -150,7 +162,7 @@ function enhance(root: HTMLElement): void {
       // Accordion: close others
       for (const b of buttons) {
         b.setAttribute("aria-expanded", "false");
-        b.setAttribute("aria-label", msgExpand);
+        b.setAttribute("aria-label", `${msgExpand}: ${b.dataset.stepLabel}`);
         const p = document.getElementById(
           b.getAttribute("aria-controls") ?? "",
         );
@@ -158,7 +170,7 @@ function enhance(root: HTMLElement): void {
       }
       if (!open) {
         btn.setAttribute("aria-expanded", "true");
-        btn.setAttribute("aria-label", msgCollapse);
+        btn.setAttribute("aria-label", `${msgCollapse}: ${step.label}`);
         panel.hidden = false;
       }
     });
