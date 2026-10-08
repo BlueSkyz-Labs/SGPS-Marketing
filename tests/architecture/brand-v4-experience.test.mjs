@@ -47,3 +47,12 @@ test("v4 copy library description is the public brand proposition", () => {
   );
   assert.match(site, /A higher perspective builds a brighter tomorrow\./);
 });
+
+test("footer tagline keeps a space between lead and accent (F-02)", () => {
+  const footer = readFileSync("src/components/layout/Footer.astro", "utf8");
+  // F-02 (2026-10-07): a whitespace-only literal between the tagline segments
+  // is dropped at compile time, rendering "Nâng tầm.Tác động." on production.
+  // The separating space must live inside a dynamic expression.
+  assert.doesNotMatch(footer, /\{taglineLead\}\{" "\}/);
+  assert.match(footer, /\$\{taglineLead\} `\}/);
+});
