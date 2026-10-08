@@ -9,10 +9,10 @@ import type { LocalizedLabel } from "@/data/site";
  */
 export const EMPTY_STATE_COPY = {
   contactLede: {
-    en: "No business mailbox is published yet. We will list it here once it is approved.",
-    vi: "Chưa có hộp thư công việc được công bố. Chúng tôi sẽ đăng tại đây khi được phê duyệt.",
-    zh: "商务邮箱尚未公布。获批后将在此列出。",
-    "zh-hant": "商務電子信箱尚未公布。核准後將在此列出。",
+    en: "Our business inbox is on its way. For now, here is how to reach us.",
+    vi: "Hộp thư công việc của chúng tôi sắp sẵn sàng. Hiện tại, đây là cách liên hệ với chúng tôi.",
+    zh: "我们的商务邮箱即将就绪。目前，您可以通过以下方式联系我们。",
+    "zh-hant": "我們的商務電子信箱即將就緒。目前，您可以透過以下方式聯絡我們。",
   },
   signInHeading: {
     en: "Product sign-in",
@@ -27,16 +27,16 @@ export const EMPTY_STATE_COPY = {
     "zh-hant": "已在使用某款產品？直接前往其登入頁。",
   },
   notPublished: {
-    en: "Not yet published",
-    vi: "Chưa công bố",
-    zh: "尚未公布",
-    "zh-hant": "尚未公布",
+    en: "Coming soon",
+    vi: "Sắp có",
+    zh: "即将推出",
+    "zh-hant": "即將推出",
   },
   businessPending: {
-    en: "Published here once approved.",
-    vi: "Sẽ được công bố tại đây khi được phê duyệt.",
-    zh: "获批后在此公布。",
-    "zh-hant": "核准後於此公布。",
+    en: "Our business inbox is on its way.",
+    vi: "Hộp thư công việc của chúng tôi sắp sẵn sàng.",
+    zh: "我们的商务邮箱即将就绪。",
+    "zh-hant": "我們的商務電子信箱即將就緒。",
   },
   aboutCheck: {
     en: "What you can check",
