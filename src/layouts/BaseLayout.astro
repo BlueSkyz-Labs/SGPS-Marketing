@@ -18,6 +18,7 @@ import {
   organizationJsonLd,
   safeJsonLd,
   websiteJsonLd,
+  webPageJsonLd,
 } from "@/lib/seo";
 import { getLanguageFromPath } from "@/lib/i18n";
 import { breadcrumbJsonLd } from "@/lib/breadcrumbs";
@@ -42,6 +43,8 @@ interface Props {
   lensBoundaries?: boolean;
   /** Authored scene marker consumed by the global header (C3-A Task 4). */
   scene?: Scene;
+  /** Page-specific JSON-LD nodes appended after the site-wide graph. */
+  extraJsonLd?: Record<string, unknown>[];
 }
 
 const {
@@ -55,6 +58,7 @@ const {
   lensTraces = true,
   lensBoundaries = true,
   scene = DEFAULT_SCENE,
+  extraJsonLd = [],
 } = Astro.props;
 
 /** One separator, descriptor first, brand last. A descriptor that already
@@ -105,9 +109,16 @@ const ogImageMeta = ogImage === defaultOgImagePath() ? DEFAULT_OG_IMAGE : null;
 const ogImageAlt = DEFAULT_OG_IMAGE_ALT[currentLang];
 const structuredData: Record<string, unknown>[] = isNotFoundPage
   ? []
-  : [organizationJsonLd(SITE.url), websiteJsonLd(SITE.url)];
-const breadcrumb = breadcrumbJsonLd(currentLang, path, SITE.url);
-if (breadcrumb) structuredData.push(breadcrumb);
+  : [
+      organizationJsonLd(SITE.url),
+      websiteJsonLd(SITE.url),
+      webPageJsonLd(SITE.url, path, fullTitle, description, currentLang),
+    ];
+if (!isNotFoundPage) {
+  const breadcrumb = breadcrumbJsonLd(currentLang, path, SITE.url);
+  if (breadcrumb) structuredData.push(breadcrumb);
+  for (const node of extraJsonLd) structuredData.push(node);
+}
 const robotsNoindex = noindex || isNonProductionSiteUrl(SITE.url);
 /** Non-production origins never follow; only a deliberate noindex may. */
 const robotsContent =
