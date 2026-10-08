@@ -83,6 +83,35 @@ const SHAPES = {
     ...(isAbsoluteHttp(n.url) ? [] : ["url"]),
     ...(n.publisher?.["@type"] === "Organization" ? [] : ["publisher"]),
   ],
+  WebPage: (n) => [
+    ...(isText(n.name) ? [] : ["name"]),
+    ...(isText(n.description) ? [] : ["description"]),
+    ...(isAbsoluteHttp(n.url) ? [] : ["url"]),
+    ...(isText(n.inLanguage) ? [] : ["inLanguage"]),
+    ...(n.isPartOf?.["@type"] === "WebSite" && isAbsoluteHttp(n.isPartOf["@id"])
+      ? []
+      : ["isPartOf"]),
+  ],
+  ClaimReview: (n) => [
+    ...(isText(n.claimReviewed) ? [] : ["claimReviewed"]),
+    ...(isAbsoluteHttp(n.url) ? [] : ["url"]),
+    ...(isText(n.inLanguage) ? [] : ["inLanguage"]),
+    ...(n.author?.["@type"] === "Organization" &&
+    isAbsoluteHttp(n.author["@id"]) &&
+    isAbsoluteHttp(n.author.url)
+      ? []
+      : ["author"]),
+    ...(n.reviewRating?.["@type"] === "Rating" &&
+    isText(n.reviewRating.alternateName) &&
+    n.reviewRating.ratingValue === undefined
+      ? []
+      : ["reviewRating"]),
+    ...(n.itemReviewed?.["@type"] === "Claim" &&
+    isText(n.itemReviewed.text) &&
+    n.itemReviewed.author?.["@type"] === "Organization"
+      ? []
+      : ["itemReviewed"]),
+  ],
   SoftwareApplication: (n) => [
     ...(isText(n.name) ? [] : ["name"]),
     ...(isText(n.description) ? [] : ["description"]),

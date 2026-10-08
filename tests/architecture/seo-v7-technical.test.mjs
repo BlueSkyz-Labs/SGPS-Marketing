@@ -10,6 +10,7 @@ import test from "node:test";
 import {
   DEFAULT_OG_IMAGE,
   DEFAULT_OG_IMAGE_ALT,
+  isClaimReviewState,
   isNoindexPath,
   organizationJsonLd,
   PUBLIC_STATIC_PATHS,
@@ -21,6 +22,14 @@ const LANGS = ["en", "vi", "zh", "zh-hant"];
 const gateway = readFileSync("src/pages/index.astro", "utf8");
 const layout = readFileSync("src/layouts/BaseLayout.astro", "utf8");
 const sitemap = readFileSync("src/pages/sitemap.xml.ts", "utf8");
+
+test("ClaimReview only supports truth states with an actual review", () => {
+  assert.equal(isClaimReviewState("reviewed"), true);
+  assert.equal(isClaimReviewState("source-linked"), true);
+  for (const state of ["public", "draft", "not-published", "unknown"]) {
+    assert.equal(isClaimReviewState(state), false, state);
+  }
+});
 
 // --- gateway JSON-LD ------------------------------------------------------
 
@@ -242,7 +251,10 @@ test("negative proof: an alternate filter that keeps the current locale is detec
 // SEO-12/21: noindex 404 pages carry no hreflang and no site-level JSON-LD.
 const guards404 = (src) =>
   /const isNotFoundPage = \/\\\/404\\\/\?\$\/\.test\(path\)/.test(src) &&
-  /isNotFoundPage\s*\?\s*\[\]\s*:\s*\[organizationJsonLd/.test(src) &&
+  /isNotFoundPage\s*\?\s*\[\]\s*:\s*\[\s*organizationJsonLd/.test(src) &&
+  /if\s*\(!isNotFoundPage\)\s*\{[\s\S]*?for\s*\(const node of extraJsonLd\)\s*structuredData\.push\(node\);[\s\S]*?\}/.test(
+    src,
+  ) &&
   /\{isNotFoundPage\s*\?\s*null\s*:\s*hreflangLinks/.test(src) &&
   /\{isNotFoundPage \? null : \(\s*<link\s+rel="alternate"\s+hreflang="x-default"/.test(
     src,
@@ -266,9 +278,15 @@ test("404 pages drop hreflang, x-default and Organization/WebSite JSON-LD", () =
 
 test("negative proof: restoring site JSON-LD on 404 is rejected", () => {
   const broken = layout.replace(
-    /isNotFoundPage\s*\?\s*\[\]\s*:\s*\[organizationJsonLd/,
+    /isNotFoundPage\s*\?\s*\[\]\s*:\s*\[\s*organizationJsonLd/,
     "[organizationJsonLd",
   );
+  assert.notEqual(broken, layout);
+  assert.equal(guards404(broken), false);
+});
+
+test("negative proof: appending page JSON-LD to a 404 is rejected", () => {
+  const broken = layout.replace("if (!isNotFoundPage) {", "if (true) {");
   assert.notEqual(broken, layout);
   assert.equal(guards404(broken), false);
 });
