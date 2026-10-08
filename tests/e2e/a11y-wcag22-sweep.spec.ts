@@ -123,6 +123,9 @@ test.describe("WCAG 2.2 AA sweep", () => {
       testInfo.project.name !== "chromium",
       "engine-independent sweep: runs once, on the chromium project",
     );
+    // The full-site crawl covers every public locale and can exceed the
+    // default 30s hook budget when the browser shard is under load.
+    test.setTimeout(90_000);
     const page = await browser.newPage();
     routes = await crawl(page);
     await page.close();
