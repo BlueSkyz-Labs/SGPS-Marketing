@@ -34,7 +34,7 @@ const claimReview =
   passport && passport.state in CLAIM_STATE_LABELS
     ? [
         claimReviewJsonLd(SITE.url, `/zh-hant/evidence/${id}/`, {
-          claimText: passport.claim.zh-hant ?? passport.claim.en,
+          claimText: passport.claim["zh-hant"] ?? passport.claim.en,
           lang: "zh-hant",
           stateLabel: CLAIM_STATE_LABELS[passport.state],
           reviewedOn: passport.reviewedOn,
