@@ -11,8 +11,8 @@ export const EMPTY_STATE_COPY = {
   contactLede: {
     en: "Our business inbox is on its way. For now, here is how to reach us.",
     vi: "Hộp thư công việc của chúng tôi sắp sẵn sàng. Hiện tại, đây là cách liên hệ với chúng tôi.",
-    zh: "我们的商务邮箱即将就绪。目前，您可以通过以下方式联系我们。",
-    "zh-hant": "我們的商務電子信箱即將就緒。目前，您可以透過以下方式聯絡我們。",
+    zh: "我们的商务邮箱即将就绪。目前，你可以通过以下方式联系我们。",
+    "zh-hant": "我們的商務電子信箱即將就緒。目前，你可以透過以下方式聯絡我們。",
   },
   signInHeading: {
     en: "Product sign-in",
