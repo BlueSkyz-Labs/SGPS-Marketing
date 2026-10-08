@@ -53,8 +53,8 @@ export function organizationJsonLd(siteUrl: string) {
     "@id": organizationId(siteUrl),
     name: "BlueSkyz Labs",
     url: siteRootUrl(siteUrl),
-    // Square BlueSkyz mark (Owner decision F11, 2026-10-01). No sameAs and no
-    // contactPoint: those stay absent until the Owner supplies real profiles.
+    // Square BlueSkyz mark (Owner decision F11, 2026-10-01). No sameAs,
+    // contactPoint, founder or legal founding date is asserted here.
     logo: absoluteUrl(siteUrl, ORGANIZATION_LOGO_PATH),
   } as const;
 }

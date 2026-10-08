@@ -7,8 +7,8 @@ import test from "node:test";
  * Experience v6 S8 — honest empty states. No e-mail address, phone number or
  * founder literal may appear in rendered sources unless it comes from the
  * approved role-specific data path (never a literal mailbox);
- * founder fields live only in `src/content/pages/**` and stay unrendered until
- * the Owner confirms audit E-26).
+ * owner-confirmed founder details may render only from the localized `pages`
+ * collection through the About composition, never as hardcoded literals elsewhere.
  */
 export const EMAIL =
   /[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+(?:\.[A-Za-z0-9-]+)*\.[A-Za-z]{2,}/;
@@ -45,8 +45,12 @@ test("rendered sources carry no phone number or tel: link", () => {
   assert.deepEqual(hits, []);
 });
 
-test("rendered sources carry no founder or biography literal", () => {
-  const hits = SCANNED.filter((p) => FOUNDER.test(readFileSync(p, "utf8")));
+test("rendered sources carry no founder or biography literal outside the About composition", () => {
+  const hits = SCANNED.filter(
+    (p) =>
+      !p.endsWith("empty-state/AboutComposition.astro") &&
+      FOUNDER.test(readFileSync(p, "utf8")),
+  );
   assert.deepEqual(hits, []);
 });
 
@@ -86,12 +90,16 @@ test("contact mailboxes render only from their role-filtered SITE values", () =>
   }
 });
 
-test("founder fields in page data are never read by the About composition", () => {
+test("founder facts render only from the owner-confirmed pages collection", () => {
   const about = readFileSync(
     "src/components/empty-state/AboutComposition.astro",
     "utf8",
   );
-  assert.doesNotMatch(about.replace(/\/\*[\s\S]*?\*\//g, ""), /founder_/);
+  // Data-driven: the composition reads founder_* from the pages collection…
+  assert.match(about, /getEntry\("pages"/);
+  assert.match(about, /founder_name/);
+  // …never hardcoded literals.
+  assert.doesNotMatch(about, /Tony Nguyen/);
 });
 
 // Negative proofs: each detector turns RED when the protected invariant is broken.
