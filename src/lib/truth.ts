@@ -1,3 +1,5 @@
+import { publicMailboxForRole } from "./public-mailbox.ts";
+
 export interface PublicTruthInput {
   siteUrl?: string;
   contactEmail?: string;
@@ -96,12 +98,6 @@ function isCanonicalPublicSiteUrl(value: string | undefined): boolean {
   }
 }
 
-function isPlausibleEmail(value: string | undefined): boolean {
-  if (!value) return false;
-  // Minimal shape only — do not invent corporate addresses.
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
-}
-
 export function validatePublicTruth(input: PublicTruthInput): string[] {
   const errors: string[] = [];
   if (!isCanonicalPublicSiteUrl(input.siteUrl)) {
@@ -109,11 +105,15 @@ export function validatePublicTruth(input: PublicTruthInput): string[] {
       `PUBLIC_SITE_URL must be the canonical BlueSkyz Labs origin ${CANONICAL_PUBLIC_SITE_ORIGIN}`,
     );
   }
-  if (!isPlausibleEmail(input.contactEmail)) {
-    errors.push("PUBLIC_CONTACT_EMAIL is required");
+  if (!publicMailboxForRole(input.contactEmail, "contact")) {
+    errors.push(
+      "PUBLIC_CONTACT_EMAIL must be the DEC-038 contact mailbox hello@blueskyzlabs.com",
+    );
   }
-  if (!isPlausibleEmail(input.securityEmail)) {
-    errors.push("PUBLIC_SECURITY_EMAIL is required");
+  if (!publicMailboxForRole(input.securityEmail, "security")) {
+    errors.push(
+      "PUBLIC_SECURITY_EMAIL must be the DEC-038 security mailbox security@blueskyzlabs.com",
+    );
   }
   return errors;
 }

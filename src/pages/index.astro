@@ -15,8 +15,8 @@ import { isNonProductionSiteUrl } from "@/lib/truth";
 
 // Language gateway: indexable and the home cluster's x-default (Owner
 // decision F16, 2026-10-01). Single all-locale title and description.
-// English-first and single-language: the page is a language selector, so the
-// title says so and the description names the four languages by endonym.
+// English-first and single-language: preserve the language selector while
+// exposing the same organization facts as About to crawlers and no-JS users.
 const title = "BlueSkyz Labs | Choose your language";
 const description =
   "Choose a language for BlueSkyz Labs, which is building Sổ Trọ and Sổ Tâm, both in development: English, Tiếng Việt, 简体中文 or 繁體中文.";
@@ -177,6 +177,36 @@ const robotsNoindex = isNonProductionSiteUrl(SITE.url);
         color: var(--muted);
         font-size: var(--size-3);
       }
+      .company {
+        display: grid;
+        gap: 0.5rem;
+        margin: 0 0 2rem;
+      }
+      .company h2 {
+        margin: 0;
+        font-size: var(--size-4);
+        font-weight: 650;
+        line-height: 1.3;
+      }
+      .company p {
+        margin: 0;
+        color: var(--muted);
+        font-size: var(--size-2);
+      }
+      .company a {
+        display: inline-flex;
+        align-items: center;
+        justify-self: center;
+        min-height: 2.75rem;
+        color: var(--accent);
+        font-size: var(--size-2);
+        font-weight: 600;
+        text-underline-offset: 0.2em;
+      }
+      .company a:focus-visible {
+        outline: 3px solid var(--accent);
+        outline-offset: 2px;
+      }
       nav {
         display: grid;
         grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -238,6 +268,17 @@ const robotsNoindex = isNonProductionSiteUrl(SITE.url);
         <span lang="zh-Hans">选择语言</span> ·
         <span lang="zh-Hant">選擇語言</span>
       </p>
+      <section class="company" aria-labelledby="company-name">
+        <h2 id="company-name">{SITE.name}</h2>
+        <p>{SITE.proposition}</p>
+        <p>
+          Operating since{" "}
+          <time datetime={String(SITE.operatingSinceYear)}>
+            {SITE.operatingSinceYear}
+          </time>
+        </p>
+        <a href="/en/about/">About BlueSkyz Labs</a>
+      </section>
       <nav aria-label="Language">
         <a href="/vi/" data-language-choice="vi" lang="vi" hreflang="vi">
           Tiếng Việt

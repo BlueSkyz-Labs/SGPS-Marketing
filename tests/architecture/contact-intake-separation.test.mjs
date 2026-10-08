@@ -12,18 +12,23 @@ const cases = [
 for (const { lang, boundary } of cases) {
   test(`${lang}: business and security remain separate`, () => {
     const page = readFileSync(`src/pages/${lang}/contact.astro`, "utf8");
-    assert.match(page, /hasBusinessEmail = Boolean\(SITE\.contactEmail\)/);
-    assert.match(page, /mailto:\$\{SITE\.contactEmail\}/);
+    assert.match(page, /<PublicContactEmails/);
     assert.match(page, /SECURITY_ADVISORY_URL/);
     assert.match(page, /boundary="private-reporting"/);
-    assert.doesNotMatch(page, /\{!hasBusinessEmail \? \(/);
     assert.ok(page.includes(boundary));
-    assert.doesNotMatch(
-      page,
-      /support@blueskyzlabs\.com|security@blueskyzlabs\.com/,
-    );
+    assert.doesNotMatch(page, /SITE\.securityEmail/);
   });
 }
+
+test("mailbox roles on Contact are filtered before rendering", () => {
+  const component = readFileSync(
+    "src/components/empty-state/PublicContactEmails.astro",
+    "utf8",
+  );
+  assert.match(component, /SITE\.contactEmail/);
+  assert.match(component, /SITE\.supportEmail/);
+  assert.doesNotMatch(component, /SITE\.securityEmail|SITE\.privacyEmail/);
+});
 
 test("mutated security fallback fails", () => {
   const source = readFileSync("src/pages/en/contact.astro", "utf8");

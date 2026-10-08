@@ -21,9 +21,13 @@ test("trust ledger uses only truthful states and evidence kinds", () => {
   );
   assert.match(ledger, /evidenceKind: "route" \| "private-reporting";/);
 
-  const states = [...ledger.matchAll(/state:\s*"([^"]+)",/g)].map((m) => m[1]);
-  assert.equal(states.length, 3, "expected exactly three ledger states");
-  for (const state of states) {
+  const stateEntries = [
+    ...ledger.matchAll(
+      /state:\s*(?:"([^"]+)"|SITE\.supportEmail\s*\?\s*"([^"]+)"\s*:\s*"([^"]+)"),/g,
+    ),
+  ];
+  assert.equal(stateEntries.length, 3, "expected exactly three ledger states");
+  for (const state of stateEntries.flatMap((m) => m.slice(1).filter(Boolean))) {
     assert.ok(
       ["available", "not-published"].includes(state),
       `invalid trust state: ${state}`,
