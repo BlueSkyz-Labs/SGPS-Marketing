@@ -56,6 +56,9 @@ test("public About products and status labels come from the public registry", ()
 test("mailbox projection accepts only the address assigned to its DEC-038 role", () => {
   const allowed = [
     ["hello@blueskyzlabs.com", "contact"],
+    // Owner-approved temporary public contact fallback (2026-10-08).
+    // Founder mailbox must never be usable for a security-reporting role.
+    ["tony@blueskyzlabs.com", "security"],
     ["support@blueskyzlabs.com", "support"],
     ["privacy@blueskyzlabs.com", "privacy"],
     ["security@blueskyzlabs.com", "security"],
