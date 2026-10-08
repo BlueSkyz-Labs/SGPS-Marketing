@@ -1,4 +1,5 @@
 import type { LocalizedText } from "../data/integrity.ts";
+import { SITE } from "./site.ts";
 export type TrustState = "available" | "not-published";
 
 export interface TrustLedgerEntry {
@@ -15,7 +16,7 @@ export interface TrustLedgerEntry {
  * Every entry must be derivable from facts already encoded by this site.
  * A missing fact is `not-published` — never a guessed assurance status.
  *
- * Support is `not-published` while `SITE.contactEmail` is absent: the /support
+ * Support is `not-published` while `SITE.supportEmail` is absent: the /support
  * page says no general support mailbox is published, so the ledger must not
  * call the lane "available". Its summary reuses that page's own wording. This
  * is the build-default truth; a build that publishes a mailbox is described by
@@ -65,7 +66,7 @@ export const TRUST_LEDGER: TrustLedgerEntry[] = [
   },
   {
     id: "support",
-    state: "not-published",
+    state: SITE.supportEmail ? "available" : "not-published",
     href: {
       en: "/en/support/",
       vi: "/vi/support/",
@@ -73,12 +74,19 @@ export const TRUST_LEDGER: TrustLedgerEntry[] = [
       "zh-hant": "/zh-hant/support/",
     },
     label: { en: "Support", vi: "Hỗ trợ", zh: "支持", "zh-hant": "支援" },
-    summary: {
-      en: "No general support mailbox has been published yet. Security reporting is for vulnerabilities only.",
-      vi: "Hiện chưa có hộp thư hỗ trợ chung. Kênh báo cáo bảo mật chỉ dành cho lỗ hổng bảo mật.",
-      zh: "目前尚未公布通用支持邮箱。安全漏洞报告仅用于漏洞。",
-      "zh-hant": "目前尚未公布通用支援信箱。資安通報僅用於漏洞。",
-    },
+    summary: SITE.supportEmail
+      ? {
+          en: "A product-support mailbox is published here. Security reporting is for vulnerabilities only.",
+          vi: "Trang này đã công bố hộp thư hỗ trợ sản phẩm. Kênh báo cáo bảo mật chỉ dành cho lỗ hổng bảo mật.",
+          zh: "本站已公布产品支持邮箱。安全漏洞报告仅用于漏洞。",
+          "zh-hant": "本站已公布產品支援信箱。資安通報僅用於漏洞。",
+        }
+      : {
+          en: "No general support mailbox has been published yet. Security reporting is for vulnerabilities only.",
+          vi: "Hiện chưa có hộp thư hỗ trợ chung. Kênh báo cáo bảo mật chỉ dành cho lỗ hổng bảo mật.",
+          zh: "目前尚未公布通用支持邮箱。安全漏洞报告仅用于漏洞。",
+          "zh-hant": "目前尚未公布通用支援信箱。資安通報僅用於漏洞。",
+        },
     evidenceKind: "route",
   },
 ];

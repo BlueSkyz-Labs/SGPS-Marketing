@@ -30,11 +30,8 @@ const routes = [
 for (const { lang, fallback, action } of routes) {
   test(`${lang}: security disclosure is not general support`, () => {
     const page = readFileSync(`src/pages/${lang}/support.astro`, "utf8");
-    assert.match(
-      page,
-      /const hasBusinessEmail = Boolean\(SITE\.contactEmail\)/,
-    );
-    assert.match(page, /mailto:\$\{SITE\.contactEmail\}/);
+    assert.match(page, /const hasSupportEmail = Boolean\(SITE\.supportEmail\)/);
+    assert.match(page, /mailto:\$\{SITE\.supportEmail\}/);
     assert.match(page, fallback);
     if (lang === "vi") {
       assert.match(page, /không tiếp nhận yêu cầu hỗ trợ\s+thông thường\./);
@@ -60,8 +57,8 @@ for (const { lang, fallback, action } of routes) {
 test("never invent an unverified mailbox in any locale", () => {
   for (const { lang } of routes) {
     const page = readFileSync(`src/pages/${lang}/support.astro`, "utf8");
-    assert.match(page, /hasBusinessEmail \? \(/);
-    assert.match(page, /SITE\.contactEmail/);
+    assert.match(page, /hasSupportEmail \? \(/);
+    assert.match(page, /SITE\.supportEmail/);
     assert.doesNotMatch(
       page,
       /href="mailto:(?:support|security|hello)@blueskyzlabs\.com"/,

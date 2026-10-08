@@ -23,7 +23,7 @@ test("public truth gate rejects documentation and preview hosts", () => {
   for (const siteUrl of cases) {
     const errors = validatePublicTruth({
       siteUrl,
-      contactEmail: "owner@blueskyzlabs.com",
+      contactEmail: "hello@blueskyzlabs.com",
       securityEmail: "security@blueskyzlabs.com",
     });
     assert.ok(
@@ -38,6 +38,16 @@ test("public truth gate rejects placeholder emails", () => {
     siteUrl: "https://blueskyzlabs.com",
     contactEmail: "@",
     securityEmail: "not-an-email",
+  });
+  assert.ok(errors.some((e) => e.includes("PUBLIC_CONTACT_EMAIL")));
+  assert.ok(errors.some((e) => e.includes("PUBLIC_SECURITY_EMAIL")));
+});
+
+test("public truth gate rejects plausible emails assigned to the wrong role", () => {
+  const errors = validatePublicTruth({
+    siteUrl: "https://blueskyzlabs.com",
+    contactEmail: "owner@blueskyzlabs.com",
+    securityEmail: "admin@blueskyzlabs.com",
   });
   assert.ok(errors.some((e) => e.includes("PUBLIC_CONTACT_EMAIL")));
   assert.ok(errors.some((e) => e.includes("PUBLIC_SECURITY_EMAIL")));
@@ -64,7 +74,7 @@ test("public truth gate rejects IPv6 loopback and .example TLD", () => {
   for (const siteUrl of ["https://[::1]", "https://docs.example"]) {
     const errors = validatePublicTruth({
       siteUrl,
-      contactEmail: "owner@blueskyzlabs.com",
+      contactEmail: "hello@blueskyzlabs.com",
       securityEmail: "security@blueskyzlabs.com",
     });
     assert.ok(
@@ -94,7 +104,7 @@ test("isNonProductionSiteUrl rejects pages.dev, tonydemo staging, and trailing-d
 
 test("public truth gate accepts only the exact canonical BlueSkyz organizational origin", () => {
   const validEmails = {
-    contactEmail: "owner@blueskyzlabs.com",
+    contactEmail: "hello@blueskyzlabs.com",
     securityEmail: "security@blueskyzlabs.com",
   };
 
