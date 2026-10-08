@@ -448,38 +448,4 @@ const supportingLine = flagship ? null : proposition;
       transform: none;
     }
   }
-
-  /* ─── Elite Wave 2: Hero life ──────────────────────────────────────────
-     The hero breathes after the initial draw: scroll-linked parallax on the
-     atmosphere (transform-only, ~8% range) + ultra-slow halo breathing
-     (24s opacity oscillation). The LCP headline and .hero-content NEVER move. */
-  @media (prefers-reduced-motion: no-preference) {
-    @supports (animation-timeline: view()) {
-      .hero-atmosphere {
-        animation: hero-parallax linear both;
-        animation-timeline: view();
-        animation-range: entry 0% exit 100%;
-      }
-      @keyframes hero-parallax {
-        from {
-          transform: translateY(0);
-        }
-        to {
-          transform: translateY(8%);
-        }
-      }
-    }
-    .horizon-field__halo {
-      animation: halo-breathe 24s ease-in-out infinite;
-    }
-    @keyframes halo-breathe {
-      0%,
-      100% {
-        opacity: 0.85;
-      }
-      50% {
-        opacity: 1;
-      }
-    }
-  }
 </style>

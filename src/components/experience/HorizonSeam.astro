@@ -42,7 +42,8 @@ const { class: className = "", ...rest } = Astro.props;
       color-mix(in srgb, var(--brand-cobalt) 55%, transparent) 75%,
       transparent 100%
     );
-    box-shadow: 0 0 16px color-mix(in srgb, var(--brand-cobalt) 35%, transparent);
+    box-shadow: 0 0 16px
+      color-mix(in srgb, var(--brand-cobalt) 35%, transparent);
     opacity: 0.7;
   }
   @media (max-width: 767px) {
