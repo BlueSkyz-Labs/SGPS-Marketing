@@ -190,6 +190,8 @@
     transition:
       opacity var(--motion-reveal) var(--ease-emphasized),
       clip-path var(--motion-reveal) var(--ease-emphasized);
+    /* Elite 2026-10-08: stagger delay from --reveal-i (set by RevealObserver). */
+    transition-delay: calc(var(--motion-stagger) * var(--reveal-i, 0));
   }
   .reveal-planes[data-revealed="false"] {
     opacity: 0;

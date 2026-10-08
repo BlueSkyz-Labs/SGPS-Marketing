@@ -1,0 +1,63 @@
+---
+/**
+ * Elite Wave 2 — "Horizon Seam" section divider.
+ *
+ * Promotes the BlueSkyz Horizon signature (HorizonField.astro) from a
+ * hero-only moment to a section-divider system. Slimmer than the hero field:
+ * just the glowing horizon line, no halo/depth. Repetition with restraint is
+ * how signatures are built.
+ *
+ * Pure CSS, zero JS, locale-agnostic, aria-hidden decorative.
+ */
+interface Props {
+  class?: string;
+}
+
+const { class: className = "", ...rest } = Astro.props;
+---
+
+<div class:list={["horizon-seam", className]} aria-hidden="true" {...rest}>
+  <span class="horizon-seam__line"></span>
+</div>
+
+<style>
+  .horizon-seam {
+    position: relative;
+    height: 3rem;
+    overflow: hidden;
+    pointer-events: none;
+  }
+  .horizon-seam__line {
+    position: absolute;
+    left: 12%;
+    right: 12%;
+    top: 50%;
+    height: 1px;
+    /* Same gradient grammar as .horizon-field__line, slimmer context. */
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      color-mix(in srgb, var(--brand-cobalt) 55%, transparent) 25%,
+      color-mix(in srgb, var(--brand-porcelain) 70%, transparent) 50%,
+      color-mix(in srgb, var(--brand-cobalt) 55%, transparent) 75%,
+      transparent 100%
+    );
+    box-shadow: 0 0 16px
+      color-mix(in srgb, var(--brand-cobalt) 35%, transparent);
+    opacity: 0.7;
+  }
+  @media (max-width: 767px) {
+    .horizon-seam {
+      height: 2rem;
+    }
+    .horizon-seam__line {
+      left: 6%;
+      right: 6%;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .horizon-seam__line {
+      box-shadow: none;
+    }
+  }
+</style>
