@@ -79,10 +79,10 @@ test("support empty state offers working trust paths without Contact loop", () =
   // locale page) with no markup of its own; the rendered content this guard
   // cares about lives on the locale page it redirects to.
   const support = readFileSync("src/pages/en/support.astro", "utf8");
-  assert.match(support, /SITE\.contactEmail/);
+  assert.match(support, /SITE\.supportEmail/);
   assert.match(support, /href="\/en\/security\/"/);
   assert.match(support, /href="\/en\/about\/"/);
-  assert.match(support, /hasBusinessEmail/);
+  assert.match(support, /hasSupportEmail/);
 });
 
 test("privacy page summarizes practical trust answers", () => {

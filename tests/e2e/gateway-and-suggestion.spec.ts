@@ -34,6 +34,14 @@ for (const scheme of ["light", "dark"] as const) {
       const links = gateway.getByRole("link");
       await expect(links).toHaveCount(4);
       await expect(page.locator("h1")).toHaveCount(1);
+      await expect(page.locator("main")).toContainText("BlueSkyz Labs");
+      await expect(page.locator("main")).toContainText("2026");
+      await expect(page.locator("main")).toContainText(
+        "We build intelligent products that empower people and elevate the way work gets done.",
+      );
+      await expect(
+        page.getByRole("link", { name: "About BlueSkyz Labs" }),
+      ).toHaveAttribute("href", "/en/about/");
       // Native labels for the four live choices.
       await expect(links).toHaveText([
         "Tiếng Việt",
