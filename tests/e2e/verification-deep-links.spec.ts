@@ -65,8 +65,16 @@ test.describe("verification deep links", () => {
     const heading = page.locator("#claim-security-reporting-is-private");
     await expect(heading).toBeVisible();
     await expect(heading).toHaveRole("heading");
-    // Evidence list items carry their stable ids too.
+  });
+
+  test("source anchors open the visible sources step", async ({ page }) => {
+    await page.goto(
+      "/en/evidence/security-reporting-is-private/#evidence-ev-security-advisory",
+    );
     await expect(page.locator("#evidence-ev-security-advisory")).toBeVisible();
+    await expect(
+      page.getByRole("button", { name: "Hide details: Sources" }),
+    ).toHaveAttribute("aria-expanded", "true");
   });
 
   for (const [lang, copy] of Object.entries(EXPLORER_COPY)) {
@@ -110,6 +118,10 @@ test.describe("verification deep links", () => {
     await expect(
       page.locator("#claim-security-reporting-is-private"),
     ).toBeVisible();
+    await page.goto(
+      "/en/evidence/security-reporting-is-private/#evidence-ev-security-advisory",
+    );
+    await expect(page.locator("#evidence-ev-security-advisory")).toBeVisible();
     await context.close();
   });
 

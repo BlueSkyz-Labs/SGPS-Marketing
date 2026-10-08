@@ -82,6 +82,7 @@ function enhance(root: HTMLElement): void {
   const sourcesUl = document.createElement("ul");
   for (const ref of graph.evidence) {
     const li = document.createElement("li");
+    li.id = `evidence-${ref.id}`;
     const a = document.createElement("a");
     a.href = ref.href;
     a.textContent = ref.label;
@@ -193,6 +194,29 @@ function enhance(root: HTMLElement): void {
   });
 
   // Activate: show chain (CSS hides static sections when active)
+  root
+    .querySelectorAll<HTMLElement>(
+      "[data-evidence-static-sources] [id^='evidence-']",
+    )
+    .forEach((target) => target.removeAttribute("id"));
   chain.hidden = false;
   root.setAttribute("data-explorer-active", "true");
+
+  const openEvidenceHash = () => {
+    const evidenceId = window.location.hash.slice(1);
+    if (!graph.evidence.some((ref) => `evidence-${ref.id}` === evidenceId)) {
+      return;
+    }
+
+    const sourcesButton = buttons[1];
+    if (sourcesButton?.getAttribute("aria-expanded") !== "true") {
+      sourcesButton?.click();
+    }
+    requestAnimationFrame(() => {
+      document.getElementById(evidenceId)?.scrollIntoView({ block: "start" });
+    });
+  };
+
+  window.addEventListener("hashchange", openEvidenceHash);
+  openEvidenceHash();
 }
