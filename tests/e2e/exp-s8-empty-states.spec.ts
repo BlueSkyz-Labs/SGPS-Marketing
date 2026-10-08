@@ -1,6 +1,12 @@
 import { expect, test } from "@playwright/test";
 
 const LOCALES = ["en", "vi", "zh", "zh-hant"] as const;
+const FOUNDER_TITLE: Record<(typeof LOCALES)[number], string> = {
+  en: "Founder & CEO",
+  vi: "Nhà sáng lập kiêm CEO",
+  zh: "创始人兼首席执行官",
+  "zh-hant": "創辦人兼執行長",
+};
 const MISSION = {
   en: /We build intelligent products that empower people and elevate the way work gets done\./,
   vi: /Chúng tôi xây dựng sản phẩm thông minh/,
@@ -55,7 +61,7 @@ for (const lang of LOCALES) {
       ).toHaveAttribute("href", new RegExp(`^/${lang}/about/$`));
     });
 
-    test("about: mission, operating year, registry products, no founder line", async ({
+    test("about: owner-confirmed identity, mission, and registry products", async ({
       page,
     }) => {
       await page.goto(`/${lang}/about/`);
@@ -63,9 +69,12 @@ for (const lang of LOCALES) {
       expect(size(lang, text), "about visible size").toBeLessThanOrEqual(
         budget(lang, 150),
       );
+      const normalizedText = text.toLocaleLowerCase();
+      expect(normalizedText).toContain("tony nguyen");
+      expect(normalizedText).toContain(FOUNDER_TITLE[lang].toLocaleLowerCase());
       expect(text).toContain("2026");
       expect(text).toMatch(MISSION[lang]);
-      expect(text).not.toMatch(FOUNDER);
+      expect(text).toMatch(FOUNDER);
       expect(text).not.toMatch(EMAIL);
       const products = page.locator(
         "[data-about-composition] [data-about-product]",

@@ -81,19 +81,17 @@ test("flagship act is evidence-gated, wired on the home, and the retired shelf s
   assert.doesNotMatch(legacyHome, /FlagshipProof|FeaturedProducts/);
 });
 
-test("about page omits the unconfirmed founder line and invents no biography", () => {
-  // Experience v6 S8 (audit E-26): founder detail publishes only when the
-  // Owner confirms it, so neither the legacy redirect nor the locale pages
-  // carry the literal.
-  for (const path of [
-    "src/pages/about.astro",
-    "src/pages/en/about.astro",
+test("about page shows the owner-confirmed founder line and invents no biography", () => {
+  // Experience v6 S8 (audit E-26 resolved 2026-10-07, #523): founder detail
+  // now publishes from the pages collection, so the composition must stay
+  // data-driven (no hardcoded literal) and must not invent offices.
+  const about = readFileSync(
     "src/components/empty-state/AboutComposition.astro",
-  ]) {
-    const about = readFileSync(path, "utf8");
-    assert.doesNotMatch(about, /Tony Nguyen|Founder/);
-    assert.doesNotMatch(about, /global offices|bank-grade|military-grade/i);
-  }
+    "utf8",
+  );
+  assert.match(about, /founder_name/);
+  assert.doesNotMatch(about, /Tony Nguyen/);
+  assert.doesNotMatch(about, /global offices|bank-grade|military-grade/i);
 });
 
 test("SECURITY.md advisory URL matches site constant", () => {
