@@ -180,12 +180,18 @@ test("contact soft-lands through BusinessRouteState without an invented mailbox"
   });
   for (const lang of LOCALES) {
     const source = readFileSync(`src/pages/${lang}/contact.astro`, "utf8");
-    assert.match(source, /BusinessRouteState/, lang);
-    assert.match(source, /hasBusinessEmail/, lang);
+    assert.match(source, /PublicContactEmails/, lang);
     assert.doesNotMatch(
       source,
       /mailto:(hello@|contact@|info@|support@)/i,
       lang,
     );
   }
+  const contactEmails = readFileSync(
+    "src/components/empty-state/PublicContactEmails.astro",
+    "utf8",
+  );
+  assert.match(contactEmails, /BusinessRouteState/);
+  assert.match(contactEmails, /SITE\.contactEmail/);
+  assert.match(contactEmails, /SITE\.supportEmail/);
 });

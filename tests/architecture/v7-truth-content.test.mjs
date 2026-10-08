@@ -57,11 +57,11 @@ test("D-01: the Support ledger lane matches the absent support mailbox", () => {
   const support = TRUST_LEDGER.find((entry) => entry.id === "support");
   assert.ok(support);
   assert.equal(
-    Boolean(SITE.contactEmail),
+    Boolean(SITE.supportEmail),
     false,
-    "the default build publishes no general support mailbox",
+    "the default build publishes no support mailbox",
   );
-  assert.ok(supportLedgerIsTruthful(support, Boolean(SITE.contactEmail)));
+  assert.ok(supportLedgerIsTruthful(support, Boolean(SITE.supportEmail)));
   assert.equal(support.state, "not-published");
 });
 

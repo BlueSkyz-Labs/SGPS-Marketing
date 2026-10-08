@@ -86,8 +86,9 @@ const flagshipLine =
   (flagship ? HOME_ONE_LINER[flagship.data.slug]?.[lang] : undefined) ??
   copy?.shortDescription ??
   "";
-const emptyPrimary = emptyRegistryPrimaryCta(SITE.contactEmail, lang);
-const emptySecondary = emptyRegistrySecondaryCta(SITE.contactEmail, lang);
+const publicContactEmail = SITE.contactEmail || SITE.supportEmail;
+const emptyPrimary = emptyRegistryPrimaryCta(publicContactEmail, lang);
+const emptySecondary = emptyRegistrySecondaryCta(publicContactEmail, lang);
 // Flagship present: the proposition is the H1 and carries the promise alone.
 // Fallback: tagline H1 plus the proposition as the one supporting sentence.
 const supportingLine = flagship ? null : proposition;
