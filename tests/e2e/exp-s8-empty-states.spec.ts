@@ -7,6 +7,12 @@ const FOUNDER_TITLE: Record<(typeof LOCALES)[number], string> = {
   zh: "创始人兼首席执行官",
   "zh-hant": "創辦人兼執行長",
 };
+const MISSION = {
+  en: /We build intelligent products that empower people and elevate the way work gets done\./,
+  vi: /Chúng tôi xây dựng sản phẩm thông minh/,
+  zh: /我们打造智能化产品/,
+  "zh-hant": /我們打造智慧化產品/,
+} as const;
 const EMAIL =
   /[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+(?:\.[A-Za-z0-9-]+)*\.[A-Za-z]{2,}/;
 const PHONE = /(?:\+\d{1,3}[ .-]?)\(?\d{1,4}\)?[ .-]\d{3}[ .-]?\d{3,4}/;
@@ -55,7 +61,7 @@ for (const lang of LOCALES) {
       ).toHaveAttribute("href", new RegExp(`^/${lang}/about/$`));
     });
 
-    test("about: owner-confirmed identity, no mailbox, at most 150 words", async ({
+    test("about: owner-confirmed identity, mission, and registry products", async ({
       page,
     }) => {
       await page.goto(`/${lang}/about/`);
@@ -67,7 +73,18 @@ for (const lang of LOCALES) {
       expect(normalizedText).toContain("tony nguyen");
       expect(normalizedText).toContain(FOUNDER_TITLE[lang].toLocaleLowerCase());
       expect(text).toContain("2026");
+      expect(text).toMatch(MISSION[lang]);
+      expect(text).toMatch(FOUNDER);
       expect(text).not.toMatch(EMAIL);
+      const products = page.locator(
+        "[data-about-composition] [data-about-product]",
+      );
+      await expect(products).toHaveCount(2);
+      await expect(
+        page.locator(
+          "[data-about-composition] [data-product-status='In development']",
+        ),
+      ).toHaveCount(2);
     });
 
     test("product without captures shows no artwork, no device frame, status once", async ({

@@ -4,14 +4,11 @@ import { join } from "node:path";
 import test from "node:test";
 
 /**
- * Experience v6 S8 — honest empty states. No e-mail address or phone number
- * may appear in rendered sources unless it comes from the approved data path
- * (the env-supplied `SITE.contactEmail`, never a literal).
- *
- * Founder literals (audit E-26, resolved 2026-10-07, #523): the Owner
- * confirmed the entity facts, so the About composition — and only it — may
- * render founder name/title/year/location, strictly from the `pages`
- * collection (`{lang}-about` entry), never as hardcoded literals elsewhere.
+ * Experience v6 S8 — honest empty states. No e-mail address, phone number or
+ * founder literal may appear in rendered sources unless it comes from the
+ * approved role-specific data path (never a literal mailbox);
+ * owner-confirmed founder details may render only from the localized `pages`
+ * collection through the About composition, never as hardcoded literals elsewhere.
  */
 export const EMAIL =
   /[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+(?:\.[A-Za-z0-9-]+)*\.[A-Za-z]{2,}/;
@@ -77,12 +74,19 @@ test("product content and page data carry no e-mail or phone literal", () => {
   assert.deepEqual(hits, []);
 });
 
-test("contact mailbox renders only from SITE.contactEmail", () => {
+test("contact mailboxes render only from their role-filtered SITE values", () => {
+  const emails = readFileSync(
+    "src/components/empty-state/PublicContactEmails.astro",
+    "utf8",
+  );
+  assert.match(emails, /mailto:\$\{SITE\.contactEmail\}/);
+  assert.match(emails, /mailto:\$\{SITE\.supportEmail\}/);
+  assert.match(emails, /data-public-email-role="contact"/);
+  assert.match(emails, /data-public-email-role="support"/);
   for (const lang of ["en", "vi", "zh", "zh-hant"]) {
     const page = readFileSync(`src/pages/${lang}/contact.astro`, "utf8");
-    assert.match(page, /mailto:\$\{SITE\.contactEmail\}/);
+    assert.match(page, /<PublicContactEmails/);
     assert.match(page, /<ProductSignInLane lang="[^"]+" \/>/);
-    assert.match(page, /<BusinessRouteState/);
   }
 });
 

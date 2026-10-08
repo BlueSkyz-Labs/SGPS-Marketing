@@ -14,7 +14,7 @@ import TrustFacts from "@/components/trust/TrustFacts.astro";
 import TrustLayout from "@/components/trust/TrustLayout.astro";
 import { getClaimAnchor } from "@/lib/claims";
 import { PRIVACY_COPY } from "@/data/trust-copy";
-import type { Language } from "@/data/site";
+import { SITE, SHARED_LABELS, labelFor, type Language } from "@/data/site";
 
 interface Props {
   lang: Language;
@@ -33,6 +33,20 @@ const CLAIM_ID = "privacy-no-tracking-on-this-site";
     class="scroll-mt-24"
   >
     <PageHeader title={c.title} lede={c.lede} />
+    {SITE.privacyEmail ? (
+      <p
+        class="mt-6 text-sm text-[var(--text-secondary)]"
+        data-public-email-role="privacy"
+      >
+        {labelFor(SHARED_LABELS.privacyContact, lang)}{" "}
+        <a
+          href={`mailto:${SITE.privacyEmail}`}
+          class="font-semibold text-[var(--action-primary)] no-underline hover:underline"
+        >
+          {SITE.privacyEmail}
+        </a>
+      </p>
+    ) : null}
   </div>
   <TrustFacts
     facts={[

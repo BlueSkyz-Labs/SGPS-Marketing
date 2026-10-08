@@ -53,23 +53,9 @@ export function organizationJsonLd(siteUrl: string) {
     "@id": organizationId(siteUrl),
     name: "BlueSkyz Labs",
     url: siteRootUrl(siteUrl),
-    // Square BlueSkyz mark (Owner decision F11, 2026-10-01).
+    // Square BlueSkyz mark (Owner decision F11, 2026-10-01). No sameAs,
+    // contactPoint, founder or legal founding date is asserted here.
     logo: absoluteUrl(siteUrl, ORGANIZATION_LOGO_PATH),
-    // Owner-confirmed entity facts (2026-10-07, #523): founder, founding
-    // year, location and contact mailbox are real. sameAs stays absent until
-    // the Owner supplies real external profiles.
-    foundingDate: "2026",
-    founder: {
-      "@type": "Person",
-      name: "Tony Nguyen",
-      jobTitle: "Founder & CEO",
-    },
-    address: {
-      "@type": "PostalAddress",
-      addressLocality: "Ho Chi Minh City",
-      addressCountry: "VN",
-    },
-    email: "hello@blueskyzlabs.com",
   } as const;
 }
 
@@ -143,6 +129,73 @@ export function productJsonLd(
           },
         }
       : {}),
+  };
+}
+
+/**
+ * Per-page WebPage node (SEO completeness, 2026-10-08). Emitted by BaseLayout
+ * for every non-404 page alongside Organization + WebSite + BreadcrumbList.
+ */
+export function webPageJsonLd(
+  siteUrl: string,
+  path: string,
+  name: string,
+  description: string,
+  lang: string,
+) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    name,
+    description,
+    url: canonicalForPath(path, siteUrl),
+    inLanguage: languageTag(lang),
+    isPartOf: { "@type": "WebSite", "@id": websiteId(siteUrl) },
+  };
+}
+
+/**
+ * ClaimReview for evidence passport pages (SEO P1, 2026-10-08).
+ *
+ * The site's truth states describe publication reality only — no scoring, no
+ * confidence percentages, no certification language. The rating therefore
+ * carries no numeric value: `alternateName` is the state's honest label.
+ * Only call for states where a review with evidence actually exists
+ * ("reviewed", "source-linked"); other states have no review to report.
+ */
+export type ClaimReviewState = "reviewed" | "source-linked";
+
+export function isClaimReviewState(state: string): state is ClaimReviewState {
+  return state === "reviewed" || state === "source-linked";
+}
+
+export function claimReviewJsonLd(
+  siteUrl: string,
+  pagePath: string,
+  review: {
+    claimText: string;
+    lang: string;
+    stateLabel: string;
+    reviewedOn?: string | undefined;
+  },
+) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "ClaimReview",
+    url: canonicalForPath(pagePath, siteUrl),
+    claimReviewed: review.claimText,
+    inLanguage: languageTag(review.lang),
+    author: publisherRef(siteUrl),
+    reviewRating: {
+      "@type": "Rating",
+      alternateName: review.stateLabel,
+    },
+    itemReviewed: {
+      "@type": "Claim",
+      text: review.claimText,
+      author: publisherRef(siteUrl),
+    },
+    ...(review.reviewedOn ? { datePublished: review.reviewedOn } : {}),
   };
 }
 

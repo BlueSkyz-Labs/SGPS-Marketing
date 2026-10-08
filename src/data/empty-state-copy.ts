@@ -68,15 +68,6 @@ export const EMPTY_STATE_COPY = {
     zh: "我们正在打造",
     "zh-hant": "我們正在打造",
   },
-  // Owner-confirmed entity facts (E-26 resolved 2026-10-07, #523). The label
-  // is derived translation flagged for native review; the facts themselves
-  // come from the `pages` collection, never from this file.
-  aboutFounded: {
-    en: "Founded",
-    vi: "Thành lập",
-    zh: "成立于",
-    "zh-hant": "成立於",
-  },
   noCaptures: {
     en: "No app screenshots are published yet.",
     vi: "Chưa có ảnh chụp giao diện ứng dụng nào được công bố.",

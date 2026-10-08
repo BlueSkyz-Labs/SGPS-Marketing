@@ -1,0 +1,54 @@
+---
+import BusinessRouteState from "@/components/empty-state/BusinessRouteState.astro";
+import { SITE, labelFor, SHARED_LABELS } from "@/data/site";
+import type { Language } from "@/data/site";
+
+interface Props {
+  lang: Language;
+  boundary: string;
+}
+
+const { lang, boundary } = Astro.props;
+const hasPublicEmail = Boolean(SITE.contactEmail || SITE.supportEmail);
+---
+
+{hasPublicEmail ? (
+  <li class="flex min-w-0 flex-col gap-3 rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-raised)] p-6 sm:col-span-2">
+    <h2 class="text-lg font-semibold tracking-tight">
+      {labelFor(SHARED_LABELS.generalContact, lang)}
+    </h2>
+    {SITE.contactEmail ? (
+      <p
+        class="text-sm text-[var(--text-secondary)]"
+        data-public-email-role="contact"
+      >
+        <a
+          href={`mailto:${SITE.contactEmail}`}
+          class="inline-flex min-h-11 items-center font-semibold text-[var(--action-primary)] no-underline hover:underline"
+        >
+          {SITE.contactEmail}
+        </a>
+      </p>
+    ) : null}
+    {SITE.supportEmail ? (
+      <p
+        class="text-sm text-[var(--text-secondary)]"
+        data-public-email-role="support"
+      >
+        <span>{labelFor(SHARED_LABELS.productSupport, lang)}: </span>
+        <a
+          href={`mailto:${SITE.supportEmail}`}
+          class="inline-flex min-h-11 items-center font-semibold text-[var(--action-primary)] no-underline hover:underline"
+        >
+          {SITE.supportEmail}
+        </a>
+      </p>
+    ) : null}
+  </li>
+) : (
+  <BusinessRouteState
+    lang={lang}
+    heading={labelFor(SHARED_LABELS.generalContact, lang)}
+    boundary={boundary}
+  />
+)}

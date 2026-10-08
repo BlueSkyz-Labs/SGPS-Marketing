@@ -23,10 +23,9 @@ const { phones, desktops, lang, labels, first = false } = Astro.props;
 // (`<name>-480.webp`). Without it the 780px masters compete with the LCP
 // text's fonts.
 const PHONE_SIZES = "(min-width: 64rem) 17rem, min(72vw, 17rem)";
-// The rail's static tabindex="0" is kept on purpose (v8 W10): it scrolls only
-// below 64rem, where keyboard users need to focus it. At >= 64rem it is a plain
-// grid and stays a focus stop, because CSS cannot set tabindex and no showcase
-// script exists; adding one would spend client budget on a one-attribute fix.
+// The rail scrolls only below 64rem, where keyboard users need to focus it.
+// At >= 64rem it is a plain grid, so the script below removes the dead tab
+// stop there (a11y 2026-10-08): tabindex="0" only while the rail scrolls.
 const phoneSmallSrc = (src: string) => src.replace(/\.webp$/, "-480.webp");
 // Desktop captures are 1920px masters. Each ships a 768w derivative
 // (`<name>-768.webp`) so a phone never downloads the full master: the first
@@ -44,6 +43,7 @@ const desktopSmallSrc = (src: string) => src.replace(/\.webp$/, "-768.webp");
       class:list={["showcase__rail", first && "showcase__rail--stage"]}
       role="list"
       tabindex="0"
+      data-showcase-rail
       aria-label={labels.phoneRail}
     >
       {phones.map((item, index) => (
@@ -113,3 +113,17 @@ const desktopSmallSrc = (src: string) => src.replace(/\.webp$/, "-768.webp");
     </ul>
   </div>
 ) : null}
+
+<script>
+  // a11y 2026-10-08: the phone rail is a tab stop only while it scrolls
+  // (below 64rem). At desktop widths it is a plain grid; remove the dead stop.
+  // `matchMedia` mirrors the CSS breakpoint — no layout measurement needed.
+  const mq = window.matchMedia("(max-width: 63.99rem)");
+  const syncRailTabindex = () => {
+    for (const rail of document.querySelectorAll("[data-showcase-rail]")) {
+      rail.setAttribute("tabindex", mq.matches ? "0" : "-1");
+    }
+  };
+  syncRailTabindex();
+  mq.addEventListener("change", syncRailTabindex);
+</script>

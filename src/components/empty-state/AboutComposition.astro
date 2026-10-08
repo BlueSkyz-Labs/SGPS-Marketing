@@ -1,8 +1,9 @@
 ---
 import BlueSkyzIcon from "@/components/icon/BlueSkyzIcon.astro";
 import ButtonLink from "@/components/ui/ButtonLink.astro";
+import ProductStatus from "@/components/product/ProductStatus.astro";
 import { EMPTY_STATE_COPY } from "@/data/empty-state-copy";
-import { labelFor, SHARED_LABELS, type Language } from "@/data/site";
+import { SITE, labelFor, SHARED_LABELS, type Language } from "@/data/site";
 import { getPublicProducts } from "@/lib/products";
 import { productPageCopy } from "@/components/product/product-page-copy";
 import { getEntry } from "astro:content";
@@ -13,8 +14,9 @@ import { getEntry } from "astro:content";
  * abt-5; two bound claims linked to their pages).
  *
  * Owner-confirmed entity facts (audit E-26 resolved 2026-10-07, #523): the
- * `pages` collection `{lang}-about` entry now supplies founder name/title,
- * founding year and location, rendered below as the entity identity block.
+ * `pages` collection `{lang}-about` entry supplies founder name/title and
+ * location, rendered below as the entity identity block. The confirmed
+ * operating year is shown once from SITE.operatingSinceYear above.
  * Absent fields are still omitted, never padded.
  *
  * UI upgrade F12 (presentation only): products render as hairline cards whose
@@ -34,7 +36,6 @@ interface Props {
 interface AboutContent {
   founder_name?: unknown;
   founder_title?: unknown;
-  founded_year?: unknown;
   location?: unknown;
 }
 
@@ -43,6 +44,7 @@ const products = (await getPublicProducts()).map((product) => ({
   slug: product.data.slug,
   name: product.data.name,
   description: productPageCopy(product.data, lang).oneLiner,
+  publicLabel: product.data.publicLabel,
 }));
 
 const aboutEntry = await getEntry("pages", `${lang}-about`);
@@ -56,25 +58,24 @@ const founderTitle =
   typeof aboutContent?.founder_title === "string"
     ? aboutContent.founder_title
     : null;
-const foundedYear =
-  typeof aboutContent?.founded_year === "number"
-    ? aboutContent.founded_year
-    : null;
 const founderLocation =
   typeof aboutContent?.location === "string" ? aboutContent.location : null;
 ---
 
+<p class="about-founded" data-organization-founding-year>
+  {labelFor(SHARED_LABELS.operatingSince, lang)}{" "}
+  <time datetime={String(SITE.operatingSinceYear)}>
+    {SITE.operatingSinceYear}
+  </time>
+</p>
 <div class="about-grid" data-about-composition>
-  {founderName && foundedYear && founderLocation && (
+  {founderName && founderLocation && (
     <section aria-labelledby="about-founder" data-about-founder>
       <h2 id="about-founder" class="about-label">
         {founderName}
       </h2>
       {founderTitle && <p class="about-founder__title">{founderTitle}</p>}
-      <p class="about-founder__meta text-pretty">
-        {labelFor(EMPTY_STATE_COPY.aboutFounded, lang)} {foundedYear} ·{" "}
-        {founderLocation}
-      </p>
+      <p class="about-founder__meta text-pretty">{founderLocation}</p>
     </section>
   )}
   {products.length > 0 ? (
@@ -84,7 +85,7 @@ const founderLocation =
       </h2>
       <ul class="about-products">
         {products.map((product) => (
-          <li class="about-product">
+          <li class="about-product" data-about-product>
             <a
               href={`/${lang}/products/${product.slug}/`}
               class="about-product__name"
@@ -95,6 +96,7 @@ const founderLocation =
                 class="about-arrow h-4 w-4 shrink-0"
               />
             </a>
+            <ProductStatus label={product.publicLabel} lang={lang} />
             <p class="about-product__desc text-pretty">{product.description}</p>
           </li>
         ))}
@@ -138,6 +140,20 @@ const founderLocation =
     </a>
   </section>
 </div>
+{SITE.founderEmail ? (
+  <p
+    class="mt-8 text-sm text-[var(--text-secondary)]"
+    data-public-email-role="founder"
+  >
+    {labelFor(SHARED_LABELS.strategicContact, lang)}{" "}
+    <a
+      href={`mailto:${SITE.founderEmail}`}
+      class="font-semibold text-[var(--action-primary)] no-underline hover:underline"
+    >
+      {SITE.founderEmail}
+    </a>
+  </p>
+) : null}
 <div class="mt-12 flex flex-wrap gap-3">
   <ButtonLink href={`/${lang}/products/`}>
     {labelFor(SHARED_LABELS.exploreProducts, lang)}
@@ -148,6 +164,11 @@ const founderLocation =
 </div>
 
 <style>
+  .about-founded {
+    margin: 0 0 3rem;
+    color: var(--text-secondary);
+    font-size: var(--size-2);
+  }
   .about-grid {
     display: grid;
     gap: 3rem;
@@ -237,8 +258,16 @@ const founderLocation =
   .about-product__name::after {
     content: "";
     position: absolute;
+    z-index: 0;
     inset: 0;
     border-radius: inherit;
+  }
+  .about-product [data-product-status] {
+    position: relative;
+    z-index: 1;
+    margin-inline-start: 0.75rem;
+    pointer-events: none;
+    vertical-align: middle;
   }
   .about-product__name:focus-visible {
     outline: none;

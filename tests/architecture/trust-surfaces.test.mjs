@@ -13,8 +13,8 @@ test("support empty state offers contact and security recourse", () => {
   assert.match(support, /href="\/en\/contact\/"/);
   assert.match(support, /href="\/en\/security\/"/);
   assert.match(support, /href="\/en\/about\/"/);
-  assert.match(support, /SITE\.contactEmail/);
-  assert.match(support, /hasBusinessEmail/);
+  assert.match(support, /SITE\.supportEmail/);
+  assert.match(support, /hasSupportEmail/);
   assert.match(support, /min-h-11/);
 
   const rootStub = readFileSync("src/pages/support.astro", "utf8");
