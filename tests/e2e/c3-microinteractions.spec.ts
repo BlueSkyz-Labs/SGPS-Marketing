@@ -16,11 +16,15 @@ const INTERACTIVE = "a, button, summary";
  * document's animations before interacting, and assert on visible elements.
  */
 async function settle(page: Page): Promise<void> {
-  // Decorative ambient animation (e.g. the hero's horizon field) runs forever by
-  // design, so waiting for "every animation finished" would hang. Wait only for
-  // finite animations to finish; perpetual ones must not gate interaction.
+  // The hero halo is aria-hidden decoration with a deliberately slow, finite
+  // animation. It does not affect hit testing, so it must not hold up a test.
+  // Other finite animations still need to settle before pointer interaction.
   await page.waitForFunction(() =>
     document.getAnimations().every((animation) => {
+      const target = animation.effect?.target;
+      if (target instanceof Element && target.matches(".horizon-field__halo")) {
+        return true;
+      }
       const iterations = animation.effect?.getTiming?.().iterations;
       return iterations === Infinity || animation.playState !== "running";
     }),

@@ -157,7 +157,10 @@
   --motion-emphasis-duration: var(--motion-slow);
   --motion-confirmation-duration: var(--motion-fast);
   --motion-continuity-duration: var(--motion-slow);
-  --motion-ease-standard: cubic-bezier(0.22, 1, 0.36, 1);
+  /* Elite 2026-10-08: unified signature ease (was 0.22,1,0.36,1 Quint).
+     The emphasized curve has the confident snap elite sites favor. */
+  --motion-ease-standard: cubic-bezier(0.16, 1, 0.3, 1);
+  --motion-ease-gentle: cubic-bezier(0.22, 1, 0.36, 1);
   --motion-distance-sm: 0.25rem;
   --motion-distance-md: 0.5rem;
   --motion-distance-lg: 1.25rem;
@@ -428,6 +431,38 @@ body {
       color-mix(in srgb, var(--brand-cobalt) 12%, transparent),
       transparent 72%
     );
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .hero-plane--ink > .hero-atmosphere {
+      animation: hero-parallax linear both;
+      animation-timeline: view();
+      animation-range: entry 0% exit 100%;
+    }
+  }
+
+  .hero-plane--ink .horizon-field__halo {
+    animation: halo-breathe 24s ease-in-out both;
+  }
+
+  @keyframes hero-parallax {
+    from {
+      transform: translateY(0);
+    }
+    to {
+      transform: translateY(8%);
+    }
+  }
+
+  @keyframes halo-breathe {
+    from {
+      opacity: 0.85;
+    }
+    to {
+      opacity: 1;
+    }
+  }
 }
 
 /* S+ BlueSkyz Horizon — decorative signature field (S+ Task 2). */
@@ -2024,5 +2059,25 @@ dd {
   }
   details > summary {
     list-style: none;
+  }
+}
+
+/* ─── Elite Wave 1: Ink Grain material system ────────────────────────────
+   Subtle SVG noise (3% opacity) on ink surfaces. Makes dark mode feel like
+   material, not flat color. Pure CSS, zero JS, locale-agnostic. */
+.surface-grain {
+  position: relative;
+}
+.surface-grain::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+}
+@media (prefers-reduced-motion: reduce) {
+  .surface-grain::after {
+    display: none;
   }
 }

@@ -145,6 +145,28 @@ test.describe("C3-D Fidelity Engine — presentation tier", () => {
     // the main thread permanently.
     const heavyAnim = await page.evaluate(() =>
       document.getAnimations().every((a) => {
+        const target = a.effect?.target;
+        if (
+          target instanceof Element &&
+          target.matches(".horizon-field__halo") &&
+          target.closest('.horizon-field[aria-hidden="true"]')
+        ) {
+          const keyframes = a.effect?.getKeyframes() ?? [];
+          return (
+            keyframes.length > 0 &&
+            keyframes.every((frame) =>
+              Object.keys(frame).every((property) =>
+                [
+                  "opacity",
+                  "offset",
+                  "computedOffset",
+                  "easing",
+                  "composite",
+                ].includes(property),
+              ),
+            )
+          );
+        }
         const t = a.effect?.getTiming?.();
         return !t || t.duration < 2000 || t.iterations === Infinity;
       }),
