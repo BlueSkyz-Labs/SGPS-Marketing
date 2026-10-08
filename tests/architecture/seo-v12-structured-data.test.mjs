@@ -6,8 +6,8 @@
  * descriptions are unique per locale and short enough for a result page.
  * Built half (runs when dist/ exists; the local gate builds first, and CI
  * repeats it on served pages in tests/e2e/seo-v12-routes.spec.ts): every page
- * has exactly one h1, valid JSON-LD of the expected types, no rating/review/
- * price keys, and per-locale unique titles and descriptions.
+ * has exactly one h1, valid JSON-LD of the expected types, no fabricated
+ * product ratings or prices, and per-locale unique titles and descriptions.
  * Every predicate has a negative proof below.
  */
 import assert from "node:assert/strict";
@@ -25,7 +25,9 @@ import { productBreadcrumbJsonLd } from "../../src/lib/breadcrumbs.ts";
 import {
   organizationJsonLd,
   organizationId,
+  claimReviewJsonLd,
   productJsonLd,
+  webPageJsonLd,
   websiteJsonLd,
 } from "../../src/lib/seo.ts";
 import {
@@ -144,6 +146,32 @@ test("site-wide Organization and WebSite are valid and share one Organization id
     assert.equal(appFor(facts, "en").publisher["@id"], org["@id"]);
     assert.equal(appFor(facts, "en").publisher.url, org.url);
   }
+});
+
+test("WebPage and ClaimReview nodes stay complete and carry no numeric rating", () => {
+  const page = webPageJsonLd(
+    BASE,
+    "/en/about/",
+    "About BlueSkyz Labs",
+    "Company facts and products.",
+    "en",
+  );
+  assert.deepEqual(jsonLdProblems(page), []);
+
+  const review = claimReviewJsonLd(BASE, "/en/evidence/example/", {
+    claimText: "The site sets no cookies.",
+    lang: "en",
+    stateLabel: "Source linked",
+  });
+  assert.deepEqual(jsonLdProblems(review), []);
+  assert.deepEqual(forbiddenKeyPaths(review), []);
+
+  const numeric = {
+    ...review,
+    reviewRating: { ...review.reviewRating, ratingValue: 5 },
+  };
+  assert.ok(jsonLdProblems(numeric).some((p) => p.includes("reviewRating")));
+  assert.ok(forbiddenKeyPaths(numeric).some((p) => p.endsWith("ratingValue")));
 });
 
 test("product BreadcrumbList is valid in every locale", () => {

@@ -12,8 +12,9 @@ import {
  * v12 S2 — the served-page half of tests/architecture/seo-v12-structured-data.
  * CI runs architecture contracts before the build, so this spec repeats the
  * built-HTML scan on the preview: it crawls every same-origin page linked from
- * the four locale homes and checks one h1, valid registry-bound JSON-LD (no
- * rating, review or price keys) and per-locale unique titles/descriptions.
+ * the four locale homes and checks one h1, valid registry-bound JSON-LD, no
+ * fabricated product rating/price claims, and unique locale metadata. Evidence
+ * pages may carry a text-only ClaimReview; numeric ratings remain prohibited.
  * The check reads raw HTML, so it is engine-independent and runs once, on the
  * chromium project; the negative proofs live with the shared predicates in the
  * architecture test.
