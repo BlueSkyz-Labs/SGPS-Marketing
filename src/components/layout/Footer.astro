@@ -40,7 +40,10 @@ const languageName = isVi
         lang={isVi ? undefined : "en"}
         class="footer-tagline max-w-sm font-semibold text-[var(--brand-porcelain)]"
       >
-        {taglineLead}{" "}
+        {/* F-02: the separating space must live inside a dynamic expression.
+            A whitespace-only literal between the segments is dropped at compile
+            time, which rendered "Nâng tầm.Tác động." on production. */}
+        {`${taglineLead} `}
         <span class="text-[color-mix(in_srgb,var(--brand-cobalt)_70%,white)]">
           {taglineAccent}
         </span>

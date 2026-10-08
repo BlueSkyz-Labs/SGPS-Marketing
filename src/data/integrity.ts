@@ -236,4 +236,35 @@ export const INTEGRITY_ENTRIES: readonly IntegrityEntry[] = [
           en: "/.well-known/sgps.json",
           vi: "/.well-known/sgps.json",
           zh: "/.well-known/sgps.json",
-          "zh-h
+          "zh-hant": "/.well-known/sgps.json",
+        },
+        label: {
+          en: "Public claims file (JSON)",
+          vi: "Tệp tuyên bố công khai (JSON)",
+          zh: "公开声明文件（JSON）",
+          "zh-hant": "公開聲明檔案（JSON）",
+        },
+      },
+    ],
+  },
+];
+
+/** Authored EN/VI pairs for the selective bilingual mirror (v3 S+8). */
+export interface MirrorPair {
+  id: string;
+  en: string;
+  vi: string;
+}
+
+export const MIRROR_PAIRS: readonly MirrorPair[] = [
+  {
+    id: "security-reporting",
+    en: "Private vulnerability reporting is available through GitHub security advisories, visible only to maintainers.",
+    vi: "Kênh báo cáo lỗ hổng riêng tư khả dụng qua GitHub security advisories, chỉ người bảo trì nhìn thấy.",
+  },
+  {
+    id: "security-limits",
+    en: "Reporting does not establish a bug-bounty program, a response-time SLA, or a right to public disclosure.",
+    vi: "Việc báo cáo không xác lập chương trình bug-bounty, cam kết thời gian phản hồi, hay quyền công bố công khai.",
+  },
+];
