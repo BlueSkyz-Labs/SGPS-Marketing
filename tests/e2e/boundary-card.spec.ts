@@ -1,13 +1,34 @@
-import { expect, test } from "@playwright/test";
+import { expect, test, type Locator } from "@playwright/test";
 
 const EN = {
   establishes: "What this covers",
   notEstablishes: "What this does not cover",
+  boundaryStep: "Boundary",
+  expand: "Show details",
 };
 const VI = {
   establishes: "Phạm vi áp dụng",
   notEstablishes: "Ngoài phạm vi",
+  boundaryStep: "Ranh giới",
+  expand: "Xem chi tiết",
 };
+
+async function expandStep(
+  passport: Locator,
+  expand: string,
+  label: string,
+): Promise<Locator> {
+  const button = passport.getByRole("button", {
+    name: `${expand}: ${label}`,
+  });
+  await expect(button).toBeVisible();
+  const panelId = await button.getAttribute("aria-controls");
+  expect(panelId).toBeTruthy();
+  await button.click();
+  const panel = passport.locator(`#${panelId}`);
+  await expect(panel).toBeVisible();
+  return panel;
+}
 
 test.describe("boundary cards on evidence pages", () => {
   for (const [route, labels] of [
@@ -18,7 +39,13 @@ test.describe("boundary cards on evidence pages", () => {
   ] as const) {
     test(`${route} shows both boundary concepts`, async ({ page }) => {
       await page.goto(route);
-      const card = page.locator("[data-boundary-card]");
+      const passport = page.locator("[data-evidence-passport]");
+      const panel = await expandStep(
+        passport,
+        labels.expand,
+        labels.boundaryStep,
+      );
+      const card = panel.locator("[data-boundary-card]");
       await expect(card).toBeVisible();
       await expect(
         card.getByRole("heading", { level: 2, name: labels.establishes }),
@@ -33,7 +60,9 @@ test.describe("boundary cards on evidence pages", () => {
     page,
   }) => {
     await page.goto("/en/evidence/security-reporting-is-private/");
-    const headings = await page
+    const passport = page.locator("[data-evidence-passport]");
+    const panel = await expandStep(passport, EN.expand, EN.boundaryStep);
+    const headings = await panel
       .locator("[data-boundary-card] h2")
       .allTextContents();
     expect(headings[0]).toBe(EN.establishes);
@@ -48,7 +77,9 @@ test.describe("boundary cards on evidence pages", () => {
       "/en/evidence/privacy-no-tracking-on-this-site/",
     ]) {
       await page.goto(route);
-      const text = await page.locator("[data-boundary-card]").innerText();
+      const passport = page.locator("[data-evidence-passport]");
+      const panel = await expandStep(passport, EN.expand, EN.boundaryStep);
+      const text = await panel.locator("[data-boundary-card]").innerText();
       expect(text).not.toMatch(/certified|guaranteed|trust score|score/i);
     }
   });
@@ -56,7 +87,9 @@ test.describe("boundary cards on evidence pages", () => {
   test("320px keeps the boundary card readable", async ({ page }) => {
     await page.setViewportSize({ width: 320, height: 900 });
     await page.goto("/vi/evidence/security-reporting-is-private/");
-    await expect(page.locator("[data-boundary-card]")).toBeVisible();
+    const passport = page.locator("[data-evidence-passport]");
+    const panel = await expandStep(passport, VI.expand, VI.boundaryStep);
+    await expect(panel.locator("[data-boundary-card]")).toBeVisible();
     const overflow = await page.evaluate(
       () =>
         document.documentElement.scrollWidth >

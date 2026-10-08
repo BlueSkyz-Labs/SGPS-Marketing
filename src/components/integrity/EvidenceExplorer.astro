@@ -225,12 +225,22 @@ const graphJson = passport
     gap: 0.5rem;
   }
   /* When JS is active, static sections hide (chain replaces them) */
-  .evidence-explorer[data-explorer-active] [data-evidence-static-sources],
-  .evidence-explorer[data-explorer-active] [data-evidence-static-boundary] {
+  .evidence-explorer[data-explorer-active] > [data-evidence-static-sources],
+  .evidence-explorer[data-explorer-active] > [data-evidence-static-boundary] {
     display: none;
   }
   .evidence-explorer__chain:not([hidden]) ~ [data-evidence-static-sources],
   .evidence-explorer__chain:not([hidden]) ~ [data-evidence-static-boundary] {
     display: none;
+  }
+
+  @media print {
+    .evidence-explorer__chain {
+      display: none !important;
+    }
+    .evidence-explorer > [data-evidence-static-sources],
+    .evidence-explorer > [data-evidence-static-boundary] {
+      display: block !important;
+    }
   }
 </style>
