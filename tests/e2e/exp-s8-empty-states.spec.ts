@@ -1,6 +1,12 @@
 import { expect, test } from "@playwright/test";
 
 const LOCALES = ["en", "vi", "zh", "zh-hant"] as const;
+const FOUNDER_TITLE: Record<(typeof LOCALES)[number], string> = {
+  en: "Founder & CEO",
+  vi: "Nhà sáng lập kiêm CEO",
+  zh: "创始人兼首席执行官",
+  "zh-hant": "創辦人兼執行長",
+};
 const EMAIL =
   /[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+(?:\.[A-Za-z0-9-]+)*\.[A-Za-z]{2,}/;
 const PHONE = /(?:\+\d{1,3}[ .-]?)\(?\d{1,4}\)?[ .-]\d{3}[ .-]?\d{3,4}/;
@@ -49,13 +55,18 @@ for (const lang of LOCALES) {
       ).toHaveAttribute("href", new RegExp(`^/${lang}/about/$`));
     });
 
-    test("about: at most 150 words, no founder line", async ({ page }) => {
+    test("about: owner-confirmed identity, no mailbox, at most 150 words", async ({
+      page,
+    }) => {
       await page.goto(`/${lang}/about/`);
       const text = await page.locator("main").innerText();
       expect(size(lang, text), "about visible size").toBeLessThanOrEqual(
         budget(lang, 150),
       );
-      expect(text).not.toMatch(FOUNDER);
+      const normalizedText = text.toLocaleLowerCase();
+      expect(normalizedText).toContain("tony nguyen");
+      expect(normalizedText).toContain(FOUNDER_TITLE[lang].toLocaleLowerCase());
+      expect(text).toContain("2026");
       expect(text).not.toMatch(EMAIL);
     });
 
