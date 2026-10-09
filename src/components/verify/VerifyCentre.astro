@@ -15,6 +15,7 @@ import TrustLedger from "@/components/experience/TrustLedger.astro";
 import Atlas from "@/components/experience/Atlas.astro";
 import DeepLinkOpener from "@/components/verify/DeepLinkOpener.astro";
 import SourcesLine from "@/components/trust/SourcesLine.astro";
+import VerifySeal from "@/components/trust/VerifySeal.astro";
 import { getClaimAnchor, getPublicClaims } from "@/lib/claims";
 import { getPublicProducts } from "@/lib/products";
 import type { Language } from "@/data/site";
@@ -237,7 +238,10 @@ for (const item of items) {
 
 <section class="py-16 lg:py-24" data-verify-centre>
   <Container>
-    <PageHeader title={c.title} lede={c.lede} />
+    <div class="flex flex-col items-center text-center">
+      <VerifySeal lang={lang} />
+      <PageHeader title={c.title} lede={c.lede} />
+    </div>
 
     {items.length > 0 ? (
       <div class="mt-12">

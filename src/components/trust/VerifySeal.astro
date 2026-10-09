@@ -1,0 +1,117 @@
+/**
+ * VerifySeal — animated verification seal for the Verify page.
+ *
+ * A CSS-only stamp that rotates in on entry. Purely presentational;
+ * it marks the page's identity, not a certification of any specific claim.
+ */
+import type { Language } from "@/data/site";
+
+interface Props {
+  lang: Language;
+}
+
+const { lang } = Astro.props;
+
+const LABEL: Record<Language, string> = {
+  en: "Verify",
+  vi: "Xác minh",
+  zh: "验证",
+  "zh-hant": "驗證",
+};
+---
+
+<div class="verify-seal" aria-hidden="true">
+  <svg
+    class="verify-seal__ring"
+    viewBox="0 0 120 120"
+    fill="none"
+    role="presentation"
+  >
+    <circle
+      cx="60"
+      cy="60"
+      r="56"
+      stroke="currentColor"
+      stroke-width="3"
+      stroke-dasharray="8 6"
+      class="verify-seal__dash"
+    />
+    <circle
+      cx="60"
+      cy="60"
+      r="44"
+      stroke="currentColor"
+      stroke-width="1.5"
+      opacity="0.5"
+    />
+    <path
+      d="M42 61.5 54 73l24-28"
+      stroke="currentColor"
+      stroke-width="5"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      class="verify-seal__check"
+    />
+  </svg>
+  <span class="verify-seal__label">{LABEL[lang]}</span>
+</div>
+
+<style>
+  .verify-seal {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--action-primary);
+  }
+  .verify-seal__ring {
+    width: 5rem;
+    height: 5rem;
+    animation: seal-enter 0.8s var(--ease-signature, cubic-bezier(0.16, 1, 0.3, 1)) both;
+  }
+  .verify-seal__dash {
+    transform-origin: 60px 60px;
+    animation: seal-spin 24s linear infinite;
+  }
+  .verify-seal__check {
+    stroke-dasharray: 60;
+    stroke-dashoffset: 60;
+    animation: seal-draw 0.6s ease-out 0.4s forwards;
+  }
+  .verify-seal__label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+  @keyframes seal-enter {
+    from {
+      opacity: 0;
+      transform: scale(0.6) rotate(-20deg);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1) rotate(0deg);
+    }
+  }
+  @keyframes seal-spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  @keyframes seal-draw {
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .verify-seal__ring,
+    .verify-seal__dash,
+    .verify-seal__check {
+      animation: none;
+    }
+    .verify-seal__check {
+      stroke-dashoffset: 0;
+    }
+  }
+</style>

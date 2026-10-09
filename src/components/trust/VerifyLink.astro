@@ -1,0 +1,80 @@
+/**
+ * VerifyLink — a small "Verify →" citation link that deep-links
+ * into a specific claim on the Verify page.
+ *
+ * Like an academic footnote: it turns "trust us" into "check us."
+ * Only use with claim IDs that actually exist in the claims registry.
+ */
+import type { Language } from "@/data/site";
+import { getClaimAnchor } from "@/lib/claims";
+
+interface Props {
+  lang: Language;
+  /** Claim ID from the claims registry (e.g. "privacy-no-tracking-on-this-site"). */
+  claimId: string;
+}
+
+const { lang, claimId } = Astro.props;
+
+const LABEL: Record<Language, string> = {
+  en: "Verify",
+  vi: "Xác minh",
+  zh: "验证",
+  "zh-hant": "驗證",
+};
+
+const href = `/${lang}/verify/#${getClaimAnchor(claimId)}`;
+---
+
+<a href={href} class="verify-link">
+  <span aria-hidden="true" class="verify-link__mark">✓</span>
+  {LABEL[lang]}
+  <span aria-hidden="true" class="verify-link__arrow">→</span>
+</a>
+
+<style>
+  .verify-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--action-primary);
+    text-decoration: none;
+    border-bottom: 1px dashed color-mix(in srgb, var(--action-primary) 40%, transparent);
+    padding-bottom: 1px;
+    transition: border-color 0.2s ease, gap 0.2s ease;
+  }
+  .verify-link:hover {
+    border-bottom-style: solid;
+    gap: 0.5rem;
+  }
+  .verify-link__mark {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.125rem;
+    height: 1.125rem;
+    border-radius: 9999px;
+    background: color-mix(in srgb, var(--action-primary) 12%, transparent);
+    font-size: 0.6875rem;
+  }
+  .verify-link__arrow {
+    transition: transform 0.2s ease;
+  }
+  .verify-link:hover .verify-link__arrow {
+    transform: translateX(2px);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .verify-link,
+    .verify-link__arrow {
+      transition: none;
+    }
+    .verify-link:hover {
+      gap: 0.375rem;
+    }
+    .verify-link:hover .verify-link__arrow {
+      transform: none;
+    }
+  }
+</style>

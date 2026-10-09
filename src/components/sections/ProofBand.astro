@@ -3,7 +3,7 @@ import type { Language } from "@/data/site";
 import { SHARED_LABELS, labelFor } from "@/data/site";
 import BlueSkyzIcon from "@/components/icon/BlueSkyzIcon.astro";
 import { SECURITY_COPY } from "@/data/trust-copy";
-import { claimShortLabel, getPublicClaims } from "@/lib/claims";
+import { claimShortLabel, getClaimAnchor, getPublicClaims } from "@/lib/claims";
 import { getPublicProducts } from "@/lib/products";
 
 /**
@@ -77,7 +77,14 @@ const ctaLabel = labelFor(SHARED_LABELS.trustCta, lang).replace(
     >
       {rows.map((row) => (
         <li class="evidence-ledger__row" data-claim-id={row.id}>
-          <p class="evidence-ledger__claim">{row.label}</p>
+          <p class="evidence-ledger__claim">
+            <a
+              href={`/${lang}/verify/#${getClaimAnchor(row.id)}`}
+              class="evidence-ledger__link"
+            >
+              {row.label}
+            </a>
+          </p>
           <span class="evidence-ledger__thread" aria-hidden="true">
             <svg
               viewBox="0 0 100 2"
@@ -102,6 +109,16 @@ const ctaLabel = labelFor(SHARED_LABELS.trustCta, lang).replace(
      the token lands) instead of a tighter one-off padding. */
   .trust-strip {
     padding-block: var(--section-y, 3.5rem);
+  }
+  .evidence-ledger__link {
+    color: inherit;
+    text-decoration: none;
+    border-bottom: 1px dashed color-mix(in srgb, var(--action-primary) 35%, transparent);
+    transition: border-color 0.2s ease;
+  }
+  .evidence-ledger__link:hover {
+    border-bottom-style: solid;
+    border-bottom-color: var(--action-primary);
   }
   .trust-strip__head {
     display: grid;
