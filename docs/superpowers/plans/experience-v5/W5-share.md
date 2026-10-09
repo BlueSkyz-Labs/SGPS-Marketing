@@ -10,4 +10,4 @@ Depends on W3.1.
 
 ## W5.2 Sitemap / hreflang regression
 
-- Test: sitemap lists 5 products × 3 locales + indexes; every product page carries reciprocal `hreflang` (`en`, `vi`, `zh-Hans`, `x-default`) and a self canonical.
+- Test: sitemap lists every currently published product × supported locale + indexes. The 2026-10-09 publication snapshot is 2 products (Sổ Trọ, Sổ Tâm) × 4 locales (`en`, `vi`, `zh`, `zh-hant`); unpublished profiles must stay excluded. Every product page carries reciprocal `hreflang` (`en`, `vi`, `zh-Hans`, `zh-Hant`, `x-default`) and a self canonical.
