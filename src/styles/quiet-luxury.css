@@ -1,0 +1,149 @@
+/**
+ * Quiet Luxury — comprehensive premium design refinement.
+ *
+ * Design language: understated confidence. Muted tones, generous space,
+ * editorial typography, hairline details, restrained motion.
+ *
+ * Round 1: Typography — serif display voice, refined spacing
+ * Round 2: Color & space — muted palette, airier rhythm
+ * Round 3: Motion — quieter, more deliberate
+ * Round 4: Components — cards, buttons, dividers, captions
+ */
+
+/* ═══════════════════════════════════════════════════════════════════
+   ROUND 1: TYPOGRAPHY
+   ═══════════════════════════════════════════════════════════════════ */
+
+:root {
+  /* Serif display stack — Georgia has excellent Vietnamese diacritics.
+     Newsreader/Source Serif 4 can be self-hosted later as progressive
+     enhancement; the stack degrades gracefully. */
+  --font-serif:
+    "Newsreader", "Source Serif 4", Georgia, "Times New Roman",
+    ui-serif, serif;
+
+  --tracking-display: -0.025em;
+  --tracking-eyebrow: 0.18em;
+  --leading-display: 1.08;
+  --leading-body-relaxed: 1.75;
+}
+
+/* Display headlines — serif voice for hero, page titles, section heads.
+   Weight 500 keeps it refined, not shouty. */
+.hero-headline,
+h1[class*="headline"],
+.page-title,
+.section-title {
+  font-family: var(--font-serif);
+  font-weight: 500;
+  letter-spacing: var(--tracking-display);
+  line-height: var(--leading-display);
+}
+
+/* Eyebrows and labels — the quiet luxury signature:
+   small, uppercase, wide tracking */
+.eyebrow,
+[class*="eyebrow"] {
+  letter-spacing: var(--tracking-eyebrow);
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   ROUND 2: COLOR & SPACE
+   ═══════════════════════════════════════════════════════════════════ */
+
+:root {
+  --ql-ink-soft: #1a2338;
+  --ql-accent-muted: #3b5bdb;
+  --ql-accent-whisper: rgba(59, 91, 219, 0.08);
+  --ql-hairline: rgba(11, 16, 32, 0.09);
+  --ql-hairline-dark: rgba(255, 255, 255, 0.09);
+}
+
+/* Hairline dividers */
+.ql-divider {
+  border: 0;
+  border-top: 1px solid var(--ql-hairline);
+  margin: 0;
+}
+
+[data-theme="dark"] .ql-divider {
+  border-top-color: var(--ql-hairline-dark);
+}
+
+/* Refined link underlines */
+a {
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+
+/* Elegant selection */
+::selection {
+  background: var(--ql-accent-whisper);
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   ROUND 3: MOTION — quieter, more deliberate
+   ═══════════════════════════════════════════════════════════════════ */
+
+:root {
+  --ease-luxury: cubic-bezier(0.22, 1, 0.36, 1);
+  --duration-luxury: 400ms;
+}
+
+a,
+button {
+  transition-duration: var(--duration-luxury);
+  transition-timing-function: var(--ease-luxury);
+}
+
+/* Subtler hover lifts */
+[data-product-slug]:hover {
+  transform: translateY(-2px);
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   ROUND 4: COMPONENTS
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* Softer card borders */
+.product-card,
+.studio-shelf__item {
+  border-color: var(--ql-hairline);
+}
+
+/* Refined buttons — slightly less rounded */
+.btn-primary,
+.btn-secondary {
+  border-radius: 0.625rem;
+  letter-spacing: 0.01em;
+}
+
+/* Editorial captions */
+figcaption {
+  font-size: 0.8125rem;
+  letter-spacing: 0.02em;
+  color: var(--text-muted);
+}
+
+/* Tabular numbers */
+.stat-number {
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.01em;
+}
+
+/* Elegant focus */
+:focus-visible {
+  outline: 2px solid var(--ql-accent-muted);
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
