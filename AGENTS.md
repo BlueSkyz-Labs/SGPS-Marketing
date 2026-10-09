@@ -1,5 +1,7 @@
 # Agent guide — BlueSkyz Labs Web (SGPS-Marketing)
 
+> **2026-10-09 PORTFOLIO OWNER WORK WAVE — AI Factory + Experience:** Before dev/UX/PR promotion read `docs/sgps/2026-10-09-AI_FACTORY_EXPERIENCE_ADOPTION.md` after refreshing live truth. Continue safe approved work autonomously; require independent exact-head, real rendered UX proof and keep existing project Owner/brand/security/instruction protections. The SGPS Core #293 candidate does NOT change pins or grant merge/release authority. Do not self-apply `owner-approved`.
+
 Trusted current source of truth only:
 
 - **Experience contract:** `docs/superpowers/specs/2026-09-03-blueskyz-web-v1-c1-1-design.md` — substantive design remains authoritative; its pre-implementation status text is historical.
