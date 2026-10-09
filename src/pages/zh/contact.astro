@@ -3,6 +3,7 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
 import { PAGE_META } from "@/data/page-meta";
 import Container from "@/components/layout/Container.astro";
 import PageHeader from "@/components/layout/PageHeader.astro";
+import SafeAction from "@/components/integrity/SafeAction.astro";
 import ProductSignInLane from "@/components/empty-state/ProductSignInLane.astro";
 import PublicContactEmails from "@/components/empty-state/PublicContactEmails.astro";
 import { EMPTY_STATE_COPY } from "@/data/empty-state-copy";
@@ -23,23 +24,20 @@ import { labelFor, SECURITY_ADVISORY_URL } from "@/data/site";
       />
       <ul class="mt-12 grid gap-4 sm:grid-cols-2">
         <li class="flex min-w-0 flex-col justify-center rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-raised)] p-6">
-          <a
-            href="/zh/security/"
-            class="inline-flex min-h-11 items-center gap-2 text-lg font-semibold tracking-tight text-[var(--action-primary)] no-underline hover:underline"
-          >
-            安全 →
-          </a>
+          <h2 class="text-lg font-semibold tracking-tight">安全</h2>
           <p class="mt-2 text-sm leading-relaxed text-[var(--text-secondary)]">
-            访问安全页面
+            <a href="/zh/security/" class="text-[var(--action-primary)] underline">
+              访问安全页面
+            </a>
           </p>
-          <a
-            href={SECURITY_ADVISORY_URL}
-            data-boundary="private-reporting"
-            rel="noopener noreferrer"
-            class="mt-3 inline-flex min-h-11 items-center text-sm font-medium text-[var(--action-primary)] underline"
-          >
-            通过私密渠道报告安全漏洞
-          </a>
+          <div class="mt-3">
+            <SafeAction
+              href={SECURITY_ADVISORY_URL}
+              label="打开私密漏洞报告"
+              boundary="private-reporting"
+              lang="zh"
+            />
+          </div>
         </li>
         <ProductSignInLane lang="zh" />
         <PublicContactEmails
