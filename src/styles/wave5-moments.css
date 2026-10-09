@@ -1,0 +1,54 @@
+/** Wave 5 — existing page primitives and a responsive product shelf. */
+.sail-drift {
+  display: inline-block;
+  font-size: var(--size-9);
+  line-height: 1;
+  animation: sail-drift 4s var(--motion-ease-standard) 1;
+  transform-origin: 50% 80%;
+}
+
+@keyframes sail-drift {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-12px);
+  }
+}
+
+.not-found-moment .page-header__eyebrow {
+  justify-content: center;
+}
+
+.studio-shelf {
+  display: grid;
+  gap: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .studio-shelf {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.studio-shelf__framing {
+  max-width: 42rem;
+}
+
+/* Preserve the ProductCard shell's equal-height grid stretch and existing
+   hover/focus/reduced-motion treatment; no second motion layer. */
+.studio-shelf__item {
+  display: flex;
+  min-width: 0;
+}
+
+.studio-shelf__item > .product-card-shell {
+  flex: 1 1 auto;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sail-drift {
+    animation: none;
+  }
+}

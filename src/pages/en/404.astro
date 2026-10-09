@@ -13,19 +13,26 @@ import PageHeader from "@/components/layout/PageHeader.astro";
 >
   <section class="py-20 lg:py-28">
     <Container>
-      <PageHeader
-        eyebrow="404"
-        eyebrowVariant="numeral"
-        title="Page not found"
-        lede="We can't find that page. It may have moved. Try one of these."
-      />
-      <div class="mt-10 flex flex-wrap gap-3">
-        <ButtonLink href="/en/" variant="primary">
-          Go home
-        </ButtonLink>
-        <ButtonLink href="/en/products/" variant="secondary">
-          Browse products
-        </ButtonLink>
+      <div class="not-found-moment mx-auto max-w-2xl text-center">
+        <div class="sail-drift" aria-hidden="true">
+          ⛵
+        </div>
+        <div class="mt-6">
+          <PageHeader
+            eyebrow="404"
+            eyebrowVariant="numeral"
+            title="Page not found"
+            lede="Lost at sea? Even sails drift off course. Let’s get you back on track."
+          />
+        </div>
+        <div class="mt-10 flex flex-wrap justify-center gap-3">
+          <ButtonLink href="/en/" variant="primary">
+            Go home
+          </ButtonLink>
+          <ButtonLink href="/en/products/" variant="secondary">
+            Browse products
+          </ButtonLink>
+        </div>
       </div>
     </Container>
   </section>

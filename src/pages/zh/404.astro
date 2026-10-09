@@ -13,19 +13,26 @@ import PageHeader from "@/components/layout/PageHeader.astro";
 >
   <section class="py-20 lg:py-28">
     <Container>
-      <PageHeader
-        eyebrow="404"
-        eyebrowVariant="numeral"
-        title="找不到页面"
-        lede="页面可能已经移动。你可以试试下面的链接。"
-      />
-      <div class="mt-10 flex flex-wrap gap-3">
-        <ButtonLink href="/zh/" variant="primary">
-          返回首页
-        </ButtonLink>
-        <ButtonLink href="/zh/products/" variant="secondary">
-          浏览产品
-        </ButtonLink>
+      <div class="not-found-moment mx-auto max-w-2xl text-center">
+        <div class="sail-drift" aria-hidden="true">
+          ⛵
+        </div>
+        <div class="mt-6">
+          <PageHeader
+            eyebrow="404"
+            eyebrowVariant="numeral"
+            title="找不到页面"
+            lede="在海上迷失了？ 即使是帆也会偏离航向。让我们带你回到正轨。"
+          />
+        </div>
+        <div class="mt-10 flex flex-wrap justify-center gap-3">
+          <ButtonLink href="/zh/" variant="primary">
+            返回首页
+          </ButtonLink>
+          <ButtonLink href="/zh/products/" variant="secondary">
+            浏览产品
+          </ButtonLink>
+        </div>
       </div>
     </Container>
   </section>

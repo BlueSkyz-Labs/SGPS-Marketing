@@ -7,26 +7,33 @@ import PageHeader from "@/components/layout/PageHeader.astro";
 ---
 
 <BaseLayout
-  title="未找到頁面"
+  title="找不到頁面"
   description="你請求的頁面無法找到。"
   path="/zh-hant/404/"
   noindex={true}
 >
   <section class="py-20 lg:py-28">
     <Container>
-      <PageHeader
-        eyebrow="404"
-        eyebrowVariant="numeral"
-        title="找不到頁面"
-        lede="頁面可能已經移動。你可以試試下面的連結。"
-      />
-      <div class="mt-10 flex flex-wrap gap-3">
-        <ButtonLink href="/zh-hant/" variant="primary">
-          返回首頁
-        </ButtonLink>
-        <ButtonLink href="/zh-hant/products/" variant="secondary">
-          瀏覽產品
-        </ButtonLink>
+      <div class="not-found-moment mx-auto max-w-2xl text-center">
+        <div class="sail-drift" aria-hidden="true">
+          ⛵
+        </div>
+        <div class="mt-6">
+          <PageHeader
+            eyebrow="404"
+            eyebrowVariant="numeral"
+            title="找不到頁面"
+            lede="在海上迷失了？ 即使是帆也會偏離航向。讓我們帶你回到正軌。"
+          />
+        </div>
+        <div class="mt-10 flex flex-wrap justify-center gap-3">
+          <ButtonLink href="/zh-hant/" variant="primary">
+            返回首頁
+          </ButtonLink>
+          <ButtonLink href="/zh-hant/products/" variant="secondary">
+            瀏覽產品
+          </ButtonLink>
+        </div>
       </div>
     </Container>
   </section>
