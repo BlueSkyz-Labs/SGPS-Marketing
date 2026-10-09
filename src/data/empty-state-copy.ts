@@ -9,10 +9,10 @@ import type { LocalizedLabel } from "@/data/site";
  */
 export const EMPTY_STATE_COPY = {
   contactLede: {
-    en: "No business mailbox is published yet. We will list it here once it is approved.",
-    vi: "Chưa có hộp thư công việc được công bố. Chúng tôi sẽ đăng tại đây khi được phê duyệt.",
-    zh: "商务邮箱尚未公布。获批后将在此列出。",
-    "zh-hant": "商務電子信箱尚未公布。核准後將在此列出。",
+    en: "For business enquiries or other requests, choose the appropriate contact route below.",
+    vi: "Để liên hệ kinh doanh hoặc gửi yêu cầu khác, hãy chọn kênh phù hợp bên dưới.",
+    zh: "如需商务或其他咨询，请从下方选择合适的联系渠道。",
+    "zh-hant": "如需商務或其他諮詢，請從下方選擇合適的聯絡管道。",
   },
   signInHeading: {
     en: "Product sign-in",
@@ -27,16 +27,16 @@ export const EMPTY_STATE_COPY = {
     "zh-hant": "已在使用某款產品？直接前往其登入頁。",
   },
   notPublished: {
-    en: "Not yet published",
-    vi: "Chưa công bố",
-    zh: "尚未公布",
-    "zh-hant": "尚未公布",
+    en: "Not listed",
+    vi: "Không có trong danh sách",
+    zh: "未列出",
+    "zh-hant": "未列出",
   },
   businessPending: {
-    en: "Published here once approved.",
-    vi: "Sẽ được công bố tại đây khi được phê duyệt.",
-    zh: "获批后在此公布。",
-    "zh-hant": "核准後於此公布。",
+    en: "No business mailbox is listed.",
+    vi: "Không có hộp thư doanh nghiệp nào được liệt kê.",
+    zh: "未列出商务邮箱。",
+    "zh-hant": "未列出商務電子信箱。",
   },
   aboutCheck: {
     en: "What you can check",
