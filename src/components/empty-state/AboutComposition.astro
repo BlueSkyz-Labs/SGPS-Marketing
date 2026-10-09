@@ -17,12 +17,13 @@ import { getEntry } from "astro:content";
  * `pages` collection `{lang}-about` entry supplies founder name/title and
  * location, rendered below as the entity identity block. The confirmed
  * operating year is shown once from SITE.operatingSinceYear above.
- * Absent fields are still omitted, never padded.
+ * Absent fields are still omitted, never padded. The founder feature uses
+ * decorative brand artwork rather than implying an unverified portrait.
  *
  * UI upgrade F12 (presentation only): products render as hairline cards whose
  * whole surface is the link target; each checkable claim is a full-width row
  * with a trailing arrow, so the link affordance no longer depends on an
- * underlined sentence. Copy and DOM order are unchanged.
+ * underlined sentence. Product and claim copy remain authored by their sources.
  *
  * v12 S2: each card says what the product does for the visitor, with the
  * same presentation one-liner as its profile page (`productPageCopy`, which
@@ -68,16 +69,32 @@ const founderLocation =
     {SITE.operatingSinceYear}
   </time>
 </p>
-<div class="about-grid" data-about-composition>
-  {founderName && founderLocation && (
-    <section aria-labelledby="about-founder" data-about-founder>
-      <h2 id="about-founder" class="about-label">
+{founderName && founderLocation && (
+  <section
+    class="about-founder"
+    aria-labelledby="about-founder"
+    data-about-founder
+  >
+    <div class="about-founder__identity">
+      {founderTitle && <p class="about-founder__title">{founderTitle}</p>}
+      <h2 id="about-founder" class="about-founder__name">
         {founderName}
       </h2>
-      {founderTitle && <p class="about-founder__title">{founderTitle}</p>}
       <p class="about-founder__meta text-pretty">{founderLocation}</p>
-    </section>
-  )}
+    </div>
+    <div class="about-founder__art" aria-hidden="true">
+      <img
+        src="/images/about/founder-elevation.webp"
+        alt=""
+        width="960"
+        height="1200"
+        loading="lazy"
+        decoding="async"
+      />
+    </div>
+  </section>
+)}
+<div class="about-grid" data-about-composition>
   {products.length > 0 ? (
     <section aria-labelledby="about-make">
       <h2 id="about-make" class="about-label">
@@ -209,18 +226,63 @@ const founderLocation =
   :lang(zh) .about-label {
     letter-spacing: 0.04em;
   }
+  .about-founder {
+    display: grid;
+    overflow: hidden;
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-media);
+    background: var(--surface-raised);
+  }
+  .about-founder__identity {
+    align-self: center;
+    min-inline-size: 0;
+    padding: 2rem;
+  }
   .about-founder__title {
-    margin: 0.75rem 0 0;
-    font-size: var(--size-4);
+    margin: 0 0 1.5rem;
+    font-size: var(--size-2);
     font-weight: 600;
-    letter-spacing: -0.01em;
+    line-height: var(--lh-2);
+    color: var(--action-primary);
+  }
+  .about-founder__name {
+    margin: 0;
+    font-size: var(--size-7);
+    font-weight: 600;
+    line-height: var(--lh-7);
+    letter-spacing: -0.02em;
+    overflow-wrap: anywhere;
     color: var(--text-primary);
   }
   .about-founder__meta {
-    margin: 0.5rem 0 0;
+    margin: 1.25rem 0 0;
+    padding-block-start: 1.25rem;
+    border-block-start: 1px solid var(--border-subtle);
     font-size: var(--size-2);
-    line-height: 1.6;
+    line-height: var(--lh-2);
     color: var(--text-secondary);
+  }
+  .about-founder__art {
+    aspect-ratio: 4 / 5;
+    overflow: hidden;
+  }
+  .about-founder__art img {
+    display: block;
+    inline-size: 100%;
+    block-size: 100%;
+    object-fit: cover;
+  }
+  @media (min-width: 48rem) {
+    .about-founder {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    }
+    .about-founder__identity {
+      padding: 3rem;
+    }
+    .about-founder__name {
+      font-size: var(--size-8);
+      line-height: var(--lh-8);
+    }
   }
   .about-products,
   .about-checks {
@@ -335,8 +397,13 @@ const founderLocation =
     }
   }
   @media (forced-colors: active) {
-    .about-label::before {
+    .about-label::before,
+    .about-founder,
+    .about-founder__meta {
       border-color: CanvasText;
+    }
+    .about-founder__title {
+      color: CanvasText;
     }
     .about-grid :global(.about-arrow) {
       color: LinkText;
