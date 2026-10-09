@@ -266,23 +266,6 @@ jobs:
             .catch((error)=>{console.error(error);process.exit(1);});"
       - name: Visual regression gate (chromium)
         run: pnpm exec playwright test --project=visual
-      - name: Export reviewed visual candidates as public log evidence
-        if: ${{ failure() }}
-        run: |
-          python3 - <<'PYTHON'
-          import base64, hashlib
-          from pathlib import Path
-          files = sorted(Path("test-results").glob("*/*-actual.png"))
-          for path in files:
-              if "retry" in path.parent.name:
-                  continue
-              data = path.read_bytes()
-              print("SGPS_VISUAL_BEGIN " + path.name + " " + hashlib.sha256(data).hexdigest())
-              encoded = base64.b64encode(data).decode("ascii")
-              for start in range(0, len(encoded), 1000):
-                  print("SGPS_VISUAL_DATA " + encoded[start:start + 1000])
-              print("SGPS_VISUAL_END")
-          PYTHON
       - name: Upload diff images on failure
         if: ${{ failure() }}
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
