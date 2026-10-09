@@ -62,11 +62,18 @@ test("products page empty registry omits hollow featured shelf", async ({
   await expect(page.locator("[data-proof-first-empty-state]")).toBeVisible();
 });
 
-test("contact empty-email state leads with working security path", async ({
+test("contact publishes business email alongside working security path", async ({
   page,
 }) => {
   await page.goto("/en/contact/");
-  await expect(page.locator('a[href^="mailto:"]')).toHaveCount(0);
+  const businessEmail = page.locator(
+    'main [data-public-email-role="contact"] a',
+  );
+  await expect(businessEmail).toHaveCount(1);
+  await expect(businessEmail).toHaveAttribute(
+    "href",
+    /^mailto:(?:hello|tony)@blueskyzlabs\.com$/,
+  );
   await expect(
     page.getByRole("link", { name: /private vulnerability reporting/i }),
   ).toBeVisible();
