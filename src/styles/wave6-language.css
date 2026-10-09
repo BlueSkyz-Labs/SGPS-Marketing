@@ -1,0 +1,28 @@
+/**
+ * Elite Wave 6 — Verify as design language + hero breathing.
+ *
+ * 1. Hero breathing: an extremely subtle slow light shift on the hero
+ *    atmosphere. Makes the hero feel alive without distraction.
+ *    Respects prefers-reduced-motion.
+ * 2. (VerifySeal + VerifyLink are components; their styles are scoped.)
+ */
+
+/* ── Hero breathing ────────────────────────────────────────────── */
+@keyframes hero-breathe {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.92;
+  }
+}
+
+.hero-atmosphere {
+  animation: hero-breathe 8s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-atmosphere {
+    animation: none;
+  }
+}
