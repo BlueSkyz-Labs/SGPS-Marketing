@@ -56,7 +56,10 @@ const emptyDescription = "产品仅在具备可核验的公开证据时发布。
           </h2>
           <div class="studio-shelf mt-8">
             {products.map((product) => (
-              <div data-product-slug={product.data.slug} class="studio-shelf__item">
+              <div
+                data-product-slug={product.data.slug}
+                class="studio-shelf__item"
+              >
                 <ProductCard product={product} lang="zh" showThumb />
               </div>
             ))}

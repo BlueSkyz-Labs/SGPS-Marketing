@@ -1,31 +1,26 @@
-/**
- * Elite Wave 5 — Brand moments.
- *
- * 1. 404 drifting sail: gentle CSS animation, respects reduced motion.
- * 2. Studio shelf: product index editorial cards (styles only; markup in pages).
- */
-
- /* ── 404 drifting sail ─────────────────────────────────────────── */
+/** Wave 5 — existing page primitives and a responsive product shelf. */
 .sail-drift {
   display: inline-block;
-  font-size: clamp(3rem, 8vw, 5rem);
+  font-size: var(--size-9);
   line-height: 1;
-  animation: sail-drift 6s ease-in-out infinite;
+  animation: sail-drift 4s var(--motion-ease-standard) 1;
   transform-origin: 50% 80%;
 }
 
 @keyframes sail-drift {
-  0%, 100% { transform: translateY(0) rotate(-2deg); }
-  50% { transform: translateY(-12px) rotate(2deg); }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .sail-drift {
-    animation: none;
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-12px);
   }
 }
 
-/* ── Studio shelf: product index ───────────────────────────────── */
+.not-found-moment .page-header__eyebrow {
+  justify-content: center;
+}
+
 .studio-shelf {
   display: grid;
   gap: 1.5rem;
@@ -41,51 +36,19 @@
   max-width: 42rem;
 }
 
+/* Preserve the ProductCard shell's equal-height grid stretch and existing
+   hover/focus/reduced-motion treatment; no second motion layer. */
 .studio-shelf__item {
-  position: relative;
-  border-radius: 1.25rem;
-  transition:
-    transform 0.3s var(--ease-signature, cubic-bezier(0.16, 1, 0.3, 1));
+  display: flex;
+  min-width: 0;
 }
 
-/* Per-product ambient gradients behind the card */
-.studio-shelf__item::before {
-  content: "";
-  position: absolute;
-  inset: -1px;
-  border-radius: inherit;
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-  z-index: 0;
+.studio-shelf__item > .product-card-shell {
+  flex: 1 1 auto;
 }
 
-.studio-shelf__item[data-product-slug="sotro"]::before {
-  background: radial-gradient(
-    100% 60% at 80% 0%,
-    color-mix(in srgb, #c2410c 16%, transparent),
-    transparent 70%
-  );
-}
-
-.studio-shelf__item[data-product-slug="sotam"]::before {
-  background: radial-gradient(
-    100% 60% at 20% 0%,
-    color-mix(in srgb, #a21caf 14%, transparent),
-    transparent 70%
-  );
-}
-
-.studio-shelf__item:hover::before,
-.studio-shelf__item:focus-within::before {
-  opacity: 1;
-}
-
-.studio-shelf__item:hover {
-  transform: translateY(-2px);
-}
-
-.studio-shelf__item > * {
-  position: relative;
-  z-index: 1;
+@media (prefers-reduced-motion: reduce) {
+  .sail-drift {
+    animation: none;
+  }
 }

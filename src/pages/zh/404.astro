@@ -2,6 +2,7 @@
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import Container from "@/components/layout/Container.astro";
 import ButtonLink from "@/components/ui/ButtonLink.astro";
+import PageHeader from "@/components/layout/PageHeader.astro";
 ---
 
 <BaseLayout
@@ -12,17 +13,18 @@ import ButtonLink from "@/components/ui/ButtonLink.astro";
 >
   <section class="py-20 lg:py-28">
     <Container>
-      <div class="mx-auto max-w-2xl text-center">
-        <div class="sail-drift" aria-hidden="true">⛵</div>
-        <p class="mt-6 text-sm font-semibold uppercase tracking-widest text-[var(--text-secondary)]">
-          404
-        </p>
-        <h1 class="mt-2 text-4xl font-bold tracking-tight sm:text-5xl">
-          在海上迷失了？
-        </h1>
-        <p class="mt-4 text-lg leading-relaxed text-[var(--text-secondary)]">
-          即使是帆也会偏离航向。让我们带你回到正轨。
-        </p>
+      <div class="not-found-moment mx-auto max-w-2xl text-center">
+        <div class="sail-drift" aria-hidden="true">
+          ⛵
+        </div>
+        <div class="mt-6">
+          <PageHeader
+            eyebrow="404"
+            eyebrowVariant="numeral"
+            title="找不到页面"
+            lede="在海上迷失了？ 即使是帆也会偏离航向。让我们带你回到正轨。"
+          />
+        </div>
         <div class="mt-10 flex flex-wrap justify-center gap-3">
           <ButtonLink href="/zh/" variant="primary">
             返回首页

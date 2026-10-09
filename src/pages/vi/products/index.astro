@@ -37,7 +37,8 @@ const emptyDescription =
       />
       {products.length > 0 && (
         <p class="studio-shelf__framing mt-6 text-base font-medium text-[var(--text-secondary)]">
-          {products.length} sản phẩm. Một triết lý: công cụ nhỏ bạn có thể xác minh, xây cho người dùng.
+          {products.length} sản phẩm. Một triết lý: công cụ nhỏ bạn có thể xác
+          minh, xây cho người dùng.
         </p>
       )}
       {products.length === 0 ? (
@@ -57,7 +58,10 @@ const emptyDescription =
           </h2>
           <div class="studio-shelf mt-8">
             {products.map((product) => (
-              <div data-product-slug={product.data.slug} class="studio-shelf__item">
+              <div
+                data-product-slug={product.data.slug}
+                class="studio-shelf__item"
+              >
                 <ProductCard product={product} lang="vi" showThumb />
               </div>
             ))}
