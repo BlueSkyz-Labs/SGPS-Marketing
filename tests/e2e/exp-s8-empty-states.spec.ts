@@ -36,7 +36,7 @@ function budget(lang: string, englishWords: number) {
 
 for (const lang of LOCALES) {
   test.describe(`S8 empty states /${lang}/`, () => {
-    test("contact: one primary action to a real route, no invented mailbox", async ({
+    test("contact: owner-confirmed business mailbox and separate security reporting", async ({
       page,
     }) => {
       await page.goto(`/${lang}/contact/`);
@@ -45,9 +45,25 @@ for (const lang of LOCALES) {
       expect(size(lang, text), "contact visible size").toBeLessThanOrEqual(
         budget(lang, 100),
       );
-      expect(text).not.toMatch(EMAIL);
+      const publishedEmails = text.match(new RegExp(EMAIL.source, "g")) ?? [];
+      expect(publishedEmails).toHaveLength(1);
+      expect(publishedEmails[0]).toMatch(/^(?:hello|tony)@blueskyzlabs\.com$/);
       expect(text).not.toMatch(PHONE);
-      await expect(page.locator('main a[href^="mailto:"]')).toHaveCount(0);
+      const businessEmail = main.locator(
+        '[data-public-email-role="contact"] a',
+      );
+      await expect(businessEmail).toHaveCount(1);
+      await expect(businessEmail).toHaveAttribute(
+        "href",
+        /^mailto:(?:hello|tony)@blueskyzlabs\.com$/,
+      );
+      await expect(businessEmail).toHaveText(publishedEmails[0]);
+      await expect(main.locator('a[href^="mailto:"]')).toHaveCount(1);
+      await expect(
+        main.locator(
+          '[data-public-email-role="support"], [data-public-email-role="privacy"], [data-public-email-role="security"]',
+        ),
+      ).toHaveCount(0);
       await expect(page.locator('main a[href^="tel:"]')).toHaveCount(0);
       const primary = page.locator("main [data-safe-action] a");
       await expect(primary).toHaveCount(1);
@@ -57,8 +73,8 @@ for (const lang of LOCALES) {
       );
       await expect(page.locator("[data-contact-signin]")).not.toHaveCount(0);
       await expect(
-        page.locator('[data-contact-lane="business-state"] a'),
-      ).toHaveAttribute("href", new RegExp(`^/${lang}/about/$`));
+        page.locator('[data-contact-lane="business-state"]'),
+      ).toHaveCount(0);
     });
 
     test("about: owner-confirmed identity, mission, and registry products", async ({
