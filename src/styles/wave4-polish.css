@@ -1,0 +1,65 @@
+/**
+ * Elite Wave 4 — refinements on existing surfaces.
+ * Keep the authored scene, theme and accessibility contracts intact.
+ */
+
+/* The proof band's existing verification link uses the secondary pill shape. */
+.trust-strip__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 2.75rem;
+  padding: 0.625rem 1.25rem;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--border-subtle);
+  font-weight: 600;
+  font-size: var(--size-2);
+  text-decoration: none;
+  color: var(--text-primary);
+  transition:
+    border-color 0.2s var(--ease-signature, cubic-bezier(0.16, 1, 0.3, 1)),
+    background-color 0.2s var(--ease-signature, cubic-bezier(0.16, 1, 0.3, 1));
+}
+
+.trust-strip__cta:where(:hover, :focus-visible) {
+  border-color: var(--action-primary);
+  background-color: color-mix(in srgb, var(--action-primary) 8%, transparent);
+}
+
+/* Only an authored ink header gets the accent on a light page.
+   Explicit light and system-light follow the site's data-theme contract. */
+:root[data-theme="light"] .header-glass[data-scene="ink"] {
+  border-bottom-color: color-mix(
+    in srgb,
+    var(--action-primary) 24%,
+    transparent
+  );
+  box-shadow: 0 1px 12px -4px
+    color-mix(in srgb, var(--action-primary) 18%, transparent);
+}
+
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) .header-glass[data-scene="ink"] {
+    border-bottom-color: color-mix(
+      in srgb,
+      var(--action-primary) 24%,
+      transparent
+    );
+    box-shadow: 0 1px 12px -4px
+      color-mix(in srgb, var(--action-primary) 18%, transparent);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .trust-strip__cta {
+    transition: none;
+  }
+}
+
+@media (forced-colors: active) {
+  :root[data-theme] .header-glass[data-scene="ink"],
+  :root:not([data-theme]) .header-glass[data-scene="ink"] {
+    border-bottom-color: CanvasText;
+    box-shadow: none;
+  }
+}

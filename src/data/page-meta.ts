@@ -41,9 +41,9 @@ export const PAGE_META: Record<Language, Record<StaticPageKey, PageMeta>> = {
         "BlueSkyz Labs đang làm Sổ Trọ và Sổ Tâm. Tìm hiểu cách chúng tôi làm việc và tự kiểm chứng từng điều chúng tôi nói qua nguồn công khai.",
     },
     contact: {
-      title: "Liên hệ: báo cáo bảo mật riêng tư",
+      title: "Liên hệ: hợp tác và câu hỏi chung",
       description:
-        "Cách liên hệ BlueSkyz Labs: báo lỗ hổng bảo mật riêng tư qua GitHub. Hộp thư cho hợp tác và câu hỏi chung sẽ được đăng tại đây khi sẵn sàng.",
+        "Liên hệ BlueSkyz Labs về hợp tác và câu hỏi chung qua email được công bố trên trang. Báo cáo lỗ hổng bảo mật qua kênh riêng tư trên GitHub.",
     },
     privacy: {
       title: "Quyền riêng tư: không dùng cookie",
@@ -103,9 +103,9 @@ export const PAGE_META: Record<Language, Record<StaticPageKey, PageMeta>> = {
         "BlueSkyz Labs builds software products. See what we are building now and the public evidence behind what we say, so you can check it yourself.",
     },
     contact: {
-      title: "Contact us: private security reports",
+      title: "Contact: business and general inquiries",
       description:
-        "How to reach BlueSkyz Labs: private vulnerability reporting for security issues today, and a business mailbox once one is published.",
+        "Contact BlueSkyz Labs about business and general questions. Report security vulnerabilities through the private GitHub channel.",
     },
     privacy: {
       title: "Privacy: no cookies, only language and theme",
@@ -166,9 +166,9 @@ export const PAGE_META: Record<Language, Record<StaticPageKey, PageMeta>> = {
         "BlueSkyz Labs 打造软件产品。了解我们目前在做什么，以及我们所说内容背后的公开依据，方便你自行核实。",
     },
     contact: {
-      title: "联系我们：私密安全报告",
+      title: "联系我们：商务合作与一般咨询",
       description:
-        "如何联系 BlueSkyz Labs：目前可通过私密漏洞报告通道反馈安全问题；商务邮箱公布后将在此列出。",
+        "联系 BlueSkyz Labs，咨询商务合作及一般问题。请通过 GitHub 私密渠道报告安全漏洞。",
     },
     privacy: {
       title: "隐私：不设置 Cookie，仅保存语言与主题",
@@ -229,9 +229,9 @@ export const PAGE_META: Record<Language, Record<StaticPageKey, PageMeta>> = {
         "BlueSkyz Labs 打造軟體產品。了解我們目前在做什麼，以及我們所說內容背後的公開依據，方便你自行查證。",
     },
     contact: {
-      title: "聯絡我們：私密資安通報",
+      title: "聯絡我們：商務合作與一般洽詢",
       description:
-        "如何聯絡 BlueSkyz Labs：目前可透過私密漏洞通報管道回報資安問題；商務電子信箱公布後將在此列出。",
+        "聯絡 BlueSkyz Labs，洽詢商務合作與一般問題。請透過 GitHub 私密管道通報資安漏洞。",
     },
     privacy: {
       title: "隱私權：不設定 Cookie，只儲存語言與主題",
