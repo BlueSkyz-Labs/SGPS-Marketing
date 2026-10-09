@@ -15,7 +15,7 @@ export const CRAFT_STORIES: readonly CraftStoryDraft[] = [
     sections: {
       problem: {
         en: "A public issue tracker is the wrong place for a vulnerability: it publishes the reporter and the defect before anyone can look at either.",
-        vi: "Issue tracker công khai không phải là nơi phù hợp cho một lỗ hổng: nó công bố cả người báo lẫn khiếm khuyết trước khi ai kịp xem.",
+        vi: "Trình theo dõi issue công khai là chỗ sai cho một lỗ hổng: nó công bố cả người báo lẫn khiếm khuyết trước khi ai kịp xem.",
         zh: "公开的问题跟踪器并不适合处理漏洞：它会在任何人查看之前就公布报告者与缺陷。",
         "zh-hant":
           "公開的問題追蹤器並不適合處理漏洞：它會在任何人檢視之前就公布報告者與缺陷。",
@@ -43,7 +43,7 @@ export const CRAFT_STORIES: readonly CraftStoryDraft[] = [
       },
       limitations: {
         en: "No bug bounty, no response time commitment and no certification are claimed. This site does not itself receive reports — it states the private channel and its boundary.",
-        vi: "Không có bug bounty, không cam kết thời gian phản hồi và không tuyên bố chứng nhận nào. Trang web này không tự tiếp nhận báo cáo — nó nêu kênh riêng và ranh giới của kênh đó.",
+        vi: "Không có chương trình thưởng lỗ hổng, không cam kết thời gian phản hồi và không có chứng nhận nào được tuyên bố. Trang web này không tự tiếp nhận báo cáo — nó nêu kênh riêng và ranh giới của kênh đó.",
         zh: "不声称漏洞赏金、响应时限或任何认证。本站自身不接收报告——它只说明私密渠道及其边界。",
         "zh-hant":
           "不聲稱漏洞賞金、回應時限或任何認證。本站自身不接收報告——它只說明私密管道及其邊界。",

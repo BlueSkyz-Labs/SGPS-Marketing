@@ -57,7 +57,7 @@ lastReviewedAt: 2026-09-30
 # is an Owner feedback checkpoint (plan v5 W3.4).
 i18n:
   vi:
-    shortDescription: "Dành cho chủ trọ ở Việt Nam. Theo dõi phòng, tiền chưa thu và việc cần làm hôm nay."
+    shortDescription: "Dành cho chủ trọ ở Việt Nam. Theo dõi phòng, tiền chưa thu, lịch sử thuê đáng tin cậy và việc cần làm hôm nay."
     jobs:
       - "Xem tháng này còn ai chưa đóng tiền và hôm nay cần lo việc gì"
       - "Ghi lại phòng, người thuê, số điện nước và các khoản thu hằng tháng cho gọn, cho chắc"

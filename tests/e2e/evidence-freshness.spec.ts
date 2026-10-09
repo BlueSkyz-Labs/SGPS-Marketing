@@ -45,7 +45,7 @@ test.describe("authored evidence freshness", () => {
   test("VI freshness row is localized", async ({ page }) => {
     await page.goto("/vi/security/");
     await expect(page.locator("[data-sources-line]")).toContainText(
-      /Rà soát 12 tháng 9, 2026/,
+      /Đã xem xét 12 tháng 9, 2026/,
     );
   });
 });
