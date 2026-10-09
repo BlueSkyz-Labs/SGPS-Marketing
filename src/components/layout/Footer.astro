@@ -10,6 +10,7 @@ const lang = getLanguageFromPath(currentPath);
 const isVi = lang === "vi";
 const FOOTER_GROUPS = getFooterGroups(lang);
 
+// OG-2 owner-ratified: English tagline in en/zh/zh-hant; vi is localized.
 const taglineLead = isVi ? "Trí tuệ. Nâng tầm." : SITE.taglineLead;
 const taglineAccent = isVi ? "Tác động." : SITE.taglineAccent;
 
