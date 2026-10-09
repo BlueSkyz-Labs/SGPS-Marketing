@@ -141,8 +141,8 @@ export const CLAIMS: readonly PublicClaim[] = [
     titleLabel: {
       en: "Registry lists only products with verifiable evidence",
       vi: "Danh mục chỉ công bố sản phẩm có bằng chứng xác minh được",
-      zh: "产品仅在其公开证据可核验时",
-      "zh-hant": "產品僅在其公開證據可核驗時",
+      zh: "产品仅在其公开证据可核验时才会出现在公开登记表中",
+      "zh-hant": "產品僅在其公開證據可核驗時才會出現在公開登錄名單中",
     },
     evidenceIds: ["ev-products-route"],
   },
