@@ -33,7 +33,7 @@ export const PAGE_META: Record<Language, Record<StaticPageKey, PageMeta>> = {
     home: {
       title: "BlueSkyz Labs | Sổ Trọ và Sổ Tâm, đang phát triển",
       description:
-        "BlueSkyz Labs đang xây dựng Sổ Trọ, sổ tay điện tử cho chủ trọ ở Việt Nam, và Sổ Tâm, cuốn nhật ký riêng tư ưu tiên lưu trên máy. Cả hai đang phát triển.",
+        "BlueSkyz Labs đang xây dựng Sổ Trọ, sổ tay cho chủ trọ Việt Nam, và Sổ Tâm, nhật ký riêng tư ưu tiên lưu trên máy. Cả hai đang phát triển.",
     },
     about: {
       title: "Về BlueSkyz",
@@ -56,9 +56,9 @@ export const PAGE_META: Record<Language, Record<StaticPageKey, PageMeta>> = {
         "Cách nhận trợ giúp cho Sổ Trọ và Sổ Tâm. Hiện chưa có hộp thư hỗ trợ chung; kênh báo cáo bảo mật riêng tư chỉ dành cho lỗ hổng bảo mật.",
     },
     products: {
-      title: "Sản phẩm: Sổ Trọ và Sổ Tâm, đang phát triển",
+      title: "Sản phẩm: Sổ Trọ và Sổ Tâm",
       description:
-        "Xem Sổ Trọ và Sổ Tâm giúp bạn được gì: sổ ghi tiền phòng, điện nước cho chủ trọ ở Việt Nam và nhật ký riêng tư ưu tiên lưu trên máy. Cả hai đang phát triển.",
+        "Sổ Trọ — sổ tiền phòng, điện nước cho chủ trọ Việt Nam — và Sổ Tâm, nhật ký riêng tư ưu tiên lưu trên máy. Cả hai đang phát triển.",
     },
     verify: {
       title: "Xác minh: tự kiểm chứng điều chúng tôi nói",
@@ -95,7 +95,7 @@ export const PAGE_META: Record<Language, Record<StaticPageKey, PageMeta>> = {
     home: {
       title: "BlueSkyz Labs | Sổ Trọ and Sổ Tâm, in development",
       description:
-        "BlueSkyz Labs is building Sổ Trọ, a digital notebook for landlords in Vietnam, and Sổ Tâm, a private local-first journal. Both are in development.",
+        "BlueSkyz Labs builds Sổ Trọ, a rent notebook for landlords in Vietnam, and Sổ Tâm, a private local-first journal. Both are in development.",
     },
     about: {
       title: "About us",
@@ -118,9 +118,9 @@ export const PAGE_META: Record<Language, Record<StaticPageKey, PageMeta>> = {
         "How to get help with Sổ Trọ and Sổ Tâm. No general support mailbox has been published yet; private security reporting is for vulnerabilities only.",
     },
     products: {
-      title: "Products: Sổ Trọ and Sổ Tâm, in development",
+      title: "Products: Sổ Trọ and Sổ Tâm",
       description:
-        "See what Sổ Trọ and Sổ Tâm do for you: a rent and meter notebook for landlords in Vietnam, and a private local-first journal. Both are in development.",
+        "Sổ Trọ — a rent-and-meter notebook for landlords in Vietnam — and Sổ Tâm, a private local-first journal. Both are in development.",
     },
     verify: {
       title: "Verify our claims: trust routes and evidence",
@@ -285,14 +285,14 @@ export const PAGE_META: Record<Language, Record<StaticPageKey, PageMeta>> = {
 export const PRODUCT_META: Record<string, Record<Language, PageMeta>> = {
   sotro: {
     vi: {
-      title: "Sổ Trọ – sổ tay điện tử cho chủ trọ",
+      title: "Sổ Trọ: sổ quản lý phòng trọ cho chủ trọ",
       description:
-        "Sổ Trọ giúp chủ trọ nắm phòng, khoản tiền chưa thu, tiền điện nước theo chỉ số công tơ và biên nhận. Đang phát triển; ảnh chụp từ bản thử, dữ liệu mẫu.",
+        "Sổ Trọ giúp chủ trọ nắm khoản tiền chưa thu, điện nước theo số công tơ với từng bậc tiền điện, và biên nhận có bước xác nhận thu tiền. Đang phát triển.",
     },
     en: {
-      title: "Sổ Trọ: a digital notebook for landlords",
+      title: "Sổ Trọ: Rent Notebook for Vietnam Landlords",
       description:
-        "For landlords in Vietnam: see unpaid rent and today's tasks, turn meter readings into utility bills, and confirm money received. Sổ Trọ is in development.",
+        "For landlords in Vietnam: see unpaid rent, calculate utility charges with electricity tiers shown, and confirm money received. Sổ Trọ is in development.",
     },
     zh: {
       title: "Sổ Trọ：房东电子记事本",
@@ -307,14 +307,14 @@ export const PRODUCT_META: Record<string, Record<Language, PageMeta>> = {
   },
   sotam: {
     vi: {
-      title: "Sổ Tâm – nhật ký riêng tư",
+      title: "Sổ Tâm: nhật ký riêng tư lưu trên máy",
       description:
-        "Sổ Tâm là cuốn nhật ký ưu tiên lưu trên máy, để bạn ghi lại suy nghĩ riêng tư và giữ kỷ niệm. Bạn có thể tự xuất bài viết ra máy. Đang phát triển.",
+        "Sổ Tâm là nhật ký riêng tư ưu tiên lưu trên máy, để viết suy nghĩ và giữ kỷ niệm. Bạn tự xuất bài viết ra máy khi muốn. Đang phát triển.",
     },
     en: {
-      title: "Sổ Tâm: a private, local-first journal",
+      title: "Sổ Tâm: Private Local-First Journaling App",
       description:
-        "Sổ Tâm is a local-first journal for writing private reflections and keeping personal memories, with local export you control. In development.",
+        "Sổ Tâm is a private, local-first journal for reflections and memories, with a Personal Vault and user-controlled local export. In development.",
     },
     zh: {
       title: "Sổ Tâm：本地优先的私密日记",

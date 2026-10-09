@@ -50,8 +50,8 @@ screens:
       zh: "今天"
       zh-hant: "今天"
     caption:
-      en: "only what needs remembering, and what is unpaid this month."
-      vi: "chỉ hiện việc cần nhớ và khoản chưa thu tháng này."
+      en: "Your day at a glance: only what needs remembering, and what's unpaid this month."
+      vi: "Ngày mới mở ra: chỉ việc cần nhớ và khoản chưa thu tháng này."
       zh: "只显示需要记住的事，以及本月未收款项。"
       zh-hant: "只顯示需要記住的事，以及本月未收款項。"
     alt:
@@ -70,8 +70,8 @@ screens:
       zh: "读数"
       zh-hant: "讀數"
     caption:
-      en: "pick a room, enter readings, move to the next."
-      vi: "chọn phòng, nhập số, sang phòng kế tiếp."
+      en: "Pick a room, enter the readings, and move to the next."
+      vi: "Chọn phòng, nhập số, sang phòng tiếp theo — gọn nhẹ từng bước."
       zh: "选一间房，输入读数，再到下一间。"
       zh-hant: "選一間房，輸入度數，再到下一間。"
     alt:
@@ -90,8 +90,8 @@ screens:
       zh: "收租"
       zh-hant: "收租"
     caption:
-      en: "see who owes, confirm the amount, then record it. Solar and lunar dates shown."
-      vi: "xem ai còn nợ, xác nhận số tiền rồi ghi nhận. Có lịch dương và âm."
+      en: "See who owes what, confirm the amount, then record it — with solar and lunar dates side by side."
+      vi: "Xem ai nợ bao nhiêu, xác nhận số tiền rồi ghi nhận — có cả lịch dương và lịch âm."
       zh: "看谁还欠款，先确认金额，再记录。显示公历与农历。"
       zh-hant: "看誰還欠款，先確認金額，再記錄。顯示國曆與農曆。"
     alt:
@@ -110,8 +110,8 @@ screens:
       zh: "房间"
       zh-hant: "房間"
     caption:
-      en: "vacant rooms are listed first, with a deposit reminder."
-      vi: "phòng trống hiện trước, kèm nhắc thu tiền cọc."
+      en: "Vacant rooms float to the top, with a gentle deposit reminder."
+      vi: "Phòng trống hiện lên đầu, kèm lời nhắc thu tiền cọc."
       zh: "空房排在最前，并提醒收订金。"
       zh-hant: "空房排在最前，並提醒收訂金。"
     alt:
@@ -130,8 +130,8 @@ screens:
       zh: "配对手机"
       zh-hant: "配對手機"
     caption:
-      en: "open the owner's link and tap once. No account or password to type."
-      vi: "mở liên kết của chủ trọ, chạm một lần. Không cần tài khoản hay mật khẩu."
+      en: "Open the owner's link, tap once — no account, no password to type."
+      vi: "Mở liên kết của chủ trọ, chạm một lần — không tài khoản, không mật khẩu."
       zh: "打开房东的链接，点一下即可。无需账号或密码。"
       zh-hant: "開啟房東的連結，點一下即可。不需帳號或密碼。"
     alt:
@@ -150,8 +150,8 @@ screens:
       zh: "夜间模式"
       zh-hant: "夜間模式"
     caption:
-      en: "warmer display from 9 pm; can be switched off."
-      vi: "màn hình ấm hơn từ 21:00; có thể tắt."
+      en: "A warmer display after 9 pm — easy on the eyes, easy to switch off."
+      vi: "Từ 21:00 màn hình chuyển tông ấm — dịu mắt, tắt lúc nào cũng được."
       zh: "晚上 9 点起显示更暖，可关闭。"
       zh-hant: "晚上 9 點起畫面較暖，可關閉。"
     alt:
@@ -170,8 +170,8 @@ screens:
       zh: "楼栋与房间"
       zh-hant: "房舍與房間"
     caption:
-      en: "occupancy, vacant rooms, meters and tariffs."
-      vi: "tình trạng phòng, phòng trống, công tơ, giá."
+      en: "Occupancy, vacant rooms, meters, and tariffs — the whole building in one view."
+      vi: "Tình trạng phòng, phòng trống, công tơ, bảng giá — cả dãy trọ trong một màn hình."
       zh: "入住情况、空房、电表水表与价格。"
       zh-hant: "入住情況、空房、電表水表與費率。"
     alt:
@@ -190,8 +190,8 @@ screens:
       zh: "收款总览"
       zh-hant: "收款總覽"
     caption:
-      en: "paid, due and overdue for the whole building."
-      vi: "đã thu, sắp đến hạn, quá hạn cho cả dãy."
+      en: "Paid, due, and overdue — the whole building's pulse at a glance."
+      vi: "Đã thu, sắp đến hạn, quá hạn — cả dãy trọ trong một cái nhìn."
       zh: "整栋楼的已付、待付、逾期。"
       zh-hant: "整棟的已付、待付、逾期。"
     alt:
@@ -210,8 +210,8 @@ screens:
       zh: "家人与设备"
       zh-hant: "家人與裝置"
     caption:
-      en: "the owner chooses who uses which paired phone."
-      vi: "chủ trọ chọn ai dùng điện thoại nào."
+      en: "The owner decides who uses which paired phone — the whole family stays in the loop."
+      vi: "Chủ trọ quyết định ai dùng điện thoại nào — cả nhà cùng theo dõi."
       zh: "由房东决定谁用哪部配对手机。"
       zh-hant: "由房東決定誰用哪支配對手機。"
     alt:
@@ -230,8 +230,8 @@ screens:
       zh: "四步设置"
       zh-hant: "四步設定"
     caption:
-      en: "building, rooms, electricity and water prices."
-      vi: "dãy trọ, phòng, giá điện nước."
+      en: "Four steps: building, rooms, electricity and water prices — and you're set."
+      vi: "Bốn bước: dãy trọ, phòng, giá điện nước — xong là dùng được."
       zh: "楼栋、房间、水电价格。"
       zh-hant: "房舍、房間、水電價格。"
     alt:

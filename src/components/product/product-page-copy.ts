@@ -25,29 +25,29 @@ const DECK: Record<
   sotro: {
     en: {
       oneLiner:
-        "Rent, meter readings and receipts for every room, in one notebook made for landlords in Vietnam.",
+        "One calm notebook for every room — rent, meter readings, and receipts, made for landlords in Vietnam.",
       whatItDoes: [
-        "See who has not paid this month and what needs doing today",
-        "Keep room, tenant, meter and monthly charge records",
-        "Electricity bills from meter readings, with each tier shown",
-        "Receipts, with a separate step to confirm money received",
-        "Zalo or SMS reminder text to copy; nothing is sent automatically",
+        "See who hasn't paid this month — and what needs doing today",
+        "Keep dependable records of rooms, tenants, meters, and monthly charges",
+        "Turn meter readings into electricity bills, with every tier shown",
+        "Issue receipts — confirmed in a separate step before money is recorded",
+        "Copy a polite Zalo or SMS reminder; nothing is ever sent automatically",
       ],
     },
     vi: {
       oneLiner:
-        "Tiền thuê, điện nước và biên nhận của từng phòng, gọn trong một cuốn sổ dành cho chủ trọ ở Việt Nam.",
+        "Tiền thuê, điện nước, biên nhận của từng phòng — gọn trong một cuốn sổ dành riêng cho chủ trọ Việt Nam.",
       whatItDoes: [
-        "Xem tháng này còn ai chưa đóng tiền và hôm nay cần lo việc gì",
-        "Ghi lại phòng, người thuê, số điện nước và các khoản thu hằng tháng",
-        "Tính tiền điện từ số công tơ, hiện rõ từng bậc giá",
-        "Có biên nhận, và một bước xác nhận riêng trước khi ghi nhận tiền đã nhận",
-        "Tin nhắn nhắc kiểu Zalo hoặc SMS để sao chép; không tự động gửi",
+        "Liếc một cái biết ngay tháng này ai chưa đóng tiền, hôm nay cần lo việc gì",
+        "Phòng, người thuê, số điện nước, khoản thu hằng tháng — ghi chép gọn gàng, đáng tin",
+        "Nhập số công tơ là ra tiền điện, từng bậc giá hiện rõ ràng",
+        "Xuất biên nhận — có bước xác nhận riêng trước khi ghi nhận đã thu tiền",
+        "Tin nhắn nhắc lịch sự kiểu Zalo/SMS để sao chép; không bao giờ tự động gửi",
       ],
     },
     zh: {
       oneLiner:
-        "每个房间的房租、水电表读数和收据，都记在一本为越南房东打造的记事本里。",
+        "每个房间的租金、水电表读数与收据，都收进一本为越南房东打造的记事本。",
       whatItDoes: [
         "查看本月谁还没付款、今天要处理什么",
         "记录房间、租客、水电表和每月费用",
@@ -58,7 +58,7 @@ const DECK: Record<
     },
     "zh-hant": {
       oneLiner:
-        "每個房間的租金、水電表度數和收據，都記在一本為越南房東打造的記事本裡。",
+        "每個房間的租金、水電表度數與收據，都收進一本為越南房東打造的記事本。",
       whatItDoes: [
         "查看本月誰還沒付款、今天要處理什麼",
         "記錄房間、房客、水電表和每月費用",
@@ -72,21 +72,21 @@ const DECK: Record<
     en: {
       oneLiner: "A private, local-first journal for reflections and memories.",
       whatItDoes: [
-        "Write private reflections at your own pace",
-        "Reread your entries and memories",
+        "Write private reflections at your own pace, in your own words",
+        "Return to your entries and memories whenever you wish",
         "Local-first writing in a private Personal Vault",
-        "Export your reflections to your device, when you choose",
-        "Private Vault storage with clearly defined recovery limits",
+        "Export your reflections whenever you choose — they're yours to keep",
+        "A private Vault with clearly stated recovery limits",
       ],
     },
     vi: {
       oneLiner:
         "Cuốn nhật ký riêng tư, ưu tiên lưu trên máy, để viết suy nghĩ và giữ kỷ niệm.",
       whatItDoes: [
-        "Viết suy nghĩ riêng tư theo nhịp của bạn",
-        "Đọc lại nhật ký và kỷ niệm",
-        "Nhật ký ưu tiên lưu trên máy, trong Personal Vault riêng tư",
-        "Tự xuất bài viết ra máy khi bạn muốn",
+        "Viết theo nhịp của riêng bạn, bằng lời của riêng bạn",
+        "Đọc lại những trang đã viết bất cứ khi nào bạn muốn",
+        "Viết nhật ký trong Personal Vault riêng tư, ưu tiên lưu trên máy",
+        "Xuất bài viết bất cứ lúc nào bạn muốn — đó là của bạn",
         "Lưu trong Vault riêng tư, với giới hạn khôi phục được nêu rõ",
       ],
     },
@@ -138,8 +138,8 @@ const S = (en: string, vi: string, zh: string, zhHant: string): Strings => ({
 export const PAGE_LABELS = {
   // sro-2
   seeScreens: S(
-    "See the screens",
-    "Xem các màn hình",
+    "See real screens",
+    "Xem ảnh chụp thực tế",
     "查看界面截图",
     "查看畫面截圖",
   ),
