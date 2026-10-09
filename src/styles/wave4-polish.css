@@ -1,25 +1,14 @@
 /**
- * Elite Wave 4 — Polish refinements.
- *
- * CSS-only upgrades from the 2026-10-08 design audit:
- * 1. CTA language unification (pill buttons)
- * 2. Light-mode header intentional edge
- * 3. Hero-to-body gradient scrim
- * 4. Product screenshot depth (glow)
- * 5. Evidence source chips
- *
- * All progressive enhancement. Respects prefers-reduced-motion.
- * No JS, no new dependencies, no layout shifts.
+ * Elite Wave 4 — refinements on existing surfaces.
+ * Keep the authored scene, theme and accessibility contracts intact.
  */
 
-/* ── 1. CTA unification ─────────────────────────────────────────── */
-/* "Check our claims" text link → ghost pill, consistent with secondaries */
-a[href*="/verify/"].cta-text-link,
-.verify-section-cta {
+/* The proof band's existing verification link uses the secondary pill shape. */
+.trust-strip__cta {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  min-height: 2.75rem; /* 44px tap target */
+  min-height: 2.75rem;
   padding: 0.625rem 1.25rem;
   border-radius: var(--radius-pill);
   border: 1px solid var(--border-subtle);
@@ -32,114 +21,45 @@ a[href*="/verify/"].cta-text-link,
     background-color 0.2s var(--ease-signature, cubic-bezier(0.16, 1, 0.3, 1));
 }
 
-a[href*="/verify/"].cta-text-link:hover,
-.verify-section-cta:hover {
+.trust-strip__cta:where(:hover, :focus-visible) {
   border-color: var(--action-primary);
   background-color: color-mix(in srgb, var(--action-primary) 8%, transparent);
 }
 
-/* ── 2. Light-mode header edge ──────────────────────────────────── */
-/* The always-dark header can read as a theming bug in light mode.
-   A hairline blue accent makes it feel intentional. */
-:root:not(.dark) .site-header,
-:root[data-theme="light"] .site-header {
-  border-bottom: 1px solid
-    color-mix(in srgb, var(--action-primary) 24%, transparent);
+/* Only an authored ink header gets the accent on a light page.
+   Explicit light and system-light follow the site's data-theme contract. */
+:root[data-theme="light"] .header-glass[data-scene="ink"] {
+  border-bottom-color: color-mix(
+    in srgb,
+    var(--action-primary) 24%,
+    transparent
+  );
   box-shadow: 0 1px 12px -4px
     color-mix(in srgb, var(--action-primary) 18%, transparent);
 }
 
-/* ── 3. Hero-to-body scrim ──────────────────────────────────────── */
-/* Soften the hard edge where the dark hero meets light content. */
-.hero-scrim {
-  position: relative;
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) .header-glass[data-scene="ink"] {
+    border-bottom-color: color-mix(
+      in srgb,
+      var(--action-primary) 24%,
+      transparent
+    );
+    box-shadow: 0 1px 12px -4px
+      color-mix(in srgb, var(--action-primary) 18%, transparent);
+  }
 }
 
-.hero-scrim::after {
-  content: "";
-  position: absolute;
-  inset-inline: 0;
-  bottom: 0;
-  height: clamp(4rem, 12vw, 9rem);
-  pointer-events: none;
-  background: linear-gradient(
-    to bottom,
-    transparent,
-    color-mix(in srgb, var(--page-bg, #fff) 92%, transparent)
-  );
-}
-
-/* Only apply where the hero is dark and body is light */
-:root:not(.dark) .hero--dark .hero-scrim::after,
-:root[data-theme="light"] .hero--dark .hero-scrim::after {
-  display: block;
-}
-
-:root.dark .hero-scrim::after,
-:root[data-theme="dark"] .hero-scrim::after {
-  display: none;
-}
-
-/* ── 4. Product screenshot depth ────────────────────────────────── */
-/* Soft brand glow under product frames for tactile feel. */
-.product-frame {
-  position: relative;
-}
-
-.product-frame::before {
-  content: "";
-  position: absolute;
-  inset: -1px;
-  border-radius: inherit;
-  z-index: -1;
-  background: radial-gradient(
-    120% 90% at 50% 0%,
-    color-mix(in srgb, var(--action-primary) 22%, transparent),
-    transparent 70%
-  );
-  filter: blur(24px);
-  opacity: 0.7;
-  pointer-events: none;
-}
-
-/* Light-mode frame: avoid heavy dark slab */
-:root:not(.dark) .product-frame--dark,
-:root[data-theme="light"] .product-frame--dark {
-  box-shadow:
-    0 0 0 1px color-mix(in srgb, var(--brand-ink) 12%, transparent),
-    0 24px 48px -16px color-mix(in srgb, var(--brand-ink) 28%, transparent);
-}
-
-/* ── 5. Evidence source chips ───────────────────────────────────── */
-/* Promote the tiny route label into a visible source chip. */
-.evidence-route-chip {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.375rem;
-  padding: 0.25rem 0.625rem;
-  border-radius: var(--radius-pill);
-  font-size: var(--size-1);
-  font-weight: 600;
-  letter-spacing: 0.02em;
-  color: var(--text-secondary);
-  background-color: color-mix(in srgb, var(--text-secondary) 8%, transparent);
-  border: 1px solid color-mix(in srgb, var(--text-secondary) 16%, transparent);
-  white-space: nowrap;
-}
-
-.evidence-route-chip::before {
-  content: "";
-  width: 0.375rem;
-  height: 0.375rem;
-  border-radius: var(--radius-pill);
-  background-color: var(--action-fill);
-  flex-shrink: 0;
-}
-
-/* ── Reduced motion ─────────────────────────────────────────────── */
 @media (prefers-reduced-motion: reduce) {
-  a[href*="/verify/"].cta-text-link,
-  .verify-section-cta {
+  .trust-strip__cta {
     transition: none;
+  }
+}
+
+@media (forced-colors: active) {
+  :root[data-theme] .header-glass[data-scene="ink"],
+  :root:not([data-theme]) .header-glass[data-scene="ink"] {
+    border-bottom-color: CanvasText;
+    box-shadow: none;
   }
 }
