@@ -1,0 +1,129 @@
+/**
+ * Quiet Luxury — Phase A: Restraint pass.
+ *
+ * Pure CSS, no assets, no copy changes. Moves ~60% toward quiet luxury
+ * by removing startup signals: glow shadows, pills, ambient loops,
+ * lifted cards, filled badges.
+ *
+ * #4  Buttons: quiet rectangles, no glow
+ * #5  Eyebrows: wider tracking, lighter weight
+ * #7  Stillness: kill infinite ambient loops (keep one-shot entrances)
+ * #8  Cards: flat over lifted
+ * #9  Badges: outline, not filled
+ * #12 Numerals: letterspaced kickers
+ */
+
+/* ── #4: Buttons — from pills to quiet rectangles ─────────────────── */
+.btn-primary,
+.btn-secondary,
+.button-primary,
+.button-secondary,
+a[class*="btn"] {
+  border-radius: 0.625rem !important; /* 10px — tailored, not pill */
+}
+
+/* Kill cobalt glow shadows on hover */
+.btn-primary:hover,
+.button-primary:hover {
+  box-shadow: none !important;
+}
+
+/* Flatten hover to border-darken / subtle overlay */
+.btn-secondary:hover,
+.button-secondary:hover {
+  box-shadow: none !important;
+}
+
+/* ── #5: Eyebrow kickers — more air, less shout ───────────────────── */
+.eyebrow,
+[class*="eyebrow"],
+.c4-folio {
+  letter-spacing: 0.21em !important;
+  font-weight: 500 !important;
+}
+
+/* ── #7: Stillness audit — kill ambient motion loops ──────────────── */
+/* Keep one-shot entrance reveals; delete infinite loops. */
+
+/* 404 sail drift (wave5) — static, elegant */
+.sail-drift {
+  animation: none !important;
+  transform: none !important;
+}
+
+/* Hero breathing (wave6) — still */
+.hero-atmosphere {
+  animation: none !important;
+}
+
+/* VerifySeal spin + draw — show final state immediately */
+.verify-seal__dash {
+  animation: none !important;
+}
+.verify-seal__check {
+  animation: none !important;
+  stroke-dashoffset: 0 !important;
+}
+.verify-seal__ring {
+  animation: none !important;
+}
+
+/* Any other ambient loops */
+.halo-breathe,
+[class*="breathe"],
+[class*="float-loop"],
+[class*="drift-loop"] {
+  animation: none !important;
+}
+
+/* ── #8: Cards — flat over lifted ─────────────────────────────────── */
+.product-card:hover,
+.product-card:focus-within .product-thumb__capture,
+.product-card:focus-within .product-thumb__icon {
+  transform: none !important;
+}
+
+/* Hover firms the hairline border instead of lifting */
+.product-card:hover {
+  border-color: color-mix(in srgb, var(--brand-ink) 28%, transparent) !important;
+  box-shadow: none !important;
+}
+
+/* Studio shelf: keep layout, drop the color wash blooms */
+.studio-shelf__item::before {
+  display: none !important;
+}
+.studio-shelf__item:hover {
+  transform: none !important;
+}
+
+/* ── #9: Status badges — outline, not filled ──────────────────────── */
+.studio-shelf__status,
+[data-product-status] {
+  background: transparent !important;
+  border: 1px solid var(--ql-hairline, rgba(11, 16, 32, 0.15)) !important;
+  border-radius: 0.375rem !important; /* not pill */
+  text-transform: uppercase !important;
+  letter-spacing: 0.14em !important;
+  font-size: 0.6875rem !important;
+  font-weight: 500 !important;
+  padding: 0.375rem 0.625rem !important;
+}
+
+/* ── #12: Numerals — letterspaced kickers ─────────────────────────── */
+[class*="folio"] [class*="numeral"],
+[class*="step"] [class*="numeral"],
+.ordinals {
+  letter-spacing: 0.12em;
+}
+
+/* Sổ Trọ scrollytelling step numbers */
+[class*="step-number"],
+[class*="stepnum"] {
+  letter-spacing: 0.14em;
+  font-variant-numeric: tabular-nums;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* Already still — nothing to add */
+}

@@ -1,0 +1,74 @@
+/**
+ * Quiet Luxury — Phase C: Hero restage + 404 SVG.
+ *
+ * #3: Hero from cinematic ink band → quiet paper.
+ *     Luxury opens bright, quiet, typographic.
+ * #10: 404 sail as line drawing (SVG), not emoji.
+ */
+
+/* ── #3: Hero restage ───────────────────────────────────────────── */
+/* Override the dark cinematic hero with quiet paper.
+   Keep the footer dark (it already works as grounding band). */
+
+.hero-plane--ink {
+  background: var(--brand-porcelain) !important;
+  border-bottom: 1px solid var(--ql-hairline, rgba(11, 16, 32, 0.09)) !important;
+}
+
+/* Kill cobalt atmosphere blooms on hero */
+.hero-plane--ink .hero-atmosphere--ink,
+.hero-plane--ink .hero-atmosphere {
+  display: none !important;
+}
+
+/* Hero text goes ink on paper */
+.hero-plane--ink .hero-headline,
+.hero-plane--ink [class*="headline"] {
+  color: var(--brand-ink) !important;
+}
+
+.hero-plane--ink .hero-tagline,
+.hero-plane--ink [class*="tagline"] {
+  color: var(--text-secondary) !important;
+}
+
+/* Hero CTAs adapt to paper */
+.hero-plane--ink .btn-primary {
+  background: var(--brand-ink) !important;
+  color: var(--brand-porcelain) !important;
+}
+
+/* Generous top whitespace — confidence to not perform */
+.hero-plane--ink {
+  padding-top: 2rem;
+}
+
+/* Dark mode: hero stays dark but quieter (no cobalt bloom) */
+[data-theme="dark"] .hero-plane--ink {
+  background: var(--brand-ink) !important;
+  border-bottom-color: rgba(255, 255, 255, 0.09) !important;
+}
+
+[data-theme="dark"] .hero-plane--ink .hero-headline {
+  color: var(--brand-porcelain) !important;
+}
+
+/* ── #10: 404 sail line drawing ─────────────────────────────────── */
+/* Replaces the emoji with a thin-stroke SVG. The .sail-svg class
+   is applied to the inline SVG in 404.astro pages. */
+
+.sail-svg {
+  width: clamp(4rem, 10vw, 6rem);
+  height: auto;
+  color: var(--brand-ink);
+  opacity: 0.85;
+}
+
+[data-theme="dark"] .sail-svg {
+  color: var(--brand-porcelain);
+}
+
+/* Hide the old emoji sail */
+.sail-drift {
+  display: none !important;
+}

@@ -1,32 +1,42 @@
 ---
-// zh-Hant copy: machine-assisted (OpenCC s2twp), pending native review.
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import Container from "@/components/layout/Container.astro";
 import ButtonLink from "@/components/ui/ButtonLink.astro";
-import PageHeader from "@/components/layout/PageHeader.astro";
 ---
 
 <BaseLayout
-  title="未找到頁面"
+  title="找不到頁面"
   description="你請求的頁面無法找到。"
   path="/zh-hant/404/"
   noindex={true}
 >
   <section class="py-20 lg:py-28">
     <Container>
-      <PageHeader
-        eyebrow="404"
-        eyebrowVariant="numeral"
-        title="找不到頁面"
-        lede="頁面可能已經移動。你可以試試下面的連結。"
-      />
-      <div class="mt-10 flex flex-wrap gap-3">
-        <ButtonLink href="/zh-hant/" variant="primary">
-          返回首頁
-        </ButtonLink>
-        <ButtonLink href="/zh-hant/products/" variant="secondary">
-          瀏覽產品
-        </ButtonLink>
+      <div class="mx-auto max-w-2xl text-center">
+        <svg class="sail-svg" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+  <path d="M50 15 L50 75" />
+  <path d="M50 20 C50 20 75 35 78 65 L50 65 Z" />
+  <path d="M50 30 C50 30 30 40 28 65 L50 65 Z" />
+  <path d="M25 78 L75 78 L68 88 L32 88 Z" />
+  <path d="M20 92 C35 88 65 88 80 92" stroke-width="1" opacity="0.5"/>
+</svg>
+        <p class="mt-6 text-sm font-medium uppercase" style="letter-spacing: 0.21em; color: var(--text-secondary);">
+          404
+        </p>
+        <h1 class="mt-2 text-4xl font-medium tracking-tight sm:text-5xl" style="font-family: var(--font-serif);">
+          在海上迷失了？
+        </h1>
+        <p class="mt-4 text-lg leading-relaxed text-[var(--text-secondary)]">
+          即使是帆也會偏離航向。讓我們帶你回到正軌。
+        </p>
+        <div class="mt-10 flex flex-wrap justify-center gap-3">
+          <ButtonLink href="/zh-hant/" variant="primary">
+            返回首頁
+          </ButtonLink>
+          <ButtonLink href="/zh-hant/products/" variant="secondary">
+            瀏覽產品
+          </ButtonLink>
+        </div>
       </div>
     </Container>
   </section>

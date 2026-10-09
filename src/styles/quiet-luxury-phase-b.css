@@ -1,0 +1,90 @@
+/**
+ * Quiet Luxury — Phase B: Color remap.
+ *
+ * #2: Retire cobalt as primary action → ink
+ * #6: Warm the neutrals (cool slate → warm stone)
+ *
+ * Approach: CSS variable overrides, not token edits. Lower risk,
+ * easy to revert. Contrast ratios preserved (ink on porcelain
+ * exceeds AA).
+ */
+
+:root {
+  /* ── #2: Ink over cobalt ─────────────────────────────────────── */
+  /* Primary actions become ink — confident, not eager */
+  --action-primary: var(--brand-ink);
+  --action-fill: var(--brand-ink);
+  --btn-bg: var(--brand-ink);
+  --btn-text: var(--brand-porcelain);
+
+  /* Keep blue only for hairline accents and focus */
+  --accent-hairline: #2564ff;
+}
+
+/* Body links: ink with underline, not blue */
+.prose a,
+p a,
+li a {
+  color: var(--brand-ink);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+  text-decoration-color: color-mix(in srgb, var(--brand-ink) 30%, transparent);
+}
+
+.prose a:hover,
+p a:hover,
+li a:hover {
+  text-decoration-color: var(--brand-ink);
+}
+
+/* ── #6: Warm neutrals ─────────────────────────────────────────── */
+/* Shift cool slate toward warm stone. Careful: hold contrast. */
+
+:root {
+  --text-muted-warm: #57534e;      /* was #475569 (cool) */
+  --surface-subtle-warm: #f5f4f2;  /* was #f1f5f9 (cool) */
+  --hairline-warm: #ddd8d2;        /* was cooler border */
+}
+
+/* Apply warm neutrals to muted text */
+.text-muted,
+[class*="text-muted"] {
+  color: var(--text-muted-warm);
+}
+
+/* Warm subtle surfaces */
+.bg-subtle,
+[class*="bg-subtle"] {
+  background-color: var(--surface-subtle-warm);
+}
+
+/* ── Dark mode parallel ─────────────────────────────────────────── */
+[data-theme="dark"] {
+  --action-primary: var(--brand-porcelain);
+  --action-fill: var(--brand-porcelain);
+  --btn-bg: var(--brand-porcelain);
+  --btn-text: var(--brand-ink);
+
+  --text-muted-warm: #a8a29e;
+  --surface-subtle-warm: #1c1917;
+  --hairline-warm: #44403c;
+}
+
+[data-theme="dark"] .prose a,
+[data-theme="dark"] p a,
+[data-theme="dark"] li a {
+  color: var(--brand-porcelain);
+  text-decoration-color: color-mix(in srgb, var(--brand-porcelain) 30%, transparent);
+}
+
+[data-theme="dark"] .prose a:hover,
+[data-theme="dark"] p a:hover,
+[data-theme="dark"] li a:hover {
+  text-decoration-color: var(--brand-porcelain);
+}
+
+/* Focus rings keep a whisper of blue — the one place it remains */
+:focus-visible {
+  outline-color: var(--accent-hairline);
+}
