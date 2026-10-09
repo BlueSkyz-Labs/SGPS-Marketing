@@ -213,7 +213,7 @@ test("the tooltip names the theme on hover and keyboard focus", async ({
   if (canHover) {
     await expect(tip).toBeVisible();
     // innerText: only the current mode's word is rendered (display).
-    await expect.poll(() => tip.innerText()).toBe("Giao diện: Tự động");
+    await expect.poll(() => tip.innerText()).toBe("Giao diện: Hệ thống");
   } else {
     await expect(tip).toBeHidden();
   }
@@ -244,5 +244,5 @@ test("below lg the icon trigger keeps its accessible name", async ({
   await page.goto("/vi/");
   const trigger = page.locator("header [data-theme-trigger]").first();
   await expect(trigger).toBeVisible();
-  await expect(trigger).toHaveAttribute("aria-label", "Giao diện: Tự động");
+  await expect(trigger).toHaveAttribute("aria-label", "Giao diện: Hệ thống");
 });
