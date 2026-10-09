@@ -1,5 +1,36 @@
 import { expect, test } from "@playwright/test";
 
+const EXPLORER_COPY = {
+  en: {
+    expand: "Show details",
+    collapse: "Hide details",
+    claim: "Claim",
+    state: "Verification state",
+    stateValue: "Source-linked",
+  },
+  vi: {
+    expand: "Xem chi tiết",
+    collapse: "Ẩn chi tiết",
+    claim: "Tuyên bố",
+    state: "Trạng thái xác minh",
+    stateValue: "Đã gắn nguồn",
+  },
+  zh: {
+    expand: "查看详情",
+    collapse: "隐藏详情",
+    claim: "说法",
+    state: "验证状态",
+    stateValue: "已关联来源",
+  },
+  "zh-hant": {
+    expand: "檢視詳情",
+    collapse: "隱藏詳情",
+    claim: "說法",
+    state: "驗證狀態",
+    stateValue: "已關聯來源",
+  },
+} as const;
+
 test.describe("verification deep links", () => {
   test("claim anchor exists on the security surface and lands below the header", async ({
     page,
@@ -34,9 +65,51 @@ test.describe("verification deep links", () => {
     const heading = page.locator("#claim-security-reporting-is-private");
     await expect(heading).toBeVisible();
     await expect(heading).toHaveRole("heading");
-    // Evidence list items carry their stable ids too.
-    await expect(page.locator("#evidence-ev-security-advisory")).toBeVisible();
   });
+
+  test("source anchors open the visible sources step", async ({ page }) => {
+    await page.goto(
+      "/en/evidence/security-reporting-is-private/#evidence-ev-security-advisory",
+    );
+    await expect(page.locator("#evidence-ev-security-advisory")).toBeVisible();
+    await expect(
+      page.getByRole("button", { name: "Hide details: Sources" }),
+    ).toHaveAttribute("aria-expanded", "true");
+  });
+
+  for (const [lang, copy] of Object.entries(EXPLORER_COPY)) {
+    test(`/${lang}/evidence/ enhances the localized verification chain`, async ({
+      page,
+    }) => {
+      await page.goto(`/${lang}/evidence/security-reporting-is-private/`);
+      const explorer = page.locator("[data-evidence-explorer]");
+      await expect(explorer).toHaveAttribute("data-explorer-active", "true");
+      const chain = explorer.locator("[data-evidence-chain]");
+      await expect(chain).toBeVisible();
+
+      const steps = chain.getByRole("button");
+      await expect(steps).toHaveCount(4);
+      await expect(steps.nth(0)).toHaveAccessibleName(
+        `${copy.expand}: ${copy.claim}`,
+      );
+      const stateStep = steps.nth(2);
+      await expect(stateStep).toHaveAccessibleName(
+        `${copy.expand}: ${copy.state}`,
+      );
+      await stateStep.click();
+      await expect(stateStep).toHaveAttribute("aria-expanded", "true");
+      await expect(stateStep).toHaveAccessibleName(
+        `${copy.collapse}: ${copy.state}`,
+      );
+
+      const panelId = await stateStep.getAttribute("aria-controls");
+      await expect(explorer.locator(`#${panelId}`)).toContainText(
+        copy.stateValue,
+      );
+      await stateStep.press("ArrowDown");
+      await expect(steps.nth(3)).toBeFocused();
+    });
+  }
 
   test("deep links work with JavaScript disabled", async ({ browser }) => {
     const context = await browser.newContext({ javaScriptEnabled: false });
@@ -45,6 +118,10 @@ test.describe("verification deep links", () => {
     await expect(
       page.locator("#claim-security-reporting-is-private"),
     ).toBeVisible();
+    await page.goto(
+      "/en/evidence/security-reporting-is-private/#evidence-ev-security-advisory",
+    );
+    await expect(page.locator("#evidence-ev-security-advisory")).toBeVisible();
     await context.close();
   });
 

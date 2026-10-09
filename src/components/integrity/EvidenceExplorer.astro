@@ -1,0 +1,246 @@
+---
+/**
+ * Elite Wave 3 — Interactive Evidence Explorer.
+ *
+ * Turns the static evidence passport into an explorable chain: the claim,
+ * its sources, verification state and boundary unfold as interactive steps.
+ *
+ * Architecture (per tech audit 2026-10-08):
+ * - Server renders the COMPLETE static passport as semantic HTML first.
+ *   This is the SEO/a11y baseline and works with JS disabled.
+ * - The passport model is serialized as JSON (not executable JS — CSP-safe).
+ * - Client script (evidence-explorer.ts) enhances progressively: stepper UI,
+ *   keyboard navigation, aria-expanded sync.
+ * - i18n via data-msg-* attributes (4 locales, zero JS i18n library).
+ * - All state in-memory; fail-closed (malformed JSON = static fallback).
+ */
+import { getEvidencePassport, getClaimAnchor } from "@/lib/claims";
+import { formatDisplayDate } from "@/lib/display-date";
+import TruthState from "./TruthState.astro";
+import { SOURCE_LINKED_LEGEND } from "@/data/integrity";
+import BoundaryCard from "./BoundaryCard.astro";
+import type { Language } from "@/data/site";
+
+interface Props {
+  id: string;
+  lang: Language;
+  products: { slug: string; name: string }[];
+  claimAs?: "h1" | "h2";
+}
+
+const { id, lang, products, claimAs = "h2" } = Astro.props;
+const ClaimHeading = claimAs;
+const SourcesHeading = claimAs === "h1" ? "h2" : "h3";
+const passport = getEvidencePassport(id, products);
+
+const LABELS = {
+  en: {
+    kind: "Evidence for this claim",
+    sources: "Public sources",
+    reviewed: "Reviewed",
+    context: "View in context",
+    steps: "Verification steps",
+    stepClaim: "Claim",
+    stepSources: "Sources",
+    stepState: "Verification state",
+    stepBoundary: "Boundary",
+    expand: "Show details",
+    collapse: "Hide details",
+  },
+  vi: {
+    kind: "Bằng chứng cho tuyên bố này",
+    sources: "Nguồn công khai",
+    reviewed: "Đã xem xét",
+    context: "Xem trong ngữ cảnh",
+    steps: "Các bước xác minh",
+    stepClaim: "Tuyên bố",
+    stepSources: "Nguồn",
+    stepState: "Trạng thái xác minh",
+    stepBoundary: "Ranh giới",
+    expand: "Xem chi tiết",
+    collapse: "Ẩn chi tiết",
+  },
+  zh: {
+    kind: "这条说法的证据",
+    sources: "公开来源",
+    reviewed: "已审阅",
+    context: "在原文中查看",
+    steps: "验证步骤",
+    stepClaim: "说法",
+    stepSources: "来源",
+    stepState: "验证状态",
+    stepBoundary: "边界",
+    expand: "查看详情",
+    collapse: "隐藏详情",
+  },
+  "zh-hant": {
+    kind: "這項說法的證據",
+    sources: "公開來源",
+    reviewed: "已審閱",
+    context: "在原文中檢視",
+    steps: "驗證步驟",
+    stepClaim: "說法",
+    stepSources: "來源",
+    stepState: "驗證狀態",
+    stepBoundary: "邊界",
+    expand: "檢視詳情",
+    collapse: "隱藏詳情",
+  },
+} as const;
+
+const labels = LABELS[lang];
+// Serialize for the client enhancer (CSP-safe: application/json, not executable)
+const graphJson = passport
+  ? JSON.stringify({
+      id: passport.id,
+      claim: passport.claim[lang],
+      state: passport.state,
+      evidence: passport.evidence.map((ref) => ({
+        id: ref.id,
+        label: ref.label[lang],
+        href: ref.href[lang],
+      })),
+      hasBoundary: Boolean(passport.boundary),
+    }).replace(/</g, "\\u003c")
+  : null;
+---
+
+{passport ? (
+  <article
+    class="evidence-passport evidence-explorer"
+    data-evidence-passport={passport.id}
+    data-evidence-explorer
+    data-msg-expand={labels.expand}
+    data-msg-collapse={labels.collapse}
+    data-msg-claim={labels.stepClaim}
+    data-msg-sources={labels.stepSources}
+    data-msg-state={labels.stepState}
+    data-msg-boundary={labels.stepBoundary}
+  >
+    {/* Static baseline: full passport as semantic HTML (SEO + no-JS) */}
+    <ClaimHeading
+      id={getClaimAnchor(passport.id)}
+      class="evidence-passport__claim"
+    >
+      {passport.claim[lang]}
+    </ClaimHeading>
+    <p class="evidence-passport__meta">
+      <TruthState state={passport.state} lang={lang} />
+      {passport.reviewedOn ? (
+        <span class="evidence-passport__review" data-passport-review>
+          {labels.reviewed}:{" "}
+          <time datetime={passport.reviewedOn}>
+            {formatDisplayDate(passport.reviewedOn, lang)}
+          </time>
+        </span>
+      ) : null}
+    </p>
+    {passport.state === "source-linked" ? (
+      <p class="integrity-lens__legend">{SOURCE_LINKED_LEGEND[lang]}</p>
+    ) : null}
+
+    {/* Interactive chain: enhanced by evidence-explorer.ts */}
+    <div class="evidence-explorer__chain" data-evidence-chain hidden>
+      <p class="evidence-explorer__chain-title">{labels.steps}</p>
+      <ol class="evidence-explorer__steps" data-evidence-steps></ol>
+    </div>
+
+    {/* Static sources (also the fallback) */}
+    <div class="evidence-passport__sources" data-evidence-static-sources>
+      <SourcesHeading class="evidence-passport__sources-title">
+        {labels.sources}
+      </SourcesHeading>
+      <ul>
+        {passport.evidence.map((ref) => (
+          <li id={`evidence-${ref.id}`}>
+            <a
+              href={ref.href[lang]}
+              rel={
+                /^https?:\/\//i.test(ref.href[lang])
+                  ? "noopener noreferrer"
+                  : undefined
+              }
+              class="inline-flex min-h-11 items-center text-sm font-semibold text-[var(--action-primary)] no-underline hover:underline"
+            >
+              {ref.label[lang]}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+    {passport.boundary ? (
+      <div class="evidence-passport__boundary" data-evidence-static-boundary>
+        <BoundaryCard boundary={passport.boundary} lang={lang} />
+      </div>
+    ) : null}
+    <p class="evidence-passport__context">
+      <a
+        href={passport.contextHref[lang]}
+        class="inline-flex min-h-11 items-center text-sm font-semibold text-[var(--action-primary)] no-underline hover:underline"
+      >
+        {labels.context} →
+      </a>
+    </p>
+
+    {/* Graph data for the client enhancer */}
+    {graphJson ? (
+      <script
+        type="application/json"
+        data-evidence-graph
+        set:html={graphJson}
+      />
+    ) : null}
+  </article>
+) : null}
+
+<script>
+  import { initEvidenceExplorer } from "@/scripts/evidence-explorer";
+  initEvidenceExplorer();
+</script>
+
+<style>
+  /* Chain is hidden until JS enhances (progressive enhancement) */
+  .evidence-explorer__chain[hidden] {
+    display: none;
+  }
+  .evidence-explorer__chain {
+    margin-block: 1.5rem;
+  }
+  .evidence-explorer__chain-title {
+    font-size: var(--size-2);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+    margin-bottom: 0.75rem;
+  }
+  :lang(vi) .evidence-explorer__chain-title {
+    text-transform: none;
+  }
+  .evidence-explorer__steps {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 0.5rem;
+  }
+  /* When JS is active, static sections hide (chain replaces them) */
+  .evidence-explorer[data-explorer-active] > [data-evidence-static-sources],
+  .evidence-explorer[data-explorer-active] > [data-evidence-static-boundary] {
+    display: none;
+  }
+  .evidence-explorer__chain:not([hidden]) ~ [data-evidence-static-sources],
+  .evidence-explorer__chain:not([hidden]) ~ [data-evidence-static-boundary] {
+    display: none;
+  }
+
+  @media print {
+    .evidence-explorer__chain {
+      display: none !important;
+    }
+    .evidence-explorer > [data-evidence-static-sources],
+    .evidence-explorer > [data-evidence-static-boundary] {
+      display: block !important;
+    }
+  }
+</style>

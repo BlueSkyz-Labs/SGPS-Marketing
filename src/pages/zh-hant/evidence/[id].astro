@@ -2,7 +2,7 @@
 // zh-Hant copy: machine-assisted (OpenCC s2twp), pending native review.
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import Container from "@/components/layout/Container.astro";
-import EvidencePassport from "@/components/integrity/EvidencePassport.astro";
+import EvidenceExplorer from "@/components/integrity/EvidenceExplorer.astro";
 import { getEvidencePassport, getEvidencePassportIds } from "@/lib/claims";
 import { getPublicProducts } from "@/lib/products";
 import { claimReviewJsonLd, isClaimReviewState } from "@/lib/seo";
@@ -55,7 +55,7 @@ const claimReview =
         <p class="evidence-passport__page-title" data-passport-page-title>
           這項說法的證據
         </p>
-        <EvidencePassport
+        <EvidenceExplorer
           id={id ?? ""}
           lang="zh-hant"
           products={products}

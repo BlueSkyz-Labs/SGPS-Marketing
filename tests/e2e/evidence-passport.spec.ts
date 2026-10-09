@@ -1,9 +1,26 @@
-import { expect, test } from "@playwright/test";
+import { expect, test, type Locator } from "@playwright/test";
 
 const ID = "security-reporting-is-private";
 const EN = `/en/evidence/${ID}/`;
 const VI = `/vi/evidence/${ID}/`;
 const ZH = `/zh/evidence/${ID}/`;
+
+async function expandStep(
+  passport: Locator,
+  expand: string,
+  label: string,
+): Promise<Locator> {
+  const button = passport.getByRole("button", {
+    name: `${expand}: ${label}`,
+  });
+  await expect(button).toBeVisible();
+  const panelId = await button.getAttribute("aria-controls");
+  expect(panelId).toBeTruthy();
+  await button.click();
+  const panel = passport.locator(`#${panelId}`);
+  await expect(panel).toBeVisible();
+  return panel;
+}
 
 test.describe("evidence passport", () => {
   test("EN passport renders claim, sources, boundary, review, and context", async ({
@@ -23,15 +40,21 @@ test.describe("evidence passport", () => {
     await expect(
       passport.locator('[data-truth-state="source-linked"]'),
     ).toHaveText(/Source-linked/);
+    const sourcesPanel = await expandStep(passport, "Show details", "Sources");
     await expect(
-      passport.getByRole("link", {
+      sourcesPanel.getByRole("link", {
         name: /GitHub private vulnerability reporting/i,
       }),
     ).toHaveAttribute(
       "href",
       "https://github.com/BlueSkyz-Labs/SGPS-Marketing/security/advisories/new",
     );
-    await expect(passport.locator("[data-boundary-card]")).toBeVisible();
+    const boundaryPanel = await expandStep(
+      passport,
+      "Show details",
+      "Boundary",
+    );
+    await expect(boundaryPanel.locator("[data-boundary-card]")).toBeVisible();
     await expect(passport.locator("[data-passport-review]")).toHaveText(
       /September 12, 2026/,
     );
@@ -103,7 +126,13 @@ test.describe("evidence passport", () => {
         name: "安全报告通过 GitHub 私有渠道送达维护者，绝不会通过公开 issue 提出。",
       }),
     ).toBeVisible();
-    await expect(passport.getByText("公开来源", { exact: true })).toBeVisible();
+    const sourcesPanel = await expandStep(passport, "查看详情", "来源");
+    await expect(
+      sourcesPanel.getByRole("link", { name: "GitHub 私有漏洞报告" }),
+    ).toBeVisible();
+    await expect(
+      sourcesPanel.getByRole("link", { name: "安全报告页面" }),
+    ).toHaveAttribute("href", "/zh/security/");
     await expect(
       passport.getByRole("link", { name: "在原文中查看 →" }),
     ).toHaveAttribute("href", "/zh/security/");
@@ -139,10 +168,21 @@ test.describe("evidence passport", () => {
     await expect(
       page.locator(`[data-evidence-passport="${ID}"]`),
     ).toBeVisible();
+    const passport = page.locator(`[data-evidence-passport="${ID}"]`);
+    const staticSources = passport.locator(
+      ":scope > [data-evidence-static-sources]",
+    );
+    await expect(passport.locator("[data-evidence-chain]")).toBeHidden();
+    await expect(staticSources).toBeVisible();
     await expect(
-      page.getByRole("link", {
+      staticSources.getByRole("link", {
         name: /GitHub private vulnerability reporting/i,
       }),
+    ).toBeVisible();
+    await expect(
+      passport.locator(
+        ":scope > [data-evidence-static-boundary] [data-boundary-card]",
+      ),
     ).toBeVisible();
   });
 });
@@ -156,6 +196,19 @@ test.describe("evidence passport without JavaScript", () => {
     await expect(passport).toBeVisible();
     await expect(
       passport.getByRole("link", { name: /View in context/i }),
+    ).toBeVisible();
+    const staticSources = passport.locator(
+      ":scope > [data-evidence-static-sources]",
+    );
+    await expect(
+      staticSources.getByRole("link", {
+        name: /GitHub private vulnerability reporting/i,
+      }),
+    ).toBeVisible();
+    await expect(
+      passport.locator(
+        ":scope > [data-evidence-static-boundary] [data-boundary-card]",
+      ),
     ).toBeVisible();
   });
 });
