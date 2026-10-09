@@ -1,0 +1,91 @@
+/**
+ * Elite Wave 5 — Brand moments.
+ *
+ * 1. 404 drifting sail: gentle CSS animation, respects reduced motion.
+ * 2. Studio shelf: product index editorial cards (styles only; markup in pages).
+ */
+
+ /* ── 404 drifting sail ─────────────────────────────────────────── */
+.sail-drift {
+  display: inline-block;
+  font-size: clamp(3rem, 8vw, 5rem);
+  line-height: 1;
+  animation: sail-drift 6s ease-in-out infinite;
+  transform-origin: 50% 80%;
+}
+
+@keyframes sail-drift {
+  0%, 100% { transform: translateY(0) rotate(-2deg); }
+  50% { transform: translateY(-12px) rotate(2deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sail-drift {
+    animation: none;
+  }
+}
+
+/* ── Studio shelf: product index ───────────────────────────────── */
+.studio-shelf {
+  display: grid;
+  gap: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .studio-shelf {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.studio-shelf__framing {
+  max-width: 42rem;
+}
+
+.studio-shelf__item {
+  position: relative;
+  border-radius: 1.25rem;
+  transition:
+    transform 0.3s var(--ease-signature, cubic-bezier(0.16, 1, 0.3, 1));
+}
+
+/* Per-product ambient gradients behind the card */
+.studio-shelf__item::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 0;
+}
+
+.studio-shelf__item[data-product-slug="sotro"]::before {
+  background: radial-gradient(
+    100% 60% at 80% 0%,
+    color-mix(in srgb, #c2410c 16%, transparent),
+    transparent 70%
+  );
+}
+
+.studio-shelf__item[data-product-slug="sotam"]::before {
+  background: radial-gradient(
+    100% 60% at 20% 0%,
+    color-mix(in srgb, #a21caf 14%, transparent),
+    transparent 70%
+  );
+}
+
+.studio-shelf__item:hover::before,
+.studio-shelf__item:focus-within::before {
+  opacity: 1;
+}
+
+.studio-shelf__item:hover {
+  transform: translateY(-2px);
+}
+
+.studio-shelf__item > * {
+  position: relative;
+  z-index: 1;
+}
