@@ -49,7 +49,7 @@ export const HOME_ONE_LINER: Record<
     "zh-hant": "給越南房東：查看本月還有誰沒繳租、今天要處理什麼。",
   },
   sotam: {
-    en: "A private journal for reflections and memories — your words stay on your device.",
+    en: "A private, local-first journal for reflections and memories.",
     vi: "Cuốn nhật ký riêng tư, ưu tiên lưu trên máy, để viết suy nghĩ và giữ kỷ niệm.",
     zh: "私密、本地优先的日记，用来写下所思所想、留住回忆。",
     "zh-hant": "私密、本機優先的日記，用來寫下所思所想、留住回憶。",
@@ -74,8 +74,8 @@ export const HOME_FLAGSHIP_LEAD: Record<string, Localized | undefined> = {
 /** hom-8 and hom-9: the two home proof points for Sổ Trọ (capability 0 and 1). */
 export const HOME_PROOF_POINTS: Localized[] = [
   {
-    en: "Meter readings become electricity bills — every tier shown, nothing hidden",
-    vi: "Nhập số công tơ, ra tiền điện — từng bậc giá hiện rõ, không mập mờ",
+    en: "Meter readings become electricity bills — every tier shown",
+    vi: "Nhập số công tơ, ra tiền điện — từng bậc giá hiện rõ",
     zh: "根据电表读数计算电费，并清楚列出每一档",
     "zh-hant": "依電表度數計算電費，並清楚列出每一級",
   },

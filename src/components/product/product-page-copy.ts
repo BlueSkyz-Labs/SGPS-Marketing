@@ -70,28 +70,28 @@ const DECK: Record<
   },
   sotam: {
     en: {
-      oneLiner: "A private journal for reflections and memories — your words stay on your device, in your hands.",
+      oneLiner: "A private, local-first journal for reflections and memories.",
       whatItDoes: [
         "Write private reflections at your own pace, in your own words",
         "Return to your entries and memories whenever you wish",
-        "A private Personal Vault on your device — your words never have to leave it",
+        "Local-first writing in a private Personal Vault",
         "Export your reflections whenever you choose — they're yours to keep",
-        "A private Vault with clearly stated recovery limits — no fine print",
+        "A private Vault with clearly stated recovery limits",
       ],
     },
     vi: {
       oneLiner:
-        "Cuốn nhật ký riêng tư cho suy nghĩ và kỷ niệm — viết trên máy bạn, giữ trong tay bạn.",
+        "Cuốn nhật ký riêng tư, ưu tiên lưu trên máy, để viết suy nghĩ và giữ kỷ niệm.",
       whatItDoes: [
         "Viết theo nhịp của riêng bạn, bằng lời của riêng bạn",
         "Đọc lại những trang đã viết bất cứ khi nào bạn muốn",
-        "Personal Vault riêng tư trên máy bạn — chữ của bạn không cần đi đâu cả",
+        "Viết nhật ký trong Personal Vault riêng tư, ưu tiên lưu trên máy",
         "Xuất bài viết bất cứ lúc nào bạn muốn — đó là của bạn",
-        "Ranh giới rõ ràng: điều gì khôi phục được đều nói thẳng, không chữ nhỏ",
+        "Lưu trong Vault riêng tư, với giới hạn khôi phục được nêu rõ",
       ],
     },
     zh: {
-      oneLiner: "私密的日记，写下所思所想、留住回忆——你的文字，留在你的设备上。",
+      oneLiner: "私密、本地优先的日记，用来写下所思所想、留住回忆。",
       whatItDoes: [
         "按自己的节奏写下私密想法",
         "重读自己的日记与回忆",
@@ -101,7 +101,7 @@ const DECK: Record<
       ],
     },
     "zh-hant": {
-      oneLiner: "私密的日記，寫下所思所想、留住回憶——你的文字，留在你的裝置上。",
+      oneLiner: "私密、本機優先的日記，用來寫下所思所想、留住回憶。",
       whatItDoes: [
         "按自己的節奏寫下私密想法",
         "重讀自己的日記與回憶",

@@ -33,7 +33,7 @@ export const PAGE_META: Record<Language, Record<StaticPageKey, PageMeta>> = {
     home: {
       title: "BlueSkyz Labs | Sổ Trọ và Sổ Tâm, đang phát triển",
       description:
-        "BlueSkyz Labs đang làm Sổ Trọ, cuốn sổ gọn gàng cho chủ trọ Việt Nam, và Sổ Tâm, nhật ký riêng tư trên máy bạn. Cả hai đang phát triển.",
+        "BlueSkyz Labs đang xây dựng Sổ Trọ, sổ tay cho chủ trọ Việt Nam, và Sổ Tâm, nhật ký riêng tư ưu tiên lưu trên máy. Cả hai đang phát triển.",
     },
     about: {
       title: "Về BlueSkyz",
@@ -58,7 +58,7 @@ export const PAGE_META: Record<Language, Record<StaticPageKey, PageMeta>> = {
     products: {
       title: "Sản phẩm: Sổ Trọ và Sổ Tâm",
       description:
-        "Sổ Trọ — cuốn sổ thu tiền phòng, điện nước cho chủ trọ Việt Nam — và Sổ Tâm, nhật ký riêng tư nằm trên máy bạn. Cả hai đang phát triển.",
+        "Sổ Trọ — sổ tiền phòng, điện nước cho chủ trọ Việt Nam — và Sổ Tâm, nhật ký riêng tư ưu tiên lưu trên máy. Cả hai đang phát triển.",
     },
     verify: {
       title: "Xác minh: tự kiểm chứng điều chúng tôi nói",
@@ -95,7 +95,7 @@ export const PAGE_META: Record<Language, Record<StaticPageKey, PageMeta>> = {
     home: {
       title: "BlueSkyz Labs | Sổ Trọ and Sổ Tâm, in development",
       description:
-        "BlueSkyz Labs builds Sổ Trọ, the calm rent notebook for landlords in Vietnam, and Sổ Tâm, a private journal on your device. Both are in development.",
+        "BlueSkyz Labs builds Sổ Trọ, a rent notebook for landlords in Vietnam, and Sổ Tâm, a private local-first journal. Both are in development.",
     },
     about: {
       title: "About us",
@@ -120,7 +120,7 @@ export const PAGE_META: Record<Language, Record<StaticPageKey, PageMeta>> = {
     products: {
       title: "Products: Sổ Trọ and Sổ Tâm",
       description:
-        "Sổ Trọ — the calm rent-and-meter notebook for landlords in Vietnam — and Sổ Tâm, a private journal on your device. Both are in development.",
+        "Sổ Trọ — a rent-and-meter notebook for landlords in Vietnam — and Sổ Tâm, a private local-first journal. Both are in development.",
     },
     verify: {
       title: "Verify our claims: trust routes and evidence",
@@ -287,12 +287,12 @@ export const PRODUCT_META: Record<string, Record<Language, PageMeta>> = {
     vi: {
       title: "Sổ Trọ: sổ quản lý phòng trọ cho chủ trọ",
       description:
-        "Sổ Trọ giúp chủ trọ biết tháng này ai chưa đóng tiền, tính tiền điện nước theo bậc giá từ số công tơ, xuất biên nhận có xác nhận. Đang phát triển.",
+        "Sổ Trọ giúp chủ trọ nắm khoản tiền chưa thu, điện nước theo số công tơ với từng bậc tiền điện, và biên nhận có bước xác nhận thu tiền. Đang phát triển.",
     },
     en: {
       title: "Sổ Trọ: Rent Notebook for Vietnam Landlords",
       description:
-        "For landlords in Vietnam: see who's unpaid this month, turn meter readings into clear tiered bills, and confirm every receipt. Sổ Trọ is in development.",
+        "For landlords in Vietnam: see unpaid rent, calculate utility charges with electricity tiers shown, and confirm money received. Sổ Trọ is in development.",
     },
     zh: {
       title: "Sổ Trọ：房东电子记事本",
@@ -309,12 +309,12 @@ export const PRODUCT_META: Record<string, Record<Language, PageMeta>> = {
     vi: {
       title: "Sổ Tâm: nhật ký riêng tư lưu trên máy",
       description:
-        "Sổ Tâm là cuốn nhật ký riêng tư để viết suy nghĩ, giữ kỷ niệm — mọi thứ nằm trên máy bạn, xuất ra bất cứ lúc nào. Đang phát triển.",
+        "Sổ Tâm là nhật ký riêng tư ưu tiên lưu trên máy, để viết suy nghĩ và giữ kỷ niệm. Bạn tự xuất bài viết ra máy khi muốn. Đang phát triển.",
     },
     en: {
       title: "Sổ Tâm: Private Local-First Journaling App",
       description:
-        "Sổ Tâm is a private journal for reflections and memories — your words stay on your device, in a Personal Vault you control. In development.",
+        "Sổ Tâm is a private, local-first journal for reflections and memories, with a Personal Vault and user-controlled local export. In development.",
     },
     zh: {
       title: "Sổ Tâm：本地优先的私密日记",
