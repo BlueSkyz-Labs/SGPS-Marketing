@@ -68,12 +68,24 @@ test("footer navigation links to /verify in every locale", () => {
   );
 });
 
-test("the home proof band links to /verify (and only one route)", () => {
+test("the home proof band links to /verify, including claim anchors", () => {
   const band = read("src/components/sections/ProofBand.astro");
   assert.ok(linksToVerify(band));
-  assert.equal((band.match(/<a\b/g) ?? []).length, 1);
-  // Negative proof: pointing the band back at /security/ fails the guard.
-  assert.ok(!linksToVerify(band.replace("/verify/", "/security/")));
+  const links = band
+    .split("<a")
+    .slice(1)
+    .map((part) => part.split("</a>")[0]);
+  assert.ok(links.length > 0);
+  assert.ok(
+    links.every((link) => link.includes("href={`/${lang}/verify/")),
+    "every proof-band link stays on its locale's single /verify route",
+  );
+  assert.ok(
+    links.some((link) => link.includes("getClaimAnchor(row.id)")),
+    "claim citations retain their specific evidence anchors",
+  );
+  // Negative proof: sending the whole band to /security/ fails the guard.
+  assert.ok(!linksToVerify(band.replaceAll("/verify/", "/security/")));
 });
 
 test("products index and security carry no inlined Atlas/trace/ledger; products links to /verify", () => {
