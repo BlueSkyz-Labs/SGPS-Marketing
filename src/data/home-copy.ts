@@ -50,6 +50,9 @@ export const HOME_ONE_LINER: Record<
   },
   sotam: {
     en: "A private, local-first journal for reflections and memories.",
+    vi: "Cuốn nhật ký riêng tư, ưu tiên lưu trên máy, để viết suy nghĩ và giữ kỷ niệm.",
+    zh: "私密、本地优先的日记，用来写下所思所想、留住回忆。",
+    "zh-hant": "私密、本機優先的日記，用來寫下所思所想、留住回憶。",
   },
 };
 

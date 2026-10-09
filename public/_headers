@@ -24,6 +24,11 @@
 /brand/*
   Cache-Control: public, max-age=3600
 
+# llms.txt carries Vietnamese diacritics; declare UTF-8 explicitly so
+# plain-text viewers never fall back to Latin-1 (mojibake).
+/llms.txt
+  Content-Type: text/plain; charset=utf-8
+
 # Stable workers.dev host (baked SITE.url may be a custom domain while this host still serves the same dist).
 https://blueskyz-web.thinhnguyen-km10.workers.dev/*
   X-Robots-Tag: noindex

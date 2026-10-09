@@ -82,10 +82,10 @@ export const TRUST_LEDGER: TrustLedgerEntry[] = [
           "zh-hant": "本站已公布產品支援信箱。資安通報僅用於漏洞。",
         }
       : {
-          en: "No general support mailbox has been published yet. Security reporting is for vulnerabilities only.",
-          vi: "Hiện chưa có hộp thư hỗ trợ chung. Kênh báo cáo bảo mật chỉ dành cho lỗ hổng bảo mật.",
-          zh: "目前尚未公布通用支持邮箱。安全漏洞报告仅用于漏洞。",
-          "zh-hant": "目前尚未公布通用支援信箱。資安通報僅用於漏洞。",
+          en: "No dedicated support mailbox yet — for business inquiries, see tony@blueskyzlabs.com on the contact page. Security reporting is for vulnerabilities only.",
+          vi: "Hiện chưa có hộp thư hỗ trợ riêng — nếu cần liên hệ công việc, xem tony@blueskyzlabs.com trên trang liên hệ. Kênh báo cáo bảo mật chỉ dành cho lỗ hổng bảo mật.",
+          zh: "目前尚未设立专门的支持邮箱——商务咨询请见联系页面的 tony@blueskyzlabs.com。安全漏洞报告仅用于漏洞。",
+          "zh-hant": "目前尚未設立專門的支援信箱——商務諮詢請見聯絡頁面的 tony@blueskyzlabs.com。資安通報僅用於漏洞。",
         },
     evidenceKind: "route",
   },

@@ -35,3 +35,10 @@ sections:
     content: 我們打造智慧化產品，賦能個人並提升工作方式。更高的視角，成就更明亮的明天。
     founder_name: Tony Nguyen
     founder_title: 創辦人兼執行長
+  nextstep:
+    heading: 下一步
+    intro: 目前還沒有公開發佈的產品。可以先了解一下我們，或在需要可用管道時使用安全通報管道。
+    primaryCta: 關於 BlueSkyz
+    primaryHref: /zh-hant/about/
+    secondaryCta: 安全
+    secondaryHref: /zh-hant/security/

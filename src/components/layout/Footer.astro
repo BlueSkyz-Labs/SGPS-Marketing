@@ -14,7 +14,7 @@ const FOOTER_GROUPS = getFooterGroups(lang);
 const taglineLead = isVi ? "Trí tuệ. Nâng tầm." : SITE.taglineLead;
 const taglineAccent = isVi ? "Tác động." : SITE.taglineAccent;
 
-// C4-A S6 — colophon: identity + language only. Every public trust/security
+// C4-A S6 — colophon: identity (with © year) + language only. Every public trust/security
 // route already exists exactly once in the footer navigation; repeating them
 // here would create duplicate targets for the same public destination.
 const languageName = isVi
@@ -81,7 +81,7 @@ const languageName = isVi
       </nav>
     </div>
     <div class="c4-colophon" data-c4-colophon>
-      <span class="c4-colophon__identity">{SITE.name}</span>
+      <span class="c4-colophon__identity">© {SITE.operatingSinceYear} {SITE.name}</span>
       <span class="c4-colophon__rule" aria-hidden="true"></span>
       <span class="c4-colophon__language">{languageName}</span>
     </div>
