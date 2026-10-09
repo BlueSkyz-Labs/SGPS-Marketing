@@ -35,6 +35,11 @@ const emptyDescription =
               : "Each product page states its status and what backs it."
         }
       />
+      {products.length > 0 && (
+        <p class="studio-shelf__framing mt-6 text-base font-medium text-[var(--text-secondary)]">
+          {products.length} products. One philosophy: small tools you can verify, built for the people who use them.
+        </p>
+      )}
       {products.length === 0 ? (
         <div class="mt-12">
           <ProofFirstEmptyState lang="en" />
@@ -50,9 +55,11 @@ const emptyDescription =
           >
             {allInDevelopment ? "In development" : "Products"}
           </h2>
-          <div class="mt-6 grid gap-4 md:grid-cols-2">
+          <div class="studio-shelf mt-8">
             {products.map((product) => (
-              <ProductCard product={product} lang="en" showThumb />
+              <div data-product-slug={product.data.slug} class="studio-shelf__item">
+                <ProductCard product={product} lang="en" showThumb />
+              </div>
             ))}
           </div>
         </section>

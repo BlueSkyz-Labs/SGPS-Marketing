@@ -37,6 +37,11 @@ const emptyDescription = "產品僅在具備可核驗的公開證據時發布。
               : "每個頁面都註明產品狀態與依據。"
         }
       />
+      {products.length > 0 && (
+        <p class="studio-shelf__framing mt-6 text-base font-medium text-[var(--text-secondary)]">
+          {products.length} 款產品。同一個理念：小而可驗證的工具，為使用者而造。
+        </p>
+      )}
       {products.length === 0 ? (
         <div class="mt-12">
           <ProofFirstEmptyState lang="zh-hant" />
@@ -52,9 +57,11 @@ const emptyDescription = "產品僅在具備可核驗的公開證據時發布。
           >
             {allInDevelopment ? "開發中" : "產品"}
           </h2>
-          <div class="mt-6 grid gap-4 md:grid-cols-2">
+          <div class="studio-shelf mt-8">
             {products.map((product) => (
-              <ProductCard product={product} lang="zh-hant" showThumb />
+              <div data-product-slug={product.data.slug} class="studio-shelf__item">
+                <ProductCard product={product} lang="zh-hant" showThumb />
+              </div>
             ))}
           </div>
         </section>

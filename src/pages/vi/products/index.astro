@@ -35,6 +35,11 @@ const emptyDescription =
               : "Mỗi trang nói rõ trạng thái và căn cứ của sản phẩm đó."
         }
       />
+      {products.length > 0 && (
+        <p class="studio-shelf__framing mt-6 text-base font-medium text-[var(--text-secondary)]">
+          {products.length} sản phẩm. Một triết lý: công cụ nhỏ bạn có thể xác minh, xây cho người dùng.
+        </p>
+      )}
       {products.length === 0 ? (
         <div class="mt-12">
           <ProofFirstEmptyState lang="vi" />
@@ -50,9 +55,11 @@ const emptyDescription =
           >
             {allInDevelopment ? "Đang phát triển" : "Sản phẩm"}
           </h2>
-          <div class="mt-6 grid gap-4 md:grid-cols-2">
+          <div class="studio-shelf mt-8">
             {products.map((product) => (
-              <ProductCard product={product} lang="vi" showThumb />
+              <div data-product-slug={product.data.slug} class="studio-shelf__item">
+                <ProductCard product={product} lang="vi" showThumb />
+              </div>
             ))}
           </div>
         </section>
