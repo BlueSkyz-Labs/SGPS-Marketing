@@ -57,6 +57,10 @@ const robotsNoindex = isNonProductionSiteUrl(SITE.url);
     <link rel="mask-icon" href="/icons/safari-pinned-tab.svg" color="#2564FF" />
     <meta name="msapplication-config" content="/browserconfig.xml" />
     <meta property="og:type" content="website" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:locale:alternate" content="vi_VN" />
+    <meta property="og:locale:alternate" content="zh_CN" />
+    <meta property="og:locale:alternate" content="zh_TW" />
     <meta property="og:site_name" content={SITE.name} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
@@ -276,16 +280,26 @@ const robotsNoindex = isNonProductionSiteUrl(SITE.url);
         <a href="/en/about/">About BlueSkyz Labs</a>
       </section>
       <nav aria-label="Language">
-        <a href="/vi/" data-language-choice="vi" lang="vi">
+        <a href="/vi/" data-language-choice="vi" lang="vi" hreflang="vi">
           Tiếng Việt
         </a>
-        <a href="/en/" data-language-choice="en" lang="en">
+        <a href="/en/" data-language-choice="en" lang="en" hreflang="en">
           English
         </a>
-        <a href="/zh/" data-language-choice="zh" lang="zh-Hans">
+        <a
+          href="/zh/"
+          data-language-choice="zh"
+          lang="zh-Hans"
+          hreflang="zh-Hans"
+        >
           简体中文
         </a>
-        <a href="/zh-hant/" data-language-choice="zh-hant" lang="zh-Hant">
+        <a
+          href="/zh-hant/"
+          data-language-choice="zh-hant"
+          lang="zh-Hant"
+          hreflang="zh-Hant"
+        >
           繁體中文
         </a>
       </nav>

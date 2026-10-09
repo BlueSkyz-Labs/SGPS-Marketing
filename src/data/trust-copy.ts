@@ -80,7 +80,7 @@ export const SECURITY_COPY: PerLang<SecurityCopy> = {
       },
       { id: "ev-security-route", label: "Trang Bảo mật" },
     ],
-    reviewed: "Rà soát",
+    reviewed: "Đã xem xét",
     emailLabel: "Email",
   },
   zh: {
@@ -165,7 +165,7 @@ export const PRIVACY_COPY: PerLang<PrivacyCopy> = {
     limitsBody:
       "Điều này không có nghĩa là không có dữ liệu nào được xử lý. Mọi trang web đều cần hạ tầng xử lý dữ liệu mạng như địa chỉ IP và header yêu cầu.",
     deletion:
-      "Trang web này không có tài khoản nào để xuất hoặc xoá. Mỗi sản phẩm sẽ công bố cách xử lý quyền riêng tư của mình khi được công khai. Văn bản pháp lý đầy đủ sẽ đăng khi BlueSkyz phê duyệt.",
+      "Trang web này không có tài khoản nào để xuất hoặc xoá. Mỗi sản phẩm sẽ công bố cách xử lý quyền riêng tư của mình khi được công khai. Văn bản pháp lý đầy đủ sẽ đăng khi được BlueSkyz phê duyệt.",
     sourcesLabel: "Nguồn:",
     sources: [
       { id: "ev-privacy-route", label: "Trang Quyền riêng tư" },
