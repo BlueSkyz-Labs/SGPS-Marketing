@@ -75,13 +75,13 @@ const founderLocation =
     aria-labelledby="about-founder"
     data-about-founder
   >
-    <div class="about-founder__identity">
+    <header class="about-founder__identity">
       {founderTitle && <p class="about-founder__title">{founderTitle}</p>}
       <h2 id="about-founder" class="about-founder__name">
         {founderName}
       </h2>
       <p class="about-founder__meta text-pretty">{founderLocation}</p>
-    </div>
+    </header>
     <div class="about-founder__art" aria-hidden="true">
       <img
         src="/images/about/founder-elevation.webp"
@@ -278,10 +278,6 @@ const founderLocation =
     }
     .about-founder__identity {
       padding: 3rem;
-    }
-    .about-founder__name {
-      font-size: var(--size-8);
-      line-height: var(--lh-8);
     }
   }
   .about-products,
