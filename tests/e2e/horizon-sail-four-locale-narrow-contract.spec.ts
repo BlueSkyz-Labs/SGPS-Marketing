@@ -1,96 +1,70 @@
-import { expect, test, type Page } from "@playwright/test";
+import { expect, test } from "@playwright/test";
 
 /**
- * W0/W4: all four public locale shells retain a usable narrow-screen
- * reading path in both themes, without changing visual snapshots or budgets.
- *
- * This is an executable structural guard, NOT independent visual review,
- * native language validation or proof of the Cloudflare served revision.
+ * W0/W4: four public locale shells retain usable narrow-screen routes
+ * in both themes. This is structural QA, not native-language or visual E4.
  */
 const locales = [
-  { route: "en", documentLang: "en" },
-  { route: "vi", documentLang: "vi" },
-  { route: "zh", documentLang: "zh-Hans" },
-  { route: "zh-hant", documentLang: "zh-Hant" },
+  ["en", "en"],
+  ["vi", "vi"],
+  ["zh", "zh-Hans"],
+  ["zh-hant", "zh-Hant"],
 ] as const;
 
-const viewports = [
-  { width: 320, height: 720 },
-  { width: 390, height: 844 },
-] as const;
-
-async function assertNoHorizontalOverflow(page: Page): Promise<void> {
-  const metrics = await page.evaluate(() => ({
-    scrollWidth: document.documentElement.scrollWidth,
-    clientWidth: document.documentElement.clientWidth,
-  }));
-  expect(
-    metrics.scrollWidth,
-    `content overflows at viewport ${metrics.clientWidth}px: ${JSON.stringify(metrics)}`,
-  ).toBeLessThanOrEqual(metrics.clientWidth);
+async function noOverflow(page: import("@playwright/test").Page) {
+  const overflowing = await page.evaluate(
+    () =>
+      document.documentElement.scrollWidth >
+      document.documentElement.clientWidth,
+  );
+  expect(overflowing).toBe(false);
 }
 
-for (const { route, documentLang } of locales) {
-  for (const viewport of viewports) {
+for (const [lang, documentLang] of locales) {
+  for (const width of [320, 390]) {
     for (const theme of ["light", "dark"] as const) {
-      test(`${route} ${viewport.width}px ${theme}: home and Verify remain readable`, async ({
-        page,
-      }) => {
-        await page.setViewportSize(viewport);
+      test(`${lang} ${width}px ${theme}: Home and Verify`, async ({ page }) => {
+        await page.setViewportSize({ width, height: 844 });
         await page.addInitScript((mode: string) => {
           try {
             localStorage.setItem("blueskyz-theme", mode);
           } catch {
-            // Storage may be disabled; the visual baseline is still HTML.
+            // When storage is unavailable, the HTML fallback still applies.
           }
         }, theme);
-
-        await page.goto(`/${route}/`);
-        await expect(page.locator("html")).toHaveAttribute(
-          "lang",
-          documentLang,
-        );
-        await expect(page.locator("html")).toHaveAttribute(
-          "data-theme",
-          theme,
-        );
+        await page.goto(`/${lang}/`);
+        await expect(page.locator("html")).toHaveAttribute("lang", documentLang);
+        await expect(page.locator("html")).toHaveAttribute("data-theme", theme);
         await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
         await expect(page.locator("[data-hero-primary]")).toBeVisible();
-        await assertNoHorizontalOverflow(page);
+        await noOverflow(page);
 
-        await page.goto(`/${route}/verify/`);
-        await expect(page.locator("html")).toHaveAttribute(
-          "data-theme",
-          theme,
-        );
+        await page.goto(`/${lang}/verify/`);
+        await expect(page.locator("html")).toHaveAttribute("data-theme", theme);
         await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
-        await assertNoHorizontalOverflow(page);
+        await noOverflow(page);
       });
     }
   }
 }
 
-test.describe("Chinese locale static fallback at 320px", () => {
+test.describe("Chinese static fallback at 320px", () => {
   test.use({
     javaScriptEnabled: false,
     viewport: { width: 320, height: 720 },
     reducedMotion: "reduce",
   });
 
-  for (const { route, documentLang } of locales.filter((x) =>
-    x.route.startsWith("zh"),
-  )) {
-    test(`${route}: home and Verify remain usable without JS`, async ({
-      page,
-    }) => {
-      await page.goto(`/${route}/`);
+  for (const [lang, documentLang] of locales.slice(2)) {
+    test(`${lang}: Home and Verify without JS`, async ({ page }) => {
+      await page.goto(`/${lang}/`);
       await expect(page.locator("html")).toHaveAttribute("lang", documentLang);
       await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
-      await assertNoHorizontalOverflow(page);
+      await noOverflow(page);
 
-      await page.goto(`/${route}/verify/`);
+      await page.goto(`/${lang}/verify/`);
       await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
-      await assertNoHorizontalOverflow(page);
+      await noOverflow(page);
     });
   }
 });
