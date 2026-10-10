@@ -202,7 +202,7 @@ const defaultTrack = wanted
       phones={heroPhones}
       desktops={heroDesktops}
       lang={lang}
-      labels={t}
+      labels={{ ...t, inspect: STORY_COPY[lang].inspect }}
       first
     />
   ) : null}
@@ -214,7 +214,7 @@ const defaultTrack = wanted
         phones={morePhones}
         desktops={moreDesktops}
         lang={lang}
-        labels={t}
+        labels={{ ...t, inspect: STORY_COPY[lang].inspect }}
       />
     </details>
   ) : null}
@@ -356,6 +356,22 @@ const defaultTrack = wanted
     box-shadow:
       0 1px 0 color-mix(in srgb, white 30%, transparent) inset,
       0 36px 60px -28px color-mix(in srgb, var(--brand-cobalt) 40%, transparent);
+  }
+  .showcase__inspect {
+    display: inline-flex;
+    min-height: 2.75rem;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 0.25rem;
+    color: var(--action-primary);
+    font-size: var(--size-2);
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+  .showcase__inspect:focus-visible {
+    outline: 2px solid var(--brand-cobalt);
+    outline-offset: 3px;
   }
   .showcase__caption {
     margin-top: 1rem;
