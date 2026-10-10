@@ -87,12 +87,20 @@ for (const [from, to] of LEGACY_REDIRECTS) {
   });
 }
 
-test("/privacy/ summarizes practical trust answers", async ({ page }) => {
+test("/privacy/ summarizes website-only data and offers a working contact route", async ({
+  page,
+}) => {
   await page.goto("/en/privacy/");
   await expect(page.getByText(/What is collected/i)).toBeVisible();
   await expect(
-    page.getByText(/no account on this site to export or delete/i),
+    page.getByText(/This site has no account to export or delete/i),
   ).toBeVisible();
+  await expect(
+    page.getByText(/This notice covers blueskyzlabs.com only/i),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("link", { name: "Contact BlueSkyz Labs" }),
+  ).toHaveAttribute("href", "/en/contact/");
 });
 
 test("homepage omits flagship proof without verified screenshot", async ({

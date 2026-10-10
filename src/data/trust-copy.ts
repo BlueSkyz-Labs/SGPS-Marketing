@@ -133,6 +133,8 @@ export interface PrivacyCopy {
   limitsLead: string;
   limitsBody: string;
   deletion: string;
+  contactLead: string;
+  contactLink: string;
   sourcesLabel: string;
   sources: SourceRef[];
 }
@@ -148,7 +150,9 @@ export const PRIVACY_COPY: PerLang<PrivacyCopy> = {
     limitsBody:
       "This does not mean no data is processed. Any website needs infrastructure that handles network data such as IP addresses and request headers.",
     deletion:
-      "There is no account on this site to export or delete. Each product publishes its own privacy practices when it is public. Full legal wording is published when BlueSkyz approves it.",
+      "This site has no account to export or delete. This notice covers blueskyzlabs.com only; each public product has its own privacy notice.",
+    contactLead: "Questions about this notice?",
+    contactLink: "Contact BlueSkyz Labs",
     sourcesLabel: "Sources:",
     sources: [
       { id: "ev-privacy-route", label: "Privacy route" },
@@ -165,7 +169,9 @@ export const PRIVACY_COPY: PerLang<PrivacyCopy> = {
     limitsBody:
       "Điều này không có nghĩa là không có dữ liệu nào được xử lý. Mọi trang web đều cần hạ tầng xử lý dữ liệu mạng như địa chỉ IP và header yêu cầu.",
     deletion:
-      "Trang web này không có tài khoản nào để xuất hoặc xoá. Mỗi sản phẩm sẽ công bố cách xử lý quyền riêng tư của mình khi được công khai. Văn bản pháp lý đầy đủ sẽ đăng khi được BlueSkyz phê duyệt.",
+      "Trang web này không có tài khoản để xuất hoặc xoá. Thông báo này chỉ áp dụng cho blueskyzlabs.com; mỗi sản phẩm công khai có thông báo quyền riêng tư riêng.",
+    contactLead: "Có câu hỏi về thông báo này?",
+    contactLink: "Liên hệ BlueSkyz Labs",
     sourcesLabel: "Nguồn:",
     sources: [
       { id: "ev-privacy-route", label: "Trang Quyền riêng tư" },
@@ -182,7 +188,9 @@ export const PRIVACY_COPY: PerLang<PrivacyCopy> = {
     limitsBody:
       "这不代表完全不处理任何数据。任何网站都需要基础设施处理 IP 地址、请求标头等网络数据。",
     deletion:
-      "本站没有可导出或删除的账号。每款产品公开时会发布各自的隐私做法。完整法律文本经 BlueSkyz 批准后发布。",
+      "本站没有可导出或删除的账号。本通知仅适用于 blueskyzlabs.com；每款公开产品均有自己的隐私通知。",
+    contactLead: "如对本通知有疑问，请",
+    contactLink: "联系 BlueSkyz Labs",
     sourcesLabel: "来源：",
     sources: [
       { id: "ev-privacy-route", label: "隐私页面" },
@@ -199,7 +207,9 @@ export const PRIVACY_COPY: PerLang<PrivacyCopy> = {
     limitsBody:
       "這不代表完全不處理任何資料。任何網站都需要基礎設施處理 IP 位址、請求標頭等網路資料。",
     deletion:
-      "本站沒有可匯出或刪除的帳號。每項產品公開時會發布各自的隱私做法。完整法律文本經 BlueSkyz 核准後發布。",
+      "本站沒有可匯出或刪除的帳號。本通知僅適用於 blueskyzlabs.com；每項公開產品均有自己的隱私權通知。",
+    contactLead: "如對本通知有疑問，請",
+    contactLink: "聯絡 BlueSkyz Labs",
     sourcesLabel: "來源：",
     sources: [
       { id: "ev-privacy-route", label: "隱私權頁面" },
