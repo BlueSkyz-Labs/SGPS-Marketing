@@ -8,7 +8,8 @@ test("malformed graph preserves static proof", async ({ page }) => {
   await page.route(`**${EN}`, async (route) => {
     const response = await route.fetch();
     const body = await response.text();
-    const graph = /(<script\b[^>]*data-evidence-graph[^>]*>)[\s\S]*?(<\/script>)/;
+    const graph =
+      /(<script\b[^>]*data-evidence-graph[^>]*>)[\s\S]*?(<\/script>)/;
     if (!graph.test(body)) {
       throw new Error("No evidence graph found in HTML");
     }
