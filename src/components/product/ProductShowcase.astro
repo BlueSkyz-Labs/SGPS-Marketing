@@ -242,7 +242,10 @@ const defaultTrack = wanted
      change. */
   .showcase {
     content-visibility: auto;
-    contain-intrinsic-size: auto 4545px;
+    /* W2: five real-screen inspection links plus coda increased the
+       390px collapsed-gallery height. Chromium/WebKit/mobile CI measured
+       4938–4972px (vi/en, reduced motion); retain the strict 6% CLS guard. */
+    contain-intrinsic-size: auto 4960px;
   }
   @media (min-width: 64rem) {
     .showcase {
