@@ -111,6 +111,52 @@ const DECK: Record<
       ],
     },
   },
+  fluentarc: {
+    en: {
+      oneLiner:
+        "Turn work into fluency. Professional English, built from your real work — captured in your browser, kept on your device.",
+      whatItDoes: [
+        "Capture professional English from the pages you read at work",
+        "Understand words in their real context, not isolated lists",
+        "Recall with FSRS-spaced review sessions",
+        "Your learning data stays on your device — local-first, no account needed",
+        "Export your vocabulary to your device whenever you choose",
+      ],
+    },
+    vi: {
+      oneLiner:
+        "Biến công việc thành sự lưu loát. Tiếng Anh chuyên nghiệp, xây từ chính công việc của bạn — thu thập trong trình duyệt, lưu trên thiết bị của bạn.",
+      whatItDoes: [
+        "Thu thập tiếng Anh chuyên nghiệp từ trang bạn đọc khi làm việc",
+        "Hiểu từ trong ngữ cảnh thật, không phải danh sách rời rạc",
+        "Ôn tập với lịch nhắc thông minh theo FSRS",
+        "Dữ liệu học tập ở yên trên máy bạn — ưu tiên cục bộ, không cần tài khoản",
+        "Xuất từ vựng ra máy bất cứ khi nào bạn muốn",
+      ],
+    },
+    zh: {
+      oneLiner:
+        "把工作变成流利。职场英语，源自你的真实工作——在浏览器中采集，保存在你的设备上。",
+      whatItDoes: [
+        "从你工作中阅读的页面采集职场英语",
+        "在真实语境中理解单词，而非孤立词表",
+        "用基于 FSRS 的间隔重复进行复习",
+        "学习数据只留在你的设备上——本地优先，无需账号",
+        "随时将词汇导出到你的设备",
+      ],
+    },
+    "zh-hant": {
+      oneLiner:
+        "把工作變成流利。職場英語，源自你的真實工作——在瀏覽器中採集，保存在你的裝置上。",
+      whatItDoes: [
+        "從你工作中閱讀的頁面採集職場英語",
+        "在真實語境中理解單字，而非孤立詞表",
+        "用基於 FSRS 的間隔重複進行複習",
+        "學習資料只留在你的裝置上——本機優先，無需帳號",
+        "隨時將詞彙匯出到你的裝置",
+      ],
+    },
+  },
 };
 
 /** At most five plain statements, so the page never turns back into a data sheet. */
@@ -192,3 +238,4 @@ export const AVAILABILITY = {
   ),
   colon: S(": ", ": ", "：", "："),
 } as const;
+

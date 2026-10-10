@@ -1,6 +1,6 @@
 slug: fluentarc
 name: FluentArc
-shortDescription: An extension-first, local-first approach to learning professional English from real work and qualified core content.
+shortDescription: "Turn work into fluency. Professional English, built from your real work — captured in your browser, kept on your device."
 lifecycle: concept
 availability: preview
 publicLabel: In development
@@ -35,15 +35,15 @@ proof:
 endorsement: A BlueSkyz Labs product
 featuredTier: hidden
 displayOrder: 4
-public: false
+public: true
 sourceRevision: b74a3027dc5ebd4cd4b3a3502576dc0d1edba6bc
-lastReviewedAt: 2026-09-27
+lastReviewedAt: 2026-10-10
 # Localized copy: faithful translations of the English claims above; the
 # English record stays canonical for claim/proof binding. Native VI/ZH review
 # is an Owner feedback checkpoint (plan v5 W3.4).
 i18n:
   vi:
-    shortDescription: "Cách học tiếng Anh chuyên nghiệp ưu tiên tiện ích trình duyệt và lưu cục bộ, từ chính công việc thực tế và nội dung cốt lõi được chọn lọc."
+    shortDescription: "Biến công việc thành sự lưu loát. Tiếng Anh chuyên nghiệp, xây từ chính công việc của bạn — thu thập trong trình duyệt, lưu trên thiết bị của bạn."
     jobs:
       - "Biến tiếng Anh gặp trong công việc thành cách giao tiếp chuyên nghiệp dùng lại được"
       - "Luyện tiếng Anh chuyên nghiệp và CNTT qua ghi nhớ và vận dụng"
@@ -53,7 +53,7 @@ i18n:
       - "Trọng tâm giai đoạn A: dữ liệu học tập riêng tư, có xuất và khôi phục"
     primaryActionLabel: "Xem trước FluentArc"
   zh:
-    shortDescription: "以浏览器扩展为先、本地优先的方式，从真实工作和经过筛选的核心内容中学习职场英语。"
+    shortDescription: "把工作变成流利。职场英语，源自你的真实工作——在浏览器中采集，保存在你的设备上。"
     jobs:
       - "将工作中遇到的英语转化为可复用的职场表达"
       - "通过回忆与应用练习职场与 IT 英语"
@@ -64,7 +64,7 @@ i18n:
     primaryActionLabel: "预览 FluentArc"
   # zh-Hant copy: machine-assisted (OpenCC s2twp), pending native review.
   zh-hant:
-    shortDescription: "以瀏覽器擴充功能為先、本機優先的方式，從真實工作和經過篩選的核心內容中學習職場英語。"
+    shortDescription: "把工作變成流利。職場英語，源自你的真實工作——在瀏覽器中採集，保存在你的裝置上。"
     jobs:
       - "將工作中遇到的英語轉化為可複用的職場表達"
       - "透過回憶與應用練習職場與 IT 英語"
