@@ -69,6 +69,15 @@ const DESKTOP_SIZES = "(min-width: 64rem) 64rem, calc(100vw - 2.5rem)";
             {screen.title[lang]}
           </h3>
           <p class="story__line">{sentenceCase(screen.caption[lang], lang)}</p>
+          <a
+            href={screen.src}
+            class="story__inspect"
+            aria-label={`${t.inspect}: ${screen.title[lang]}`}
+            data-capture-inspect
+          >
+            {t.inspect}
+            <span aria-hidden="true">↗</span>
+          </a>
           {fact ? (
             <p class="story__fact" data-story-fact>
               {fact}
@@ -116,6 +125,15 @@ const DESKTOP_SIZES = "(min-width: 64rem) 64rem, calc(100vw - 2.5rem)";
         <p class="story__line">
           {sentenceCase(story.coda.caption[lang], lang)}
         </p>
+        <a
+          href={story.coda.src}
+          class="story__inspect"
+          aria-label={`${t.inspect}: ${story.coda.title[lang]}`}
+          data-capture-inspect
+        >
+          {t.inspect}
+          <span aria-hidden="true">↗</span>
+        </a>
       </div>
       <figure class="story__browser" data-story-screen={story.coda.id}>
         <span class="story__browser-bar" aria-hidden="true">
@@ -210,6 +228,26 @@ const DESKTOP_SIZES = "(min-width: 64rem) 64rem, calc(100vw - 2.5rem)";
     line-height: 1.6;
     color: var(--text-secondary);
     text-wrap: pretty;
+  }
+  /* Source-owned full image, available even when JS is disabled. Keep its
+     control in the visible text column: cross-faded phone figures are not
+     keyboard focus targets while hidden. */
+  .story__inspect {
+    display: inline-flex;
+    width: fit-content;
+    min-height: 2.75rem;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+    color: var(--action-primary);
+    font-size: var(--size-2);
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+  .story__inspect:focus-visible {
+    outline: 2px solid var(--brand-cobalt);
+    outline-offset: 3px;
   }
   /* The registered capability this chapter's task relates to: plain
      secondary text, never a check-marked "this screen shows" claim. */
