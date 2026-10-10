@@ -32,14 +32,17 @@
 
 ## 2. Engineering sequence
 
-| Wave | Scope / output | Existing implementation reused | Exit evidence | Promotion |
-| --- | --- | --- | --- | --- |
-| **W0 Truth** P1 | Freeze `main`, PR, source registry/brand lock; baseline map across 4 locales/2 themes, desktop/mobile; defects ranked by impact | `src/pages/{en,vi,zh,zh-hant}/`, current playwright/visual tests | Screenshot contact sheet with SHA, browser build, route, viewport, theme; Lighthouse/axe baseline | Documentation/QA PR |
-| **W1 Signature hero** P1 | Horizon/Sail responsive visual continuity, single focal point and non-LCP decoration; start with low-risk **static mobile horizon seam** using existing markup, no media/network/scripts | `Hero.astro`, `HorizonField`, `SailReveal`, Inter, Brand Kit v4 | Before/after 390px and 1440px, reduced motion, CJK, color modes, no layout jump | Small reversible feature PR |
-| **W2 Product theatre** P1 | Mobile-readable source-backed screenshot and clearer 1× focus on user job; remove redundant beats only if baseline proves repetition | `FlagshipTheatre`, `ProductHouse`, `FlagshipCapture`, showcase registry | Visual legibility proof; image bytes, LCP and end-to-end product navigation | Feature PR (no new product claims) |
-| **W3 Evidence signature** P2 | Distinctive but restrained claim→source→limit visual trail, fully semantic and functional without JS | `ProofBand`, `EvidenceExplorer`, `TrustLedger` | Link trace, reduced-motion, keyboard, stale/unpublished data negative checks | Separate PR |
-| **W4 Editorial consistency** P2 | Harmonize Product/About/Verify/Contact/404 framing, typography rhythm, status and action density | Existing design tokens, `c4-quiet-authority.css`, route-specific components | 4 locales × light/dark × 390/1440 comparisons and native-review residual | Small per-surface PRs |
-| **W5 Red-team/release** P1 | Independent beauty-blind and task walkthroughs, perf/a11y/security/truth regression, rollback | Existing Source Assurance + Browser Assurance, Lighthouse, SGPS DEC-028 | Exact-head receipts; production readback separated from source | Never skip protected gates |
+**W0 — Truth (P1):** Freeze `main`, PR queue, source registry and Brand Kit v4. Capture baseline at 1440 × 900 / 390 × 844, light/dark and all four locales. Deliver screenshots (SHA, route, viewport, theme), Lighthouse/axe baseline, defect/risk map. Reuse existing Playwright and visual tests. Promotion: documentation/QA PR.
+
+**W1 — Signature hero (P1):** Preserve one dominant focal point. Reuse `Hero.astro`, `HorizonField`, `SailReveal`, Inter and Brand Kit v4. First reversible slice: a static mobile horizon seam behind actual app capture with no added media/network/scripts. Deliver before/after screenshot evidence at 390px/1440px, reduced motion, CJK, both themes. Promotion: small feature PR.
+
+**W2 — Product theatre (P1):** Make real product media readable on phones and avoid duplicated user-job stories where fresh renders show them. Reuse `FlagshipTheatre`, `ProductHouse`, `FlagshipCapture` and the showcase registry. Deliver legibility proof, asset bytes, LCP and end-to-end navigation. No new product claims. Promotion: feature PR.
+
+**W3 — Evidence signature (P2):** Create a cohesive source-linked claim → source → limit visual journey, semantic even without JS. Reuse `ProofBand`, `EvidenceExplorer`, `TrustLedger`; verify keyboard, negative truth cases and reduced motion. Promotion: separate PR.
+
+**W4 — Editorial consistency (P2):** Improve Products, About, Verify, Contact and 404 using existing tokens and `c4-quiet-authority.css`. Verify EN/VI/zh/zh-hant × light/dark × 390/1440 and separate native-review residual. Promotion: small per-surface PRs.
+
+**W5 — Red-team/release (P1):** Independent beauty-blind and task walkthroughs, exact-head Source Assurance, Browser Assurance, Lighthouse, WCAG 2.2 AA and product/privacy gates. Reconcile GitHub merge SHA with Cloudflare provider served revision. Missing evidence is NOT_VERIFIED; never skip protected gates.
 
 ## 3. W1 precise change envelope
 
@@ -53,17 +56,15 @@
 
 ### Coverage to capture before accepting design
 
-| Route | Purpose | Required states |
-| --- | --- | --- |
-| `/<lang>/` | Studio, proposition, flagship + proof | 1440×900 / 390×844; light/dark; no-JS; motion-reduce; screenshot/readability |
-| `/<lang>/products/` | Browse published products | 1440/390; real registry, nonpublic products absent, CTA/status |
-| `/<lang>/products/sotro/` | Understand main product | desktop/mobile captures + source provenance, label, status, no fabricated UI |
-| `/<lang>/verify/` | Trace evidence | keyboard, focus, source/limit, no-JS and reduced-motion |
-| `/<lang>/about/` | Recognize studio | 1440/390, decorative founder artwork not presented as photo |
-| `/<lang>/contact/` | Meaningful CTA | accurate real email state; no false transactional form |
-| `/<lang>/404/` | Clear recovery | semantic heading and genuine routes, compact brand moment |
+- **Home `/<lang>/`:** Studio proposition, flagship and proof. 1440 × 900 / 390 × 844; light/dark, no-JS, reduced-motion, screenshot readability.
+- **Products `/<lang>/products/`:** Browse published products, check truthful registry and lifecycle CTA/status; 1440/390.
+- **Flagship `/<lang>/products/sotro/`:** Desktop/mobile real captures, provenance, sample-data label and status.
+- **Verify `/<lang>/verify/`:** Accessible focus/keyboard flow, evidence source and limits, no-JS and reduced-motion.
+- **About `/<lang>/about/`:** Accurate studio identity; decorative founder illustration must not be presented as photography.
+- **Contact `/<lang>/contact/`:** Correct public email identity, useful recovery, no fake sent/received behavior.
+- **404 `/<lang>/404/`:** Semantic recovery headline, real destinations and a calm brand moment.
 
-`<lang>` = `en`, `vi`, `zh`, `zh-hant`. At minimum also capture 320px and text zoom / spacing, CJK wrapping, landscape clipping, forced colors and one keyboard-only flow. Mark native-locale review **NOT_VERIFIED** unless a qualified native reviewer actually signs off.
+`<lang>` means `en`, `vi`, `zh`, `zh-hant`. Also capture 320px, text zoom and spacing, CJK wrapping, landscape clipping, forced colors and a keyboard-only flow. Native-locale review is **NOT_VERIFIED** until a qualified reviewer actually signs off.
 
 ### Blocking quality and negative tests
 
@@ -77,15 +78,13 @@
 
 ## 5. Art-direction scorecard (review rubric, no invented score)
 
-| Lens | Weight | Anti-failure |
-| --- | ---: | --- |
-| Brand recognizability / Sail DNA | 20 | Could be any generic SaaS with logo hidden |
-| Hero focal clarity and immediate understanding | 20 | Two competing focal points; hidden real status |
-| True product visualization, mobile legibility | 20 | Screenshots unreadable or fabricated |
-| Calm optical typography + visual craft | 15 | Additional fonts/palette, inconsistent scale |
-| Accessibility + responsive parity | 10 | Locale clipping / nonfunctional keyboard |
-| Perf / motion / user control | 10 | Added bytes, looped animation, LCP regression |
-| Verifiable trust and honest lifecycle | 5 | Fake signals or claims unsupported by registry |
+- **Brand recognizability / Sail DNA — 20%:** Is it generic SaaS when the logo is hidden?
+- **Hero focal clarity and immediate comprehension — 20%:** Competing focal points or invisible status fail.
+- **Real mobile-legible product visualization — 20%:** Tiny or invented captures fail.
+- **Calm optical typography / craft — 15%:** Added fonts, token forks and inconsistent scale fail.
+- **Accessibility and responsive parity — 10%:** CJK overflow and keyboard loss fail.
+- **Performance / motion / control — 10%:** Regression, perpetual loops or new unneeded bytes fail.
+- **Verifiable trust and lifecycle truth — 5%:** Invented assurance claims or fake status fail.
 
 Never publish self-awarded scores without a capture and reviewer method. Any hard gate FAIL overrides weighted score.
 
