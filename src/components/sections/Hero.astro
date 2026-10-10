@@ -343,8 +343,27 @@ const supportingLine = flagship ? null : proposition;
     hyphens: none;
     text-align: center;
   }
+  /* Horizon / Sail W1: give the real product capture the same restrained
+     brand horizon on phones as on desktop. The line stays *behind* the image;
+     it uses no image/JS/animation, occupies no layout space, and does not touch
+     the LCP headline or the screenshot's reserved dimensions. */
   .hero-stage__horizon {
-    display: none;
+    display: block;
+    position: absolute;
+    z-index: 1;
+    top: 44%;
+    left: 0;
+    right: 0;
+    height: 1px;
+    pointer-events: none;
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      color-mix(in srgb, var(--brand-cobalt) 45%, transparent) 18%,
+      color-mix(in srgb, var(--brand-porcelain) 65%, transparent) 50%,
+      color-mix(in srgb, var(--brand-cobalt) 45%, transparent) 82%,
+      transparent 100%
+    );
   }
 
   @media (min-width: 768px) {
