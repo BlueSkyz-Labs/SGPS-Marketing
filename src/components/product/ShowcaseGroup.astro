@@ -12,7 +12,7 @@ interface Props {
   phones: Screen[];
   desktops: Screen[];
   lang: Language;
-  labels: { phone: string; phoneRail: string; desktop: string };
+  labels: { phone: string; phoneRail: string; desktop: string; inspect: string };
   first?: boolean;
 }
 
@@ -66,6 +66,15 @@ const desktopSmallSrc = (src: string) => src.replace(/\.webp$/, "-768.webp");
                 {item.title[lang]}
               </strong>
               <span> — {item.caption[lang]}</span>
+              <a
+                href={item.src}
+                class="showcase__inspect"
+                aria-label={`${labels.inspect}: ${item.title[lang]}`}
+                data-capture-inspect
+              >
+                {labels.inspect}
+                <span aria-hidden="true">↗</span>
+              </a>
             </figcaption>
           </figure>
         </li>
@@ -106,6 +115,15 @@ const desktopSmallSrc = (src: string) => src.replace(/\.webp$/, "-768.webp");
                 {item.title[lang]}
               </strong>
               <span> — {item.caption[lang]}</span>
+              <a
+                href={item.src}
+                class="showcase__inspect"
+                aria-label={`${labels.inspect}: ${item.title[lang]}`}
+                data-capture-inspect
+              >
+                {labels.inspect}
+                <span aria-hidden="true">↗</span>
+              </a>
             </figcaption>
           </figure>
         </li>
