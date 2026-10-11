@@ -62,6 +62,42 @@ function enhance(root: HTMLElement): void {
   }
   if (!graph || !graph.claim || !Array.isArray(graph.evidence)) return;
 
+  // The client graph is a presentation hint, not a second authority.
+  // Refuse enhancement unless every source matches the server-rendered
+  // passport. On mismatch the full static proof and boundary stay readable.
+  const staticSources = [
+    ...root.querySelectorAll<HTMLLIElement>(
+      "[data-evidence-static-sources] li[id^='evidence-']",
+    ),
+  ];
+  const heading = root.querySelector<HTMLElement>(".evidence-passport__claim");
+  const truthState = root.querySelector<HTMLElement>("[data-truth-state]");
+  const hasStaticBoundary = Boolean(
+    root.querySelector("[data-evidence-static-boundary]"),
+  );
+  if (
+    graph.id !== root.dataset.evidencePassport ||
+    graph.claim !== heading?.textContent?.trim() ||
+    graph.state !== truthState?.dataset.truthState ||
+    typeof graph.hasBoundary !== "boolean" ||
+    graph.hasBoundary !== hasStaticBoundary ||
+    graph.evidence.length !== staticSources.length ||
+    graph.evidence.some((ref, index) => {
+      const item = staticSources[index];
+      const link = item?.querySelector<HTMLAnchorElement>("a");
+      return (
+        !ref ||
+        item?.id !== `evidence-${ref.id}` ||
+        link?.getAttribute("href") !== ref.href ||
+        link?.textContent?.trim() !== ref.label ||
+        typeof ref.href !== "string" ||
+        !/^(?:https?:\/\/|\/(?!\/))/i.test(ref.href)
+      );
+    })
+  ) {
+    return;
+  }
+
   const msgExpand = root.dataset.msgExpand ?? "Show details";
   const msgCollapse = root.dataset.msgCollapse ?? "Hide details";
   const msgClaim = root.dataset.msgClaim ?? "Claim";
