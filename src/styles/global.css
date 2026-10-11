@@ -257,6 +257,23 @@
   }
 }
 
+/* Brand-derived cobalt enhancement only where supported. The canonical
+   static hex above stays first for accessible fallback, CI contrast guards
+   and browsers without color-mix(). */
+@supports (color: color-mix(in srgb, red, blue)) {
+  html[data-theme="dark"] {
+    --action-primary: color-mix(in srgb, var(--brand-cobalt) 62%, white);
+    --focus-ring: color-mix(in srgb, var(--brand-cobalt) 62%, white);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    html:root:not([data-theme="light"]) {
+      --action-primary: color-mix(in srgb, var(--brand-cobalt) 62%, white);
+      --focus-ring: color-mix(in srgb, var(--brand-cobalt) 62%, white);
+    }
+  }
+}
+
 @media (min-width: 640px) {
   :root {
     --site-gutter: 1.5rem;
