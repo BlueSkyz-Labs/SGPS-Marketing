@@ -71,11 +71,11 @@ const primaryLink = NAV[1]!;
       </ButtonLink>
     </nav>
 
-    <details class="relative md:hidden">
+    <details class="md:hidden">
       <summary class="inline-flex min-h-11 min-w-11 list-none items-center justify-center rounded-lg border border-[var(--border-subtle)] px-3 text-sm font-medium">
         {labelFor(SHARED_LABELS.menu, lang)}
       </summary>
-      <div class="absolute right-0 z-20 mt-2 w-[min(16rem,calc(100vw-2rem))] rounded-lg border border-[var(--border-subtle)] bg-[var(--surface-primary)] p-3 shadow-sm">
+      <div class="absolute right-4 z-20 mt-2 w-[min(16rem,calc(100vw-2rem))] rounded-lg border border-[var(--border-subtle)] bg-[var(--surface-primary)] p-3 shadow-sm">
         <nav
           aria-label={labelFor(SHARED_LABELS.mobileNav, lang)}
           class="flex flex-col gap-2"
