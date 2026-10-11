@@ -97,7 +97,7 @@
   --brand-slate-650: #475569;
   --brand-slate-500: #64748b; /* decorative/large only — fails AA normal text */
   --brand-action-dark: #1d4ed8;
-  --brand-text-disabled: #64748B;
+  --brand-text-disabled: #94a3b8;
   --brand-shadow-subtle: 0 8px 28px rgba(11, 16, 32, 0.12);
   /* Kit parity alias; S+ motion keeps its own curve for purpose tokens. */
   --brand-ease-standard: cubic-bezier(0.2, 0, 0, 1);
@@ -208,10 +208,10 @@
   --surface-raised: #0f172a;
   --text-primary: #ffffff;
   --text-secondary: #cbd5e1;
-  --text-muted: #64748B;
+  --text-muted: #94a3b8;
   --border-subtle: #334155;
-  --action-primary: color-mix(in srgb, var(--brand-cobalt) 62%, white);
-  --focus-ring: color-mix(in srgb, var(--brand-cobalt) 62%, white);
+  --action-primary: #3b82f6;
+  --focus-ring: #3b82f6;
   --brand-text-disabled: #64748b;
   --bsl-border: #334155;
   --badge-ink: #93c5fd;
@@ -242,10 +242,10 @@
     --surface-raised: #0f172a;
     --text-primary: #ffffff;
     --text-secondary: #cbd5e1;
-    --text-muted: #64748B;
+    --text-muted: #94a3b8;
     --border-subtle: #334155;
-    --action-primary: color-mix(in srgb, var(--brand-cobalt) 62%, white);
-    --focus-ring: color-mix(in srgb, var(--brand-cobalt) 62%, white);
+    --action-primary: #3b82f6;
+    --focus-ring: #3b82f6;
     --brand-text-disabled: #64748b;
     --bsl-border: #334155;
     --badge-ink: #93c5fd;
@@ -254,6 +254,23 @@
     --surface-footer: #060a16;
     --footer-edge: #334155;
     --specular: rgba(255, 255, 255, 0.09);
+  }
+}
+
+/* Brand-derived cobalt enhancement only where supported. The canonical
+   static hex above stays first for accessible fallback, CI contrast guards
+   and browsers without color-mix(). */
+@supports (color: color-mix(in srgb, red, blue)) {
+  [data-theme="dark"] {
+    --action-primary: color-mix(in srgb, var(--brand-cobalt) 62%, white);
+    --focus-ring: color-mix(in srgb, var(--brand-cobalt) 62%, white);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --action-primary: color-mix(in srgb, var(--brand-cobalt) 62%, white);
+      --focus-ring: color-mix(in srgb, var(--brand-cobalt) 62%, white);
+    }
   }
 }
 
