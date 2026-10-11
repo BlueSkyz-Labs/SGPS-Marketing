@@ -15,7 +15,6 @@ export const ATELIER_GOALS = [
   "explore",
   "evaluate",
   "verify",
-  "architecture",
   "work-with-blueskyz",
 ] as const;
 
@@ -38,7 +37,6 @@ export const ATELIER_REASON_KEYS = [
   "in-scope",
   "carries-source",
   "states-limits",
-  "trust-surface",
   "product-fact",
 ] as const;
 
@@ -89,9 +87,6 @@ const GOAL_GROUPS: Record<AtelierGoal, readonly GroupRule[]> = {
       reason: "carries-source",
       requiresEvidence: true,
     },
-  ],
-  architecture: [
-    { id: "trust-signals", kinds: ["trust"], reason: "trust-surface" },
   ],
   "work-with-blueskyz": [
     { id: "product-truth", kinds: ["product"], reason: "product-fact" },

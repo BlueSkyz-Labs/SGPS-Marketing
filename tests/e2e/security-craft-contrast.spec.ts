@@ -31,7 +31,6 @@ const C4_ROUTES = [
   "/en/dossier/",
   "/en/dossier/print/",
   "/en/decision-room/",
-  "/en/architecture/",
 ] as const;
 const C4_SELECTORS = ["[class*=c4-]", "[class*=decision-room]"] as const;
 

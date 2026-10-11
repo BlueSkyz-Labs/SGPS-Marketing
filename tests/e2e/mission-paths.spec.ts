@@ -12,7 +12,6 @@ import { expect, test, type Page } from "@playwright/test";
 const MISSION_IDS = [
   "explore-products",
   "evaluate-product",
-  "understand-architecture",
   "verify-trust",
   "work-with-us",
 ] as const;
@@ -83,14 +82,8 @@ test.describe("mission paths", () => {
     // Pinned from src/data/experience.ts MISSIONS (deliberate update point):
     // if the authored missions change, this must be updated by hand.
     const AUTHORED_ORDERS: Record<string, string[]> = {
-      "explore-products": ["products", "architecture", "about", "contact"],
+      "explore-products": ["products", "about", "contact"],
       "evaluate-product": ["decision-room", "products", "about", "contact"],
-      "understand-architecture": [
-        "architecture",
-        "about",
-        "security",
-        "products",
-      ],
       "verify-trust": ["security", "privacy", "decision-room", "support"],
       "work-with-us": ["contact", "support", "about", "security"],
     };

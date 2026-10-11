@@ -14,7 +14,7 @@ test("C4-B maison: serves the live house sections in order", () => {
     const sections = getMaisonSections(lang);
     assert.deepEqual(
       sections.map((section) => section.id),
-      ["products", "proof", "architecture", "studio"],
+      ["products", "proof", "studio"],
       `${lang} section order`,
     );
   }

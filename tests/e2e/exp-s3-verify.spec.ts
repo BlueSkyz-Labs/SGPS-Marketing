@@ -127,7 +127,6 @@ test("the moved routes stay reachable", async ({ request }) => {
   for (const path of [
     "/en/decision-room/",
     "/en/dossier/",
-    "/en/architecture/",
     "/en/editions/",
     "/en/security/",
     "/en/products/",

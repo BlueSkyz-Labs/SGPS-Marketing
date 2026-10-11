@@ -128,8 +128,9 @@ test.describe("v7 shell", () => {
         page.locator("footer nav").getByRole("list", { name }),
       ).toHaveCount(1);
     }
+    // 2026-10-11: the retired "How this site is built" link left the Trust group.
     expect(await page.locator("footer nav ul[aria-labelledby] a").count()).toBe(
-      10,
+      9,
     );
   });
 
