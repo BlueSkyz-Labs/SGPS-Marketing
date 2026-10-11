@@ -354,16 +354,22 @@ test("negative proof: passing ogImage is detected", () => {
 
 // --- sitemap --------------------------------------------------------------
 
-test("footer-linked indexable /architecture/ routes are in the sitemap set", () => {
+test("the retired /architecture/ page is gone from links, sitemap and source, and 301s to /verify/", () => {
+  // Owner 2026-10-11: the "How this site is built" page was retired. Its
+  // public-claim role lives on /verify; old URLs take one permanent hop there.
+  const redirects = new Set(
+    readFileSync("public/_redirects", "utf8")
+      .split(/\r?\n/)
+      .map((line) => line.trim().split(/\s+/).join(" ")),
+  );
   for (const lang of LANGS) {
     const footer = getFooterLinks(lang).map((item) => item.href);
-    assert.ok(footer.includes(`/${lang}/architecture/`), lang);
-    assert.ok(PUBLIC_STATIC_PATHS.includes(`/${lang}/architecture/`), lang);
-    const page = readFileSync(
-      `src/pages/${lang}/architecture/index.astro`,
-      "utf8",
-    );
-    assert.doesNotMatch(page, /noindex/);
+    assert.ok(!footer.includes(`/${lang}/architecture/`), lang);
+    assert.ok(!PUBLIC_STATIC_PATHS.includes(`/${lang}/architecture/`), lang);
+    assert.ok(!existsSync(`src/pages/${lang}/architecture`), lang);
+    for (const from of [`/${lang}/architecture/`, `/${lang}/architecture`]) {
+      assert.ok(redirects.has(`${from} /${lang}/verify/ 301`), from);
+    }
   }
 });
 

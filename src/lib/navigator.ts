@@ -54,12 +54,6 @@ const ROUTE_ALIASES: Record<string, Record<Language, string[]>> = {
     zh: ["核实", "核验", "验证", "我们如何核验"],
     "zh-hant": ["核實", "核驗", "驗證", "查證", "我們如何核驗"],
   },
-  architecture: {
-    en: ["architecture", "how this site is built"],
-    vi: ["kiến trúc", "cách trang web này được xây dựng"],
-    zh: ["架构", "本站如何构建"],
-    "zh-hant": ["架構", "本站如何建置"],
-  },
   editions: {
     en: ["collected editions", "editions", "collections"],
     vi: ["tuyển tập", "bộ sưu tập"],

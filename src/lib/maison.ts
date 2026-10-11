@@ -9,8 +9,7 @@ import { getFooterLinks, type Language } from "../data/site.ts";
  * rather than invented. Nothing here may become a second route source.
  */
 
-export type MaisonSectionId =
-  "products" | "proof" | "architecture" | "journal" | "studio";
+export type MaisonSectionId = "products" | "proof" | "journal" | "studio";
 
 export interface MaisonSection {
   id: MaisonSectionId;
@@ -22,7 +21,6 @@ export interface MaisonSection {
 export const MAISON_ORDER: readonly MaisonSectionId[] = [
   "products",
   "proof",
-  "architecture",
   "journal",
   "studio",
 ] as const;
@@ -44,7 +42,6 @@ const SECTION_ROUTE_KEY: Readonly<Partial<Record<MaisonSectionId, string>>> =
   Object.freeze({
     products: "products",
     proof: "security",
-    architecture: "architecture",
     studio: "about",
   });
 

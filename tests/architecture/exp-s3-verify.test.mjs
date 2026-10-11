@@ -120,7 +120,6 @@ test("evidence capabilities are mounted on /verify, not deleted", () => {
   for (const route of [
     "decision-room.astro",
     "dossier/index.astro",
-    "architecture/index.astro",
     "editions/index.astro",
   ]) {
     assert.ok(existsSync(`src/pages/en/${route}`), `${route} must remain`);

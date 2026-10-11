@@ -1,12 +1,6 @@
 import { expect, test } from "@playwright/test";
 
-const GOALS = [
-  "explore",
-  "evaluate",
-  "verify",
-  "architecture",
-  "work-with-blueskyz",
-];
+const GOALS = ["explore", "evaluate", "verify", "work-with-blueskyz"];
 
 test.describe("C4-E decision atelier", () => {
   test("controls are hidden without JavaScript and the baseline room is complete", async ({
@@ -65,16 +59,18 @@ test.describe("C4-E decision atelier", () => {
     );
     expect(before.length).toBeGreaterThan(0);
 
-    await page.locator("[data-atelier-goal]").selectOption("architecture");
-    // architecture only publishes trust signals
-    const grouped = page.locator('[data-atelier-group="trust-signals"]');
+    await page
+      .locator("[data-atelier-goal]")
+      .selectOption("work-with-blueskyz");
+    // work-with-blueskyz only publishes product facts
+    const grouped = page.locator('[data-atelier-group="product-truth"]');
     await expect(grouped.first()).toBeVisible();
     const kinds = await page
       .locator("[data-decision-items] [data-decision-item]:not([hidden])")
       .evaluateAll((nodes) =>
         nodes.map((node) => node.getAttribute("data-item-kind")),
       );
-    expect(kinds.every((kind) => kind === "trust")).toBe(true);
+    expect(kinds.every((kind) => kind === "product")).toBe(true);
 
     await page.locator("[data-atelier-reset]").click();
     const after = await items.evaluateAll((nodes) =>
@@ -236,7 +232,9 @@ test.describe("C4-E atelier reasons", () => {
   }) => {
     await page.goto("/en/decision-room/");
     // the same goal always yields the same reason key, whatever the items are
-    await page.locator("[data-atelier-goal]").selectOption("architecture");
+    await page
+      .locator("[data-atelier-goal]")
+      .selectOption("work-with-blueskyz");
     const keys = await page
       .locator(
         "[data-decision-items] [data-decision-item]:not([hidden]) [data-atelier-reason-text]",
@@ -245,7 +243,7 @@ test.describe("C4-E atelier reasons", () => {
         nodes.map((node) => node.getAttribute("data-atelier-reason-text")),
       );
     expect(new Set(keys).size).toBe(1);
-    expect(keys[0]).toBe("trust-surface");
+    expect(keys[0]).toBe("product-fact");
   });
 
   test("reason templates are not published as page content", async ({

@@ -12,7 +12,6 @@ const ROUTES = [
   "/en/security/",
   "/en/verify/",
   "/en/dossier/",
-  "/en/architecture/",
   "/en/contact/",
   "/en/support/",
 ];
