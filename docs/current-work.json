@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.0",
-  "updatedAt": "2026-10-09",
+  "updatedAt": "2026-10-11",
   "program": "SGPS Premium Experience & Design Excellence v2.0 (God-Tier × Tier S+)",
   "status": "sgps-v2-in-progress",
   "authorities": {
@@ -356,7 +356,7 @@
     },
     {
       "id": "rum-provider",
-      "question": "Owner chose Cloudflare Web Analytics on 2026-10-05 (SGPS-DEC-2026-039 §3.3, sgps-core #284). Transmission stays OFF until, in order: the Owner fills the legal facts in docs/drafts/privacy-notice-draft.md; the privacy notice is published naming the analytics processor; Cloudflare Access is lifted; SGPS-DEC-2026-032 G3 legal review (C1) and a primary-source check of the provider's fields and retention (C3) close. The beacon then ships with a CSP change scoped to the provider's beacon host and a negative proof that a payload with an identifier fails review. If C3 finds identifiers, fall back to a first-party beacon. Scope: SGPS-DEC-2026-032 aggregate-only rules; local mapping docs/sgps/adoption/SGPS_DEC_2026_032_PORTFOLIO_OBSERVATION.md.",
+      "question": "Owner chose Cloudflare Web Analytics on 2026-10-05 (SGPS-DEC-2026-039 §3.3, sgps-core #284). Transmission stays OFF until, in order: the Owner fills the legal facts in docs/drafts/privacy-notice-draft.md; the privacy notice is published naming the analytics processor; Cloudflare Access is lifted; SGPS-DEC-2026-032 G3 legal review (C1) and a primary-source check of the provider's fields and retention (C3) close. The beacon then ships with a CSP change scoped to the provider's beacon host and a negative proof that a payload with an identifier fails review. If C3 finds identifiers, fall back to a first-party beacon. Scope: SGPS-DEC-2026-032 aggregate-only rules; local mapping docs/sgps/adoption/SGPS_DEC_2026_032_PORTFOLIO_OBSERVATION.md. 2026-10-11: privacy notice published (#556) and the site is public; C3 primary-source check is PARTIAL (docs/evidence/2026-10-11-rum-c3-cloudflare-web-analytics.md): retention documented, payload fields not enumerated, and the beacon script is third-party and unpinned. Owner to choose between Cloudflare automatic injection and the first-party fallback; C1 stays open.",
       "blocks": []
     },
     {
