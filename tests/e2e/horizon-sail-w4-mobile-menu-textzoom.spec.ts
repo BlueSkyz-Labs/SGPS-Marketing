@@ -12,8 +12,8 @@ for (const lang of ["en", "vi", "zh", "zh-hant"] as const) {
     }) => {
       await page.setViewportSize({ width, height: 844 });
       await page.goto(`/${lang}/`);
-      await page.evaluate(() => {
-        document.documentElement.style.fontSize = "200%";
+      await page.addStyleTag({
+        content: "html { font-size: 200% !important; }",
       });
 
       const disclosure = page.locator("header details").first();
@@ -26,8 +26,14 @@ for (const lang of ["en", "vi", "zh", "zh-hant"] as const) {
         return { left: r.left, right: r.right, width: r.width };
       });
       expect(box.width).toBeGreaterThan(0);
-      expect(box.left, `menu clipped on left: ${JSON.stringify(box)}`).toBeGreaterThanOrEqual(-1);
-      expect(box.right, `menu clipped on right: ${JSON.stringify(box)}`).toBeLessThanOrEqual(width + 1);
+      expect(
+        box.left,
+        `menu clipped on left: ${JSON.stringify(box)}`,
+      ).toBeGreaterThanOrEqual(-1);
+      expect(
+        box.right,
+        `menu clipped on right: ${JSON.stringify(box)}`,
+      ).toBeLessThanOrEqual(width + 1);
       await expect(disclosure.locator("nav a").first()).toBeVisible();
     });
   }
@@ -45,13 +51,14 @@ test.describe("W4 no-JS native disclosure on 320px", () => {
       page,
     }) => {
       await page.goto(`/${lang}/`);
-      await page.evaluate(() => {
-        document.documentElement.style.fontSize = "200%";
+      await page.addStyleTag({
+        content: "html { font-size: 200% !important; }",
       });
       const disclosure = page.locator("header details").first();
       await disclosure.locator("summary").click();
       await expect(disclosure.locator("nav a").first()).toBeVisible();
-      const { left, right } = await disclosure.locator("nav").evaluate((node) => {
+      const nav = disclosure.locator("nav");
+      const { left, right } = await nav.evaluate((node) => {
         const r = node.parentElement!.getBoundingClientRect();
         return { left: r.left, right: r.right };
       });
