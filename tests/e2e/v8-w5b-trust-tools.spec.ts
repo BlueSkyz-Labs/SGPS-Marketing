@@ -3,7 +3,7 @@ import { expect, test } from "@playwright/test";
 
 /**
  * v8 W5b - dossier (printable summary), decision room (compare claims),
- * architecture (how this site is built), evidence pages and collections.
+ * evidence pages and collections.
  */
 const CLAIM = "security-reporting-is-private";
 
@@ -154,55 +154,6 @@ test.describe("compare claims", () => {
       "href",
       new RegExp(`/en/dossier/\\?items=${CLAIM}`),
     );
-  });
-});
-
-test.describe("how this site is built", () => {
-  test("each part title appears once outside details, within the word and height budget", async ({
-    page,
-  }) => {
-    await page.setViewportSize({ width: 1440, height: 900 });
-    await page.goto("/en/architecture/");
-    const result = await page.evaluate(() => {
-      const main = document.querySelector("main") as HTMLElement;
-      const words = main.innerText.split(/\s+/).filter(Boolean).length;
-      const outside = [
-        ...main.querySelectorAll(
-          ".c4-salon__chip, .c4-salon__node-label, .c4-salon__system-label",
-        ),
-      ]
-        .filter((n) => !n.closest("details"))
-        .map((n) => (n.textContent ?? "").trim());
-      return { words, outside, height: document.documentElement.scrollHeight };
-    });
-    const counts = new Map<string, number>();
-    for (const t of result.outside) counts.set(t, (counts.get(t) ?? 0) + 1);
-    for (const [title, n] of counts) {
-      expect(
-        n,
-        `"${title}" appears ${n} times outside <details>`,
-      ).toBeLessThanOrEqual(1);
-    }
-    expect(result.outside.length).toBeGreaterThan(0);
-    expect(result.words).toBeLessThanOrEqual(250);
-    expect(result.height).toBeLessThanOrEqual(2200);
-  });
-
-  test("lens disclosures are closed by default and open from a link", async ({
-    page,
-  }) => {
-    await page.goto("/en/architecture/");
-    const lenses = page.locator("details[data-architecture-lens]");
-    await expect(lenses).toHaveCount(5);
-    for (const open of await lenses.evaluateAll((n) =>
-      n.map((d) => (d as HTMLDetailsElement).open),
-    )) {
-      expect(open).toBe(false);
-    }
-    await page.goto("/en/architecture/#lens-recovery");
-    await expect(
-      page.locator('details[data-architecture-lens="recovery"]'),
-    ).toHaveJSProperty("open", true);
   });
 });
 

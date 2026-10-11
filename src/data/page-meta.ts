@@ -25,8 +25,7 @@ export type StaticPageKey =
   | "decisionRoom"
   | "editions"
   | "dossier"
-  | "dossierPrint"
-  | "architecture";
+  | "dossierPrint";
 
 export const PAGE_META: Record<Language, Record<StaticPageKey, PageMeta>> = {
   vi: {
@@ -85,11 +84,6 @@ export const PAGE_META: Record<Language, Record<StaticPageKey, PageMeta>> = {
       description:
         "Bản in những gì BlueSkyz Labs đã công bố trên trang web này, ghi đầy đủ mọi liên kết nguồn và mọi ranh giới để bạn tự đối chiếu.",
     },
-    architecture: {
-      title: "Cách trang web này được xây dựng",
-      description:
-        "Cách trang web này được xây dựng và phân phối, nói dễ hiểu: các trang tĩnh dựng từ mã nguồn trên GitHub, do Cloudflare phân phối, không có dịch vụ tiếp nhận.",
-    },
   },
   en: {
     home: {
@@ -146,11 +140,6 @@ export const PAGE_META: Record<Language, Record<StaticPageKey, PageMeta>> = {
       title: "Printable summary: print view",
       description:
         "A print-ready view of what BlueSkyz Labs has already published on this site, with every source link and every boundary stated in full.",
-    },
-    architecture: {
-      title: "How this site is built",
-      description:
-        "How this website is built and served, in plain terms: static pages built from source held on GitHub and served by Cloudflare, with no intake service.",
     },
   },
   // zh: NOT VERIFIED (native review pending).
@@ -210,11 +199,6 @@ export const PAGE_META: Record<Language, Record<StaticPageKey, PageMeta>> = {
       description:
         "BlueSkyz Labs 已在本站发布内容的打印视图，完整列出所有来源链接与边界说明。",
     },
-    architecture: {
-      title: "本站如何构建",
-      description:
-        "用通俗的话说明本网站如何构建和提供服务：静态页面由 GitHub 上的源代码构建，由 Cloudflare 提供，不设接收服务。",
-    },
   },
   // zh-hant: NOT VERIFIED (native review pending).
   "zh-hant": {
@@ -272,11 +256,6 @@ export const PAGE_META: Record<Language, Record<StaticPageKey, PageMeta>> = {
       title: "可列印摘要：列印檢視",
       description:
         "BlueSkyz Labs 已在本站發布內容的列印檢視，完整列出所有來源連結與邊界說明。",
-    },
-    architecture: {
-      title: "本站如何建置",
-      description:
-        "用淺白的話說明本網站如何建置與提供服務：靜態頁面由 GitHub 上的原始碼建置，由 Cloudflare 提供，不設收件服務。",
     },
   },
 };

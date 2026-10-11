@@ -104,7 +104,7 @@ test("no network or storage primitive is introduced", () => {
 test("only allowlisted goals and constraints are accepted", () => {
   assert.deepEqual(
     [...ATELIER_GOALS],
-    ["explore", "evaluate", "verify", "architecture", "work-with-blueskyz"],
+    ["explore", "evaluate", "verify", "work-with-blueskyz"],
   );
   assert.deepEqual(
     [...ATELIER_CONSTRAINTS],
@@ -189,7 +189,7 @@ test("constraints narrow by declared kind only", () => {
   }
 
   const trust = arrangeDecisionItems(ITEMS, {
-    goal: "architecture",
+    goal: "verify",
     constraints: ["trust"],
   });
   for (const group of trust.groups) {
@@ -235,13 +235,7 @@ test("arrangement is deterministic", () => {
 test("every group states why it matched, using only the declared reason vocabulary", () => {
   assert.deepEqual(
     [...ATELIER_REASON_KEYS],
-    [
-      "in-scope",
-      "carries-source",
-      "states-limits",
-      "trust-surface",
-      "product-fact",
-    ],
+    ["in-scope", "carries-source", "states-limits", "product-fact"],
   );
   let published = 0;
   for (const goal of ATELIER_GOALS) {

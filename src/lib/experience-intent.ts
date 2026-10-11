@@ -11,7 +11,6 @@ export const EXPERIENCE_INTENTS = [
   "explore-products",
   "evaluate-product",
   "verify-trust",
-  "understand-architecture",
   "work-with-us",
 ] as const;
 
@@ -52,14 +51,6 @@ const INTENT_PRIORITIES: Readonly<
     "support",
     "principle",
     "brand",
-  ],
-  "understand-architecture": [
-    "principle",
-    "brand",
-    "product",
-    "trust",
-    "policy",
-    "support",
   ],
   "work-with-us": [
     "support",

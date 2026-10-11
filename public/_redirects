@@ -36,3 +36,13 @@
 /vi /vi/ 301
 /zh /zh/ 301
 /zh-hant /zh-hant/ 301
+# Retired "How this site is built" page (Owner 2026-10-11). Its public-claim
+# role lives on /verify; one permanent hop, exact matches only.
+/en/architecture/ /en/verify/ 301
+/en/architecture /en/verify/ 301
+/vi/architecture/ /vi/verify/ 301
+/vi/architecture /vi/verify/ 301
+/zh/architecture/ /zh/verify/ 301
+/zh/architecture /zh/verify/ 301
+/zh-hant/architecture/ /zh-hant/verify/ 301
+/zh-hant/architecture /zh-hant/verify/ 301

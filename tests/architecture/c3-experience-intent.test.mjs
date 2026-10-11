@@ -33,7 +33,6 @@ test("publishes every declared explicit intent", () => {
     "explore-products",
     "evaluate-product",
     "verify-trust",
-    "understand-architecture",
     "work-with-us",
   ]);
   assert.equal(DEFAULT_EXPERIENCE_INTENT, "explore-products");

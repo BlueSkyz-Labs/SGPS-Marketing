@@ -243,7 +243,6 @@ interface NavLabels {
   support: string;
   privacy: string;
   security: string;
-  architecture: string;
   verify: string;
   /** Existing /editions page title (no new copy). */
   editions: string;
@@ -259,7 +258,6 @@ const NAV_LABELS: Record<Language, NavLabels> = {
     support: "Support",
     privacy: "Privacy",
     security: "Security",
-    architecture: "How this site is built",
     verify: "Verify",
     editions: "Collections",
     dossier: "Printable summary",
@@ -271,7 +269,6 @@ const NAV_LABELS: Record<Language, NavLabels> = {
     support: "Hỗ trợ",
     privacy: "Quyền riêng tư",
     security: "Bảo mật",
-    architecture: "Cách trang web này được xây dựng",
     verify: "Xác minh",
     editions: "Tuyển tập",
     dossier: "Bản tóm tắt để in",
@@ -283,7 +280,6 @@ const NAV_LABELS: Record<Language, NavLabels> = {
     support: "支持",
     privacy: "隐私",
     security: "安全",
-    architecture: "本站如何构建",
     verify: "核实",
     editions: "合集",
     dossier: "可打印摘要",
@@ -295,7 +291,6 @@ const NAV_LABELS: Record<Language, NavLabels> = {
     support: "支援",
     privacy: "隱私",
     security: "安全",
-    architecture: "本站如何建置",
     verify: "查證",
     editions: "合集",
     dossier: "可列印摘要",
@@ -321,7 +316,6 @@ export function getFooterLinks(lang: Language): NavItem[] {
     { label: l.privacy, href: `/${lang}/privacy/` },
     { label: l.security, href: `/${lang}/security/` },
     { label: l.verify, href: `/${lang}/verify/` },
-    { label: l.architecture, href: `/${lang}/architecture/` },
     { label: l.editions, href: `/${lang}/editions/` },
     { label: l.dossier, href: `/${lang}/dossier/` },
   ];
@@ -360,7 +354,7 @@ export function getFooterGroups(lang: Language): FooterGroup[] {
     },
     {
       label: FOOTER_GROUP_LABELS.trust[lang],
-      links: pick("privacy", "security", "verify", "architecture"),
+      links: pick("privacy", "security", "verify"),
     },
     {
       label: FOOTER_GROUP_LABELS.evidence[lang],

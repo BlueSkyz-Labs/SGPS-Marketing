@@ -287,15 +287,6 @@ export const MISSIONS: Mission[] = [
         },
       },
       {
-        path: "/architecture/",
-        label: {
-          en: "Architecture",
-          vi: "Cách trang web này được xây dựng",
-          zh: "架构",
-          "zh-hant": "架構",
-        },
-      },
-      {
         path: "/about/",
         label: {
           en: "About BlueSkyz",
@@ -360,48 +351,6 @@ export const MISSIONS: Mission[] = [
           vi: "Liên hệ",
           zh: "联系我们",
           "zh-hant": "聯絡我們",
-        },
-      },
-    ],
-  },
-  {
-    id: "understand-architecture",
-    label: {
-      en: "Understand architecture",
-      vi: "Tìm hiểu cách trang web này được xây dựng",
-      zh: "了解架构",
-      "zh-hant": "了解架構",
-    },
-    steps: [
-      {
-        path: "/architecture/",
-        label: {
-          en: "Architecture",
-          vi: "Cách trang web này được xây dựng",
-          zh: "架构",
-          "zh-hant": "架構",
-        },
-      },
-      {
-        path: "/about/",
-        label: {
-          en: "About BlueSkyz",
-          vi: "Về BlueSkyz",
-          zh: "关于 BlueSkyz",
-          "zh-hant": "關於 BlueSkyz",
-        },
-      },
-      {
-        path: "/security/",
-        label: { en: "Security", vi: "Bảo mật", zh: "安全", "zh-hant": "安全" },
-      },
-      {
-        path: "/products/",
-        label: {
-          en: "Products",
-          vi: "Sản phẩm",
-          zh: "产品",
-          "zh-hant": "產品",
         },
       },
     ],
