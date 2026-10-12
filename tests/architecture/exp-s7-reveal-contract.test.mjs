@@ -202,8 +202,71 @@ test("the motion script stays within 2 KB and is the only motion script", () => 
   ).length;
   assert.ok(brotli <= JS_BUDGET_BYTES, `${brotli} B brotli`);
   assert.doesNotMatch(SAIL, /<script/);
-  assert.match(OBSERVER, /new IntersectionObserver/);
   assert.doesNotMatch(OBSERVER, /requestAnimationFrame|setInterval|setTimeout/);
+});
+
+/** Class selectors the motion script queries (querySelector/All/closest). */
+export function queriedClasses(astro) {
+  const body = astro.match(/<script>([\s\S]*?)<\/script>/)?.[1] ?? "";
+  return [
+    ...body.matchAll(
+      /(?:querySelector(?:All)?|closest|matches)(?:<[^>]*>)?\(\s*["'`]([^"'`]+)["'`]/g,
+    ),
+  ].flatMap((m) => [...m[1].matchAll(/\.([A-Za-z_][\w-]*)/g)].map((c) => c[1]));
+}
+
+/** Queried classes that no rendered source (.astro/.ts/.md*) ever emits. */
+export function orphanTargets(astro, sources) {
+  return queriedClasses(astro).filter(
+    (cls) =>
+      !sources.some((text) =>
+        new RegExp(`(?<![\\w-])${cls}(?![\\w-])`).test(text),
+      ),
+  );
+}
+
+const RENDER_SOURCES = () =>
+  walk("src")
+    .filter(
+      (f) =>
+        /\.(astro|tsx?|mdx?)$/.test(f) &&
+        !f.endsWith("components/motion/RevealObserver.astro"),
+    )
+    .map((f) => readFileSync(f, "utf8"));
+
+test("every reveal branch in the motion script has a rendered target", () => {
+  assert.deepEqual(orphanTargets(OBSERVER, RENDER_SOURCES()), []);
+});
+
+test("the removed reveal-plane branch stays gone (script and CSS)", () => {
+  for (const [name, text] of [
+    ["RevealObserver.astro", OBSERVER],
+    ["reveal.css", CSS],
+  ]) {
+    assert.doesNotMatch(
+      text,
+      /reveal-planes|data-reveal-group|--reveal-i|\[data-revealed|dataset\.revealed/,
+      name,
+    );
+  }
+});
+
+test("negative proof: a branch with no rendered target is rejected", () => {
+  const withOrphan = OBSERVER.replace(
+    "</script>",
+    'document.querySelectorAll(".reveal-planes");</script>',
+  );
+  assert.deepEqual(orphanTargets(withOrphan, RENDER_SOURCES()), [
+    "reveal-planes",
+  ]);
+  // ...and a target that IS emitted by some source is accepted.
+  assert.deepEqual(
+    orphanTargets(withOrphan, [
+      ...RENDER_SOURCES(),
+      '<div class="reveal-planes">',
+    ]),
+    [],
+  );
 });
 
 test("negative proof: an over-budget script is rejected", () => {
@@ -226,8 +289,10 @@ test("the hero headline (LCP) is never an animation target", () => {
   assert.equal(targetsLcp(`${CSS}\nh1 { animation: a 1s; }`), true);
 });
 
-test("the observer only arms below-the-fold elements and never hides the LCP", () => {
-  assert.match(OBSERVER, /getBoundingClientRect\(\)\.top\s*>\s*innerHeight/);
+test("the motion script hides nothing, so it can never hide the LCP", () => {
+  const body = OBSERVER.match(/<script>([\s\S]*?)<\/script>/)[1];
+  assert.doesNotMatch(body, /\.style\b|classList|dataset\.revealed|hidden/);
+  assert.match(body, /dataset\.motion\s*=\s*"on"/);
   assert.match(OBSERVER, /prefers-reduced-motion: reduce/);
 });
 

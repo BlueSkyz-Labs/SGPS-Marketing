@@ -23,7 +23,10 @@ const navLabel = isVi
   <ol class="experience-spine__list">
     {EXPERIENCE_STAGES.map((stage, index) => (
       <li class="experience-spine__item">
-        <a class="experience-spine__link" href={`#${stage.id}`}>
+        <a
+          class="experience-spine__link"
+          href={`/${lang}${stage.path}${stage.id ? `#${stage.id}` : ""}`}
+        >
           <span class="experience-spine__index" aria-hidden="true">
             {String(index + 1).padStart(2, "0")}
           </span>
