@@ -30,7 +30,7 @@ const COPY = {
     family: "Family · phone",
     step: "Step",
     done: "That’s the daily loop. Questions or feedback?",
-    support: "Contact support",
+    contact: "Contact",
   },
   vi: {
     back: `Quay lại ${product.data.name}`,
@@ -40,7 +40,7 @@ const COPY = {
     family: "Người nhà · điện thoại",
     step: "Bước",
     done: "Vậy là xong vòng việc hằng ngày. Cần hỏi thêm hoặc góp ý?",
-    support: "Liên hệ hỗ trợ",
+    contact: "Liên hệ",
   },
   zh: {
     back: `返回 ${product.data.name}`,
@@ -50,7 +50,7 @@ const COPY = {
     family: "家人 · 手机",
     step: "步骤",
     done: "日常流程就是这样。有问题或建议？",
-    support: "联系支持",
+    contact: "联系我们",
   },
   "zh-hant": {
     back: `返回 ${product.data.name}`,
@@ -60,7 +60,7 @@ const COPY = {
     family: "家人 · 手機",
     step: "步驟",
     done: "日常流程就是這樣。有問題或建議？",
-    support: "聯絡支援",
+    contact: "聯絡我們",
   },
 } as const satisfies Record<Language, Record<string, string>>;
 const t = COPY[lang];
@@ -132,7 +132,7 @@ const t = COPY[lang];
     <footer class="guide__footer">
       <p class="text-lg font-semibold text-[var(--text-primary)]">{t.done}</p>
       <div class="mt-5 flex flex-wrap gap-3">
-        <ButtonLink href={`/${lang}/support/`}>{t.support}</ButtonLink>
+        <ButtonLink href={`/${lang}/contact/`}>{t.contact}</ButtonLink>
       </div>
     </footer>
   </Container>
