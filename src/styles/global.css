@@ -2101,3 +2101,28 @@ dd {
     display: none;
   }
 }
+
+/* Aesthetic S3 (audit HIGH-2): the one product lifecycle status badge. Every
+   data-product-status element uses it; only the ink variant changes colour, for
+   scenes that are ink in both themes (the hero). Text and lifecycle semantics
+   stay with each component; this is presentation only. */
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  max-width: 100%;
+  min-width: 0;
+  overflow-wrap: anywhere;
+  border: 1px solid var(--border-subtle);
+  /* Card radius, never a universal pill: it wraps cleanly at 200% text. */
+  border-radius: var(--radius-card);
+  padding: 0.25rem 0.75rem;
+  font-size: var(--size-1);
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: 0.025em;
+  color: var(--text-secondary);
+}
+.status-badge--ink {
+  border-color: color-mix(in srgb, var(--brand-porcelain) 30%, transparent);
+  color: var(--brand-porcelain);
+}

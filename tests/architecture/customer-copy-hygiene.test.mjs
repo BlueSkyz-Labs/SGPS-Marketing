@@ -71,7 +71,14 @@ test("product status chrome avoids universal pills and all-caps", () => {
   );
   assert.doesNotMatch(status, /rounded-full/);
   assert.doesNotMatch(status, /\buppercase\b/);
-  assert.match(status, /radius-card|rounded-\[/);
+  // S3: the badge chrome now lives in one canonical class, so the radius and
+  // case rules are asserted on that rule (at least as strong as the old check,
+  // which only looked at this one component).
+  assert.match(status, /class="status-badge"/);
+  const css = readFileSync("src/styles/global.css", "utf8");
+  const rule = css.match(/\n\.status-badge \{([^}]*)\}/)?.[1] ?? "";
+  assert.match(rule, /border-radius:\s*var\(--radius-card\)/);
+  assert.doesNotMatch(rule, /radius-pill|999px|text-transform/);
 });
 
 test("support empty state offers working trust paths without Contact loop", () => {
