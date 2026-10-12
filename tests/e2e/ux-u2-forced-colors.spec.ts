@@ -10,6 +10,26 @@ const ROUTES = ["/vi/", "/en/", "/vi/products/sotro/"];
 const SCHEMES = ["light", "dark"] as const;
 const MIN_INK = 0.02;
 
+// Playwright emulates `forced-colors` only in Chromium; elsewhere the media
+// query silently stays inactive, so the measurement would be meaningless.
+test.skip(
+  ({ browserName }) => browserName !== "chromium",
+  "forced-colors emulation is Chromium-only in Playwright",
+);
+
+async function enterForcedColors(
+  page: Page,
+  colorScheme: "light" | "dark",
+  route: string,
+) {
+  await page.emulateMedia({ forcedColors: "active", colorScheme });
+  await page.goto(route);
+  expect(
+    await page.evaluate(() => matchMedia("(forced-colors: active)").matches),
+    "forced-colors emulation must be active",
+  ).toBe(true);
+}
+
 /** Share of pixels of the element's screenshot that contrast with Canvas. */
 async function inkRatio(page: Page, selector: string): Promise<number> {
   const el = page.locator(selector).first();
@@ -54,8 +74,7 @@ for (const scheme of SCHEMES) {
     test(`logo visible in forced-colors ${scheme} ${route}`, async ({
       page,
     }) => {
-      await page.emulateMedia({ forcedColors: "active", colorScheme: scheme });
-      await page.goto(route);
+      await enterForcedColors(page, scheme, route);
       for (const sel of [
         "header .brand-lockup img:visible",
         "footer .brand-lockup img:visible",
@@ -73,8 +92,7 @@ for (const scheme of SCHEMES) {
 test("negative proof: without the filter the reverse mark vanishes on light Canvas", async ({
   page,
 }) => {
-  await page.emulateMedia({ forcedColors: "active", colorScheme: "light" });
-  await page.goto("/vi/");
+  await enterForcedColors(page, "light", "/vi/");
   await page.addStyleTag({
     content: ".brand-lockup__img{filter:none !important}",
   });
