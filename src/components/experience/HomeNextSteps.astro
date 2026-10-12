@@ -1,0 +1,37 @@
+---
+import BlueSkyzIcon from "@/components/icon/BlueSkyzIcon.astro";
+import Container from "@/components/layout/Container.astro";
+import { getHomeCloseActions } from "@/lib/journey";
+import { SHARED_LABELS, labelFor, type Language } from "@/data/site";
+
+interface Props {
+  lang: Language;
+}
+const { lang } = Astro.props;
+const navLabel = labelFor(SHARED_LABELS.nextSteps, lang);
+const actions = getHomeCloseActions(lang);
+---
+
+<nav
+  class="border-t border-[var(--border-subtle)] bg-[var(--surface-subtle)]"
+  aria-label={navLabel}
+  data-home-next-steps
+>
+  <Container class="flex flex-col gap-3 py-6 sm:flex-row sm:items-center sm:justify-between">
+    <p class="eyebrow">{navLabel}</p>
+    <div class="flex flex-wrap gap-3">
+      {actions.map((action) => (
+        <a
+          class="inline-flex min-h-11 items-center gap-1.5 rounded-lg border border-[var(--border-subtle)] bg-[var(--surface-raised)] px-4 text-sm font-semibold text-[var(--text-primary)] no-underline transition-[border-color,box-shadow] duration-150 hover:border-[var(--action-primary)] hover:shadow-sm"
+          href={action.href}
+        >
+          {action.label}
+          <BlueSkyzIcon
+            name="arrow-right"
+            class="size-4 shrink-0 text-[var(--action-primary)]"
+          />
+        </a>
+      ))}
+    </div>
+  </Container>
+</nav>
