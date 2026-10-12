@@ -68,7 +68,7 @@ test("320px keeps no horizontal overflow on the home", async ({ page }) => {
   ).toBe(false);
 });
 
-test("home renders its hero, flagship and proof band without JavaScript", async ({
+test("home renders its hero and flagship without JavaScript", async ({
   browser,
 }) => {
   const context = await browser.newContext({ javaScriptEnabled: false });
@@ -76,6 +76,7 @@ test("home renders its hero, flagship and proof band without JavaScript", async 
   await page.goto("/en/");
   await expect(page.locator("#hero-title")).toBeVisible();
   await expect(page.locator("[data-flagship-theatre]")).toBeVisible();
-  await expect(page.locator("[data-trust-band]")).toBeVisible();
+  // Owner 2026-10-12: the claims band left the home.
+  await expect(page.locator("[data-trust-band]")).toHaveCount(0);
   await context.close();
 });

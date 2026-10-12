@@ -32,10 +32,10 @@ for (const locale of LOCALES) {
 
     test("the home ends without a closing horizon band", async ({ page }) => {
       // v8 W2 (V7-C-08): the trailing empty gradient band before the footer is
-      // removed; the trust strip is the last content block.
+      // removed. Owner 2026-10-12: the trust strip left the home too.
       await page.goto(locale.path);
       await expect(page.locator("[data-closing-horizon]")).toHaveCount(0);
-      await expect(page.locator("[data-trust-band]")).toHaveCount(1);
+      await expect(page.locator("[data-trust-band]")).toHaveCount(0);
     });
   });
 }

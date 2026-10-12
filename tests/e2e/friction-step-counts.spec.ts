@@ -42,11 +42,12 @@ for (const lang of LOCALES) {
       expect(await inFirstViewport(page, "[data-product-status]")).toBe(true);
     });
 
-    test("J3 is 1 step: home links Verify, which shows a claim with its limit", async ({
+    test("J3 is 1 step: the home footer links Verify, which shows a claim with its limit", async ({
       page,
     }) => {
       await page.goto(`/${lang}/`);
-      const link = page.locator(`main a[href="/${lang}/verify/"]`);
+      // Owner 2026-10-12: the home claims band left; the footer is the door.
+      const link = page.locator(`footer a[href="/${lang}/verify/"]`);
       expect(await link.count()).toBeGreaterThan(0);
       await link.first().click();
       await expect(page).toHaveURL(new RegExp(`/${lang}/verify/$`));

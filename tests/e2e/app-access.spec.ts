@@ -10,7 +10,7 @@ const HIDDEN = ["apexagent", "fluentarc", "vungtaylai"];
 
 test.describe("app access", () => {
   for (const slug of PUBLISHED) {
-    test(`${slug}: one Availability line (no store link); sign-in is a text link`, async ({
+    test(`${slug}: one Availability line (no store link) and no sign-in link`, async ({
       page,
     }) => {
       await page.goto(`/vi/products/${slug}/`);
@@ -27,30 +27,26 @@ test.describe("app access", () => {
       await expect(
         block.locator('[data-mobile-state="in-development"]'),
       ).toHaveCount(1);
-      const signIn = page.getByRole("link", {
-        name: "Đã có tài khoản? Đăng nhập",
-      });
-      await expect(signIn).toHaveAttribute("href", SIGN_IN[slug]);
-      await expect(block.locator("[data-app-signin]")).toHaveCount(0);
-      const box = await signIn.boundingBox();
-      expect(box?.height ?? 0).toBeGreaterThanOrEqual(44);
+      // Owner 2026-10-12: the public profile shows no app sign-in.
+      await expect(page.locator("[data-app-signin]")).toHaveCount(0);
+      await expect(page.locator(`a[href="${SIGN_IN[slug]}"]`)).toHaveCount(0);
     });
   }
 
   for (const lang of ["en", "vi", "zh", "zh-hant"]) {
     for (const slug of PUBLISHED) {
-      test(`${lang}/${slug}: sign-in link opens the app, not this page`, async ({
+      test(`${lang}/${slug}: no page links to the app sign-in`, async ({
         page,
       }) => {
-        await page.goto(`/${lang}/products/${slug}/`);
-        const primaryActions = page.locator(
-          `main article a[href="${SIGN_IN[slug]}"]`,
-        );
-        await expect(primaryActions).toHaveCount(1);
-        await expect(primaryActions).toHaveAttribute("href", SIGN_IN[slug]);
-        expect(new URL(SIGN_IN[slug]).pathname).not.toBe(
-          new URL(page.url()).pathname,
-        );
+        for (const path of [
+          `/${lang}/products/${slug}/`,
+          `/${lang}/contact/`,
+        ]) {
+          await page.goto(path);
+          await expect(page.locator(`a[href="${SIGN_IN[slug]}"]`)).toHaveCount(
+            0,
+          );
+        }
       });
     }
   }

@@ -265,51 +265,26 @@ test("zh-hant carries no mainland terms and zh no 您 on the rendered trust page
   expect(await page.locator("main").innerText()).not.toContain("您");
 });
 
-const SIGN_IN_LABEL: Record<(typeof LOCALES)[number], string> = {
-  en: "Sign in (existing users)",
-  vi: "Đăng nhập (người dùng hiện có)",
-  zh: "登录（现有用户）",
-  "zh-hant": "登入（現有使用者）",
-};
-
+// D-14 superseded by the Owner on 2026-10-12: the profile and the guide show
+// no app sign-in; the guide footer keeps Support as its one action.
 for (const lang of LOCALES) {
-  test(`/${lang}/products/sotro/ demotes sign-in to a text link below the primary action`, async ({
+  test(`/${lang}/products/sotro/ keeps one primary action and no sign-in link`, async ({
     page,
   }) => {
-    // v8 W3: the primary action is "See the screens"; sign-in is a plain
-    // text link with a qualified label, never a filled button.
     await page.goto(`/${lang}/products/sotro/`);
-    const signIn = page.locator("[data-app-signin]");
-    await expect(signIn).toHaveCount(1);
-    const primary = page.locator("[data-primary-action]");
-    await expect(primary).toHaveCount(1);
-    const [signInBg, primaryBg] = await Promise.all([
-      signIn.evaluate((el) => getComputedStyle(el).backgroundColor),
-      primary.evaluate((el) => getComputedStyle(el).backgroundColor),
-    ]);
-    expect(signInBg).not.toBe(primaryBg);
-    expect(signInBg).toBe("rgba(0, 0, 0, 0)");
-    const order = await primary.evaluate(
-      (el) =>
-        el.compareDocumentPosition(
-          document.querySelector("[data-app-signin]") as Element,
-        ) & Node.DOCUMENT_POSITION_FOLLOWING,
-    );
-    expect(order).toBeTruthy();
+    await expect(page.locator("[data-primary-action]")).toHaveCount(1);
+    await expect(page.locator("[data-app-signin]")).toHaveCount(0);
+    await expect(
+      page.locator('main a[href^="https://sotro.blueskyzlabs.com"]'),
+    ).toHaveCount(0);
   });
 
-  test(`/${lang}/products/sotro/guide/ does not make sign-in the primary action`, async ({
+  test(`/${lang}/products/sotro/guide/ ends with Support and no sign-in`, async ({
     page,
   }) => {
     await page.goto(`/${lang}/products/sotro/guide/`);
-    const footer = page.locator(".guide__footer");
-    const signIn = footer.getByRole("link", { name: SIGN_IN_LABEL[lang] });
-    await expect(signIn).toHaveCount(1);
-    const other = footer.locator("a").first();
-    expect(await other.getAttribute("href")).toBe(`/${lang}/support/`);
+    const links = page.locator(".guide__footer a");
+    await expect(links).toHaveCount(1);
+    expect(await links.first().getAttribute("href")).toBe(`/${lang}/support/`);
   });
 }
-
-test("negative proof: the old unqualified filled sign-in label would fail", () => {
-  expect("Sign in · Sổ Trọ").not.toContain(SIGN_IN_LABEL.en);
-});

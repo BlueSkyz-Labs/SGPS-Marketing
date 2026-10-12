@@ -46,7 +46,8 @@ test("homepage keeps the C2 act landmarks", async ({ page }) => {
   } else {
     await expect(page.locator("[data-product-card]")).toHaveCount(0);
   }
-  await expect(page.locator("[data-trust-band]")).toBeVisible();
+  // Owner 2026-10-12: the claims band left the home; /verify is in the footer.
+  await expect(page.locator("[data-trust-band]")).toHaveCount(0);
   // Removed in S1: One house word band, About block, closing action band.
   for (const name of [
     "One house",

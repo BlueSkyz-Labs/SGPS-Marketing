@@ -1,11 +1,10 @@
 import { expect, test } from "@playwright/test";
 
 /**
- * Experience v6 S1/S3 — the home proof band replaces the homepage Trust
- * ledger; the three-lane ledger (`TrustLedger`) is staged on /verify, where
- * its runtime specs below are restored (they were removed from the home
- * spec in S1). The proof band keeps the same truth constraints: no assurance
- * vocabulary, one real internal route (/verify), localized in every locale.
+ * Experience v6 S1/S3 staged the three-lane ledger (`TrustLedger`) on /verify.
+ * Owner 2026-10-12: the home proof band is gone too; /verify, linked once in
+ * the footer, is the one trust door. The /verify specs below keep the truth
+ * constraints: no assurance vocabulary, localized in every locale.
  */
 const FORBIDDEN = [
   /certif/i,
@@ -17,48 +16,26 @@ const FORBIDDEN = [
   /maturity score/i,
 ];
 
-const LOCALES = [
-  { lang: "en", heading: "Check what we say", link: "Check our claims" },
-  {
-    lang: "vi",
-    heading: "Kiểm chứng điều chúng tôi nói",
-    link: "Xem các tuyên bố",
-  },
-  { lang: "zh", heading: "核实我们所说的", link: "查看依据" },
-  { lang: "zh-hant", heading: "查證我們所說的", link: "查看依據" },
-] as const;
+const LANGS = ["en", "vi", "zh", "zh-hant"] as const;
 
-for (const locale of LOCALES) {
-  test(`/${locale.lang}/ proof band is one heading, one line and one real route`, async ({
+for (const lang of LANGS) {
+  test(`/${lang}/ has no proof band; the footer Verify link is the one door`, async ({
     page,
   }) => {
-    await page.goto(`/${locale.lang}/`);
+    await page.goto(`/${lang}/`);
     await expect(page.locator("[data-trust-ledger]")).toHaveCount(0);
-    const band = page.locator("[data-trust-band]");
-    await expect(band).toBeVisible();
-    await expect(
-      band.getByRole("heading", { level: 2, name: locale.heading }),
-    ).toBeVisible();
-    const links = band.getByRole("link");
-    await expect(links).toHaveCount(1);
-    // Exact name: the copy carries no arrow glyph (F9).
-    await expect(links.first()).toHaveText(locale.link);
-    await expect(links.first()).toHaveAttribute(
-      "href",
-      `/${locale.lang}/verify/`,
+    await expect(page.locator("[data-trust-band]")).toHaveCount(0);
+    await expect(page.locator(`footer a[href="/${lang}/verify/"]`)).toHaveCount(
+      1,
     );
-    const text = await band.innerText();
-    for (const pattern of FORBIDDEN) {
-      expect(text).not.toMatch(pattern);
-    }
   });
 }
 
-test("the proof-band link navigates to the real /verify route", async ({
+test("the footer Verify link navigates to the real /verify route", async ({
   page,
 }) => {
   await page.goto("/en/");
-  await page.locator("[data-trust-band]").getByRole("link").click();
+  await page.locator('footer a[href="/en/verify/"]').click();
   await expect(page).toHaveURL(/\/en\/verify\/$/);
   await expect(page.locator("[data-trust-ledger]")).toBeVisible();
 });
