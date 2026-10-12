@@ -6,21 +6,47 @@
  * the data is still kept resolvable so re-using it cannot ship dead anchors.
  */
 import assert from "node:assert/strict";
-import { existsSync, readFileSync } from "node:fs";
+import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
+import { join } from "node:path";
 import { test } from "node:test";
 
 const LANGS = ["en", "vi", "zh", "zh-hant"];
 const SRC = readFileSync("src/data/experience.ts", "utf8");
 
-/** Parse `{ path: "...", id?: "..." }` stage heads out of the source. */
+/** Parse stage heads (path, optional id) out of the source, any field order. */
 export function parseStages(source) {
   const block = source.match(
     /export const EXPERIENCE_STAGES[^=]*=\s*\[([\s\S]*?)\n\];/,
   )?.[1];
   assert.ok(block, "EXPERIENCE_STAGES block not found");
-  return [
-    ...block.matchAll(/\{\s*path:\s*"([^"]+)"(?:,\s*id:\s*"([^"]+)")?/g),
-  ].map((m) => ({ path: m[1], id: m[2] }));
+  return block
+    .split(/\n  \{\n/)
+    .slice(1)
+    .map((chunk) => {
+      const head = chunk.split(/\n\s*label:/)[0];
+      return {
+        path: head.match(/\bpath:\s*"([^"]+)"/)?.[1],
+        id: head.match(/\bid:\s*"([^"]+)"/)?.[1],
+      };
+    });
+}
+
+/** Source mode (always runs, no build needed): page file + id literal in src. */
+export function unresolvedInSource(stages, exists, srcTexts) {
+  const bad = [];
+  for (const lang of LANGS) {
+    for (const { path, id } of stages) {
+      const base = `src/pages/${lang}${path.replace(/\/$/, "")}`;
+      const candidates =
+        path === "/"
+          ? [`src/pages/${lang}/index.astro`]
+          : [`${base}.astro`, `${base}/index.astro`];
+      if (!candidates.some(exists)) bad.push(`${lang}${path}: page missing`);
+      if (id && !srcTexts.some((t) => t.includes(`id="${id}"`)))
+        bad.push(`${lang}${path}#${id}: id missing in src`);
+    }
+  }
+  return bad;
 }
 
 export function unresolved(stages, read) {
@@ -66,4 +92,35 @@ test("negative proof: a stale id and a missing page are rejected", () => {
   assert.equal(bad.length, LANGS.length * 2);
   assert.ok(bad.some((b) => b.includes("id missing")));
   assert.ok(bad.some((b) => b.includes("page missing")));
+});
+
+const walk = (d) =>
+  readdirSync(d).flatMap((n) =>
+    statSync(join(d, n)).isDirectory() ? walk(join(d, n)) : [join(d, n)],
+  );
+const SRC_TEXTS = () =>
+  walk("src")
+    .filter((f) => f.endsWith(".astro"))
+    .map((f) => readFileSync(f, "utf8"));
+
+test("source mode: every stage page and id exists in src (runs without dist)", () => {
+  assert.deepEqual(
+    unresolvedInSource(parseStages(SRC), existsSync, SRC_TEXTS()),
+    [],
+  );
+});
+
+test("negative proof (source mode): stale id and missing page are rejected", () => {
+  const bad = unresolvedInSource(
+    [{ path: "/", id: "house-title" }, { path: "/no-such-page/" }],
+    existsSync,
+    SRC_TEXTS(),
+  );
+  assert.ok(bad.some((b) => b.includes("id missing in src")));
+  assert.ok(bad.some((b) => b.includes("page missing")));
+});
+
+test("parseStages is independent of field order", () => {
+  const src = `export const EXPERIENCE_STAGES: X[] = [\n  {\n    id: "a",\n    path: "/p/",\n    label: {},\n  },\n];`;
+  assert.deepEqual(parseStages(src), [{ path: "/p/", id: "a" }]);
 });

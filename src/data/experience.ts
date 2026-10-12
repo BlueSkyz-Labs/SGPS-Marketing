@@ -27,9 +27,9 @@ export interface ExperienceStage {
 
 /**
  * S+ Elevation Spine — narrative stages of the homepage story in document
- * order. Each stage must resolve to a real page (and heading id, when given)
- * in the built site; tests/architecture/experience-stages-resolve.test.mjs
- * guards it. Trust and Impact left the homepage, so they open their pages.
+ * order. Each stage must name a page source in every locale and an id that
+ * exists in src (always checked), and resolve in dist/ when a build is
+ * present; tests/architecture/experience-stages-resolve.test.mjs guards it. Trust and Impact left the homepage, so they open their pages.
  */
 export const EXPERIENCE_STAGES: ExperienceStage[] = [
   {
