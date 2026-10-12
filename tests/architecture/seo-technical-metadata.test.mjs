@@ -332,24 +332,49 @@ test("the committed default card really is 1200x630", () => {
   assert.equal(header.readUInt32BE(4), DEFAULT_OG_IMAGE.height);
 });
 
-test("product and guide pages no longer push non-1.91:1 art into summary_large_image", () => {
+test("product profiles pass only their own 1200x630 card; guides pass none", () => {
+  // v5 W5.1: replaces "profiles pass no ogImage". Stronger: a profile may pass
+  // an ogImage only as the generated 1.91:1 card with its measured size and a
+  // localized alt, never the raw (non-1.91:1) registry art.
   for (const lang of LANGS) {
-    for (const file of [
+    const profile = readFileSync(
       `src/pages/${lang}/products/[slug].astro`,
+      "utf8",
+    );
+    assert.match(profile, /ogImage=\{productOgImagePath\(data\.slug\)\}/, lang);
+    assert.match(profile, /ogImageSize=\{PRODUCT_OG_SIZE\}/, lang);
+    assert.match(
+      profile,
+      new RegExp(
+        `ogImageAltText=\\{productOgImageAlt\\(data\\.name, "${lang}"\\)\\}`,
+      ),
+      lang,
+    );
+    assert.doesNotMatch(profile, /ogImage=\{data\.proof\.media/, lang);
+    const guide = readFileSync(
       `src/pages/${lang}/products/[slug]/guide.astro`,
-    ]) {
-      assert.equal(passesOgImage(readFileSync(file, "utf8")), false, file);
-    }
+      "utf8",
+    );
+    assert.equal(passesOgImage(guide), false, `${lang} guide`);
   }
 });
 
-test("negative proof: passing ogImage is detected", () => {
+test("negative proof: passing raw registry art as ogImage is detected", () => {
   const source = readFileSync("src/pages/en/products/[slug].astro", "utf8");
   const broken = source.replace(
-    "  scene=",
-    "  ogImage={data.proof.media?.src}\n  scene=",
+    "ogImage={productOgImagePath(data.slug)}",
+    "ogImage={data.proof.media?.src}",
   );
-  assert.equal(passesOgImage(broken), true);
+  assert.doesNotMatch(broken, /ogImage=\{productOgImagePath\(data\.slug\)\}/);
+  assert.match(broken, /ogImage=\{data\.proof\.media/);
+  const guide = readFileSync(
+    "src/pages/en/products/[slug]/guide.astro",
+    "utf8",
+  );
+  assert.equal(
+    passesOgImage(guide.replace("  scene=", "  ogImage={x}\n  scene=")),
+    true,
+  );
 });
 
 // --- sitemap --------------------------------------------------------------
