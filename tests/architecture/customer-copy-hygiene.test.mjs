@@ -116,14 +116,18 @@ test("support empty state offers working trust paths without Contact loop", () =
 });
 
 test("privacy page summarizes practical trust answers", () => {
-  const privacy = readFileSync("src/pages/privacy.astro", "utf8");
-  assert.match(privacy, /What is collected/i);
-  assert.match(privacy, /Why/i);
-  assert.match(privacy, /How it is used/i);
-  assert.match(privacy, /Deletion/i);
-  assert.doesNotMatch(privacy, /tracking cookies are required/i);
-  assert.match(privacy, /hasBusinessEmail/);
-  assert.match(privacy, /href="\/security\/"/);
+  // UX U8: src/pages/privacy.astro is now a locale-gateway stub (its former
+  // dead template was removed); the rendered notice is PrivacyBody + PRIVACY_COPY.
+  const body = readFileSync("src/components/trust/PrivacyBody.astro", "utf8");
+  const copy = readFileSync("src/data/trust-copy.ts", "utf8");
+  assert.match(copy, /collectedLead: "What is collected\."/);
+  assert.match(copy, /limitsLead: "Limits\."/);
+  assert.match(
+    copy,
+    /deletion:\s*"This site has no account to export or delete/,
+  );
+  assert.doesNotMatch(copy, /tracking cookies are required/i);
+  assert.match(body, /href=\{`\/\$\{lang\}\/contact\/`\}/);
 });
 
 test("404 page always requests noindex", () => {
