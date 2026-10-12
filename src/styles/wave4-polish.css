@@ -3,6 +3,14 @@
  * Keep the authored scene, theme and accessibility contracts intact.
  */
 
+/* Home chrome is one ink surface. The frosted glass token (ink at 88%) blends
+   with the porcelain page behind a sticky header and rendered a grey band in
+   the light theme; an authored ink scene is the opaque brand ink in both
+   themes. The scene re-points --surface-primary to --brand-ink. */
+.header-glass[data-scene="ink"] {
+  background-color: var(--surface-primary);
+}
+
 /* Only an authored ink header gets the accent on a light page.
    Explicit light and system-light follow the site's data-theme contract. */
 :root[data-theme="light"] .header-glass[data-scene="ink"] {
