@@ -4,8 +4,13 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
 import { PAGE_META } from "@/data/page-meta";
 import Container from "@/components/layout/Container.astro";
 import PageHeader from "@/components/layout/PageHeader.astro";
+import ButtonLink from "@/components/ui/ButtonLink.astro";
 import { SITE } from "@/data/site";
 
+// Contact is always the primary action: /zh-hant/contact/ renders a real business
+// route (published mailbox when present, otherwise BusinessRouteState with the
+// private vulnerability channel), so it is never a dead end. Security stays a
+// secondary link for vulnerability reports only.
 const hasSupportEmail = Boolean(SITE.supportEmail);
 ---
 
@@ -36,34 +41,18 @@ const hasSupportEmail = Boolean(SITE.supportEmail);
           </a>{" "}
           可提供一般產品支援，直至發布針對產品的支援通道。
         </p>
-      ) : (
-        <p class="mt-8 max-w-2xl text-[var(--text-secondary)]">
-          通用產品支援電子郵件信箱尚未核實。請僅使用已在經驗證的產品資料頁上公布的
-          專用支援入口。安全漏洞報告僅用於疑似安全問題，不接受一般客戶支援請求。
-        </p>
-      )}
-      <div class="mt-10 flex flex-wrap gap-3">
-        <a
+      ) : null}
+      <div class="mt-10 flex flex-wrap items-center gap-3" data-support-actions>
+        <ButtonLink href="/zh-hant/contact/" data-support-primary>
+          聯絡我們
+        </ButtonLink>
+        <ButtonLink
           href="/zh-hant/security/"
-          class="inline-flex min-h-11 items-center rounded-lg border border-[var(--border-subtle)] bg-[var(--surface-raised)] px-5 text-sm font-semibold text-[var(--text-primary)] no-underline transition-colors hover:border-[var(--action-primary)]"
+          variant="secondary"
+          data-support-security
         >
-          報告安全漏洞
-        </a>
-        {hasSupportEmail ? (
-          <a
-            href="/zh-hant/contact/"
-            class="inline-flex min-h-11 items-center rounded-lg border border-[var(--border-subtle)] bg-[var(--surface-raised)] px-5 text-sm font-semibold text-[var(--text-primary)] no-underline transition-colors hover:border-[var(--action-primary)]"
-          >
-            聯絡 BlueSkyz
-          </a>
-        ) : (
-          <a
-            href="/zh-hant/about/"
-            class="inline-flex min-h-11 items-center rounded-lg border border-[var(--border-subtle)] bg-[var(--surface-raised)] px-5 text-sm font-semibold text-[var(--text-primary)] no-underline transition-colors hover:border-[var(--action-primary)]"
-          >
-            關於 BlueSkyz
-          </a>
-        )}
+          安全（僅限漏洞通報）
+        </ButtonLink>
       </div>
     </Container>
   </section>

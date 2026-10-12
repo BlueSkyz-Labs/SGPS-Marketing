@@ -111,7 +111,7 @@ test("support empty state offers working trust paths without Contact loop", () =
   const support = readFileSync("src/pages/en/support.astro", "utf8");
   assert.match(support, /SITE\.supportEmail/);
   assert.match(support, /href="\/en\/security\/"/);
-  assert.match(support, /href="\/en\/about\/"/);
+  assert.match(support, /<ButtonLink\s+href="\/en\/contact\/"/);
   assert.match(support, /hasSupportEmail/);
 });
 
