@@ -17,6 +17,7 @@ interface Props {
     phoneRail: string;
     desktop: string;
     inspect: string;
+    inspectOpens: string;
   };
   first?: boolean;
 }
@@ -74,7 +75,9 @@ const desktopSmallSrc = (src: string) => src.replace(/\.webp$/, "-768.webp");
               <a
                 href={item.src}
                 class="showcase__inspect"
-                aria-label={`${labels.inspect}: ${item.title[lang]}`}
+                aria-label={`${labels.inspect}: ${item.title[lang]} (${labels.inspectOpens})`}
+                target="_blank"
+                rel="noopener noreferrer"
                 data-capture-inspect
               >
                 {labels.inspect}
@@ -123,7 +126,9 @@ const desktopSmallSrc = (src: string) => src.replace(/\.webp$/, "-768.webp");
               <a
                 href={item.src}
                 class="showcase__inspect"
-                aria-label={`${labels.inspect}: ${item.title[lang]}`}
+                aria-label={`${labels.inspect}: ${item.title[lang]} (${labels.inspectOpens})`}
+                target="_blank"
+                rel="noopener noreferrer"
                 data-capture-inspect
               >
                 {labels.inspect}
