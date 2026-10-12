@@ -41,15 +41,16 @@ for (const lang of BANNER_LOCALES) {
     }) => {
       const { context, page } = await phone(browser, height);
       try {
+        // No input happens in this test, so every layout shift counts. Do not
+        // filter on hadRecentInput: Chromium can flag a late-injected banner's
+        // shift as input-related, which would hide a real hero jump.
         await page.addInitScript(() => {
           (window as unknown as { __cls: number }).__cls = 0;
           new PerformanceObserver((list) => {
             for (const entry of list.getEntries() as unknown as {
-              hadRecentInput: boolean;
               value: number;
             }[]) {
-              if (!entry.hadRecentInput)
-                (window as unknown as { __cls: number }).__cls += entry.value;
+              (window as unknown as { __cls: number }).__cls += entry.value;
             }
           }).observe({ type: "layout-shift", buffered: true });
         });
@@ -143,6 +144,54 @@ for (const lang of ["zh", "zh-hant"] as const) {
           () => getComputedStyle(document.querySelector("main h1")!).textWrap,
         );
         expect(tw).not.toBe("balance");
+      } finally {
+        await context.close();
+      }
+    });
+  }
+}
+
+/**
+ * W0 review B2: the visible "in development" badges on zh/zh-hant Products
+ * must read as one line. (The section h2 with the same words is `sr-only`,
+ * a 1px clipped box that is never painted, so it is excluded.)
+ */
+for (const lang of ["zh", "zh-hant"] as const) {
+  for (const width of [360, 390, 1440]) {
+    test(`B2 ${lang} @${width}: visible in-development badges stay on one line`, async ({
+      browser,
+    }) => {
+      const { context, page } = await phone(browser, 900, width);
+      try {
+        await page.goto(`/${lang}/products/`);
+        const badges = await page.evaluate(() => {
+          const out: { lines: number; width: number }[] = [];
+          const walker = document.createTreeWalker(
+            document.body,
+            NodeFilter.SHOW_TEXT,
+          );
+          for (let n = walker.nextNode(); n; n = walker.nextNode()) {
+            const node = n as Text;
+            if (!/^\s*(开发中|開發中)\s*$/.test(node.data)) continue;
+            const el = node.parentElement!;
+            if (el.getBoundingClientRect().width <= 1) continue; // sr-only
+            const range = document.createRange();
+            range.selectNodeContents(node);
+            const tops = new Set(
+              [...range.getClientRects()].map((r) => Math.round(r.top)),
+            );
+            out.push({
+              lines: tops.size,
+              width: el.getBoundingClientRect().width,
+            });
+          }
+          return out;
+        });
+        expect(badges.length).toBeGreaterThanOrEqual(2);
+        for (const badge of badges) {
+          expect(badge.lines).toBe(1);
+          expect(badge.width).toBeGreaterThan(40);
+        }
       } finally {
         await context.close();
       }
