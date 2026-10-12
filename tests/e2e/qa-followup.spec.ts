@@ -32,13 +32,14 @@ test.describe("command palette covers existing pages", () => {
   }
 
   for (const lang of LOCALES) {
-    test(`/${lang}/ footer and palette link editions and dossier, main nav does not`, async ({
+    test(`/${lang}/ palette links editions and dossier; footer and main nav do not`, async ({
       page,
     }) => {
       await page.goto(`/${lang}/`);
       for (const route of ["editions", "dossier"]) {
         const href = `/${lang}/${route}/`;
-        await expect(page.locator(`footer a[href="${href}"]`)).toHaveCount(1);
+        // Owner 2026-10-12: /verify is the one trust door in the footer.
+        await expect(page.locator(`footer a[href="${href}"]`)).toHaveCount(0);
         await expect(
           page.locator(`[data-command-item] a[href="${href}"]`),
         ).toHaveCount(1);

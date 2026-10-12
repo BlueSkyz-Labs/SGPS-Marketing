@@ -143,13 +143,6 @@ export const PAGE_LABELS = {
     "查看界面截图",
     "查看畫面截圖",
   ),
-  // sro-3 (glossary 5.3 for vi)
-  signIn: S(
-    "Already have an account? Sign in",
-    "Đã có tài khoản? Đăng nhập",
-    "老用户登录",
-    "既有使用者登入",
-  ),
   // sro-8 / stm-8 heading
   whatItDoes: S("What it does", "Tính năng", "功能", "功能"),
   // sro-14

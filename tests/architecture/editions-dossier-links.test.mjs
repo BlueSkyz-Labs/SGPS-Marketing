@@ -5,17 +5,20 @@ import { getFooterLinks, getNav } from "../../src/data/site.ts";
 
 const LANGS = ["en", "vi", "zh", "zh-hant"];
 
+// Owner 2026-10-12: both pages left the footer (customer-focus.test.mjs); the
+// registry still labels them for the command navigator and breadcrumbs.
+
 function pageTitle(lang, route) {
   const source = readFileSync(`src/pages/${lang}/${route}/index.astro`, "utf8");
   return source.match(/^\s+title="([^"]+)"/m)?.[1];
 }
 
 for (const lang of LANGS) {
-  test(`${lang}: footer links /editions and /dossier with the pages' own titles`, () => {
+  test(`${lang}: the route registry labels /editions and /dossier with the pages' own titles`, () => {
     const footer = getFooterLinks(lang);
     for (const route of ["editions", "dossier"]) {
       const link = footer.find((item) => item.href === `/${lang}/${route}/`);
-      assert.ok(link, `${lang} footer links ${route}`);
+      assert.ok(link, `${lang} registry labels ${route}`);
       assert.equal(
         link.label,
         pageTitle(lang, route),
@@ -33,7 +36,7 @@ for (const lang of LANGS) {
   });
 }
 
-test("negative proof: a footer without the links is detected", () => {
+test("negative proof: a registry without the links is detected", () => {
   for (const lang of LANGS) {
     const withoutEditions = getFooterLinks(lang).filter(
       (item) => !item.href.includes("/editions/"),

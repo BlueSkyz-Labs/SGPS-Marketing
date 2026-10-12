@@ -4,7 +4,6 @@ import type { Language } from "@/lib/i18n";
 import type { ShowcaseSchema } from "@/lib/showcase-schema";
 import Container from "@/components/layout/Container.astro";
 import ButtonLink from "@/components/ui/ButtonLink.astro";
-import { labelFor, SHARED_LABELS } from "@/data/site";
 
 /**
  * GOLIVE W5 — onboarding guide built only from the product's recorded real
@@ -65,7 +64,6 @@ const COPY = {
   },
 } as const satisfies Record<Language, Record<string, string>>;
 const t = COPY[lang];
-const signInUrl = product.data.appAccess?.signInUrl;
 ---
 
 <article class="guide py-12 sm:py-16" data-product-guide={product.data.slug}>
@@ -135,11 +133,6 @@ const signInUrl = product.data.appAccess?.signInUrl;
       <p class="text-lg font-semibold text-[var(--text-primary)]">{t.done}</p>
       <div class="mt-5 flex flex-wrap gap-3">
         <ButtonLink href={`/${lang}/support/`}>{t.support}</ButtonLink>
-        {signInUrl ? (
-          <ButtonLink href={signInUrl} variant="secondary">
-            {labelFor(SHARED_LABELS.signInExisting, lang)} · {product.data.name}
-          </ButtonLink>
-        ) : null}
       </div>
     </footer>
   </Container>

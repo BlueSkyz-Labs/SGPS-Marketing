@@ -49,16 +49,14 @@ for (const lang of LOCALES) {
       await expect(primary).toHaveCount(1);
       await expect(primary).toHaveAttribute("href", "#profile-showcase");
       await expect(page.locator("#profile-showcase")).toHaveCount(1);
-      // Sign-in is a text link, not a button.
-      const signIn = page.locator("[data-app-signin]");
-      await expect(signIn).toHaveCount(1);
-      await expect(signIn).not.toHaveAttribute("data-primary-action", /.*/);
+      // Owner 2026-10-12: no public app sign-in link.
+      await expect(page.locator("[data-app-signin]")).toHaveCount(0);
     });
 
     test("Sổ Tâm has no primary action", async ({ page }) => {
       await page.goto(`/${lang}/products/sotam/`);
       await expect(page.locator("[data-primary-action]")).toHaveCount(0);
-      await expect(page.locator("[data-app-signin]")).toHaveCount(1);
+      await expect(page.locator("[data-app-signin]")).toHaveCount(0);
     });
 
     for (const slug of ["sotro", "sotam"]) {

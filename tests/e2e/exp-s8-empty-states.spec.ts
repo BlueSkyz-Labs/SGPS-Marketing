@@ -71,7 +71,8 @@ for (const lang of LOCALES) {
         "href",
         /^https:\/\/github\.com\/BlueSkyz-Labs\/SGPS-Marketing\/security\/advisories\/new$/,
       );
-      await expect(page.locator("[data-contact-signin]")).not.toHaveCount(0);
+      // Owner 2026-10-12: Contact shows no product sign-in lane.
+      await expect(page.locator("[data-contact-signin]")).toHaveCount(0);
       await expect(
         page.locator('[data-contact-lane="business-state"]'),
       ).toHaveCount(0);

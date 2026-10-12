@@ -121,38 +121,13 @@ export const SHARED_LABELS = {
     zh: "同样在开发中",
     "zh-hant": "同樣在開發中",
   },
-  trustHeading: {
-    en: "Check what we say",
-    vi: "Kiểm chứng điều chúng tôi nói",
-    zh: "核实我们所说的",
-    "zh-hant": "查證我們所說的",
-  },
-  trustBody: {
-    en: "Our public claims link to the sources behind them.",
-    vi: "Các tuyên bố công khai của chúng tôi đều dẫn tới nguồn đã công bố.",
-    zh: "我们的公开声明都链接到其依据来源。",
-    "zh-hant": "我們的公開聲明都連結到其依據來源。",
-  },
-  trustCta: {
-    en: "Check our claims",
-    vi: "Xem các tuyên bố",
-    zh: "查看依据",
-    "zh-hant": "查看依據",
-  },
   viewProfile: {
     en: "View profile",
     vi: "Xem hồ sơ",
     zh: "查看产品简介",
     "zh-hant": "檢視產品簡介",
   },
-  signIn: { en: "Sign in", vi: "Đăng nhập", zh: "登录", "zh-hant": "登入" },
   /** Qualified label: the sign-in page is for existing users, not an open sign-up. */
-  signInExisting: {
-    en: "Sign in (existing users)",
-    vi: "Đăng nhập (người dùng hiện có)",
-    zh: "登录（现有用户）",
-    "zh-hant": "登入（現有使用者）",
-  },
   /** Same wording as the product showcase guide link. */
   readGuide: {
     en: "Read the getting-started guide",
@@ -306,6 +281,11 @@ export function getNav(lang: Language): NavItem[] {
   ];
 }
 
+/**
+ * Every approved secondary route with its label. The command navigator,
+ * breadcrumbs and concierge read labels from here; the footer shows only the
+ * subset picked in `getFooterGroups`.
+ */
 export function getFooterLinks(lang: Language): NavItem[] {
   const l = NAV_LABELS[lang];
   return [
@@ -327,20 +307,15 @@ export interface FooterGroup {
   links: NavItem[];
 }
 
-const FOOTER_GROUP_LABELS: Record<
-  "trust" | "evidence",
-  Record<Language, string>
-> = {
+const FOOTER_GROUP_LABELS: Record<"trust", Record<Language, string>> = {
   trust: { en: "Trust", vi: "Tin cậy", zh: "信任", "zh-hant": "信任" },
-  evidence: {
-    en: "Evidence",
-    vi: "Bằng chứng",
-    zh: "证据",
-    "zh-hant": "證據",
-  },
 };
 
-/** The footer links grouped by intent; same set and order as getFooterLinks. */
+/**
+ * The footer links grouped by intent. Owner 2026-10-12: /verify is the one
+ * trust door, so Collections (/editions) and Printable summary (/dossier)
+ * stay reachable by link and search but leave the footer.
+ */
 export function getFooterGroups(lang: Language): FooterGroup[] {
   const byPath = new Map(
     getFooterLinks(lang).map((link) => [link.href.split("/")[2], link]),
@@ -355,10 +330,6 @@ export function getFooterGroups(lang: Language): FooterGroup[] {
     {
       label: FOOTER_GROUP_LABELS.trust[lang],
       links: pick("privacy", "security", "verify"),
-    },
-    {
-      label: FOOTER_GROUP_LABELS.evidence[lang],
-      links: pick("editions", "dossier"),
     },
   ];
 }

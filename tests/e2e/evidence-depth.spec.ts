@@ -20,18 +20,16 @@ test.describe("executive-to-evidence reading depth", () => {
     await expect(evidenceLink).toBeVisible();
   });
 
-  test("the home keeps one quiet proof link instead of ledger rows", async ({
+  test("the home carries no ledger rows; /verify stays one footer link away", async ({
     page,
   }) => {
-    // Experience v6 S1: the home proof band is a heading, one line and one link;
-    // the ledger rows and their evidence disclosures return on /verify (S3).
+    // Experience v6 S1 moved the ledger rows to /verify (S3); Owner 2026-10-12
+    // also removed the home proof band, leaving the footer Verify link.
     // Evidence disclosure stays covered on /security/ and /privacy/ above/below.
     await page.goto("/en/");
     await expect(page.locator("[data-trust-ledger]")).toHaveCount(0);
-    const band = page.locator("[data-trust-band]");
-    await expect(band).toBeVisible();
-    await expect(band.getByRole("link")).toHaveCount(1);
-    await expect(band.getByRole("link")).toHaveAttribute("href", "/en/verify/");
+    await expect(page.locator("[data-trust-band]")).toHaveCount(0);
+    await expect(page.locator('footer a[href="/en/verify/"]')).toHaveCount(1);
   });
 
   test("print output keeps the evidence readable (chromium)", async ({

@@ -14,18 +14,6 @@ export const EMPTY_STATE_COPY = {
     zh: "如需商务或其他咨询，请从下方选择合适的联系渠道。",
     "zh-hant": "如需商務或其他諮詢，請從下方選擇合適的聯絡管道。",
   },
-  signInHeading: {
-    en: "Product sign-in",
-    vi: "Đăng nhập sản phẩm",
-    zh: "产品登录",
-    "zh-hant": "產品登入",
-  },
-  signInBody: {
-    en: "Already using a product? Go straight to its sign-in.",
-    vi: "Đã dùng một sản phẩm? Vào thẳng trang đăng nhập của sản phẩm.",
-    zh: "已在使用某款产品？直接前往其登录页。",
-    "zh-hant": "已在使用某款產品？直接前往其登入頁。",
-  },
   notPublished: {
     en: "Not listed",
     vi: "Không có trong danh sách",

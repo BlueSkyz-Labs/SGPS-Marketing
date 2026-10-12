@@ -21,15 +21,6 @@ const JOURNEY: Record<string, JourneyStep[]> = {
   "": [],
   products: [
     {
-      segment: "decision-room",
-      label: {
-        en: "Compare claims",
-        vi: "So sánh tuyên bố",
-        zh: "比较声明",
-        "zh-hant": "比較聲明",
-      },
-    },
-    {
       segment: "verify",
       label: { en: "Verify", vi: "Xác minh", zh: "核实", "zh-hant": "查證" },
     },

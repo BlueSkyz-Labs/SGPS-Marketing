@@ -49,7 +49,8 @@ for (const viewport of VIEWPORTS) {
           page.getByRole("heading", { level: 2 }).first(),
         ).toBeVisible();
         const headings = await page.locator("main h2").allTextContents();
-        expect(headings.length).toBeGreaterThanOrEqual(3);
+        // Owner 2026-10-12: the claims band left the home (flagship + house).
+        expect(headings.length).toBeGreaterThanOrEqual(2);
 
         // Anchors remain the authority: at least one real link per act region.
         const links = await page.locator("main a[href^='/']").count();

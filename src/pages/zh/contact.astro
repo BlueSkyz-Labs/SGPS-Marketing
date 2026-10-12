@@ -4,7 +4,6 @@ import { PAGE_META } from "@/data/page-meta";
 import Container from "@/components/layout/Container.astro";
 import PageHeader from "@/components/layout/PageHeader.astro";
 import SafeAction from "@/components/integrity/SafeAction.astro";
-import ProductSignInLane from "@/components/empty-state/ProductSignInLane.astro";
 import PublicContactEmails from "@/components/empty-state/PublicContactEmails.astro";
 import { EMPTY_STATE_COPY } from "@/data/empty-state-copy";
 import { labelFor, SECURITY_ADVISORY_URL } from "@/data/site";
@@ -42,7 +41,6 @@ import { labelFor, SECURITY_ADVISORY_URL } from "@/data/site";
             />
           </div>
         </li>
-        <ProductSignInLane lang="zh" />
         <PublicContactEmails
           lang="zh"
           boundary="私密安全报告仅用于报告疑似漏洞，不接收商务或一般咨询。"

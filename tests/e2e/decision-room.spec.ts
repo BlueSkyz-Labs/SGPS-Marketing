@@ -138,16 +138,21 @@ test.describe("decision room", () => {
     // Experience v6 S1 removed the Trust ledger cards (and their per-card
     // "Compare in the Decision Room" hooks) from the home; S3 re-stages them on
     // /verify. The room keeps its own routes: the products journey bar and the
-    // command navigator still lead to it.
+    // command navigator still lead to it. Owner 2026-10-12: the products
+    // journey bar no longer offers it (/verify is the one trust door); the page
+    // itself stays published.
     await page.goto("/en/");
     await expect(page.locator("[data-decision-hook]")).toHaveCount(0);
     await page.goto("/en/products/");
-    const link = page
-      .locator("[data-journey-bar] a")
-      .filter({ hasText: "Compare claims" });
-    await expect(link).toBeVisible();
-    await link.click();
-    await expect(page).toHaveURL(/\/en\/decision-room\/$/);
+    await expect(
+      page.locator('[data-journey-bar] a[href="/en/decision-room/"]'),
+    ).toHaveCount(0);
+    await expect(
+      page.locator('[data-journey-bar] a[href="/en/verify/"]'),
+    ).toHaveCount(1);
+    const response = await page.goto("/en/decision-room/");
+    expect(response?.status()).toBe(200);
+    await expect(page.locator(ROOM)).toBeVisible();
   });
 
   test("VI room is localized", async ({ page }) => {
