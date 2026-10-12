@@ -11,9 +11,19 @@ interface Props {
   note?: string;
   /** Size the action to its label instead of the full column. */
   fit?: boolean;
+  /** Visual weight of the action; the boundary note is unchanged. */
+  variant?: "primary" | "secondary" | "tertiary";
 }
 
-const { href, label, boundary, lang, note, fit = false } = Astro.props;
+const {
+  href,
+  label,
+  boundary,
+  lang,
+  note,
+  fit = false,
+  variant = "primary",
+} = Astro.props;
 
 const host = /^https?:\/\//i.test(href) ? new URL(href).host : "";
 const mailTarget = href.replace(/^mailto:/i, "");
@@ -42,7 +52,7 @@ const CONTEXT = {
 ---
 
 <div class="safe-action" data-safe-action={boundary}>
-  <ButtonLink href={href} class={fit ? "self-start" : ""}>
+  <ButtonLink href={href} variant={variant} class={fit ? "self-start" : ""}>
     {label}
   </ButtonLink>
   <p class="safe-action__context">{note ?? CONTEXT[boundary][lang]}</p>
