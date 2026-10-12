@@ -212,6 +212,9 @@ const robotsContent =
     <meta property="og:image" content={ogImageUrl} />
     {ogImageMeta ? (
       <>
+        {ogImage !== defaultOgImagePath() ? (
+          <meta property="og:image:type" content="image/jpeg" />
+        ) : null}
         <meta property="og:image:width" content={String(ogImageMeta.width)} />
         <meta property="og:image:height" content={String(ogImageMeta.height)} />
         <meta property="og:image:alt" content={ogImageAlt} />

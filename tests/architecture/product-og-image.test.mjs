@@ -49,6 +49,8 @@ export function productPageOgProblems({ html, slug, card }) {
     if (!value || new URL(value).pathname !== expected)
       problems.push(`${key} is ${value ?? "missing"}, expected ${expected}`);
   }
+  if (meta(html, "og:image:type") !== "image/jpeg")
+    problems.push("og:image:type");
   if (meta(html, "og:image:width") !== "1200") problems.push("og:image:width");
   if (meta(html, "og:image:height") !== "630") problems.push("og:image:height");
   if (!meta(html, "og:image:alt")) problems.push("og:image:alt missing");
@@ -74,7 +76,7 @@ test("source: card path, size and localized alt come from existing copy", () => 
 });
 
 test("negative proof: the predicate rejects each broken invariant", () => {
-  const good = `<meta property="og:image" content="https://x.test/social/products/a.jpg"><meta name="twitter:image" content="https://x.test/social/products/a.jpg"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:image:alt" content="a"><meta name="twitter:image:alt" content="a">`;
+  const good = `<meta property="og:image" content="https://x.test/social/products/a.jpg"><meta name="twitter:image" content="https://x.test/social/products/a.jpg"><meta property="og:image:type" content="image/jpeg"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:image:alt" content="a"><meta name="twitter:image:alt" content="a">`;
   const card = { width: 1200, height: 630, bytes: 1000, format: "jpeg" };
   assert.deepEqual(productPageOgProblems({ html: good, slug: "a", card }), []);
   const bad = (html, c = card) =>
@@ -82,6 +84,7 @@ test("negative proof: the predicate rejects each broken invariant", () => {
   assert.ok(bad(good.replace(/a\.jpg/g, "og-default.png")), "default image");
   assert.ok(bad(good.replace('width" content="1200', 'width" content="1')));
   assert.ok(bad(good.replace(/<meta property="og:image:alt"[^>]*>/, "")));
+  assert.ok(bad(good.replace("image/jpeg", "image/png")), "wrong type");
   assert.ok(bad(good, null), "missing file");
   assert.ok(bad(good, { ...card, width: 600 }), "wrong dimensions");
   assert.ok(bad(good, { ...card, bytes: PRODUCT_OG_MAX_BYTES + 1 }), "size");
@@ -135,6 +138,7 @@ test("built: non-product pages keep the site-wide default card", (t) => {
   ]) {
     const html = readFileSync(`dist/${rel}`, "utf8");
     assert.match(meta(html, "og:image"), /\/social\/og-default\.png$/, rel);
+    assert.equal(meta(html, "og:image:type"), undefined, rel);
   }
 });
 

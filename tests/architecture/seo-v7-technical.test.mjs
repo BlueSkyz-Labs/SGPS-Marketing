@@ -150,7 +150,7 @@ test("negative proof: a sitemap that skips the filter, or a filter that matches 
 test("og:image:alt and twitter:image:alt are localized per locale", () => {
   assert.match(
     layout,
-    /const ogImageAlt =[\s\S]*?DEFAULT_OG_IMAGE_ALT\[currentLang\]/,
+    /const ogImageAlt =\s*ogImage === defaultOgImagePath\(\)\s*\?\s*DEFAULT_OG_IMAGE_ALT\[currentLang\]/,
   );
   assert.match(layout, /og:image:alt" content=\{ogImageAlt\}/);
   assert.match(layout, /twitter:image:alt" content=\{ogImageAlt\}/);
