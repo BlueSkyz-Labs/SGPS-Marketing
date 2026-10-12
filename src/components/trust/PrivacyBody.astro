@@ -41,7 +41,7 @@ const CLAIM_ID = "privacy-no-tracking-on-this-site";
         {labelFor(SHARED_LABELS.privacyContact, lang)}{" "}
         <a
           href={`mailto:${SITE.privacyEmail}`}
-          class="font-semibold text-[var(--action-primary)] no-underline hover:underline"
+          class="inline-flex min-h-11 items-center font-semibold text-[var(--action-primary)] no-underline hover:underline"
         >
           {SITE.privacyEmail}
         </a>
@@ -61,7 +61,7 @@ const CLAIM_ID = "privacy-no-tracking-on-this-site";
     {c.contactLead}{" "}
     <a
       href={`/${lang}/contact/`}
-      class="font-semibold text-[var(--action-primary)] no-underline hover:underline"
+      class="inline-flex min-h-11 items-center font-semibold text-[var(--action-primary)] no-underline hover:underline"
     >
       {c.contactLink}
     </a>
