@@ -3,8 +3,13 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
 import { PAGE_META } from "@/data/page-meta";
 import Container from "@/components/layout/Container.astro";
 import PageHeader from "@/components/layout/PageHeader.astro";
+import ButtonLink from "@/components/ui/ButtonLink.astro";
 import { SITE } from "@/data/site";
 
+// Contact is always the primary action: /vi/contact/ renders a real business
+// route (published mailbox when present, otherwise BusinessRouteState with the
+// private vulnerability channel), so it is never a dead end. Security stays a
+// secondary link for vulnerability reports only.
 const hasSupportEmail = Boolean(SITE.supportEmail);
 ---
 
@@ -35,36 +40,18 @@ const hasSupportEmail = Boolean(SITE.supportEmail);
           </a>{" "}
           cho hỗ trợ sản phẩm chung cho đến khi có kênh cụ thể theo sản phẩm.
         </p>
-      ) : (
-        <p class="mt-8 max-w-2xl text-[var(--text-secondary)]">
-          Chưa có email hỗ trợ sản phẩm chung được xác minh. Chỉ sử dụng kênh hỗ
-          trợ riêng khi đã được công bố trên trang sản phẩm có xác minh. Báo cáo
-          bảo mật chỉ dành cho lỗ hổng nghi vấn, không tiếp nhận yêu cầu hỗ trợ
-          thông thường.
-        </p>
-      )}
-      <div class="mt-10 flex flex-wrap gap-3">
-        <a
+      ) : null}
+      <div class="mt-10 flex flex-wrap items-center gap-3" data-support-actions>
+        <ButtonLink href="/vi/contact/" data-support-primary>
+          Liên hệ
+        </ButtonLink>
+        <ButtonLink
           href="/vi/security/"
-          class="inline-flex min-h-11 items-center rounded-lg border border-[var(--border-subtle)] bg-[var(--surface-raised)] px-5 text-sm font-semibold text-[var(--text-primary)] no-underline transition-colors hover:border-[var(--action-primary)]"
+          variant="secondary"
+          data-support-security
         >
-          Báo cáo lỗ hổng bảo mật
-        </a>
-        {hasSupportEmail ? (
-          <a
-            href="/vi/contact/"
-            class="inline-flex min-h-11 items-center rounded-lg border border-[var(--border-subtle)] bg-[var(--surface-raised)] px-5 text-sm font-semibold text-[var(--text-primary)] no-underline transition-colors hover:border-[var(--action-primary)]"
-          >
-            Liên hệ BlueSkyz
-          </a>
-        ) : (
-          <a
-            href="/vi/about/"
-            class="inline-flex min-h-11 items-center rounded-lg border border-[var(--border-subtle)] bg-[var(--surface-raised)] px-5 text-sm font-semibold text-[var(--text-primary)] no-underline transition-colors hover:border-[var(--action-primary)]"
-          >
-            Về BlueSkyz
-          </a>
-        )}
+          Bảo mật (chỉ báo cáo lỗ hổng)
+        </ButtonLink>
       </div>
     </Container>
   </section>

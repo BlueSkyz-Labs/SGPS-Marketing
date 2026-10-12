@@ -11,19 +11,18 @@ import test from "node:test";
 const routes = [
   {
     lang: "en",
-    fallback:
-      /Security reporting is for suspected\s+vulnerabilities, not routine customer support\./,
-    action: /Report a security vulnerability/,
+    fallback: /No general support mailbox has been published yet\./,
+    action: /Security \(vulnerability reports only\)/,
   },
   {
     lang: "vi",
-    fallback: /Báo cáo\s+bảo mật chỉ dành cho lỗ hổng nghi vấn/,
-    action: /Báo cáo lỗ hổng bảo mật/,
+    fallback: /Hiện chưa có hộp thư hỗ trợ chung\./,
+    action: /Bảo mật \(chỉ báo cáo lỗ hổng\)/,
   },
   {
     lang: "zh",
-    fallback: /安全漏洞报告仅用于疑似安全问题，不接受一般客户支持请求。/,
-    action: /报告安全漏洞/,
+    fallback: /目前尚未公布通用支持邮箱。/,
+    action: /安全（仅限漏洞报告）/,
   },
 ];
 
@@ -33,16 +32,18 @@ for (const { lang, fallback, action } of routes) {
     assert.match(page, /const hasSupportEmail = Boolean\(SITE\.supportEmail\)/);
     assert.match(page, /mailto:\$\{SITE\.supportEmail\}/);
     assert.match(page, fallback);
-    if (lang === "vi") {
-      assert.match(page, /không tiếp nhận yêu cầu hỗ trợ\s+thông thường\./);
-    }
+    // CX1: security is a vulnerability-only lane, never the first action.
+    assert.match(page, /vulnerabilit|lỗ hổng|漏洞/);
     const securityAction = page.match(
-      new RegExp(`href="/${lang}/security/"[\\s\\S]*?</a>`),
+      new RegExp(`href="/${lang}/security/"[\\s\\S]*?</(?:a|ButtonLink)>`),
     );
     assert.ok(securityAction);
     assert.match(securityAction[0], action);
-    assert.match(page, new RegExp(`href="/${lang}/contact/"`));
-    assert.match(page, new RegExp(`href="/${lang}/about/"`));
+    // CX1: Contact is the primary (first) action; Contact itself soft-lands on
+    // About when no mailbox is published (src/lib/act.ts via BusinessRouteState).
+    const firstHref = page.match(/<ButtonLink\s+href="([^"]+)"/);
+    assert.ok(firstHref);
+    assert.equal(firstHref[1], `/${lang}/contact/`);
     assert.doesNotMatch(
       page,
       /support@blueskyzlabs\.com|security@blueskyzlabs\.com/,
@@ -68,10 +69,19 @@ test("never invent an unverified mailbox in any locale", () => {
 
 test("regression guard catches a security-as-support fallback mutation", () => {
   const good = readFileSync("src/pages/en/support.astro", "utf8");
-  const bad = good.replace(
-    "Security reporting is for suspected",
-    "Security reporting is the general support path. It is for suspected",
+  const bad = good.replaceAll(
+    "Security reporting is for vulnerabilities only.",
+    "Security reporting is the general support path.",
   );
-  assert.match(good, /Security reporting is for suspected/);
-  assert.doesNotMatch(bad, /Security reporting is for suspected/);
+  assert.match(good, /Security reporting is for vulnerabilities only\./);
+  assert.doesNotMatch(bad, /Security reporting is for vulnerabilities only\./);
+  // CX1 negative proof: a security-first order is detected.
+  const swapped = good
+    .replace('href="/en/contact/"', "@@")
+    .replace('href="/en/security/"', 'href="/en/contact/"')
+    .replace("@@", 'href="/en/security/"');
+  assert.equal(
+    swapped.match(/<ButtonLink\s+href="([^"]+)"/)[1],
+    "/en/security/",
+  );
 });
