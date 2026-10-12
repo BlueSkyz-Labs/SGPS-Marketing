@@ -81,17 +81,41 @@ test.describe("S4 composition guards", () => {
     }
   });
 
-  test("verify: sources sit under the claim at desktop width", async ({
+  test("verify: rail sits beside its claim at 1440, gap at most --space-8", async ({
     page,
   }) => {
     await page.setViewportSize({ width: 1440, height: 900 });
     await page.goto("/en/verify/");
-    const claim = page.locator(".verify-claim").first();
-    const main = await claim.locator(".verify-claim__main").boundingBox();
-    const src = await claim.locator("[data-sources-line]").boundingBox();
-    expect(main && src).toBeTruthy();
-    expect(src!.y).toBeGreaterThanOrEqual(main!.y + main!.height - 1);
-    expect(Math.abs(src!.x - main!.x)).toBeLessThan(2);
+    const space8 = await page.evaluate(() => {
+      const probe = document.createElement("div");
+      probe.style.width = "var(--space-8)";
+      document.body.append(probe);
+      const w = probe.getBoundingClientRect().width;
+      probe.remove();
+      return w;
+    });
+    expect(space8).toBe(32);
+    const claims = page.locator(".verify-claim");
+    const n = await claims.count();
+    expect(n).toBeGreaterThan(0);
+    for (let i = 0; i < n; i++) {
+      const main = await claims
+        .nth(i)
+        .locator(".verify-claim__main")
+        .boundingBox();
+      const rail = await claims
+        .nth(i)
+        .locator("[data-sources-line]")
+        .boundingBox();
+      expect(rail!.x, `claim ${i} beside`).toBeGreaterThan(
+        main!.x + main!.width - 1,
+      );
+      expect(rail!.y, `claim ${i} aligned`).toBeLessThan(main!.y + 40);
+      expect(
+        rail!.x - (main!.x + main!.width),
+        `claim ${i} gap`,
+      ).toBeLessThanOrEqual(space8 + 1);
+    }
   });
 
   test("about: founder art is square and bounded at 48rem+", async ({
