@@ -22,18 +22,26 @@ import { labelFor, SECURITY_ADVISORY_URL } from "@/data/site";
         lede={labelFor(EMPTY_STATE_COPY.contactLede, "zh-hant")}
       />
       <ul class="mt-12 grid gap-4 sm:grid-cols-2">
-        <li class="flex min-w-0 flex-col justify-center rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-raised)] p-6">
+        <PublicContactEmails
+          lang="zh-hant"
+          boundary="私密資安通報僅用於通報疑似漏洞，不受理商務或一般諮詢。"
+        />
+        <li
+          data-contact-card="security"
+          class="flex min-w-0 flex-col justify-center rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-raised)] p-6"
+        >
           <h2 class="text-lg font-semibold tracking-tight">安全</h2>
           <p class="mt-2 text-sm leading-relaxed text-[var(--text-secondary)]">
             <a
               href="/zh-hant/security/"
-              class="text-[var(--action-primary)] underline"
+              class="inline-flex min-h-11 items-center text-[var(--action-primary)] underline"
             >
               前往安全性頁面
             </a>
           </p>
           <div class="mt-3">
             <SafeAction
+              variant="tertiary"
               href={SECURITY_ADVISORY_URL}
               label="開啟私密漏洞通報"
               boundary="private-reporting"
@@ -41,10 +49,6 @@ import { labelFor, SECURITY_ADVISORY_URL } from "@/data/site";
             />
           </div>
         </li>
-        <PublicContactEmails
-          lang="zh-hant"
-          boundary="私密資安通報僅用於通報疑似漏洞，不受理商務或一般諮詢。"
-        />
       </ul>
     </Container>
   </section>
