@@ -23,6 +23,20 @@ test.describe("S4 composition guards", () => {
           .locator(".profile-lockup-light")
           .evaluate((el) => el.getBoundingClientRect().width);
         expect(box, `width ${width}`).toBeGreaterThanOrEqual(160);
+        // Reserved box (1500:420) so the lazy lockup cannot shift layout.
+        const attrs = await page
+          .locator(".profile-lockup img")
+          .evaluateAll((els) =>
+            els.map((e) => [
+              e.getAttribute("width"),
+              e.getAttribute("height"),
+              e.getAttribute("loading"),
+            ]),
+          );
+        expect(attrs, `lockup attrs at ${width}`).toEqual([
+          ["1500", "420", "lazy"],
+          ["1500", "420", "lazy"],
+        ]);
         const overflow = await page.evaluate(
           () =>
             document.documentElement.scrollWidth >
