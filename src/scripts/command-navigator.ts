@@ -12,6 +12,55 @@ function normalize(value: string): string {
     .replace(/\p{Diacritic}/gu, "");
 }
 
+const WORD_SPLIT = /[^\p{L}\p{N}]+/u;
+const CJK = /[\u3400-\u9fff]/u;
+
+function words(value: string): string[] {
+  return value.split(WORD_SPLIT).filter((word) => word.length > 0);
+}
+
+/**
+ * Whole-word / word-prefix match on accent-folded text (never a substring
+ * inside a word). Short tokens (< 4 chars) must be whole words. A token the
+ * visitor typed with accents ("giá") must also match accent-sensitively, so it
+ * cannot match "giao". CJK text has no word breaks and uses substring.
+ */
+function tokenMatches(token: string, text: string): boolean {
+  if (text.length === 0) return false;
+  if (CJK.test(token)) return text.toLocaleLowerCase().includes(token);
+  const accented = token.normalize("NFC") !== normalize(token);
+  const folded = words(normalize(text));
+  const raw = accented ? words(text.toLocaleLowerCase().normalize("NFC")) : [];
+  const foldedToken = normalize(token);
+  return folded.some((word, index) => {
+    const exact = word === foldedToken;
+    const prefix = foldedToken.length >= 4 && word.startsWith(foldedToken);
+    if (!exact && !prefix) return false;
+    if (!accented) return true;
+    const original = raw[index] ?? "";
+    return (
+      original === token ||
+      (foldedToken.length >= 4 && original.startsWith(token))
+    );
+  });
+}
+
+/** 0 = no match; title 3 > keywords 2 > body text 1. */
+function scoreItem(tokens: string[], item: Element): number {
+  const title = item.getAttribute("data-title") ?? "";
+  const keys = item.getAttribute("data-keys") ?? "";
+  const body = item.getAttribute("data-body") ?? "";
+  let total = 0;
+  for (const token of tokens) {
+    const tier = [title, keys, body].findIndex((text) =>
+      tokenMatches(token, text),
+    );
+    if (tier < 0) return 0;
+    total += 3 - tier;
+  }
+  return total;
+}
+
 export function initCommandNavigator(root: ParentNode = document): void {
   const dialog = root.querySelector("[data-command-navigator]");
   if (!(dialog instanceof HTMLDialogElement)) {
@@ -33,21 +82,49 @@ export function initCommandNavigator(root: ParentNode = document): void {
 
   let invoker: HTMLElement | null = null;
 
+  const list = dialog.querySelector("[data-command-list]");
+  const status = dialog.querySelector("[data-command-status]");
+  const fallback = dialog.querySelector("[data-command-fallback]");
+  const intents = (status?.getAttribute("data-intents") ?? "")
+    .split("|")
+    .filter((entry) => entry.length > 0);
+  const originalOrder = items.slice();
+
   const applyFilter = (query: string): void => {
-    const needle = normalize(query.trim());
+    const lowered = query.trim().toLocaleLowerCase();
+    const tokens = words(lowered);
     let visibleCount = 0;
-    for (const item of items) {
-      const haystack = item.getAttribute("data-search") ?? "";
-      const match = needle.length === 0 || normalize(haystack).includes(needle);
+    const scored = originalOrder.map((item, index) => ({
+      item,
+      index,
+      score: tokens.length === 0 ? 1 : scoreItem(tokens, item),
+    }));
+    for (const { item, score } of scored) {
       if (item instanceof HTMLElement) {
-        item.hidden = !match;
+        item.hidden = score === 0;
       }
-      if (match) {
+      if (score > 0) {
         visibleCount += 1;
       }
     }
+    if (list) {
+      // Rank title hits above keyword hits above body hits; stable otherwise.
+      scored
+        .sort((a, b) => b.score - a.score || a.index - b.index)
+        .forEach(({ item }) => list.appendChild(item));
+    }
     if (empty instanceof HTMLElement) {
       empty.hidden = visibleCount > 0;
+    }
+    if (fallback instanceof HTMLElement) {
+      fallback.hidden = visibleCount > 0;
+    }
+    if (status instanceof HTMLElement) {
+      const folded = ` ${words(normalize(lowered)).join(" ")} `;
+      status.hidden = !(
+        visibleCount === 0 &&
+        intents.some((intent) => folded.includes(` ${normalize(intent)} `))
+      );
     }
     if (live instanceof HTMLElement) {
       const none = live.getAttribute("data-live-none") ?? "";
