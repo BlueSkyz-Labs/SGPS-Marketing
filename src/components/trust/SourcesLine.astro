@@ -78,41 +78,53 @@ const reviewedOn = reviewedLabel ? passport?.reviewedOn : undefined;
             <span class="sources-line__sep" aria-hidden="true">
               {"\u00a0\u00b7"}
             </span>
+          ) : reviewedOn ? (
+            <span class="sources-line__sep">{"."}</span>
           ) : null}
         </span>
       </>
-    ))}
+    ))}{" "}
     {reviewedOn ? (
-      <>
-        {". "}
+      <span class="sources-line__reviewed">
         {reviewedLabel}{" "}
         <time datetime={reviewedOn}>{formatDisplayDate(reviewedOn, lang)}</time>
         {"."}
-      </>
+      </span>
     ) : null}
   </p>
 ) : null}
 
 <style>
+  /*
+   * Rows are laid out by flex so each wrapped row owns its own 44px band: the
+   * link boxes of adjacent rows never overlap and a tap on one link cannot be
+   * captured by the next row. (44px is the WCAG 2.5.5 AAA target; 2.5.8 AA
+   * needs 24px.) Each source is one unit, the link plus the separator that
+   * FOLLOWS it, so a "·" can end a line but never begin one.
+   */
   .sources-line {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    column-gap: 0.25rem;
+    row-gap: 0;
     margin: 0;
     font-size: var(--size-2);
     line-height: 1.6;
     color: var(--text-muted);
   }
 
-  /*
-   * One atomic unit per source: the link and the separator that FOLLOWS it
-   * travel together, so a "·" can end a line but never begin one. The 44px
-   * touch target (WCAG 2.5.8) stays; the negative block margin stops it from
-   * inflating every wrapped line into a 44px-tall gap.
-   */
+  .sources-line__label,
+  .sources-line__reviewed {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.75rem;
+  }
+
   .sources-line__item {
     display: inline-flex;
     align-items: center;
     min-height: 2.75rem;
-    margin-block: calc((1.6em - 2.75rem) / 2);
-    vertical-align: middle;
   }
 
   .sources-line__sep {

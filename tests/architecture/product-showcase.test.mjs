@@ -268,7 +268,15 @@ function profileProblems(page) {
   for (const m of page.matchAll(
     /<img\s+src=\{`[^`]*lockup_(?:light|dark)\.svg`\}[^>]*?>/gs,
   )) {
-    if (!/loading="lazy"/.test(m[0])) problems.push("lockup must be lazy");
+    // The lockup sits above the fold (>=480px), so it is not lazy: lazy plus
+    // no intrinsic size caused CLS. It must reserve its box (1500:420), stay
+    // low priority and decode off the main thread.
+    if (!/width="1500"/.test(m[0]) || !/height="420"/.test(m[0]))
+      problems.push("lockup must reserve its 1500x420 box");
+    if (/loading="eager"|fetchpriority="high"/.test(m[0]))
+      problems.push("lockup must not be eager or high priority");
+    if (!/decoding="async"/.test(m[0]))
+      problems.push("lockup must decode async");
   }
   return problems;
 }
@@ -290,6 +298,7 @@ test("product profile keeps non-LCP requests out of the first paint", () => {
 test("negative proof: eager master icon and eager lockups are caught", () => {
   const page = readFileSync("src/pages/vi/products/[slug].astro", "utf8")
     .replace("getProductIconThumbPath(data.slug)", "`/products/x/icon.png`")
-    .replaceAll('loading="lazy"', 'loading="eager"');
-  assert.ok(profileProblems(page).length >= 2);
+    .replaceAll('width="1500"', "")
+    .replaceAll('decoding="async"', 'loading="eager"');
+  assert.ok(profileProblems(page).length >= 3);
 });

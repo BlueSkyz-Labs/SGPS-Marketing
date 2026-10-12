@@ -12,20 +12,24 @@ const LOCALES = ["en", "vi", "zh", "zh-hant"] as const;
 
 test.describe("S4 composition guards", () => {
   for (const lang of LOCALES) {
-    test(`${lang}: endorsed lockup is at least 160px wide at sm+`, async ({
+    test(`${lang}: endorsed lockup is at least 160px wide from 480px up`, async ({
       page,
     }) => {
-      await page.setViewportSize({ width: 1440, height: 900 });
       await page.goto(`/${lang}/products/sotro/`);
-      const box = await page
-        .locator(".profile-lockup-light")
-        .evaluate((el) => el.getBoundingClientRect().width);
-      expect(box).toBeGreaterThanOrEqual(160);
-      await page.setViewportSize({ width: 640, height: 900 });
-      const sm = await page
-        .locator(".profile-lockup-light")
-        .evaluate((el) => el.getBoundingClientRect().width);
-      expect(sm).toBeGreaterThanOrEqual(160);
+      // The lockup shows from 480px; it must meet the minimum at every width.
+      for (const width of [480, 560, 640, 1440]) {
+        await page.setViewportSize({ width, height: 900 });
+        const box = await page
+          .locator(".profile-lockup-light")
+          .evaluate((el) => el.getBoundingClientRect().width);
+        expect(box, `width ${width}`).toBeGreaterThanOrEqual(160);
+        const overflow = await page.evaluate(
+          () =>
+            document.documentElement.scrollWidth >
+            document.documentElement.clientWidth,
+        );
+        expect(overflow, `overflow at ${width}`).toBe(false);
+      }
     });
   }
 
@@ -42,7 +46,6 @@ test.describe("S4 composition guards", () => {
           if (!link) continue;
           const s = sep.getBoundingClientRect();
           const l = link.getBoundingClientRect();
-          // The separator trails its link on the same line, never leads one.
           // Same line as its link and strictly after it: it trails, never leads.
           if (s.left < l.right - 1) out.push("leads-link");
           const line = sep.closest("[data-sources-line]")!;
@@ -88,6 +91,45 @@ test.describe("S4 composition guards", () => {
         .evaluate((el) => el.getBoundingClientRect());
       expect(Math.abs(b.width - b.height), `width ${width}`).toBeLessThan(2);
       expect(b.height).toBeLessThanOrEqual(640);
+    }
+  });
+
+  test("verify/security/privacy: every source link owns its whole tap area", async ({
+    page,
+  }) => {
+    for (const lang of ["en", "vi"]) {
+      for (const route of ["verify", "security", "privacy"]) {
+        for (const width of [320, 390]) {
+          await page.setViewportSize({ width, height: 900 });
+          await page.goto(`/${lang}/${route}/`);
+          const bad = await page.evaluate(() => {
+            const out: string[] = [];
+            const links = [
+              ...document.querySelectorAll<HTMLElement>(".sources-line__link"),
+            ];
+            links.forEach((a, i) => {
+              a.scrollIntoView({ block: "center" });
+              // Each link may span several lines; sample every client rect.
+              for (const rect of a.getClientRects()) {
+                const pts: [number, number][] = [];
+                for (const fx of [0.06, 0.25, 0.5, 0.75, 0.94])
+                  for (const fy of [0.06, 0.25, 0.5, 0.75, 0.94])
+                    pts.push([
+                      rect.left + rect.width * fx,
+                      rect.top + rect.height * fy,
+                    ]);
+                for (const [x, y] of pts) {
+                  const hit = document.elementFromPoint(x, y);
+                  if (hit?.closest(".sources-line__link") !== a)
+                    out.push(`link ${i} at ${Math.round(x)},${Math.round(y)}`);
+                }
+              }
+            });
+            return out;
+          });
+          expect(bad, `${lang}/${route} @${width}`).toEqual([]);
+        }
+      }
     }
   });
 });
