@@ -838,6 +838,33 @@ html[data-intent="evaluate-product"] [data-journey-bar] a[href$="/products/"] {
   color: var(--text-muted);
 }
 
+.command-navigator__fallback {
+  padding: 0 0.75rem 0.5rem;
+  font-size: var(--size-2);
+}
+
+.command-navigator__fallback ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+  margin: 0.25rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.command-navigator__fallback a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+.command-navigator__status {
+  margin: 0.25rem 0 0;
+  color: var(--text-muted);
+}
+
 .hero-mark {
   position: relative;
   z-index: 1;
