@@ -9,6 +9,9 @@
    themes. The scene re-points --surface-primary to --brand-ink. */
 .header-glass[data-scene="ink"] {
   background-color: var(--surface-primary);
+  /* Nothing shows through an opaque fill; skip the compositing cost. */
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
 }
 
 /* Only an authored ink header gets the accent on a light page.

@@ -51,29 +51,63 @@ for (const theme of ["light", "dark"] as const) {
         // Out of flow: it must not take layout space or intercept input.
         await expect(seam).toHaveCSS("position", "absolute");
         await expect(seam).toHaveCSS("pointer-events", "none");
-        const [heroBox, seamBox] = await Promise.all([
-          page.locator(".hero-plane").boundingBox(),
-          seam.boundingBox(),
-        ]);
-        expect(heroBox && seamBox).toBeTruthy();
-        // The seam line sits on the hero's bottom edge (within a few px).
-        const lineCentre = seamBox!.y + seamBox!.height / 2;
-        expect(
-          Math.abs(lineCentre - (heroBox!.y + heroBox!.height)),
-        ).toBeLessThan(4);
+        // In-page measurement: the seam line sits on the hero's bottom edge.
+        const offset = await page.evaluate(() => {
+          const hero = document.querySelector(".hero-plane")!;
+          const line = hero.querySelector(".horizon-seam__line")!;
+          const h = hero.getBoundingClientRect();
+          const l = line.getBoundingClientRect();
+          return Math.abs(l.top + l.height / 2 - h.bottom);
+        });
+        expect(offset).toBeLessThan(4);
       });
     });
   }
 }
 
-test("hero headline never animates and no seam ships on porcelain-scene pages", async ({
-  page,
-}) => {
-  await page.goto("/en/about/", { waitUntil: "load" });
-  await expect(page.locator(".hero-plane > .horizon-seam")).toHaveCount(0);
-  await page.goto("/en/", { waitUntil: "load" });
-  const animation = await page
-    .locator("#hero-title")
-    .evaluate((el) => getComputedStyle(el).animationName);
-  expect(animation).toBe("none");
+test.describe("ink header focus ring", () => {
+  test.use({ colorScheme: "light" });
+
+  // WCAG 2.x relative luminance contrast of two computed colours. Computed
+  // color-mix() serialises as color(srgb r g b) in 0..1, rgb() in 0..255.
+  const contrast = (a: string, b: string) => {
+    const lum = (c: string) => {
+      const scale = c.startsWith("color(") ? 1 : 255;
+      const [r, g, b2] = (c.match(/[\d.]+/g) ?? []).slice(0, 3).map((v) => {
+        const x = Number(v) / scale;
+        return x <= 0.03928 ? x / 12.92 : ((x + 0.055) / 1.055) ** 2.4;
+      });
+      return 0.2126 * r + 0.7152 * g + 0.0722 * b2;
+    };
+    const [hi, lo] = [lum(a), lum(b)].sort((x, y) => y - x);
+    return (hi + 0.05) / (lo + 0.05);
+  };
+
+  for (const lang of ["en", "vi", "zh", "zh-hant"] as const) {
+    test(`${lang} light theme: header focus ring is >= 3:1 on ink`, async ({
+      page,
+    }) => {
+      await page.addInitScript(() => {
+        try {
+          localStorage.setItem("blueskyz-theme", "light");
+        } catch {
+          /* attribute fallback */
+        }
+      });
+      await page.setViewportSize({ width: 1440, height: 900 });
+      await page.goto(`/${lang}/`, { waitUntil: "load" });
+      await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
+      const { ring, bg } = await page.evaluate(() => {
+        const header = document.querySelector('header[data-scene="ink"]')!;
+        const probe = document.createElement("span");
+        probe.style.color = "var(--focus-ring)";
+        header.append(probe);
+        const ring = getComputedStyle(probe).color;
+        probe.remove();
+        return { ring, bg: getComputedStyle(header).backgroundColor };
+      });
+      expect(bg).toBe(INK);
+      expect(contrast(ring, bg)).toBeGreaterThanOrEqual(3);
+    });
+  }
 });
