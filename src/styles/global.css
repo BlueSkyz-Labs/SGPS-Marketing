@@ -1766,6 +1766,23 @@ h3 {
   }
 }
 
+/* UX-U2 (C-06) — forced colors. The lockup is an <img> SVG with fixed brand
+   colors; forced-colors replaces the header/footer backgrounds with Canvas,
+   so the white reverse mark vanished on a white Canvas. Filters are not
+   overridden by forced colors: flatten the mark to a single luminance that
+   contrasts with the Canvas of the active palette (prefers-color-scheme
+   follows the forced palette). */
+@media (forced-colors: active) {
+  .brand-lockup__img {
+    filter: brightness(0);
+  }
+}
+@media (forced-colors: active) and (prefers-color-scheme: dark) {
+  .brand-lockup__img {
+    filter: brightness(0) invert(1);
+  }
+}
+
 /* Scroll-driven entrance for showcase and guide media (GOLIVE W5). Pure CSS,
    only where supported and only when the visitor allows motion. */
 @media (prefers-reduced-motion: no-preference) {
