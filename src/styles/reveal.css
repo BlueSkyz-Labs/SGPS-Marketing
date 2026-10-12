@@ -179,37 +179,12 @@
   }
 }
 
-/* ---- .reveal-planes: same grammar for flagship frames and the proof band.
-   Default = final. Only JS arms it (below the fold, motion allowed). */
-.reveal-planes {
-  opacity: 1;
-  clip-path: inset(0 0 0 0);
-}
-@media (prefers-reduced-motion: no-preference) {
-  .reveal-planes[data-revealed="true"] {
-    transition:
-      opacity var(--motion-reveal) var(--ease-emphasized),
-      clip-path var(--motion-reveal) var(--ease-emphasized);
-    /* Elite 2026-10-08: stagger delay from --reveal-i (set by RevealObserver). */
-    transition-delay: calc(var(--motion-stagger) * var(--reveal-i, 0));
-  }
-  .reveal-planes[data-revealed="false"] {
-    opacity: 0;
-    clip-path: inset(0 0 16% 0);
-  }
-}
-
 /* ---- Final state, unconditionally, where motion must not run */
 @media (prefers-reduced-motion: reduce) {
   html .sail-reveal,
-  html .sail-reveal *,
-  html .reveal-planes {
+  html .sail-reveal * {
     animation: none;
     transition: none;
-  }
-  html .reveal-planes {
-    opacity: 1;
-    clip-path: none;
   }
   html .sail-stroke {
     stroke-dashoffset: 0;
@@ -226,17 +201,9 @@
   .sail-reveal--handoff {
     display: none;
   }
-  .reveal-planes {
-    opacity: 1 !important;
-    clip-path: none !important;
-  }
 }
 @media print {
   .sail-reveal--handoff {
     display: none;
-  }
-  .reveal-planes {
-    opacity: 1 !important;
-    clip-path: none !important;
   }
 }
