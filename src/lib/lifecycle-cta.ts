@@ -129,3 +129,16 @@ export function resolveLifecycleCta(
     external: tryEligible,
   };
 }
+
+/**
+ * Accessible name for a product CTA. The visible label is kept as the start
+ * of the name (WCAG 2.5.3). The product name is appended only when the label
+ * does not already carry it, so a screen reader never hears the name twice
+ * ("Xem Sổ Trọ: Sổ Trọ").
+ */
+export function lifecycleCtaAccessibleName(
+  label: string,
+  productName: string,
+): string {
+  return label.includes(productName) ? label : `${label}: ${productName}`;
+}
