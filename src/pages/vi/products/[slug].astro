@@ -1,4 +1,5 @@
 ---
+import HorizonSeam from "@/components/experience/HorizonSeam.astro";
 import type { CollectionEntry } from "astro:content";
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import Container from "@/components/layout/Container.astro";
@@ -203,6 +204,7 @@ const isIdentityArt = media?.kind === "identity-art";
           </div>
         </div>
       </header>
+      <HorizonSeam class="horizon-rule" data-horizon-rule />
 
       <p class="mt-8 max-w-3xl text-lg leading-relaxed text-[var(--text-secondary)] sm:text-xl">
         {page.oneLiner}

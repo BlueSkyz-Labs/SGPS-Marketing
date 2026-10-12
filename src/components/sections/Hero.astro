@@ -6,7 +6,10 @@ import SailReveal from "@/components/motion/SailReveal.astro";
 import { SITE, labelFor, type Language } from "@/data/site";
 import { HOME_ONE_LINER, HOME_PRODUCT_LINE } from "@/data/home-copy";
 import { emptyRegistryPrimaryCta, emptyRegistrySecondaryCta } from "@/lib/act";
-import { resolveLifecycleCta } from "@/lib/lifecycle-cta";
+import {
+  lifecycleCtaAccessibleName,
+  resolveLifecycleCta,
+} from "@/lib/lifecycle-cta";
 import { productCopy } from "@/lib/product-copy";
 import {
   getProductIconThumbPath,
@@ -208,7 +211,10 @@ const supportingLine = flagship ? null : proposition;
             data-product-cta={cta.verb}
             data-hero-primary
             class="hero-flagship__cta mt-4"
-            aria-label={`${cta.label}: ${flagship.data.name}`}
+            aria-label={lifecycleCtaAccessibleName(
+              cta.label,
+              flagship.data.name,
+            )}
           >
             {cta.label}
           </ButtonLink>

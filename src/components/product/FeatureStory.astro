@@ -72,7 +72,9 @@ const DESKTOP_SIZES = "(min-width: 64rem) 64rem, calc(100vw - 2.5rem)";
           <a
             href={screen.src}
             class="story__inspect"
-            aria-label={`${t.inspect}: ${screen.title[lang]}`}
+            aria-label={`${t.inspect}: ${screen.title[lang]} (${t.inspectOpens})`}
+            target="_blank"
+            rel="noopener noreferrer"
             data-capture-inspect
           >
             {t.inspect}
@@ -128,7 +130,9 @@ const DESKTOP_SIZES = "(min-width: 64rem) 64rem, calc(100vw - 2.5rem)";
         <a
           href={story.coda.src}
           class="story__inspect"
-          aria-label={`${t.inspect}: ${story.coda.title[lang]}`}
+          aria-label={`${t.inspect}: ${story.coda.title[lang]} (${t.inspectOpens})`}
+          target="_blank"
+          rel="noopener noreferrer"
           data-capture-inspect
         >
           {t.inspect}
