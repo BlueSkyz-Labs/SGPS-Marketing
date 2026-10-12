@@ -416,7 +416,7 @@ test("D-05: zh and zh-hant taglines are the renderings already published on the 
       `${BRAND_TAGLINE.en.lead} ${BRAND_TAGLINE.en.accent}`,
     );
   }
-  assert.equal(BRAND_TAGLINE.vi.lead, "Trí tuệ. Nâng tầm.");
+  assert.equal(BRAND_TAGLINE.vi.lead, "Trí tuệ. Tầm nhìn.");
   assert.match(
     read("docs/notes/zh-localization-glossary.md"),
     /智能。提升。影响。/,

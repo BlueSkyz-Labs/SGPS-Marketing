@@ -47,7 +47,7 @@ export const EXPERIENCE_STAGES: ExperienceStage[] = [
     id: "product-house-title",
     label: {
       en: "Elevation.",
-      vi: "Nâng tầm.",
+      vi: "Tầm nhìn.",
       zh: "提升。",
       "zh-hant": "提升。",
     },
@@ -84,7 +84,7 @@ export interface PrincipleMatrixEntry {
 
 const VI_PRINCIPLE_NAMES: Record<string, string> = {
   Intelligence: "Trí tuệ",
-  Elevation: "Nâng tầm",
+  Elevation: "Tầm nhìn",
   Trust: "Tin cậy",
   Impact: "Tác động",
 };

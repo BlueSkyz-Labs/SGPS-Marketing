@@ -11,7 +11,7 @@ import { hasPublicProducts } from "./product-helpers.ts";
  */
 const H1 = {
   en: "We build intelligent products that empower people and elevate the way work gets done.",
-  vi: "Chúng tôi xây dựng sản phẩm thông minh, giúp con người làm chủ và nâng tầm cách làm việc.",
+  vi: "Chúng tôi làm những sản phẩm thông minh, giúp mọi người làm việc nhẹ nhàng và hiệu quả hơn.",
   zh: "我们打造智能化产品，赋能个人并提升工作方式。",
   "zh-hant": "我們打造智慧化產品，賦能個人並提升工作方式。",
 } as const;

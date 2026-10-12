@@ -185,3 +185,32 @@ export const AVAILABILITY = {
   ),
   colon: S(": ", ": ", "：", "："),
 } as const;
+
+/**
+ * Owner-approved 2026-10-12 (U10): interim sentence for a product that is
+ * not yet open for sign-up or download. No waitlist, date or promise. The
+ * link text is the last clause of the sentence, linking to Contact.
+ */
+export const INTERIM_NOTE = {
+  en: {
+    before:
+      "Not yet open for sign-up or download. Check this page for updates, or ",
+    link: "get in touch",
+    after: ".",
+  },
+  vi: {
+    before: "Chưa mở đăng ký hoặc tải về. Bạn có thể theo dõi trang này, hoặc ",
+    link: "liên hệ với chúng tôi",
+    after: ".",
+  },
+  zh: {
+    before: "目前尚未开放注册或下载。请关注本页更新，或",
+    link: "与我们联系",
+    after: "。",
+  },
+  "zh-hant": {
+    before: "目前尚未開放註冊或下載。歡迎持續關注本頁，或",
+    link: "與我們聯絡",
+    after: "。",
+  },
+} as const;
