@@ -279,12 +279,12 @@ for (const lang of LOCALES) {
     ).toHaveCount(0);
   });
 
-  test(`/${lang}/products/sotro/guide/ ends with Support and no sign-in`, async ({
+  test(`/${lang}/products/sotro/guide/ ends with Contact and no sign-in`, async ({
     page,
   }) => {
     await page.goto(`/${lang}/products/sotro/guide/`);
     const links = page.locator(".guide__footer a");
     await expect(links).toHaveCount(1);
-    expect(await links.first().getAttribute("href")).toBe(`/${lang}/support/`);
+    expect(await links.first().getAttribute("href")).toBe(`/${lang}/contact/`);
   });
 }

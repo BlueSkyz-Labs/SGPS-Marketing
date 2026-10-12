@@ -12,10 +12,10 @@ test("support empty state offers contact and security recourse", () => {
   const support = readFileSync("src/pages/en/support.astro", "utf8");
   assert.match(support, /href="\/en\/contact\/"/);
   assert.match(support, /href="\/en\/security\/"/);
-  assert.match(support, /href="\/en\/about\/"/);
   assert.match(support, /SITE\.supportEmail/);
   assert.match(support, /hasSupportEmail/);
   assert.match(support, /min-h-11/);
+  assert.match(support, /<ButtonLink\s+href="\/en\/contact\/"/);
 
   const rootStub = readFileSync("src/pages/support.astro", "utf8");
   assert.match(rootStub, /<LegacyLocaleGateway route="\/support\/" \/>/);
