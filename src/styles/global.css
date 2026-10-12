@@ -1977,6 +1977,10 @@ dd {
 :is(:lang(zh-Hans), :lang(zh-Hant)) :is(h1, h2, h3) {
   word-break: normal;
   line-break: strict;
+  /* W0 G4: never balance CJK headings. balance equalises line lengths by
+     character count and ignores word boundaries, so it split product names
+     mid-word ("产/品"). pretty only avoids short last lines. */
+  text-wrap: pretty;
 }
 @supports (word-break: auto-phrase) {
   :is(:lang(zh-Hans), :lang(zh-Hant)) :is(h1, h2, h3) {
