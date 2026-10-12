@@ -3,8 +3,13 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
 import { PAGE_META } from "@/data/page-meta";
 import Container from "@/components/layout/Container.astro";
 import PageHeader from "@/components/layout/PageHeader.astro";
+import ButtonLink from "@/components/ui/ButtonLink.astro";
 import { SITE } from "@/data/site";
 
+// Contact is always the primary action: /en/contact/ renders a real business
+// route (published mailbox when present, otherwise BusinessRouteState with the
+// private vulnerability channel), so it is never a dead end. Security stays a
+// secondary link for vulnerability reports only.
 const hasSupportEmail = Boolean(SITE.supportEmail);
 ---
 
@@ -36,36 +41,18 @@ const hasSupportEmail = Boolean(SITE.supportEmail);
           for general product support until a product-specific path is
           published.
         </p>
-      ) : (
-        <p class="mt-8 max-w-2xl text-[var(--text-secondary)]">
-          A general product-support email has not yet been verified. Use a
-          product-specific support path only when it is published on that
-          product’s verified profile. Security reporting is for suspected
-          vulnerabilities, not routine customer support.
-        </p>
-      )}
-      <div class="mt-10 flex flex-wrap gap-3">
-        <a
+      ) : null}
+      <div class="mt-10 flex flex-wrap items-center gap-3" data-support-actions>
+        <ButtonLink href="/en/contact/" data-support-primary>
+          Contact
+        </ButtonLink>
+        <ButtonLink
           href="/en/security/"
-          class="inline-flex min-h-11 items-center rounded-lg border border-[var(--border-subtle)] bg-[var(--surface-raised)] px-5 text-sm font-semibold text-[var(--text-primary)] no-underline transition-colors hover:border-[var(--action-primary)]"
+          variant="secondary"
+          data-support-security
         >
-          Report a security vulnerability
-        </a>
-        {hasSupportEmail ? (
-          <a
-            href="/en/contact/"
-            class="inline-flex min-h-11 items-center rounded-lg border border-[var(--border-subtle)] bg-[var(--surface-raised)] px-5 text-sm font-semibold text-[var(--text-primary)] no-underline transition-colors hover:border-[var(--action-primary)]"
-          >
-            Contact BlueSkyz
-          </a>
-        ) : (
-          <a
-            href="/en/about/"
-            class="inline-flex min-h-11 items-center rounded-lg border border-[var(--border-subtle)] bg-[var(--surface-raised)] px-5 text-sm font-semibold text-[var(--text-primary)] no-underline transition-colors hover:border-[var(--action-primary)]"
-          >
-            About BlueSkyz
-          </a>
-        )}
+          Security (vulnerability reports only)
+        </ButtonLink>
       </div>
     </Container>
   </section>
