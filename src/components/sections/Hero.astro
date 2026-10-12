@@ -1,5 +1,6 @@
 ---
 import HorizonField from "@/components/experience/HorizonField.astro";
+import HorizonSeam from "@/components/experience/HorizonSeam.astro";
 import ButtonLink from "@/components/ui/ButtonLink.astro";
 import SailReveal from "@/components/motion/SailReveal.astro";
 import { SITE, labelFor, type Language } from "@/data/site";
@@ -271,9 +272,24 @@ const supportingLine = flagship ? null : proposition;
       </div>
     ) : null}
   </div>
+  <!-- The hero's bottom edge is an intentional horizon line, not a hard cut.
+       Static, decorative, no JS; out of flow so the layout never shifts. -->
+  <HorizonSeam class="hero-plane__seam" />
 </section>
 
 <style>
+  .hero-plane :global(.hero-plane__seam) {
+    position: absolute;
+    inset-inline: 0;
+    bottom: calc(-1.5rem + 1px);
+    z-index: 0;
+  }
+  @media (max-width: 767px) {
+    .hero-plane :global(.hero-plane__seam) {
+      bottom: calc(-1rem + 1px);
+    }
+  }
+
   /* ---- Layout -------------------------------------------------------------
      One column on phones in DOM order: promise, product line, flagship name +
      CTA, then the capture. From 768 px the promise and the flagship body share
