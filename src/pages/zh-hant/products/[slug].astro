@@ -28,6 +28,11 @@ import { getPublicProducts } from "@/lib/products";
 import { productMeta } from "@/data/page-meta";
 import { productTransitionStyle } from "@/lib/product-transition";
 import { labelFor, SITE } from "@/data/site";
+import {
+  PRODUCT_OG_SIZE,
+  productOgImageAlt,
+  productOgImagePath,
+} from "@/lib/product-og";
 
 /**
  * v8 W3 product profile (zh-hant).
@@ -111,6 +116,9 @@ const isIdentityArt = media?.kind === "identity-art";
   title={meta.title}
   description={meta.description}
   path={`/zh-hant/products/${data.slug}/`}
+  ogImage={productOgImagePath(data.slug)}
+  ogImageSize={PRODUCT_OG_SIZE}
+  ogImageAltText={productOgImageAlt(data.name, "zh-hant")}
   scene="product"
 >
   <script
