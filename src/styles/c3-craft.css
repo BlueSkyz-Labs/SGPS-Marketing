@@ -373,3 +373,58 @@ header summary:active,
     border-bottom-color: CanvasText;
   }
 }
+
+/* U6: inner-page Horizon signature. HorizonSeam reused under each page H1;
+   the line is left-aligned to the content column. Decorative, CSS only. */
+.horizon-seam.horizon-rule {
+  height: 1.5rem;
+  margin-block-start: 1.5rem;
+}
+.horizon-seam.horizon-rule .horizon-seam__line {
+  left: 0;
+  right: 0;
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--brand-cobalt) 70%, transparent) 0%,
+    color-mix(in srgb, var(--brand-cobalt) 30%, transparent) 45%,
+    transparent 100%
+  );
+  box-shadow: none;
+  opacity: 0.8;
+}
+/* 404: a slightly richer stage, a taller horizon with a soft cobalt halo. */
+.horizon-seam.horizon-rule--stage {
+  height: 7rem;
+  margin-block-start: 2rem;
+  background: radial-gradient(
+    ellipse 60% 70% at 30% 50%,
+    color-mix(in srgb, var(--brand-cobalt) 16%, transparent),
+    transparent 70%
+  );
+}
+.horizon-seam.horizon-rule--stage .horizon-seam__line {
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    color-mix(in srgb, var(--brand-cobalt) 65%, transparent) 20%,
+    color-mix(in srgb, var(--brand-porcelain) 70%, transparent) 40%,
+    color-mix(in srgb, var(--brand-cobalt) 50%, transparent) 65%,
+    transparent 100%
+  );
+  box-shadow: 0 0 24px color-mix(in srgb, var(--brand-cobalt) 40%, transparent);
+}
+@media (prefers-reduced-motion: reduce) {
+  .horizon-seam.horizon-rule--stage .horizon-seam__line {
+    box-shadow: none;
+  }
+}
+@media (forced-colors: active) {
+  .horizon-seam.horizon-rule .horizon-seam__line {
+    background: CanvasText;
+    opacity: 0.5;
+  }
+  .horizon-seam.horizon-rule--stage {
+    background: none;
+  }
+}
