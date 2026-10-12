@@ -1,0 +1,24 @@
+{
+  "schemaVersion": "1.0",
+  "provider": "cloudflare-web-analytics",
+  "decision": "docs/decisions/0015-rum-cloudflare-web-analytics.md",
+  "scriptUrl": "https://static.cloudflareinsights.com/beacon.min.js",
+  "endpoint": "/cdn-cgi/rum",
+  "declaredFields": [
+    {
+      "name": "navigation-timing",
+      "source": "https://developers.cloudflare.com/web-analytics/data-metrics/data-origin-and-collection/"
+    },
+    {
+      "name": "core-web-vitals",
+      "source": "https://developers.cloudflare.com/web-analytics/data-metrics/data-origin-and-collection/"
+    },
+    {
+      "name": "page-path",
+      "source": "https://developers.cloudflare.com/web-analytics/faq"
+    }
+  ],
+  "retention": "Unsampled 7 days, then about a 10% sample; dashboard shows six months (provider FAQ, page dated 2026-07-14).",
+  "observedPayload": "NOT_VERIFIED until the Owner enables Web Analytics; capture one beacon request and compare its keys with declaredFields.",
+  "killSwitch": "Disable Web Analytics for blueskyzlabs.com in the Cloudflare dashboard; then remove the script-src path from public/_headers."
+}
