@@ -3,6 +3,8 @@ import { buildNavigatorIndex } from "@/lib/navigator";
 import { getPublicProducts } from "@/lib/products";
 import { getLanguageFromPath } from "@/lib/i18n";
 import { buildConciergeCorpus } from "@/lib/concierge-corpus";
+import { getNav } from "@/data/site";
+import { AVAILABILITY } from "@/components/product/product-page-copy";
 
 const lang = getLanguageFromPath(Astro.url.pathname);
 const isVi = lang === "vi";
@@ -83,6 +85,53 @@ const resultNone = isVi
     : isZhHant
       ? "無結果"
       : "No results";
+
+// U1 (C-01): honest recovery for the commonest intents. No price, date or link
+// is invented: the status line reuses the existing availability copy
+// ("in development" + "no store release"), and the links are the Products and
+// Contact nav entries of the current locale.
+const fallbackLinks = getNav(lang).filter(
+  (link) =>
+    link.href === `/${lang}/products/` || link.href === `/${lang}/contact/`,
+);
+const statusLine = `${AVAILABILITY.inDevelopment[lang]}${lang === "zh" || lang === "zh-hant" ? "；" : "; "}${AVAILABILITY.noStore[lang]}`;
+const STATUS_INTENTS: Record<string, string[]> = {
+  en: [
+    "price",
+    "prices",
+    "pricing",
+    "cost",
+    "free",
+    "buy",
+    "download",
+    "install",
+    "app",
+    "sign up",
+    "signup",
+    "register",
+    "waitlist",
+  ],
+  vi: [
+    "giá",
+    "bao nhiêu",
+    "miễn phí",
+    "mua",
+    "tải",
+    "tải app",
+    "tải về",
+    "cài đặt",
+    "app",
+    "đăng ký",
+    "danh sách chờ",
+    "price",
+    "pricing",
+    "download",
+    "waitlist",
+  ],
+  zh: ["价格", "多少钱", "免费", "购买", "下载", "安装", "注册", "报名"],
+  "zh-hant": ["價格", "多少錢", "免費", "購買", "下載", "安裝", "註冊", "報名"],
+};
+const statusIntents = (STATUS_INTENTS[lang] ?? []).join("|");
 ---
 
 <dialog class="command-navigator" aria-label={navLabel} data-command-navigator>
@@ -100,15 +149,25 @@ const resultNone = isVi
     />
     <ul class="command-navigator__list" data-command-list>
       {items.map((item) => {
-        const searchText =
-          `${item.label} ${item.aliases.join(" ")} ${corpusText.get(item.href) ?? ""}`
-            .trim()
-            .toLocaleLowerCase(lang);
+        // Rank tiers: label (title) > short keywords > long body text.
+        const keys = item.aliases
+          .filter((alias) => alias.trim().split(/\s+/).length <= 3)
+          .join(" ");
+        const body = [
+          ...item.aliases.filter(
+            (alias) => alias.trim().split(/\s+/).length > 3,
+          ),
+          corpusText.get(item.href) ?? "",
+        ]
+          .join(" ")
+          .trim();
         return (
           <li
             data-command-item
             data-command-kind={item.kind}
-            data-search={searchText}
+            data-title={item.label}
+            data-keys={keys}
+            data-body={body}
           >
             <a href={item.href}>{item.label}</a>
             <span class="command-navigator__kind">
@@ -129,6 +188,24 @@ const resultNone = isVi
     <p class="command-navigator__empty" data-command-empty hidden>
       {emptyLabel}
     </p>
+    <div class="command-navigator__fallback" data-command-fallback hidden>
+      <p
+        class="command-navigator__status"
+        data-command-status
+        data-intents={statusIntents}
+        hidden
+      >
+        {statusLine.charAt(0).toLocaleUpperCase(lang)}
+        {statusLine.slice(1)}.
+      </p>
+      <ul>
+        {fallbackLinks.map((link) => (
+          <li>
+            <a href={link.href}>{link.label}</a>
+          </li>
+        ))}
+      </ul>
+    </div>
   </div>
 </dialog>
 
