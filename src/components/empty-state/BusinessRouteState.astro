@@ -1,4 +1,5 @@
 ---
+import ButtonLink from "@/components/ui/ButtonLink.astro";
 import { EMPTY_STATE_COPY } from "@/data/empty-state-copy";
 import { SITE, labelFor, type Language } from "@/data/site";
 import { emptyRegistryPrimaryCta } from "@/lib/act";
@@ -22,8 +23,9 @@ const soft = emptyRegistryPrimaryCta(
 ---
 
 <li
-  class="flex min-w-0 flex-col gap-2 rounded-xl border border-dashed border-[var(--border-subtle)] p-6 sm:col-span-2"
+  class="flex min-w-0 flex-col gap-2 rounded-xl border border-dashed border-[var(--border-subtle)] p-6"
   data-contact-lane="business-state"
+  data-contact-card="business"
 >
   <div class="flex flex-wrap items-center gap-x-3 gap-y-1">
     <h2 class="text-lg font-semibold tracking-tight">{heading}</h2>
@@ -35,11 +37,13 @@ const soft = emptyRegistryPrimaryCta(
     {labelFor(EMPTY_STATE_COPY.businessPending, lang)} {boundary}
   </p>
   <p class="mt-1">
-    <a
+    <ButtonLink
       href={soft.href}
-      class="inline-flex min-h-11 items-center text-sm font-semibold text-[var(--action-primary)] no-underline hover:underline"
+      variant="primary"
+      icon="none"
+      data-contact-primary
     >
       {soft.label}
-    </a>
+    </ButtonLink>
   </p>
 </li>
