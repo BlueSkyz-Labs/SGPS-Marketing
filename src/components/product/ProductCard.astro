@@ -116,10 +116,7 @@ const ctaIsExternal = cta.external || /^https?:\/\//i.test(cta.href);
       )}
 
       <!-- Static lifecycle status badge -->
-      <span
-        data-product-status={data.publicLabel}
-        class="inline-flex max-w-full min-w-0 items-center gap-1.5 rounded-[var(--radius-card)] border border-[var(--border-subtle)] px-2.5 py-1 text-xs font-semibold tracking-wide text-[var(--action-primary)] [overflow-wrap:anywhere] sm:px-3"
-      >
+      <span data-product-status={data.publicLabel} class="status-badge min-w-0">
         {copy.statusLabel}
       </span>
     </header>
@@ -217,7 +214,8 @@ const ctaIsExternal = cta.external || /^https?:\/\//i.test(cta.href);
     height: 12rem;
     overflow: hidden;
     border-radius: calc(var(--radius-card) - 2px);
-    border: 1px solid var(--border-subtle);
+    /* LOW-1: same hairline token as the card edge, not a stronger border. */
+    border: 1px solid var(--border-hairline);
     background:
       radial-gradient(
         ellipse at 50% 0%,

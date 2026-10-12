@@ -157,7 +157,7 @@ const rows = (compact && isContinuation ? visibleProducts : []).map(
               </a>
               <span
                 data-product-status={row.product.data.publicLabel}
-                class="product-row__badge"
+                class="status-badge"
               >
                 {row.statusLabel}
               </span>
@@ -239,19 +239,6 @@ const rows = (compact && isContinuation ? visibleProducts : []).map(
     font-weight: 600;
     letter-spacing: -0.02em;
     color: var(--text-primary);
-  }
-  .product-row__badge {
-    display: inline-flex;
-    border: 1px solid var(--border-subtle);
-    border-radius: var(--radius-pill);
-    max-width: 100%;
-    min-width: 0;
-    overflow-wrap: anywhere;
-    padding: 0.125rem 0.625rem;
-    font-size: var(--size-1);
-    font-weight: 600;
-    letter-spacing: 0.02em;
-    color: var(--text-secondary);
   }
   .product-row__line {
     margin: 0.25rem 0 0;

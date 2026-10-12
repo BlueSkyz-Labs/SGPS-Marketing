@@ -11,9 +11,6 @@ const { label, lang } = Astro.props;
 const displayLabel = statusLabelFor(label, lang);
 ---
 
-<span
-  data-product-status={label}
-  class="inline-flex max-w-full rounded-[var(--radius-card)] border border-[var(--border-subtle)] px-2.5 py-1 text-xs font-semibold tracking-wide text-[var(--text-secondary)] sm:px-3"
->
+<span data-product-status={label} class="status-badge">
   {displayLabel}
 </span>
