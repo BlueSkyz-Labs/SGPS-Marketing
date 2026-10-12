@@ -18,17 +18,22 @@ export type Language = SiteLanguage;
 type LocalizedText = Record<LocaleLanguage, string>;
 
 export interface ExperienceStage {
-  /** Existing heading id on the homepage that the stage anchors to. */
-  id: string;
+  /** Language-less canonical route the stage opens ("/" is the homepage). */
+  path: string;
+  /** Existing heading id on that page, when the stage anchors to a section. */
+  id?: string;
   label: LocalizedText;
 }
 
 /**
  * S+ Elevation Spine — narrative stages of the homepage story in document
- * order. Anchors must stay bound to real section heading ids; no shims.
+ * order. Each stage must resolve to a real page (and heading id, when given)
+ * in the built site; tests/architecture/experience-stages-resolve.test.mjs
+ * guards it. Trust and Impact left the homepage, so they open their pages.
  */
 export const EXPERIENCE_STAGES: ExperienceStage[] = [
   {
+    path: "/",
     id: "hero-title",
     label: {
       en: "Intelligence.",
@@ -38,7 +43,8 @@ export const EXPERIENCE_STAGES: ExperienceStage[] = [
     },
   },
   {
-    id: "house-title",
+    path: "/",
+    id: "product-house-title",
     label: {
       en: "Elevation.",
       vi: "Nâng tầm.",
@@ -47,11 +53,11 @@ export const EXPERIENCE_STAGES: ExperienceStage[] = [
     },
   },
   {
-    id: "trust-title",
+    path: "/security/",
     label: { en: "Trust.", vi: "Tin cậy.", zh: "信任。", "zh-hant": "信任。" },
   },
   {
-    id: "about-title",
+    path: "/about/",
     label: {
       en: "Impact.",
       vi: "Tác động.",
