@@ -78,7 +78,30 @@ test("product status chrome avoids universal pills and all-caps", () => {
   const css = readFileSync("src/styles/global.css", "utf8");
   const rule = css.match(/\n\.status-badge \{([^}]*)\}/)?.[1] ?? "";
   assert.match(rule, /border-radius:\s*var\(--radius-card\)/);
-  assert.doesNotMatch(rule, /radius-pill|999px|text-transform/);
+  // Every later .status-badge rule or override is held to the same limits.
+  const rules = css.match(/\.status-badge[^{]*\{[^}]*\}/g) ?? [];
+  assert.ok(rules.length >= 1, "global.css must define .status-badge");
+  for (const r of rules) {
+    assert.doesNotMatch(
+      r,
+      /radius-pill|999|9999|rounded-full|text-transform/,
+      `status-badge rule must not be a pill or uppercase: ${r}`,
+    );
+  }
+  // No consumer re-draws the badge as a pill inline.
+  for (const file of [
+    "src/components/sections/Hero.astro",
+    "src/components/product/ProductHouse.astro",
+    "src/components/product/ProductCard.astro",
+  ]) {
+    const src = readFileSync(file, "utf8");
+    const tags = src.match(/<span[^>]*data-product-status[^>]*>/g) ?? [];
+    assert.ok(tags.length >= 1, `${file} renders a product status badge`);
+    for (const tag of tags) {
+      assert.doesNotMatch(tag, /rounded-full/, `${file}: ${tag}`);
+      assert.match(tag, /status-badge/, `${file}: ${tag}`);
+    }
+  }
 });
 
 test("support empty state offers working trust paths without Contact loop", () => {

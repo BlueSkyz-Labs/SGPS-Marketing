@@ -12,7 +12,7 @@ import { test, expect, type Page } from "@playwright/test";
 
 const LANGS = ["en", "vi", "zh", "zh-hant"] as const;
 const THEMES = ["light", "dark"] as const;
-const ROUTES = ["", "products/", "products/sotro/"] as const;
+const ROUTES = ["", "products/", "products/sotro/", "about/"] as const;
 
 interface Probe {
   total: number;
@@ -23,7 +23,8 @@ interface Probe {
 
 /** Violations of the single-badge invariant on the current page. */
 async function probeBadges(page: Page): Promise<Probe> {
-  return page.evaluate(() => {
+  const inkBackdrops = await measureInkBackdrops(page);
+  return page.evaluate((inkBackdrops: number[][]) => {
     const toRgba = (css: string): [number, number, number, number] => {
       const c = document.createElement("canvas");
       c.width = c.height = 1;
@@ -72,6 +73,7 @@ async function probeBadges(page: Page): Promise<Probe> {
       ].join("|");
     };
     const byVariant = new Map<string, string>();
+    let inkIndex = 0;
     for (const el of badges) {
       const label = el.textContent?.trim() ?? "?";
       if (!el.classList.contains("status-badge")) {
@@ -85,24 +87,76 @@ async function probeBadges(page: Page): Promise<Probe> {
       const seen = byVariant.get(variant);
       if (seen === undefined) byVariant.set(variant, g);
       else if (seen !== g) out.mismatches.push(`${variant}:${label}`);
-      const fg = toRgba(getComputedStyle(el).color);
-      // Ink scenes keep a brand-ink base in both themes; the page backdrop
-      // is used everywhere else.
+      const fgRaw = toRgba(getComputedStyle(el).color);
+      // Ink badges sit on a gradient: use the lightest pixel actually painted
+      // behind the badge (worst case for light text), measured from a
+      // screenshot with the badge's own ink hidden. Everything else uses the
+      // nearest opaque ancestor backdrop.
       const bg =
         variant === "ink"
-          ? toRgba(
-              getComputedStyle(document.documentElement)
-                .getPropertyValue("--brand-ink")
-                .trim(),
-            )
+          ? (inkBackdrops[inkIndex++] ?? backdrop(el))
           : backdrop(el);
+      // Composite a translucent foreground over its backdrop before measuring.
+      const a = fgRaw[3];
+      const fg = [0, 1, 2].map((i) => fgRaw[i] * a + bg[i] * (1 - a));
       if (ratio(fg, bg) < 4.5) out.lowContrast.push(`${variant}:${label}`);
     }
     // Same geometry across variants too: only colour may differ.
     const shapes = new Set([...byVariant.values()]);
     if (shapes.size > 1) out.mismatches.push("variants differ in geometry");
     return out;
-  });
+  }, inkBackdrops);
+}
+
+/**
+ * Lightest painted pixel behind each ink badge, in DOM order. The badge's text
+ * and border are made transparent for the capture, then restored.
+ */
+async function measureInkBackdrops(page: Page): Promise<number[][]> {
+  const badges = page.locator(".status-badge--ink");
+  const count = await badges.count();
+  const out: number[][] = [];
+  for (let i = 0; i < count; i++) {
+    const el = badges.nth(i);
+    await el.scrollIntoViewIfNeeded();
+    const prev = await el.evaluate((n) => {
+      const h = n as HTMLElement;
+      const saved = h.getAttribute("style");
+      h.style.color = "transparent";
+      h.style.borderColor = "transparent";
+      return saved;
+    });
+    const png = (await el.screenshot()).toString("base64");
+    await el.evaluate((n, saved) => {
+      const h = n as HTMLElement;
+      if (saved === null) h.removeAttribute("style");
+      else h.setAttribute("style", saved);
+    }, prev);
+    out.push(
+      await page.evaluate(async (b64) => {
+        const img = new Image();
+        img.src = `data:image/png;base64,${b64}`;
+        await img.decode();
+        const c = document.createElement("canvas");
+        c.width = img.width;
+        c.height = img.height;
+        const ctx = c.getContext("2d", { willReadFrequently: true })!;
+        ctx.drawImage(img, 0, 0);
+        const d = ctx.getImageData(0, 0, c.width, c.height).data;
+        let best = [0, 0, 0];
+        let bestSum = -1;
+        for (let k = 0; k < d.length; k += 4) {
+          const sum = d[k] + d[k + 1] + d[k + 2];
+          if (sum > bestSum) {
+            bestSum = sum;
+            best = [d[k], d[k + 1], d[k + 2], 1];
+          }
+        }
+        return best;
+      }, png),
+    );
+  }
+  return out;
 }
 
 async function open(page: Page, lang: string, route: string, theme: string) {
@@ -192,6 +246,49 @@ test.describe("S3 one status badge", () => {
       el.style.padding = "2px 10px";
     });
     expect((await probeBadges(page)).mismatches.length).toBeGreaterThan(0);
+  });
+});
+
+test.describe("S3 contrast guard", () => {
+  test("negative proof: pale text on the light theme is flagged exactly once", async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await open(page, "en", "products/", "light");
+    expect((await probeBadges(page)).lowContrast).toEqual([]);
+    await page.evaluate(() => {
+      (
+        document.querySelector("[data-product-status]") as HTMLElement
+      ).style.color = "#cbd5e1";
+    });
+    expect((await probeBadges(page)).lowContrast.length).toBe(1);
+  });
+
+  test("negative proof: a translucent foreground is measured after compositing", async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await open(page, "en", "products/", "light");
+    await page.evaluate(() => {
+      (
+        document.querySelector("[data-product-status]") as HTMLElement
+      ).style.color = "rgba(51, 65, 85, 0.25)";
+    });
+    expect((await probeBadges(page)).lowContrast.length).toBe(1);
+  });
+
+  test("negative proof: a pale ink-variant text on the real hero backdrop is flagged", async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await open(page, "en", "", "light");
+    expect((await probeBadges(page)).lowContrast).toEqual([]);
+    await page.evaluate(() => {
+      (
+        document.querySelector(".status-badge--ink") as HTMLElement
+      ).style.color = "#475569";
+    });
+    expect((await probeBadges(page)).lowContrast.length).toBe(1);
   });
 });
 
