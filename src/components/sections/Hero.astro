@@ -382,6 +382,55 @@ const supportingLine = flagship ? null : proposition;
     );
   }
 
+  /* Horizon / Sail W1, phones: the HorizonField (halo + line + depth) already
+     in the hero collapses to a 0 px box because its wrapper has no height, so
+     on phones the whole signature was one hairline under the header. Give the
+     existing field a real box and seat its horizon line behind the capture, at
+     the stage's 44 % mark (the capture stands on it, like the sail on desktop).
+     No new media, font, JS, request or motion: the halo breathing is the
+     existing no-preference-only rule. Decorative, aria-hidden, no pointer
+     events; it never paints over the headline, badge or CTA (z-index 1 under
+     .hero-content z-index 2; the capture is z-index 2). The 1 px stage line
+     is dropped here because the field line replaces it. */
+  @media (max-width: 767px) {
+    .hero-plane {
+      --hero-pad-b: 2.5rem;
+      /* Stage height (capture slot + caption) in rem; the line sits at 44 %
+         from its top, so 56 % of it lies below the line. */
+      --hero-stage-h: 27.94rem;
+      --hero-field-h: 16rem;
+      /* Field line = 24 % above the field's bottom (global.css). */
+      --hero-field-bottom: calc(
+        var(--hero-pad-b) + var(--hero-stage-h) * 0.56 - var(--hero-field-h) *
+          0.24
+      );
+    }
+    .hero-plane :global(.horizon-signature) {
+      position: absolute;
+      inset-inline: 0;
+      bottom: var(--hero-field-bottom);
+      height: var(--hero-field-h);
+      opacity: 1;
+    }
+    /* The ink depth fade reads as a hard band behind the capture on a phone;
+       the hero atmosphere already supplies the ground. */
+    .hero-plane :global(.horizon-signature .horizon-field__depth) {
+      display: none;
+    }
+    .hero-plane :global(.horizon-signature .horizon-field__halo) {
+      inset: auto -30% 24% -30%;
+      height: 14rem;
+    }
+    .hero-stage__horizon {
+      display: none;
+    }
+  }
+  @media (min-width: 640px) and (max-width: 767px) {
+    .hero-plane {
+      --hero-pad-b: 3.5rem;
+    }
+  }
+
   @media (min-width: 768px) {
     .hero-grid[data-hero-layout="flagship"] {
       grid-template-columns: minmax(0, 1.08fr) minmax(0, 0.92fr);
