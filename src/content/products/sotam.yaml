@@ -55,9 +55,9 @@ i18n:
       - "Viết ra những suy nghĩ riêng tư, theo nhịp của bạn"
       - "Đọc lại nhật ký và kỷ niệm của mình"
     capabilities:
-      - "Viết nhật ký trong Personal Vault riêng tư, ưu tiên lưu trên máy"
+      - "Viết nhật ký trong kho cá nhân riêng tư, ưu tiên lưu trên máy"
       - "Bạn tự xuất bài viết ra máy của mình"
-      - "Lưu trong Vault riêng tư, với giới hạn khôi phục được nêu rõ"
+      - "Lưu trong kho cá nhân riêng tư, với giới hạn khôi phục được nêu rõ"
     primaryActionLabel: "Xem trước Sổ Tâm"
   zh:
     shortDescription: "私密、本地优先的日记，用来写下所思所想、留住回忆。"
@@ -65,9 +65,9 @@ i18n:
       - "按自己的节奏，写下私密的所思所想"
       - "翻看自己的日记与回忆"
     capabilities:
-      - "在私有的 Personal Vault 中，以本地优先的方式写日记"
+      - "在私有的个人保险库中，以本地优先的方式写日记"
       - "由你自行把日记导出并保存到本地"
-      - "私有 Vault 存储，并明确说明恢复的边界"
+      - "私有个人保险库存储，并明确说明恢复的边界"
     primaryActionLabel: "预览 Sổ Tâm"
   # zh-Hant copy: machine-assisted (OpenCC s2twp), pending native review.
   zh-hant:
@@ -76,7 +76,7 @@ i18n:
       - "按自己的節奏，寫下私密的所思所想"
       - "翻閱自己的日記與回憶"
     capabilities:
-      - "在私有的 Personal Vault 中，以本機優先的方式寫日記"
+      - "在私有的個人保險庫中，以本機優先的方式寫日記"
       - "由你自行將日記匯出並儲存到本機"
-      - "私有 Vault 儲存，並明確說明復原的範圍"
+      - "私有個人保險庫儲存，並明確說明復原的範圍"
     primaryActionLabel: "預覽 Sổ Tâm"
