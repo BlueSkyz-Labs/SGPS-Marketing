@@ -53,8 +53,16 @@ test("negative proof: a divergent label is detected", () => {
 });
 
 test("verify aliases only reuse wording already on the site", () => {
-  const source =
-    read("src/data/site.ts") + read("src/components/sections/ProofBand.astro");
+  // The home claims band (ProofBand) was removed on 2026-10-12; the same
+  // wording still ships on the Verify centre, Decision Room and empty states.
+  const source = [
+    "src/data/site.ts",
+    "src/data/empty-state-copy.ts",
+    "src/components/verify/VerifyCentre.astro",
+    "src/components/experience/DecisionRoom.astro",
+  ]
+    .map(read)
+    .join("\n");
   for (const alias of ["核实", "查證", "查看", "依据", "Kiểm chứng", "Xem"]) {
     assert.ok(source.includes(alias), alias);
   }

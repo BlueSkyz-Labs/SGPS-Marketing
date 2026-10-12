@@ -4,7 +4,6 @@ import { PAGE_META } from "@/data/page-meta";
 import Container from "@/components/layout/Container.astro";
 import PageHeader from "@/components/layout/PageHeader.astro";
 import SafeAction from "@/components/integrity/SafeAction.astro";
-import ProductSignInLane from "@/components/empty-state/ProductSignInLane.astro";
 import PublicContactEmails from "@/components/empty-state/PublicContactEmails.astro";
 import { EMPTY_STATE_COPY } from "@/data/empty-state-copy";
 import { labelFor, SECURITY_ADVISORY_URL } from "@/data/site";
@@ -42,7 +41,6 @@ import { labelFor, SECURITY_ADVISORY_URL } from "@/data/site";
             />
           </div>
         </li>
-        <ProductSignInLane lang="vi" />
         <PublicContactEmails
           lang="vi"
           boundary="Hợp tác và câu hỏi chung. Kênh báo cáo bảo mật riêng tư chỉ dành cho lỗ hổng bảo mật, không dùng cho hợp tác hay hỗ trợ thông thường."

@@ -240,10 +240,6 @@ test("at most one signature appearance per composition", () => {
     join("src", "components", "sections", "Hero.astro"),
   ]);
   assert.equal((HERO.match(/<SailReveal\b/g) ?? []).length, 1);
-  assert.doesNotMatch(
-    readFileSync("src/components/sections/ProofBand.astro", "utf8"),
-    /data-reveal="signature"/,
-  );
 });
 
 test("the mark is decorative and cites its brand source", () => {
