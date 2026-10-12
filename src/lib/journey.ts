@@ -109,6 +109,23 @@ export function getJourneyActions(
   }));
 }
 
+/**
+ * CX4 (audit M1): Home keeps no journey bar (`"": []`, one primary action);
+ * its closing row is a separate, quiet About + Contact pair that reuses the
+ * labels already approved for the other routes' Next steps rows.
+ */
+const HOME_CLOSE_SEGMENTS = ["about", "contact"] as const;
+
+export function getHomeCloseActions(lang: Language): JourneyAction[] {
+  const allSteps = Object.values(JOURNEY).flat();
+  return HOME_CLOSE_SEGMENTS.flatMap((segment) => {
+    const step = allSteps.find((candidate) => candidate.segment === segment);
+    return step
+      ? [{ href: `/${lang}/${segment}/`, label: step.label[lang] }]
+      : [];
+  });
+}
+
 /** Route key from a live href/path — strips the locale and sur[/] noise. */
 export function routeKeyFromPath(pathOrHref: string): string {
   const parts = pathOrHref.split("/").filter(Boolean);
