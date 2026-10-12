@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.0",
-  "updatedAt": "2026-10-11",
+  "updatedAt": "2026-10-12",
   "program": "SGPS Premium Experience & Design Excellence v2.0 (God-Tier × Tier S+)",
   "status": "sgps-v2-in-progress",
   "authorities": {
@@ -346,6 +346,12 @@
       "name": "v13 Experience Global Enterprise: SGPS-DEC-2026-037 header controls (#512 d24a5af, #513 dc3e128), WCAG 2.2 AA lock-in #514 f3a2d35; W3/W4 NO-GO; W5 blocked on Sổ Tâm screens",
       "status": "MERGED",
       "evidence": "docs/evidence/2026-10-05-v13-convergence.md"
+    },
+    {
+      "id": "customer-focus-2026-10-12",
+      "name": "Customer focus (Owner 2026-10-12): /verify is the one trust door (Collections, Printable summary and Compare claims leave footer/Next steps; home claims band removed) and no public app sign-in. #575 f308909; production read-back done",
+      "status": "MERGED",
+      "evidence": "docs/evidence/2026-10-12-customer-focus-readback.md"
     }
   ],
   "openOwnerDecisions": [
