@@ -6,7 +6,10 @@ import {
   getProductIconThumbPath,
 } from "@/lib/product-routes";
 import { platformLabel, productCopy } from "@/lib/product-copy";
-import { resolveLifecycleCta } from "@/lib/lifecycle-cta";
+import {
+  lifecycleCtaAccessibleName,
+  resolveLifecycleCta,
+} from "@/lib/lifecycle-cta";
 import { productTransitionStyle } from "@/lib/product-transition";
 
 interface Props {
@@ -171,7 +174,7 @@ const ctaIsExternal = cta.external || /^https?:\/\//i.test(cta.href);
         href={cta.href}
         rel={ctaIsExternal ? "noopener noreferrer" : undefined}
         data-product-cta={cta.verb}
-        aria-label={`${cta.label}: ${data.name}`}
+        aria-label={lifecycleCtaAccessibleName(cta.label, data.name)}
         class="inline-flex min-h-11 max-w-full min-w-0 items-center gap-1.5 [overflow-wrap:anywhere] btn-secondary"
       >
         {cta.label}
