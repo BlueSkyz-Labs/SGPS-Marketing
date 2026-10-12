@@ -327,6 +327,18 @@ for (const item of items) {
     max-width: 46rem;
   }
 
+  /* v8 contract: the sources rail sits beside its claim from 1024px. The
+     columns hug their content widths so the rail reads as attached to the
+     claim (gap = --space-8) instead of floating at the far edge. */
+  @media (min-width: 1024px) {
+    .verify-claim {
+      grid-template-columns: minmax(0, 46rem) minmax(0, 28rem);
+      column-gap: var(--space-8);
+      justify-content: start;
+      align-items: start;
+    }
+  }
+
   .verify-claim__statement {
     margin: 0;
     font-size: var(--size-4);
@@ -349,14 +361,6 @@ for (const item of items) {
   .verify-claim__limit strong {
     font-weight: 600;
     color: var(--text-primary);
-  }
-
-  @media (min-width: 1024px) {
-    .verify-claim {
-      grid-template-columns: minmax(0, 1fr) minmax(0, 28rem);
-      column-gap: 3rem;
-      align-items: start;
-    }
   }
 
   .verify-layer {

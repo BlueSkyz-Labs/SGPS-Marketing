@@ -53,47 +53,88 @@ const reviewedOn = reviewedLabel ? passport?.reviewedOn : undefined;
     <span class="sources-line__label">{label}</span>{" "}
     {items.map((item, index) => (
       <>
-        {index > 0 ? <span aria-hidden="true"> · </span> : null}
-        <a
-          href={item.href}
-          id={
-            omitAnchorIds.includes(item.id) ? undefined : `evidence-${item.id}`
-          }
-          data-trace-step={
-            omitAnchorIds.includes(item.id) ? undefined : "evidence"
-          }
-          rel={
-            /^https?:\/\//i.test(item.href) ? "noopener noreferrer" : undefined
-          }
-          class="sources-line__link"
-        >
-          {item.label}
-        </a>
+        {index > 0 ? " " : null}
+        <span class="sources-line__item" data-sources-item>
+          <a
+            href={item.href}
+            id={
+              omitAnchorIds.includes(item.id)
+                ? undefined
+                : `evidence-${item.id}`
+            }
+            data-trace-step={
+              omitAnchorIds.includes(item.id) ? undefined : "evidence"
+            }
+            rel={
+              /^https?:\/\//i.test(item.href)
+                ? "noopener noreferrer"
+                : undefined
+            }
+            class="sources-line__link"
+          >
+            {item.label}
+          </a>
+          {index < items.length - 1 ? (
+            <span class="sources-line__sep" aria-hidden="true">
+              {"\u00a0\u00b7"}
+            </span>
+          ) : reviewedOn ? (
+            <span class="sources-line__sep">{"."}</span>
+          ) : null}
+        </span>
       </>
-    ))}
+    ))}{" "}
     {reviewedOn ? (
-      <>
-        {". "}
+      <span class="sources-line__reviewed">
         {reviewedLabel}{" "}
         <time datetime={reviewedOn}>{formatDisplayDate(reviewedOn, lang)}</time>
         {"."}
-      </>
+      </span>
     ) : null}
   </p>
 ) : null}
 
 <style>
+  /*
+   * Rows are laid out by flex so each wrapped row owns its own 44px band: the
+   * link boxes of adjacent rows never overlap and a tap on one link cannot be
+   * captured by the next row. (44px is the WCAG 2.5.5 AAA target; 2.5.8 AA
+   * needs 24px.) Each source is one unit, the link plus the separator that
+   * FOLLOWS it, so a "·" can end a line but never begin one.
+   */
   .sources-line {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    column-gap: 0.25rem;
+    row-gap: 0;
     margin: 0;
     font-size: var(--size-2);
     line-height: 1.6;
     color: var(--text-muted);
   }
 
-  .sources-line__link {
+  .sources-line__label,
+  .sources-line__reviewed {
     display: inline-flex;
     align-items: center;
     min-height: 2.75rem;
+  }
+
+  .sources-line__item {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.75rem;
+  }
+
+  .sources-line__sep {
+    white-space: nowrap;
+  }
+
+  .sources-line__link {
+    display: inline-flex;
+    align-items: center;
+    align-self: stretch;
     font-weight: 600;
     color: var(--action-primary);
     text-decoration: underline;
