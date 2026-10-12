@@ -89,7 +89,13 @@ const rows = (compact && isContinuation ? visibleProducts : []).map(
 <section
   class:list={[
     // Calm-chrome round (2026-10-04): acts are separated by space, not rules.
-    "c2-product-house section-y",
+    "c2-product-house",
+    // Home rhythm (aesthetic S1, MED-2): a continuation directly follows the
+    // flagship act, which already carries one full section-y of bottom padding,
+    // so its own top padding steps down to the tight token (no 2x section-y).
+    isContinuation
+      ? "pt-[var(--section-y-tight)] pb-[var(--section-y)]"
+      : "section-y",
   ]}
   aria-labelledby="product-house-title"
   data-product-house
@@ -187,9 +193,18 @@ const rows = (compact && isContinuation ? visibleProducts : []).map(
     align-items: center;
     gap: 0.75rem 1rem;
     padding: 1rem;
-    border: 1px solid var(--border-hairline);
+    border: 1px solid var(--border-subtle);
     border-radius: var(--radius-card);
     background: var(--surface-raised);
+  }
+  /* Dark keeps the quieter hairline (LOW-5: only light was near-invisible). */
+  :global([data-theme="dark"]) .product-row {
+    border-color: var(--border-hairline);
+  }
+  @media (prefers-color-scheme: dark) {
+    :global(:root:not([data-theme="light"])) .product-row {
+      border-color: var(--border-hairline);
+    }
   }
   .product-row__main {
     min-width: 0;

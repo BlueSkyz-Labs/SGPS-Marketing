@@ -20,7 +20,7 @@ This site feeds the **Reach** stage of the go-global funnel for Sổ Trọ and S
 - **Source:** Cloudflare zone analytics for `blueskyzlabs.com` (S1): requests by country, status and cache, read by the control-plane publisher. No code change.
 - **Measured fact:** the site is a static-assets Worker with no script. `wrangler.toml` has `[assets]` and no `main`.
 - **Finer counting (S2):** per-locale path and per-product page counts in Workers Analytics Engine need a script in front of the assets. That is an architecture change to a static-first site, with performance and Trusted Types/CSP implications. It needs its own project decision, made after G1–G5. It is **not** authorized here.
-- **No client beacon** (DEC-032 §2.5). The live CSP (`script-src 'self'; require-trusted-types-for 'script'`) stays unchanged.
+- **Client beacon (2026-10-11):** Cloudflare Web Analytics only, under ADR 0015 and SGPS-DEC-2026-039 Part C. `script-src` admits exactly `https://static.cloudflareinsights.com/beacon.min.js`; `connect-src 'self'` and `require-trusted-types-for 'script'` stay. Declared fields, retention and kill switch: `docs/sgps/adoption/rum-beacon-fields.json`. The beacon is off until the Owner enables it after the privacy notice naming it is deployed.
 
 ## Event allowlist
 
@@ -30,7 +30,8 @@ None yet. S1 needs no events. Any future S2 events will be declared here first, 
 
 - The site publishes the claim `privacy-no-tracking-on-this-site`.
 - Aggregate edge counts with no identifier must fit that claim's wording before G4. If they do not, the claim's text is updated in the same change that opens `rum-provider`.
-- `docs/current-work.json` → `rum-provider` stays **OFF**.
+- The claim's wording (no cookies, no tracking or profiling) still holds for an aggregate, cookie-free beacon; the privacy notice now names the processor, what it sends and its retention.
+- `docs/current-work.json` → `rum-provider` stays open until the post-enable payload capture matches the declared fields.
 
 ## Open items found during mapping
 
