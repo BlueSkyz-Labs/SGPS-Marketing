@@ -86,7 +86,11 @@ test("contact mailboxes render only from their role-filtered SITE values", () =>
   for (const lang of ["en", "vi", "zh", "zh-hant"]) {
     const page = readFileSync(`src/pages/${lang}/contact.astro`, "utf8");
     assert.match(page, /<PublicContactEmails/);
-    assert.match(page, /<ProductSignInLane lang="[^"]+" \/>/);
+    assert.doesNotMatch(
+      page,
+      /ProductSignInLane/,
+      `${lang} contact shows no product sign-in`,
+    );
   }
 });
 

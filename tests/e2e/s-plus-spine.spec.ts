@@ -5,12 +5,12 @@
 // homepage, in both locales.
 import { expect, test } from "@playwright/test";
 
-// Experience v6 S1 stages: hero, flagship, second product, one proof band.
+// Experience v6 S1 stages: hero, flagship, second product. The proof band
+// (#trust-title) left the home on 2026-10-12 (Owner: /verify is the one door).
 const EN_ANCHORS = [
   "#hero-title",
   "#flagship-theatre-title",
   "#product-house-title",
-  "#trust-title",
 ];
 const VI_ANCHORS = EN_ANCHORS;
 

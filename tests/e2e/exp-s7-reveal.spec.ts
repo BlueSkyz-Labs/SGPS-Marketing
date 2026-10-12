@@ -112,18 +112,9 @@ test("reduced motion renders the final state at t=0", async ({ browser }) => {
   await page.waitForLoadState("domcontentloaded");
   await expect(page.locator("html")).not.toHaveAttribute("data-motion", "on");
   expect((await animationReport(page)).count).toBe(0);
-  const band = page.locator("[data-trust-band]");
-  await expect(band).toHaveCount(1);
-  await expect(band).not.toHaveAttribute("data-revealed", /.*/);
-  expect(
-    await band.evaluate((el) => {
-      const cs = getComputedStyle(el);
-      return [cs.opacity, cs.clipPath];
-    }),
-  ).toEqual([
-    "1",
-    expect.stringMatching(/^(none|inset\(0(px)?( 0(px)?){0,3}\))$/),
-  ]);
+  // Owner 2026-10-12: the proof band (the home's only reveal plane) is gone;
+  // nothing on the page may be left armed or hidden.
+  await expect(page.locator("[data-revealed]")).toHaveCount(0);
   if (await isDesktopMark(page)) {
     // Hand-off overlay rests transparent: the static mark is the final state.
     expect(
@@ -151,27 +142,17 @@ test("no-JS renders the final state with the same content and actions", async ({
   await expect(page.locator("[data-hero-primary]")).toBeVisible();
   await expect(page.locator("html")).not.toHaveAttribute("data-motion", "on");
   expect((await animationReport(page)).count).toBe(0);
-  const band = page.locator("[data-trust-band]");
-  expect(
-    await band.evaluate((el) => {
-      const cs = getComputedStyle(el);
-      return [cs.opacity, cs.clipPath];
-    }),
-  ).toEqual([
-    "1",
-    expect.stringMatching(/^(none|inset\(0(px)?( 0(px)?){0,3}\))$/),
-  ]);
+  await expect(page.locator("[data-revealed]")).toHaveCount(0);
   await context.close();
 });
 
-test("motion draws the mark with allowed properties only, then below-fold planes reveal once", async ({
+test("motion draws the mark with allowed properties only and arms no plane on the home", async ({
   browser,
 }) => {
   const context = await browser.newContext({ reducedMotion: "no-preference" });
   const page = await context.newPage();
   await page.goto("/en/");
   await expect(page.locator("html")).toHaveAttribute("data-motion", "on");
-  const band = page.locator("[data-trust-band]");
   if (await isDesktopMark(page)) {
     const report = await animationReport(page);
     // Negative proof for the reduced/no-JS tests above: here motion IS active,
@@ -181,15 +162,9 @@ test("motion draws the mark with allowed properties only, then below-fold planes
     for (const prop of report.props) expect(ALLOWED.has(prop), prop).toBe(true);
     expect(report.props).toContain("strokeDashoffset");
   }
-  await expect(band).toHaveAttribute("data-revealed", "false");
-  await band.scrollIntoViewIfNeeded();
-  await expect(band).toHaveAttribute("data-revealed", "true");
-  await expect
-    .poll(() => band.evaluate((el) => getComputedStyle(el).opacity))
-    .toBe("1");
-  // Once per page load: scrolling away never re-arms it.
-  await page.evaluate(() => window.scrollTo(0, 0));
-  await expect(band).toHaveAttribute("data-revealed", "true");
+  // Owner 2026-10-12: the proof band was the home's only reveal plane.
+  await expect(page.locator(".reveal-planes")).toHaveCount(0);
+  await expect(page.locator("[data-revealed]")).toHaveCount(0);
   await context.close();
 });
 

@@ -13,21 +13,16 @@ test("product profile route is statically wired for public entries", () => {
   assert.match(source, /primaryAction/);
 });
 
-test("localized product-profile primary CTAs use the app sign-in destination", () => {
+test("localized product-profile primary CTAs come from the lifecycle mapper, never a sign-in link", () => {
   for (const lang of ["en", "vi", "zh", "zh-hant"]) {
     const source = readFileSync(
       `src/pages/${lang}/products/[slug].astro`,
       "utf8",
     );
-    assert.match(source, /data\.appAccess\?\.signInUrl/, lang);
     assert.doesNotMatch(source, /href=\{data\.primaryAction\.href\}/, lang);
-    // v8 W3: sign-in is a plain text link (data-app-signin), never a button.
-    assert.match(source, /data-app-signin/, lang);
-    assert.doesNotMatch(
-      source,
-      /<ButtonLink[^>]*href=\{data\.appAccess\.signInUrl\}/,
-      lang,
-    );
+    // Owner 2026-10-12: the public profile shows no app sign-in link.
+    assert.doesNotMatch(source, /data-app-signin/, lang);
+    assert.doesNotMatch(source, /href=\{data\.appAccess\.signInUrl\}/, lang);
     assert.match(source, /resolveLifecycleCta/, lang);
     assert.doesNotMatch(source, /data\.primaryAction\.label/, lang);
   }

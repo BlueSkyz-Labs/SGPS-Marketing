@@ -14,7 +14,7 @@ const LOCALES = ["en", "vi"];
 const homePath = (lang) => `src/pages/${lang}/index.astro`;
 
 /** Act components in the order the C2 design requires. */
-const ACT_ORDER = ["Hero", "FlagshipTheatre", "ProductHouse", "ProofBand"];
+const ACT_ORDER = ["Hero", "FlagshipTheatre", "ProductHouse"];
 
 /** Experience v6 S1: removed from the home (W10 deleted all but MaisonIndex). */
 const REMOVED_FROM_HOME = [
@@ -23,6 +23,8 @@ const REMOVED_FROM_HOME = [
   "AboutBlueSkyz",
   "NextStep",
   "MaisonIndex",
+  // Owner 2026-10-12: the claims band left the home; /verify is the one door.
+  "ProofBand",
 ];
 
 /** Power-user surfaces that must no longer lead the homepage. */

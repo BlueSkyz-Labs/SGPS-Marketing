@@ -12,8 +12,8 @@ import { hasPublicProducts } from "./product-helpers.ts";
  *   (the project target standard; padding on an inline box adds no height).
  * - W1: the desktop mark is not hidden behind the capture (most of it reads),
  *   and the capture keeps its reserved ratio under the 3D tilt.
- * - W3: the ledger shows at most three rows, each a published claim joined to
- *   source names; the band still has exactly one link (/verify).
+ * - W3 (retired 2026-10-12): the home ledger and its band were removed; the
+ *   file now guards their absence.
  *
  * Negative proof (in this file): each checker is also run against a page that
  * was deliberately broken in the browser and must report the defect.
@@ -73,30 +73,6 @@ async function productLine(page: Page) {
     }));
     const lineHeight = Number.parseFloat(getComputedStyle(line).lineHeight);
     return { gaps, links, lineHeight };
-  });
-}
-
-/** Ledger rows and the band's links. */
-async function ledger(page: Page) {
-  return page.evaluate(() => {
-    const band = document.querySelector("[data-trust-band]")!;
-    return {
-      rows: [...band.querySelectorAll("[data-evidence-ledger] > li")].map(
-        (li) => ({
-          id: li.getAttribute("data-claim-id"),
-          claim: li.querySelector(".evidence-ledger__claim")?.textContent ?? "",
-          source:
-            li.querySelector(".evidence-ledger__source")?.textContent ?? "",
-          threadHidden:
-            li
-              .querySelector(".evidence-ledger__thread")
-              ?.getAttribute("aria-hidden") === "true",
-        }),
-      ),
-      links: [...band.querySelectorAll("a[href]")].map((a) =>
-        a.getAttribute("href"),
-      ),
-    };
   });
 }
 
@@ -200,68 +176,29 @@ test("1440: the prismatic mark reads beside the capture and the capture keeps it
   expect(m.ratio).toBeCloseTo(1440 / 780, 1);
 });
 
+// Owner 2026-10-12: the W3 evidence ledger left the home with its claims
+// band; /verify (footer) is the one trust door and lists every claim.
 for (const lang of LOCALES) {
-  test(`/${lang}/ evidence ledger: <= 3 published claims joined to sources, one link`, async ({
+  test(`/${lang}/ carries no evidence ledger or claims band`, async ({
     page,
   }) => {
     await page.goto(`/${lang}/`);
-    const { rows, links } = await ledger(page);
-    expect(rows.length).toBeGreaterThan(0);
-    expect(rows.length).toBeLessThanOrEqual(3);
-    for (const row of rows) {
-      expect(row.id).toMatch(/^[a-z0-9-]+$/);
-      expect(row.claim.trim().length).toBeGreaterThan(0);
-      expect(row.source.trim().length).toBeGreaterThan(0);
-      expect(row.threadHidden).toBe(true);
-    }
-    expect(links).toEqual([`/${lang}/verify/`]);
+    await expect(page.locator("[data-trust-band]")).toHaveCount(0);
+    await expect(page.locator("[data-evidence-ledger]")).toHaveCount(0);
+    await expect(page.locator(`footer a[href="/${lang}/verify/"]`)).toHaveCount(
+      1,
+    );
   });
 }
 
-test("evidence ledger rows are claims /verify publishes", async ({ page }) => {
-  await page.goto("/en/");
-  const ids = (await ledger(page)).rows.map((row) => row.id);
-  await page.goto("/en/verify/");
-  for (const id of ids) {
-    await expect(page.locator(`[data-claim-id="${id}"]`)).toHaveCount(1);
-  }
-});
-
-test("negative proof: a fourth row, a sourceless row or a second link is detected", async ({
-  page,
-}) => {
-  await page.goto("/en/");
-  await page.evaluate(() => {
-    const list = document.querySelector("[data-evidence-ledger]")!;
-    const extra = list.firstElementChild!.cloneNode(true) as HTMLElement;
-    extra.querySelector(".evidence-ledger__source")!.textContent = "";
-    list.appendChild(extra);
-    const link = document.createElement("a");
-    link.href = "/en/security/";
-    link.textContent = "Security";
-    document.querySelector("[data-trust-band]")!.appendChild(link);
-  });
-  const { rows, links } = await ledger(page);
-  expect(rows.length).toBeGreaterThan(3);
-  expect(rows.some((row) => row.source.trim() === "")).toBe(true);
-  expect(links).not.toEqual(["/en/verify/"]);
-});
-
-test("reduced motion: ledger threads rest fully drawn and the capture is static", async ({
-  browser,
-}) => {
+test("reduced motion: the capture is static", async ({ browser }) => {
   const context = await browser.newContext({ reducedMotion: "reduce" });
   const page = await context.newPage();
   await page.goto("/en/");
   const state = await page.evaluate(() => ({
-    offsets: [
-      ...document.querySelectorAll(".evidence-ledger__thread line"),
-    ].map((line) => getComputedStyle(line).strokeDashoffset),
     focal: getComputedStyle(document.querySelector("[data-hero-focal]")!)
       .animationName,
   }));
-  expect(state.offsets.length).toBeGreaterThan(0);
-  for (const offset of state.offsets) expect(offset).toMatch(/^0(px)?$/);
   expect(state.focal).toBe("none");
   await context.close();
 });

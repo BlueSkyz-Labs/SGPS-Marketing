@@ -122,16 +122,20 @@ test.describe("v7 shell", () => {
   }) => {
     await page.goto("/en/about/");
     const groups = page.locator("footer nav ul[aria-labelledby]");
-    expect(await groups.count()).toBe(3);
-    for (const name of ["BlueSkyz", "Trust", "Evidence"]) {
+    // Owner 2026-10-12: the Evidence group left; /verify is the one door.
+    expect(await groups.count()).toBe(2);
+    for (const name of ["BlueSkyz", "Trust"]) {
       await expect(
         page.locator("footer nav").getByRole("list", { name }),
       ).toHaveCount(1);
     }
     // 2026-10-11: the retired "How this site is built" link left the Trust group.
     expect(await page.locator("footer nav ul[aria-labelledby] a").count()).toBe(
-      9,
+      7,
     );
+    await expect(
+      page.locator("footer nav").getByRole("list", { name: "Evidence" }),
+    ).toHaveCount(0);
   });
 
   test("B-24 zh palette finds 验证 and the 选集 / 公开档案 pages", async ({

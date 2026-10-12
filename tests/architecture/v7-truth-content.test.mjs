@@ -510,49 +510,22 @@ test("D-20: display dates localize per locale and keep ISO in the datetime attri
 });
 
 /* ------------------------------------------------------------------ */
-/* D-14 (Owner 2026-10-01) — sign-in is secondary and qualified        */
+/* D-14 superseded (Owner 2026-10-12) — no public sign-in surface       */
 /* ------------------------------------------------------------------ */
 
-// v8 W3: on the product page sign-in is a plain text link with a qualified
-// label, below the (at most one) primary action; never a filled button.
-const signInIsTextLink = (source) =>
-  /<a[^>]*data-app-signin[\s\S]*?\{PAGE_LABELS\.signIn\[lang\]\}/.test(
-    source,
-  ) && !/<ButtonLink[^>]*href=\{data\.appAccess\.signInUrl\}/.test(source);
+// The record keeps `appAccess.signInUrl` (product truth); no public page links
+// to it. Guarded in tests/architecture/customer-focus.test.mjs.
+const linksSignIn = (source) =>
+  /data-app-signin|href=\{(?:data\.appAccess\.)?signInUrl\}/.test(source);
 
-const signInIsSecondary = (source) =>
-  /variant="secondary"[^>]*>\s*\{labelFor\(SHARED_LABELS\.signInExisting/.test(
-    source,
-  ) && !/<ButtonLink href=\{signInUrl\}>/.test(source);
-
-test("D-14: product pages and the guide demote sign-in to a qualified secondary action", () => {
+test("D-14 superseded: product pages and the guide link no app sign-in", () => {
   for (const lang of LOCALES) {
     const page = read(`src/pages/${lang}/products/[slug].astro`);
-    assert.ok(signInIsTextLink(page), `${lang} product page`);
-    // Negative proof: a filled sign-in button fails.
-    assert.equal(
-      signInIsTextLink(
-        page.replace(
-          /<a([^>]*)data-app-signin/,
-          "<ButtonLink$1 href={data.appAccess.signInUrl} data-app-signin",
-        ),
-      ),
-      false,
-    );
+    assert.equal(linksSignIn(page), false, `${lang} product page`);
   }
   const guide = read("src/components/product/ProductGuide.astro");
-  assert.ok(signInIsSecondary(guide));
-  assert.equal(
-    signInIsSecondary(guide.replace(' variant="secondary"', "")),
-    false,
-  );
-  const site = read("src/data/site.ts");
-  for (const text of [
-    "Sign in (existing users)",
-    "Đăng nhập (người dùng hiện có)",
-    "登录（现有用户）",
-    "登入（現有使用者）",
-  ]) {
-    assert.ok(site.includes(text), text);
-  }
+  assert.equal(linksSignIn(guide), false, "guide");
+  // Negative proof: re-adding either link shape is caught.
+  assert.ok(linksSignIn("<a href={data.appAccess.signInUrl} data-app-signin>"));
+  assert.ok(linksSignIn('<ButtonLink href={signInUrl} variant="secondary">'));
 });

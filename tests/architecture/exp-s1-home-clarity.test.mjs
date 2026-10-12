@@ -27,7 +27,7 @@ test("hero flagship statements resolve to registry fields; the H1 is the site pr
   assert.doesNotMatch(hero, /BrandLockup/);
 });
 
-test("every locale home renders one hero, no removed band, one quiet proof link", () => {
+test("every locale home renders one hero and no removed band", () => {
   for (const lang of LOCALES) {
     const source = read(`src/pages/${lang}/index.astro`);
     assert.equal((source.match(/<Hero\b/g) ?? []).length, 1, lang);
@@ -38,6 +38,8 @@ test("every locale home renders one hero, no removed band, one quiet proof link"
       "MaisonIndex",
       "TrustLedger",
       "EvidenceTeaser",
+      // Owner 2026-10-12: the "Check what we say" band left the home.
+      "ProofBand",
     ]) {
       assert.doesNotMatch(
         source,
@@ -45,7 +47,6 @@ test("every locale home renders one hero, no removed band, one quiet proof link"
         `${lang} ${removed}`,
       );
     }
-    assert.match(source, /<ProofBand lang="/, lang);
   }
 });
 

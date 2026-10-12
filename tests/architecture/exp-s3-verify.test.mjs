@@ -14,10 +14,6 @@ const read = (path) => readFileSync(path, "utf8");
 const mountsVerify = (source, lang) =>
   source.includes(`path="/${lang}/verify/"`) &&
   new RegExp(`<VerifyCentre lang="${lang}"`).test(source);
-const linksToVerify = (source) =>
-  /href=\{`\/\$\{lang\}\/verify\/`\}|href="\/(en|vi|zh|zh-hant)\/verify\/"/.test(
-    source,
-  );
 const inlinesEvidence = (source) =>
   /import\s+(Atlas|SourceTrace|TrustLedger|EvidenceTeaser)\b|<(Atlas|SourceTrace|TrustLedger|EvidenceTeaser)\b/.test(
     source,
@@ -66,14 +62,6 @@ test("footer navigation links to /verify in every locale", () => {
     footerBody.replace("/verify/", "/security/"),
     /l\.verify, href: `\/\$\{lang\}\/verify\/`/,
   );
-});
-
-test("the home proof band links to /verify (and only one route)", () => {
-  const band = read("src/components/sections/ProofBand.astro");
-  assert.ok(linksToVerify(band));
-  assert.equal((band.match(/<a\b/g) ?? []).length, 1);
-  // Negative proof: pointing the band back at /security/ fails the guard.
-  assert.ok(!linksToVerify(band.replace("/verify/", "/security/")));
 });
 
 test("products index and security carry no inlined Atlas/trace/ledger; products links to /verify", () => {
