@@ -33,6 +33,9 @@ interface Props {
   description: string;
   path?: string;
   ogImage?: string;
+  /** Pixel size + localized alt of a custom `ogImage`; omitted => no size/alt emitted. */
+  ogImageSize?: { width: number; height: number };
+  ogImageAltText?: string;
   noindex?: boolean;
   /** With `noindex`: keep links followable (`noindex, follow`), e.g. print views. */
   followLinks?: boolean;
@@ -53,6 +56,8 @@ const {
   description,
   path = Astro.url.pathname,
   ogImage = defaultOgImagePath(),
+  ogImageSize,
+  ogImageAltText,
   noindex = false,
   followLinks = false,
   surface,
@@ -106,8 +111,16 @@ const ogAlternates = Object.values(OG_LOCALES).filter(
 const canonical = canonicalForPath(path, SITE.url);
 const ogImageUrl = absoluteUrl(SITE.url, ogImage);
 /** Pixel size and alt are only known for the committed default card. */
-const ogImageMeta = ogImage === defaultOgImagePath() ? DEFAULT_OG_IMAGE : null;
-const ogImageAlt = DEFAULT_OG_IMAGE_ALT[currentLang];
+const ogImageMeta =
+  ogImage === defaultOgImagePath()
+    ? DEFAULT_OG_IMAGE
+    : ogImageSize && ogImageAltText
+      ? ogImageSize
+      : null;
+const ogImageAlt =
+  ogImage === defaultOgImagePath()
+    ? DEFAULT_OG_IMAGE_ALT[currentLang]
+    : (ogImageAltText ?? "");
 const structuredData: Record<string, unknown>[] = isNotFoundPage
   ? []
   : [
