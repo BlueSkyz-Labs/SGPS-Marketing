@@ -157,3 +157,40 @@ test.describe("rendered gateway", () => {
     }
   });
 });
+
+test.describe("gateway indexing and privacy to security link", () => {
+  for (const route of LEGACY_GATEWAY_ROUTES) {
+    test(`${route} gateway canonicalises to /en${route} and is not a duplicate`, async ({
+      browser,
+    }) => {
+      const context = await browser.newContext({ javaScriptEnabled: false });
+      try {
+        const html = await (await context.request.get(route)).text();
+        const canonical = html.match(/rel="canonical" href="([^"]+)"/)?.[1];
+        expect(new URL(canonical!).pathname).toBe(`/en${route}`);
+        // Carries no localized content or hreflang cluster, so it cannot
+        // compete as a duplicate: canonical to the English page is sufficient.
+        expect(html).not.toContain('hreflang="x-default"');
+        expect(html).not.toMatch(/<link[^>]+rel="alternate"/);
+        expect(html).toContain('data-legacy-route="' + route + '"');
+        // Negative: the canonical is never the unprefixed URL itself.
+        expect(new URL(canonical!).pathname).not.toBe(route);
+      } finally {
+        await context.close();
+      }
+    });
+  }
+
+  for (const lang of ["en", "vi", "zh", "zh-hant"]) {
+    test(`/${lang}/privacy/ links to /${lang}/security/`, async ({ page }) => {
+      await page.goto(`/${lang}/privacy/`);
+      await expect(
+        page.locator(`a[href="/${lang}/security/"]`).first(),
+      ).toHaveCount(1);
+      // Negative: a different locale's security URL must not satisfy it.
+      await expect(
+        page.locator(`a[href="/${lang === "en" ? "vi" : "en"}/security/"]`),
+      ).toHaveCount(0);
+    });
+  }
+});

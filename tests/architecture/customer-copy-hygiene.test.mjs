@@ -128,7 +128,28 @@ test("privacy page summarizes practical trust answers", () => {
   );
   assert.doesNotMatch(copy, /tracking cookies are required/i);
   assert.match(body, /href=\{`\/\$\{lang\}\/contact\/`\}/);
+  // Replaces the former hasBusinessEmail assertion against live source: the
+  // address renders only when the mailbox is configured, never as a literal.
+  assert.ok(emailRendersOnlyWhenConfigured(body));
+  assert.ok(
+    !emailRendersOnlyWhenConfigured(
+      body.replace("SITE.privacyEmail ?", "true ?"),
+    ),
+  );
+  assert.ok(
+    !emailRendersOnlyWhenConfigured(body + "\nsupport@blueskyzlabs.com"),
+  );
 });
+
+function emailRendersOnlyWhenConfigured(source) {
+  return (
+    /\{SITE\.privacyEmail \?\s*\(/.test(source) &&
+    /\) : null\}/.test(source) &&
+    !/[\w.-]+@[\w-]+\.[a-z]{2,}/i.test(
+      source.replace(/mailto:\$\{SITE\.privacyEmail\}/, ""),
+    )
+  );
+}
 
 test("404 page always requests noindex", () => {
   const en404 = readFileSync("src/pages/en/404.astro", "utf8");
