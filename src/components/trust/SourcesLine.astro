@@ -53,22 +53,33 @@ const reviewedOn = reviewedLabel ? passport?.reviewedOn : undefined;
     <span class="sources-line__label">{label}</span>{" "}
     {items.map((item, index) => (
       <>
-        {index > 0 ? <span aria-hidden="true"> · </span> : null}
-        <a
-          href={item.href}
-          id={
-            omitAnchorIds.includes(item.id) ? undefined : `evidence-${item.id}`
-          }
-          data-trace-step={
-            omitAnchorIds.includes(item.id) ? undefined : "evidence"
-          }
-          rel={
-            /^https?:\/\//i.test(item.href) ? "noopener noreferrer" : undefined
-          }
-          class="sources-line__link"
-        >
-          {item.label}
-        </a>
+        {index > 0 ? " " : null}
+        <span class="sources-line__item" data-sources-item>
+          <a
+            href={item.href}
+            id={
+              omitAnchorIds.includes(item.id)
+                ? undefined
+                : `evidence-${item.id}`
+            }
+            data-trace-step={
+              omitAnchorIds.includes(item.id) ? undefined : "evidence"
+            }
+            rel={
+              /^https?:\/\//i.test(item.href)
+                ? "noopener noreferrer"
+                : undefined
+            }
+            class="sources-line__link"
+          >
+            {item.label}
+          </a>
+          {index < items.length - 1 ? (
+            <span class="sources-line__sep" aria-hidden="true">
+              {"\u00a0\u00b7"}
+            </span>
+          ) : null}
+        </span>
       </>
     ))}
     {reviewedOn ? (
@@ -90,10 +101,28 @@ const reviewedOn = reviewedLabel ? passport?.reviewedOn : undefined;
     color: var(--text-muted);
   }
 
-  .sources-line__link {
+  /*
+   * One atomic unit per source: the link and the separator that FOLLOWS it
+   * travel together, so a "·" can end a line but never begin one. The 44px
+   * touch target (WCAG 2.5.8) stays; the negative block margin stops it from
+   * inflating every wrapped line into a 44px-tall gap.
+   */
+  .sources-line__item {
     display: inline-flex;
     align-items: center;
     min-height: 2.75rem;
+    margin-block: calc((1.6em - 2.75rem) / 2);
+    vertical-align: middle;
+  }
+
+  .sources-line__sep {
+    white-space: nowrap;
+  }
+
+  .sources-line__link {
+    display: inline-flex;
+    align-items: center;
+    align-self: stretch;
     font-weight: 600;
     color: var(--action-primary);
     text-decoration: underline;

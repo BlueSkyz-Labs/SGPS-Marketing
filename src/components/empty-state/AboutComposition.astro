@@ -271,8 +271,13 @@ const founderLocation =
     inline-size: 100%;
     block-size: 100%;
     object-fit: cover;
+    /* Keep the sail tip and base inside the square crop (art spans ~5-83% of the height). */
+    object-position: 50% 19%;
   }
   @media (min-width: 48rem) {
+    .about-founder__art {
+      aspect-ratio: 1 / 1;
+    }
     .about-founder {
       grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     }
