@@ -64,7 +64,6 @@ test.describe("S1 home rhythm", () => {
       await page.setViewportSize(viewport);
       await page.goto("/en/");
       const m = await page.evaluate(() => {
-        const root = getComputedStyle(document.documentElement);
         const px = (name: string) => {
           const probe = document.createElement("div");
           probe.style.paddingTop = `var(${name})`;
@@ -73,7 +72,6 @@ test.describe("S1 home rhythm", () => {
           probe.remove();
           return v;
         };
-        void root;
         const f = document.querySelector("[data-flagship-theatre]")!;
         const h = document.querySelector("[data-product-house]")!;
         return {
@@ -103,7 +101,7 @@ test.describe("S1 home rhythm", () => {
         parseFloat(getComputedStyle(h).paddingTop)
       );
     });
-    const tight = await page.evaluate(() => {
+    const budget = await page.evaluate(() => {
       const p = document.createElement("div");
       p.style.paddingTop = "var(--section-y-tight)";
       document.body.append(p);
@@ -116,7 +114,7 @@ test.describe("S1 home rhythm", () => {
       q.remove();
       return v + w;
     });
-    expect(total).toBeGreaterThan(tight);
+    expect(total).toBeGreaterThan(budget);
   });
 });
 
@@ -141,13 +139,32 @@ test.describe("S1 product-row border", () => {
     expect(await borderColor(page, "light")).toBe("rgb(203, 213, 225)");
   });
 
-  test("dark row border stays the translucent hairline", async ({ page }) => {
-    expect(await borderColor(page, "dark")).toContain("/");
-  });
-
-  test("negative proof: the hairline value is not the light expectation", async ({
+  test("dark row border stays the --border-hairline token", async ({
     page,
   }) => {
-    expect(await borderColor(page, "dark")).not.toBe("rgb(203, 213, 225)");
+    const actual = await borderColor(page, "dark");
+    const hairline = await page.evaluate(() => {
+      const p = document.createElement("div");
+      p.style.borderTop = "1px solid var(--border-hairline)";
+      document.body.append(p);
+      const v = getComputedStyle(p).borderTopColor;
+      p.remove();
+      return v;
+    });
+    expect(actual).toBe(hairline);
+  });
+
+  test("negative proof: reverting the light row to the hairline breaks the light pin", async ({
+    page,
+  }) => {
+    await borderColor(page, "light");
+    const reverted = await page
+      .locator(".product-row")
+      .first()
+      .evaluate((el: HTMLElement) => {
+        el.style.borderColor = "var(--border-hairline)";
+        return getComputedStyle(el).borderTopColor;
+      });
+    expect(reverted).not.toBe("rgb(203, 213, 225)");
   });
 });
