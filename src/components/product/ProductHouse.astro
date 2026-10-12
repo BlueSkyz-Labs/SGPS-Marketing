@@ -102,7 +102,17 @@ const rows = (compact && isContinuation ? visibleProducts : []).map(
 >
   <div class="product-act-intro flex flex-wrap items-end justify-between gap-4">
     <div class="product-act-intro__copy">
-      <h2 id="product-house-title" class="type-d2 product-act-intro__title">
+      <h2
+        id="product-house-title"
+        class:list={[
+          "type-d2",
+          "product-act-intro__title",
+          // Home hierarchy (aesthetic S5, LOW-2): the continuation is the
+          // secondary act, so its heading steps down one scale step (32 -> 24 px)
+          // below the flagship's d2; the flagship heading is unchanged.
+          isContinuation && compact && "product-act-intro__title--secondary",
+        ]}
+      >
         {headingLabel}
       </h2>
     </div>
@@ -205,6 +215,11 @@ const rows = (compact && isContinuation ? visibleProducts : []).map(
     :global(:root:not([data-theme="light"])) .product-row {
       border-color: var(--border-hairline);
     }
+  }
+  /* Keeps the d2 face, weight, VI leading and CJK stack; only the size steps
+     down. Compound selector so it outranks .type-d2 in any bundle order. */
+  .type-d2.product-act-intro__title--secondary {
+    font-size: var(--size-6);
   }
   .product-row__main {
     min-width: 0;
