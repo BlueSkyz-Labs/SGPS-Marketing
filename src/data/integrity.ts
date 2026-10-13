@@ -159,11 +159,11 @@ export const INTEGRITY_ENTRIES: readonly IntegrityEntry[] = [
     surface: "privacy",
     state: "source-linked",
     summary: {
-      en: "The privacy route states exactly what is and is not collected, and no analytics transmission is enabled.",
-      vi: "Trang quyền riêng tư nêu rõ điều gì được và không được thu thập, và không có truyền dữ liệu phân tích nào được bật.",
-      zh: "隐私页面明确说明收集与不收集的内容，且不启用任何分析数据传输。",
+      en: "The privacy route states exactly what is and is not collected, and page speed is measured with Cloudflare Web Analytics, as described there.",
+      vi: "Trang quyền riêng tư nêu rõ điều gì được và không được thu thập, và tốc độ tải trang được đo bằng Cloudflare Web Analytics, như đã nêu ở đó.",
+      zh: "隐私页面明确说明收集与不收集的内容，页面加载速度通过 Cloudflare Web Analytics 测量，详见该页。",
       "zh-hant":
-        "隱私頁面明確說明收集與不收集的內容，且不啟用任何分析資料傳輸。",
+        "隱私頁面明確說明收集與不收集的內容，頁面載入速度透過 Cloudflare Web Analytics 測量，詳見該頁。",
     },
     evidence: [
       {
