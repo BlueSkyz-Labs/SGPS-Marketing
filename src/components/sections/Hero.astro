@@ -3,7 +3,7 @@ import HorizonField from "@/components/experience/HorizonField.astro";
 import HorizonSeam from "@/components/experience/HorizonSeam.astro";
 import ButtonLink from "@/components/ui/ButtonLink.astro";
 import SailReveal from "@/components/motion/SailReveal.astro";
-import { SITE, labelFor, type Language } from "@/data/site";
+import { SHARED_LABELS, SITE, labelFor, type Language } from "@/data/site";
 import { HOME_ONE_LINER, HOME_PRODUCT_LINE } from "@/data/home-copy";
 import { emptyRegistryPrimaryCta, emptyRegistrySecondaryCta } from "@/lib/act";
 import {
@@ -162,6 +162,27 @@ const supportingLine = flagship ? null : proposition;
           <span class="whitespace-pre-wrap">{productLine.b}</span>
         </p>
       ) : null}
+      {productLine && lineSecond && !(flagship && cta) ? (
+        <a
+          href={getProductProfilePath(lang, lineSecond.data.slug)}
+          class="hero-entry-chip mt-3"
+          data-hero-entry={lineSecond.data.slug}
+        >
+          <img
+            class="size-7 rounded-md"
+            src={getProductIconThumbPath(lineSecond.data.slug)}
+            alt=""
+            width="28"
+            height="28"
+            decoding="async"
+            loading="lazy"
+          />
+          <span class="hero-entry-chip__name">{lineSecond.data.name}</span>
+          <span class="hero-entry-chip__action">
+            {labelFor(SHARED_LABELS.viewProfile, lang)}
+          </span>
+        </a>
+      ) : null}
       {!(flagship && cta) ? (
         <div class="hero-actions mt-6">
           <ButtonLink href={emptyPrimary.href} data-hero-primary>
@@ -218,6 +239,27 @@ const supportingLine = flagship ? null : proposition;
           >
             {cta.label}
           </ButtonLink>
+          {productLine && lineSecond ? (
+            <a
+              href={getProductProfilePath(lang, lineSecond.data.slug)}
+              class="hero-entry-chip mt-3"
+              data-hero-entry={lineSecond.data.slug}
+            >
+              <img
+                class="size-7 rounded-md"
+                src={getProductIconThumbPath(lineSecond.data.slug)}
+                alt=""
+                width="28"
+                height="28"
+                decoding="async"
+                loading="lazy"
+              />
+              <span class="hero-entry-chip__name">{lineSecond.data.name}</span>
+              <span class="hero-entry-chip__action">
+                {labelFor(SHARED_LABELS.viewProfile, lang)}
+              </span>
+            </a>
+          ) : null}
         </div>
         <div class="hero-stage">
           <!-- W1 "Horizon & Sail": the prismatic mark rises behind the capture
@@ -331,6 +373,38 @@ const supportingLine = flagship ? null : proposition;
       var(--brand-porcelain) 55%,
       transparent
     );
+  }
+  /* UX-U5: a tap-sized secondary entry for the second product, in the same
+     ghost-on-ink treatment as the other hero secondary actions. */
+  .hero-entry-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.625rem;
+    min-height: 2.75rem;
+    padding: 0.375rem 0.875rem 0.375rem 0.5rem;
+    border: 1px solid
+      color-mix(in srgb, var(--brand-porcelain) 32%, transparent);
+    border-radius: var(--radius-card);
+    color: var(--brand-porcelain);
+    text-decoration: none;
+    font-size: var(--size-2);
+    line-height: 1.2;
+  }
+  .hero-flagship__body .hero-entry-chip {
+    display: flex;
+    width: fit-content;
+  }
+  .hero-entry-chip__name {
+    font-weight: 600;
+  }
+  .hero-entry-chip__action {
+    color: color-mix(in srgb, var(--brand-porcelain) 78%, transparent);
+  }
+  .hero-entry-chip__action::after {
+    content: " \2192";
+  }
+  .hero-entry-chip:hover {
+    border-color: var(--brand-porcelain);
   }
   .hero-inline-link:hover {
     text-decoration-color: currentColor;

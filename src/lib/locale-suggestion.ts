@@ -73,12 +73,12 @@ export const LOCALE_SUGGESTION_COPY: Record<Language, LocaleSuggestionCopy> = {
   zh: {
     question: "使用简体中文查看此页面？",
     accept: "切换到简体中文",
-    keep: "保持{language}",
+    keep: "继续使用 {language}",
   },
   "zh-hant": {
     question: "使用繁體中文檢視此頁面？",
     accept: "切換至繁體中文",
-    keep: "保持{language}",
+    keep: "繼續使用 {language}",
   },
 };
 

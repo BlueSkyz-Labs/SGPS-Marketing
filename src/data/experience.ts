@@ -104,7 +104,7 @@ const VI_PRINCIPLE_SUMMARIES: Record<string, string> = {
 };
 
 const ZH_PRINCIPLE_SUMMARIES: Record<string, string> = {
-  Intelligence: "深思熟虑。方案智能。",
+  Intelligence: "深度思考。智能解决方案。",
   Elevation: "视角更高。影响更大。",
   Trust: "声明公开。证据可核验。",
   Impact: "真实价值。真实改变。",
@@ -125,7 +125,7 @@ const PRINCIPLE_DIMENSIONS: Record<
       en: "Less guesswork for the people using and maintaining what we build.",
       vi: "Ít phỏng đoán hơn cho người dùng và người vận hành sản phẩm.",
       zh: "让使用和维护我们所构建产品的人少一些猜测。",
-      "zh-hant": "讓使用和維護我們所構建產品的人少一些猜測。",
+      "zh-hant": "讓使用與維護我們所打造產品的人少一些猜測。",
     },
     evidence: {
       en: "Evidence lives in tests, reviews, and versioned decisions.",
@@ -145,7 +145,7 @@ const PRINCIPLE_DIMENSIONS: Record<
       en: "Built for the long view — fewer rushed trade-offs, more durable structure.",
       vi: "Xây dựng theo tầm nhìn dài hạn — ít đánh đổi vội vàng, cấu trúc bền vững hơn.",
       zh: "着眼长期构建 — 更少仓促取舍，更持久的结构。",
-      "zh-hant": "著眼長期構建 — 更少倉促取捨，更持久的結構。",
+      "zh-hant": "著眼長遠打造 — 更少倉促取捨，更持久的結構。",
     },
     people: {
       en: "Raises the ceiling for the team and for the person at the screen.",
@@ -208,8 +208,8 @@ const PRINCIPLE_DIMENSIONS: Record<
     evidence: {
       en: "Changes are validated against acceptance criteria before release.",
       vi: "Thay đổi được xác nhận theo tiêu chí chấp nhận trước khi phát hành.",
-      zh: "变更在发布前依据验收标准完成验证。",
-      "zh-hant": "變更在發布前依據驗收標準完成驗證。",
+      zh: "变更在发布前依据验收标准进行验证。",
+      "zh-hant": "變更在發布前依據驗收標準進行驗證。",
     },
     impact: {
       en: "Value shows up in durable outcomes, not launch-day noise.",

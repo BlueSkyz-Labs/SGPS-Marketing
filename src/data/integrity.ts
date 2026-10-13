@@ -97,7 +97,7 @@ export const PRIVACY_BOUNDARY: BoundaryStatement = {
     vi: "Nó không xác lập rằng không có dữ liệu nào được xử lý: mọi trang web vẫn cần hạ tầng xử lý siêu dữ liệu mạng như địa chỉ IP và header yêu cầu.",
     zh: "这并不表示完全不会处理任何数据：提供任何网站服务仍需要基础设施处理网络层面元数据，例如 IP 地址和请求头。",
     "zh-hant":
-      "這並不表示完全不會處理任何資料：提供任何網站服務仍需要基礎設施處理網路層面後設資料，例如 IP 地址和請求頭。",
+      "這並不表示完全不會處理任何資料：提供任何網站服務仍需要基礎設施處理網路層級的中繼資料，例如 IP 位址和請求標頭。",
   },
 };
 
@@ -159,11 +159,11 @@ export const INTEGRITY_ENTRIES: readonly IntegrityEntry[] = [
     surface: "privacy",
     state: "source-linked",
     summary: {
-      en: "The privacy route states exactly what is and is not collected, and no analytics transmission is enabled.",
-      vi: "Trang quyền riêng tư nêu rõ điều gì được và không được thu thập, và không có truyền dữ liệu phân tích nào được bật.",
-      zh: "隐私页面明确说明收集与不收集的内容，且不启用任何分析数据传输。",
+      en: "The privacy route states exactly what is and is not collected, and page speed is measured with Cloudflare Web Analytics, as described there.",
+      vi: "Trang quyền riêng tư nêu rõ điều gì được và không được thu thập, và tốc độ tải trang được đo bằng Cloudflare Web Analytics, như đã nêu ở đó.",
+      zh: "隐私页面明确说明收集与不收集的内容，页面加载速度通过 Cloudflare Web Analytics 测量，详见该页。",
       "zh-hant":
-        "隱私頁面明確說明收集與不收集的內容，且不啟用任何分析資料傳輸。",
+        "隱私頁面明確說明收集與不收集的內容，頁面載入速度透過 Cloudflare Web Analytics 測量，詳見該頁。",
     },
     evidence: [
       {
