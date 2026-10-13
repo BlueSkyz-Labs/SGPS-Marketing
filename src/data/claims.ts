@@ -121,8 +121,9 @@ export const CLAIMS: readonly PublicClaim[] = [
     titleLabel: {
       en: "No cookies; only chosen language and theme are stored",
       vi: "Không đặt cookie; chỉ lưu ngôn ngữ và giao diện đã chọn",
-      zh: "本站不设置 Cookie",
-      "zh-hant": "本站不設定 Cookie",
+      zh: "本站不设置 Cookie；仅在访客明确选择语言或主题时于浏览器本地保存偏好",
+      "zh-hant":
+        "本站不設定 Cookie；僅在訪客明確選擇語言或主題時於瀏覽器本地儲存偏好",
     },
     evidenceIds: ["ev-privacy-route", "ev-security-route"],
     boundaryId: "bnd-privacy-collection",
