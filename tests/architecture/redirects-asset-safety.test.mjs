@@ -104,8 +104,8 @@ test("no redirect source matches a non-HTML asset in dist/ (when built)", (t) =>
 
 test("legacy page redirects still exist and target the localized routes", () => {
   const bySource = new Map(rules.map((r) => [r.source, r]));
-  assert.equal(bySource.get("/products/")?.destination, "/en/products/");
-  assert.equal(bySource.get("/products/")?.status, "301");
+  // UX U8: /products/ is a static locale gateway, so it must NOT have a rule.
+  assert.equal(bySource.get("/products/"), undefined);
   const slugRule = bySource.get("/products/:slug/");
   // Same destination as the old greedy rule: not every legacy slug has a
   // localized profile page, so a slug-preserving target would 404.
@@ -114,7 +114,6 @@ test("legacy page redirects still exist and target the localized routes", () => 
   assert.equal(bySource.get("/products/:slug")?.destination, "/en/products/");
 
   for (const [from, to] of [
-    ["/products/", "/en/products/"],
     ["/products/sotro/", "/vi/products/sotro/"],
     ["/products/sotro", "/vi/products/sotro/"],
     ["/products/sotam/", "/en/products/sotam/"],
