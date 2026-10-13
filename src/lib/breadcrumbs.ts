@@ -29,8 +29,8 @@ const DECLARED_ROUTE_LABELS: Record<string, Record<Language, string>> = {
   evidence: {
     en: "Evidence for this claim",
     vi: "Bằng chứng cho tuyên bố này",
-    zh: "这条说法的证据",
-    "zh-hant": "這項說法的證據",
+    zh: "这项声明的证据",
+    "zh-hant": "這項聲明的證據",
   },
 };
 

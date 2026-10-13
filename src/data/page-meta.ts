@@ -155,9 +155,9 @@ export const PAGE_META: Record<Language, Record<StaticPageKey, PageMeta>> = {
         "BlueSkyz Labs 打造软件产品。了解我们目前在做什么，以及我们所说内容背后的公开依据，方便你自行核实。",
     },
     contact: {
-      title: "联系我们：商务合作与一般咨询",
+      title: "联系我们：商务与一般咨询",
       description:
-        "联系 BlueSkyz Labs，咨询商务合作及一般问题。请通过 GitHub 私密渠道报告安全漏洞。",
+        "联系 BlueSkyz Labs，咨询商务及一般问题。请通过 GitHub 私密渠道报告安全漏洞。",
     },
     privacy: {
       title: "隐私：不设置 Cookie，仅保存语言与主题",
@@ -213,9 +213,9 @@ export const PAGE_META: Record<Language, Record<StaticPageKey, PageMeta>> = {
         "BlueSkyz Labs 打造軟體產品。了解我們目前在做什麼，以及我們所說內容背後的公開依據，方便你自行查證。",
     },
     contact: {
-      title: "聯絡我們：商務合作與一般洽詢",
+      title: "聯絡我們：商務與一般洽詢",
       description:
-        "聯絡 BlueSkyz Labs，洽詢商務合作與一般問題。請透過 GitHub 私密管道通報資安漏洞。",
+        "聯絡 BlueSkyz Labs，洽詢商務與一般問題。請透過 GitHub 私密管道通報資安漏洞。",
     },
     privacy: {
       title: "隱私權：不設定 Cookie，只儲存語言與主題",
@@ -276,12 +276,12 @@ export const PRODUCT_META: Record<string, Record<Language, PageMeta>> = {
     zh: {
       title: "Sổ Trọ：房东电子记事本",
       description:
-        "Sổ Trọ 是面向越南房东的电子记事本：房间、未收房租、按电表水表读数计算的费用与收据。开发中，截图来自使用演示数据的开发版本。",
+        "Sổ Trọ 是面向越南房东的电子记事本：房间、未收房租、按电表水表读数计算的费用与收据。开发中，截图来自使用示例数据的开发版本。",
     },
     "zh-hant": {
       title: "Sổ Trọ：房東數位記事本",
       description:
-        "Sổ Trọ 是給越南房東的數位記事本：房間、未收租金、依電表水表度數計算的費用與收據。開發中，畫面來自使用示範資料的開發版本。",
+        "Sổ Trọ 是給越南房東的數位記事本：房間、未收租金、依電表水表度數計算的費用與收據。開發中，畫面來自使用範例資料的開發版本。",
     },
   },
   sotam: {
@@ -329,7 +329,7 @@ export const GUIDE_META: Record<string, Record<Language, PageMeta>> = {
     "zh-hant": {
       title: "Sổ Trọ 入門指南",
       description:
-        "Sổ Trọ 開發版的逐步指南：建立房舍、為家人配對手機、記錄水電表度數並收租。正式發布前步驟可能調整。",
+        "Sổ Trọ 開發版的逐步指南：建立樓棟、為家人配對手機、記錄水電表度數並收租。正式發布前步驟可能調整。",
     },
   },
 };

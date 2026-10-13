@@ -73,8 +73,8 @@ export const SHARED_LABELS = {
   scopeHeading: {
     en: "What we're building",
     vi: "Đang xây dựng những gì",
-    zh: "正在开发的内容",
-    "zh-hant": "開發中的內容",
+    zh: "我们正在打造的产品",
+    "zh-hant": "我們正在打造的產品",
   },
   search: { en: "Search", vi: "Tìm", zh: "搜索", "zh-hant": "搜尋" },
   searchPages: {
@@ -157,8 +157,8 @@ export const SHARED_LABELS = {
   nextSteps: {
     en: "Next steps",
     vi: "Bước tiếp theo",
-    zh: "下一步",
-    "zh-hant": "下一步",
+    zh: "后续步骤",
+    "zh-hant": "後續步驟",
   },
   houseIndex: {
     en: "Site index",

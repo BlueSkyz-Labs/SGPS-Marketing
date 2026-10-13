@@ -5,8 +5,8 @@ import test from "node:test";
 const cases = [
   { lang: "en", boundary: "is only for suspected vulnerabilities" },
   { lang: "vi", boundary: "không dùng cho hợp tác hay hỗ trợ thông thường" },
-  { lang: "zh", boundary: "不接收商务或一般咨询" },
-  { lang: "zh-hant", boundary: "不受理商務或一般諮詢" },
+  { lang: "zh", boundary: "仅用于报告疑似漏洞" },
+  { lang: "zh-hant", boundary: "僅用於通報疑似漏洞" },
 ];
 
 for (const { lang, boundary } of cases) {

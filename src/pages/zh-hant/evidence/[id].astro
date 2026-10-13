@@ -45,7 +45,7 @@ const claimReview =
 
 <BaseLayout
   title={title}
-  description={passport?.claim["zh-hant"] ?? "這項說法的證據"}
+  description={passport?.claim["zh-hant"] ?? "這項聲明的證據"}
   path={`/zh-hant/evidence/${id}/`}
   extraJsonLd={claimReview}
 >
@@ -53,7 +53,7 @@ const claimReview =
     <Container>
       <div class="max-w-3xl">
         <p class="evidence-passport__page-title" data-passport-page-title>
-          這項說法的證據
+          這項聲明的證據
         </p>
         <EvidenceExplorer
           id={id ?? ""}

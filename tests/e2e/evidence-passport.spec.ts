@@ -118,7 +118,7 @@ test.describe("evidence passport", () => {
       "安全报告通过 GitHub 私有渠道送达维护者，绝不会通过公开 issue 提出。",
     );
     await expect(page.locator("[data-passport-page-title]")).toHaveText(
-      "这条说法的证据",
+      "这项声明的证据",
     );
     await expect(
       passport.getByRole("heading", {
@@ -134,7 +134,7 @@ test.describe("evidence passport", () => {
       sourcesPanel.getByRole("link", { name: "安全报告页面" }),
     ).toHaveAttribute("href", "/zh/security/");
     await expect(
-      passport.getByRole("link", { name: "在原文中查看 →" }),
+      passport.getByRole("link", { name: "在上下文中查看 →" }),
     ).toHaveAttribute("href", "/zh/security/");
     await expect(
       page.locator(`link[rel="alternate"][hreflang="zh-Hans"]`),
