@@ -1,0 +1,33 @@
+---
+import type { Language } from "@/lib/i18n";
+import type { ShowcaseSchema } from "@/lib/showcase-schema";
+
+/**
+ * UX-U4 / P1-3: the two-sided model (owner on a computer, family on a paired
+ * phone) near the hero. The sentence is the first sentence of the product
+ * guide's own intro (`guide.intro` in the showcase record), so the wording
+ * stays single-sourced and states no platform fact the guide does not.
+ * Renders nothing for a product whose record has no guide.
+ */
+interface Props {
+  showcase: ShowcaseSchema | null;
+  lang: Language;
+}
+
+const { showcase, lang } = Astro.props;
+const intro = showcase?.guide?.intro[lang] ?? "";
+const first =
+  lang === "zh" || lang === "zh-hant"
+    ? intro.match(/^.*?。/)?.[0]
+    : intro.match(/^.*?\.(?=\s|$)/)?.[0];
+const sentence = first ?? intro;
+---
+
+{sentence ? (
+  <p
+    class="mt-5 max-w-3xl text-base leading-relaxed text-[var(--text-primary)]"
+    data-product-sides
+  >
+    {sentence}
+  </p>
+) : null}
