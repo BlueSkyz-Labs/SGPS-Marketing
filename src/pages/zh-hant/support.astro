@@ -32,14 +32,14 @@ const hasSupportEmail = Boolean(SITE.supportEmail);
       />
       {hasSupportEmail ? (
         <p class="mt-8 max-w-2xl text-[var(--text-secondary)]">
-          Email{" "}
+          請來信{" "}
           <a
             href={`mailto:${SITE.supportEmail}`}
             class="inline-flex min-h-11 items-center font-semibold text-[var(--action-primary)] no-underline hover:underline"
           >
             {SITE.supportEmail}
           </a>{" "}
-          可提供一般產品支援，直至發布針對產品的支援通道。
+          取得一般產品支援，直至發布各產品專屬的支援管道。
         </p>
       ) : null}
       <div class="mt-10 flex flex-wrap items-center gap-3" data-support-actions>
