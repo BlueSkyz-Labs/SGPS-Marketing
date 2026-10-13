@@ -21,7 +21,17 @@ const PROFILE_ROUTES = LOCALES.map(
 const INDEX_ROUTES = LOCALES.map(
   (lang) => `src/pages/${lang}/products/index.astro`,
 );
-const ROOT_REDIRECT_STUBS = ["src/pages/products/index.astro"];
+const ROOT_GATEWAY_STUBS = [
+  "about",
+  "contact",
+  "privacy",
+  "security",
+  "support",
+  "products/index",
+].map((name) => ({
+  file: `src/pages/${name}.astro`,
+  route: `/${name.replace(/\/index$/, "")}/`,
+}));
 
 /** Public products declared by the content registry (README excluded). */
 function publicProductCount(dir = PRODUCT_ENTRIES_DIR) {
@@ -78,19 +88,33 @@ test("the profile path helper stays locale-prefixed", () => {
   }
 });
 
-test("legacy non-root paths stay redirect stubs, never dead ends", () => {
-  for (const stub of ROOT_REDIRECT_STUBS) {
-    const source = readFileSync(stub, "utf8");
+test("unprefixed legacy paths are locale gateways, never dead ends or fixed redirects", () => {
+  for (const { file, route } of ROOT_GATEWAY_STUBS) {
+    const source = readFileSync(file, "utf8");
+    assert.doesNotMatch(
+      source,
+      /Astro\.redirect\(/,
+      `${file} must not hard-redirect`,
+    );
     assert.match(
       source,
-      /Astro\.redirect\("\/en/,
-      `${stub} must redirect to a locale path`,
+      new RegExp(`<LegacyLocaleGateway route="${route}" />`),
+      `${file} must render the locale gateway for ${route}`,
     );
-    // A stub must not carry a rendered template: everything after the second
-    // frontmatter fence is dead weight that could surface as a stale page.
-    const body = source.split(/^---$/m).slice(2).join("---").trim();
-    assert.equal(body, "", `${stub} must not render a template`);
   }
+  const gateway = readFileSync(
+    "src/components/LegacyLocaleGateway.astro",
+    "utf8",
+  );
+  assert.match(gateway, /legacyGatewayTarget/);
+  assert.match(gateway, /LANGUAGE_STORAGE_KEY/);
+  assert.match(gateway, /window\.location\.replace/);
+  // No-JS fallback: English, plus four visible localized links.
+  assert.match(
+    gateway,
+    /http-equiv="refresh" content=\{`2;url=\/en\$\{route\}`\}/,
+  );
+  assert.match(gateway, /rel="canonical"/);
   // The legacy product profile route is deliberately retained WITH its
   // implementation (its own architecture contracts pin it) and guarded by a
   // redirect so nothing renders while the registry is empty.
