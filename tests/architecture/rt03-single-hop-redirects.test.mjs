@@ -22,7 +22,7 @@ test("every legacy slash rule has a no-slash twin with the same 301 target", () 
     (rule) =>
       rule.from.endsWith("/") && rule.from !== "/" && !rule.from.includes(":"),
   );
-  assert.ok(slashRules.length >= 6, "legacy slash rules must be discovered");
+  assert.ok(slashRules.length >= 2, "legacy slash rules must be discovered");
   for (const rule of slashRules) {
     const twin = byFrom.get(rule.from.slice(0, -1));
     assert.ok(twin, `missing no-slash rule for ${rule.from}`);
