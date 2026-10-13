@@ -125,19 +125,26 @@ const LEGACY_REDIRECTS = [
 ];
 
 for (const [from, to] of LEGACY_REDIRECTS) {
-  check(`legacy ${from} redirects to ${to}`, async () => {
+  check(`legacy ${from} resolves to ${to} or the locale gateway`, async () => {
     const response = await get(from);
     if ([301, 302, 307, 308].includes(response.status)) {
       const location = response.headers.get("location") ?? "";
       assert(
-        location === to || location === `${site}${to}`,
+        location === to || location === `${site}${to}` || location === from,
         `unexpected location ${location}`,
       );
       return;
     }
     assert(response.status === 200, `status ${response.status}`);
     const html = await response.text();
-    assert(html.includes(`url=${to}`), `meta-refresh stub must target ${to}`);
+    // UX U8: unprefixed routes are static locale gateways (canonical stays the
+    // English page; no-JS falls back to it through a delayed meta refresh).
+    assert(
+      html.includes(`data-legacy-route="${from}"`) &&
+        html.includes(`rel="canonical" href="${site}${to}"`) &&
+        html.includes(`url=${to.replace(/\/$/, "")}`),
+      `gateway for ${from} must canonicalise to ${to}`,
+    );
   });
 }
 
