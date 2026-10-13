@@ -4,6 +4,13 @@ import Container from "@/components/layout/Container.astro";
 import LanguageSwitcher from "@/components/layout/LanguageSwitcher.astro";
 import { SITE, SHARED_LABELS, labelFor, getFooterGroups } from "@/data/site";
 import { getLanguageFromPath } from "@/lib/i18n";
+import type { LastUpdatedView } from "@/lib/last-updated";
+
+interface Props {
+  /** UX P2-10: omitted entirely when there is no accurate git date. */
+  lastUpdated?: LastUpdatedView | null;
+}
+const { lastUpdated = null } = Astro.props;
 
 const currentPath = Astro.url.pathname;
 const lang = getLanguageFromPath(currentPath);
@@ -84,6 +91,15 @@ const languageName = isVi
       <span class="c4-colophon__identity">{SITE.name}</span>
       <span class="c4-colophon__rule" aria-hidden="true"></span>
       <span class="c4-colophon__language">{languageName}</span>
+      {lastUpdated ? (
+        <>
+          <span class="c4-colophon__rule" aria-hidden="true"></span>
+          <span class="c4-colophon__updated" data-last-updated>
+            {lastUpdated.label}{" "}
+            <time datetime={lastUpdated.datetime}>{lastUpdated.text}</time>
+          </span>
+        </>
+      ) : null}
     </div>
   </Container>
 </footer>

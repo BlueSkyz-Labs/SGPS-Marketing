@@ -23,6 +23,8 @@ import {
 import { getLanguageFromPath } from "@/lib/i18n";
 import { breadcrumbJsonLd } from "@/lib/breadcrumbs";
 import { isNonProductionSiteUrl } from "@/lib/truth";
+import { lastmodForPath } from "@/lib/git-lastmod";
+import { lastUpdatedView } from "@/lib/last-updated";
 import { DEFAULT_SCENE, type Scene } from "@/lib/scene";
 import "@/styles/global.css";
 import "@/styles/c3-craft.css";
@@ -47,6 +49,8 @@ interface Props {
   lensBoundaries?: boolean;
   /** Authored scene marker consumed by the global header (C3-A Task 4). */
   scene?: Scene;
+  /** UX P2-10: show the git-derived "Last updated" line (omitted if unknown). */
+  lastUpdated?: boolean;
   /** Page-specific JSON-LD nodes appended after the site-wide graph. */
   extraJsonLd?: Record<string, unknown>[];
 }
@@ -64,6 +68,7 @@ const {
   lensTraces = true,
   lensBoundaries = true,
   scene = DEFAULT_SCENE,
+  lastUpdated = false,
   extraJsonLd = [],
 } = Astro.props;
 
@@ -71,6 +76,10 @@ const {
  * names the brand (home) is used as authored. */
 const fullTitle = title.includes(SITE.name) ? title : `${title} | ${SITE.name}`;
 const currentLang = getLanguageFromPath(path);
+/** UX P2-10: git-derived (sitemap lastmod source); null => no line at all. */
+const lastUpdatedLine = lastUpdated
+  ? lastUpdatedView(lastmodForPath(path), currentLang)
+  : null;
 /** v10 E4 (M02): prefetch rules are emitted only on the production origin.
  * Non-production origins (localhost previews, CI e2e over HTTP) make engines
  * deny the prefetches and log console errors ("URL must be secure (HTTPS)"),
@@ -273,6 +282,6 @@ const robotsContent =
       <JourneyBar />
     </main>
     <BackToTop lang={currentLang} />
-    <Footer />
+    <Footer lastUpdated={lastUpdatedLine} />
   </body>
 </html>
