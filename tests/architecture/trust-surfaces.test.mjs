@@ -6,7 +6,7 @@ const ADVISORY =
   "https://github.com/BlueSkyz-Labs/SGPS-Marketing/security/advisories/new";
 
 test("support empty state offers contact and security recourse", () => {
-  // The root src/pages/support.astro is a pure Astro.redirect("/en/support/")
+  // The root src/pages/support.astro is a pure locale-gateway (UX U8)
   // stub with no rendered markup of its own; the actually rendered content
   // lives in the locale page, so assert there instead of on dead source.
   const support = readFileSync("src/pages/en/support.astro", "utf8");
@@ -18,7 +18,7 @@ test("support empty state offers contact and security recourse", () => {
   assert.match(support, /<ButtonLink\s+href="\/en\/contact\/"/);
 
   const rootStub = readFileSync("src/pages/support.astro", "utf8");
-  assert.match(rootStub, /Astro\.redirect\("\/en\/support\/"\)/);
+  assert.match(rootStub, /<LegacyLocaleGateway route="\/support\/" \/>/);
 });
 
 test("trust section links meet touch-target floor", () => {
@@ -41,21 +41,24 @@ test("security surface exposes actionable private reporting CTA", () => {
   assert.match(site, /SECURITY_ADVISORY_URL/);
   assert.match(site, /security\/advisories\/new/);
 
-  const page = readFileSync("src/pages/security.astro", "utf8");
+  // UX U8: src/pages/security.astro is a locale-gateway stub; the rendered
+  // page is SecurityBody (advisory CTA) plus its copy.
+  const page = readFileSync("src/components/trust/SecurityBody.astro", "utf8");
   assert.match(page, /SECURITY_ADVISORY_URL/);
-  assert.match(page, /Open private vulnerability reporting/);
-  assert.doesNotMatch(page, /bank-grade|military-grade/i);
+  const copy = readFileSync("src/data/trust-copy.ts", "utf8");
+  assert.match(copy, /cta: "Report a vulnerability"/);
+  assert.doesNotMatch(page + copy, /bank-grade|military-grade/i);
 });
 
 test("contact security lane deep-links advisory when email unset", () => {
   // Same rationale as the support test above: root src/pages/contact.astro
-  // is a redirect-only stub; the rendered lane lives on the locale page.
+  // is a gateway-only stub; the rendered lane lives on the locale page.
   const contact = readFileSync("src/pages/en/contact.astro", "utf8");
   assert.match(contact, /SECURITY_ADVISORY_URL/);
   assert.match(contact, /Open private vulnerability reporting/);
 
   const rootStub = readFileSync("src/pages/contact.astro", "utf8");
-  assert.match(rootStub, /Astro\.redirect\("\/en\/contact\/"\)/);
+  assert.match(rootStub, /<LegacyLocaleGateway route="\/contact\/" \/>/);
 });
 
 test("flagship act is evidence-gated, wired on the home, and the retired shelf stays gone", () => {
