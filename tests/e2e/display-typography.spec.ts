@@ -142,7 +142,9 @@ test.describe("display typeface", () => {
       expect(result.length).toBeGreaterThan(0);
       for (const h of result) {
         // The CJK display stack (--font-display-cjk), not the Latin display token.
-        expect(h.family).toMatch(/PingFang SC/);
+        expect(h.family).toMatch(
+          lang === "zh-hant" ? /PingFang TC/ : /PingFang SC/,
+        );
         expect(h.lb).toBe("strict");
         for (const line of h.lines.slice(1)) {
           const trimmed = line.trim();

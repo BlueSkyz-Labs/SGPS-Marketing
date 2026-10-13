@@ -184,4 +184,5 @@ export const AVAILABILITY = {
     "尚未上架應用程式商店",
   ),
   colon: S(": ", ": ", "：", "："),
+  sep: S(", ", ", ", "，", "，"),
 } as const;
