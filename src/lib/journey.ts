@@ -126,6 +126,23 @@ export function getHomeCloseActions(lang: Language): JourneyAction[] {
   });
 }
 
+/**
+ * UX-U5 (P1-7): in-page next steps for a product profile that has no real
+ * screens yet. Same approved labels and existing routes as the other Next steps
+ * rows (Product status, Verify, Contact); no new copy.
+ */
+const PROFILE_NEXT_SEGMENTS = ["products", "verify", "contact"] as const;
+
+export function getProfileNextActions(lang: Language): JourneyAction[] {
+  const allSteps = Object.values(JOURNEY).flat();
+  return PROFILE_NEXT_SEGMENTS.flatMap((segment) => {
+    const step = allSteps.find((candidate) => candidate.segment === segment);
+    return step
+      ? [{ href: `/${lang}/${segment}/`, label: step.label[lang] }]
+      : [];
+  });
+}
+
 /** Route key from a live href/path — strips the locale and sur[/] noise. */
 export function routeKeyFromPath(pathOrHref: string): string {
   const parts = pathOrHref.split("/").filter(Boolean);
