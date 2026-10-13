@@ -35,6 +35,13 @@ const OPEN_LABEL: Record<Language, string> = {
   "zh-hant": "開啟",
 };
 
+const SOURCES_LABEL: Record<Language, string> = {
+  en: "Sources",
+  vi: "Nguồn",
+  zh: "来源",
+  "zh-hant": "來源",
+};
+
 const COMPARE_LABEL: Record<Language, string> = {
   en: "Compare claims",
   vi: "So sánh tuyên bố",
@@ -63,6 +70,7 @@ const COMPARE_LABEL: Record<Language, string> = {
         <div class="flex flex-col items-start gap-2">
           <EvidenceDetails
             summary={entry.summary[lang]}
+            evidenceLabel={`${SOURCES_LABEL[lang]}: ${entry.label[lang]}`}
             evidence={[
               {
                 label: `${OPEN_LABEL[lang]}: ${entry.label[lang]}`,
