@@ -47,7 +47,7 @@ export const EMPTY_STATE_COPY = {
   aboutCheckCta: {
     en: "Check what we say",
     vi: "Xem các tuyên bố và nguồn",
-    zh: "查看我们的声明与依据",
+    zh: "查看我们的声明与来源",
     "zh-hant": "查看我們的聲明與依據",
   },
   aboutContactCta: {
