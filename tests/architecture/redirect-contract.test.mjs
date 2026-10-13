@@ -45,22 +45,25 @@ test("no redirect destination is itself a redirect source (no chains)", () => {
   );
 });
 
-test("every legacy non-root route has a rule while / remains the language gateway", () => {
+test("unprefixed trust routes are locale gateways, not fixed 301s, while / stays the gateway", () => {
   assert.ok(
     !rules.some((rule) => rule.from === "/"),
     "root must not bypass the DEC-019 language gateway",
   );
-  for (const from of [
-    "/about/",
-    "/contact/",
-    "/privacy/",
-    "/security/",
-    "/support/",
-    "/products/",
+  // UX U8: a fixed 301 to /en/ forced Vietnamese visitors into English. These
+  // routes are served by static gateway pages instead; a rule here would shadow
+  // them (redirects run before static assets).
+  for (const route of [
+    "/about",
+    "/contact",
+    "/privacy",
+    "/security",
+    "/support",
+    "/products",
   ]) {
     assert.ok(
-      rules.some((rule) => rule.from === from),
-      `missing legacy rule for ${from}`,
+      !rules.some((rule) => rule.from === route || rule.from === `${route}/`),
+      `${route} must not have a fixed redirect rule`,
     );
   }
 });
