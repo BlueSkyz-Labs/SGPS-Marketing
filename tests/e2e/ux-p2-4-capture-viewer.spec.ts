@@ -69,13 +69,58 @@ test("modifier-click is left to the browser (no viewer)", async ({ page }) => {
   await page.waitForFunction(() =>
     document.documentElement.hasAttribute("data-capture-viewer-ready"),
   );
+  // Whether the browser then opens a window is browser behaviour (and not
+  // reliable in CI); what the site owns is leaving the default alone. A
+  // window-level listener runs after the viewer's handler, records whether
+  // the default was prevented, then cancels navigation so the test stays on
+  // the page.
+  await page.evaluate(() => {
+    window.addEventListener("click", (event) => {
+      const target = event.target as Element | null;
+      if (!target?.closest("a[data-capture-inspect]")) return;
+      document.documentElement.dataset.testDefaultPrevented = String(
+        event.defaultPrevented,
+      );
+      event.preventDefault();
+    });
+  });
   const trigger = page.locator("a[data-capture-inspect]").first();
   await trigger.scrollIntoViewIfNeeded();
-  const popup = page.context().waitForEvent("page");
   await trigger.click({ modifiers: ["Shift"] });
-  await (await popup).close();
+  await expect(page.locator("html")).toHaveAttribute(
+    "data-test-default-prevented",
+    "false",
+  );
   await expect(page.locator("dialog[data-capture-viewer][open]")).toHaveCount(
     0,
+  );
+});
+
+test("negative proof: a plain click is taken by the viewer", async ({
+  page,
+}) => {
+  await page.goto("/en/products/sotro/");
+  await page.waitForFunction(() =>
+    document.documentElement.hasAttribute("data-capture-viewer-ready"),
+  );
+  await page.evaluate(() => {
+    window.addEventListener("click", (event) => {
+      const target = event.target as Element | null;
+      if (!target?.closest("a[data-capture-inspect]")) return;
+      document.documentElement.dataset.testDefaultPrevented = String(
+        event.defaultPrevented,
+      );
+    });
+  });
+  const trigger = page.locator("a[data-capture-inspect]").first();
+  await trigger.scrollIntoViewIfNeeded();
+  await trigger.click();
+  await expect(page.locator("html")).toHaveAttribute(
+    "data-test-default-prevented",
+    "true",
+  );
+  await expect(page.locator("dialog[data-capture-viewer][open]")).toHaveCount(
+    1,
   );
 });
 
