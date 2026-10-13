@@ -39,6 +39,14 @@ export function initCaptureViewer(root: Document = document): void {
   root.documentElement.setAttribute("data-capture-viewer-ready", "");
   if (typeof HTMLDialogElement === "undefined") return;
 
+  // Wire each link: with JS a plain click opens the dialog, so the "opens in
+  // a new tab" suffix would be false. Without JS the original label stays.
+  for (const link of root.querySelectorAll<HTMLAnchorElement>(SELECTOR)) {
+    const label = link.dataset.viewerLabel;
+    if (label) link.setAttribute("aria-label", label);
+    link.setAttribute("aria-haspopup", "dialog");
+  }
+
   let parts: ReturnType<typeof build> | null = null;
   let trigger: HTMLElement | null = null;
 

@@ -20,9 +20,11 @@ const OPENS = {
 const OLD = /View original sample-data|Xem ảnh gốc|查看原始/;
 
 for (const lang of ["en", "vi", "zh", "zh-hant"] as const) {
-  test(`${lang}: capture links are labelled, safe and say they open the image`, async ({
-    page,
+  test(`${lang}: capture links are labelled, safe and say they open the image (no JS)`, async ({
+    browser,
   }) => {
+    const ctx = await browser.newContext({ javaScriptEnabled: false });
+    const page = await ctx.newPage();
     await page.goto(`/${lang}/products/sotro/`);
     const links = page.locator("a[data-capture-inspect]");
     const n = await links.count();
@@ -43,6 +45,27 @@ for (const lang of ["en", "vi", "zh", "zh-hant"] as const) {
     await expect(page.locator("[data-showcase-disclosure]")).toContainText(
       /sample|mẫu|示例|範例/,
     );
+    await ctx.close();
+  });
+
+  test(`${lang}: with JS the viewer-wired links drop the new-tab suffix and declare a dialog`, async ({
+    page,
+  }) => {
+    await page.goto(`/${lang}/products/sotro/`);
+    await page.waitForFunction(() =>
+      document.documentElement.hasAttribute("data-capture-viewer-ready"),
+    );
+    const links = page.locator("a[data-capture-inspect]");
+    const n = await links.count();
+    expect(n).toBeGreaterThanOrEqual(10);
+    for (let i = 0; i < n; i++) {
+      const a = links.nth(i);
+      const name = (await a.getAttribute("aria-label")) ?? "";
+      expect(name).toMatch(LABEL[lang]);
+      expect(name).not.toMatch(OPENS[lang]);
+      expect(name).toBe(await a.getAttribute("data-viewer-label"));
+      await expect(a).toHaveAttribute("aria-haspopup", "dialog");
+    }
   });
 }
 
@@ -51,3 +74,24 @@ test("negative proof: the matcher rejects the old label and a missing noopener",
   expect("Xem ảnh gốc (dữ liệu mẫu)").not.toMatch(LABEL.vi);
   expect("noreferrer".split(/\s+/)).not.toContain("noopener");
 });
+
+test("negative proof: a link the script did not wire keeps the new-tab label", async ({
+  page,
+}) => {
+  await page.goto("/en/products/sotro/");
+  await page.waitForFunction(() =>
+    document.documentElement.hasAttribute("data-capture-viewer-ready"),
+  );
+  const unwired = page.locator("#unwired");
+  await page.evaluate(() => {
+    const a = document.createElement("a");
+    a.id = "unwired";
+    a.href = "/x.webp";
+    a.setAttribute("data-capture-inspect", "");
+    a.setAttribute("aria-label", "View larger image (opens in a new tab)");
+    document.body.prepend(a);
+  });
+  await expect(unwired).toHaveAttribute("aria-label", OPENS_EN_NEG);
+  await expect(unwired).not.toHaveAttribute("aria-haspopup", "dialog");
+});
+const OPENS_EN_NEG = /new tab/;

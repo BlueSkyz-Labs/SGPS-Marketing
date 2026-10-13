@@ -76,6 +76,7 @@ const DESKTOP_SIZES = "(min-width: 64rem) 64rem, calc(100vw - 2.5rem)";
             target="_blank"
             rel="noopener noreferrer"
             data-capture-inspect
+            data-viewer-label={`${t.inspect}: ${screen.title[lang]}`}
             data-viewer-title={screen.title[lang]}
             data-viewer-alt={screen.alt[lang]}
             data-viewer-close={t.viewerClose}
@@ -137,6 +138,7 @@ const DESKTOP_SIZES = "(min-width: 64rem) 64rem, calc(100vw - 2.5rem)";
           target="_blank"
           rel="noopener noreferrer"
           data-capture-inspect
+          data-viewer-label={`${t.inspect}: ${story.coda.title[lang]}`}
           data-viewer-title={story.coda.title[lang]}
           data-viewer-alt={story.coda.alt[lang]}
           data-viewer-close={t.viewerClose}
