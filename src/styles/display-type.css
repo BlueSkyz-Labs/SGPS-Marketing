@@ -103,6 +103,17 @@
   letter-spacing: -0.01em;
 }
 
+/* Han unification: the same code point has different glyph forms in zh-Hans
+   and zh-Hant, so the system CJK families are ordered per script. Traditional
+   headings list the TC/Taiwan families first (A4); Simplified keeps the
+   default order above. */
+:lang(zh-Hant) {
+  --font-display-cjk:
+    "Inter Variable", "Inter Fallback", "PingFang TC", "Hiragino Sans CNS",
+    "Noto Sans TC", "Noto Sans CJK TC", "Source Han Sans TC",
+    "Microsoft JhengHei", sans-serif;
+}
+
 /* CJK (`:lang(zh)` also matches zh-Hant): no display web face, no tracking,
    no italic, strict line breaking. `auto-phrase` (phrase-aware breaks) is a
    progressive enhancement over `normal`; never `break-all`. */
