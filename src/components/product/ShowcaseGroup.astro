@@ -18,6 +18,7 @@ interface Props {
     desktop: string;
     inspect: string;
     inspectOpens: string;
+    viewerClose: string;
   };
   first?: boolean;
 }
@@ -79,6 +80,9 @@ const desktopSmallSrc = (src: string) => src.replace(/\.webp$/, "-768.webp");
                 target="_blank"
                 rel="noopener noreferrer"
                 data-capture-inspect
+                data-viewer-title={item.title[lang]}
+                data-viewer-alt={item.alt[lang]}
+                data-viewer-close={labels.viewerClose}
               >
                 {labels.inspect}
                 <span aria-hidden="true">↗</span>
@@ -130,6 +134,9 @@ const desktopSmallSrc = (src: string) => src.replace(/\.webp$/, "-768.webp");
                 target="_blank"
                 rel="noopener noreferrer"
                 data-capture-inspect
+                data-viewer-title={item.title[lang]}
+                data-viewer-alt={item.alt[lang]}
+                data-viewer-close={labels.viewerClose}
               >
                 {labels.inspect}
                 <span aria-hidden="true">↗</span>
@@ -154,4 +161,8 @@ const desktopSmallSrc = (src: string) => src.replace(/\.webp$/, "-768.webp");
   };
   syncRailTabindex();
   mq.addEventListener("change", syncRailTabindex);
+</script>
+
+<script>
+  import "@/scripts/capture-viewer";
 </script>
