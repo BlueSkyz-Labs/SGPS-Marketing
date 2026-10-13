@@ -244,7 +244,7 @@ const NAV_LABELS: Record<Language, NavLabels> = {
     support: "Hỗ trợ",
     privacy: "Quyền riêng tư",
     security: "Bảo mật",
-    verify: "Xác minh",
+    verify: "Kiểm chứng",
     editions: "Tuyển tập",
     dossier: "Bản tóm tắt để in",
   },
@@ -365,7 +365,7 @@ export const BRAND_TAGLINE: Record<
   { lead: string; accent: string }
 > = {
   en: { lead: SITE.taglineLead, accent: SITE.taglineAccent },
-  vi: { lead: "Trí tuệ. Nâng tầm.", accent: "Tác động." },
+  vi: { lead: "Trí tuệ. Tầm nhìn.", accent: "Tác động." },
   zh: { lead: "智能。提升。", accent: "影响。" },
   "zh-hant": { lead: "智慧。提升。", accent: "影響。" },
 };

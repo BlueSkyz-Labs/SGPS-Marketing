@@ -676,24 +676,24 @@ Every wave picks its **own ports**: preview `33<NN>`, wrangler `34<NN>`, inspect
 
 ### 5.3 Vietnamese glossary (binding for all waves)
 
-| Concept                         | Use                                       | Avoid                                                                                     |
-| ------------------------------- | ----------------------------------------- | ----------------------------------------------------------------------------------------- |
-| claim                           | tuyên bố                                  | nhận định, khẳng định (mixed)                                                             |
-| evidence                        | bằng chứng                                | chứng cứ                                                                                  |
-| source                          | nguồn                                     |                                                                                           |
-| website                         | trang web; "trang" for one page           | site                                                                                      |
-| in development                  | đang phát triển                           | đang phát triển thử nghiệm                                                                |
-| sample data                     | dữ liệu mẫu                               | dữ liệu minh hoạ                                                                          |
-| sign in (existing users)        | Đã có tài khoản? Đăng nhập                | Người dùng hiện tại: đăng nhập                                                            |
-| About                           | Về BlueSkyz                               | Giới thiệu, Tìm hiểu BlueSkyz (except the page title, if a test pins it: update the test) |
-| private vulnerability reporting | báo cáo lỗ hổng riêng tư                  |                                                                                           |
-| maintainers                     | người bảo trì                             |                                                                                           |
-| offline                         | khi không có mạng                         | ngoại tuyến (UI copy)                                                                     |
-| first-class route               | (do not translate; remove the phrase)     | tuyến đường hạng nhất                                                                     |
-| verify                          | xác minh (page name), kiểm chứng (action) |                                                                                           |
-| printable summary               | bản tóm tắt để in                         | hồ sơ, dossier                                                                            |
-| compare claims                  | so sánh tuyên bố                          | phòng quyết định                                                                          |
-| how this site is built          | cách trang web này được xây dựng          | kiến trúc (as a visitor label)                                                            |
+| Concept                         | Use                                                          | Avoid                                                                                     |
+| ------------------------------- | ------------------------------------------------------------ | ----------------------------------------------------------------------------------------- |
+| claim                           | tuyên bố                                                     | nhận định, khẳng định (mixed)                                                             |
+| evidence                        | bằng chứng                                                   | chứng cứ                                                                                  |
+| source                          | nguồn                                                        |                                                                                           |
+| website                         | trang web; "trang" for one page                              | site                                                                                      |
+| in development                  | đang phát triển                                              | đang phát triển thử nghiệm                                                                |
+| sample data                     | dữ liệu mẫu                                                  | dữ liệu minh hoạ                                                                          |
+| sign in (existing users)        | Đã có tài khoản? Đăng nhập                                   | Người dùng hiện tại: đăng nhập                                                            |
+| About                           | Về BlueSkyz                                                  | Giới thiệu, Tìm hiểu BlueSkyz (except the page title, if a test pins it: update the test) |
+| private vulnerability reporting | báo cáo lỗ hổng riêng tư                                     |                                                                                           |
+| maintainers                     | người bảo trì                                                |                                                                                           |
+| offline                         | khi không có mạng                                            | ngoại tuyến (UI copy)                                                                     |
+| first-class route               | (do not translate; remove the phrase)                        | tuyến đường hạng nhất                                                                     |
+| verify                          | kiểm chứng (page name and action; Owner-approved 2026-10-12) |                                                                                           |
+| printable summary               | bản tóm tắt để in                                            | hồ sơ, dossier                                                                            |
+| compare claims                  | so sánh tuyên bố                                             | phòng quyết định                                                                          |
+| how this site is built          | cách trang web này được xây dựng                             | kiến trúc (as a visitor label)                                                            |
 
 ### 5.4 Checks before every push
 

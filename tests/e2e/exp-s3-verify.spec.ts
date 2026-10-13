@@ -11,7 +11,7 @@ import { openVerifyLayer } from "./verify-helpers.ts";
  */
 const LOCALES = [
   { lang: "en", label: "Verify", products: "Products" },
-  { lang: "vi", label: "Xác minh", products: "Sản phẩm" },
+  { lang: "vi", label: "Kiểm chứng", products: "Sản phẩm" },
   { lang: "zh", label: "核验", products: "产品" },
   { lang: "zh-hant", label: "核驗", products: "產品" },
 ] as const;

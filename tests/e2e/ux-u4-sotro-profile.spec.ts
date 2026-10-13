@@ -189,9 +189,21 @@ for (const lang of LANGS) {
         window.scrollTo(0, 0);
       });
       await page.waitForTimeout(300);
-      const height = await page.evaluate(
-        () => document.documentElement.scrollHeight,
-      );
+      // MAIN_HEIGHT predates the Owner-approved U10 interim note, which adds
+      // content outside the chapters; exclude its box so this guard keeps
+      // measuring the chapter layout only.
+      const height = await page.evaluate(() => {
+        const note = [
+          ...document.querySelectorAll<HTMLElement>("[data-interim-note]"),
+        ].reduce(
+          (sum, el) =>
+            sum +
+            el.getBoundingClientRect().height +
+            parseFloat(getComputedStyle(el).marginTop),
+          0,
+        );
+        return document.documentElement.scrollHeight - note;
+      });
       const before = MAIN_HEIGHT[name][lang];
       // Wide: tighter chapters save about 7% in the static layout (8% with
       // the sticky stage, below); phones are already one phone per chapter,
