@@ -162,7 +162,7 @@ const supportingLine = flagship ? null : proposition;
           <span class="whitespace-pre-wrap">{productLine.b}</span>
         </p>
       ) : null}
-      {productLine && lineSecond ? (
+      {productLine && lineSecond && !(flagship && cta) ? (
         <a
           href={getProductProfilePath(lang, lineSecond.data.slug)}
           class="hero-entry-chip mt-3"
@@ -239,6 +239,27 @@ const supportingLine = flagship ? null : proposition;
           >
             {cta.label}
           </ButtonLink>
+          {productLine && lineSecond ? (
+            <a
+              href={getProductProfilePath(lang, lineSecond.data.slug)}
+              class="hero-entry-chip mt-3"
+              data-hero-entry={lineSecond.data.slug}
+            >
+              <img
+                class="size-7 rounded-md"
+                src={getProductIconThumbPath(lineSecond.data.slug)}
+                alt=""
+                width="28"
+                height="28"
+                decoding="async"
+                loading="lazy"
+              />
+              <span class="hero-entry-chip__name">{lineSecond.data.name}</span>
+              <span class="hero-entry-chip__action">
+                {labelFor(SHARED_LABELS.viewProfile, lang)}
+              </span>
+            </a>
+          ) : null}
         </div>
         <div class="hero-stage">
           <!-- W1 "Horizon & Sail": the prismatic mark rises behind the capture
@@ -368,6 +389,10 @@ const supportingLine = flagship ? null : proposition;
     text-decoration: none;
     font-size: var(--size-2);
     line-height: 1.2;
+  }
+  .hero-flagship__body .hero-entry-chip {
+    display: flex;
+    width: fit-content;
   }
   .hero-entry-chip__name {
     font-weight: 600;
