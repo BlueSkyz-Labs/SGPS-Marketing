@@ -11,7 +11,7 @@ import { expect, test, type Page } from "@playwright/test";
 const ARROW = /[←-⇿⟵-⟿➔➜➡›»]/;
 
 const ABOUT_CTA = {
-  en: "See our claims and sources",
+  en: "Check what we say",
   vi: "Xem các tuyên bố và nguồn",
   zh: "查看我们的声明与依据",
   "zh-hant": "查看我們的聲明與依據",
