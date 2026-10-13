@@ -182,7 +182,7 @@ export const REQUIRED_CSP_DIRECTIVES = [
   "upgrade-insecure-requests",
   "frame-ancestors 'none'",
   // ADR 0015: one exact third-party script path (Cloudflare Web Analytics).
-  "script-src 'self' 'inline-speculation-rules' https://static.cloudflareinsights.com/beacon.min.js",
+  "script-src 'self' 'inline-speculation-rules' https://static.cloudflareinsights.com/beacon.min.js/",
 ];
 
 const REQUIRED_HTML_HEADERS = [

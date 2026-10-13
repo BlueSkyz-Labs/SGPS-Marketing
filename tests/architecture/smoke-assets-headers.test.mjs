@@ -163,7 +163,7 @@ test("header expectations are read from public/_headers", () => {
     "media-src 'self'",
     "upgrade-insecure-requests",
     "frame-ancestors 'none'",
-    "script-src 'self' 'inline-speculation-rules' https://static.cloudflareinsights.com/beacon.min.js",
+    "script-src 'self' 'inline-speculation-rules' https://static.cloudflareinsights.com/beacon.min.js/",
   ]);
 });
 

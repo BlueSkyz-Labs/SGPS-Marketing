@@ -5,7 +5,7 @@
   X-Permitted-Cross-Domain-Policies: none
   Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=(), browsing-topics=()
   Strict-Transport-Security: max-age=31536000; includeSubDomains
-  Content-Security-Policy: default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; img-src 'self' data:; media-src 'self'; font-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'inline-speculation-rules' https://static.cloudflareinsights.com/beacon.min.js; connect-src 'self'; form-action 'self'; upgrade-insecure-requests; require-trusted-types-for 'script'
+  Content-Security-Policy: default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; img-src 'self' data:; media-src 'self'; font-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'inline-speculation-rules' https://static.cloudflareinsights.com/beacon.min.js/; connect-src 'self'; form-action 'self'; upgrade-insecure-requests; require-trusted-types-for 'script'
   Cross-Origin-Opener-Policy: same-origin
   Cross-Origin-Resource-Policy: same-site
 
