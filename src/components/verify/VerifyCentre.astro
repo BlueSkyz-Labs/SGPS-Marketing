@@ -58,14 +58,14 @@ interface VerifyCopy {
 const COPY: Record<Language, VerifyCopy> = {
   en: {
     title: "Verify",
-    lede: "Check our claims against public sources.",
-    claims: "What we claim",
+    lede: "Check what we say against public sources.",
+    claims: "What we say",
     limit: "Limit:",
     sources: "Sources:",
-    backs: "What backs it",
-    comparePre: "To compare claims side by side, use",
-    compareLink: "Compare claims",
-    map: "Map of our claims",
+    backs: "How to check",
+    comparePre: "To compare, open the",
+    compareLink: "side-by-side view",
+    map: "Map of what we say",
     items: [
       {
         id: "security-reporting-is-private",
@@ -76,9 +76,12 @@ const COPY: Record<Language, VerifyCopy> = {
         sources: [
           {
             id: "ev-security-advisory",
-            label: "GitHub private vulnerability reporting",
+            label: "Private reporting form on GitHub",
           },
-          { id: "ev-security-route", label: "Security route" },
+          {
+            id: "ev-security-route",
+            label: "Security page",
+          },
         ],
       },
       {
@@ -88,8 +91,11 @@ const COPY: Record<Language, VerifyCopy> = {
         limit:
           "network data such as IP addresses is still handled by the infrastructure.",
         sources: [
-          { id: "ev-privacy-route", label: "Privacy route" },
-          { id: "ev-security-route", label: "Security route" },
+          { id: "ev-privacy-route", label: "Privacy page" },
+          {
+            id: "ev-security-route",
+            label: "Security page: details",
+          },
         ],
       },
       {
@@ -122,7 +128,10 @@ const COPY: Record<Language, VerifyCopy> = {
             id: "ev-security-advisory",
             label: "Báo cáo lỗ hổng riêng tư của GitHub",
           },
-          { id: "ev-security-route", label: "Trang Bảo mật" },
+          {
+            id: "ev-security-route",
+            label: "Trang Bảo mật",
+          },
         ],
       },
       {
@@ -131,28 +140,31 @@ const COPY: Record<Language, VerifyCopy> = {
           "Trang web này không đặt cookie. Chỉ lưu ngôn ngữ và giao diện bạn chọn trong trình duyệt.",
         limit: "dữ liệu mạng như địa chỉ IP vẫn do hạ tầng xử lý.",
         sources: [
-          { id: "ev-privacy-route", label: "Trang Quyền riêng tư" },
-          { id: "ev-security-route", label: "Trang Bảo mật" },
+          { id: "ev-privacy-route", label: "Về quyền riêng tư" },
+          {
+            id: "ev-security-route",
+            label: "Về bảo mật",
+          },
         ],
       },
       {
         id: "registry-publishes-only-proven-products",
         statement:
           "Sản phẩm chỉ được liệt kê khi bằng chứng công khai sẵn sàng để kiểm chứng.",
-        sources: [{ id: "ev-products-route", label: "Trang Sản phẩm" }],
+        sources: [{ id: "ev-products-route", label: "Sản phẩm" }],
       },
     ],
   },
   zh: {
     title: "核实",
-    lede: "对照公开来源，检查我们的声明。",
-    claims: "我们的声明",
+    lede: "对照公开来源，检查我们的说法。",
+    claims: "我们说了什么",
     limit: "限制：",
     sources: "来源：",
     backs: "依据是什么",
     comparePre: "要并排比较，请用",
-    compareLink: "比较声明",
-    map: "我们的声明图谱",
+    compareLink: "并排查看我们的说法",
+    map: "我们所说内容的图谱",
     items: [
       {
         id: "security-reporting-is-private",
@@ -160,8 +172,8 @@ const COPY: Record<Language, VerifyCopy> = {
           "安全报告通过 GitHub 私有渠道送达维护者，绝不通过公开 issue。",
         limit: "不含漏洞赏金、响应时限承诺或公开披露权。",
         sources: [
-          { id: "ev-security-advisory", label: "GitHub 私密漏洞报告" },
-          { id: "ev-security-route", label: "安全页面" },
+          { id: "ev-security-advisory", label: "在 GitHub 私下报告漏洞" },
+          { id: "ev-security-route", label: "安全页面：报告送达方式" },
         ],
       },
       {
@@ -169,27 +181,27 @@ const COPY: Record<Language, VerifyCopy> = {
         statement: "本站不设置 Cookie，只在浏览器中保存你选择的语言和主题。",
         limit: "IP 地址等网络数据仍由基础设施处理。",
         sources: [
-          { id: "ev-privacy-route", label: "隐私页面" },
-          { id: "ev-security-route", label: "安全页面" },
+          { id: "ev-privacy-route", label: "查看隐私页面" },
+          { id: "ev-security-route", label: "安全页面：报告详情" },
         ],
       },
       {
         id: "registry-publishes-only-proven-products",
         statement: "只有公开证据可核验时，产品才会列在这里。",
-        sources: [{ id: "ev-products-route", label: "产品页面" }],
+        sources: [{ id: "ev-products-route", label: "查看产品页面" }],
       },
     ],
   },
   "zh-hant": {
     title: "查證",
-    lede: "對照公開來源，檢查我們的聲明。",
-    claims: "我們的聲明",
+    lede: "對照公開來源，檢查我們的說法。",
+    claims: "我們說了什麼",
     limit: "限制：",
     sources: "來源：",
     backs: "依據是什麼",
     comparePre: "要並排比較，請用",
-    compareLink: "比較聲明",
-    map: "我們的聲明圖譜",
+    compareLink: "並排查看我們的說法",
+    map: "我們所說內容的圖譜",
     items: [
       {
         id: "security-reporting-is-private",
@@ -197,8 +209,8 @@ const COPY: Record<Language, VerifyCopy> = {
           "資安通報透過 GitHub 私有管道送達維護者，絕不透過公開 issue。",
         limit: "不含漏洞賞金、回應時限承諾或公開揭露權。",
         sources: [
-          { id: "ev-security-advisory", label: "GitHub 私密漏洞通報" },
-          { id: "ev-security-route", label: "資訊安全頁面" },
+          { id: "ev-security-advisory", label: "在 GitHub 私下通報漏洞" },
+          { id: "ev-security-route", label: "資訊安全頁面：通報送達方式" },
         ],
       },
       {
@@ -206,14 +218,14 @@ const COPY: Record<Language, VerifyCopy> = {
         statement: "本站不設定 Cookie，只在瀏覽器中儲存你選擇的語言與主題。",
         limit: "IP 位址等網路資料仍由基礎設施處理。",
         sources: [
-          { id: "ev-privacy-route", label: "隱私權頁面" },
-          { id: "ev-security-route", label: "資訊安全頁面" },
+          { id: "ev-privacy-route", label: "查看隱私權頁面" },
+          { id: "ev-security-route", label: "資訊安全頁面：通報詳情" },
         ],
       },
       {
         id: "registry-publishes-only-proven-products",
         statement: "只有公開證據可查證時，產品才會列在這裡。",
-        sources: [{ id: "ev-products-route", label: "產品頁面" }],
+        sources: [{ id: "ev-products-route", label: "查看產品頁面" }],
       },
     ],
   },
