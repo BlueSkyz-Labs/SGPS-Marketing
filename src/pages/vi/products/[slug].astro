@@ -11,6 +11,7 @@ import ProductShowcase from "@/components/product/ProductShowcase.astro";
 import ButtonLink from "@/components/ui/ButtonLink.astro";
 import NoCaptureStage from "@/components/empty-state/NoCaptureStage.astro";
 import ProductVisual from "@/components/product/ProductVisual.astro";
+import ProductSides from "@/components/product/ProductSides.astro";
 import {
   PAGE_LABELS,
   productPageCopy,
@@ -230,6 +231,7 @@ const awaitingScreens = !showcase && isIdentityArt;
         ) : null}
       </div>
 
+      <ProductSides showcase={showcase} lang="vi" />
       <AppAccess
         appAccess={data.appAccess}
         lang="vi"
