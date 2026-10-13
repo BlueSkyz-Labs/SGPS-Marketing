@@ -192,6 +192,41 @@ test("Inter preload stays engine-gated and display type never reaches CJK", () =
   assert.doesNotMatch(cjk, /break-all/);
 });
 
+/** zh-Hant display headings list Traditional (TC) families before any SC one. */
+function checkHantDisplayOrder(source) {
+  const code = stripComments(source);
+  const token =
+    code.match(
+      /:lang\(zh-Hant\)\s*\{[^}]*--font-display-cjk\s*:\s*([^;]+);/,
+    )?.[1] ?? "";
+  assert.ok(token, "a :lang(zh-Hant) --font-display-cjk override is required");
+  const families = token.split(",").map((f) => f.trim().replace(/"/g, ""));
+  const firstTc = families.findIndex((f) => /\bTC\b|CNS|JhengHei/.test(f));
+  assert.ok(firstTc >= 0, "zh-Hant stack needs a Traditional family");
+  const firstSc = families.findIndex((f) =>
+    /\bSC\b|YaHei|Hiragino Sans GB/.test(f),
+  );
+  assert.ok(
+    firstSc === -1 || firstTc < firstSc,
+    "zh-Hant must list TC families before any SC family",
+  );
+}
+
+test("zh-Hant display CJK stack is Traditional-first (A4)", () => {
+  checkHantDisplayOrder(css);
+  assert.throws(() =>
+    checkHantDisplayOrder(
+      css.replace(
+        /(:lang\(zh-Hant\)\s*\{[^}]*"Inter Fallback",)/,
+        '$1 "PingFang SC",',
+      ),
+    ),
+  );
+  assert.throws(() =>
+    checkHantDisplayOrder(css.replace(/:lang\(zh-Hant\)\s*\{/, ":lang(xx) {")),
+  );
+});
+
 test("negative proof: each blocking check turns RED on a broken invariant", () => {
   const boot = read("public/theme-init.js");
   const layoutSrc = read("src/layouts/BaseLayout.astro");
