@@ -74,16 +74,25 @@ test("/en/about/ shows the owner-confirmed founder line (E-26 resolved 2026-10-0
 });
 
 for (const [from, to] of LEGACY_REDIRECTS) {
-  test(`legacy route ${from} redirects to ${to} instead of duplicating content`, async ({
-    page,
+  // UX U8: unprefixed routes are locale gateways (see ux-u8-locale-redirect.spec.ts).
+  // With JavaScript off they must still emit the English redirect and never
+  // duplicate localized content.
+  test(`legacy route ${from} falls back to ${to} without JavaScript instead of duplicating content`, async ({
+    browser,
   }) => {
-    const response = await page.goto(from, { waitUntil: "domcontentloaded" });
-    expect(response, `${from} response`).not.toBeNull();
-    expect(response!.status(), `${from} status`).toBeLessThan(400);
-    await expect(
-      page.locator('meta[http-equiv="refresh"]'),
-      `${from} must emit a redirect to ${to}`,
-    ).toHaveAttribute("content", new RegExp(to));
+    const context = await browser.newContext({ javaScriptEnabled: false });
+    try {
+      const page = await context.newPage();
+      const response = await page.goto(from, { waitUntil: "domcontentloaded" });
+      expect(response, `${from} response`).not.toBeNull();
+      expect(response!.status(), `${from} status`).toBeLessThan(400);
+      await expect(
+        page.locator('meta[http-equiv="refresh"]'),
+        `${from} must emit a redirect to ${to}`,
+      ).toHaveAttribute("content", new RegExp(to));
+    } finally {
+      await context.close();
+    }
   });
 }
 
