@@ -11,7 +11,7 @@ sections:
     content: We collect only the minimum data needed to run this website and improve the visitor experience. We do not sell personal data to third parties.
   usage:
     heading: How we use data
-    content: Request metadata supports site delivery and security. Visitor analytics transmission is not enabled; an explicitly chosen language or theme preference stays in this browser.
+    content: Request metadata supports site delivery and security. Page speed is measured with Cloudflare Web Analytics, as described on this page; an explicitly chosen language or theme preference stays in this browser.
   contact:
     heading: Contact
     content: For privacy inquiries, please contact us through the security reporting path.
