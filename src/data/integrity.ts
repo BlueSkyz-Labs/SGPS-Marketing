@@ -97,7 +97,7 @@ export const PRIVACY_BOUNDARY: BoundaryStatement = {
     vi: "Nó không xác lập rằng không có dữ liệu nào được xử lý: mọi trang web vẫn cần hạ tầng xử lý siêu dữ liệu mạng như địa chỉ IP và header yêu cầu.",
     zh: "这并不表示完全不会处理任何数据：提供任何网站服务仍需要基础设施处理网络层面元数据，例如 IP 地址和请求头。",
     "zh-hant":
-      "這並不表示完全不會處理任何資料：提供任何網站服務仍需要基礎設施處理網路層面後設資料，例如 IP 地址和請求頭。",
+      "這並不表示完全不會處理任何資料：提供任何網站服務仍需要基礎設施處理網路層級的中繼資料，例如 IP 位址和請求標頭。",
   },
 };
 

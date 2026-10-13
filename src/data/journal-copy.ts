@@ -46,6 +46,6 @@ export const JOURNAL_COPY: Record<
     news: "新聞與動態",
     product: "產品更新",
     empty: "暫無文章。",
-    languageNote: "文章以越南語和英語釋出。",
+    languageNote: "文章以越南語和英語發布。",
   },
 };

@@ -18,14 +18,14 @@ const EXPLORER_COPY = {
   zh: {
     expand: "查看详情",
     collapse: "隐藏详情",
-    claim: "说法",
+    claim: "声明",
     state: "验证状态",
     stateValue: "已关联来源",
   },
   "zh-hant": {
     expand: "檢視詳情",
     collapse: "隱藏詳情",
-    claim: "說法",
+    claim: "聲明",
     state: "驗證狀態",
     stateValue: "已關聯來源",
   },
