@@ -139,7 +139,7 @@ export const CLAIMS: readonly PublicClaim[] = [
       "zh-hant": "產品僅在其公開證據可核驗時才會出現在公開登錄名單中。",
     },
     titleLabel: {
-      en: "Registry lists only products with verifiable evidence",
+      en: "Registry lists only products with checkable sources",
       vi: "Danh mục chỉ công bố sản phẩm có bằng chứng xác minh được",
     },
     evidenceIds: ["ev-products-route"],
