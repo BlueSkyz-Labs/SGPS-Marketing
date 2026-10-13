@@ -15,7 +15,9 @@ import test from "node:test";
 
 import { PRIVACY_COPY } from "../../src/data/trust-copy.ts";
 
-const BEACON = "https://static.cloudflareinsights.com/beacon.min.js";
+// Trailing slash = CSP prefix match on this path only. The injected tag is
+// /beacon.min.js/<version>, which a slash-less source (exact match) blocks.
+const BEACON = "https://static.cloudflareinsights.com/beacon.min.js/";
 const LANGS = ["en", "vi", "zh", "zh-hant"];
 
 const cspLine = readFileSync("public/_headers", "utf8")
@@ -76,7 +78,13 @@ test("script-src admits exactly the beacon path; connect-src and Trusted Types s
 test("negative proof: a host-wide, wildcard or extra script source is rejected", () => {
   for (const broken of [
     cspLine.replace(BEACON, "https://static.cloudflareinsights.com"),
-    cspLine.replace(BEACON, "https://*.cloudflareinsights.com/beacon.min.js"),
+    cspLine.replace(BEACON, "https://*.cloudflareinsights.com/beacon.min.js/"),
+    cspLine.replace(BEACON, "https://static.cloudflareinsights.com/other.js/"),
+    cspLine.replace(
+      BEACON,
+      "https://static.cloudflareinsights.com/beacon.min.js",
+    ),
+    cspLine.replace(BEACON, "https://static.cloudflareinsights.com/"),
     cspLine.replace(BEACON, `${BEACON} https://cdn.example.com/x.js`),
     cspLine.replace(
       "connect-src 'self'",
@@ -92,7 +100,7 @@ test("declared beacon fields carry no identifier", () => {
   const contract = JSON.parse(
     readFileSync("docs/sgps/adoption/rum-beacon-fields.json", "utf8"),
   );
-  assert.equal(contract.scriptUrl, BEACON);
+  assert.equal(`${contract.scriptUrl}/`, BEACON);
   assert.equal(contract.endpoint, "/cdn-cgi/rum");
   assert.ok(contract.declaredFields.length > 0);
   for (const field of contract.declaredFields) {
