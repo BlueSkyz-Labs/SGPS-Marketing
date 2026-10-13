@@ -85,9 +85,9 @@ const DECK: Record<
       whatItDoes: [
         "Viết suy nghĩ riêng tư theo nhịp của bạn",
         "Đọc lại nhật ký và kỷ niệm",
-        "Nhật ký ưu tiên lưu trên máy, trong Personal Vault riêng tư",
+        "Nhật ký ưu tiên lưu trên máy, trong kho cá nhân riêng tư",
         "Tự xuất bài viết ra máy khi bạn muốn",
-        "Lưu trong Vault riêng tư, với giới hạn khôi phục được nêu rõ",
+        "Lưu trong kho cá nhân riêng tư, với giới hạn khôi phục được nêu rõ",
       ],
     },
     zh: {
@@ -95,9 +95,9 @@ const DECK: Record<
       whatItDoes: [
         "按自己的节奏写下私密想法",
         "重读自己的日记与回忆",
-        "在私有的 Personal Vault 中本地优先写作",
+        "在私有的个人保险库中本地优先写作",
         "在你需要时把日记导出到你的设备",
-        "私有 Vault 存储，恢复范围有明确界定",
+        "私有个人保险库存储，恢复范围有明确界定",
       ],
     },
     "zh-hant": {
@@ -105,9 +105,9 @@ const DECK: Record<
       whatItDoes: [
         "按自己的節奏寫下私密想法",
         "重讀自己的日記與回憶",
-        "在私有的 Personal Vault 中以本機優先的方式寫作",
+        "在私有的個人保險庫中以本機優先的方式寫作",
         "在你需要時把日記匯出到你的裝置",
-        "私有 Vault 儲存，復原範圍有明確界定",
+        "私有個人保險庫儲存，復原範圍有明確界定",
       ],
     },
   },

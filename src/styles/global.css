@@ -838,6 +838,33 @@ html[data-intent="evaluate-product"] [data-journey-bar] a[href$="/products/"] {
   color: var(--text-muted);
 }
 
+.command-navigator__fallback {
+  padding: 0 0.75rem 0.5rem;
+  font-size: var(--size-2);
+}
+
+.command-navigator__fallback ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+  margin: 0.25rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.command-navigator__fallback a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+.command-navigator__status {
+  margin: 0.25rem 0 0;
+  color: var(--text-muted);
+}
+
 .hero-mark {
   position: relative;
   z-index: 1;
@@ -1763,6 +1790,23 @@ h3 {
     .brand-lockup--adaptive
     .brand-lockup__img--dark {
     display: block;
+  }
+}
+
+/* UX-U2 (C-06) — forced colors. The lockup is an <img> SVG with fixed brand
+   colors; forced-colors replaces the header/footer backgrounds with Canvas,
+   so the white reverse mark vanished on a white Canvas. Filters are not
+   overridden by forced colors: flatten the mark to a single luminance that
+   contrasts with the Canvas of the active palette (prefers-color-scheme
+   follows the forced palette). */
+@media (forced-colors: active) {
+  .brand-lockup__img {
+    filter: brightness(0);
+  }
+}
+@media (forced-colors: active) and (prefers-color-scheme: dark) {
+  .brand-lockup__img {
+    filter: brightness(0) invert(1);
   }
 }
 

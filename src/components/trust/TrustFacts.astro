@@ -28,7 +28,11 @@ const factLabel = (label: string) => label.replace(/[:.：。]\s*$/u, "");
         class="trust-fact"
         {...(fact.marker ? { [`data-${fact.marker}`]: "" } : {})}
       >
-        <dt class="trust-fact__label">{factLabel(fact.label)}</dt>
+        <dt class="trust-fact__label">
+          <span role="heading" aria-level="2">
+            {factLabel(fact.label)}
+          </span>
+        </dt>
         <dd class="trust-fact__body text-pretty">{fact.body}</dd>
       </div>
     ))}

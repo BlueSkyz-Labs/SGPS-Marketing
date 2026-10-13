@@ -1,4 +1,5 @@
 ---
+import ButtonLink from "@/components/ui/ButtonLink.astro";
 import BusinessRouteState from "@/components/empty-state/BusinessRouteState.astro";
 import { SITE, labelFor, SHARED_LABELS } from "@/data/site";
 import type { Language } from "@/data/site";
@@ -13,7 +14,10 @@ const hasPublicEmail = Boolean(SITE.contactEmail || SITE.supportEmail);
 ---
 
 {hasPublicEmail ? (
-  <li class="flex min-w-0 flex-col gap-3 rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-raised)] p-6">
+  <li
+    data-contact-card="business"
+    class="flex min-w-0 flex-col gap-3 rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-raised)] p-6"
+  >
     <h2 class="text-lg font-semibold tracking-tight">
       {labelFor(SHARED_LABELS.generalContact, lang)}
     </h2>
@@ -22,12 +26,14 @@ const hasPublicEmail = Boolean(SITE.contactEmail || SITE.supportEmail);
         class="text-sm text-[var(--text-secondary)]"
         data-public-email-role="contact"
       >
-        <a
+        <ButtonLink
           href={`mailto:${SITE.contactEmail}`}
-          class="inline-flex min-h-11 items-center font-semibold text-[var(--action-primary)] no-underline hover:underline"
+          variant="primary"
+          icon="none"
+          data-contact-primary
         >
           {SITE.contactEmail}
-        </a>
+        </ButtonLink>
       </p>
     ) : null}
     {SITE.supportEmail ? (
@@ -36,12 +42,13 @@ const hasPublicEmail = Boolean(SITE.contactEmail || SITE.supportEmail);
         data-public-email-role="support"
       >
         <span>{labelFor(SHARED_LABELS.productSupport, lang)}: </span>
-        <a
+        <ButtonLink
           href={`mailto:${SITE.supportEmail}`}
-          class="inline-flex min-h-11 items-center font-semibold text-[var(--action-primary)] no-underline hover:underline"
+          variant="tertiary"
+          icon="none"
         >
           {SITE.supportEmail}
-        </a>
+        </ButtonLink>
       </p>
     ) : null}
   </li>

@@ -202,7 +202,11 @@ const defaultTrack = wanted
       phones={heroPhones}
       desktops={heroDesktops}
       lang={lang}
-      labels={{ ...t, inspect: STORY_COPY[lang].inspect }}
+      labels={{
+        ...t,
+        inspect: STORY_COPY[lang].inspect,
+        inspectOpens: STORY_COPY[lang].inspectOpens,
+      }}
       first
     />
   ) : null}
@@ -214,7 +218,11 @@ const defaultTrack = wanted
         phones={morePhones}
         desktops={moreDesktops}
         lang={lang}
-        labels={{ ...t, inspect: STORY_COPY[lang].inspect }}
+        labels={{
+          ...t,
+          inspect: STORY_COPY[lang].inspect,
+          inspectOpens: STORY_COPY[lang].inspectOpens,
+        }}
       />
     </details>
   ) : null}
