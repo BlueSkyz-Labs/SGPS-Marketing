@@ -92,7 +92,7 @@ test.describe("C2 Flagship Theatre — fixture-backed (product present)", () => 
       description: "旗舰产品的测试说明。",
       jobsHeading: "能帮你做什么",
       jobs: ["测试工作一", "测试工作二"],
-      scopeHeading: "正在开发的内容",
+      scopeHeading: "我们正在打造的产品",
       capabilities: ["测试范围一", "测试范围二", "测试范围三"],
       action: "查看 Fixture Flagship",
       caption: "品牌视觉素材，并非应用运行界面的截图。",

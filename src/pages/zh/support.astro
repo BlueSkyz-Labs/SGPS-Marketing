@@ -31,14 +31,14 @@ const hasSupportEmail = Boolean(SITE.supportEmail);
       />
       {hasSupportEmail ? (
         <p class="mt-8 max-w-2xl text-[var(--text-secondary)]">
-          Email{" "}
+          请发邮件至{" "}
           <a
             href={`mailto:${SITE.supportEmail}`}
             class="inline-flex min-h-11 items-center font-semibold text-[var(--action-primary)] no-underline hover:underline"
           >
             {SITE.supportEmail}
           </a>{" "}
-          可提供一般产品支持，直至发布针对产品的支持通道。
+          获取一般产品支持，直至发布各产品专属的支持渠道。
         </p>
       ) : null}
       <div class="mt-10 flex flex-wrap items-center gap-3" data-support-actions>
