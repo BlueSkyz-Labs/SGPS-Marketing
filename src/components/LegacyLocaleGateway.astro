@@ -1,0 +1,135 @@
+---
+import { SITE } from "@/data/site";
+import { canonicalForPath } from "@/lib/seo";
+import { isNonProductionSiteUrl } from "@/lib/truth";
+import {
+  isLegacyGatewayRoute,
+  type LegacyGatewayRoute,
+} from "@/lib/legacy-gateway";
+
+interface Props {
+  route: LegacyGatewayRoute;
+}
+
+// Unprefixed legacy route gateway (UX U8). Canonical stays the English page,
+// as with the old redirect stub; the page itself never carries content.
+const { route } = Astro.props;
+if (!isLegacyGatewayRoute(route)) throw new Error(`Unknown route ${route}`);
+const canonical = canonicalForPath(`/en${route}`, SITE.url);
+const robotsNoindex = isNonProductionSiteUrl(SITE.url);
+const choices = [
+  { code: "vi", label: "Tiếng Việt", lang: "vi", hreflang: "vi" },
+  { code: "en", label: "English", lang: "en", hreflang: "en" },
+  { code: "zh", label: "简体中文", lang: "zh-Hans", hreflang: "zh-Hans" },
+  { code: "zh-hant", label: "繁體中文", lang: "zh-Hant", hreflang: "zh-Hant" },
+];
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    {robotsNoindex ? <meta name="robots" content="noindex, nofollow" /> : null}
+    <link rel="canonical" href={canonical} />
+    <title>BlueSkyz Labs | Choose your language</title>
+    <!-- No-JS fallback: English after 2s. With JS the script below navigates
+         first (locale-aware) and cancels this pending refresh. -->
+    <meta http-equiv="refresh" content={`2;url=/en${route}`} />
+    <style is:inline>
+      :root {
+        color-scheme: light dark;
+      }
+      body {
+        margin: 0;
+        font-family:
+          ui-sans-serif,
+          system-ui,
+          -apple-system,
+          "Segoe UI",
+          sans-serif;
+        line-height: 1.5;
+        background: Canvas;
+        color: CanvasText;
+      }
+      main {
+        max-width: 30rem;
+        margin: 0 auto;
+        padding: 3rem 1rem;
+        text-align: center;
+      }
+      ul {
+        display: grid;
+        gap: 0.75rem;
+        padding: 0;
+        margin: 1.5rem 0 0;
+        list-style: none;
+      }
+      a {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 2.75rem;
+        border: 1px solid currentColor;
+        border-radius: 0.5rem;
+        color: LinkText;
+        font-weight: 600;
+        text-decoration: none;
+      }
+    </style>
+  </head>
+  <body data-legacy-route={route}>
+    <main>
+      <h1>Choose your language</h1>
+      <p>
+        <span lang="vi">Chọn ngôn ngữ</span> ·
+        <span lang="zh-Hans">选择语言</span> ·
+        <span lang="zh-Hant">選擇語言</span>
+      </p>
+      <ul>
+        {choices.map((choice) => (
+          <li>
+            <a
+              href={`/${choice.code}${route}`}
+              lang={choice.lang}
+              hreflang={choice.hreflang}
+              data-language-choice={choice.code}
+            >
+              {choice.label}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </main>
+    <script>
+      import { LANGUAGE_STORAGE_KEY } from "@/lib/i18n";
+      import {
+        isLegacyGatewayRoute,
+        legacyGatewayTarget,
+      } from "@/lib/legacy-gateway";
+
+      const route = document.body.dataset.legacyRoute ?? "";
+      if (isLegacyGatewayRoute(route)) {
+        let stored: string | null = null;
+        try {
+          stored = window.localStorage.getItem(LANGUAGE_STORAGE_KEY);
+        } catch {
+          // Storage unreadable: fall through to browser preference.
+        }
+        const languages = navigator.languages?.length
+          ? navigator.languages
+          : [navigator.language];
+        window.location.replace(
+          legacyGatewayTarget({
+            route,
+            stored,
+            languages,
+            country: document.documentElement.dataset.country ?? null,
+            search: window.location.search,
+            hash: window.location.hash,
+          }),
+        );
+      }
+    </script>
+  </body>
+</html>
