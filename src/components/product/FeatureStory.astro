@@ -167,14 +167,14 @@ const DESKTOP_SIZES = "(min-width: 64rem) 64rem, calc(100vw - 2.5rem)";
   }
   .story__chapters {
     display: grid;
-    gap: 3.5rem;
+    gap: 2.5rem;
   }
   .story__frame {
     display: none;
   }
   .story__chapter {
     display: grid;
-    gap: 1.5rem;
+    gap: 1rem;
     min-width: 0;
   }
   .story__text {
@@ -210,8 +210,9 @@ const DESKTOP_SIZES = "(min-width: 64rem) 64rem, calc(100vw - 2.5rem)";
     letter-spacing: 0.01em;
   }
   .story__title {
+    /* UX-U4: h3 scale, always below the page H1 (32 px phones, 44 px wide). */
     margin: 0.5rem 0 0;
-    font-size: var(--size-7);
+    font-size: var(--size-6);
     font-weight: 600;
     line-height: 1.15;
     letter-spacing: -0.02em;
@@ -318,22 +319,22 @@ const DESKTOP_SIZES = "(min-width: 64rem) 64rem, calc(100vw - 2.5rem)";
   /* Wide, static: each chapter is a row, text beside its phone. */
   @media (min-width: 64rem) {
     .story__chapters {
-      gap: 4rem;
+      gap: 2.5rem;
     }
     .story__chapter {
-      grid-template-columns: minmax(0, 1fr) 17rem;
+      grid-template-columns: minmax(0, 1fr) 14rem;
       align-items: center;
-      column-gap: clamp(3rem, 6vw, 6rem);
+      column-gap: clamp(2rem, 5vw, 4rem);
     }
     .story__screen {
-      width: 17rem;
+      width: 14rem;
       justify-self: center;
     }
     .story__title {
-      font-size: var(--size-8);
+      font-size: var(--size-7);
     }
     .story__coda {
-      margin-top: 6rem;
+      margin-top: 4rem;
     }
   }
 
@@ -376,7 +377,7 @@ const DESKTOP_SIZES = "(min-width: 64rem) 64rem, calc(100vw - 2.5rem)";
         display: flex;
         flex-direction: column;
         justify-content: center;
-        min-height: 78svh;
+        min-height: 64svh;
         view-timeline-name: var(--story-tl);
         view-timeline-axis: block;
       }
