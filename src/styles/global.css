@@ -2170,3 +2170,54 @@ dd {
   border-color: color-mix(in srgb, var(--brand-porcelain) 30%, transparent);
   color: var(--brand-porcelain);
 }
+
+/* UX P2-4 — capture viewer: one shared native dialog for the sample-data
+   capture links. Static, no animation, so reduced motion needs no override. */
+.capture-viewer {
+  margin: auto;
+  width: min(100% - 1.5rem, 72rem);
+  max-height: calc(100dvh - 1.5rem);
+  overflow: auto;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  background: var(--surface-raised);
+  color: var(--text-primary);
+  padding: 0.75rem;
+}
+.capture-viewer::backdrop {
+  background: color-mix(in srgb, var(--brand-ink) 72%, transparent);
+}
+.capture-viewer__img {
+  display: block;
+  margin: 0 auto;
+  max-width: 100%;
+  max-height: calc(100dvh - 9rem);
+  width: auto;
+  height: auto;
+  object-fit: contain;
+}
+.capture-viewer__caption {
+  margin: 0.75rem 0 0;
+  font-size: var(--size-3);
+  color: var(--text-secondary);
+}
+.capture-viewer__close {
+  display: inline-flex;
+  min-width: 2.75rem;
+  min-height: 2.75rem;
+  align-items: center;
+  justify-content: center;
+  margin-top: 0.75rem;
+  padding: 0 1.25rem;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-pill);
+  background: var(--surface-raised);
+  color: var(--action-primary);
+  font-size: var(--size-3);
+  font-weight: 600;
+  cursor: pointer;
+}
+.capture-viewer__close:focus-visible {
+  outline: 2px solid var(--brand-cobalt);
+  outline-offset: 3px;
+}
