@@ -243,9 +243,10 @@ const defaultTrack = wanted
      collapsed (Sổ Trọ with its Feature Story, 2026-10-04, reduced motion:
      4431-4660 px at 390, 4554-4572 px at 1024, 4630-4648 px at 1440 across
      the four locales) so the scrollbar does not jump. Where the sticky story
-     stage runs, each of the five chapters is 78svh tall, so the placeholder
-     follows the viewport height (measured: 1875 px + 5 x 78svh at 1024,
-     1944 px + 5 x 78svh at 1440). Guarded by
+     stage runs, each of the five chapters is 64svh tall, so the placeholder
+     follows the viewport height (measured 2026-10-12, UX-U4: 1875 px + 5 x 64svh at 1024,
+     1950 px + 5 x 64svh at 1440; static: 4019-4038 px at 1024, 4095-4114 px
+     at 1440, 4577-4813 px at 390). Guarded by
      tests/e2e/wp-c-product-surfaces.spec.ts; re-measure after any layout
      change. */
   .showcase {
@@ -253,16 +254,16 @@ const defaultTrack = wanted
     /* W2: five real-screen inspection links plus coda increased the
        390px collapsed-gallery height. Chromium/WebKit/mobile CI measured
        4938–4972px (vi/en, reduced motion); retain the strict 6% CLS guard. */
-    contain-intrinsic-size: auto 4960px;
+    contain-intrinsic-size: auto 4700px;
   }
   @media (min-width: 64rem) {
     .showcase {
-      contain-intrinsic-size: auto 4555px;
+      contain-intrinsic-size: auto 4030px;
     }
   }
   @media (min-width: 80rem) {
     .showcase {
-      contain-intrinsic-size: auto 4635px;
+      contain-intrinsic-size: auto 4100px;
     }
   }
   .showcase__lead {
@@ -531,14 +532,14 @@ const defaultTrack = wanted
   @media (min-width: 64rem) and (prefers-reduced-motion: no-preference) {
     @supports (animation-timeline: view()) and (timeline-scope: --story) {
       .showcase:has([data-feature-story]) {
-        contain-intrinsic-size: auto calc(1870px + 390svh);
+        contain-intrinsic-size: auto calc(1875px + 320svh);
       }
     }
   }
   @media (min-width: 80rem) and (prefers-reduced-motion: no-preference) {
     @supports (animation-timeline: view()) and (timeline-scope: --story) {
       .showcase:has([data-feature-story]) {
-        contain-intrinsic-size: auto calc(1945px + 390svh);
+        contain-intrinsic-size: auto calc(1950px + 320svh);
       }
     }
   }
