@@ -87,7 +87,7 @@ for (const lang of ["en", "vi", "zh", "zh-hant"] as const) {
       await expect(page.locator("[data-command-empty]")).toBeVisible();
       await expect(page.locator("[data-command-fallback]")).toBeVisible();
       await expect(page.locator("[data-command-status]")).toBeHidden();
-      await expect(page.locator("[data-command-live]")).toHaveText(/\\S+/);
+      await expect(page.locator("[data-command-live]")).toHaveText(/\S+/);
     });
   }
 }
