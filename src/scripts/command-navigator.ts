@@ -93,11 +93,14 @@ export function initCommandNavigator(root: ParentNode = document): void {
   const applyFilter = (query: string): void => {
     const lowered = query.trim().toLocaleLowerCase();
     const tokens = words(lowered);
+    const isEmptyQuery = lowered.length === 0;
     let visibleCount = 0;
     const scored = originalOrder.map((item, index) => ({
       item,
       index,
-      score: tokens.length === 0 ? 1 : scoreItem(tokens, item),
+      // A non-empty query with no word tokens (emoji/punctuation) has no
+      // matches. Only a genuinely blank field may show the whole index.
+      score: isEmptyQuery ? 1 : tokens.length === 0 ? 0 : scoreItem(tokens, item),
     }));
     for (const { item, score } of scored) {
       if (item instanceof HTMLElement) {
