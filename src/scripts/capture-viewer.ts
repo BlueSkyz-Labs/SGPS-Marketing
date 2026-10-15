@@ -93,7 +93,6 @@ export function initCaptureViewer(root: Document = document): void {
     }
     trigger = link;
     const { dialog, img, caption, close } = parts;
-    img.src = href;
     img.alt = link.dataset.viewerAlt ?? "";
     caption.textContent = link.dataset.viewerTitle ?? "";
     close.textContent = link.dataset.viewerClose ?? "";
@@ -109,6 +108,9 @@ export function initCaptureViewer(root: Document = document): void {
       return;
     }
     event.preventDefault();
+    // Load the full-resolution image only after successful enhancement.
+    // A failed in-app modal must not start a duplicate download.
+    img.src = href;
     close.focus();
   });
 }
