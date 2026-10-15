@@ -94,13 +94,17 @@ export function initCommandNavigator(root: ParentNode = document): void {
     const lowered = query.trim().toLocaleLowerCase();
     const tokens = words(lowered);
     const isEmptyQuery = lowered.length === 0;
+    // Emoji/punctuation can produce no tokens. That is not a blank search.
+    const rank = (item: Element): number => {
+      if (isEmptyQuery) return 1;
+      if (tokens.length === 0) return 0;
+      return scoreItem(tokens, item);
+    };
     let visibleCount = 0;
     const scored = originalOrder.map((item, index) => ({
       item,
       index,
-      // A non-empty query with no word tokens (emoji/punctuation) has no
-      // matches. Only a genuinely blank field may show the whole index.
-      score: isEmptyQuery ? 1 : tokens.length === 0 ? 0 : scoreItem(tokens, item),
+      score: rank(item),
     }));
     for (const { item, score } of scored) {
       if (item instanceof HTMLElement) {
