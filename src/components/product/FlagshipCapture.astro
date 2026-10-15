@@ -36,6 +36,12 @@ interface Props {
     | { src: string; width: number }
     | { src: string; width: number }[]
     | undefined;
+  /**
+   * UX P2-9: optional crop window in source pixels. The same recorded file is
+   * shown, enlarged and clipped to this region so its text stays readable in a
+   * small slot; nothing is redrawn and the alt/provenance stay the record's.
+   */
+  crop?: { x: number; y: number; width: number; height: number } | undefined;
   class?: string;
 }
 
@@ -48,6 +54,7 @@ const {
   showLabel = true,
   sizes,
   smallSrc,
+  crop,
   class: className = "",
 } = Astro.props;
 
@@ -64,6 +71,15 @@ const smallCandidates = smallSrc
       (entry) => `${entry.src} ${entry.width}w`,
     )
   : [];
+const pct = (n: number) => `${Math.round(n * 10000) / 100}%`;
+const cropStyle = crop
+  ? [
+      `aspect-ratio: ${crop.width} / ${crop.height}`,
+      `--crop-w: ${pct(item.width / crop.width)}`,
+      `--crop-x: -${pct(crop.x / crop.width)}`,
+      `--crop-y: -${pct(crop.y / crop.height)}`,
+    ].join("; ")
+  : undefined;
 const revision = capture.sourceRevision.slice(0, 7);
 const capturedOn = capture.capturedAt.toISOString().slice(0, 10);
 
@@ -82,25 +98,31 @@ const label = LABEL[lang];
   data-capture-surface={item.surface}
   data-capture-revision={revision}
   data-capture-date={capturedOn}
+  data-capture-crop={crop ? "" : undefined}
 >
-  <img
-    class="flagship-capture__image"
-    src={item.src}
-    srcset={
-      smallCandidates.length > 0
-        ? [...smallCandidates, `${item.src} ${item.width}w`].join(", ")
-        : undefined
-    }
-    alt={item.alt[lang]}
-    width={item.width}
-    height={item.height}
-    sizes={sizes}
-    decoding="async"
-    loading={priority ? "eager" : "lazy"}
-    fetchpriority={lowPriority ? "low" : priority ? "high" : "auto"}
-    data-capture-src={item.src}
-    data-lcp-candidate={priority ? "" : undefined}
-  />
+  <div
+    class:list={[crop ? "flagship-capture__crop" : "flagship-capture__frame"]}
+    style={cropStyle}
+  >
+    <img
+      class="flagship-capture__image"
+      src={item.src}
+      srcset={
+        smallCandidates.length > 0
+          ? [...smallCandidates, `${item.src} ${item.width}w`].join(", ")
+          : undefined
+      }
+      alt={item.alt[lang]}
+      width={item.width}
+      height={item.height}
+      sizes={sizes}
+      decoding="async"
+      loading={priority ? "eager" : "lazy"}
+      fetchpriority={lowPriority ? "low" : priority ? "high" : "auto"}
+      data-capture-src={item.src}
+      data-lcp-candidate={priority ? "" : undefined}
+    />
+  </div>
   {showLabel ? (
     <figcaption class="flagship-capture__label">
       {label}
@@ -123,6 +145,27 @@ const label = LABEL[lang];
       color-mix(in srgb, var(--brand-porcelain) 22%, transparent);
     background: var(--brand-ink);
     opacity: 1;
+  }
+  /* Without a crop the wrapper is layout-neutral. */
+  .flagship-capture__frame {
+    display: contents;
+  }
+  .flagship-capture__crop {
+    position: relative;
+    overflow: hidden;
+    border-radius: var(--radius-md);
+    border: 1px solid
+      color-mix(in srgb, var(--brand-porcelain) 22%, transparent);
+    background: var(--brand-ink);
+  }
+  .flagship-capture__crop .flagship-capture__image {
+    position: absolute;
+    left: var(--crop-x);
+    top: var(--crop-y);
+    width: var(--crop-w);
+    max-width: none;
+    border: 0;
+    border-radius: 0;
   }
   .flagship-capture__label {
     margin-top: 0.5rem;
