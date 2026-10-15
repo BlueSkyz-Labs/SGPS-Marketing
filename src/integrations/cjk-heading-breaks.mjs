@@ -7,46 +7,32 @@ import { fileURLToPath } from "node:url";
  * Browsers break between any two Han characters, and `word-break: auto-phrase`
  * does not segment Chinese (Chromium 141 still split "产/品" with it applied;
  * Firefox and WebKit do not support it). At build time this pass wraps every
- * Chinese word of two or more characters, and short Latin runs such as
- * "Sổ Trọ", in zh-Hans / zh-Hant h1–h3 in `<span class="cjk-nowrap">`, and
- * tags the heading `data-cjk-wrap`. Lines then break only between words while
- * the heading keeps `word-break: normal` (keep-all overflowed 320px before).
- * Copy is unchanged: the spans add no characters.
+ * Chinese word of two or more characters in zh-Hans / zh-Hant h1–h3 in
+ * `<span class="cjk-word">` and tags the heading `data-cjk-wrap`. The span
+ * keeps the word whole (keep-all) but may still break as a last resort
+ * (overflow-wrap: anywhere), so a word that cannot fit never overflows; the
+ * heading itself keeps `word-break: normal`. Latin text such as "Sổ Trọ" is
+ * left alone: breaking it at a space is normal. Copy is unchanged: the spans
+ * add no characters.
  */
 
 const HAN = /\p{Script=Han}/u;
-const LATIN_RUN = /([\p{Script=Latin}\p{N}]+(?: [\p{Script=Latin}\p{N}]+)+)/u;
-const MAX_NOWRAP = 24;
 const HEADING = /<(h[1-3])(\s[^>]*)?>([\s\S]*?)<\/\1>/g;
 
-const nowrap = (text) => `<span class="cjk-nowrap">${text}</span>`;
+const word = (text) => `<span class="cjk-word">${text}</span>`;
 
 function segmenter(lang) {
   return new Intl.Segmenter(lang, { granularity: "word" });
 }
 
-/** Wrap each Han word of two or more characters so it never splits. */
-export function wrapHanWords(text, seg) {
+/** Wrap each Han word of two or more characters so it breaks only as a last resort. */
+export function wrapWords(text, seg) {
   let out = "";
   for (const { segment } of seg.segment(text)) {
     out +=
-      [...segment].length > 1 && HAN.test(segment) ? nowrap(segment) : segment;
+      [...segment].length > 1 && HAN.test(segment) ? word(segment) : segment;
   }
   return out;
-}
-
-/** Wrap Han words, and keep a short multi-word Latin run on one line. */
-export function wrapWords(text, seg) {
-  return text
-    .split(LATIN_RUN)
-    .map((part, i) =>
-      i % 2 === 1
-        ? part.length <= MAX_NOWRAP
-          ? nowrap(part)
-          : part
-        : wrapHanWords(part, seg),
-    )
-    .join("");
 }
 
 /** Rewrite the h1–h3 elements of one zh-Hans / zh-Hant HTML document. */

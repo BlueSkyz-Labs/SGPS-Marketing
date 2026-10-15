@@ -2032,12 +2032,14 @@ dd {
   }
 }
 /* UX S06: auto-phrase does not segment Chinese, so headings still split
-   "产/品". The build wraps each Chinese word and short Latin name in zh-Hans /
-   zh-Hant h1–h3 in .cjk-nowrap (src/integrations/cjk-heading-breaks.mjs):
-   lines still break between words under word-break: normal, never inside
-   one. keep-all is not used (it overflowed 320px, see v8-w6 contract). */
-.cjk-nowrap {
-  white-space: nowrap;
+   "产/品". The build wraps each Chinese word in zh-Hans / zh-Hant h1–h3 in
+   .cjk-word (src/integrations/cjk-heading-breaks.mjs): lines break between
+   words, and a word that cannot fit on a line may still break inside rather
+   than overflow (200% text at 320px). keep-all applies to the word span
+   only, never to the heading (it overflowed 320px, see v8-w6 contract). */
+.cjk-word {
+  word-break: keep-all;
+  overflow-wrap: anywhere;
 }
 
 /* Back to top: a plain anchor at the end of long pages on phones.

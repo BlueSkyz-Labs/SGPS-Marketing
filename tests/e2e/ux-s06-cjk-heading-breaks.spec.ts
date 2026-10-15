@@ -8,8 +8,8 @@ import {
 /**
  * UX S06 (audit 2026-10-15): Chinese headings broke inside words at
  * 320–390px ("智能化产 | 品", "私 | 有"). The build now wraps each Chinese word
- * and short Latin run such as "Sổ Trọ" in zh-Hans / zh-Hant h1–h3 in a
- * nowrap span; headings keep word-break: normal.
+ * in zh-Hans / zh-Hant h1–h3 in a keep-all span that may still break as a last
+ * resort; headings keep word-break: normal.
  */
 const LANGS = ["zh", "zh-hant"] as const;
 const ROUTES = [
@@ -28,11 +28,12 @@ const WIDTHS = [320, 390];
 
 test("negative proof: the build pass wraps words and leaves other text alone", () => {
   const seg = new Intl.Segmenter("zh-Hans", { granularity: "word" });
-  const n = (t: string) => `<span class="cjk-nowrap">${t}</span>`;
+  const n = (t: string) => `<span class="cjk-word">${t}</span>`;
   expect(wrapWords("智能化产品", seg)).toBe(`${n("智能")}化${n("产品")}`);
   // Punctuation and one-character words stay outside the spans.
   expect(wrapWords("产品，提升", seg)).toBe(`${n("产品")}，${n("提升")}`);
-  expect(wrapWords("在 Sổ Trọ 里", seg)).toBe(`在 ${n("Sổ Trọ")} 里`);
+  // Latin text may break at its spaces.
+  expect(wrapWords("在 Sổ Trọ 里", seg)).toBe("在 Sổ Trọ 里");
   expect(wrapWords("BlueSkyz", seg)).toBe("BlueSkyz");
   expect(documentLang('<html lang="en">')).toBeNull();
   expect(documentLang('<html dir="ltr" lang="zh-Hant">')).toBe("zh-Hant");
@@ -41,7 +42,8 @@ test("negative proof: the build pass wraps words and leaves other text alone", (
   expect(out).toContain('<h2 class="x" data-cjk-wrap>');
   // Tags and attributes are never rewritten.
   expect(out).toContain('<a href="/zh/">');
-  expect(out).toContain(n("BlueSkyz Labs"));
+  expect(out).toContain(">BlueSkyz Labs</a>");
+  expect(out).toContain(n("关于"));
   // A heading without Han text is left alone.
   expect(rewriteHeadings("<h1>About</h1>", "zh-Hans")).toBe("<h1>About</h1>");
 });
@@ -127,7 +129,7 @@ test("negative proof: without the word spans the home H1 splits a word at 320px"
   await page.goto("/zh/");
   await page.evaluate(() => {
     const h1 = document.querySelector("h1")!;
-    h1.querySelectorAll(".cjk-nowrap").forEach((s) =>
+    h1.querySelectorAll(".cjk-word").forEach((s) =>
       s.replaceWith(...s.childNodes),
     );
   });
