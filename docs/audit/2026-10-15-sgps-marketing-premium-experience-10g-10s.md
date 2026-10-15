@@ -65,8 +65,9 @@ Score = 3×Impact + 2×Feasibility + 2×SGPS Alignment − 2×Risk, each 1–5 (
 2. **Problem / evidence:** W0 shows large desktop inter-section whitespace and a small mobile proof; CX decision already removed duplicate trust bands, so remaining comprehension is a validation hypothesis (not a measured conversion defect).
 3. **Kịch bản & interaction:** New visitor with 30 seconds on 390px understands Sổ Trọ or Sổ Tâm, reads truthful status, reaches profile/Verify; returning visitor is not forced through onboarding.
 4. **UX/UI, visual & architecture:** Run logo-hidden information hierarchy study; reconcile Hero → flagship → second product → next-step story. Reuse Hero, ProductHouse, HomeNextSteps and lifecycle-CTA; make only independently observed root-cause changes, not another CTA rail.
-5. **Value, trade-off, dependency, effort, AC:** Comprehension + conversion clarity without false urgency; differentiates a trusted product house. Dependencies #561 W0 and source-backed current product truth; risk over-condensing nuance, effort M; accept 4-locale/no-JS route parity, no duplicated primary CTA, independent E4 tasks and no performance regressions.
-6. **Priority score:** 29/35 = 3×Impact(5) + 2×Feasibility(4) + 2×SGPS(5) − 2×Risk(2), where 5=high for all input scales and high Risk is penalized.
+5. **Experience / business / trust / differentiation:** Comprehension + conversion clarity without false urgency; differentiates a trusted product house.
+6. **Dependencies / risk / effort / acceptance criteria:** Dependencies #561 W0 and source-backed current product truth; risk over-condensing nuance, effort M; accept 4-locale/no-JS route parity, no duplicated primary CTA, independent E4 tasks and no performance regressions.
+7. **Priority score:** 29/35 = 3×Impact(5) + 2×Feasibility(4) + 2×SGPS(5) − 2×Risk(2), where 5=high for all input scales and high Risk is penalized.
 
 ### G02 — Contextual claim → source → boundary chain
 
@@ -74,8 +75,9 @@ Score = 3×Impact + 2×Feasibility + 2×SGPS Alignment − 2×Risk, each 1–5 (
 2. **Problem / evidence:** Current Verify has claim/source/limit rows; #604 is OPEN to group those into cards. No verified current-head comprehension outcome after #604.
 3. **Kịch bản & interaction:** Visitor asks whether a screenshot or promise can be trusted; one contextual explainer goes to canonical /verify claim anchor, and shows limits before confident language.
 4. **UX/UI, visual & architecture:** After #604, pilot a minimal progressive-disclosure fragment on product detail using getPublicClaims/SourceTrace; static anchor fallback; reject unverifiable claim, stale/unpublished refs and JS failure.
-5. **Value, trade-off, dependency, effort, AC:** Trust differentiation anchored in evidence, no vanity verification. Dependency #604 and #564; risk implying third-party audit, effort M; accept 1:1 claim IDs to /verify, sources + limits accessible keyboard/no-JS, all negative fixtures red on false claims.
-6. **Priority score:** 25/35 = 3×Impact(5) + 2×Feasibility(3) + 2×SGPS(5) − 2×Risk(3), where 5=high for all input scales and high Risk is penalized.
+5. **Experience / business / trust / differentiation:** Trust differentiation anchored in evidence, no vanity verification.
+6. **Dependencies / risk / effort / acceptance criteria:** Dependency #604 and #564; risk implying third-party audit, effort M; accept 1:1 claim IDs to /verify, sources + limits accessible keyboard/no-JS, all negative fixtures red on false claims.
+7. **Priority score:** 25/35 = 3×Impact(5) + 2×Feasibility(3) + 2×SGPS(5) − 2×Risk(3), where 5=high for all input scales and high Risk is penalized.
 
 ### G03 — Shareable source-bound product passport
 
@@ -83,8 +85,9 @@ Score = 3×Impact + 2×Feasibility + 2×SGPS Alignment − 2×Risk, each 1–5 (
 2. **Problem / evidence:** Existing Dossier and Decision Room are general-purpose; there is no source-verified decision that a concise product-specific handoff is ready. This is an opportunity, not a proven defect.
 3. **Kịch bản & interaction:** An evaluator opens Sổ Trọ, requests a one-page overview, then sees the owner-approved stage, screenshot provenance, security/support boundaries and source links.
 4. **UX/UI, visual & architecture:** Generate a static product-scoped print/share view from product + showcase + claim graph, no shadow registry. Keep Dossier/Decision Room out of global nav per Owner CX decision; no private telemetry or unapproved pricing.
-5. **Value, trade-off, dependency, effort, AC:** Useful high-trust sales/partner handoff; supports differentiation without fabricating case studies. Dependencies product-owner approved publicability and existing dossier schema; risk outdated exports, effort L; accept byte-level facts parity, print readability, source timestamps, unknown fields omitted rather than inferred.
-6. **Priority score:** 22/35 = 3×Impact(4) + 2×Feasibility(3) + 2×SGPS(5) − 2×Risk(3), where 5=high for all input scales and high Risk is penalized.
+5. **Experience / business / trust / differentiation:** Useful high-trust sales/partner handoff; supports differentiation without fabricating case studies.
+6. **Dependencies / risk / effort / acceptance criteria:** Dependencies product-owner approved publicability and existing dossier schema; risk outdated exports, effort L; accept byte-level facts parity, print readability, source timestamps, unknown fields omitted rather than inferred.
+7. **Priority score:** 22/35 = 3×Impact(4) + 2×Feasibility(3) + 2×SGPS(5) − 2×Risk(3), where 5=high for all input scales and high Risk is penalized.
 
 ### G04 — Honest product-evolution narrative
 
@@ -92,8 +95,9 @@ Score = 3×Impact + 2×Feasibility + 2×SGPS Alignment − 2×Risk, each 1–5 (
 2. **Problem / evidence:** Registry records lifecycle and sourceRevision/lastReviewedAt; Git last-updated line from #606 disappears on shallow production clone. Historical merges do not prove a public timeline exists.
 3. **Kịch bản & interaction:** A returning visitor compares what changed since previous visit and can distinguish preview, under development and launched—without a fake countdown.
 4. **UX/UI, visual & architecture:** Derive an optional chronology only from owner-approved public release/claim records; bound chronology to immutable source, publishability and date; no separate editable copy corpus.
-5. **Value, trade-off, dependency, effort, AC:** Higher return-visit utility and credibility. Dependencies upstream release schema + approved published milestones; risk date/availability overclaim, effort M/L; accept unknown dates hidden, source and lifecycle red-team, no public forward promises.
-6. **Priority score:** 20/35 = 3×Impact(4) + 2×Feasibility(3) + 2×SGPS(5) − 2×Risk(4), where 5=high for all input scales and high Risk is penalized.
+5. **Experience / business / trust / differentiation:** Higher return-visit utility and credibility.
+6. **Dependencies / risk / effort / acceptance criteria:** Dependencies upstream release schema + approved published milestones; risk date/availability overclaim, effort M/L; accept unknown dates hidden, source and lifecycle red-team, no public forward promises.
+7. **Priority score:** 20/35 = 3×Impact(4) + 2×Feasibility(3) + 2×SGPS(5) − 2×Risk(4), where 5=high for all input scales and high Risk is penalized.
 
 ### G05 — Guided real-screen understanding, not screenshot theatre
 
@@ -101,8 +105,9 @@ Score = 3×Impact + 2×Feasibility + 2×SGPS Alignment − 2×Risk, each 1–5 (
 2. **Problem / evidence:** W0 measured a ~235px mobile depiction as illegible; #607 OPEN adds existing-source crop and narrow capture, #605 viewer MERGED. A full guided explanation is not yet evidenced.
 3. **Kịch bản & interaction:** Visitor taps a real app screenshot, inspects its original pixels, reads two approved task-led captions and goes back without losing scroll or context.
 4. **UX/UI, visual & architecture:** Reuse FlagshipCapture, showcase YAML, viewer and approved jobs; add only source-bound optional caption-to-region links after #607; no synthetic overlays pretending to be UI; src dimensions/provenance stay intact.
-5. **Value, trade-off, dependency, effort, AC:** Product clarity with honest provenance. Dependency #607 and asset owner approval; risk annotations misstate functionality or load weight, effort M; accept same recorded image SHA/alt, narrow/desktop visual proof, device/keyboard/no-JS access, no new third parties.
-6. **Priority score:** 27/35 = 3×Impact(5) + 2×Feasibility(4) + 2×SGPS(5) − 2×Risk(3), where 5=high for all input scales and high Risk is penalized.
+5. **Experience / business / trust / differentiation:** Product clarity with honest provenance.
+6. **Dependencies / risk / effort / acceptance criteria:** Dependency #607 and asset owner approval; risk annotations misstate functionality or load weight, effort M; accept same recorded image SHA/alt, narrow/desktop visual proof, device/keyboard/no-JS access, no new third parties.
+7. **Priority score:** 27/35 = 3×Impact(5) + 2×Feasibility(4) + 2×SGPS(5) − 2×Risk(3), where 5=high for all input scales and high Risk is penalized.
 
 ### G06 — Privacy-preserving visitor intent lens
 
@@ -110,8 +115,9 @@ Score = 3×Impact + 2×Feasibility + 2×SGPS Alignment − 2×Risk, each 1–5 (
 2. **Problem / evidence:** IntentLens and journey helpers already exist; the 2026-10-12 CX decision simplified visible navigation. No evidence that a persistent segmentation engine is needed.
 3. **Kịch bản & interaction:** Visitor optionally picks a goal, sees only existing public product content reordered/highlighted; refresh/default remains neutral and complete.
 4. **UX/UI, visual & architecture:** Extend existing IntentLens for ephemeral presentation state only; never store sensitive inferred traits, send signals to RUM, change claims/lifecycle or add intrusive modal.
-5. **Value, trade-off, dependency, effort, AC:** Faster task completion without a tracking trade-off. Dependency usability E4 proving value before shipping, risk new choice friction, effort M; accept zero mandatory steps, identical canonical URLs/claims and no storage/network of inferred intent.
-6. **Priority score:** 22/35 = 3×Impact(4) + 2×Feasibility(3) + 2×SGPS(5) − 2×Risk(3), where 5=high for all input scales and high Risk is penalized.
+5. **Experience / business / trust / differentiation:** Faster task completion without a tracking trade-off.
+6. **Dependencies / risk / effort / acceptance criteria:** Dependency usability E4 proving value before shipping, risk new choice friction, effort M; accept zero mandatory steps, identical canonical URLs/claims and no storage/network of inferred intent.
+7. **Priority score:** 22/35 = 3×Impact(4) + 2×Feasibility(3) + 2×SGPS(5) − 2×Risk(3), where 5=high for all input scales and high Risk is penalized.
 
 ### G07 — Four-locale editorial-native craft
 
@@ -119,8 +125,9 @@ Score = 3×Impact + 2×Feasibility + 2×SGPS Alignment − 2×Risk, each 1–5 (
 2. **Problem / evidence:** W0 sees zh/zh-Hant mobile H1 mid-word breaks; product YAML explicitly says zh-Hant is machine-assisted pending native review; #602 corrected 52 rows but did not equal native editorial signoff.
 3. **Kịch bản & interaction:** A Chinese-language mobile visitor can scan Home, Sổ Trọ, Verify and Contact without awkward splitting, hidden caveats or artificial English terminology.
 4. **UX/UI, visual & architecture:** Create reviewer-owned locale style sheets and 4-locale 320/390/1440 matrix; code-level language-aware line-break and optional approved copy overrides, no separate product-fact translation authority.
-5. **Value, trade-off, dependency, effort, AC:** Global-ready trust and reduced comprehension friction. Dependency qualified native reviewer and source translation approval; risk regional nuance/legal terminology, effort L; accept four locale critical routes reviewed by humans, 200% zoom and no machine-only PASS.
-6. **Priority score:** 27/35 = 3×Impact(5) + 2×Feasibility(3) + 2×SGPS(5) − 2×Risk(2), where 5=high for all input scales and high Risk is penalized.
+5. **Experience / business / trust / differentiation:** Global-ready trust and reduced comprehension friction.
+6. **Dependencies / risk / effort / acceptance criteria:** Dependency qualified native reviewer and source translation approval; risk regional nuance/legal terminology, effort L; accept four locale critical routes reviewed by humans, 200% zoom and no machine-only PASS.
+7. **Priority score:** 27/35 = 3×Impact(5) + 2×Feasibility(3) + 2×SGPS(5) − 2×Risk(2), where 5=high for all input scales and high Risk is penalized.
 
 ### G08 — Verified contact and recovery journey
 
@@ -128,8 +135,9 @@ Score = 3×Impact + 2×Feasibility + 2×SGPS Alignment − 2×Risk, each 1–5 (
 2. **Problem / evidence:** #281/#522 open: mailbox routing, receive/reply and staffing not independently verified; production launch read-back explicitly warns published mailto does not prove delivery.
 3. **Kịch bản & interaction:** Prospect can contact a real business recipient; existing customer has a clear support boundary; security researcher uses private disclosure, not a public marketing inbox.
 4. **UX/UI, visual & architecture:** Keep existing contact/support/security pages and truthful fallback; owner verifies independent real receive/reply, aliases, recovery, escalation and privacy before upgrading any CTA; no new form/CRM without consent.
-5. **Value, trade-off, dependency, effort, AC:** Real-world trust and business recourse. Dependencies Owner/provider/SGPS identity standard; risk security disclosure leakage, effort M plus external ops; accept timed send/receive/reply evidence, correct mailbox separation, failure path and protected security channel.
-6. **Priority score:** 21/35 = 3×Impact(5) + 2×Feasibility(2) + 2×SGPS(5) − 2×Risk(4), where 5=high for all input scales and high Risk is penalized.
+5. **Experience / business / trust / differentiation:** Real-world trust and business recourse.
+6. **Dependencies / risk / effort / acceptance criteria:** Dependencies Owner/provider/SGPS identity standard; risk security disclosure leakage, effort M plus external ops; accept timed send/receive/reply evidence, correct mailbox separation, failure path and protected security channel.
+7. **Priority score:** 21/35 = 3×Impact(5) + 2×Feasibility(2) + 2×SGPS(5) − 2×Risk(4), where 5=high for all input scales and high Risk is penalized.
 
 ### G09 — Field friction quality loop without surveillance
 
@@ -137,8 +145,9 @@ Score = 3×Impact + 2×Feasibility + 2×SGPS Alignment − 2×Risk, each 1–5 (
 2. **Problem / evidence:** W0 only one-run lab Lighthouse; ADR 0015 states RUM C3 remains PARTIAL and exact payload unverified; #451 adoption remains open.
 3. **Kịch bản & interaction:** On slow 4G, visitor still reaches product facts and verifies claims; operator can detect p75 INP/LCP/CLS regressions without session replay or identity tracking.
 4. **UX/UI, visual & architecture:** Owner-gated Cloudflare Web Analytics privacy field audit, connect existing performance budget to route-level aggregate p75; add manual E4 friction checklist and rollback thresholds; retain beacon kill switch.
-5. **Value, trade-off, dependency, effort, AC:** User trust through reliability. Dependencies #451, ADR0015, privacy provider proof; risk data minimization failure, effort L; accept sanitized captured payload before RUM PASS, p75 baselines over adequate traffic, rollback drill and no PII identifiers.
-6. **Priority score:** 23/35 = 3×Impact(5) + 2×Feasibility(3) + 2×SGPS(5) − 2×Risk(4), where 5=high for all input scales and high Risk is penalized.
+5. **Experience / business / trust / differentiation:** User trust through reliability.
+6. **Dependencies / risk / effort / acceptance criteria:** Dependencies #451, ADR0015, privacy provider proof; risk data minimization failure, effort L; accept sanitized captured payload before RUM PASS, p75 baselines over adequate traffic, rollback drill and no PII identifiers.
+7. **Priority score:** 23/35 = 3×Impact(5) + 2×Feasibility(3) + 2×SGPS(5) − 2×Risk(4), where 5=high for all input scales and high Risk is penalized.
 
 ### G10 — Logo-hidden Horizon/Sail recognition signature
 
@@ -146,8 +155,9 @@ Score = 3×Impact + 2×Feasibility + 2×SGPS Alignment − 2×Risk, each 1–5 (
 2. **Problem / evidence:** ADR 0014 fixes Horizon/Sail; W0 notes a hard light-theme section seam and desktop empty band. Human independent beauty-blind decision remains NOT VERIFIED.
 3. **Kịch bản & interaction:** First-visit brand recall test hides logo: visitor recognizes a calm horizon, crisp typography and real-product presentation; product task remains faster than stylistic exploration.
 4. **UX/UI, visual & architecture:** Converge existing HorizonField/HorizonSeam/SailReveal with tokens and measured CSS; no WebGL, autoplay, external serif, new fonts, parallax or uncontrolled global overrides.
-5. **Value, trade-off, dependency, effort, AC:** Memorable bespoke identity with lightweight engineering. Dependency W0 current-head images and independent blinded panel; risk aesthetic overfit vs task clarity, effort M; accept logo-hidden recognition study plus Lighthouse/CLS and reduced-motion parity.
-6. **Priority score:** 26/35 = 3×Impact(4) + 2×Feasibility(4) + 2×SGPS(5) − 2×Risk(2), where 5=high for all input scales and high Risk is penalized.
+5. **Experience / business / trust / differentiation:** Memorable bespoke identity with lightweight engineering.
+6. **Dependencies / risk / effort / acceptance criteria:** Dependency W0 current-head images and independent blinded panel; risk aesthetic overfit vs task clarity, effort M; accept logo-hidden recognition study plus Lighthouse/CLS and reduced-motion parity.
+7. **Priority score:** 26/35 = 3×Impact(4) + 2×Feasibility(4) + 2×SGPS(5) − 2×Risk(2), where 5=high for all input scales and high Risk is penalized.
 
 
 ## TOP 10 TIER S+ — execution excellence
@@ -158,8 +168,9 @@ Score = 3×Impact + 2×Feasibility + 2×SGPS Alignment − 2×Risk, each 1–5 (
 2. **Problem / evidence:** W0 ~235px legibility gap; #607 OPEN and not merged.
 3. **Kịch bản & interaction:** Visitor sees purposefully chosen phone capture on narrow screens and original source region on wide screens.
 4. **UX/UI, visual & architecture:** Finish/review #607 rather than create competing crop; inspect min-width thresholds, CSS clipping, image loading and original-file viewer.
-5. **Value, trade-off, dependency, effort, AC:** Clarity and craftsmanship. Dependency #607; risk wrong crop or duplicate image downloading, effort S/M; accept source SHA/provenance parity, screenshots on 320/390/768/1024/1440, screen-reader alternative, no budget regression.
-6. **Priority score:** 31/35 = 3×Impact(5) + 2×Feasibility(5) + 2×SGPS(5) − 2×Risk(2), where 5=high for all input scales and high Risk is penalized.
+5. **Experience / business / trust / differentiation:** Clarity and craftsmanship.
+6. **Dependencies / risk / effort / acceptance criteria:** Dependency #607; risk wrong crop or duplicate image downloading, effort S/M; accept source SHA/provenance parity, screenshots on 320/390/768/1024/1440, screen-reader alternative, no budget regression.
+7. **Priority score:** 31/35 = 3×Impact(5) + 2×Feasibility(5) + 2×SGPS(5) − 2×Risk(2), where 5=high for all input scales and high Risk is penalized.
 
 ### S02 — Verify card reading order and source pairing
 
@@ -167,8 +178,9 @@ Score = 3×Impact + 2×Feasibility + 2×SGPS Alignment − 2×Risk, each 1–5 (
 2. **Problem / evidence:** #604 OPEN has exactly this grouping; current main still has pre-PR layout.
 3. **Kịch bản & interaction:** User reads one claim and immediately its qualifier and linked source.
 4. **UX/UI, visual & architecture:** Review/complete existing #604 with source and keyboard tests; do not fork duplicate.
-5. **Value, trade-off, dependency, effort, AC:** Trust and comprehension. Dependency #604/#564, risk a styled card reads as verification seal, effort S; accept canonical claims unchanged, source in same semantic unit, real 4-locale render/no-JS proof.
-6. **Priority score:** 31/35 = 3×Impact(5) + 2×Feasibility(5) + 2×SGPS(5) − 2×Risk(2), where 5=high for all input scales and high Risk is penalized.
+5. **Experience / business / trust / differentiation:** Trust and comprehension.
+6. **Dependencies / risk / effort / acceptance criteria:** Dependency #604/#564, risk a styled card reads as verification seal, effort S; accept canonical claims unchanged, source in same semantic unit, real 4-locale render/no-JS proof.
+7. **Priority score:** 31/35 = 3×Impact(5) + 2×Feasibility(5) + 2×SGPS(5) − 2×Risk(2), where 5=high for all input scales and high Risk is penalized.
 
 ### S03 — One pill action tier, one text-link grammar
 
@@ -176,8 +188,9 @@ Score = 3×Impact + 2×Feasibility + 2×SGPS Alignment − 2×Risk, each 1–5 (
 2. **Problem / evidence:** #609 OPEN changes 24 files and baseline images; no current-head merge confirmation.
 3. **Kịch bản & interaction:** Visitor does not confuse inline reference links with prominent product actions.
 4. **UX/UI, visual & architecture:** Finish #609 design grammar via ButtonLink + underlined links, preserve focus and semantics; no wide CSS patch.
-5. **Value, trade-off, dependency, effort, AC:** Lower action confusion. Dependency #609 Owner-protected visual snapshot review; risk over-uniforming context, effort M; accept action audit all critical routes, 44px tap targets and coherent hover/focus/light/dark.
-6. **Priority score:** 28/35 = 3×Impact(4) + 2×Feasibility(5) + 2×SGPS(5) − 2×Risk(2), where 5=high for all input scales and high Risk is penalized.
+5. **Experience / business / trust / differentiation:** Lower action confusion.
+6. **Dependencies / risk / effort / acceptance criteria:** Dependency #609 Owner-protected visual snapshot review; risk over-uniforming context, effort M; accept action audit all critical routes, 44px tap targets and coherent hover/focus/light/dark.
+7. **Priority score:** 28/35 = 3×Impact(4) + 2×Feasibility(5) + 2×SGPS(5) − 2×Risk(2), where 5=high for all input scales and high Risk is penalized.
 
 ### S04 — Viewer interaction reliability on real phones
 
@@ -185,8 +198,9 @@ Score = 3×Impact + 2×Feasibility + 2×SGPS Alignment − 2×Risk, each 1–5 (
 2. **Problem / evidence:** #605/#611 merged; source report says iOS Safari/Zalo/Facebook/Messenger <dialog> unverified.
 3. **Kịch bản & interaction:** User opens image in iOS Safari and in-app browser, closes via touch/back and returns with correct focus and scroll.
 4. **UX/UI, visual & architecture:** Device QA and fallback to source image when dialog unsupported; preserve modifier-click default.
-5. **Value, trade-off, dependency, effort, AC:** Low-friction tactile ergonomics. Dependency actual iOS/Android device access; risk dialog focus/gesture traps, effort S/M; accept touch/keyboard/back/escape tests and no scroll/focus loss.
-6. **Priority score:** 24/35 = 3×Impact(4) + 2×Feasibility(4) + 2×SGPS(5) − 2×Risk(3), where 5=high for all input scales and high Risk is penalized.
+5. **Experience / business / trust / differentiation:** Low-friction tactile ergonomics.
+6. **Dependencies / risk / effort / acceptance criteria:** Dependency actual iOS/Android device access; risk dialog focus/gesture traps, effort S/M; accept touch/keyboard/back/escape tests and no scroll/focus loss.
+7. **Priority score:** 24/35 = 3×Impact(4) + 2×Feasibility(4) + 2×SGPS(5) − 2×Risk(3), where 5=high for all input scales and high Risk is penalized.
 
 ### S05 — Low-footprint locale suggestion
 
@@ -194,8 +208,9 @@ Score = 3×Impact + 2×Feasibility + 2×SGPS Alignment − 2×Risk, each 1–5 (
 2. **Problem / evidence:** W0 observed suggestion banner moves H1/CTA about 60–90px on 390px under en-US browser; not established as failure.
 3. **Kịch bản & interaction:** Visitor opens VI page with EN browser and still sees value/CTA promptly.
 4. **UX/UI, visual & architecture:** Pilot compact inline dismissible suggestion or defer until after first scroll; keep existing locale logic and consent-free persistence.
-5. **Value, trade-off, dependency, effort, AC:** Less top-of-page friction. Dependency measured short-viewport E4; risk hiding useful accessibility affordance, effort S; accept decision visible/accessible, no focus jump or automatic locale redirect.
-6. **Priority score:** 24/35 = 3×Impact(4) + 2×Feasibility(4) + 2×SGPS(4) − 2×Risk(2), where 5=high for all input scales and high Risk is penalized.
+5. **Experience / business / trust / differentiation:** Less top-of-page friction.
+6. **Dependencies / risk / effort / acceptance criteria:** Dependency measured short-viewport E4; risk hiding useful accessibility affordance, effort S; accept decision visible/accessible, no focus jump or automatic locale redirect.
+7. **Priority score:** 24/35 = 3×Impact(4) + 2×Feasibility(4) + 2×SGPS(4) − 2×Risk(2), where 5=high for all input scales and high Risk is penalized.
 
 ### S06 — CJK word boundaries and text-scale craft
 
@@ -203,8 +218,9 @@ Score = 3×Impact + 2×Feasibility + 2×SGPS Alignment − 2×Risk, each 1–5 (
 2. **Problem / evidence:** W0 observed zh/zh-Hant H1 mid-word breaks, 320px and 200% zoom unresolved.
 3. **Kịch bản & interaction:** Chinese-speaking visitor sees complete phrases; keyboard zoom user reads all action and evidence labels.
 4. **UX/UI, visual & architecture:** Scoped lang-aware CSS plus human-approved line-break copy; use existing Inter/system CJK fallback and token hierarchy.
-5. **Value, trade-off, dependency, effort, AC:** Editorial polish and readability. Dependency qualified native review; risk manual line break on different devices, effort S/M; accept 320/390/200% text sizing, no clipped text, native reviewed screenshot matrix.
-6. **Priority score:** 26/35 = 3×Impact(4) + 2×Feasibility(4) + 2×SGPS(5) − 2×Risk(2), where 5=high for all input scales and high Risk is penalized.
+5. **Experience / business / trust / differentiation:** Editorial polish and readability.
+6. **Dependencies / risk / effort / acceptance criteria:** Dependency qualified native review; risk manual line break on different devices, effort S/M; accept 320/390/200% text sizing, no clipped text, native reviewed screenshot matrix.
+7. **Priority score:** 26/35 = 3×Impact(4) + 2×Feasibility(4) + 2×SGPS(5) − 2×Risk(2), where 5=high for all input scales and high Risk is penalized.
 
 ### S07 — Search/menu keyboard and mobile focus handoff
 
@@ -212,8 +228,9 @@ Score = 3×Impact + 2×Feasibility + 2×SGPS Alignment − 2×Risk, each 1–5 (
 2. **Problem / evidence:** Existing CommandNavigator/Header/mobile-menu modules and tests; current HEAD keyboard/screen-reader walkthrough not executed in this session.
 3. **Kịch bản & interaction:** Keyboard user opens command search, jumps to product, returns; mobile user closes menu with focus restored.
 4. **UX/UI, visual & architecture:** Audit existing modal focus trap, Escape, visible trigger and route scroll; root-cause fix only after reproduction.
-5. **Value, trade-off, dependency, effort, AC:** Accessible navigation. Dependencies current-head browser tests; risk regressions on no-JS and touch, effort S/M; accept WCAG 2.2 focus-not-obscured, 320px, keyboard/screen-reader and no-JS fallback.
-6. **Priority score:** 26/35 = 3×Impact(4) + 2×Feasibility(4) + 2×SGPS(5) − 2×Risk(2), where 5=high for all input scales and high Risk is penalized.
+5. **Experience / business / trust / differentiation:** Accessible navigation.
+6. **Dependencies / risk / effort / acceptance criteria:** Dependencies current-head browser tests; risk regressions on no-JS and touch, effort S/M; accept WCAG 2.2 focus-not-obscured, 320px, keyboard/screen-reader and no-JS fallback.
+7. **Priority score:** 26/35 = 3×Impact(4) + 2×Feasibility(4) + 2×SGPS(5) − 2×Risk(2), where 5=high for all input scales and high Risk is penalized.
 
 ### S08 — Honest freshness metadata in production
 
@@ -221,8 +238,9 @@ Score = 3×Impact + 2×Feasibility + 2×SGPS Alignment − 2×Risk, each 1–5 (
 2. **Problem / evidence:** #606 merged but 2026-10-13 production read-back showed absent date and 0 sitemap lastmod due shallow Cloudflare clone.
 3. **Kịch bản & interaction:** Visitor sees a valid changed-date only when source provenance exists; crawler receives matching lastmod.
 4. **UX/UI, visual & architecture:** Owner-gated build depth/readback or deterministic source-generated metadata; do not use deploy-time-as-content-date fallback.
-5. **Value, trade-off, dependency, effort, AC:** Credibility and SEO hygiene. Dependencies Cloudflare Build configuration and exact served revision; risk git fetch cost/stale source, effort S/M; accept reproducible date match on production and truthful omission when unavailable.
-6. **Priority score:** 22/35 = 3×Impact(4) + 2×Feasibility(3) + 2×SGPS(5) − 2×Risk(3), where 5=high for all input scales and high Risk is penalized.
+5. **Experience / business / trust / differentiation:** Credibility and SEO hygiene.
+6. **Dependencies / risk / effort / acceptance criteria:** Dependencies Cloudflare Build configuration and exact served revision; risk git fetch cost/stale source, effort S/M; accept reproducible date match on production and truthful omission when unavailable.
+7. **Priority score:** 22/35 = 3×Impact(4) + 2×Feasibility(3) + 2×SGPS(5) − 2×Risk(3), where 5=high for all input scales and high Risk is penalized.
 
 ### S09 — Purposeful recovery, support and no-JS states
 
@@ -230,8 +248,9 @@ Score = 3×Impact + 2×Feasibility + 2×SGPS Alignment − 2×Risk, each 1–5 (
 2. **Problem / evidence:** Existing BusinessRouteState, NoCaptureStage, ProofFirstEmptyState and 404 routes exist; no current-head journey-wide failure evidence.
 3. **Kịch bản & interaction:** No public screenshot or inactive product: visitor is clearly told what's known and can reach Products, Verify or Contact safely.
 4. **UX/UI, visual & architecture:** Consolidate language/semantics only where repeated or broken; no secret public registry; reusable fallbacks that fail closed.
-5. **Value, trade-off, dependency, effort, AC:** Lower abandonment without overpromise. Dependencies user walkthrough; risk dead-end or wrong pricing/pay CTA, effort S; accept all 4 locales with no-JS/error/empty and truthful status tests.
-6. **Priority score:** 26/35 = 3×Impact(4) + 2×Feasibility(4) + 2×SGPS(5) − 2×Risk(2), where 5=high for all input scales and high Risk is penalized.
+5. **Experience / business / trust / differentiation:** Lower abandonment without overpromise.
+6. **Dependencies / risk / effort / acceptance criteria:** Dependencies user walkthrough; risk dead-end or wrong pricing/pay CTA, effort S; accept all 4 locales with no-JS/error/empty and truthful status tests.
+7. **Priority score:** 26/35 = 3×Impact(4) + 2×Feasibility(4) + 2×SGPS(5) − 2×Risk(2), where 5=high for all input scales and high Risk is penalized.
 
 ### S10 — Motion scarcity, contrast and real interaction budget
 
@@ -239,8 +258,9 @@ Score = 3×Impact + 2×Feasibility + 2×SGPS Alignment − 2×Risk, each 1–5 (
 2. **Problem / evidence:** W0 axe passes its scoped run but independent reduced-motion/forced-colors/device verdict at HEAD not established; many CSS layers exist.
 3. **Kịch bản & interaction:** Low-power user, keyboard user and motion-sensitive visitor all reach same content and actions without animation dependency.
 4. **UX/UI, visual & architecture:** Token-level motion budget, forced-colors fallback and invalid-CSS counterexamples; validate no third-party requests and p75 when provider evidence exists.
-5. **Value, trade-off, dependency, effort, AC:** Polish, inclusive craft, performance. Dependencies current-head browser/visual/Lighthouse run and #451, risk CSS specificity drift, effort M; accept reduced-motion/no-JS and 320/390/1440 screenshot parity, lab budgets LCP<=2.5s, CLS<=0.05, TBT<=200ms, WCAG 2.2 AA.
-6. **Priority score:** 29/35 = 3×Impact(5) + 2×Feasibility(4) + 2×SGPS(5) − 2×Risk(2), where 5=high for all input scales and high Risk is penalized.
+5. **Experience / business / trust / differentiation:** Polish, inclusive craft, performance.
+6. **Dependencies / risk / effort / acceptance criteria:** Dependencies current-head browser/visual/Lighthouse run and #451, risk CSS specificity drift, effort M; accept reduced-motion/no-JS and 320/390/1440 screenshot parity, lab budgets LCP<=2.5s, CLS<=0.05, TBT<=200ms, WCAG 2.2 AA.
+7. **Priority score:** 29/35 = 3×Impact(5) + 2×Feasibility(4) + 2×SGPS(5) − 2×Risk(2), where 5=high for all input scales and high Risk is penalized.
 
 
 ## Dependency-first implementation roadmap
