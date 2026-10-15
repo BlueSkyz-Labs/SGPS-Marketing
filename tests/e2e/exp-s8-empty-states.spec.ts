@@ -9,7 +9,7 @@ const FOUNDER_TITLE: Record<(typeof LOCALES)[number], string> = {
 };
 const MISSION = {
   en: /We build intelligent products that empower people and elevate the way work gets done\./,
-  vi: /Chúng tôi xây dựng sản phẩm thông minh/,
+  vi: /Chúng tôi làm những sản phẩm thông minh/,
   zh: /我们打造智能化产品/,
   "zh-hant": /我們打造智慧化產品/,
 } as const;

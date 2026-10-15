@@ -162,7 +162,7 @@ test("og:image:alt and twitter:image:alt are localized per locale", () => {
     assert.equal(seen.has(alt), false, `${lang} alt must be its own string`);
     seen.add(alt);
   }
-  assert.match(DEFAULT_OG_IMAGE_ALT.vi, /Trí tuệ\. Nâng tầm\. Tác động\./);
+  assert.match(DEFAULT_OG_IMAGE_ALT.vi, /Trí tuệ\. Tầm nhìn\. Tác động\./);
   assert.match(DEFAULT_OG_IMAGE_ALT.zh, /智能。提升。影响。/);
   assert.match(DEFAULT_OG_IMAGE_ALT["zh-hant"], /智慧。提升。影響。/);
 });

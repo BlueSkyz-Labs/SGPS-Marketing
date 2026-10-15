@@ -8,6 +8,7 @@ import Container from "@/components/layout/Container.astro";
 import ProductStatus from "@/components/product/ProductStatus.astro";
 import ProductLadder from "@/components/product/ProductLadder.astro";
 import AppAccess from "@/components/product/AppAccess.astro";
+import InterimNote from "@/components/product/InterimNote.astro";
 import ProductShowcase from "@/components/product/ProductShowcase.astro";
 import ButtonLink from "@/components/ui/ButtonLink.astro";
 import NoCaptureStage from "@/components/empty-state/NoCaptureStage.astro";
@@ -241,6 +242,7 @@ const awaitingScreens = !showcase && isIdentityArt;
         lang="zh-hant"
         web={data.platforms.includes("web")}
       />
+      <InterimNote appAccess={data.appAccess} lang="zh-hant" />
       <ProductLadder lifecycle={data.lifecycle} lang="zh-hant" />
       {!showcase && media && !isIdentityArt ? (
         <NoCaptureStage media={media} lang="zh-hant" />
