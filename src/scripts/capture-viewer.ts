@@ -85,6 +85,9 @@ export function initCaptureViewer(root: Document = document): void {
         }
       });
       dialog.addEventListener("close", () => {
+        // Do not flash a previous capture on the next modal opening.
+        // Release the full-resolution source while the viewer is hidden.
+        parts?.img.removeAttribute("src");
         // Native close restores focus; make it deterministic for engines
         // that do not.
         trigger?.focus();
