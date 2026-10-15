@@ -1,12 +1,14 @@
 import { defineConfig } from "astro/config";
 import tailwindcss from "@tailwindcss/vite";
+import cjkHeadingBreaks from "./src/integrations/cjk-heading-breaks.mjs";
 import localizedNotFound from "./src/integrations/localized-not-found.mjs";
 
 const site = process.env.PUBLIC_SITE_URL?.trim() || "http://localhost:4321";
 
 export default defineConfig({
   site,
-  integrations: [localizedNotFound()],
+  // cjkHeadingBreaks runs first so the copied localized 404 pages carry it too.
+  integrations: [cjkHeadingBreaks(), localizedNotFound()],
   output: "static",
   trailingSlash: "always",
   vite: {
