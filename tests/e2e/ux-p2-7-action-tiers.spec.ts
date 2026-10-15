@@ -19,7 +19,7 @@ const PAGES = [
   "/privacy/",
   "/support/",
 ];
-const LANGS = ["en", "vi"] as const;
+const LANGS = ["en", "vi", "zh", "zh-hant"] as const;
 
 type Link = {
   boxed: boolean;
