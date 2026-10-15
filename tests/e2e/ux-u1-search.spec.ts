@@ -75,6 +75,32 @@ for (const [lang, queries] of [
   }
 }
 
+// Search must distinguish a genuinely empty query from punctuation/emoji.
+// Both tokenize to zero words, but a non-empty input must never imply matches.
+for (const lang of ["en", "vi", "zh", "zh-hant"] as const) {
+  for (const query of ["???", "🧩"]) {
+    test(`${lang}: non-word query ${query} never returns the full index`, async ({
+      page,
+    }) => {
+      await search(page, lang, query);
+      await expect(items(page)).toHaveCount(0);
+      await expect(page.locator("[data-command-empty]")).toBeVisible();
+      await expect(page.locator("[data-command-fallback]")).toBeVisible();
+      await expect(page.locator("[data-command-status]")).toBeHidden();
+      await expect(page.locator("[data-command-live]")).toHaveText(/\\S+/);
+    });
+  }
+}
+
+test("negative control: a genuinely blank query still lists destinations", async ({
+  page,
+}) => {
+  await search(page, "en", "   ");
+  expect(await items(page).count()).toBeGreaterThan(0);
+  await expect(page.locator("[data-command-fallback]")).toBeHidden();
+  await expect(page.locator("[data-command-empty]")).toBeHidden();
+});
+
 test("status line exists for all four locales on a price intent", async ({
   page,
 }) => {
