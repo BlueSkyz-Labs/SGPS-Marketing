@@ -1,8 +1,9 @@
 # SGPS Marketing — Premium Experience deep audit and scoped 10 GOD + 10 S+ execution plan
 
-**Date:** 2026-10-15 Asia/Ho_Chi_Minh. **Audit anchor:** `main@c99d26ef60747bfdfd8fbfd8f1f2fd033a239898`. **Classification:** DISCOVERY / IMPLEMENTATION-READY PLANNING ONLY / NO GO-LIVE AUTHORITY.
+**Date:** 2026-10-15 Asia/Ho_Chi_Minh. **Audit anchor:** `main@c99d26ef60747bfdfd8fbfd8f1f2fd033a239898`. **Classification:** OWNER-APPROVED RESEARCH ROADMAP / IMPLEMENTATION-READY PLANNING ONLY / NO GO-LIVE AUTHORITY.
 
 ## Owner boundaries (do not reinterpret)
+
 - Customer-centric first. Adopt SGPS FULL as the design/evidence target, **not** a claim of achieved certification or a silent SGPS release re-pin.
 - Keep Owner-approved Horizon/Sail ADR 0014, Brand Kit v4 Ink/Porcelain/Cobalt, Inter Variable, Astro static-first, truthful product registry and 4 locales. Historical ADR 0001 is superseded; do NOT revive gold/champagne/serif/WebGL/parallax.
 - Marketing is **NOT** a payment authority; Sổ Trọ/Sổ Tâm product features, sign-in, paid and security permissions are product-repo responsibilities. Existing 2026-10-12 CX decision sets /verify as the one prominent trust door, no public app sign-in link, hidden advanced dossier/editions/decision-room routes preserved.
@@ -10,22 +11,20 @@
 
 ## Evidence ledger / truth boundaries
 
-| ID | Source fact | Confidence and limit |
-|---|---|---|
-| E1 | Current tree `main@c99d26ef60747bfdfd8fbfd8f1f2fd033a239898`: Astro 7/TypeScript/Tailwind/Cloudflare source; 4 locale route trees; brand-v4 files, Hero, product theatre, VerifyCentre, captures, CSS and test suite present | CONFIRMED SOURCE; no new runtime execution in this audit |
-| E2 | `docs/evidence/2026-10-12-w0-render-truth.md (a351634; historic 164 local captures, not current HEAD)`: 164 local captures (112 base axe), 0 horizontal overflow, 0 baseline axe violations; lab mobile EN Home perf 99, LCP 1.9s, CLS 0, TBT 0; 390px flagship console ~235px and illegible | HISTORIC LOCAL BUILD only; does not attest Oct 15 HEAD, production, native readers or user testing |
-| E3 | `docs/evidence/2026-10-13-ux-redteam-wave-readback.md`: merged #593/#596/#594/#599/#592/#600/#598/#602/#595/#603/#601/#605/#606/#597/#608; #604 Verify cards, #607 capture crop, #609 action grammar remained open | PR status rechecked on 2026-10-15: #604/#607/#609 OPEN; do not create competing work |
-| E4 | `docs/evidence/2026-10-12-customer-focus-readback.md`: /verify only trust door, advanced evidence routes remain available, no public app sign-in; #575 merged | OWNER-APPROVED current UX boundary |
-| E5 | `docs/decisions/0014-horizon-sail-signature-experience.md` and `docs/superpowers/plans/2026-10-10-signature-visual-experience-horizon-sail.md` | OWNER-APPROVED visual direction; W0-W5 phased source work, independent release gates remain |
-| E6 | `src/content/products/sotro.yaml` and `sotam.yaml`: both public=true, development/preview; Sổ Tâm local-first written journals only, with sourceRevision; Sổ Trọ sample screenshots from showcase | PRODUCT RECORD SOURCE; actual upstream product capabilities and served revision require independent revalidation |
-| E7 | #281/#522: mailbox and support identity operational evidence OPEN; ADR 0015: Cloudflare Web Analytics payload field C3 PARTIAL; #606 production shallow clone missing lastmod | OWNER/PROVIDER BLOCKED or PARTIAL, no fabricated PASS |
-| E8 | Latest Source Assurance workflow run for main `c99d26e` id 38746583654 was IN_PROGRESS at readback; #615 dev dependency run id 38737941348 FAILURE | TEMPORAL observation, refresh before decisions |
-| E9 | Public web routes `https://blueskyzlabs.com/vi/` and `/vi/verify/` were inaccessible via the independent external web reader in this session | LIVE UX / served SHA NOT VERIFIED; older repo-produced production curl does not convert this to a current pass |
+- **E1** — Source fact: Current tree `main@c99d26ef60747bfdfd8fbfd8f1f2fd033a239898`: Astro 7/TypeScript/Tailwind/Cloudflare source; 4 locale route trees; brand-v4 files, Hero, product theatre, VerifyCentre, captures, CSS and test suite present; Confidence and limit: CONFIRMED SOURCE; no new runtime execution in this audit
+- **E2** — Source fact: `docs/evidence/2026-10-12-w0-render-truth.md (a351634; historic 164 local captures, not current HEAD)`: 164 local captures (112 base axe), 0 horizontal overflow, 0 baseline axe violations; lab mobile EN Home perf 99, LCP 1.9s, CLS 0, TBT 0; 390px flagship console ~235px and illegible; Confidence and limit: HISTORIC LOCAL BUILD only; does not attest Oct 15 HEAD, production, native readers or user testing
+- **E3** — Source fact: `docs/evidence/2026-10-13-ux-redteam-wave-readback.md`: merged #593/#596/#594/#599/#592/#600/#598/#602/#595/#603/#601/#605/#606/#597/#608; #604 Verify cards, #607 capture crop, #609 action grammar remained open; Confidence and limit: At initial audit #604/#607/#609 OPEN; re-read on 2026-10-15 at 21:30 +07: #604 MERGED as main@0fa376a, #607/#609 OPEN; do not create competing work
+- **E4** — Source fact: `docs/evidence/2026-10-12-customer-focus-readback.md`: /verify only trust door, advanced evidence routes remain available, no public app sign-in; #575 merged; Confidence and limit: OWNER-APPROVED current UX boundary
+- **E5** — Source fact: `docs/decisions/0014-horizon-sail-signature-experience.md` and `docs/superpowers/plans/2026-10-10-signature-visual-experience-horizon-sail.md`; Confidence and limit: OWNER-APPROVED visual direction; W0-W5 phased source work, independent release gates remain
+- **E6** — Source fact: `src/content/products/sotro.yaml` and `sotam.yaml`: both public=true, development/preview; Sổ Tâm local-first written journals only, with sourceRevision; Sổ Trọ sample screenshots from showcase; Confidence and limit: PRODUCT RECORD SOURCE; actual upstream product capabilities and served revision require independent revalidation
+- **E7** — Source fact: #281/#522: mailbox and support identity operational evidence OPEN; ADR 0015: Cloudflare Web Analytics payload field C3 PARTIAL; #606 production shallow clone missing lastmod; Confidence and limit: OWNER/PROVIDER BLOCKED or PARTIAL, no fabricated PASS
+- **E8** — Source fact: Latest Source Assurance workflow run for main `c99d26e` id 38746583654 was IN_PROGRESS at readback; #615 dev dependency run id 38737941348 FAILURE; Confidence and limit: TEMPORAL observation, refresh before decisions
+- **E9** — Source fact: Live public routes were **not independently accessed** by this audit; no availability claim is made; Confidence and limit: LIVE UX / served SHA NOT VERIFIED; older repo-produced production curl does not convert this to a current pass
 
 ## Current verdict & evidence-grounded convergence
 
 - **DONE (source/historical):** Brand Kit v4 assets, Horizon/Sail ADR, 4-locale architecture, product-truth registries, many code-level UX guards; Oct 12 baseline captured. Does not mean all runtime states passed now.
-- **PARTIAL:** W0 current-head visual freshness, mobile capture correction (#607), Verify comprehension (#604), action grammar (#609), locale native review, journey usability and post-merge qualification.
+- **PARTIAL:** W0 current-head visual freshness, mobile capture correction (#607), action grammar (#609), locale native review, journey usability and post-merge qualification. Verify cards (#604) have merged in source; current production and Human E4 verification remain open.
 - **BLOCKED (provider/owner):** real mailbox send/receive/reply & staffing, Cloudflare served SHA/readback, RUM payload verification, native device QA, Human E4, approval label for visual snapshots.
 - **NOT VERIFIED:** current-head 4-browser/4-locale 320–1440 exact render, WCAG 2.2 AA full pass, field p75 LCP/INP/CLS, paid production safety/release. Therefore SGPS FULL / pixel-perfect / production-ready cannot be declared.
 - **Numerical discipline:** 164/164 historical screenshots had no horizontal overflow (100% scoped check); 112/112 historical axe base screenshots were violation-free (100% scoped check). **0 current-head independent UX capture sets were produced in this audit; current-head verification coverage 0% for the newly requested rendered proof.** This is a coverage metric, not a product-quality or SGPS completion percentage. A total SGPS convergence % is **N/A until a signed gate denominator and independent evidence exist**.
@@ -34,28 +33,26 @@
 
 Score = 3×Impact + 2×Feasibility + 2×SGPS Alignment − 2×Risk, each 1–5 (higher risk hurts). Score is a decision heuristic, **not experimental evidence or a certification**. P0 public truth/security/financial correctness always overrides aesthetic score. Effort is qualitative (S/M/L), not a schedule promise.
 
-| ID | Recommendation | Score /35 | Lane |
-|---|---|---:|---|
-| S01 | Adaptive flagship crop / mobile readability closure | 31 | S+ |
-| S02 | Verify card reading order and source pairing | 31 | S+ |
-| G01 | 30-second outcome-first product comprehension | 29 | GOD |
-| S10 | Motion scarcity, contrast and real interaction budget | 29 | S+ |
-| S03 | One pill action tier, one text-link grammar | 28 | S+ |
-| G05 | Guided real-screen understanding, not screenshot theatre | 27 | GOD |
-| G07 | Four-locale editorial-native craft | 27 | GOD |
-| G10 | Logo-hidden Horizon/Sail recognition signature | 26 | GOD |
-| S06 | CJK word boundaries and text-scale craft | 26 | S+ |
-| S07 | Search/menu keyboard and mobile focus handoff | 26 | S+ |
-| S09 | Purposeful recovery, support and no-JS states | 26 | S+ |
-| G02 | Contextual claim → source → boundary chain | 25 | GOD |
-| S04 | Viewer interaction reliability on real phones | 24 | S+ |
-| S05 | Low-footprint locale suggestion | 24 | S+ |
-| G09 | Field friction quality loop without surveillance | 23 | GOD |
-| G03 | Shareable source-bound product passport | 22 | GOD |
-| G06 | Privacy-preserving visitor intent lens | 22 | GOD |
-| S08 | Honest freshness metadata in production | 22 | S+ |
-| G08 | Verified contact and recovery journey | 21 | GOD |
-| G04 | Honest product-evolution narrative | 20 | GOD |
+- **S01** — Recommendation: Adaptive flagship crop / mobile readability closure; Score /35: 31; Lane: S+
+- **S02** — Recommendation: Verify card reading order and source pairing; Score /35: 31; Lane: S+
+- **G01** — Recommendation: 30-second outcome-first product comprehension; Score /35: 29; Lane: GOD
+- **S10** — Recommendation: Motion scarcity, contrast and real interaction budget; Score /35: 29; Lane: S+
+- **S03** — Recommendation: One pill action tier, one text-link grammar; Score /35: 28; Lane: S+
+- **G05** — Recommendation: Guided real-screen understanding, not screenshot theatre; Score /35: 27; Lane: GOD
+- **G07** — Recommendation: Four-locale editorial-native craft; Score /35: 27; Lane: GOD
+- **G10** — Recommendation: Logo-hidden Horizon/Sail recognition signature; Score /35: 26; Lane: GOD
+- **S06** — Recommendation: CJK word boundaries and text-scale craft; Score /35: 26; Lane: S+
+- **S07** — Recommendation: Search/menu keyboard and mobile focus handoff; Score /35: 26; Lane: S+
+- **S09** — Recommendation: Purposeful recovery, support and no-JS states; Score /35: 26; Lane: S+
+- **G02** — Recommendation: Contextual claim → source → boundary chain; Score /35: 25; Lane: GOD
+- **S04** — Recommendation: Viewer interaction reliability on real phones; Score /35: 24; Lane: S+
+- **S05** — Recommendation: Low-footprint locale suggestion; Score /35: 24; Lane: S+
+- **G09** — Recommendation: Field friction quality loop without surveillance; Score /35: 23; Lane: GOD
+- **G03** — Recommendation: Shareable source-bound product passport; Score /35: 22; Lane: GOD
+- **G06** — Recommendation: Privacy-preserving visitor intent lens; Score /35: 22; Lane: GOD
+- **S08** — Recommendation: Honest freshness metadata in production; Score /35: 22; Lane: S+
+- **G08** — Recommendation: Verified contact and recovery journey; Score /35: 21; Lane: GOD
+- **G04** — Recommendation: Honest product-evolution narrative; Score /35: 20; Lane: GOD
 
 ## TOP 10 GOD-TIER — product-house differentiation
 
@@ -159,7 +156,6 @@ Score = 3×Impact + 2×Feasibility + 2×SGPS Alignment − 2×Risk, each 1–5 (
 6. **Dependencies / risk / effort / acceptance criteria:** Dependency W0 current-head images and independent blinded panel; risk aesthetic overfit vs task clarity, effort M; accept logo-hidden recognition study plus Lighthouse/CLS and reduced-motion parity.
 7. **Priority score:** 26/35 = 3×Impact(4) + 2×Feasibility(4) + 2×SGPS(5) − 2×Risk(2), where 5=high for all input scales and high Risk is penalized.
 
-
 ## TOP 10 TIER S+ — execution excellence
 
 ### S01 — Adaptive flagship crop / mobile readability closure
@@ -262,16 +258,13 @@ Score = 3×Impact + 2×Feasibility + 2×SGPS Alignment − 2×Risk, each 1–5 (
 6. **Dependencies / risk / effort / acceptance criteria:** Dependencies current-head browser/visual/Lighthouse run and #451, risk CSS specificity drift, effort M; accept reduced-motion/no-JS and 320/390/1440 screenshot parity, lab budgets LCP<=2.5s, CLS<=0.05, TBT<=200ms, WCAG 2.2 AA.
 7. **Priority score:** 29/35 = 3×Impact(5) + 2×Feasibility(4) + 2×SGPS(5) − 2×Risk(2), where 5=high for all input scales and high Risk is penalized.
 
-
 ## Dependency-first implementation roadmap
 
-| Wave | Priority / owner | Scope | Strict exit |
-|---|---|---|---|
-| R0: Integrity first | P0/P1, Owner+provider for external facts | Re-fetch main/PRs/ruleset; clear blocker truth #281/#522, CI governance, #451/ADR0015 privacy; never bypass. | Fail-closed identity/support, tests independent, exact served SHA separately evidenced |
-| R1: Land in-flight experience | P1, existing PR owners | Review/rebase #604, #607, #609; no duplicate changes; resolve visual evidence/protected Owner-label and CI per PR. | exact-head trusted Quality Gates+Browser Assurance, four-locale 320/390/1440 and no-JS, screenshot + lighthouse artifacts, rollback notes |
-| R2: Practical friction | P1/P2, experience owner | S04–S10 device QA, locale suggestion, CJK/VI reviews, keyboard focus, lastmod and states; W4 #565. | independent device/native review; WCAG 2.2 AA, target semantics, no trust/privacy drift |
-| R3: Differentiators, small pilots | P2, product/brand owner | G01, G02, G05, G07, G10 with before/after comprehension and logo-hidden blinded studies. | consented Human E4 with clear tasks, proof over decorative taste, revert weak outcomes |
-| R4: Optional future enhancements | research only | G03/G04/G06/G08/G09; Product Passport, honest history, ephemeral visitor lens, operational recourse and privacy-safe field loop. | individual ADR/Owner gate for new data, claim, provider or release authority; no blanket approval from this plan |
+- **R0: Integrity first** — Priority / owner: P0/P1, Owner+provider for external facts; Scope: Re-fetch main/PRs/ruleset; clear blocker truth #281/#522, CI governance, #451/ADR0015 privacy; never bypass.; Strict exit: Fail-closed identity/support, tests independent, exact served SHA separately evidenced
+- **R1: Land in-flight experience** — Priority / owner: P1, existing PR owners; Scope: Retain merged #604 and review/rebase #607/#609; no duplicate changes; resolve visual evidence/protected Owner-label and CI per PR.; Strict exit: exact-head trusted Quality Gates+Browser Assurance, four-locale 320/390/1440 and no-JS, screenshot + lighthouse artifacts, rollback notes
+- **R2: Practical friction** — Priority / owner: P1/P2, experience owner; Scope: S04–S10 device QA, locale suggestion, CJK/VI reviews, keyboard focus, lastmod and states; W4 #565.; Strict exit: independent device/native review; WCAG 2.2 AA, target semantics, no trust/privacy drift
+- **R3: Differentiators, small pilots** — Priority / owner: P2, product/brand owner; Scope: G01, G02, G05, G07, G10 with before/after comprehension and logo-hidden blinded studies.; Strict exit: consented Human E4 with clear tasks, proof over decorative taste, revert weak outcomes
+- **R4: Optional future enhancements** — Priority / owner: research only; Scope: G03/G04/G06/G08/G09; Product Passport, honest history, ephemeral visitor lens, operational recourse and privacy-safe field loop.; Strict exit: individual ADR/Owner gate for new data, claim, provider or release authority; no blanket approval from this plan
 
 **PLAN → DO → CHECK → IMPROVE → RED TEAM → NEXT:** smallest root-cause PR per independently measured issue; refresh `main` and other open PRs before branch; validate in CI and real browsers; record before/after artifacts; independent review; stop or rollback when task understanding or performance worsens.
 
@@ -290,7 +283,7 @@ Score = 3×Impact + 2×Feasibility + 2×SGPS Alignment − 2×Risk, each 1–5 (
 
 ## Next best actions for another coding agent
 
-1. Rebind `main` and review #604/#607/#609 exact heads and check suites; assess merges/conflicts, leave existing owners in place. Visual baselines are protected; do not self-label.
+1. Rebind `main`, confirm #604 merged, and review #607/#609 exact heads and check suites; assess merges/conflicts, leave existing owners in place. Visual baselines are protected; do not self-label.
 2. Prefer one reversible independent source fix from S04, S05, S06 or S07 **only after a reproducible current-head failure**; attach source SHA, patch and acceptance tests.
 3. Request independent real phone review for capture viewer, native Chinese/Vietnamese review and domain contact receive/reply from accountable Owner/provider; record missing evidence as BLOCKED rather than invent.
 4. Maintain /verify as one trust door and no public app sign-in. Keep all public product pages explicit about development.
