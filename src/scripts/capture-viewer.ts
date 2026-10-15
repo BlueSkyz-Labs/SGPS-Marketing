@@ -91,7 +91,6 @@ export function initCaptureViewer(root: Document = document): void {
         trigger = null;
       });
     }
-    event.preventDefault();
     trigger = link;
     const { dialog, img, caption, close } = parts;
     img.src = href;
@@ -100,7 +99,16 @@ export function initCaptureViewer(root: Document = document): void {
     close.textContent = link.dataset.viewerClose ?? "";
     close.setAttribute("aria-label", link.dataset.viewerClose ?? "");
     dialog.setAttribute("aria-label", link.dataset.viewerTitle ?? "");
-    if (!dialog.open) dialog.showModal();
+    // Some in-app browsers expose <dialog> but fail when showModal() runs.
+    // Intercept the native image link only after the modal opens successfully:
+    // when enhancement fails, target="_blank" remains the honest fallback.
+    try {
+      if (!dialog.open) dialog.showModal();
+    } catch {
+      trigger = null;
+      return;
+    }
+    event.preventDefault();
     close.focus();
   });
 }
