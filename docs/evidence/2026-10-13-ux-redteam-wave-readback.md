@@ -22,6 +22,9 @@ customer-experience (CX) and zh review follow-ups. Website repository only.
 | #606 | P2-10 git-derived "Last updated" line                | c3d440a |
 | #597 | U10 Owner-approved VI copy, interim note             | 45198bf |
 | #608 | P2-8 footer: one column per link group               | 6e81db2 |
+| #604 | U7 Verify claims as claim/limit/source cards         | 0fa376a |
+| #607 | P2-9 flagship capture: cropped wide, phone narrow    | 7f84740 |
+| #609 | P2-7 one pill tier and one link tier for actions     | 1ea2b50 |
 
 Production read-back (curl of https://blueskyzlabs.com after each Workers Build) found the
 string or markup each PR introduced, except where noted below. #608: `--footer-groups: 2`
@@ -43,13 +46,29 @@ served on /en/ and /vi/ after 6e81db2.
   `<dialog>` behaviour are NOT VERIFIED. They need an Owner device check.
 - Automated/browser evidence does not substitute for Human E4 or native zh review.
 
+## Merged 2026-10-15 (Owner added `owner-approved`)
+
+#604, #607 and #609 were each brought up to date with `main`, re-tested (8 required
+checks green on that exact head) and merged in that order, pinned to the tested head.
+Production read-back: #604 serves `data-sources-line` on /en/verify/; #607 serves
+`data-capture-crop` on /en/ and /vi/; #609 serves the at-rest underlined link
+(`underline underline-offset-4 hover:no-underline`) on /en/privacy/. The same day, dependency PRs #612
+(`actions/setup-node`, 65013fb) and #613 (`actions/upload-artifact`, c99d26e) merged the
+same way; #614 (astro 7.3.8, a484a25) was merged by the Owner.
+
+The P2-7 action-tier spec now also runs on zh and zh-Hant (it covered en and vi only).
+Locally, against the #609 head build, it passed for all four locales.
+
 ## Open at this record
 
-- #604 U7 Verify cards, #607 P2-9 home capture crop, #609 P2-7 action tiers: each
-  regenerates visual baselines and waits for the Owner's `owner-approved` label.
 - P2-6 display tier: waits for an Owner choice. Either (a) inner short-title H1 moves to the
   display step `--size-9`, or (b) the item closes as is.
 - P2-9 "strengthen the Sổ Tâm strip": not started. The red-team synthesis text for it is not
   in the repository.
+- #615 dev-dependency group (Playwright 1.64.0): the browser shards run in an image pinned
+  by digest, so the PR also pins `mcr.microsoft.com/playwright:v1.64.0-noble` to the index
+  digest read from mcr.microsoft.com. That changes a protected path and waits for the
+  Owner's `owner-approved` label. Visual baselines under 1.64 are NOT VERIFIED until CI
+  runs.
 - Remote branch cleanup: the session proxy refuses ref deletion (HTTP 403). Branches of
   merged PRs need deletion by the Owner.
