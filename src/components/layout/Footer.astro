@@ -4,6 +4,13 @@ import Container from "@/components/layout/Container.astro";
 import LanguageSwitcher from "@/components/layout/LanguageSwitcher.astro";
 import { SITE, SHARED_LABELS, labelFor, getFooterGroups } from "@/data/site";
 import { getLanguageFromPath } from "@/lib/i18n";
+import type { LastUpdatedView } from "@/lib/last-updated";
+
+interface Props {
+  /** UX P2-10: omitted entirely when there is no accurate git date. */
+  lastUpdated?: LastUpdatedView | null;
+}
+const { lastUpdated = null } = Astro.props;
 
 const currentPath = Astro.url.pathname;
 const lang = getLanguageFromPath(currentPath);
@@ -11,7 +18,7 @@ const isVi = lang === "vi";
 const FOOTER_GROUPS = getFooterGroups(lang);
 
 // OG-2 owner-ratified: English tagline in en/zh/zh-hant; vi is localized.
-const taglineLead = isVi ? "Trí tuệ. Nâng tầm." : SITE.taglineLead;
+const taglineLead = isVi ? "Trí tuệ. Tầm nhìn." : SITE.taglineLead;
 const taglineAccent = isVi ? "Tác động." : SITE.taglineAccent;
 
 // C4-A S6 — colophon: identity + language only. Every public trust/security
@@ -36,22 +43,26 @@ const languageName = isVi
       <BrandLockup size="footer" />
       <LanguageSwitcher variant="dark" placement="footer" />
     </div>
-    <div class="footer-body grid gap-8 sm:gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.6fr)] lg:gap-16">
+    <div class="footer-body grid gap-8 sm:gap-10 lg:grid-cols-[minmax(0,1fr)_auto] lg:gap-16">
       <p
         lang={isVi ? undefined : "en"}
         class="footer-tagline max-w-sm font-semibold text-[var(--brand-porcelain)]"
       >
         {/* F-02: the separating space must live inside a dynamic expression.
             A whitespace-only literal between the segments is dropped at compile
-            time, which rendered "Nâng tầm.Tác động." on production. */}
+            time, which rendered "Tầm nhìn.Tác động." on production. */}
         {`${taglineLead} `}
         <span class="text-[color-mix(in_srgb,var(--brand-cobalt)_70%,white)]">
           {taglineAccent}
         </span>
       </p>
+      {/* UX P2-8: one column per link group (a fixed three left the right
+          third empty with two groups); on wide screens the groups sit
+          against the right edge, under the language switcher. */}
       <nav
         aria-label={labelFor(SHARED_LABELS.footerNav, lang)}
-        class="grid grid-cols-2 gap-x-6 gap-y-8 sm:grid-cols-3 sm:gap-x-8"
+        class="footer-nav grid grid-cols-2 gap-x-6 gap-y-8 sm:grid-cols-[repeat(var(--footer-groups),max-content)] sm:gap-x-16"
+        style={`--footer-groups: ${FOOTER_GROUPS.length}`}
       >
         {FOOTER_GROUPS.map((group, index) => (
           <div>
@@ -84,6 +95,15 @@ const languageName = isVi
       <span class="c4-colophon__identity">{SITE.name}</span>
       <span class="c4-colophon__rule" aria-hidden="true"></span>
       <span class="c4-colophon__language">{languageName}</span>
+      {lastUpdated ? (
+        <>
+          <span class="c4-colophon__rule" aria-hidden="true"></span>
+          <span class="c4-colophon__updated" data-last-updated>
+            {lastUpdated.label}{" "}
+            <time datetime={lastUpdated.datetime}>{lastUpdated.text}</time>
+          </span>
+        </>
+      ) : null}
     </div>
   </Container>
 </footer>

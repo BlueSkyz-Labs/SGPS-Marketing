@@ -35,8 +35,8 @@ test.describe("Smoke — Astro foundation", () => {
     await expect(page.locator("html")).toHaveAttribute("lang", "vi");
     await expect(page.getByRole("heading", { level: 1 })).toContainText(
       hasPublicProducts
-        ? /Chúng tôi xây dựng sản phẩm thông minh, giúp con người làm chủ/
-        : /Trí tuệ|Nâng tầm|Tác động/,
+        ? /Chúng tôi làm những sản phẩm thông minh, giúp mọi người làm việc nhẹ nhàng/
+        : /Trí tuệ|Tầm nhìn|Tác động/,
     );
     await expect(page.getByRole("contentinfo")).toContainText(/Trí tuệ/);
   });

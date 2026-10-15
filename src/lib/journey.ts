@@ -22,7 +22,7 @@ const JOURNEY: Record<string, JourneyStep[]> = {
   products: [
     {
       segment: "verify",
-      label: { en: "Verify", vi: "Xác minh", zh: "核实", "zh-hant": "查證" },
+      label: { en: "Verify", vi: "Kiểm chứng", zh: "核实", "zh-hant": "查證" },
     },
     {
       segment: "about",
@@ -119,6 +119,23 @@ const HOME_CLOSE_SEGMENTS = ["about", "contact"] as const;
 export function getHomeCloseActions(lang: Language): JourneyAction[] {
   const allSteps = Object.values(JOURNEY).flat();
   return HOME_CLOSE_SEGMENTS.flatMap((segment) => {
+    const step = allSteps.find((candidate) => candidate.segment === segment);
+    return step
+      ? [{ href: `/${lang}/${segment}/`, label: step.label[lang] }]
+      : [];
+  });
+}
+
+/**
+ * UX-U5 (P1-7): in-page next steps for a product profile that has no real
+ * screens yet. Same approved labels and existing routes as the other Next steps
+ * rows (Product status, Verify, Contact); no new copy.
+ */
+const PROFILE_NEXT_SEGMENTS = ["products", "verify", "contact"] as const;
+
+export function getProfileNextActions(lang: Language): JourneyAction[] {
+  const allSteps = Object.values(JOURNEY).flat();
+  return PROFILE_NEXT_SEGMENTS.flatMap((segment) => {
     const step = allSteps.find((candidate) => candidate.segment === segment);
     return step
       ? [{ href: `/${lang}/${segment}/`, label: step.label[lang] }]

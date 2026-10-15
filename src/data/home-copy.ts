@@ -21,7 +21,7 @@ export const HOME_PRODUCT_LINE: Record<
   },
   vi: {
     lead: "Đang phát triển: ",
-    a: ", sổ tay cho chủ trọ, và ",
+    a: ", sổ tay cho chủ trọ; ",
     b: ", nhật ký riêng tư.",
   },
   zh: { lead: "开发中：", a: "，房东记事本；", b: "，私密日记。" },

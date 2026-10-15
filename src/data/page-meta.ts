@@ -60,7 +60,7 @@ export const PAGE_META: Record<Language, Record<StaticPageKey, PageMeta>> = {
         "Xem Sổ Trọ và Sổ Tâm giúp bạn được gì: sổ ghi tiền phòng, điện nước cho chủ trọ ở Việt Nam và nhật ký riêng tư ưu tiên lưu trên máy. Cả hai đang phát triển.",
     },
     verify: {
-      title: "Xác minh: tự kiểm chứng điều chúng tôi nói",
+      title: "Kiểm chứng: tự đối chiếu điều chúng tôi nói",
       description:
         "Tự kiểm chứng những gì BlueSkyz Labs công bố: từng tuyên bố công khai, bằng chứng và nguồn đằng sau, cùng các cách để bạn tự kiểm tra.",
     },

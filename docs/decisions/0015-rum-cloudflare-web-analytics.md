@@ -38,7 +38,7 @@ The Owner was given three options:
 Option **A**, chosen by the Owner on 2026-10-11.
 
 - **Script:** Cloudflare Web Analytics, automatic injection, on `blueskyzlabs.com` only.
-- **CSP:** `script-src` admits exactly one third-party source, `https://static.cloudflareinsights.com/beacon.min.js`. There is no host-wide or wildcard entry.
+- **CSP:** `script-src` admits exactly one third-party source, `https://static.cloudflareinsights.com/beacon.min.js/` (trailing slash, see the 2026-10-13 note). There is no host-wide or wildcard entry.
 - **Endpoint:** `connect-src` stays `'self'`, because the proxied zone posts to `/cdn-cgi/rum`.
 - **Trusted Types:** `require-trusted-types-for 'script'` stays on. If the beacon trips it, the beacon fails closed and we learn that from missing data, not from a weaker CSP.
 - **Gate C1** (legal review of aggregate-only collection): the Owner accepts the residual risk (R2 privacy/legal) on 2026-10-11 in place of an independent legal opinion.
@@ -50,6 +50,10 @@ Option **A**, chosen by the Owner on 2026-10-11.
 
 1. Disable Web Analytics for the zone in the Cloudflare dashboard. This stops collection immediately.
 2. Remove the script path from `public/_headers` and the processor sentence from the privacy copy in one PR.
+
+## Note 2026-10-13: trailing slash on the script source
+
+Automatic injection serves the beacon from `/beacon.min.js/<version>`, not from `/beacon.min.js`. In CSP path matching, a source path without a trailing slash matches that exact path only, so the original source blocked the injected tag and no data arrived. A trailing slash makes the source a prefix match on that one path. The host stays exact, there is no wildcard, and no other path on the host is admitted. The guard now pins the slash form, and its negative proof rejects a wildcard host, a different path, the slash-less form and a bare host.
 
 ## Guards
 

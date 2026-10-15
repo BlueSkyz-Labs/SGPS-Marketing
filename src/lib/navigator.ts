@@ -50,7 +50,7 @@ const ROUTE_ALIASES: Record<string, Record<Language, string[]>> = {
   },
   verify: {
     en: ["verify", "check yourself"],
-    vi: ["xác minh", "cách chúng tôi xác minh"],
+    vi: ["kiểm chứng", "xác minh", "cách chúng tôi kiểm chứng"],
     zh: ["核实", "核验", "验证", "我们如何核验"],
     "zh-hant": ["核實", "核驗", "驗證", "查證", "我們如何核驗"],
   },

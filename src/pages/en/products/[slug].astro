@@ -1,4 +1,5 @@
 ---
+import ProfileNextSteps from "@/components/experience/ProfileNextSteps.astro";
 import HorizonSeam from "@/components/experience/HorizonSeam.astro";
 import type { CollectionEntry } from "astro:content";
 import BaseLayout from "@/layouts/BaseLayout.astro";
@@ -6,6 +7,7 @@ import Container from "@/components/layout/Container.astro";
 import ProductStatus from "@/components/product/ProductStatus.astro";
 import ProductLadder from "@/components/product/ProductLadder.astro";
 import AppAccess from "@/components/product/AppAccess.astro";
+import InterimNote from "@/components/product/InterimNote.astro";
 import ProductShowcase from "@/components/product/ProductShowcase.astro";
 import ButtonLink from "@/components/ui/ButtonLink.astro";
 import NoCaptureStage from "@/components/empty-state/NoCaptureStage.astro";
@@ -109,9 +111,12 @@ const breadcrumbStructuredData = productBreadcrumbJsonLd(
   SITE.url,
 );
 const isIdentityArt = media?.kind === "identity-art";
+// UX-U5: a profile with no real screens yet (Sổ Tâm) gets next steps, no lockup.
+const awaitingScreens = !showcase && isIdentityArt;
 ---
 
 <BaseLayout
+  lastUpdated
   title={meta.title}
   description={meta.description}
   path={`/en/products/${data.slug}/`}
@@ -182,26 +187,28 @@ const isIdentityArt = media?.kind === "identity-art";
             <ProductStatus label={data.publicLabel} lang="en" />
           </div>
           <!-- Endorsed lockup: hidden on phones (the page header already names the studio). -->
-          <div class="profile-lockup mt-3" aria-hidden="true">
-            <img
-              src={`/brand/blueskyz/v4/products/${data.slug}_endorsed_lockup_light.svg`}
-              alt=""
-              class="profile-lockup-light h-12 w-auto"
-              width="1500"
-              height="420"
-              loading="lazy"
-              decoding="async"
-            />
-            <img
-              src={`/brand/blueskyz/v4/products/${data.slug}_endorsed_lockup_dark.svg`}
-              alt=""
-              class="profile-lockup-dark h-12 w-auto"
-              width="1500"
-              height="420"
-              loading="lazy"
-              decoding="async"
-            />
-          </div>
+          {!awaitingScreens ? (
+            <div class="profile-lockup mt-3" aria-hidden="true">
+              <img
+                src={`/brand/blueskyz/v4/products/${data.slug}_endorsed_lockup_light.svg`}
+                alt=""
+                class="profile-lockup-light h-12 w-auto"
+                width="1500"
+                height="420"
+                loading="lazy"
+                decoding="async"
+              />
+              <img
+                src={`/brand/blueskyz/v4/products/${data.slug}_endorsed_lockup_dark.svg`}
+                alt=""
+                class="profile-lockup-dark h-12 w-auto"
+                width="1500"
+                height="420"
+                loading="lazy"
+                decoding="async"
+              />
+            </div>
+          ) : null}
         </div>
       </header>
       <HorizonSeam class="horizon-rule" data-horizon-rule />
@@ -232,6 +239,7 @@ const isIdentityArt = media?.kind === "identity-art";
         lang="en"
         web={data.platforms.includes("web")}
       />
+      <InterimNote appAccess={data.appAccess} lang="en" />
       <ProductLadder lifecycle={data.lifecycle} lang="en" />
       {!showcase && media && !isIdentityArt ? (
         <NoCaptureStage media={media} lang="en" />
@@ -246,6 +254,9 @@ const isIdentityArt = media?.kind === "identity-art";
         >
           {labelFor(EMPTY_STATE_COPY.noCaptures, "en")}
         </p>
+      ) : null}
+      {awaitingScreens ? (
+        <ProfileNextSteps lang="en" productName={data.name} />
       ) : null}
 
       {page.whatItDoes.length > 0 ? (
