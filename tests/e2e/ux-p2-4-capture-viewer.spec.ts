@@ -153,7 +153,7 @@ test("browser with broken showModal leaves the native image link available", asy
     "data-test-default-prevented",
     "false",
   );
-  await expect(trigger).toHaveAttribute("href", /\\.webp$/);
+  await expect(trigger).toHaveAttribute("href", /\.webp$/);
   await expect(trigger).toHaveAttribute("target", "_blank");
   await expect(page.locator("dialog[data-capture-viewer][open]")).toHaveCount(0);
 });
