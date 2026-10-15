@@ -40,6 +40,8 @@ for (const lang of ["en", "vi", "zh", "zh-hant"] as const) {
     await expect(close).toBeFocused();
     await page.keyboard.press("Escape");
     await expect(dialog).toBeHidden();
+    // Reopening on a different capture must not flash the previous image.
+    await expect(dialog.locator("img")).not.toHaveAttribute("src", /.+/);
     await expect(trigger).toBeFocused();
     // Close button path.
     await trigger.click();
