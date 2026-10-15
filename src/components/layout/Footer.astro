@@ -43,7 +43,7 @@ const languageName = isVi
       <BrandLockup size="footer" />
       <LanguageSwitcher variant="dark" placement="footer" />
     </div>
-    <div class="footer-body grid gap-8 sm:gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.6fr)] lg:gap-16">
+    <div class="footer-body grid gap-8 sm:gap-10 lg:grid-cols-[minmax(0,1fr)_auto] lg:gap-16">
       <p
         lang={isVi ? undefined : "en"}
         class="footer-tagline max-w-sm font-semibold text-[var(--brand-porcelain)]"
@@ -56,9 +56,13 @@ const languageName = isVi
           {taglineAccent}
         </span>
       </p>
+      {/* UX P2-8: one column per link group (a fixed three left the right
+          third empty with two groups); on wide screens the groups sit
+          against the right edge, under the language switcher. */}
       <nav
         aria-label={labelFor(SHARED_LABELS.footerNav, lang)}
-        class="grid grid-cols-2 gap-x-6 gap-y-8 sm:grid-cols-3 sm:gap-x-8"
+        class="footer-nav grid grid-cols-2 gap-x-6 gap-y-8 sm:grid-cols-[repeat(var(--footer-groups),max-content)] sm:gap-x-16"
+        style={`--footer-groups: ${FOOTER_GROUPS.length}`}
       >
         {FOOTER_GROUPS.map((group, index) => (
           <div>
