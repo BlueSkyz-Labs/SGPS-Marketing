@@ -35,6 +35,8 @@ interface Props {
 }
 
 interface AboutContent {
+  heading?: unknown;
+  intro?: unknown;
   founder_name?: unknown;
   founder_title?: unknown;
   location?: unknown;
@@ -51,6 +53,10 @@ const products = (await getPublicProducts()).map((product) => ({
 const aboutEntry = await getEntry("pages", `${lang}-about`);
 const aboutContent = aboutEntry?.data.sections?.content as
   AboutContent | undefined;
+const missionHeading =
+  typeof aboutContent?.heading === "string" ? aboutContent.heading : null;
+const missionIntro =
+  typeof aboutContent?.intro === "string" ? aboutContent.intro : null;
 const founderName =
   typeof aboutContent?.founder_name === "string"
     ? aboutContent.founder_name
@@ -63,6 +69,18 @@ const founderLocation =
   typeof aboutContent?.location === "string" ? aboutContent.location : null;
 ---
 
+{missionHeading && missionIntro && (
+  <section
+    class="about-mission"
+    aria-labelledby="about-mission-title"
+    data-about-mission
+  >
+    <h2 id="about-mission-title" class="about-mission__title">
+      {missionHeading}
+    </h2>
+    <p class="about-mission__copy text-pretty">{missionIntro}</p>
+  </section>
+)}
 <p class="about-founded" data-organization-founding-year>
   {labelFor(SHARED_LABELS.operatingSince, lang)}{" "}
   <time datetime={String(SITE.operatingSinceYear)}>
@@ -185,6 +203,30 @@ const founderLocation =
     margin: 0 0 3rem;
     color: var(--text-secondary);
     font-size: var(--size-2);
+  }
+  .about-mission {
+    max-width: 48rem;
+    margin-block: 2rem 3rem;
+  }
+  .about-mission__title {
+    margin: 0;
+    font-size: var(--size-2);
+    font-weight: 600;
+    letter-spacing: var(--tracking-eyebrow, 0.12em);
+    color: var(--text-secondary);
+  }
+  :lang(vi) .about-mission__title {
+    letter-spacing: 0.03em;
+  }
+  :lang(zh) .about-mission__title {
+    letter-spacing: 0.02em;
+  }
+  .about-mission__copy {
+    max-width: 42rem;
+    margin: 1rem 0 0;
+    font-size: var(--size-4);
+    line-height: 1.6;
+    color: var(--text-primary);
   }
   .about-grid {
     display: grid;
