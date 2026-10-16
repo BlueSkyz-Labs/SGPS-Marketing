@@ -8,6 +8,7 @@ import {
   AVAILABILITY,
   webPreviewOpen,
 } from "@/components/product/product-page-copy";
+import BlueSkyzIcon from "@/components/icon/BlueSkyzIcon.astro";
 
 const lang = getLanguageFromPath(Astro.url.pathname);
 const isVi = lang === "vi";
@@ -60,6 +61,8 @@ const navLabel = isVi
     : isZhHant
       ? "快速導覽"
       : "Quick navigation";
+// Native dialog close action, always named in the current locale.
+const closeLabel = isVi ? "Đóng" : isZh ? "关闭" : isZhHant ? "關閉" : "Close";
 const placeholder = isVi
   ? "Tìm trang…"
   : isZh
@@ -159,14 +162,28 @@ const statusIntents = (STATUS_INTENTS[lang] ?? []).join("|");
     <label class="sr-only" for="command-navigator-input">
       {navLabel}
     </label>
-    <input
-      id="command-navigator-input"
-      type="search"
-      placeholder={placeholder}
-      autocomplete="off"
-      spellcheck="false"
-      data-command-input
-    />
+    <div class="flex items-center gap-2">
+      <input
+        id="command-navigator-input"
+        type="search"
+        placeholder={placeholder}
+        autocomplete="off"
+        spellcheck="false"
+        class="min-w-0 flex-1"
+        data-command-input
+      />
+      <form method="dialog" class="shrink-0">
+        <button
+          type="submit"
+          data-command-close
+          aria-label={closeLabel}
+          title={closeLabel}
+          class="inline-flex h-11 w-11 items-center justify-center rounded-lg border border-[var(--border-subtle)] bg-[var(--surface-raised)] text-[var(--text-primary)] hover:bg-[var(--surface-subtle)]"
+        >
+          <BlueSkyzIcon name="close" class="h-5 w-5" />
+        </button>
+      </form>
+    </div>
     <ul class="command-navigator__list" data-command-list>
       {items.map((item) => {
         // Rank tiers: label (title) > short keywords > long body text.
