@@ -9,9 +9,9 @@ import { fileURLToPath } from "node:url";
  * Firefox and WebKit do not support it). At build time this pass wraps every
  * Chinese word of two or more characters in zh-Hans / zh-Hant h1–h3 in
  * `<span class="cjk-word">` and tags the heading `data-cjk-wrap`. The span
- * keeps the word whole (keep-all) but may still break as a last resort
- * (overflow-wrap: anywhere), so a word that cannot fit never overflows; the
- * heading itself keeps `word-break: normal`. Latin text such as "Sổ Trọ" is
+ * is inline-block: a word that does not fit moves to the next line whole, and
+ * only a word wider than the whole line breaks inside, so it never overflows;
+ * the heading itself keeps `word-break: normal`. Latin text such as "Sổ Trọ" is
  * left alone: breaking it at a space is normal. Copy is unchanged: the spans
  * add no characters.
  */

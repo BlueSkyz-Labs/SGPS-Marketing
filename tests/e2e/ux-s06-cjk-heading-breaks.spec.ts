@@ -8,8 +8,8 @@ import {
 /**
  * UX S06 (audit 2026-10-15): Chinese headings broke inside words at
  * 320–390px ("智能化产 | 品", "私 | 有"). The build now wraps each Chinese word
- * in zh-Hans / zh-Hant h1–h3 in a keep-all span that may still break as a last
- * resort; headings keep word-break: normal.
+ * in zh-Hans / zh-Hant h1–h3 in an inline-block span that breaks inside only
+ * when it is wider than the line; headings keep word-break: normal.
  */
 const LANGS = ["zh", "zh-hant"] as const;
 const ROUTES = [
@@ -122,16 +122,76 @@ for (const lang of LANGS) {
   }
 }
 
-test("negative proof: without the word spans the home H1 splits a word at 320px", async ({
+/**
+ * A heading 4.5 characters wide holding "智能化产品" must wrap after four
+ * characters. The same test runs in every engine with a fixed font size, so it
+ * does not depend on how each engine lays out the real home H1.
+ */
+async function injectHeading(page: Page, html: string, width: string) {
+  await page.evaluate(
+    ({ html, width }) => {
+      const box = document.createElement("div");
+      box.id = "s06-probe";
+      box.lang = "zh-Hans";
+      box.style.cssText = `width:${width};font-size:20px`;
+      box.innerHTML = html;
+      // The site's heading rules (size, tracking, text-wrap) must not move
+      // the break: one glyph is 1em, so 4.5em holds four characters.
+      box.querySelector("h2")!.style.cssText =
+        "font-size:20px;line-height:1.5;letter-spacing:0;margin:0;text-wrap:wrap";
+      document.querySelector("main")!.prepend(box);
+    },
+    { html, width },
+  );
+}
+
+const probeBreaks = (page: Page) =>
+  page.evaluate(() => {
+    const h = document.querySelector("#s06-probe h2")!;
+    const range = document.createRange();
+    const walker = document.createTreeWalker(h, NodeFilter.SHOW_TEXT);
+    let text = "";
+    let last: number | null = null;
+    const breaks: string[] = [];
+    while (walker.nextNode()) {
+      const node = walker.currentNode as Text;
+      for (let i = 0; i < node.length; i++) {
+        range.setStart(node, i);
+        range.setEnd(node, i + 1);
+        const top = Math.round(range.getClientRects()[0]!.top);
+        if (last !== null && top > last + 4) breaks.push(text);
+        last = top;
+        text += node.data[i];
+      }
+    }
+    const box = document.querySelector<HTMLElement>("#s06-probe")!;
+    return { breaks, overflow: box.scrollWidth - box.clientWidth };
+  });
+
+test("word spans move a whole word to the next line; negative proof without them", async ({
   page,
 }) => {
-  await page.setViewportSize({ width: 320, height: 800 });
   await page.goto("/zh/");
-  await page.evaluate(() => {
-    const h1 = document.querySelector("h1")!;
-    h1.querySelectorAll(".cjk-word").forEach((s) =>
-      s.replaceWith(...s.childNodes),
-    );
-  });
-  expect((await midWordBreaks(page)).length).toBeGreaterThan(0);
+  const raw = "<h2>智能化产品</h2>";
+  await injectHeading(page, rewriteHeadings(raw, "zh-Hans"), "4.5em");
+  // Fixed: "产品" moves down whole, after "智能化".
+  expect((await probeBreaks(page)).breaks).toEqual(["智能化"]);
+  await page.evaluate(() => document.querySelector("#s06-probe")!.remove());
+  // Negative proof: the same heading without the spans splits "产 | 品".
+  await injectHeading(page, raw, "4.5em");
+  expect((await probeBreaks(page)).breaks).toEqual(["智能化产"]);
+});
+
+test("a word wider than the line breaks inside instead of overflowing", async ({
+  page,
+}) => {
+  await page.goto("/zh/");
+  await injectHeading(
+    page,
+    rewriteHeadings("<h2>智能产品</h2>", "zh-Hans"),
+    "1.5em",
+  );
+  const { breaks, overflow } = await probeBreaks(page);
+  expect(breaks.length).toBeGreaterThan(0);
+  expect(overflow).toBeLessThanOrEqual(0);
 });
