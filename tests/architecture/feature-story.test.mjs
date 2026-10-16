@@ -57,7 +57,7 @@ test("the Sổ Trọ story resolves only from its own registry records", () => {
   const { screens, story } = parseShowcase(read(SHOWCASE));
   const facts = parseFacts(read(PRODUCT));
   assert.ok(screens.length >= 10, "screens parsed");
-  assert.equal(facts.jobs.length, 2);
+  assert.equal(facts.jobs.length, 3);
   assert.equal(facts.capabilities.length, 3);
   assert.ok(story.chapters.length >= 3, "story chapters parsed");
   assert.deepEqual(storyProblems(story, screens, facts), []);
@@ -67,10 +67,11 @@ test("the Sổ Trọ story resolves only from its own registry records", () => {
     ["today", "utilities", "collect", "rooms", "candlelight"],
   );
   // Facts relate a chapter's task to a registered job or capability; only
-  // the three chapters whose task is a registered entry carry one.
+  // the three chapters whose task is a registered entry carry one (Preview
+  // 2026-10-15: meter readings are job 3, rent collection is capability 1).
   assert.deepEqual(
     resolved.chapters.map((chapter) => chapter.fact),
-    [facts.jobs[0], facts.capabilities[0], facts.capabilities[1], null, null],
+    [facts.jobs[0], facts.jobs[2], facts.jobs[1], null, null],
   );
   assert.equal(resolved.coda?.id, "owner-collect");
 });

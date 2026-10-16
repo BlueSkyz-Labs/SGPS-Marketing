@@ -7,9 +7,11 @@ import { productCopy } from "@/lib/product-copy";
  * (sro-*, stm-*). zh and zh-hant lines are deck suggestions and stay NOT
  * VERIFIED for native review.
  *
- * v12 S2: the Sổ Trọ lead is the customer outcome (rent, meter readings and
- * receipts per room in one notebook), built only from the record's jobs and
- * capabilities; the list below gives the detail and the screens the proof.
+ * v12 S2: the Sổ Trọ lead is the customer outcome, built only from the
+ * record's jobs and capabilities; the list below gives the detail and the
+ * screens the proof. Preview 2026-10-15: every line is backed by shipped code
+ * and tests in Sotro (vendored profile `_rationale.capabilities`); tiered
+ * electricity billing, automatic sending and bank matching are not claimed.
  *
  * The record fields (`shortDescription`, `jobs`, `capabilities`) are canonical
  * claim/proof bindings; `jobs`/`capabilities` are mirrored against the vendored
@@ -25,46 +27,44 @@ const DECK: Record<
   sotro: {
     en: {
       oneLiner:
-        "Rent, meter readings and receipts for every room, in one notebook made for landlords in Vietnam.",
+        "Collect rent room by room, confirm each payment once, receipt ready for Zalo. Made for landlords in Vietnam.",
       whatItDoes: [
-        "See who has not paid this month and what needs doing today",
-        "Keep room, tenant, meter and monthly charge records",
-        "Electricity bills from meter readings, with each tier shown",
-        "Receipts, with a separate step to confirm money received",
-        "Zalo or SMS reminder text to copy; nothing is sent automatically",
+        "See at a glance who still owes this month and what needs doing today",
+        "Review, then confirm: each payment is recorded once",
+        "A QR code for bank transfer, and a receipt image to copy into Zalo",
+        "Large text and big buttons; a family helper joins by scanning a QR code",
+        "Meter readings, monthly charges and a C06 residence export",
       ],
     },
     vi: {
       oneLiner:
-        "Tiền thuê, điện nước và biên nhận của từng phòng, gọn trong một cuốn sổ dành cho chủ trọ ở Việt Nam.",
+        "Thu tiền từng phòng, mỗi khoản xác nhận đúng một lần, có biên nhận gửi Zalo. Làm riêng cho chủ trọ Việt Nam.",
       whatItDoes: [
-        "Xem tháng này còn ai chưa đóng tiền và hôm nay cần lo việc gì",
-        "Ghi lại phòng, người thuê, số điện nước và các khoản thu hằng tháng",
-        "Tính tiền điện từ số công tơ, hiện rõ từng bậc giá",
-        "Có biên nhận, và một bước xác nhận riêng trước khi ghi nhận tiền đã nhận",
-        "Tin nhắn nhắc kiểu Zalo hoặc SMS để sao chép; không tự động gửi",
+        "Nhìn một lần là biết tháng này ai còn nợ và hôm nay cần làm gì",
+        "Xem lại rồi mới xác nhận: mỗi khoản thu chỉ ghi một lần",
+        "Mã QR chuyển khoản ngân hàng, và ảnh biên nhận sao chép gửi qua Zalo",
+        "Chữ to, nút lớn; người nhà tham gia chỉ bằng cách quét mã QR",
+        "Chỉ số điện nước, khoản thu hằng tháng và bảng C06 tạm trú",
       ],
     },
     zh: {
-      oneLiner:
-        "每个房间的房租、水电表读数和收据，都记在一本为越南房东打造的记事本里。",
+      oneLiner: "逐间收租，每笔只确认一次，收据可发到 Zalo。为越南房东打造。",
       whatItDoes: [
-        "查看本月谁还没付款、今天要处理什么",
-        "记录房间、租客、水电表和每月费用",
-        "根据电表读数计算电费，并列出每一档",
-        "提供收据；确认收款需单独一步",
-        "可复制的 Zalo 或短信提醒文字；不会自动发送",
+        "本月谁还欠租、今天要做什么",
+        "先核对再确认：每笔收款只记一次",
+        "转账二维码，收据可复制到 Zalo",
+        "大字大按钮；家人扫码即可加入",
+        "水电读数、每月费用和 C06 暂住表",
       ],
     },
     "zh-hant": {
-      oneLiner:
-        "每個房間的租金、水電表度數和收據，都記在一本為越南房東打造的記事本裡。",
+      oneLiner: "逐間收租，每筆只確認一次，收據可傳到 Zalo。為越南房東打造。",
       whatItDoes: [
-        "查看本月誰還沒付款、今天要處理什麼",
-        "記錄房間、房客、水電表和每月費用",
-        "依電表度數計算電費，並列出每一級",
-        "提供收據；確認收款需獨立一步",
-        "可複製的 Zalo 或簡訊提醒文字；不會自動傳送",
+        "本月誰還欠租、今天要做什麼",
+        "先核對再確認：每筆收款只記一次",
+        "轉帳 QR 碼，收據可複製到 Zalo",
+        "大字大按鈕；家人掃碼即可加入",
+        "水電度數、每月費用和 C06 暫住表",
       ],
     },
   },
@@ -171,6 +171,13 @@ export const AVAILABILITY = {
   label: S("Availability", "Tình trạng", "可用情况", "可用情況"),
   web: S("Web", "Web", "网页", "網頁"),
   inDevelopment: S("in development", "đang phát triển", "开发中", "開發中"),
+  // Preview 2026-10-15: the web app accepts new workspaces in limited numbers.
+  preview: S(
+    "open preview, limited places",
+    "bản xem trước đã mở, số chỗ có hạn",
+    "预览版已开放，名额有限",
+    "預覽版已開放，名額有限",
+  ),
   native: S(
     "Android and iOS",
     "Android và iOS",
@@ -186,6 +193,18 @@ export const AVAILABILITY = {
   colon: S(": ", ": ", "：", "："),
   sep: S(", ", ", ", "，", "，"),
 } as const;
+
+/**
+ * The web app of this record is open to new users as a preview: an early
+ * lifecycle (`beta`, or later) that is listed as `preview` or `public`.
+ */
+export function webPreviewOpen(data: ProductData): boolean {
+  return (
+    data.platforms.includes("web") &&
+    ["beta", "active", "maintenance"].includes(data.lifecycle) &&
+    ["preview", "public"].includes(data.availability)
+  );
+}
 
 /**
  * Owner-approved 2026-10-12 (U10): interim sentence for a product that is
@@ -211,6 +230,38 @@ export const INTERIM_NOTE = {
   },
   "zh-hant": {
     before: "目前尚未開放註冊或下載。歡迎持續關注本頁，或",
+    link: "與我們聯絡",
+    after: "。",
+  },
+} as const;
+
+/**
+ * Preview 2026-10-15: the interim sentence once the web app is open as a
+ * preview while native apps are still in development. No date, waitlist or
+ * promise; the link is the last clause, to Contact.
+ */
+export const PREVIEW_NOTE = {
+  en: {
+    before:
+      "The web preview is open to a limited number of landlords; the Android and iOS apps are still in development. Questions? ",
+    link: "Get in touch",
+    after: ".",
+  },
+  vi: {
+    before:
+      "Bản xem trước trên web đã mở cho một số chủ trọ, số chỗ có hạn; ứng dụng Android và iOS vẫn đang phát triển. Cần hỏi thêm? ",
+    link: "Liên hệ với chúng tôi",
+    after: ".",
+  },
+  zh: {
+    before:
+      "网页预览版已向少量房东开放，名额有限；Android 与 iOS 应用仍在开发中。有疑问？",
+    link: "与我们联系",
+    after: "。",
+  },
+  "zh-hant": {
+    before:
+      "網頁預覽版已向少量房東開放，名額有限；Android 與 iOS 應用程式仍在開發中。有疑問？",
     link: "與我們聯絡",
     after: "。",
   },

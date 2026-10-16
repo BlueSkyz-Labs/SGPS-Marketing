@@ -11,6 +11,7 @@ import {
   resolveLifecycleCta,
 } from "@/lib/lifecycle-cta";
 import { productCopy } from "@/lib/product-copy";
+import { webPreviewOpen } from "@/components/product/product-page-copy";
 import {
   getProductIconThumbPath,
   getProductProfilePath,
@@ -81,11 +82,19 @@ const proposition = labelFor(
   lang,
 );
 // Product line under the H1 (hom-2, verbatim from the copy deck), each name
-// linking to its profile.
+// linking to its profile. Preview 2026-10-15: the line states Sổ Trọ is in
+// preview and Sổ Tâm in development, so it renders only while the registry
+// agrees; otherwise it is dropped rather than left stating a stale state.
 const lineFirst = products.find((product) => product.data.slug === "sotro");
 const lineSecond = products.find((product) => product.data.slug === "sotam");
 const productLine =
-  flagship && lineFirst && lineSecond ? HOME_PRODUCT_LINE[lang] : null;
+  flagship &&
+  lineFirst &&
+  lineSecond &&
+  webPreviewOpen(lineFirst.data) &&
+  !webPreviewOpen(lineSecond.data)
+    ? HOME_PRODUCT_LINE[lang]
+    : null;
 const flagshipLine =
   (flagship ? HOME_ONE_LINER[flagship.data.slug]?.[lang] : undefined) ??
   copy?.shortDescription ??
@@ -361,7 +370,10 @@ const supportingLine = flagship ? null : proposition;
   .hero-product-line {
     line-height: 1.625;
   }
+  /* A product name never splits across lines: a wrapped link's box spans
+     both lines and reads as obscured focus (WCAG 2.4.11) at 1440px. */
   .hero-inline-link {
+    white-space: nowrap;
     padding-block: 0.85rem;
     font-weight: 600;
     color: var(--brand-porcelain);

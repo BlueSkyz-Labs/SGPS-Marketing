@@ -152,13 +152,14 @@ for (const lang of ["zh", "zh-hant"] as const) {
 }
 
 /**
- * W0 review B2: the visible "in development" badges on zh/zh-hant Products
- * must read as one line. (The section h2 with the same words is `sr-only`,
+ * W0 review B2: the visible status badges ("in development", and since the
+ * 2026-10-15 Preview also "preview") on zh/zh-hant Products must read as one
+ * line. (The section h2 with the same words is `sr-only`,
  * a 1px clipped box that is never painted, so it is excluded.)
  */
 for (const lang of ["zh", "zh-hant"] as const) {
   for (const width of [360, 390, 1440]) {
-    test(`B2 ${lang} @${width}: visible in-development badges stay on one line`, async ({
+    test(`B2 ${lang} @${width}: visible status badges stay on one line`, async ({
       browser,
     }) => {
       const { context, page } = await phone(browser, 900, width);
@@ -172,7 +173,7 @@ for (const lang of ["zh", "zh-hant"] as const) {
           );
           for (let n = walker.nextNode(); n; n = walker.nextNode()) {
             const node = n as Text;
-            if (!/^\s*(开发中|開發中)\s*$/.test(node.data)) continue;
+            if (!/^\s*(开发中|開發中|预览|預覽)\s*$/.test(node.data)) continue;
             const el = node.parentElement!;
             if (el.getBoundingClientRect().width <= 1) continue; // sr-only
             const range = document.createRange();

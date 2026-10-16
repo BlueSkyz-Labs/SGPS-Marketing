@@ -116,10 +116,10 @@ export const SHARED_LABELS = {
     "zh-hant": "精選產品",
   },
   continuationHeading: {
-    en: "Also in development",
-    vi: "Cũng đang phát triển",
-    zh: "同样在开发中",
-    "zh-hant": "同樣在開發中",
+    en: "In development",
+    vi: "Đang phát triển",
+    zh: "开发中",
+    "zh-hant": "開發中",
   },
   viewProfile: {
     en: "View profile",
