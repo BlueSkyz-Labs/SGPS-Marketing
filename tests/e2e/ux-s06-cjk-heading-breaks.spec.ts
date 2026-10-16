@@ -1,5 +1,6 @@
 import { expect, test, type Page } from "@playwright/test";
 import {
+  MAX_WORD,
   documentLang,
   rewriteHeadings,
   wrapWords,
@@ -8,8 +9,8 @@ import {
 /**
  * UX S06 (audit 2026-10-15): Chinese headings broke inside words at
  * 320–390px ("智能化产 | 品", "私 | 有"). The build now wraps each Chinese word
- * in zh-Hans / zh-Hant h1–h3 in an inline-block span that breaks inside only
- * when it is wider than the line; headings keep word-break: normal.
+ * (two to four characters) in zh-Hans / zh-Hant h1–h3 in an inline nowrap
+ * span; headings keep word-break: normal and their accessible names.
  */
 const LANGS = ["zh", "zh-hant"] as const;
 const ROUTES = [
@@ -35,6 +36,18 @@ test("negative proof: the build pass wraps words and leaves other text alone", (
   // Latin text may break at its spaces.
   expect(wrapWords("在 Sổ Trọ 里", seg)).toBe("在 Sổ Trọ 里");
   expect(wrapWords("BlueSkyz", seg)).toBe("BlueSkyz");
+  // A word longer than MAX_WORD is left free to break, so no nowrap run can
+  // be wider than a heading line.
+  const long = "一二三四五".slice(0, MAX_WORD + 1);
+  const fake = {
+    segment: () => [{ segment: long }],
+  } as unknown as Intl.Segmenter;
+  expect(wrapWords(long, fake)).toBe(long);
+  const fits = long.slice(0, MAX_WORD);
+  const fakeFit = {
+    segment: () => [{ segment: fits }],
+  } as unknown as Intl.Segmenter;
+  expect(wrapWords(fits, fakeFit)).toBe(n(fits));
   expect(documentLang('<html lang="en">')).toBeNull();
   expect(documentLang('<html dir="ltr" lang="zh-Hant">')).toBe("zh-Hant");
   const html = '<h2 class="x">关于 <a href="/zh/">BlueSkyz Labs</a>产品</h2>';
@@ -182,16 +195,36 @@ test("word spans move a whole word to the next line; negative proof without them
   expect((await probeBreaks(page)).breaks).toEqual(["智能化产"]);
 });
 
-test("a word wider than the line breaks inside instead of overflowing", async ({
+for (const lang of LANGS) {
+  test(`${lang}: word spans leave heading accessible names unchanged`, async ({
+    page,
+  }) => {
+    await page.goto(`/${lang}/products/`);
+    const names = await page
+      .locator("main")
+      .ariaSnapshot()
+      .then((snap) =>
+        snap
+          .split("\n")
+          .filter((line) => line.includes("- heading "))
+          .map((line) => /heading "([^"]*)"/.exec(line)?.[1] ?? ""),
+      );
+    const texts = await page.$$eval(
+      "main :is(h1, h2, h3)[data-cjk-wrap]",
+      (hs) => hs.map((h) => h.textContent!.replace(/\s+/g, " ").trim()),
+    );
+    expect(texts.length).toBeGreaterThan(0);
+    for (const text of texts) expect(names).toContain(text);
+  });
+}
+
+test("negative proof: inline-block word spans split the accessible name", async ({
   page,
 }) => {
-  await page.goto("/zh/");
-  await injectHeading(
-    page,
-    rewriteHeadings("<h2>智能产品</h2>", "zh-Hans"),
-    "1.5em",
-  );
-  const { breaks, overflow } = await probeBreaks(page);
-  expect(breaks.length).toBeGreaterThan(0);
-  expect(overflow).toBeLessThanOrEqual(0);
+  await page.goto("/zh/products/");
+  await page.addStyleTag({
+    content: ".cjk-word { display: inline-block !important; }",
+  });
+  const snap = await page.locator("main").ariaSnapshot();
+  expect(snap).toContain('heading "开发 中"');
 });

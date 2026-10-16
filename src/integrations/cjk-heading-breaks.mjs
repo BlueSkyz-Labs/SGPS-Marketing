@@ -7,16 +7,20 @@ import { fileURLToPath } from "node:url";
  * Browsers break between any two Han characters, and `word-break: auto-phrase`
  * does not segment Chinese (Chromium 141 still split "产/品" with it applied;
  * Firefox and WebKit do not support it). At build time this pass wraps every
- * Chinese word of two or more characters in zh-Hans / zh-Hant h1–h3 in
+ * Chinese word of two to four characters in zh-Hans / zh-Hant h1–h3 in
  * `<span class="cjk-word">` and tags the heading `data-cjk-wrap`. The span
- * is inline-block: a word that does not fit moves to the next line whole, and
- * only a word wider than the whole line breaks inside, so it never overflows;
- * the heading itself keeps `word-break: normal`. Latin text such as "Sổ Trọ" is
+ * is inline with `white-space: nowrap`, so a word that does not fit moves to
+ * the next line whole; inline keeps the heading's accessible name unchanged
+ * (inline-block split it into words in Chromium). Longer words are left
+ * alone so a nowrap run can never be wider than a heading line (200% text at
+ * 320px); the heading itself keeps `word-break: normal`. Latin text such as "Sổ Trọ" is
  * left alone: breaking it at a space is normal. Copy is unchanged: the spans
  * add no characters.
  */
 
 const HAN = /\p{Script=Han}/u;
+/** Longest word kept on one line; four glyphs fit any heading line. */
+export const MAX_WORD = 4;
 const HEADING = /<(h[1-3])(\s[^>]*)?>([\s\S]*?)<\/\1>/g;
 
 const word = (text) => `<span class="cjk-word">${text}</span>`;
@@ -25,12 +29,13 @@ function segmenter(lang) {
   return new Intl.Segmenter(lang, { granularity: "word" });
 }
 
-/** Wrap each Han word of two or more characters so it breaks only as a last resort. */
+/** Wrap each Han word of two to MAX_WORD characters so it never breaks inside. */
 export function wrapWords(text, seg) {
   let out = "";
   for (const { segment } of seg.segment(text)) {
+    const n = [...segment].length;
     out +=
-      [...segment].length > 1 && HAN.test(segment) ? word(segment) : segment;
+      n > 1 && n <= MAX_WORD && HAN.test(segment) ? word(segment) : segment;
   }
   return out;
 }

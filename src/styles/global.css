@@ -2032,15 +2032,16 @@ dd {
   }
 }
 /* UX S06: auto-phrase does not segment Chinese, so headings still split
-   "产/品". The build wraps each Chinese word in zh-Hans / zh-Hant h1–h3 in
-   .cjk-word (src/integrations/cjk-heading-breaks.mjs). An inline-block word
-   moves to the next line whole when it does not fit; only a word wider than
-   the whole line breaks inside its own box, so text never overflows (200%
-   text at 320px). inline-block works the same in every engine; keep-all on a
-   span did not stop Firefox splitting it. The heading keeps word-break:
-   normal (keep-all overflowed 320px, see v8-w6 contract). */
+   "产/品". The build wraps each Chinese word of two to four characters in
+   zh-Hans / zh-Hant h1–h3 in .cjk-word (src/integrations/cjk-heading-breaks.mjs)
+   and the word never breaks inside. The span stays inline: inline-block made
+   Chromium read "开发 中" as two words in the heading's accessible name. A
+   four-character word is narrower than any heading line, even 200% text at
+   320px, so nowrap cannot overflow. keep-all on a span did not stop Firefox
+   splitting it. The heading keeps word-break: normal (keep-all overflowed
+   320px, see v8-w6 contract). */
 .cjk-word {
-  display: inline-block;
+  white-space: nowrap;
 }
 
 /* Back to top: a plain anchor at the end of long pages on phones.
