@@ -13,6 +13,8 @@ export default defineConfig({
   forbidOnly: Boolean(process.env.CI),
   retries: process.env.CI ? 1 : 0,
   workers: process.env.CI ? 2 : "50%",
+  // WP-12: refuse stale dist/ locally; CI builds fresh so this is a no-op there.
+  globalSetup: "./tests/e2e/global-setup.mjs",
   reporter: [
     ["list"],
     ["html", { outputFolder: "playwright-report", open: "never" }],
