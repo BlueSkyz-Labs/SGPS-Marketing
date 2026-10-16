@@ -93,11 +93,18 @@ export function initCommandNavigator(root: ParentNode = document): void {
   const applyFilter = (query: string): void => {
     const lowered = query.trim().toLocaleLowerCase();
     const tokens = words(lowered);
+    const isEmptyQuery = lowered.length === 0;
+    // Emoji/punctuation can produce no tokens. That is not a blank search.
+    const rank = (item: Element): number => {
+      if (isEmptyQuery) return 1;
+      if (tokens.length === 0) return 0;
+      return scoreItem(tokens, item);
+    };
     let visibleCount = 0;
     const scored = originalOrder.map((item, index) => ({
       item,
       index,
-      score: tokens.length === 0 ? 1 : scoreItem(tokens, item),
+      score: rank(item),
     }));
     for (const { item, score } of scored) {
       if (item instanceof HTMLElement) {
