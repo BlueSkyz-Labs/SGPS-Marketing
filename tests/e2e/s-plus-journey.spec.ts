@@ -18,7 +18,7 @@ test("journey bar offers route-appropriate next steps on /en/about/", async ({
 test("journey bar renders near the end of content, not as a sticky overlay", async ({
   page,
 }) => {
-  await page.goto("/en/support/");
+  await page.goto("/en/contact/");
   const bar = page.locator("[data-journey-bar]");
   await expect(bar).toBeVisible();
   const position = await bar.evaluate((element) => {
@@ -38,13 +38,13 @@ test("journey bar renders near the end of content, not as a sticky overlay", asy
   expect(orderOk).toBe(true);
 });
 
-test("journey bar is localized on /vi/support/", async ({ page }) => {
-  await page.goto("/vi/support/");
+test("journey bar is localized on /vi/contact/", async ({ page }) => {
+  await page.goto("/vi/contact/");
   const bar = page.locator("[data-journey-bar]");
   await expect(bar).toBeVisible();
-  await expect(bar.getByRole("link", { name: /Liên hệ/ })).toHaveAttribute(
+  await expect(bar.getByRole("link", { name: /Hỗ trợ/ })).toHaveAttribute(
     "href",
-    "/vi/contact/",
+    "/vi/support/",
   );
   await expect(bar.getByRole("link", { name: /Bảo mật/ })).toHaveAttribute(
     "href",
