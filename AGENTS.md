@@ -61,6 +61,7 @@ Before any material work, refresh live `main`, open PRs/issues, `docs/current-wo
 
 - Do **not** invent corporate emails, legal prose, product claims, screenshots, photography, owner/product facts, user-research participants, quotes, completion rates or acceptance outcomes.
 - Prefer the smallest **sufficient** root-cause change over symptom patches.
+- Customer-centric decisions (`SGPS-DEC-2026-041`, LOCK): judge the whole customer journey first (CC-1), state any customer degradation explicitly (CC-2), never rank it above security, money safety, privacy or legal constraints (CC-3), and bring customer-vs-cost/speed/prior-choice conflicts to the Owner instead of resolving them silently (CC-5).
 - Never weaken tests, lint, truth gates, dependency audit, security controls, source assurance, provider governance or accessibility/performance budgets to go green.
 - Canonical organizational origin is `https://blueskyzlabs.com` per ADR 0006. `tonydemo.com` is retired/transition history and must not pass the production public-truth gate.
 - Empty public registry + empty email → Act soft-land via `src/lib/act.ts` (About / Security), not a Contact dead-end.
