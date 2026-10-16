@@ -256,7 +256,11 @@ const robotsContent =
     </a>
     <Header scene={scene} />
     <CommandNavigator />
-    <LocaleSuggestion />
+    {
+      // F8: on a 404 the switch would lead to the same missing path in the
+      // other language; the 404 page's own links are the recovery path.
+      isNotFoundPage ? null : <LocaleSuggestion />
+    }
     <!-- One module entry for the three shell initialisers: each separate
          entry is its own request, and Lighthouse's simulated LCP waits on
          every request that finishes before the hero paints. -->
