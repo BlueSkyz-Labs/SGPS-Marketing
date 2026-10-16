@@ -143,7 +143,7 @@ for (const lang of LOCALES) {
       await expect(more).toHaveAttribute("open", "");
     });
 
-    test("Privacy, security, support is one inline sentence of three links", async ({
+    test("website privacy scope is accessible; security and support remain available", async ({
       page,
     }) => {
       await page.goto(`/${lang}/products/sotro/`);
@@ -151,6 +151,27 @@ for (const lang of LOCALES) {
       await expect(trust).toHaveCount(1);
       await expect(trust.locator("a")).toHaveCount(3);
       await expect(trust.locator("svg")).toHaveCount(0);
+      const trustHrefs = await trust
+        .locator("a")
+        .evaluateAll((links) =>
+          links.map((link) => (link as HTMLAnchorElement).getAttribute("href")),
+        );
+      expect(trustHrefs).toEqual([
+        `/${lang}/privacy/`,
+        `/${lang}/security/`,
+        `/${lang}/support/`,
+      ]);
+      const privacyLabel = {
+        en: "Website privacy",
+        vi: "Quyền riêng tư website",
+        zh: "网站隐私",
+        "zh-hant": "網站隱私權",
+      }[lang];
+      await expect(
+        trust.getByRole("link", { name: privacyLabel }),
+      ).toHaveAttribute("aria-describedby", "product-privacy-scope");
+      const scope = page.locator("[data-product-privacy-scope]");
+      await expect(scope).toHaveClass(/\bsr-only\b/);
     });
   });
 }

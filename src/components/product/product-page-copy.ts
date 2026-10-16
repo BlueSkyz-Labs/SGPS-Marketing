@@ -161,7 +161,18 @@ export const PAGE_LABELS = {
     "品牌標識圖",
   ),
   // sro-15 / stm-9
-  privacy: S("Privacy", "Quyền riêng tư", "隐私", "隱私權"),
+  privacy: S(
+    "Website privacy",
+    "Quyền riêng tư website",
+    "网站隐私",
+    "網站隱私權",
+  ),
+  privacyScope: S(
+    "This notice covers blueskyzlabs.com only, not the product.",
+    "Thông báo này chỉ áp dụng cho website blueskyzlabs.com, không áp dụng cho sản phẩm.",
+    "此说明仅适用于网站 blueskyzlabs.com，不适用于该产品。",
+    "此說明僅適用於網站 blueskyzlabs.com，不適用於該產品。",
+  ),
   security: S("Security", "Bảo mật", "安全", "資訊安全"),
   support: S("Support", "Hỗ trợ", "帮助与支持", "協助與支援"),
 } as const;
