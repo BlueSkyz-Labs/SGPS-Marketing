@@ -4,9 +4,13 @@
 
 The audit findings below are the 2026-10-15 snapshot. The following readback supersedes its time-sensitive source/PR statuses; it does not refresh historical measurements or certify production.
 
-## Live status readback — 2026-10-16 07:32 +07
+## Historical live status readback — 2026-10-16 07:32 +07
 
 Current `main` is `e9179388235b5336d6d2caac313bdbaa9afbad43` after #620. #604, #607 and #609 are source-merged; #621 and #622 are open. #615 is behind and its protected-path Quality Gates failed pending Owner approval. #618 is updated on `1965e6cdff4e263f1abc82c0ffa7308e2d56bfcc`: Quality Gates passed; browser, visual and Lighthouse checks were still running. #619 remains Draft at `429dac3815e37810b4963b03181aad83da3113c6`, with its latest checks still running. #621 is at `9af1ed3c5c78386a271f36c1c954cf4d678a06fe`: Chromium passed; other browser shards were still running. #622 is at `3c6de07d4da5637fbeaf1c7970ab6fa3ab9aaba3`: Quality Gates and Lighthouse passed, visual regression failed, and browser shards were still running.
+
+## Current live status recheck — 2026-10-16 08:14 +07
+
+Current `main` is `72729f58294868369fdff2c27a28b3233c138663`; #621 merged with the visible native close action for quick search. #615 remains behind at `ed36e66c6c9619f57e876bab172e54399a593f74`; its protected-path Quality Gates failed and dependent browser/visual/Lighthouse checks were skipped pending Owner approval. #616 remains behind at `de574eee44e87a5a0065d7e4121e50be84b6463a`; all checks passed on that exact head, but its audit readback is stale and needs this update plus a current-head rerun. #618 was rebased to `280fd6e0f292fcf892e2d57c42e6c9bc488985df`; Quality Gates were running after the update. #619 remains Draft at `a7045de0066bf28c439e3e9a39be03a741feaa93`; Quality Gates, Firefox, mobile Chromium, Lighthouse and visual passed, while Chromium and WebKit were still running. #622 remains at `3c6de07d4da5637fbeaf1c7970ab6fa3ab9aaba3`; its previous exact-head browser and visual run failed, and the local foldable fixes are not yet pushed. #623 remains Draft and behind at `e11a7f11b2c05165f8e07387e45eb8563a8f5930`.
 
 Source merges and green source checks do not establish the served production SHA, mail delivery/reply, product privacy operations, native-language review, Human E4, or physical-device acceptance. Those remain NOT VERIFIED.
 

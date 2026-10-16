@@ -2,7 +2,9 @@
 
 Date: 2026-10-16, Asia/Ho_Chi_Minh. State: OWNER-APPROVED DIRECTION / IMPLEMENTATION-READY PLAN / NO PRODUCTION RELEASE AUTHORITY.
 
-Observed main: `e9179388235b5336d6d2caac313bdbaa9afbad43` at 2026-10-16 07:32 +07. #604/#607/#609/#620 are source-merged. Current PR snapshot: #615 behind/Owner-gated; #618 updated with Quality Gates passed and browser assurance running; #619 Draft with checks running; #621 Chromium passed with other browser shards running; #622 Quality Gates and Lighthouse passed, visual gate failed, browser shards running. Historical plan baseline was `7f8474006d737c31d5b2c04a1a8fdbff6391373e`. Re-read live refs and checks before acting.
+Initial plan readback: `main@e9179388235b5336d6d2caac313bdbaa9afbad43` at 2026-10-16 07:32 +07. Historical plan baseline was `7f8474006d737c31d5b2c04a1a8fdbff6391373e`.
+
+Current live recheck: `main@72729f58294868369fdff2c27a28b3233c138663` at 2026-10-16 08:14 +07. #621 is merged. #615 remains behind and Owner-gated; #616 is behind with all checks green on its old head and its current-state note refreshed in this revision; #618 is rebased and its new Quality Gates run is in progress; #619 remains Draft with Chromium/WebKit running; #622's old head has failing browser/visual checks while local foldable fixes are in progress; #623 remains Draft and behind. Re-read live refs and checks before acting.
 
 Source of scope: docs/audit/2026-10-15-sgps-marketing-premium-experience-10g-10s.md in PR #616. The core files remain AGENTS.md, docs/current-work.json, ADR 0014, Brand Kit v4, SGPS performance/friction contract, product/public claims graph and protected main ruleset 22500299.
 
