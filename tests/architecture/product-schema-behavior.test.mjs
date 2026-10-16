@@ -29,6 +29,19 @@ function baseProduct(overrides = {}) {
     },
     proof: {
       publicUrl: "https://product.blueskyz.labs/",
+      media: {
+        kind: "ui-screenshot",
+        src: "/products/demo-product/today.webp",
+        alt: "Demo Product today screen",
+        width: 780,
+        height: 1688,
+      },
+    },
+    // SGPS-DEC-2026-039 Part B: a live fixture carries its release gate.
+    releaseGate: {
+      record:
+        "https://github.com/BlueSkyz-Labs/demo/blob/main/docs/release/GO.md",
+      deployedSha: "0123456789abcdef0123456789abcdef01234567",
     },
     endorsement: "A BlueSkyz Labs product",
     featuredTier: "featured",
@@ -75,6 +88,8 @@ test("non-public draft may use private availability", () => {
       publicLabel: "In development",
       lifecycle: "development",
       capabilities: undefined,
+      // A draft has no proof media (media needs 2–3 capabilities).
+      proof: { publicUrl: "https://product.blueskyz.labs/" },
     }),
   );
   assert.equal(result.success, true);
