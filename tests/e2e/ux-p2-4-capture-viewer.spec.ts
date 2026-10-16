@@ -157,6 +157,11 @@ test("browser with broken showModal leaves the native image link available", asy
   );
   await expect(trigger).toHaveAttribute("href", /\.webp$/);
   await expect(trigger).toHaveAttribute("target", "_blank");
+  await expect(trigger).toHaveAttribute(
+    "aria-label",
+    /opens the image in a new tab/,
+  );
+  await expect(trigger).not.toHaveAttribute("aria-haspopup", "dialog");
   await expect(page.locator("dialog[data-capture-viewer][open]")).toHaveCount(
     0,
   );
@@ -186,11 +191,17 @@ test("browser without showModal also keeps the native image link", async ({
       event.preventDefault();
     });
   });
-  await page.locator("a[data-capture-inspect]").first().click();
+  const trigger = page.locator("a[data-capture-inspect]").first();
+  await trigger.click();
   await expect(page.locator("html")).toHaveAttribute(
     "data-test-default-prevented",
     "false",
   );
+  await expect(trigger).toHaveAttribute(
+    "aria-label",
+    /opens the image in a new tab/,
+  );
+  await expect(trigger).not.toHaveAttribute("aria-haspopup", "dialog");
   await expect(page.locator("dialog[data-capture-viewer][open]")).toHaveCount(
     0,
   );

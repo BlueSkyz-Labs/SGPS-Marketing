@@ -39,9 +39,18 @@ export function initCaptureViewer(root: Document = document): void {
   root.documentElement.setAttribute("data-capture-viewer-ready", "");
   if (typeof HTMLDialogElement === "undefined") return;
 
+  const originalSemantics = new WeakMap<
+    HTMLAnchorElement,
+    { label: string | null; haspopup: string | null }
+  >();
+
   // Wire each link: with JS a plain click opens the dialog, so the "opens in
   // a new tab" suffix would be false. Without JS the original label stays.
   for (const link of root.querySelectorAll<HTMLAnchorElement>(SELECTOR)) {
+    originalSemantics.set(link, {
+      label: link.getAttribute("aria-label"),
+      haspopup: link.getAttribute("aria-haspopup"),
+    });
     const label = link.dataset.viewerLabel;
     if (label) link.setAttribute("aria-label", label);
     link.setAttribute("aria-haspopup", "dialog");
@@ -107,6 +116,12 @@ export function initCaptureViewer(root: Document = document): void {
     try {
       if (!dialog.open) dialog.showModal();
     } catch {
+      const original = originalSemantics.get(link);
+      if (original?.label === null) link.removeAttribute("aria-label");
+      else if (original) link.setAttribute("aria-label", original.label ?? "");
+      if (original?.haspopup === null) link.removeAttribute("aria-haspopup");
+      else if (original)
+        link.setAttribute("aria-haspopup", original.haspopup ?? "");
       trigger = null;
       return;
     }
