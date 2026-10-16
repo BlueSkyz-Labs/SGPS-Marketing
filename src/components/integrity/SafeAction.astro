@@ -9,7 +9,9 @@ interface Props {
   lang: Language;
   /** Replaces the destination context line with a plainer one-line note. */
   note?: string;
-  /** Size the action to its label instead of the full column. */
+  /** Size the action to its label instead of the full column. A fitted
+   * tertiary action pulls back by its 0.75rem padding so its text lines up
+   * with the links above it (customer review F7). */
   fit?: boolean;
   /** Visual weight of the action; the boundary note is unchanged. */
   variant?: "primary" | "secondary" | "tertiary";
@@ -52,7 +54,13 @@ const CONTEXT = {
 ---
 
 <div class="safe-action" data-safe-action={boundary}>
-  <ButtonLink href={href} variant={variant} class={fit ? "self-start" : ""}>
+  <ButtonLink
+    href={href}
+    variant={variant}
+    class={
+      fit ? (variant === "tertiary" ? "self-start -ms-3" : "self-start") : ""
+    }
+  >
     {label}
   </ButtonLink>
   <p class="safe-action__context">{note ?? CONTEXT[boundary][lang]}</p>
