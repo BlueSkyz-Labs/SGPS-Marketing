@@ -1,0 +1,24 @@
+{
+  "id": "LSN-marketing-001",
+  "title": "A nowrap run must fit its container at 200% text and WCAG text spacing",
+  "project": "marketing",
+  "source": {
+    "repo": "SGPS-Marketing",
+    "commit": "35a3c479"
+  },
+  "captured_at": "2026-10-16T05:40:00Z",
+  "class": "ui-nowrap-overflow-at-text-zoom",
+  "tags": ["ui", "layout", "a11y", "text-resize", "cjk"],
+  "trigger": "PR #619 (S06) wrapped Chinese heading words in white-space: nowrap spans and claimed four glyphs fit any heading line. A red-team review asked for 200% text and text-spacing proof; the new test found the home product row's status word overflowing a 46px name column at 320px.",
+  "root_cause": "The no-overflow claim was reasoned from viewport width only. A rem-sized icon in the same grid row grew with the text and squeezed the text column, so a container narrower than the reasoning assumed existed only under text zoom.",
+  "rule": "Any white-space: nowrap run in a width-constrained container needs a test at 320px with 200% text and WCAG 1.4.12 text spacing proving the run fits its container.",
+  "reuse_boundary": "Browser-facing UI that adds nowrap (or another unbreakable run) inside text that sits in a grid or flex row with siblings. Not for single-line controls that already scroll or truncate by design.",
+  "guard": {
+    "level": "G2",
+    "kind": "test",
+    "path": "tests/e2e/ux-s06-cjk-heading-breaks.spec.ts (\"at 320px, 200% text and text spacing: every word span fits its heading\")",
+    "negative_proof": "Reverting the fixed 48px icon to 3rem fails the test on /zh/ and /zh-hant/ (\"开发\", \"開發\"); a 1em heading is reported by the guard's own negative-proof test. Run locally in Chromium on 2026-10-16; Firefox and WebKit run it in CI."
+  },
+  "recurrences": [],
+  "state": "GUARDED"
+}
