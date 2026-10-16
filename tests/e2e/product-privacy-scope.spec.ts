@@ -6,7 +6,7 @@ const COPY = {
     scope: "This notice covers blueskyzlabs.com only, not the product.",
   },
   vi: {
-    link: "Quyền riêng tư của website",
+    link: "Quyền riêng tư website",
     scope:
       "Thông báo này chỉ áp dụng cho website blueskyzlabs.com, không áp dụng cho sản phẩm.",
   },
@@ -27,12 +27,15 @@ for (const locale of ["en", "vi", "zh", "zh-hant"] as const) {
     }) => {
       await page.goto(`/${locale}/products/${product}/`);
 
-      await expect(
-        page.getByRole("link", { name: COPY[locale].link }),
-      ).toHaveAttribute("href", `/${locale}/privacy/`);
-      await expect(page.locator("[data-product-privacy-scope]")).toContainText(
-        COPY[locale].scope,
+      const privacyLink = page.getByRole("link", { name: COPY[locale].link });
+      const scope = page.locator("[data-product-privacy-scope]");
+      await expect(privacyLink).toHaveAttribute("href", `/${locale}/privacy/`);
+      await expect(privacyLink).toHaveAttribute(
+        "aria-describedby",
+        "product-privacy-scope",
       );
+      await expect(scope).toHaveClass(/\bsr-only\b/);
+      await expect(scope).toContainText(COPY[locale].scope);
     });
   }
 }

@@ -81,6 +81,7 @@ const privacyHref = data.proof.privacyUrl
   ? localizeSiteHref(data.proof.privacyUrl, lang)
   : null;
 const proofLinks = [
+  { href: data.proof.privacyUrl, label: PAGE_LABELS.privacy[lang] },
   { href: data.proof.securityUrl, label: PAGE_LABELS.security[lang] },
   { href: data.proof.supportUrl, label: PAGE_LABELS.support[lang] },
 ]
@@ -235,21 +236,6 @@ const awaitingScreens = !showcase && isIdentityArt;
         ) : null}
       </div>
 
-      {privacyHref ? (
-        <p
-          class="mt-4 max-w-3xl text-sm leading-relaxed text-[var(--text-secondary)]"
-          data-product-privacy-scope
-        >
-          {PAGE_LABELS.privacyScope[lang]}{" "}
-          <a
-            href={privacyHref}
-            class="profile-trust-link inline-flex min-h-11 items-center font-semibold text-[var(--action-primary)] underline underline-offset-4 hover:no-underline"
-          >
-            {PAGE_LABELS.privacy[lang]}
-          </a>
-        </p>
-      ) : null}
-
       <ProductSides showcase={showcase} lang="en" />
       <AppAccess
         appAccess={data.appAccess}
@@ -329,12 +315,26 @@ const awaitingScreens = !showcase && isIdentityArt;
                 <a
                   href={link.href}
                   class="profile-trust-link inline-flex min-h-11 items-center font-semibold text-[var(--action-primary)] underline underline-offset-4 hover:no-underline"
+                  aria-describedby={
+                    link.href === privacyHref
+                      ? "product-privacy-scope"
+                      : undefined
+                  }
                 >
                   {link.label}
                 </a>
               </>
             ))}
           </p>
+          {privacyHref ? (
+            <span
+              class="sr-only"
+              id="product-privacy-scope"
+              data-product-privacy-scope
+            >
+              {PAGE_LABELS.privacyScope[lang]}
+            </span>
+          ) : null}
         </div>
       ) : null}
     </Container>

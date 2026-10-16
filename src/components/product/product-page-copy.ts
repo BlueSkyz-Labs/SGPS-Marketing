@@ -163,7 +163,7 @@ export const PAGE_LABELS = {
   // sro-15 / stm-9
   privacy: S(
     "Website privacy",
-    "Quyền riêng tư của website",
+    "Quyền riêng tư website",
     "网站隐私",
     "網站隱私權",
   ),

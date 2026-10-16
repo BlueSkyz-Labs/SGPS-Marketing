@@ -852,6 +852,59 @@ html[data-intent="evaluate-product"] [data-journey-bar] a[href$="/products/"] {
   list-style: none;
 }
 
+/* A modal opened on a dual-screen foldable belongs to the active reading
+   segment. The top-layer backdrop may span both displays, but the dialog and
+   its controls must not sit over the physical hinge. */
+@media (horizontal-viewport-segments: 2) {
+  .command-navigator {
+    position: fixed;
+    inset: calc(env(viewport-segment-top 0 0) + 1rem) auto auto
+      calc(env(viewport-segment-left 0 0) + 1rem);
+    width: min(34rem, calc(env(viewport-segment-width 0 0) - 2rem));
+    max-height: calc(env(viewport-segment-height 0 0) - 2rem);
+    margin: 0;
+    overflow-y: auto;
+  }
+
+  .hc-panel:popover-open {
+    right: calc(
+      100vw - env(viewport-segment-left 0 0) - env(viewport-segment-width 0 0) +
+        1rem
+    );
+    width: min(18rem, calc(env(viewport-segment-width 0 0) - 2rem));
+    max-height: calc(env(viewport-segment-height 0 0) - 1.5rem);
+    position-try-fallbacks: none;
+  }
+}
+
+@media (vertical-viewport-segments: 2) {
+  .command-navigator {
+    position: fixed;
+    inset: calc(env(viewport-segment-top 0 0) + 1rem) 1rem auto;
+    width: auto;
+    max-height: calc(env(viewport-segment-height 0 0) - 2rem);
+    margin: 0;
+    overflow-y: auto;
+  }
+
+  .hc-panel:popover-open {
+    max-height: calc(env(viewport-segment-height 0 0) - 1.5rem);
+  }
+}
+
+/* Compact book displays keep the native mobile menu beside its trigger in
+   the leading segment instead of aligning it to the far edge of both panels. */
+@media (horizontal-viewport-segments: 2) and (max-width: 48rem) {
+  header .site-container > details {
+    position: relative;
+  }
+
+  header .site-container > details > div {
+    right: 0;
+    width: min(16rem, calc(env(viewport-segment-width 0 0) - 1rem));
+  }
+}
+
 .command-navigator__fallback a {
   display: inline-flex;
   align-items: center;
@@ -1956,6 +2009,24 @@ h3 {
 
   .site-container--reading {
     max-width: min(var(--container-reading), env(viewport-segment-width 0 0));
+  }
+}
+
+/* In tabletop posture, keep the page scrollport in the upper segment so
+   normal document flow cannot render text or controls behind the horizontal
+   hinge. The lower segment stays clear; the upper segment remains scrollable. */
+@media (vertical-viewport-segments: 2) {
+  html {
+    block-size: env(viewport-segment-height 0 0);
+    overflow: hidden;
+  }
+
+  body {
+    box-sizing: border-box;
+    block-size: env(viewport-segment-height 0 0);
+    min-block-size: 0;
+    overflow-y: auto;
+    overscroll-behavior-y: contain;
   }
 }
 
