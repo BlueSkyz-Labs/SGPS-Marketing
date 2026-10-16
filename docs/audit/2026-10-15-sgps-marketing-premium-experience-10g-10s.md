@@ -2,6 +2,14 @@
 
 **Date:** 2026-10-15 Asia/Ho_Chi_Minh. **Audit anchor:** `main@c99d26ef60747bfdfd8fbfd8f1f2fd033a239898`. **Classification:** OWNER-APPROVED RESEARCH ROADMAP / IMPLEMENTATION-READY PLANNING ONLY / NO GO-LIVE AUTHORITY.
 
+The audit findings below are the 2026-10-15 snapshot. The following readback supersedes its time-sensitive source/PR statuses; it does not refresh historical measurements or certify production.
+
+## Live status readback — 2026-10-16 07:32 +07
+
+Current `main` is `e9179388235b5336d6d2caac313bdbaa9afbad43` after #620. #604, #607 and #609 are source-merged; #621 and #622 are open. #615 is behind and its protected-path Quality Gates failed pending Owner approval. #618 is updated on `1965e6cdff4e263f1abc82c0ffa7308e2d56bfcc`: Quality Gates passed; browser, visual and Lighthouse checks were still running. #619 remains Draft at `429dac3815e37810b4963b03181aad83da3113c6`, with its latest checks still running. #621 is at `9af1ed3c5c78386a271f36c1c954cf4d678a06fe`: Chromium passed; other browser shards were still running. #622 is at `3c6de07d4da5637fbeaf1c7970ab6fa3ab9aaba3`: Quality Gates and Lighthouse passed, visual regression failed, and browser shards were still running.
+
+Source merges and green source checks do not establish the served production SHA, mail delivery/reply, product privacy operations, native-language review, Human E4, or physical-device acceptance. Those remain NOT VERIFIED.
+
 ## Owner boundaries (do not reinterpret)
 
 Customer-centric first. Adopt SGPS FULL as the design/evidence target, **not** a claim of achieved certification or a silent SGPS release re-pin.
@@ -14,7 +22,7 @@ Preserve independent Source Assurance + Cloudflare deployment authority + Owner-
 
 ## Evidence ledger / truth boundaries
 
-**E1** — Source fact: Current tree `main@c99d26ef60747bfdfd8fbfd8f1f2fd033a239898`: Astro 7/TypeScript/Tailwind/Cloudflare source; 4 locale route trees; brand-v4 files, Hero, product theatre, VerifyCentre, captures, CSS and test suite present; Confidence and limit: CONFIRMED SOURCE; no new runtime execution in this audit
+**E1** — Source fact: Audit tree at the time, `main@c99d26ef60747bfdfd8fbfd8f1f2fd033a239898`: Astro 7/TypeScript/Tailwind/Cloudflare source; 4 locale route trees; brand-v4 files, Hero, product theatre, VerifyCentre, captures, CSS and test suite present; Confidence and limit: CONFIRMED SOURCE; no new runtime execution in this audit
 
 **E2** — Source fact: `docs/evidence/2026-10-12-w0-render-truth.md (a351634; historic 164 local captures, not current HEAD)`: 164 local captures (112 base axe), 0 horizontal overflow, 0 baseline axe violations; lab mobile EN Home perf 99, LCP 1.9s, CLS 0, TBT 0; 390px flagship console ~235px and illegible; Confidence and limit: HISTORIC LOCAL BUILD only; does not attest Oct 15 HEAD, production, native readers or user testing
 
@@ -36,7 +44,7 @@ Preserve independent Source Assurance + Cloudflare deployment authority + Owner-
 
 **DONE (source/historical):** Brand Kit v4 assets, Horizon/Sail ADR, 4-locale architecture, product-truth registries, many code-level UX guards; Oct 12 baseline captured. Does not mean all runtime states passed now.
 
-**PARTIAL:** W0 current-head visual freshness, mobile capture correction (#607), action grammar (#609), locale native review, journey usability and post-merge qualification. Verify cards (#604) have merged in source; current production and Human E4 verification remain open.
+**PARTIAL:** W0 current-head visual freshness and post-merge qualification, locale native review, journey usability, and human/physical-device evidence. #604/#607/#609 have source merges; current production and Human E4 verification remain open.
 
 **BLOCKED (provider/owner):** real mailbox send/receive/reply & staffing, Cloudflare served SHA/readback, RUM payload verification, native device QA, Human E4, approval label for visual snapshots.
 
@@ -158,7 +166,7 @@ Score = 3×Impact + 2×Feasibility + 2×SGPS Alignment − 2×Risk, each 1–5 (
 
 **Định nghĩa & thiết kế:** Make real product captures understandable to a non-technical prospect while preserving their identity as real development/sample-data images.
 
-**Problem / evidence:** W0 measured a ~235px mobile depiction as illegible; #607 OPEN adds existing-source crop and narrow capture, #605 viewer MERGED. A full guided explanation is not yet evidenced.
+**Problem / evidence:** W0 measured a ~235px mobile depiction as illegible; #607 added the existing-source crop and narrow capture and is now merged, #605 viewer is merged. A full guided explanation is not yet evidenced.
 
 **Kịch bản & interaction:** Visitor taps a real app screenshot, inspects its original pixels, reads two approved task-led captions and goes back without losing scroll or context.
 
@@ -256,11 +264,11 @@ Score = 3×Impact + 2×Feasibility + 2×SGPS Alignment − 2×Risk, each 1–5 (
 
 **Định nghĩa & thiết kế:** A real screenshot remains legible at 320/390 without claiming simulated UI.
 
-**Problem / evidence:** W0 ~235px legibility gap; #607 OPEN and not merged.
+**Problem / evidence:** W0 ~235px legibility gap; #607 merged the capture crop. Current device and browser proof remains separate.
 
 **Kịch bản & interaction:** Visitor sees purposefully chosen phone capture on narrow screens and original source region on wide screens.
 
-**UX/UI, visual & architecture:** Finish/review #607 rather than create competing crop; inspect min-width thresholds, CSS clipping, image loading and original-file viewer.
+**UX/UI, visual & architecture:** Inspect the merged #607 result for reproducible current-browser gaps; do not create a competing crop. Check min-width thresholds, CSS clipping, image loading and original-file viewer.
 
 **Experience / business / trust / differentiation:** Clarity and craftsmanship.
 
@@ -272,11 +280,11 @@ Score = 3×Impact + 2×Feasibility + 2×SGPS Alignment − 2×Risk, each 1–5 (
 
 **Định nghĩa & thiết kế:** Claim, limitation and citation become one comprehensible card across themes.
 
-**Problem / evidence:** #604 OPEN has exactly this grouping; current main still has pre-PR layout.
+**Problem / evidence:** #604 merged this grouping; post-merge comprehension and served-production behavior remain unverified.
 
 **Kịch bản & interaction:** User reads one claim and immediately its qualifier and linked source.
 
-**UX/UI, visual & architecture:** Review/complete existing #604 with source and keyboard tests; do not fork duplicate.
+**UX/UI, visual & architecture:** Use merged #604; check source/keyboard behavior for reproducible regressions and do not fork duplicate work.
 
 **Experience / business / trust / differentiation:** Trust and comprehension.
 
@@ -288,11 +296,11 @@ Score = 3×Impact + 2×Feasibility + 2×SGPS Alignment − 2×Risk, each 1–5 (
 
 **Định nghĩa & thiết kế:** Consistent visual distinction between action, navigation and evidence link.
 
-**Problem / evidence:** #609 OPEN changes 24 files and baseline images; no current-head merge confirmation.
+**Problem / evidence:** #609 merged the 24-file action-tier change; current-head visual freshness and real-user comprehension remain separate evidence needs.
 
 **Kịch bản & interaction:** Visitor does not confuse inline reference links with prominent product actions.
 
-**UX/UI, visual & architecture:** Finish #609 design grammar via ButtonLink + underlined links, preserve focus and semantics; no wide CSS patch.
+**UX/UI, visual & architecture:** Evaluate the merged #609 action tiers for focus and semantic regressions; no duplicate or wide CSS patch.
 
 **Experience / business / trust / differentiation:** Lower action confusion.
 
@@ -416,7 +424,7 @@ Score = 3×Impact + 2×Feasibility + 2×SGPS Alignment − 2×Risk, each 1–5 (
 
 **R0: Integrity first** — Priority / owner: P0/P1, Owner+provider for external facts; Scope: Re-fetch main/PRs/ruleset; clear blocker truth #281/#522, CI governance, #451/ADR0015 privacy; never bypass.; Strict exit: Fail-closed identity/support, tests independent, exact served SHA separately evidenced
 
-**R1: Land in-flight experience** — Priority / owner: P1, existing PR owners; Scope: Retain merged #604 and review/rebase #607/#609; no duplicate changes; resolve visual evidence/protected Owner-label and CI per PR.; Strict exit: exact-head trusted Quality Gates+Browser Assurance, four-locale 320/390/1440 and no-JS, screenshot + lighthouse artifacts, rollback notes
+**R1: Qualify merged experience and shepherd open work** — Priority / owner: P1, existing PR owners; Scope: Retain source merges #604/#607/#609; qualify residual visual/runtime behavior and process the current open PR queue without duplicating work; resolve protected Owner-label and CI per PR.; Strict exit: exact-head trusted Quality Gates+Browser Assurance, four-locale 320/390/1440 and no-JS, screenshot + lighthouse artifacts, rollback notes
 
 **R2: Practical friction** — Priority / owner: P1/P2, experience owner; Scope: S04–S10 device QA, locale suggestion, CJK/VI reviews, keyboard focus, lastmod and states; W4 #565.; Strict exit: independent device/native review; WCAG 2.2 AA, target semantics, no trust/privacy drift
 
@@ -450,7 +458,7 @@ Score = 3×Impact + 2×Feasibility + 2×SGPS Alignment − 2×Risk, each 1–5 (
 
 ## Next best actions for another coding agent
 
-Rebind `main`, confirm #604 merged, and review #607/#609 exact heads and check suites; assess merges/conflicts, leave existing owners in place. Visual baselines are protected; do not self-label.
+Rebind `main`, refresh the open PR queue and exact-head checks, and qualify #604/#607/#609 source merges against current runtime evidence. Visual baselines are protected; do not self-label.
 
 Prefer one reversible independent source fix from S04, S05, S06 or S07 **only after a reproducible current-head failure**; attach source SHA, patch and acceptance tests.
 

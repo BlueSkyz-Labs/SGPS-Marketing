@@ -2,7 +2,7 @@
 
 Date: 2026-10-16, Asia/Ho_Chi_Minh. State: OWNER-APPROVED DIRECTION / IMPLEMENTATION-READY PLAN / NO PRODUCTION RELEASE AUTHORITY.
 
-Observed main: 7f8474006d737c31d5b2c04a1a8fdbff6391373e. Source update: PR #604 and #607 MERGED; #609 OPEN (head bcfe23b5ef47a5e87486483b7a31f200cd3ee4f4), #616 OPEN. These refs are timestamped evidence, not pinned future truth.
+Observed main: `e9179388235b5336d6d2caac313bdbaa9afbad43` at 2026-10-16 07:32 +07. #604/#607/#609/#620 are source-merged. Current PR snapshot: #615 behind/Owner-gated; #618 updated with Quality Gates passed and browser assurance running; #619 Draft with checks running; #621 Chromium passed with other browser shards running; #622 Quality Gates and Lighthouse passed, visual gate failed, browser shards running. Historical plan baseline was `7f8474006d737c31d5b2c04a1a8fdbff6391373e`. Re-read live refs and checks before acting.
 
 Source of scope: docs/audit/2026-10-15-sgps-marketing-premium-experience-10g-10s.md in PR #616. The core files remain AGENTS.md, docs/current-work.json, ADR 0014, Brand Kit v4, SGPS performance/friction contract, product/public claims graph and protected main ruleset 22500299.
 
@@ -16,7 +16,7 @@ Never recreate merged work, publish hidden products, invent customer proof or sc
 
 W0 (P0/P1): fetch live main, PR queue, current-work router, ADR and provider ruleset. Capture independent built screenshots and actual task walkthrough. Mark historical October 12 measurements HISTORIC. Check served SHA and security/public contact claims separately.
 
-W1 (P1): #604 and #607 are SOURCE_DONE, so validate residual behavior only. Shepherd existing #609 through exact-head browser/visual/Lighthouse and protected baseline review, never fork competing changes.
+W1 (P1): #604, #607 and #609 are SOURCE_DONE, so validate residual behavior only. Do not reopen or duplicate their source work without a reproducible regression.
 
 W2 (P1/P2): S04-S10 as small, reversible work after reproducible current-head evidence. S06 needs native review; S08 needs Owner/Cloudflare build authority. Do not run simultaneous PRs that edit the same CSS, screenshot baseline or claim source.
 
@@ -70,9 +70,9 @@ Negative proof and rollback: Missing source/limit, unknown claim or fake verific
 
 ### S03 — One action and link grammar
 
-Status and owner lane: ACTIVE PR #609.
+Status and owner lane: SOURCE MERGED through #609; runtime and user-comprehension evidence remain separate.
 
-Implementation: Shepherd existing #609 at bcfe23b5 and refresh head before promotion. Review ButtonLink, JourneyBar, HomeNextSteps, ProfileNextSteps, breadcrumb references and en/vi/zh/zh-hant views. Never duplicate the refactor.
+Implementation: Re-read merged #609 at `1ea2b5060fd0155cb071a52cb10a0a187e3d57e7` only to diagnose a reproducible regression. Review ButtonLink, JourneyBar, HomeNextSteps, ProfileNextSteps, breadcrumb references and four locales. Never duplicate the refactor.
 
 Tests and acceptance: Run ux-p2-7-action-tiers, four browser Quality/Browser Assurance, visual baseline Owner gate and keyboard/44px target tests. AC: pill action, underlined source link, preserved destination/accessible name.
 
@@ -250,7 +250,7 @@ Negative proof and rollback: Unauthorized new logo, gold/serif/WebGL/parallax or
 
 ## Priority PR dispatch
 
-PR-01: existing #609 action tiers; complete guarded checks, protected snapshots and code review; do not duplicate.
+PR-01: #609 action tiers are source-merged; qualify current runtime evidence and do not duplicate the refactor.
 
 PR-02: S04/S07 device viewer and keyboard issues only when real current-head failures are reproduced. Keep one small PR per root cause.
 
@@ -270,4 +270,4 @@ RT01 false paid/QR action on Marketing; RT02 hidden product auto-publication; RT
 
 Never call SGPS FULL, pixel-perfect or production-ready without current independently qualified evidence. Report separate numerators/denominators for source work packages, current-head critical route captures, eligible acceptance gates, Human E4/native reviews and provider served-revision. SOURCE_DONE S01/S02 is not device/production DONE. Unknown denominator means convergence percent N/A.
 
-The next coding agent starts with current main, PR #609 and this plan. Move PLAN → DO → CHECK → IMPROVE → RED TEAM → NEXT for safe independently scoped tasks, continuously updating GitHub PR evidence. Stop unsafe gates, but continue nonconflicting source-safe improvements. Summarize DONE / PARTIAL / BLOCKED / NOT VERIFIED and the exact best next action for the Owner.
+The next coding agent starts with live main, open PRs and this refreshed plan. Move PLAN → DO → CHECK → IMPROVE → RED TEAM → NEXT for safe independently scoped tasks, continuously updating GitHub PR evidence. Stop unsafe gates, but continue nonconflicting source-safe improvements. Summarize DONE / PARTIAL / BLOCKED / NOT VERIFIED and the exact best next action for the Owner.
