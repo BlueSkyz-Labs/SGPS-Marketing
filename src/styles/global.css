@@ -1943,6 +1943,22 @@ h3 {
   max-width: var(--container-reading);
 }
 
+/* A spanning book-style display has two readable regions separated by a
+   physical seam. Keep the page's reading column inside the leading segment;
+   backgrounds may still span the full canvas. */
+@media (horizontal-viewport-segments: 2) {
+  .site-container,
+  .site-container--reading {
+    max-width: min(var(--site-max), env(viewport-segment-width 0 0));
+    margin-inline-start: env(viewport-segment-left 0 0);
+    margin-inline-end: auto;
+  }
+
+  .site-container--reading {
+    max-width: min(var(--container-reading), env(viewport-segment-width 0 0));
+  }
+}
+
 /* Buttons: primary (solid cobalt, ButtonLink), secondary (outline, no dot) and
    on-ink. `.btn-secondary` is the same secondary for next-step chips. */
 .btn-secondary {

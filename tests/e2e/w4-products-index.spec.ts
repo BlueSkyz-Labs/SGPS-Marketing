@@ -3,6 +3,12 @@
 import { expect, test } from "@playwright/test";
 
 const LOCALES = ["en", "vi", "zh", "zh-hant"] as const;
+const SOTRO_CUSTOMER_OUTCOME = {
+  en: "For landlords in Vietnam: see unpaid amounts for this month and what to do today.",
+  vi: "Dành cho chủ trọ ở Việt Nam: xem khoản chưa thu trong tháng và việc cần làm hôm nay.",
+  zh: "为越南房东：查看本月未收款项和今天要处理的事。",
+  "zh-hant": "給越南房東：查看本月未收款項和今天要處理的事。",
+} as const;
 
 for (const lang of LOCALES) {
   test(`/${lang}/products/ has no intent control and one badge per card`, async ({
@@ -21,6 +27,11 @@ for (const lang of LOCALES) {
       await expect(card.locator("[data-product-thumb]")).toHaveCount(1);
       await expect(card.locator("[data-product-status]")).toHaveCount(1);
     }
+
+    const sotro = cards.filter({ hasText: "Sổ Trọ" });
+    await expect(sotro.locator(".product-card__body p")).toHaveText(
+      SOTRO_CUSTOMER_OUTCOME[lang],
+    );
     // The section heading must not repeat the badge label visibly.
     await expect(page.locator("#published-products")).toHaveClass(/sr-only/);
 

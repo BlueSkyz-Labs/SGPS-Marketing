@@ -77,8 +77,10 @@ const cta = resolveLifecycleCta(
 );
 const showTryCta = cta.verb === "try" && !data.appAccess?.signInUrl;
 
+const privacyHref = data.proof.privacyUrl
+  ? localizeSiteHref(data.proof.privacyUrl, lang)
+  : null;
 const proofLinks = [
-  { href: data.proof.privacyUrl, label: PAGE_LABELS.privacy[lang] },
   { href: data.proof.securityUrl, label: PAGE_LABELS.security[lang] },
   { href: data.proof.supportUrl, label: PAGE_LABELS.support[lang] },
 ]
@@ -233,6 +235,21 @@ const awaitingScreens = !showcase && isIdentityArt;
         ) : null}
       </div>
 
+      {privacyHref ? (
+        <p
+          class="mt-4 max-w-3xl text-sm leading-relaxed text-[var(--text-secondary)]"
+          data-product-privacy-scope
+        >
+          {PAGE_LABELS.privacyScope[lang]}{" "}
+          <a
+            href={privacyHref}
+            class="profile-trust-link inline-flex min-h-11 items-center font-semibold text-[var(--action-primary)] underline underline-offset-4 hover:no-underline"
+          >
+            {PAGE_LABELS.privacy[lang]}
+          </a>
+        </p>
+      ) : null}
+
       <ProductSides showcase={showcase} lang="en" />
       <AppAccess
         appAccess={data.appAccess}
@@ -301,22 +318,24 @@ const awaitingScreens = !showcase && isIdentityArt;
       ) : null}
 
       {proofLinks.length > 0 ? (
-        <p
+        <div
           class="mt-14 text-sm text-[var(--text-secondary)]"
           data-profile-trust
         >
-          {proofLinks.map((link, i) => (
-            <>
-              {i > 0 ? <span aria-hidden="true"> · </span> : null}
-              <a
-                href={link.href}
-                class="profile-trust-link inline-flex min-h-11 items-center font-semibold text-[var(--action-primary)] underline underline-offset-4 hover:no-underline"
-              >
-                {link.label}
-              </a>
-            </>
-          ))}
-        </p>
+          <p>
+            {proofLinks.map((link, i) => (
+              <>
+                {i > 0 ? <span aria-hidden="true"> · </span> : null}
+                <a
+                  href={link.href}
+                  class="profile-trust-link inline-flex min-h-11 items-center font-semibold text-[var(--action-primary)] underline underline-offset-4 hover:no-underline"
+                >
+                  {link.label}
+                </a>
+              </>
+            ))}
+          </p>
+        </div>
       ) : null}
     </Container>
   </article>

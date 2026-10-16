@@ -143,14 +143,24 @@ for (const lang of LOCALES) {
       await expect(more).toHaveAttribute("open", "");
     });
 
-    test("Privacy, security, support is one inline sentence of three links", async ({
+    test("website privacy is scoped near the CTA; security and support remain available", async ({
       page,
     }) => {
       await page.goto(`/${lang}/products/sotro/`);
       const trust = page.locator("[data-profile-trust]");
       await expect(trust).toHaveCount(1);
-      await expect(trust.locator("a")).toHaveCount(3);
+      await expect(trust.locator("a")).toHaveCount(2);
       await expect(trust.locator("svg")).toHaveCount(0);
+      const scope = page.locator("[data-product-privacy-scope]");
+      await expect(scope).toBeVisible();
+      await expect(scope.getByRole("link")).toHaveText(
+        {
+          en: "Website privacy",
+          vi: "Quyền riêng tư của website",
+          zh: "网站隐私",
+          "zh-hant": "網站隱私權",
+        }[lang],
+      );
     });
   });
 }
