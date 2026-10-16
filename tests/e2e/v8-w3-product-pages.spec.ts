@@ -143,24 +143,35 @@ for (const lang of LOCALES) {
       await expect(more).toHaveAttribute("open", "");
     });
 
-    test("website privacy is scoped near the CTA; security and support remain available", async ({
+    test("website privacy scope is accessible; security and support remain available", async ({
       page,
     }) => {
       await page.goto(`/${lang}/products/sotro/`);
       const trust = page.locator("[data-profile-trust]");
       await expect(trust).toHaveCount(1);
-      await expect(trust.locator("a")).toHaveCount(2);
+      await expect(trust.locator("a")).toHaveCount(3);
       await expect(trust.locator("svg")).toHaveCount(0);
+      const trustHrefs = await trust
+        .locator("a")
+        .evaluateAll((links) =>
+          links.map((link) => (link as HTMLAnchorElement).getAttribute("href")),
+        );
+      expect(trustHrefs).toEqual([
+        `/${lang}/privacy/`,
+        `/${lang}/security/`,
+        `/${lang}/support/`,
+      ]);
+      const privacyLabel = {
+        en: "Website privacy",
+        vi: "Quyền riêng tư website",
+        zh: "网站隐私",
+        "zh-hant": "網站隱私權",
+      }[lang];
+      await expect(
+        trust.getByRole("link", { name: privacyLabel }),
+      ).toHaveAttribute("aria-describedby", "product-privacy-scope");
       const scope = page.locator("[data-product-privacy-scope]");
-      await expect(scope).toBeVisible();
-      await expect(scope.getByRole("link")).toHaveText(
-        {
-          en: "Website privacy",
-          vi: "Quyền riêng tư của website",
-          zh: "网站隐私",
-          "zh-hant": "網站隱私權",
-        }[lang],
-      );
+      await expect(scope).toHaveClass(/\bsr-only\b/);
     });
   });
 }
