@@ -230,9 +230,12 @@ const rows = (compact && isContinuation ? visibleProducts : []).map(
   .product-row__main {
     min-width: 0;
   }
+  /* Fixed px: at 200% text a 3rem icon took the name column down to about
+     one glyph (46px at 320px), so a status word could not fit. The icon is
+     not text and does not need to grow with it; 48px equals 3rem at 100%. */
   .product-row__icon {
-    width: 3rem;
-    height: 3rem;
+    width: 48px;
+    height: 48px;
     border-radius: var(--radius-card);
   }
   .product-row__name {
