@@ -2,7 +2,10 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import test from "node:test";
 
-import { isProtected } from "../../scripts/check-merge-policy.mjs";
+import {
+  isProtected,
+  PROTECTED_PATHS,
+} from "../../scripts/check-merge-policy.mjs";
 
 /**
  * WP-09 (DEC-034 R1/R8): preflight contract guards.
@@ -49,7 +52,11 @@ function checkHookContract(hookText) {
 test("R1: pre-commit hook has set -eu and all 7 gates", () => {
   const hook = readFileSync(HOOK_PATH, "utf8");
   const issues = checkHookContract(hook);
-  assert.deepEqual(issues, [], `hook contract violations: ${issues.join("; ")}`);
+  assert.deepEqual(
+    issues,
+    [],
+    `hook contract violations: ${issues.join("; ")}`,
+  );
 });
 
 test("R1 negative proof: hook with one gate removed fails", () => {
@@ -72,29 +79,28 @@ test("R1 negative proof: hook with || true fails", () => {
   );
 });
 
+const R8_REQUIRED = [
+  "AGENTS.md",
+  ".claude/",
+  "scripts/",
+  ".github/",
+  ".githooks/",
+  "tests/architecture/",
+];
+
+/** Pure function: the required entries a protected-path list is missing. */
+function missingRequired(list, required) {
+  return required.filter((entry) => !list.includes(entry));
+}
+
 test("R8: PROTECTED_PATHS still includes key paths", () => {
-  const required = [
-    "AGENTS.md",
-    ".claude/",
-    "scripts/",
-    ".github/",
-    ".githooks/",
-    "tests/architecture/",
-  ];
-  for (const path of required) {
-    assert.equal(
-      isProtected(path),
-      true,
-      `PROTECTED_PATHS must include ${path}`,
-    );
+  assert.deepEqual(missingRequired(PROTECTED_PATHS, R8_REQUIRED), []);
+  for (const path of R8_REQUIRED) {
+    assert.equal(isProtected(path), true, `${path} must be protected`);
   }
 });
 
-test("R8 negative proof: fixture with a protected path removed fails", () => {
-  // Simulate a PROTECTED_PATHS list missing scripts/.
-  // isProtected is the real function; we verify it correctly
-  // identifies scripts/ as protected (so removing it would be caught
-  // by a list-comparison guard).
-  assert.equal(isProtected("scripts/check-merge-policy.mjs"), true);
-  assert.equal(isProtected("src/components/Foo.astro"), false);
+test("R8 negative proof: a list with scripts/ removed is caught", () => {
+  const broken = PROTECTED_PATHS.filter((entry) => entry !== "scripts/");
+  assert.deepEqual(missingRequired(broken, R8_REQUIRED), ["scripts/"]);
 });
