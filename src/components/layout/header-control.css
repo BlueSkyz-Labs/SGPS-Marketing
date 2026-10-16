@@ -103,8 +103,9 @@ header[data-scene="ink"] :is(.hc-trigger, .hc-group),
 .hc-glyph {
   display: block;
   flex-shrink: 0;
-  width: 1.25rem;
-  height: 1.25rem;
+  /* A5: px-sized, not rem — must not grow under 200% text zoom (WP-06). */
+  width: 20px;
+  height: 20px;
 }
 
 .hc-chevron {
