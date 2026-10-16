@@ -64,7 +64,7 @@ return Astro.redirect("/en/products/");
       <p class="text-sm font-medium text-[var(--text-muted)]">
         <a
           href="/products/"
-          class="inline-flex min-h-11 items-center text-sm font-semibold text-[var(--action-primary)] no-underline hover:underline"
+          class="inline-flex min-h-11 items-center text-sm font-semibold text-[var(--action-primary)] underline underline-offset-4 hover:no-underline"
         >
           Products
         </a>
@@ -181,7 +181,7 @@ return Astro.redirect("/en/products/");
               <li>
                 <a
                   href={link.href}
-                  class="inline-flex min-h-11 items-center text-sm font-semibold text-[var(--action-primary)] no-underline hover:underline"
+                  class="inline-flex min-h-11 items-center text-sm font-semibold text-[var(--action-primary)] underline underline-offset-4 hover:no-underline"
                 >
                   {link.label}
                 </a>

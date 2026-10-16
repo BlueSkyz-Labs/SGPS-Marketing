@@ -92,11 +92,16 @@ const proofPoints: string[] =
 const flagshipLead = compact
   ? HOME_FLAGSHIP_LEAD[data.slug]?.[lang]
   : undefined;
-const hasCapture =
-  compact &&
-  (await getShowcase(data.slug))?.data.screens.some(
-    (screen: { id: string }) => screen.id === "owner-collect",
-  );
+const showcaseScreens: { id: string }[] = compact
+  ? ((await getShowcase(data.slug))?.data.screens ?? [])
+  : [];
+const hasCapture = showcaseScreens.some((s) => s.id === "owner-collect");
+// UX P2-9: the full owner console scaled into this slot reads at 4-7px. Wide
+// screens show the same capture cropped to the collections panel; narrow
+// screens show the recorded phone capture of the same screen when there is one.
+const narrowScreen = showcaseScreens.some((s) => s.id === "collect")
+  ? "collect"
+  : undefined;
 const showProfileCta = cta.href !== profileHref;
 const ctaIsExternal = cta.external || /^https?:\/\//i.test(cta.href);
 
@@ -292,7 +297,13 @@ const ctaIsExternal = cta.external || /^https?:\/\//i.test(cta.href);
             screen="owner-collect"
             lang={lang}
             showLabel={false}
-            sizes="(min-width: 1024px) 34rem, 92vw"
+            class={narrowScreen ? "c2-flagship-theatre__capture--wide" : ""}
+            sizes={narrowScreen ? "44rem" : "(min-width: 1024px) 34rem, 92vw"}
+            crop={
+              narrowScreen
+                ? { x: 400, y: 400, width: 1500, height: 800 }
+                : undefined
+            }
             smallSrc={
               data.slug === "sotro"
                 ? {
@@ -302,6 +313,24 @@ const ctaIsExternal = cta.external || /^https?:\/\//i.test(cta.href);
                 : undefined
             }
           />
+          {narrowScreen ? (
+            <FlagshipCapture
+              slug={data.slug}
+              screen={narrowScreen}
+              lang={lang}
+              showLabel={false}
+              class="c2-flagship-theatre__capture--narrow"
+              sizes="15rem"
+              smallSrc={
+                data.slug === "sotro"
+                  ? {
+                      src: "/products/sotro/showcase/op-02-payments-480.webp",
+                      width: 480,
+                    }
+                  : undefined
+              }
+            />
+          ) : null}
         </div>
       </div>
     ) : media ? (
@@ -372,6 +401,27 @@ const ctaIsExternal = cta.external || /^https?:\/\//i.test(cta.href);
 
   .c2-flagship-theatre__capture-stage {
     padding: 0.75rem 0.75rem 1rem;
+  }
+
+  /* UX P2-9: one capture per width (the hidden one is lazy and never loads). */
+  .c2-flagship-theatre__capture-stage
+    :global(.c2-flagship-theatre__capture--wide) {
+    display: none;
+  }
+  .c2-flagship-theatre__capture-stage
+    :global(.c2-flagship-theatre__capture--narrow) {
+    max-width: 15rem;
+    margin-inline: auto;
+  }
+  @media (min-width: 1024px) {
+    .c2-flagship-theatre__capture-stage
+      :global(.c2-flagship-theatre__capture--wide) {
+      display: block;
+    }
+    .c2-flagship-theatre__capture-stage
+      :global(.c2-flagship-theatre__capture--narrow) {
+      display: none;
+    }
   }
 
   .c2-flagship-theatre__ink-stage figcaption {

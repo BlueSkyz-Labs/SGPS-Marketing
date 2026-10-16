@@ -86,7 +86,7 @@ const labels = LABELS[lang];
                   ? "noopener noreferrer"
                   : undefined
               }
-              class="inline-flex min-h-11 items-center text-sm font-semibold text-[var(--action-primary)] no-underline hover:underline"
+              class="inline-flex min-h-11 items-center text-sm font-semibold text-[var(--action-primary)] underline underline-offset-4 hover:no-underline"
             >
               {ref.label[lang]}
             </a>
@@ -102,7 +102,7 @@ const labels = LABELS[lang];
     <p class="evidence-passport__context">
       <a
         href={passport.contextHref[lang]}
-        class="inline-flex min-h-11 items-center text-sm font-semibold text-[var(--action-primary)] no-underline hover:underline"
+        class="inline-flex min-h-11 items-center text-sm font-semibold text-[var(--action-primary)] underline underline-offset-4 hover:no-underline"
       >
         {labels.context} →
       </a>

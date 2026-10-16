@@ -257,7 +257,11 @@ test.describe("public flagship capture presentation (Experience v6 S2)", () => {
       await expect(
         theatre.locator(".c2-flagship-theatre__window-controls"),
       ).toHaveCount(0);
-      const capture = theatre.locator("[data-flagship-capture]");
+      // UX P2-9: a wide and a narrow capture are both in the DOM; exactly one
+      // is visible at any width.
+      const capture = theatre
+        .locator("[data-flagship-capture]")
+        .filter({ visible: true });
       await expect(capture).toHaveCount(1);
       // v8 W2 (hom-11): one truth label per capture group; the hero capture
       // carries it, this second capture has none.

@@ -145,7 +145,7 @@ const awaitingScreens = !showcase && isIdentityArt;
           <li>
             <a
               href={"/zh/products/"}
-              class="breadcrumb-link inline-flex min-h-11 items-center text-sm font-semibold text-[var(--action-primary)] no-underline hover:underline"
+              class="breadcrumb-link inline-flex min-h-11 items-center text-sm font-semibold text-[var(--action-primary)] underline underline-offset-4 hover:no-underline"
             >
               产品
             </a>
@@ -310,7 +310,7 @@ const awaitingScreens = !showcase && isIdentityArt;
               {i > 0 ? <span aria-hidden="true"> · </span> : null}
               <a
                 href={link.href}
-                class="profile-trust-link inline-flex min-h-11 items-center font-semibold text-[var(--action-primary)] underline underline-offset-4"
+                class="profile-trust-link inline-flex min-h-11 items-center font-semibold text-[var(--action-primary)] underline underline-offset-4 hover:no-underline"
               >
                 {link.label}
               </a>
