@@ -228,3 +228,59 @@ test("negative proof: inline-block word spans split the accessible name", async 
   const snap = await page.locator("main").ariaSnapshot();
   expect(snap).toContain('heading "开发 中"');
 });
+
+test("the build pass only adds word spans: markup, entities and attributes survive", () => {
+  const html =
+    '<h2 id="s" title="产品, 说明: “开发”">关于&amp;<em>智能</em>' +
+    '<a href="/zh/?q=x&amp;y=1">产品说明</a>，提升</h2>';
+  const out = rewriteHeadings(html, "zh-Hans");
+  const strip = (s: string) =>
+    s.replace(/<span class="cjk-word">|<\/span>/g, "");
+  const expected = html.replace(/^<h2([^>]*)>/, "<h2$1 data-cjk-wrap>");
+  expect(out).not.toBe(expected);
+  expect(strip(out)).toBe(expected);
+  // Negative proof: a pass that changed one character would fail the check.
+  expect(strip(out.replace("说明", "说 明"))).not.toBe(expected);
+});
+
+/**
+ * 200% text with WCAG 1.4.12 text spacing at 320px: a nowrap word must still
+ * fit its heading line, or MAX_WORD is too large for the site's heading sizes.
+ */
+const WORD_TOO_WIDE = () =>
+  [...document.querySelectorAll<HTMLElement>("[data-cjk-wrap] .cjk-word")]
+    .filter((w) => {
+      const h = w.closest<HTMLElement>("[data-cjk-wrap]")!;
+      // Visually hidden (sr-only, 1px) headings have no line to overflow.
+      if (h.clientWidth <= 1) return false;
+      return w.getBoundingClientRect().width > h.clientWidth + 1;
+    })
+    .map((w) => w.textContent);
+
+const ZOOM_CSS =
+  "html{font-size:200%!important}" +
+  "*{letter-spacing:.12em!important;word-spacing:.16em!important;line-height:1.5!important}";
+
+for (const lang of LANGS) {
+  test(`${lang} at 320px, 200% text and text spacing: every word span fits its heading`, async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 320, height: 800 });
+    for (const route of ["/", "/products/", "/products/sotro/", "/about/"]) {
+      await page.goto(`/${lang}${route}`);
+      await page.addStyleTag({ content: ZOOM_CSS });
+      expect(await page.evaluate(WORD_TOO_WIDE), `${lang}${route}`).toEqual([]);
+    }
+  });
+}
+
+test("negative proof: a word span wider than its heading is reported", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 320, height: 800 });
+  await page.goto("/zh/");
+  await page.addStyleTag({
+    content: "[data-cjk-wrap]{max-width:1em!important}",
+  });
+  expect((await page.evaluate(WORD_TOO_WIDE)).length).toBeGreaterThan(0);
+});
