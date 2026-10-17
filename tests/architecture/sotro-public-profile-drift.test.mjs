@@ -215,7 +215,12 @@ test("negative proof: changing any mirrored claim is detected", () => {
       "what needs attention today",
       "what needs attention",
     ),
-    "jobs (vi)": record.replace("hôm nay cần lo việc gì", "hôm nay"),
+    // Anchored to the jobs list item: the vi shortDescription repeats this
+    // line, and a bare replace() would mutate that field instead.
+    "jobs (vi)": record.replace(
+      /^(\s+- "Xem tháng này còn ai chưa đóng tiền và )hôm nay cần lo việc gì"$/m,
+      '$1hôm nay"',
+    ),
     "capabilities (en)": record.replace(
       "nothing is sent automatically",
       "we open Zalo for you",

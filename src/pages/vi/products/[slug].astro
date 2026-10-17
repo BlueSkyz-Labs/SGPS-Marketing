@@ -77,6 +77,9 @@ const cta = resolveLifecycleCta(
 );
 const showTryCta = cta.verb === "try" && !data.appAccess?.signInUrl;
 
+const privacyHref = data.proof.privacyUrl
+  ? localizeSiteHref(data.proof.privacyUrl, lang)
+  : null;
 const proofLinks = [
   { href: data.proof.privacyUrl, label: PAGE_LABELS.privacy[lang] },
   { href: data.proof.securityUrl, label: PAGE_LABELS.security[lang] },
@@ -159,7 +162,9 @@ const awaitingScreens = !showcase && isIdentityArt;
         </ol>
       </nav>
 
-      <header class="mt-8 flex items-center gap-5 sm:gap-6">
+      <!-- Text zoom: the icon is rem-sized and grows with 200% text, so the
+           title block may drop under it instead of squeezing to ~40px. -->
+      <header class="mt-8 flex flex-wrap items-center gap-5 sm:gap-6">
         <div
           class="relative flex size-20 flex-shrink-0 items-center justify-center overflow-hidden rounded-2xl bg-white/5 p-2 shadow-[0_12px_32px_-8px_rgba(11,16,32,0.35)] ring-1 ring-inset ring-white/10 sm:size-28 sm:p-2.5"
           aria-hidden="true"
@@ -175,7 +180,7 @@ const awaitingScreens = !showcase && isIdentityArt;
             height="128"
           />
         </div>
-        <div class="min-w-0">
+        <div class="min-w-0 flex-1 basis-40">
           <div class="flex flex-wrap items-center gap-x-4 gap-y-2">
             <h1
               class="type-d2 profile-title text-[var(--text-primary)]"
@@ -301,22 +306,38 @@ const awaitingScreens = !showcase && isIdentityArt;
       ) : null}
 
       {proofLinks.length > 0 ? (
-        <p
+        <div
           class="mt-14 text-sm text-[var(--text-secondary)]"
           data-profile-trust
         >
-          {proofLinks.map((link, i) => (
-            <>
-              {i > 0 ? <span aria-hidden="true"> · </span> : null}
-              <a
-                href={link.href}
-                class="profile-trust-link inline-flex min-h-11 items-center font-semibold text-[var(--action-primary)] underline underline-offset-4 hover:no-underline"
-              >
-                {link.label}
-              </a>
-            </>
-          ))}
-        </p>
+          <p>
+            {proofLinks.map((link, i) => (
+              <>
+                {i > 0 ? <span aria-hidden="true"> · </span> : null}
+                <a
+                  href={link.href}
+                  class="profile-trust-link inline-flex min-h-11 items-center font-semibold text-[var(--action-primary)] underline underline-offset-4 hover:no-underline"
+                  aria-describedby={
+                    link.href === privacyHref
+                      ? "product-privacy-scope"
+                      : undefined
+                  }
+                >
+                  {link.label}
+                </a>
+              </>
+            ))}
+          </p>
+          {privacyHref ? (
+            <span
+              class="sr-only"
+              id="product-privacy-scope"
+              data-product-privacy-scope
+            >
+              {PAGE_LABELS.privacyScope[lang]}
+            </span>
+          ) : null}
+        </div>
       ) : null}
     </Container>
   </article>

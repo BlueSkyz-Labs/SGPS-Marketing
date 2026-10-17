@@ -199,7 +199,11 @@ header[data-scene="ink"] :is(.hc-trigger, .hc-group),
   margin: 0;
   padding: 0.5rem;
   width: min(18rem, calc(100vw - 1.5rem));
-  overflow: visible;
+  max-height: calc(100vh - 1.5rem);
+  max-height: calc(100dvh - 1.5rem);
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
   border: 1px solid var(--hc-line);
   border-radius: var(--radius-panel);
   background: var(--hc-surface);
@@ -275,6 +279,17 @@ header[data-scene="ink"] :is(.hc-trigger, .hc-group),
     .hc-panel:popover-open {
       transform: translateY(0.75rem);
     }
+  }
+}
+
+/* In short landscape and compact-height windows, keep the panel within the
+   visible area and let its options scroll instead of disappearing offscreen. */
+@media (max-height: 32rem) {
+  .hc-panel:popover-open {
+    inset: 0.75rem 0.75rem auto auto;
+    max-height: calc(100vh - 1.5rem);
+    max-height: calc(100dvh - 1.5rem);
+    overflow-y: auto;
   }
 }
 

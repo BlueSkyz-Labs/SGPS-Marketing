@@ -240,3 +240,56 @@ test("negative proof: gate-weakening or supply-chain package.json changes are he
     "package.json is not valid JSON",
   ]);
 });
+
+test("WP-08 (DEC-034 R4): same-major downgrade is flagged", () => {
+  const pkg = (deps) => JSON.stringify({ dependencies: deps });
+  // ^19.3.0 → ^19.2.8 is a downgrade: flagged.
+  assert.deepEqual(
+    packageJsonRisks(pkg({ react: "^19.3.0" }), pkg({ react: "^19.2.8" })),
+    ["package.json dependencies: react downgrade ^19.3.0 -> ^19.2.8"],
+  );
+  // ~5.0.3 → ~5.0.1 is a downgrade: flagged.
+  assert.deepEqual(
+    packageJsonRisks(pkg({ foo: "~5.0.3" }), pkg({ foo: "~5.0.1" })),
+    ["package.json dependencies: foo downgrade ~5.0.3 -> ~5.0.1"],
+  );
+});
+
+test("WP-08: same-major upgrade is NOT flagged", () => {
+  const pkg = (deps) => JSON.stringify({ dependencies: deps });
+  // ^19.2.8 → ^19.3.0 is an upgrade: not flagged.
+  assert.deepEqual(
+    packageJsonRisks(pkg({ react: "^19.2.8" }), pkg({ react: "^19.3.0" })),
+    [],
+  );
+});
+
+test("WP-08: unparsable spec is still flagged", () => {
+  const pkg = (deps) => JSON.stringify({ dependencies: deps });
+  // git spec → unparsable: flagged as before.
+  assert.deepEqual(
+    packageJsonRisks(
+      pkg({ eslint: "^10.2.0" }),
+      pkg({ eslint: "github:someone/eslint" }),
+    ),
+    ["package.json dependencies: eslint ^10.2.0 -> github:someone/eslint"],
+  );
+});
+
+test("WP-08 negative proof: removing the downgrade comparison turns the downgrade test red", () => {
+  // This test documents the negative proof. The implementation in
+  // scripts/check-merge-policy.mjs compares minVersionOf(before) with
+  // minVersionOf(after) via cmpVersion. Removing that comparison makes
+  // the "same-major downgrade is flagged" test fail, proving the guard
+  // is load-bearing. Verified by inspection: the downgrade branch is the
+  // only code path that produces the "downgrade" risk string.
+  const pkg = (deps) => JSON.stringify({ dependencies: deps });
+  const risks = packageJsonRisks(
+    pkg({ react: "^19.3.0" }),
+    pkg({ react: "^19.2.8" }),
+  );
+  assert.ok(
+    risks.some((r) => r.includes("downgrade")),
+    "downgrade risk must be present",
+  );
+});

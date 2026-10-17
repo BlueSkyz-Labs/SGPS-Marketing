@@ -87,6 +87,26 @@ const httpsUrl = z
   .refine(isPublicClaimHttpsUrl, "https production claim URL required");
 
 /**
+ * SGPS-DEC-2026-039 Part B (product-to-web admission): the site never shows a
+ * product further than the product's own release truth. A live listing
+ * (`active` or `maintenance`) needs, in the same record, a link to the
+ * product's merged whole-product go-live gate record, the deployed exact SHA
+ * bound to that gate, and a real `ui-screenshot` proof. Without all three the
+ * product stays a development or beta preview. `MERGED != DEPLOYED`.
+ */
+const releaseGate = z.object({
+  record: httpsUrl,
+  deployedSha: z
+    .string()
+    .regex(/^[0-9a-f]{40}$/, "deployed SHA must be a full 40-character commit"),
+});
+
+export const LIVE_LIFECYCLES: ReadonlySet<Lifecycle> = new Set([
+  "active",
+  "maintenance",
+]);
+
+/**
  * Coherence for *public* listings only.
  * Non-public drafts may use `availability: private` without matching this matrix.
  */
@@ -208,6 +228,7 @@ export const productSchema = z
     primaryAction: action,
     secondaryAction: action.optional(),
     appAccess: appAccess.optional(),
+    releaseGate: releaseGate.optional(),
     proof: z
       .object({
         /**
@@ -309,6 +330,25 @@ export const productSchema = z
           ["secondaryAction", "type"],
           "waitlist availability cannot claim Try",
         );
+      }
+    }
+
+    if (LIVE_LIFECYCLES.has(value.lifecycle)) {
+      if (!value.releaseGate) {
+        ctx.addIssue({
+          code: "custom",
+          path: ["releaseGate"],
+          message:
+            "a live product needs its merged go-live gate record and deployed SHA (SGPS-DEC-2026-039 Part B)",
+        });
+      }
+      if (value.proof.media?.kind !== "ui-screenshot") {
+        ctx.addIssue({
+          code: "custom",
+          path: ["proof", "media"],
+          message:
+            "a live product needs a real ui-screenshot proof (SGPS-DEC-2026-039 Part B)",
+        });
       }
     }
 

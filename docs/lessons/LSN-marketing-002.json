@@ -1,0 +1,24 @@
+{
+  "captured_at": "2026-10-16T07:00:00Z",
+  "class": "local-stale-build-artifact",
+  "guard": {
+    "kind": "preflight",
+    "level": "G3",
+    "negative_proof": "tests/architecture/build-stamp.test.mjs: checkStamp() refuses a stamp from another commit and a missing stamp; disabling the commit comparison turns the test red.",
+    "path": "tests/e2e/build-stamp.mjs (checkStamp) + tests/e2e/global-setup.mjs + astro.config.mjs buildStamp integration"
+  },
+  "id": "LSN-marketing-002",
+  "project": "marketing",
+  "recurrences": [],
+  "reuse_boundary": "Local development only. CI builds fresh, so the check is a no-op there (guarded by !process.env.CI). Known gaps: uncommitted edits on the same HEAD are not detected, and the run is allowed when git is unavailable. The stamp lives in .astro/ (git-ignored), never in the deployed dist/.",
+  "root_cause": "Local Playwright runs served dist/ via `astro preview` with no check that dist/ matched HEAD. A stale build produced failures unrelated to the working tree.",
+  "rule": "Local Playwright runs only against a dist/ built from the current HEAD. A build stamp (.astro/build-commit) is compared to `git rev-parse HEAD` in a local-only globalSetup; mismatch refuses the run.",
+  "source": {
+    "commit": "ce9b331",
+    "repo": "SGPS-Marketing"
+  },
+  "state": "GUARDED",
+  "tags": ["testing", "local-dev", "playwright", "build"],
+  "title": "Local Playwright must refuse a stale dist/ build",
+  "trigger": "2026-10-16: local e2e was falsely red twice on a stale dist/ (built from an older HEAD than the working tree)."
+}

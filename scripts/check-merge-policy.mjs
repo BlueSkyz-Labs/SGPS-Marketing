@@ -108,6 +108,28 @@ function majorOf(spec) {
   return major === 0 ? `0.${match[2] ?? "x"}` : String(major);
 }
 
+/**
+ * WP-08 (DEC-034 R4): parse the minimum version of a range spec.
+ * Supports ^, ~, exact and >=. Returns [major, minor, patch] or null
+ * for unparsable specs (git/file/link/workspace/tag).
+ */
+function minVersionOf(spec) {
+  const s = String(spec).trim();
+  // Strip leading ^, ~, >=, >, =, v and whitespace; take the version core.
+  const match = /^[\^~>=<\s]*v?(\d+)\.(\d+)\.(\d+)/.exec(s);
+  if (!match) return null;
+  return [Number(match[1]), Number(match[2]), Number(match[3])];
+}
+
+/** Compare two [major, minor, patch] tuples. Returns -1, 0, 1. */
+function cmpVersion(a, b) {
+  for (let i = 0; i < 3; i++) {
+    if (a[i] < b[i]) return -1;
+    if (a[i] > b[i]) return 1;
+  }
+  return 0;
+}
+
 export function packageJsonRisks(baseText, headText) {
   if (headText === null) return ["package.json deleted"];
   if (baseText === null) return ["package.json added"];
@@ -138,6 +160,16 @@ export function packageJsonRisks(baseText, headText) {
       const to = majorOf(spec);
       if (from === null || to === null || from !== to) {
         risks.push(`package.json ${field}: ${name} ${before[name]} -> ${spec}`);
+      } else {
+        // Same major: check for a silent downgrade (WP-08, DEC-034 R4).
+        const vFrom = minVersionOf(before[name]);
+        const vTo = minVersionOf(spec);
+        if (vFrom !== null && vTo !== null && cmpVersion(vTo, vFrom) < 0) {
+          risks.push(
+            `package.json ${field}: ${name} downgrade ${before[name]} -> ${spec}`,
+          );
+        }
+        // Unparsable specs stay flagged by the majorOf check above.
       }
     }
   }
