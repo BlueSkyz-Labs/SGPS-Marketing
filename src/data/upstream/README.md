@@ -7,7 +7,7 @@ Byte-for-byte snapshots of the canonical public profile each product repository 
 | Snapshot file     | `sotro.public-profile.json` (schema `sotro-public-profile/1`) |
 | Source repository | `BlueSkyz-Labs/Sotro` (private)                               |
 | Source path       | `docs/product/public-profile.json`                            |
-| Upstream revision | `1d87c09380341360acb5f2882115ebc5cd99e687`                    |
+| Upstream revision | `e6fc6c5573e202dea084eba778ed01cd826d2c3e`                    |
 | Upstream branch   | `main` (squash of BlueSkyz-Labs/Sotro#1317)                   |
 | Date vendored     | 2026-09-30                                                    |
 | Pin status        | PINNED to the Sotro `main` squash SHA.                        |

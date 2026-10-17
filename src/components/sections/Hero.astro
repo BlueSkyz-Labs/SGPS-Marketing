@@ -617,6 +617,24 @@ const supportingLine = flagship ? null : proposition;
     }
   }
 
+  /* A split book display narrows the left reading segment even though the
+     overall viewport still meets the desktop breakpoint. Keep the decorative
+     sail and horizon inside that segment instead of drawing across its hinge. */
+  @media (horizontal-viewport-segments: 2) {
+    .hero-stage :global(.hero-visual) {
+      right: 0;
+      width: min(
+        24rem,
+        calc(env(viewport-segment-width 0 0) - 2 * var(--site-gutter))
+      );
+    }
+
+    .hero-stage__horizon {
+      left: 0;
+      right: 0;
+    }
+  }
+
   @media (forced-colors: active) {
     .hero-stage__horizon {
       display: none;

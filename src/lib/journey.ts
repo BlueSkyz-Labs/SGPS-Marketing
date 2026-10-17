@@ -73,21 +73,9 @@ const JOURNEY: Record<string, JourneyStep[]> = {
       label: { en: "Security", vi: "Bảo mật", zh: "安全", "zh-hant": "安全" },
     },
   ],
-  support: [
-    {
-      segment: "contact",
-      label: {
-        en: "Contact",
-        vi: "Liên hệ",
-        zh: "联系我们",
-        "zh-hant": "聯絡我們",
-      },
-    },
-    {
-      segment: "security",
-      label: { en: "Security", vi: "Bảo mật", zh: "安全", "zh-hant": "安全" },
-    },
-  ],
+  // Customer review F2: /support already ends with the same Contact and
+  // Security pair in-page; a second identical row is noise, not a next step.
+  support: [],
 };
 
 export function getJourneyActions(

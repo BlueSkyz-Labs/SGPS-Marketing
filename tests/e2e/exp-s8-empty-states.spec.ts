@@ -13,6 +13,12 @@ const MISSION = {
   zh: /我们打造智能化产品/,
   "zh-hant": /我們打造智慧化產品/,
 } as const;
+const MISSION_HEADING: Record<(typeof LOCALES)[number], string> = {
+  en: "Our mission",
+  vi: "Điều chúng tôi theo đuổi",
+  zh: "我们的使命",
+  "zh-hant": "我們的使命",
+};
 const EMAIL =
   /[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+(?:\.[A-Za-z0-9-]+)*\.[A-Za-z]{2,}/;
 const PHONE = /(?:\+\d{1,3}[ .-]?)\(?\d{1,4}\)?[ .-]\d{3}[ .-]?\d{3,4}/;
@@ -91,6 +97,9 @@ for (const lang of LOCALES) {
       expect(normalizedText).toContain(FOUNDER_TITLE[lang].toLocaleLowerCase());
       expect(text).toContain("2026");
       expect(text).toMatch(MISSION[lang]);
+      await expect(page.locator("[data-about-mission] h2")).toHaveText(
+        MISSION_HEADING[lang],
+      );
       expect(text).toMatch(FOUNDER);
       expect(text).not.toMatch(EMAIL);
       const products = page.locator(

@@ -7,6 +7,10 @@
  * the page from the copy deck. Each source link carries the stable evidence
  * anchor (`#evidence-<id>`) so existing deep links keep resolving, unless the
  * page has already emitted that anchor for an earlier claim.
+ *
+ * A source that is the current page (the Security route on /security) is
+ * shown as plain text with aria-current: a link to itself is circular evidence
+ * (customer review F6). It keeps its anchor id and trace step.
  */
 import { getEvidencePassport } from "@/lib/claims";
 import { getPublicProducts } from "@/lib/products";
@@ -41,9 +45,18 @@ const products = (await getPublicProducts()).map((product) => ({
 }));
 const passport = getEvidencePassport(claimId, products);
 const refs = new Map((passport?.evidence ?? []).map((ref) => [ref.id, ref]));
+const pathname = Astro.url.pathname;
 const items = sources.flatMap((source) => {
   const ref = refs.get(source.id);
-  return ref ? [{ ...source, href: ref.href[lang] }] : [];
+  return ref
+    ? [
+        {
+          ...source,
+          href: ref.href[lang],
+          current: ref.href[lang] === pathname,
+        },
+      ]
+    : [];
 });
 const reviewedOn = reviewedLabel ? passport?.reviewedOn : undefined;
 ---
@@ -55,25 +68,42 @@ const reviewedOn = reviewedLabel ? passport?.reviewedOn : undefined;
       <>
         {index > 0 ? " " : null}
         <span class="sources-line__item" data-sources-item>
-          <a
-            href={item.href}
-            id={
-              omitAnchorIds.includes(item.id)
-                ? undefined
-                : `evidence-${item.id}`
-            }
-            data-trace-step={
-              omitAnchorIds.includes(item.id) ? undefined : "evidence"
-            }
-            rel={
-              /^https?:\/\//i.test(item.href)
-                ? "noopener noreferrer"
-                : undefined
-            }
-            class="sources-line__link"
-          >
-            {item.label}
-          </a>
+          {item.current ? (
+            <span
+              id={
+                omitAnchorIds.includes(item.id)
+                  ? undefined
+                  : `evidence-${item.id}`
+              }
+              data-trace-step={
+                omitAnchorIds.includes(item.id) ? undefined : "evidence"
+              }
+              aria-current="page"
+              class="sources-line__current"
+            >
+              {item.label}
+            </span>
+          ) : (
+            <a
+              href={item.href}
+              id={
+                omitAnchorIds.includes(item.id)
+                  ? undefined
+                  : `evidence-${item.id}`
+              }
+              data-trace-step={
+                omitAnchorIds.includes(item.id) ? undefined : "evidence"
+              }
+              rel={
+                /^https?:\/\//i.test(item.href)
+                  ? "noopener noreferrer"
+                  : undefined
+              }
+              class="sources-line__link"
+            >
+              {item.label}
+            </a>
+          )}
           {index < items.length - 1 ? (
             <span class="sources-line__sep" aria-hidden="true">
               {"\u00a0\u00b7"}
@@ -119,6 +149,19 @@ const reviewedOn = reviewedLabel ? passport?.reviewedOn : undefined;
     display: inline-flex;
     align-items: center;
     min-height: 2.75rem;
+  }
+
+  /* F5: the flex box drops the text-node space before <time>. */
+  .sources-line__reviewed {
+    column-gap: 0.25em;
+  }
+
+  .sources-line__current {
+    display: inline-flex;
+    align-items: center;
+    align-self: stretch;
+    font-weight: 600;
+    color: var(--text-secondary);
   }
 
   .sources-line__item {
