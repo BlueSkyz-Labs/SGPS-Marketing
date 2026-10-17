@@ -16,8 +16,9 @@
   "guard": {
     "level": "G2",
     "kind": "test",
-    "path": "tests/e2e/ux-s06-cjk-heading-breaks.spec.ts (\"at 320px, 200% text and text spacing: every word span fits its heading\")",
-    "negative_proof": "Reverting the fixed 48px icon to 3rem fails the test on /zh/ and /zh-hant/ (\"开发\", \"開發\"); a 1em heading is reported by the guard's own negative-proof test. Run locally in Chromium on 2026-10-16; Firefox and WebKit run it in CI."
+    "path": "tests/e2e/ux-s06-cjk-heading-breaks.spec.ts + tests/e2e/a11y-text-zoom-nowrap.spec.ts (site-wide: 9 routes × 4 locales at 320px, 200% text, 1.4.12 spacing)",
+    "negative_proof": "Reverting the fixed 48px icon to 3rem fails the test on /zh/ and /zh-hant/ (\"开发\", \"開發\"); a 1em heading is reported by the guard's own negative-proof test. Run locally in Chromium on 2026-10-16; Firefox and WebKit run it in CI.",
+    "notes": "2026-10-16 WP-06: 27/37 routes passed in Chromium; the 10 failures (product [slug] headers, zh/zh-hant About labels) were fixed in #631 and are pinned by tests/e2e/text-zoom-reflow.spec.ts. 2026-10-17: all 37 routes pass in Chromium. The detector also reports a nowrap run that fits its ancestor but crosses the viewport edge; removing that branch fails its negative-proof test."
   },
   "recurrences": [],
   "state": "GUARDED"
