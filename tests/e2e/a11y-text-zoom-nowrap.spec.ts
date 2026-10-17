@@ -38,6 +38,7 @@ interface DetectorResult {
 async function detect(page: Page): Promise<DetectorResult> {
   return page.evaluate(() => {
     const nowrapOffenders: string[] = [];
+    const viewport = document.documentElement.clientWidth;
     const BLOCK_DISPLAY = /^(block|list-item|table|flex|grid)$/;
 
     // Find nearest block-level ancestor with meaningful width.
@@ -72,6 +73,12 @@ async function detect(page: Page): Promise<DetectorResult> {
       if (rect.width > limit) {
         nowrapOffenders.push(
           `${describe(el)} (${Math.round(rect.width)}px > ${Math.round(limit)}px in ${describe(ancestor)})`,
+        );
+      } else if (rect.right > viewport + 1) {
+        // The ancestor can itself be wider than the viewport; then the run
+        // fits it but still pushes the page sideways.
+        nowrapOffenders.push(
+          `${describe(el)} (right edge ${Math.round(rect.right)}px > viewport ${viewport}px in ${describe(ancestor)})`,
         );
       }
     }
@@ -114,6 +121,32 @@ test.describe("WP-06 text zoom + nowrap guard", () => {
       result.nowrapOffenders.length,
       "detector must report the injected nowrap span",
     ).toBeGreaterThan(0);
+  });
+
+  test("negative proof: detector catches nowrap inside an overflowing ancestor", async ({
+    page,
+  }) => {
+    await page.goto("/en/");
+    await applyZoom(page);
+    // The run fits its 600px ancestor, but the ancestor is wider than the
+    // 320px viewport, so the run still pushes the page sideways.
+    await page.evaluate(() => {
+      const div = document.createElement("div");
+      div.style.width = "600px";
+      const span = document.createElement("span");
+      // A fixed 500px box: inside the ancestor, past the viewport edge,
+      // whatever width the zoomed font would give the text.
+      span.style.cssText =
+        "white-space:nowrap;display:inline-block;width:500px;overflow:hidden";
+      span.textContent = "B".repeat(12);
+      div.appendChild(span);
+      document.body.appendChild(div);
+    });
+    const result = await detect(page);
+    expect(
+      result.nowrapOffenders.some((o) => o.includes("viewport")),
+      "detector must report a nowrap run past the viewport edge",
+    ).toBe(true);
   });
 
   for (const locale of LOCALES) {
