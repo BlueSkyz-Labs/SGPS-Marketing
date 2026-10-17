@@ -165,7 +165,9 @@ const awaitingScreens = !showcase && isIdentityArt;
         </ol>
       </nav>
 
-      <header class="mt-8 flex items-center gap-5 sm:gap-6">
+      <!-- Text zoom: the icon is rem-sized and grows with 200% text, so the
+           title block may drop under it instead of squeezing to ~40px. -->
+      <header class="mt-8 flex flex-wrap items-center gap-5 sm:gap-6">
         <div
           class="relative flex size-20 flex-shrink-0 items-center justify-center overflow-hidden rounded-2xl bg-white/5 p-2 shadow-[0_12px_32px_-8px_rgba(11,16,32,0.35)] ring-1 ring-inset ring-white/10 sm:size-28 sm:p-2.5"
           aria-hidden="true"
@@ -181,7 +183,7 @@ const awaitingScreens = !showcase && isIdentityArt;
             height="128"
           />
         </div>
-        <div class="min-w-0">
+        <div class="min-w-0 flex-1 basis-40">
           <div class="flex flex-wrap items-center gap-x-4 gap-y-2">
             <h1
               class="type-d2 profile-title text-[var(--text-primary)]"

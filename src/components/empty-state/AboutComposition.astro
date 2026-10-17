@@ -116,7 +116,9 @@ const founderLocation =
   {products.length > 0 ? (
     <section aria-labelledby="about-make">
       <h2 id="about-make" class="about-label">
-        {labelFor(EMPTY_STATE_COPY.aboutWhatWeMake, lang)}
+        <span class="about-label__text">
+          {labelFor(EMPTY_STATE_COPY.aboutWhatWeMake, lang)}
+        </span>
       </h2>
       <ul class="about-products">
         {products.map((product) => (
@@ -140,7 +142,9 @@ const founderLocation =
   ) : null}
   <section aria-labelledby="about-check" data-about-check>
     <h2 id="about-check" class="about-label">
-      {labelFor(EMPTY_STATE_COPY.aboutCheck, lang)}
+      <span class="about-label__text">
+        {labelFor(EMPTY_STATE_COPY.aboutCheck, lang)}
+      </span>
     </h2>
     <ul class="about-checks">
       <li data-claim-id="privacy-no-tracking-on-this-site">
@@ -255,6 +259,12 @@ const founderLocation =
   :lang(vi) .about-label {
     text-transform: none;
     letter-spacing: var(--tracking-eyebrow, 0.03em);
+  }
+  /* One flex item for the words: the zh build wraps each word in .cjk-word,
+     and as separate flex items they took the 0.75rem gap between them and
+     could not wrap under 200% text. */
+  .about-label__text {
+    min-inline-size: 0;
   }
   .about-label::before {
     content: "";
