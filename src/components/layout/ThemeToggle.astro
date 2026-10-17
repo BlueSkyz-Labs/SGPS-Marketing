@@ -124,9 +124,10 @@ const triggerName = `${L.label}: ${L[DEFAULT_MODE]}`;
 
   /* Optical size: an open sun reads lighter than the closed magnifier at
      the same box, so this glyph gets 22px instead of the family's 20px. */
+  /* A5: px-sized, not rem — must not grow under 200% text zoom (WP-06). */
   .theme-trigger__glyph {
-    width: 1.375rem;
-    height: 1.375rem;
+    width: 22px;
+    height: 22px;
   }
 
   /* Press feedback: the glyph gives way a touch and springs back. */
