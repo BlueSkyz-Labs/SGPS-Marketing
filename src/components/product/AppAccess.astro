@@ -8,16 +8,20 @@ import { AVAILABILITY } from "./product-page-copy";
  * Platforms and Audience blocks. An in-development native app is plain text
  * with no store link; a store link renders only for an app that is
  * `available` with a store URL (schema-enforced). Static, no client script.
- * The sign-in link is a plain text link rendered by the page.
+ * Preview 2026-10-15: the web line says "open preview, limited places" when
+ * the record's web app accepts new users (`webPreviewOpen`), else "in
+ * development". No app link is rendered (Owner 2026-10-12, #575).
  */
 interface Props {
   appAccess: ProductEntry["data"]["appAccess"];
   lang: Language;
   /** The record lists the web platform. */
   web?: boolean;
+  /** The web app is open to new users as a preview. */
+  webPreview?: boolean;
 }
 
-const { appAccess, lang, web = true } = Astro.props;
+const { appAccess, lang, web = true, webPreview = false } = Astro.props;
 const A = AVAILABILITY;
 
 const STORES = [
@@ -43,10 +47,10 @@ const colon = A.colon[lang];
     data-app-access
   >
     {web ? (
-      <span>
+      <span data-web-state={webPreview ? "preview" : "in-development"}>
         {A.web[lang]}
         {colon}
-        {A.inDevelopment[lang]}
+        {webPreview ? A.preview[lang] : A.inDevelopment[lang]}
       </span>
     ) : null}
     {pending.length > 0 ? (

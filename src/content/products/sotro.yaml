@@ -1,18 +1,19 @@
 slug: sotro
 name: Sổ Trọ
-shortDescription: "For landlords in Vietnam: see what is still unpaid this month and what needs doing today."
-lifecycle: development
+shortDescription: A rent notebook for landlords in Vietnam, now in preview. See who still owes, collect and confirm each payment once, receipts ready for Zalo.
+lifecycle: beta
 availability: preview
-publicLabel: In development
+publicLabel: Preview
 audience:
   - individual
 jobs:
-  - See what remains unpaid this month and what needs attention today
-  - Maintain dependable room, tenant, meter, and monthly charge records
+  - See at a glance who still owes rent this month and what needs doing today
+  - Collect rent and record each payment once, correctly, without a spreadsheet
+  - Keep rooms, tenants, meter readings and the residence register in one place
 capabilities:
-  - Utility charges from meter readings, with a readable tiered-electricity breakdown
-  - Receipts, and a separate confirmation step before received money is recorded
-  - Optional polite Zalo/SMS-style reminder messages to copy; nothing is sent automatically
+  - Collect rent with a review-then-confirm step, a bank-transfer QR code and a receipt to copy into Zalo
+  - Large text and big buttons built for older landlords; a family helper's phone joins by scanning a QR code
+  - A month-readiness view of who still owes and what is due, plus a C06 residence spreadsheet to download
 platforms:
   - web
 # schema.org SoftwareApplication category (Owner delegated best practice, 2026-10-04):
@@ -23,7 +24,9 @@ primaryAction:
   label: Preview Sổ Trọ
   href: https://blueskyzlabs.com/en/products/sotro/
 # Sign-in link mirrors the upstream public profile (appAccess.signInUrl; ADR 0006 product
-# subdomain). It is a sign-in page for existing users, not evidence that signup is open.
+# subdomain). It is not rendered (Owner 2026-10-12, #575: no public app sign-in). Preview
+# 2026-10-15: upstream production accepts new workspaces in limited numbers (lifecycle beta,
+# availability preview); the upstream sign-up permission is not mirrored or linked here.
 # Native apps mirror the upstream profile (Owner 2026-09-30): Android/iOS follow the web core
 # and sync with the same workspace; in development, no store link, until a native build ships.
 appAccess:
@@ -48,42 +51,45 @@ endorsement: A BlueSkyz Labs product
 featuredTier: hero
 displayOrder: 1
 public: true
-# Sotro revision of the vendored public profile (src/data/upstream/README.md). PENDING:
-# re-pin to the Sotro main squash SHA once the upstream PR merges.
-sourceRevision: 1d87c09380341360acb5f2882115ebc5cd99e687
-lastReviewedAt: 2026-09-30
+# Sotro revision of the vendored public profile (src/data/upstream/README.md):
+# the squash merge of BlueSkyz-Labs/Sotro#1849 on main.
+sourceRevision: e6fc6c5573e202dea084eba778ed01cd826d2c3e
+lastReviewedAt: 2026-10-15
 # Localized copy: faithful translations of the English claims above; the
 # English record stays canonical for claim/proof binding. Native VI/ZH review
 # is an Owner feedback checkpoint (plan v5 W3.4).
 i18n:
   vi:
-    shortDescription: "Dành cho chủ trọ ở Việt Nam: xem tháng này còn ai chưa đóng tiền và hôm nay cần lo việc gì."
+    shortDescription: "Sổ tay thu tiền phòng cho chủ trọ Việt Nam, đang mở bản xem trước. Biết ai còn nợ, thu và xác nhận mỗi khoản đúng một lần, có biên nhận gửi Zalo."
     jobs:
-      - "Xem tháng này còn ai chưa đóng tiền và hôm nay cần lo việc gì"
-      - "Ghi lại phòng, người thuê, số điện nước và các khoản thu hằng tháng cho gọn, cho chắc"
+      - "Nhìn một lần là biết tháng này phòng nào còn nợ tiền và hôm nay cần làm gì"
+      - "Thu tiền và ghi nhận mỗi khoản đúng một lần, không cần sổ tay hay bảng tính"
+      - "Giữ phòng, người thuê, chỉ số điện nước và sổ tạm trú ở cùng một nơi"
     capabilities:
-      - "Tính tiền điện nước từ số đọc công tơ, có giải thích rõ từng bậc giá điện"
-      - "Biên nhận, và một bước xác nhận riêng trước khi ghi nhận tiền đã nhận"
-      - "Mẫu tin nhắn nhắc lịch sự kiểu Zalo/SMS để sao chép; không tự động gửi"
+      - "Thu tiền có bước xem lại rồi mới xác nhận, mã QR chuyển khoản ngân hàng và biên nhận sao chép gửi qua Zalo"
+      - "Chữ to, nút lớn, làm cho người lớn tuổi; điện thoại của người nhà tham gia chỉ bằng cách quét mã QR"
+      - "Màn hình sẵn sàng cuối tháng: ai còn nợ, việc gì đến hạn, kèm bảng C06 tạm trú tải về ngay"
     primaryActionLabel: "Xem trước Sổ Trọ"
   zh:
-    shortDescription: "给越南房东：查看本月还有谁没交租、今天要处理什么。"
+    shortDescription: "给越南房东的收租记事本，现已开放预览。看清谁还欠租，每笔收款只确认一次，收据可发到 Zalo。"
     jobs:
-      - "本月还有哪些款项没收？今天要处理什么？"
-      - "把房间、租客、水电表读数和每月费用记得清楚可靠"
+      - "一眼看清本月谁还欠租、今天要处理什么"
+      - "收租并把每笔款项准确记录一次，不再需要表格"
+      - "把房间、租客、水电表读数和暂住登记集中在一处"
     capabilities:
-      - "根据电表、水表读数计算水电费，并清楚列出阶梯电价的各档明细"
-      - "收据；并在记为已收款之前，单独增加一步确认"
-      - "可选的礼貌提醒消息模板（Zalo/短信风格），由你自行复制使用；不会自动发送"
+      - "收租先核对再确认，提供银行转账二维码，收据可复制到 Zalo"
+      - "为年长房东设计的大字号与大按钮；家人的手机扫描二维码即可加入"
+      - "月末就绪视图：谁还欠租、哪些到期，并可下载 C06 暂住登记表"
     primaryActionLabel: "预览 Sổ Trọ"
   # zh-Hant copy: machine-assisted (OpenCC s2twp), pending native review.
   zh-hant:
-    shortDescription: "給越南房東：查看本月還有誰沒繳租、今天要處理什麼。"
+    shortDescription: "給越南房東的收租記事本，現已開放預覽。看清誰還欠租，每筆收款只確認一次，收據可傳到 Zalo。"
     jobs:
-      - "本月還有哪些款項未收？今天要處理什麼？"
-      - "把房間、房客、水電表度數和每月費用記得清楚可靠"
+      - "一眼看清本月誰還欠租、今天要處理什麼"
+      - "收租並把每筆款項準確記錄一次，不再需要試算表"
+      - "把房間、房客、水電表度數和暫住登記集中在一處"
     capabilities:
-      - "依電表、水表度數計算水電費，並清楚列出階梯式電價各級明細"
-      - "收據；並在記為已收款之前，多一道獨立的確認步驟"
-      - "可選用的禮貌提醒訊息範本（Zalo／簡訊風格），由你自行複製使用；不會自動傳送"
+      - "收租先核對再確認，提供銀行轉帳 QR 碼，收據可複製到 Zalo"
+      - "為年長房東設計的大字級與大按鈕；家人的手機掃描 QR 碼即可加入"
+      - "月底就緒檢視：誰還欠租、哪些到期，並可下載 C06 暫住申報表"
     primaryActionLabel: "預覽 Sổ Trọ"

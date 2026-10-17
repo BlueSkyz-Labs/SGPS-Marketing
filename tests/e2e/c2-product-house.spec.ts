@@ -38,7 +38,7 @@ test.describe("C2 Product House — fixture-backed hierarchy", () => {
     ).toContainText("Fixture Flagship");
     await expect(cards.filter({ hasText: "Fixture Flagship" })).toHaveCount(0);
     await expect(page.locator("#product-house-title")).toHaveText(
-      "Also in development",
+      "In development",
     );
 
     const grid = page.locator(".grid.gap-4");
@@ -94,14 +94,16 @@ test.describe("C2 Product House — fixture-backed hierarchy", () => {
     const bodyText = await page.locator("body").textContent();
     // These EN strings must not appear on the VI page.
     expect(bodyText ?? "").not.toContain("View profile");
-    expect(bodyText ?? "").not.toContain("Also in development");
+    expect(bodyText ?? "").not.toContain("In development");
   });
 
   test("fixture VI labels are localized (different from EN)", async ({
     page,
   }) => {
     await page.goto(`${origin}/product-acts-vi/`);
-    await expect(page.getByText("Cũng đang phát triển")).toBeVisible();
+    await expect(
+      page.getByRole("heading", { name: "Đang phát triển" }),
+    ).toBeVisible();
     // v8 W1 (glo-9): the roadmap-implying continuation body is gone.
     await expect(page.getByText("bước tiếp theo trung thực")).toHaveCount(0);
     await expect(page.getByText("Xem hồ sơ")).toHaveCount(0);

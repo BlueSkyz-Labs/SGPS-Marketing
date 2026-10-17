@@ -176,7 +176,7 @@ test.describe("decision room", () => {
         "/zh/",
         "BlueSkyz Labs",
         "我们打造智能化产品，赋能个人并提升工作方式。",
-        "BlueSkyz Labs 正在打造两款产品：面向越南房东的电子记事本 Sổ Trọ，以及本地优先的私密日记 Sổ Tâm。两款产品均在开发中。",
+        "BlueSkyz Labs 正在打造两款产品：面向越南房东的电子记事本 Sổ Trọ，现已开放预览；本地优先的私密日记 Sổ Tâm，仍在开发中。",
       ],
       [
         "/zh/about/",

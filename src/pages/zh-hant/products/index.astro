@@ -47,7 +47,9 @@ const emptyDescription = "產品僅在具備可核驗的公開證據時發布。
             id="published-products"
             class:list={[
               "text-xs font-semibold tracking-[0.18em] text-[var(--text-secondary)] uppercase [&:lang(vi)]:normal-case [&:lang(vi)]:tracking-[var(--tracking-eyebrow)]",
-              allInDevelopment && "sr-only",
+              // The cards carry each status badge, so the label stays for screen
+              // readers only, whatever the mix of stages.
+              "sr-only",
             ]}
           >
             {allInDevelopment ? "開發中" : "產品"}

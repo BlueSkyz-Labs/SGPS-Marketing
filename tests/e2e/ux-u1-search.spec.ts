@@ -4,11 +4,14 @@ import { expect, test } from "@playwright/test";
 // must not dead-end. Desktop trigger pinned so projects behave identically.
 test.use({ viewport: { width: 1280, height: 800 } });
 
+// Preview 2026-10-15: the status line names each product's own state from the
+// registry, so an open preview is never called "in development".
 const STATUS: Record<string, RegExp> = {
-  en: /in development; no store release/i,
-  vi: /đang phát triển; chưa có bản trên cửa hàng ứng dụng/i,
-  zh: /开发中；尚未上架应用商店/,
-  "zh-hant": /開發中；尚未上架應用程式商店/,
+  en: /^Sổ Trọ: open preview, limited places; Sổ Tâm: in development; Android and iOS: no store release\.$/,
+  vi: /^Sổ Trọ: bản xem trước đã mở, số chỗ có hạn; Sổ Tâm: đang phát triển; Android và iOS: chưa có bản trên cửa hàng ứng dụng\.$/,
+  zh: /^Sổ Trọ：预览版已开放，名额有限；Sổ Tâm：开发中；Android 与 iOS：尚未上架应用商店\.$/,
+  "zh-hant":
+    /^Sổ Trọ：預覽版已開放，名額有限；Sổ Tâm：開發中；Android 與 iOS：尚未上架應用程式商店\.$/,
 };
 
 async function search(
@@ -46,11 +49,11 @@ test("unaccented 'gia' does not match inside longer words", async ({
 });
 
 for (const [lang, queries] of [
-  ["en", ["price", "pricing", "download", "sign up", "zalo"]],
-  ["vi", ["giá", "tải app", "đăng ký", "zalo", "download"]],
+  ["en", ["price", "pricing", "download", "sign up", "facebook"]],
+  ["vi", ["giá", "tải app", "đăng ký", "facebook", "download"]],
 ] as const) {
   for (const q of queries) {
-    test(`${lang} '${q}' shows fallback links${q === "zalo" ? " and no status line" : ""}`, async ({
+    test(`${lang} '${q}' shows fallback links${q === "facebook" ? " and no status line" : ""}`, async ({
       page,
     }) => {
       await search(page, lang, q);
@@ -64,8 +67,8 @@ for (const [lang, queries] of [
         fallback.locator(`a[href="/${lang}/contact/"]`),
       ).toBeVisible();
       const status = page.locator("[data-command-status]");
-      if (q === "zalo") {
-        // Contact intent: fallback links only, no availability claim.
+      if (q === "facebook") {
+        // No hit and no status intent: fallback links only, no availability claim.
         await expect(status).toBeHidden();
       } else {
         await expect(status).toBeVisible();
@@ -130,3 +133,17 @@ test("title hits rank above body hits", async ({ page }) => {
   const first = items(page).first();
   await expect(first).toContainText("Contact");
 });
+
+// Preview 2026-10-15: Sổ Trọ's published capability now mentions Zalo
+// receipts, so a 'zalo' search answers with the Sổ Trọ page instead of the
+// empty-state fallback.
+for (const lang of ["en", "vi"] as const) {
+  test(`${lang} 'zalo' finds the Sổ Trọ page`, async ({ page }) => {
+    await search(page, lang, "zalo");
+    await expect(items(page)).not.toHaveCount(0);
+    await expect(
+      items(page).locator(`a[href="/${lang}/products/sotro/"]`).first(),
+    ).toBeVisible();
+    await expect(page.locator("[data-command-fallback]")).toBeHidden();
+  });
+}
