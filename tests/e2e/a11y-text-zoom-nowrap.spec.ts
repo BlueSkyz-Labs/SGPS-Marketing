@@ -64,6 +64,10 @@ async function detect(page: Page): Promise<DetectorResult> {
     for (const el of document.querySelectorAll("body *")) {
       const cs = getComputedStyle(el);
       if (cs.whiteSpace !== "nowrap" && cs.whiteSpace !== "pre") continue;
+      // white-space shapes text runs only. SVG shapes inherit it from their
+      // button but are drawn to the viewBox, and Firefox measures a sun ray
+      // 1px past its 22px icon; that is artwork, not a run that can wrap.
+      if (el instanceof SVGElement) continue;
       // Skip sr-only / invisible elements.
       const rect = el.getBoundingClientRect();
       if (rect.width <= 1 || rect.height <= 1) continue;
