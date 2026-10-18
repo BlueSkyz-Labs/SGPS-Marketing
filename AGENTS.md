@@ -1,6 +1,4 @@
 # Agent guide — BlueSkyz Labs Web (SGPS-Marketing)
-> **2026-10-18 SIGNED-APK PUBLIC LANDING POLICY:** Before app-download pages, localized Store asset links or claims about Apple/Google marketplace availability, read `docs/sgps/2026-10-18-mobile-store-distribution-owner-adoption.md`, Sổ Trọ Product release truth and SGPS-DEC-2026-045. No public APK or merchant/store claims without signed Product release and verified authorization.
-
 
 > **2026-10-09 PORTFOLIO OWNER WORK WAVE — AI Factory + Experience:** Before dev/UX/PR promotion read `docs/sgps/2026-10-09-AI_FACTORY_EXPERIENCE_ADOPTION.md` after refreshing live truth. Continue safe approved work autonomously; require independent exact-head, real rendered UX proof and keep existing project Owner/brand/security/instruction protections. The SGPS Core #293 candidate does NOT change pins or grant merge/release authority. Do not self-apply `owner-approved`.
 
