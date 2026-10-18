@@ -372,9 +372,13 @@ const supportingLine = flagship ? null : proposition;
   }
   /* A product name never splits across lines: a wrapped link's box spans
      both lines and reads as obscured focus (WCAG 2.4.11) at 1440px. */
+  /* Audit B-01: no vertical padding. On an inline link it enlarges the hit
+     box without moving layout, so when the two product names wrap onto
+     consecutive lines the second name's box covered the lower half of the
+     first. These are links inside a sentence (WCAG 2.5.8 inline exception);
+     the tap-sized entries are the CTA and entry chip below the line. */
   .hero-inline-link {
     white-space: nowrap;
-    padding-block: 0.85rem;
     font-weight: 600;
     color: var(--brand-porcelain);
     text-decoration-line: underline;

@@ -53,6 +53,8 @@ interface Props {
   lastUpdated?: boolean;
   /** Page-specific JSON-LD nodes appended after the site-wide graph. */
   extraJsonLd?: Record<string, unknown>[];
+  /** Route segment of the one journey-bar action shown as primary. */
+  journeyPrimary?: string;
 }
 
 const {
@@ -68,6 +70,7 @@ const {
   lensTraces = true,
   lensBoundaries = true,
   scene = DEFAULT_SCENE,
+  journeyPrimary,
   lastUpdated = false,
   extraJsonLd = [],
 } = Astro.props;
@@ -283,7 +286,7 @@ const robotsContent =
           boundaries={lensBoundaries}
         />
       ) : null}
-      <JourneyBar />
+      <JourneyBar primary={journeyPrimary} />
     </main>
     <BackToTop lang={currentLang} />
     <Footer lastUpdated={lastUpdatedLine} />

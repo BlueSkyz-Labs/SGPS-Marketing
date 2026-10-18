@@ -1,6 +1,5 @@
 ---
 // zh-Hant copy: machine-assisted (OpenCC s2twp), pending native review.
-import ProfileNextSteps from "@/components/experience/ProfileNextSteps.astro";
 import HorizonSeam from "@/components/experience/HorizonSeam.astro";
 import type { CollectionEntry } from "astro:content";
 import BaseLayout from "@/layouts/BaseLayout.astro";
@@ -123,6 +122,7 @@ const awaitingScreens = !showcase && isIdentityArt;
 ---
 
 <BaseLayout
+  journeyPrimary={awaitingScreens ? "contact" : undefined}
   lastUpdated
   title={meta.title}
   description={meta.description}
@@ -268,9 +268,6 @@ const awaitingScreens = !showcase && isIdentityArt;
         >
           {labelFor(EMPTY_STATE_COPY.noCaptures, "zh-hant")}
         </p>
-      ) : null}
-      {awaitingScreens ? (
-        <ProfileNextSteps lang="zh-hant" productName={data.name} />
       ) : null}
 
       {page.whatItDoes.length > 0 ? (

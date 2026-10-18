@@ -87,21 +87,51 @@ const SUPPORT_PENDING: Record<(typeof LOCALES)[number], RegExp> = {
 const SUPPORT_OVERCLAIM =
   /Working help and recourse|real routes, not slogans|khắc phục đang hoạt động|有效的(帮助|協助)与?|提供有效/;
 
+const SUPPORT_PUBLISHED: Record<(typeof LOCALES)[number], RegExp> = {
+  en: /A product-support mailbox is published here/,
+  vi: /[Đđ]ã công bố hộp thư hỗ trợ sản phẩm/,
+  zh: /已公布产品支持邮箱/,
+  "zh-hant": /已公布產品支援信箱/,
+};
+
 for (const lang of LOCALES) {
-  test(`/${lang}/verify/ does not call Support available`, async ({ page }) => {
+  // The Support lane must match /support: "available" only when that page
+  // publishes a mailbox, the pending wording otherwise.
+  test(`/${lang}/verify/ Support row matches the published mailbox`, async ({
+    page,
+  }) => {
+    await page.goto(`/${lang}/support/`);
+    const hasMailbox =
+      (await page.locator("main a[href^='mailto:']").count()) > 0;
     await page.goto(`/${lang}/verify/`);
     const row = page.locator('[data-trust-surface="support"]');
     await expect(row).toBeVisible();
     const text = await row.innerText();
-    expect(text).toMatch(SUPPORT_PENDING[lang]);
     expect(text).not.toMatch(SUPPORT_OVERCLAIM);
-    expect(text).not.toMatch(/Available|Có sẵn|可用/);
+    if (hasMailbox) {
+      expect(text).toMatch(SUPPORT_PUBLISHED[lang]);
+      expect(text).not.toMatch(SUPPORT_PENDING[lang]);
+    } else {
+      expect(text).toMatch(SUPPORT_PENDING[lang]);
+      expect(text).not.toMatch(/Available|Có sẵn|可用/);
+    }
     // The other two lanes keep their state.
     await expect(page.locator('[data-trust-surface="privacy"]')).toContainText(
       /Available|Có sẵn|可用/,
     );
   });
 }
+
+test("negative proof: published and pending Support wording never match each other", () => {
+  for (const lang of LOCALES) {
+    expect(SUPPORT_PENDING[lang].test(SUPPORT_PUBLISHED[lang].source)).toBe(
+      false,
+    );
+    expect(SUPPORT_PUBLISHED[lang].test(SUPPORT_PENDING[lang].source)).toBe(
+      false,
+    );
+  }
+});
 
 test("negative proof: the retired Support overclaim matches the guard", () => {
   expect(
