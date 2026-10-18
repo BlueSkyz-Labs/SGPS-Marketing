@@ -3,6 +3,7 @@ import { readFileSync } from "node:fs";
 import test from "node:test";
 import {
   evaluate,
+  summarize,
   validateOverrides,
 } from "../../scripts/check-performance-budget.mjs";
 import { PROTECTED_PATHS } from "../../scripts/check-merge-policy.mjs";
@@ -76,9 +77,15 @@ const run = (route, overrides = {}) => ({
   },
   zeroCounts: {
     "third-party": 0,
-    "render-blocking": 0,
     ...overrides.zeroCounts,
   },
+  renderBlocking: overrides.renderBlocking ?? [
+    "http://127.0.0.1:3000/theme-init.js",
+    "http://127.0.0.1:3000/_astro/BaseLayout.D6eTMN56.css",
+    "http://127.0.0.1:3000/_astro/ProofFirstEmptyState.D43kTmRK.css",
+    "http://127.0.0.1:3000/_astro/HomeNextSteps.BtfO0ZTV.css",
+    "http://127.0.0.1:3000/_astro/HorizonSeam.CT1huIoj.css",
+  ],
 });
 const allRoutes = (overrides) =>
   budget.routes.flatMap((route) => [
@@ -210,5 +217,76 @@ test("negative proof: an override cannot relax timing, lacks no reason, and name
       }),
     ).length,
     1,
+  );
+});
+
+// Render-blocking guard (audit D-01). Lighthouse 13 has no
+// `render-blocking-resources`; the old zero-count read it and was vacuous.
+const fixture = JSON.parse(
+  read("tests/architecture/fixtures/lighthouse-13.4.1-en-trimmed.lhr.json"),
+);
+const fixtureBudget = { ...budget, routes: ["/en/"] };
+const fixtureRuns = (lhr) => [summarize(lhr), summarize(lhr), summarize(lhr)];
+const withItems = (extra) => {
+  const lhr = structuredClone(fixture);
+  lhr.audits["render-blocking-insight"].details.items.push(...extra);
+  return lhr;
+};
+
+test("a real Lighthouse 13 report passes through summarize() and evaluate()", () => {
+  assert.equal(fixture.lighthouseVersion, "13.4.1");
+  assert.equal(fixture.audits["render-blocking-resources"], undefined);
+  const summary = summarize(fixture);
+  assert.equal(summary.route, "/en/");
+  assert.equal(summary.renderBlocking.length, 5, "reads the insight audit");
+  assert.deepEqual(evaluate(fixtureRuns(fixture), fixtureBudget).errors, []);
+});
+
+test("legacy render-blocking-resources is still read as a fallback", () => {
+  const lhr = structuredClone(fixture);
+  lhr.audits["render-blocking-resources"] =
+    lhr.audits["render-blocking-insight"];
+  delete lhr.audits["render-blocking-insight"];
+  assert.equal(summarize(lhr).renderBlocking.length, 5);
+});
+
+test("negative proof: an extra render-blocking script fails", () => {
+  const lhr = withItems([
+    { url: "http://127.0.0.1:3000/_astro/analytics.abc123.js" },
+  ]);
+  const { errors } = evaluate(fixtureRuns(lhr), fixtureBudget);
+  assert.ok(errors.some((e) => e.includes("renderBlocking.scripts")));
+  // A look-alike name must not satisfy the theme-init allowance.
+  const spoof = withItems([
+    { url: "http://127.0.0.1:3000/_astro/not-theme-init.js" },
+  ]);
+  assert.ok(
+    evaluate(fixtureRuns(spoof), fixtureBudget).errors.some((e) =>
+      e.includes("renderBlocking.scripts"),
+    ),
+  );
+});
+
+test("negative proof: a report missing both audits fails closed", () => {
+  const lhr = structuredClone(fixture);
+  delete lhr.audits["render-blocking-insight"];
+  assert.equal(summarize(lhr).renderBlocking, null);
+  const { errors } = evaluate(fixtureRuns(lhr), fixtureBudget);
+  assert.ok(errors.some((e) => e.includes("missing render-blocking audit")));
+  // One bad run among good ones also fails (not hidden by the median).
+  const mixed = [summarize(fixture), summarize(fixture), summarize(lhr)];
+  assert.ok(
+    evaluate(mixed, fixtureBudget).errors.some((e) =>
+      e.includes("missing render-blocking audit"),
+    ),
+  );
+});
+
+test("negative proof: a stylesheet count above the ceiling fails", () => {
+  assert.equal(budget.renderBlocking.stylesheets, 4);
+  const lhr = withItems([{ url: "http://127.0.0.1:3000/_astro/Extra.x1.css" }]);
+  const { errors } = evaluate(fixtureRuns(lhr), fixtureBudget);
+  assert.ok(
+    errors.some((e) => e.includes("renderBlocking.stylesheets: 5 > 4")),
   );
 });

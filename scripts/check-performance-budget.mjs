@@ -5,7 +5,8 @@
  * Reads the Lighthouse reports written by `lhci autorun` (lhr-*.json) and
  * checks the median of every gate route against performance-budget.json:
  * timing ceilings, deterministic resource-byte ceilings and zero-count
- * invariants. A value at or above warnRatio x ceiling warns; above the
+ * invariants, plus the render-blocking invariant (no blocking script except
+ * the theme-init script; blocking stylesheet count within a ceiling). A value at or above warnRatio x ceiling warns; above the
  * ceiling fails. A budget route with fewer than minRuns reports fails, so a
  * route cannot be dropped silently. The budget file is a protected path.
  */
@@ -18,6 +19,32 @@ const median = (values) => {
   const mid = Math.floor(sorted.length / 2);
   return sorted.length % 2 ? sorted[mid] : (sorted[mid - 1] + sorted[mid]) / 2;
 };
+
+/**
+ * Render-blocking resource URLs of one report, or null when the report has
+ * neither audit. Lighthouse 13 replaced `render-blocking-resources` with
+ * `render-blocking-insight`; the legacy id is the fallback. Never defaults to
+ * an empty list: a missing audit must fail closed, not read as "none".
+ */
+export function renderBlockingUrls(audits) {
+  for (const id of ["render-blocking-insight", "render-blocking-resources"]) {
+    const items = audits[id]?.details?.items;
+    if (Array.isArray(items)) return items.map((item) => String(item.url));
+  }
+  return null;
+}
+
+/** Split render-blocking URLs into disallowed scripts and stylesheets. */
+export function classifyRenderBlocking(urls, allowedScript) {
+  const allowed = new RegExp(allowedScript);
+  const path = (url) => url.split(/[?#]/)[0];
+  const stylesheets = urls.filter((u) => /\.css$/i.test(path(u)));
+  const scripts = urls.filter((u) => !/\.css$/i.test(path(u)));
+  return {
+    stylesheets: stylesheets.length,
+    unexpectedScripts: scripts.filter((u) => !allowed.test(path(u))),
+  };
+}
 
 export function summarize(lhr) {
   const audits = lhr.audits;
@@ -41,9 +68,8 @@ export function summarize(lhr) {
     ),
     zeroCounts: {
       "third-party": resources["third-party"]?.count ?? 0,
-      "render-blocking":
-        audits["render-blocking-resources"]?.details?.items?.length ?? 0,
     },
+    renderBlocking: renderBlockingUrls(audits),
   };
 }
 
@@ -106,6 +132,28 @@ export function evaluate(summaries, budget) {
       check("resourceBytes", key, ceiling);
     for (const [key, ceiling] of Object.entries(budget.zeroCounts))
       check("zeroCounts", key, ceiling);
+    // Render-blocking: fail closed when any run lacks the audit, then no
+    // script other than the allowed one and a stylesheet-count ceiling.
+    const rb = budget.renderBlocking;
+    if (runs.some((r) => !Array.isArray(r.renderBlocking))) {
+      errors.push(
+        `${route} renderBlocking: missing render-blocking audit (render-blocking-insight / render-blocking-resources)`,
+      );
+    } else {
+      const classified = runs.map((r) =>
+        classifyRenderBlocking(r.renderBlocking, rb.allowedScript),
+      );
+      const bad = [...new Set(classified.flatMap((c) => c.unexpectedScripts))];
+      if (bad.length > rb.scripts)
+        errors.push(
+          `${route} renderBlocking.scripts: unexpected render-blocking script(s) ${bad.join(", ")}`,
+        );
+      const sheets = median(classified.map((c) => c.stylesheets));
+      if (sheets > rb.stylesheets)
+        errors.push(
+          `${route} renderBlocking.stylesheets: ${sheets} > ${rb.stylesheets}`,
+        );
+    }
   }
   return { errors, warnings };
 }

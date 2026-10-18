@@ -1,0 +1,167 @@
+{
+  "lighthouseVersion": "13.4.1",
+  "requestedUrl": "http://127.0.0.1:3000/en/",
+  "finalUrl": "http://127.0.0.1:3000/en/",
+  "finalDisplayedUrl": "http://127.0.0.1:3000/en/",
+  "audits": {
+    "resource-summary": {
+      "id": "resource-summary",
+      "score": 1,
+      "details": {
+        "type": "table",
+        "headings": [
+          {
+            "key": "label",
+            "valueType": "text",
+            "label": "Resource Type"
+          },
+          {
+            "key": "requestCount",
+            "valueType": "numeric",
+            "label": "Requests"
+          },
+          {
+            "key": "transferSize",
+            "valueType": "bytes",
+            "label": "Transfer Size"
+          }
+        ],
+        "items": [
+          {
+            "resourceType": "total",
+            "label": "Total",
+            "requestCount": 24,
+            "transferSize": 172831
+          },
+          {
+            "resourceType": "image",
+            "label": "Image",
+            "requestCount": 5,
+            "transferSize": 68955
+          },
+          {
+            "resourceType": "font",
+            "label": "Font",
+            "requestCount": 2,
+            "transferSize": 41962
+          },
+          {
+            "resourceType": "stylesheet",
+            "label": "Stylesheet",
+            "requestCount": 4,
+            "transferSize": 29709
+          },
+          {
+            "resourceType": "script",
+            "label": "Script",
+            "requestCount": 9,
+            "transferSize": 12221
+          },
+          {
+            "resourceType": "document",
+            "label": "Document",
+            "requestCount": 1,
+            "transferSize": 10465
+          },
+          {
+            "resourceType": "other",
+            "label": "Other",
+            "requestCount": 3,
+            "transferSize": 9519
+          },
+          {
+            "resourceType": "media",
+            "label": "Media",
+            "requestCount": 0,
+            "transferSize": 0
+          },
+          {
+            "resourceType": "third-party",
+            "label": "Third-party",
+            "requestCount": 0,
+            "transferSize": 0
+          }
+        ]
+      }
+    },
+    "largest-contentful-paint": {
+      "id": "largest-contentful-paint",
+      "score": 0.98,
+      "numericValue": 1830.0932000000003
+    },
+    "cumulative-layout-shift": {
+      "id": "cumulative-layout-shift",
+      "score": 1,
+      "numericValue": 0,
+      "details": {
+        "type": "debugdata",
+        "items": [
+          {
+            "cumulativeLayoutShiftMainFrame": 0,
+            "newEngineResult": {
+              "cumulativeLayoutShift": 0,
+              "cumulativeLayoutShiftMainFrame": 0
+            },
+            "newEngineResultDiffered": false
+          }
+        ]
+      }
+    },
+    "total-blocking-time": {
+      "id": "total-blocking-time",
+      "score": 1,
+      "numericValue": 0
+    },
+    "render-blocking-insight": {
+      "id": "render-blocking-insight",
+      "score": 0,
+      "details": {
+        "type": "table",
+        "headings": [
+          {
+            "key": "url",
+            "valueType": "url",
+            "label": "URL"
+          },
+          {
+            "key": "totalBytes",
+            "valueType": "bytes",
+            "label": "Transfer Size"
+          },
+          {
+            "key": "wastedMs",
+            "valueType": "timespanMs",
+            "label": "Duration"
+          }
+        ],
+        "items": [
+          {
+            "url": "http://127.0.0.1:3000/theme-init.js",
+            "totalBytes": 1046,
+            "wastedMs": 308
+          },
+          {
+            "url": "http://127.0.0.1:3000/_astro/BaseLayout.D6eTMN56.css",
+            "totalBytes": 24452,
+            "wastedMs": 758
+          },
+          {
+            "url": "http://127.0.0.1:3000/_astro/ProofFirstEmptyState.D43kTmRK.css",
+            "totalBytes": 1192,
+            "wastedMs": 308
+          },
+          {
+            "url": "http://127.0.0.1:3000/_astro/HomeNextSteps.BtfO0ZTV.css",
+            "totalBytes": 3014,
+            "wastedMs": 308
+          },
+          {
+            "url": "http://127.0.0.1:3000/_astro/HorizonSeam.CT1huIoj.css",
+            "totalBytes": 1051,
+            "wastedMs": 308
+          }
+        ]
+      }
+    }
+  }
+}
