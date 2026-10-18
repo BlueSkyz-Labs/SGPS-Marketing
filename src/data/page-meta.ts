@@ -6,8 +6,9 @@ import type { Language } from "../lib/i18n.ts";
  * ` | BlueSkyz Labs` (single separator, brand last) unless the descriptor
  * already names the brand (home). Every sentence restates what the page or the
  * product registry already says; nothing here is a new product fact, and
- * "in development" stays in every product description so previews never imply
- * availability.
+ * every product description states that product's current stage ("in
+ * development", or "in preview" once its web app is open) so a description
+ * never implies more availability than the registry records.
  */
 export interface PageMeta {
   title: string;
@@ -30,9 +31,9 @@ export type StaticPageKey =
 export const PAGE_META: Record<Language, Record<StaticPageKey, PageMeta>> = {
   vi: {
     home: {
-      title: "BlueSkyz Labs | Sổ Trọ và Sổ Tâm, đang phát triển",
+      title: "BlueSkyz Labs | Sổ Trọ xem trước, Sổ Tâm đang phát triển",
       description:
-        "BlueSkyz Labs đang xây dựng Sổ Trọ, sổ tay điện tử cho chủ trọ ở Việt Nam, và Sổ Tâm, cuốn nhật ký riêng tư ưu tiên lưu trên máy. Cả hai đang phát triển.",
+        "BlueSkyz Labs đang xây dựng Sổ Trọ, sổ tay điện tử cho chủ trọ ở Việt Nam, đang mở bản xem trước, và Sổ Tâm, nhật ký riêng tư lưu trên máy, đang phát triển.",
     },
     about: {
       title: "Về BlueSkyz",
@@ -55,9 +56,9 @@ export const PAGE_META: Record<Language, Record<StaticPageKey, PageMeta>> = {
         "Cách nhận trợ giúp cho Sổ Trọ và Sổ Tâm. Hiện chưa có hộp thư hỗ trợ chung; kênh báo cáo bảo mật riêng tư chỉ dành cho lỗ hổng bảo mật.",
     },
     products: {
-      title: "Sản phẩm: Sổ Trọ và Sổ Tâm, đang phát triển",
+      title: "Sản phẩm: Sổ Trọ xem trước và Sổ Tâm",
       description:
-        "Xem Sổ Trọ và Sổ Tâm giúp bạn được gì: sổ ghi tiền phòng, điện nước cho chủ trọ ở Việt Nam và nhật ký riêng tư ưu tiên lưu trên máy. Cả hai đang phát triển.",
+        "Xem Sổ Trọ và Sổ Tâm giúp bạn được gì: sổ thu tiền phòng cho chủ trọ Việt Nam, đang mở bản xem trước, và nhật ký riêng tư lưu trên máy, đang phát triển.",
     },
     verify: {
       title: "Kiểm chứng: tự đối chiếu điều chúng tôi nói",
@@ -87,9 +88,9 @@ export const PAGE_META: Record<Language, Record<StaticPageKey, PageMeta>> = {
   },
   en: {
     home: {
-      title: "BlueSkyz Labs | Sổ Trọ and Sổ Tâm, in development",
+      title: "BlueSkyz Labs | Sổ Trọ in preview, Sổ Tâm in development",
       description:
-        "BlueSkyz Labs is building Sổ Trọ, a digital notebook for landlords in Vietnam, and Sổ Tâm, a private local-first journal. Both are in development.",
+        "BlueSkyz Labs is building Sổ Trọ, a digital notebook for landlords in Vietnam, now in preview, and Sổ Tâm, a private local-first journal, in development.",
     },
     about: {
       title: "About us",
@@ -112,9 +113,9 @@ export const PAGE_META: Record<Language, Record<StaticPageKey, PageMeta>> = {
         "How to get help with Sổ Trọ and Sổ Tâm. No general support mailbox has been published yet; private security reporting is for vulnerabilities only.",
     },
     products: {
-      title: "Products: Sổ Trọ and Sổ Tâm, in development",
+      title: "Products: Sổ Trọ in preview and Sổ Tâm",
       description:
-        "See what Sổ Trọ and Sổ Tâm do for you: a rent and meter notebook for landlords in Vietnam, and a private local-first journal. Both are in development.",
+        "See what Sổ Trọ and Sổ Tâm do for you: a rent notebook for landlords in Vietnam, now in preview, and a private local-first journal, in development.",
     },
     verify: {
       title: "Verify our claims: trust routes and evidence",
@@ -145,9 +146,9 @@ export const PAGE_META: Record<Language, Record<StaticPageKey, PageMeta>> = {
   // zh: NOT VERIFIED (native review pending).
   zh: {
     home: {
-      title: "BlueSkyz Labs | Sổ Trọ 与 Sổ Tâm，开发中",
+      title: "BlueSkyz Labs | Sổ Trọ 预览中，Sổ Tâm 开发中",
       description:
-        "BlueSkyz Labs 正在打造两款产品：面向越南房东的电子记事本 Sổ Trọ，以及本地优先的私密日记 Sổ Tâm。两款产品均在开发中。",
+        "BlueSkyz Labs 正在打造两款产品：面向越南房东的电子记事本 Sổ Trọ，现已开放预览；本地优先的私密日记 Sổ Tâm，仍在开发中。",
     },
     about: {
       title: "关于我们",
@@ -170,9 +171,9 @@ export const PAGE_META: Record<Language, Record<StaticPageKey, PageMeta>> = {
         "如何获得 Sổ Trọ 与 Sổ Tâm 的帮助：目前尚未公布通用支持邮箱。安全漏洞请走私密报告通道，而非支持渠道。",
     },
     products: {
-      title: "产品：Sổ Trọ 与 Sổ Tâm，开发中",
+      title: "产品：Sổ Trọ 预览中，Sổ Tâm 开发中",
       description:
-        "看看 Sổ Trọ 与 Sổ Tâm 能为你做什么：为越南房东记录房租和水电的记事本，以及本地优先的私密日记。两者均在开发中。",
+        "看看 Sổ Trọ 与 Sổ Tâm 能为你做什么：为越南房东收租的记事本，现已开放预览；以及本地优先的私密日记，仍在开发中。",
     },
     verify: {
       title: "核验我们的声明：信任通道与证据",
@@ -203,9 +204,9 @@ export const PAGE_META: Record<Language, Record<StaticPageKey, PageMeta>> = {
   // zh-hant: NOT VERIFIED (native review pending).
   "zh-hant": {
     home: {
-      title: "BlueSkyz Labs | Sổ Trọ 與 Sổ Tâm，開發中",
+      title: "BlueSkyz Labs | Sổ Trọ 預覽中，Sổ Tâm 開發中",
       description:
-        "BlueSkyz Labs 正在打造兩項產品：給越南房東的數位記事本 Sổ Trọ，以及本機優先的私密日記 Sổ Tâm。兩項產品都還在開發中。",
+        "BlueSkyz Labs 正在打造兩項產品：給越南房東的數位記事本 Sổ Trọ，現已開放預覽；本機優先的私密日記 Sổ Tâm，仍在開發中。",
     },
     about: {
       title: "關於我們",
@@ -228,9 +229,9 @@ export const PAGE_META: Record<Language, Record<StaticPageKey, PageMeta>> = {
         "如何取得 Sổ Trọ 與 Sổ Tâm 的協助：目前尚未公布通用支援信箱。資安漏洞請走私密通報管道，而非支援管道。",
     },
     products: {
-      title: "產品：Sổ Trọ 與 Sổ Tâm，開發中",
+      title: "產品：Sổ Trọ 預覽中，Sổ Tâm 開發中",
       description:
-        "看看 Sổ Trọ 與 Sổ Tâm 能為你做什麼：為越南房東記錄租金和水電的記事本，以及本機優先的私密日記。兩者都在開發中。",
+        "看看 Sổ Trọ 與 Sổ Tâm 能為你做什麼：為越南房東收租的記事本，現已開放預覽；以及本機優先的私密日記，仍在開發中。",
     },
     verify: {
       title: "核驗我們的聲明：信任通道與證據",
@@ -266,22 +267,22 @@ export const PRODUCT_META: Record<string, Record<Language, PageMeta>> = {
     vi: {
       title: "Sổ Trọ – sổ tay điện tử cho chủ trọ",
       description:
-        "Sổ Trọ giúp chủ trọ nắm phòng, khoản tiền chưa thu, tiền điện nước theo chỉ số công tơ và biên nhận. Đang phát triển; ảnh chụp từ bản thử, dữ liệu mẫu.",
+        "Sổ Trọ giúp chủ trọ nắm khoản tiền chưa thu, thu và xác nhận mỗi khoản đúng một lần, có biên nhận gửi Zalo. Bản xem trước; ảnh chụp từ bản thử, dữ liệu mẫu.",
     },
     en: {
       title: "Sổ Trọ: a digital notebook for landlords",
       description:
-        "For landlords in Vietnam: see unpaid rent and today's tasks, turn meter readings into utility bills, and confirm money received. Sổ Trọ is in development.",
+        "For landlords in Vietnam: see who still owes, collect rent and confirm each payment once, with a receipt ready for Zalo. Sổ Trọ is now in preview.",
     },
     zh: {
       title: "Sổ Trọ：房东电子记事本",
       description:
-        "Sổ Trọ 是面向越南房东的电子记事本：房间、未收房租、按电表水表读数计算的费用与收据。开发中，截图来自使用示例数据的开发版本。",
+        "Sổ Trọ 是面向越南房东的电子记事本：谁还欠租、收租并只确认一次、收据可发到 Zalo。预览中，截图来自使用示例数据的测试版本。",
     },
     "zh-hant": {
       title: "Sổ Trọ：房東數位記事本",
       description:
-        "Sổ Trọ 是給越南房東的數位記事本：房間、未收租金、依電表水表度數計算的費用與收據。開發中，畫面來自使用範例資料的開發版本。",
+        "Sổ Trọ 是給越南房東的數位記事本：誰還欠租、收租並只確認一次、收據可傳到 Zalo。預覽中，畫面來自使用範例資料的測試版本。",
     },
   },
   sotam: {

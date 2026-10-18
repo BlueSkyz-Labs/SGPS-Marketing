@@ -155,19 +155,76 @@ test("Vietnamese home description does not start in English", () => {
   assert.match(description, /^BlueSkyz Labs đang xây dựng/);
 });
 
-test("product and home descriptions keep 'in development' status visible", () => {
-  const status = {
+/** Stage words per language, keyed by the registry stage of a product. */
+const STAGE = {
+  development: {
     en: /in development/i,
     vi: /đang phát triển/i,
     zh: /开发中/,
     "zh-hant": /開發中/,
-  };
+  },
+  preview: {
+    en: /in preview/i,
+    vi: /bản xem trước/i,
+    zh: /预览/,
+    "zh-hant": /預覽/,
+  },
+};
+
+/** "preview" once the registry lists the web app as open, else "development". */
+function registryStage(slug) {
+  const record = readFileSync(`src/content/products/${slug}.yaml`, "utf8");
+  const lifecycle = /^lifecycle:\s*(\S+)/m.exec(record)?.[1];
+  const availability = /^availability:\s*(\S+)/m.exec(record)?.[1];
+  const open =
+    ["beta", "active", "maintenance"].includes(lifecycle) &&
+    ["preview", "public"].includes(availability);
+  return open ? "preview" : "development";
+}
+
+/** Products whose description in `lang` does not state their registry stage. */
+function missingStage(meta, lang, stages) {
+  return Object.entries(stages)
+    .filter(([slug, stage]) => !STAGE[stage][lang].test(meta[slug]))
+    .map(([slug]) => slug);
+}
+
+test("product and home descriptions state each product's registry stage", () => {
+  const stages = Object.fromEntries(
+    Object.keys(PRODUCT_META).map((slug) => [slug, registryStage(slug)]),
+  );
   for (const lang of LANGS) {
-    assert.match(PAGE_META[lang].home.description, status[lang], lang);
-    for (const byLang of Object.values(PRODUCT_META)) {
-      assert.match(byLang[lang].description, status[lang], lang);
-    }
+    const home = PAGE_META[lang].home.description;
+    for (const stage of new Set(Object.values(stages)))
+      assert.match(home, STAGE[stage][lang], `${lang} home: ${stage}`);
+    const own = Object.fromEntries(
+      Object.entries(PRODUCT_META).map(([slug, m]) => [
+        slug,
+        m[lang].description,
+      ]),
+    );
+    assert.deepEqual(missingStage(own, lang, stages), [], lang);
   }
+});
+
+test("negative proof: a description without its product's stage is rejected", () => {
+  const stages = { sotro: "preview", sotam: "development" };
+  assert.deepEqual(
+    missingStage(
+      { sotro: "Sổ Trọ is in development.", sotam: "In development." },
+      "en",
+      stages,
+    ),
+    ["sotro"],
+  );
+  assert.deepEqual(
+    missingStage(
+      { sotro: "Bản xem trước.", sotam: "Bản xem trước." },
+      "vi",
+      stages,
+    ),
+    ["sotam"],
+  );
 });
 
 test("negative proof: out-of-band descriptions are rejected", () => {
