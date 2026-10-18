@@ -251,9 +251,9 @@ story:
     - screen: today
       fact: job-1
     - screen: utilities
-      fact: capability-1
+      fact: job-3
     - screen: collect
-      fact: capability-2
+      fact: job-2
     - screen: rooms
     - screen: candlelight
   coda: owner-collect

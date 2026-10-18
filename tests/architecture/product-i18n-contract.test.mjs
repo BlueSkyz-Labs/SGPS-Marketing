@@ -101,6 +101,7 @@ test("zh-hant Sổ Trọ copy states no claim absent from the English record (dr
       `sotro.yaml zh-hant must not contain "${banned}" (not in the English record)`,
     );
   }
-  // Positive proof: the honesty claim "nothing is sent automatically" survives.
-  assert.match(zhHant, /不會自動傳送/);
+  // Positive proof: the honesty claim survives. Preview 2026-10-15: the receipt
+  // is copied into Zalo by the landlord; nothing is sent for them.
+  assert.match(zhHant, /收據可複製到 Zalo/);
 });

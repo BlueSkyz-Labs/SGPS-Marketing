@@ -226,7 +226,7 @@ test("negative proof: inline-block word spans split the accessible name", async 
     content: ".cjk-word { display: inline-block !important; }",
   });
   const snap = await page.locator("main").ariaSnapshot();
-  expect(snap).toContain('heading "开发 中"');
+  expect(snap).toContain('heading "我们 的 产品"');
 });
 
 test("the build pass only adds word spans: markup, entities and attributes survive", () => {

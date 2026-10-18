@@ -4,6 +4,7 @@ import type { Language } from "@/lib/i18n";
 import type { ShowcaseSchema } from "@/lib/showcase-schema";
 import Container from "@/components/layout/Container.astro";
 import ButtonLink from "@/components/ui/ButtonLink.astro";
+import { webPreviewOpen } from "./product-page-copy";
 
 /**
  * GOLIVE W5 — onboarding guide built only from the product's recorded real
@@ -25,6 +26,7 @@ const COPY = {
   en: {
     back: `Back to ${product.data.name}`,
     status: "In development — steps may change before release.",
+    statusPreview: "Preview — steps may change before the full release.",
     disclosure: `Screens captured from a development build with sample data.`,
     owner: "Owner · computer",
     family: "Family · phone",
@@ -35,6 +37,8 @@ const COPY = {
   vi: {
     back: `Quay lại ${product.data.name}`,
     status: "Đang phát triển — các bước có thể thay đổi trước khi phát hành.",
+    statusPreview:
+      "Bản xem trước — các bước có thể thay đổi trước khi phát hành chính thức.",
     disclosure: `Màn hình chụp từ bản đang phát triển với dữ liệu mẫu.`,
     owner: "Chủ trọ · máy tính",
     family: "Người nhà · điện thoại",
@@ -45,6 +49,7 @@ const COPY = {
   zh: {
     back: `返回 ${product.data.name}`,
     status: "开发中——正式发布前步骤可能会有变化。",
+    statusPreview: "预览版——正式发布前步骤可能会有变化。",
     disclosure: `界面截图来自开发版本，使用示例数据。`,
     owner: "房东 · 电脑",
     family: "家人 · 手机",
@@ -55,6 +60,7 @@ const COPY = {
   "zh-hant": {
     back: `返回 ${product.data.name}`,
     status: "開發中——正式推出前步驟可能會有變化。",
+    statusPreview: "預覽版——正式推出前步驟可能會有變化。",
     disclosure: `介面截圖來自開發版本，使用範例資料。`,
     owner: "房東 · 電腦",
     family: "家人 · 手機",
@@ -73,7 +79,9 @@ const t = COPY[lang];
       {t.back}
     </a>
     <header class="mt-6 max-w-3xl">
-      <p class="guide__status">{t.status}</p>
+      <p class="guide__status">
+        {webPreviewOpen(product.data) ? t.statusPreview : t.status}
+      </p>
       <h1 class="type-d2 guide__title mt-3 text-[var(--text-primary)]">
         {guide.title[lang]}
       </h1>

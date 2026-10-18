@@ -2,7 +2,7 @@ import { expect, test, type Page } from "@playwright/test";
 
 /**
  * Aesthetic S5 (Home hierarchy + phone signature). Rendered guards:
- *  - the Home "Also in development" heading is at least one step of the
+ *  - the Home "In development" heading is at least one step of the
  *    canonical nine-step type scale smaller than the flagship heading, in every
  *    locale (the flagship heading is unchanged);
  *  - at 390 px the existing decorative horizon field renders (non-zero box,

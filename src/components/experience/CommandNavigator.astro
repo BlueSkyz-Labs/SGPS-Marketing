@@ -4,7 +4,10 @@ import { getPublicProducts } from "@/lib/products";
 import { getLanguageFromPath } from "@/lib/i18n";
 import { buildConciergeCorpus } from "@/lib/concierge-corpus";
 import { getNav } from "@/data/site";
-import { AVAILABILITY } from "@/components/product/product-page-copy";
+import {
+  AVAILABILITY,
+  webPreviewOpen,
+} from "@/components/product/product-page-copy";
 import BlueSkyzIcon from "@/components/icon/BlueSkyzIcon.astro";
 
 const lang = getLanguageFromPath(Astro.url.pathname);
@@ -91,13 +94,30 @@ const resultNone = isVi
 
 // U1 (C-01): honest recovery for the commonest intents. No price, date or link
 // is invented: the status line reuses the existing availability copy
-// ("in development" + "no store release"), and the links are the Products and
+// (per-product state + "no store release"), and the links are the Products and
 // Contact nav entries of the current locale.
 const fallbackLinks = getNav(lang).filter(
   (link) =>
     link.href === `/${lang}/products/` || link.href === `/${lang}/contact/`,
 );
-const statusLine = `${AVAILABILITY.inDevelopment[lang]}${lang === "zh" || lang === "zh-hant" ? "；" : "; "}${AVAILABILITY.noStore[lang]}`;
+// Preview 2026-10-15: once a product's web app is open as a preview, the
+// line names each product with its own state from the registry, so a "sign
+// up" search does not call an open preview "in development".
+const semi = lang === "zh" || lang === "zh-hant" ? "；" : "; ";
+const colon = AVAILABILITY.colon[lang];
+const statusLine = publicProducts.some((entry) => webPreviewOpen(entry.data))
+  ? [
+      ...publicProducts.map(
+        (entry) =>
+          `${entry.data.name}${colon}${
+            webPreviewOpen(entry.data)
+              ? AVAILABILITY.preview[lang]
+              : AVAILABILITY.inDevelopment[lang]
+          }`,
+      ),
+      `${AVAILABILITY.native[lang]}${colon}${AVAILABILITY.noStore[lang]}`,
+    ].join(semi)
+  : `${AVAILABILITY.inDevelopment[lang]}${semi}${AVAILABILITY.noStore[lang]}`;
 const STATUS_INTENTS: Record<string, string[]> = {
   en: [
     "price",

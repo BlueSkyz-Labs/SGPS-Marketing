@@ -106,11 +106,13 @@ for (const lang of LOCALES) {
         "[data-about-composition] [data-about-product]",
       );
       await expect(products).toHaveCount(2);
-      await expect(
-        page.locator(
-          "[data-about-composition] [data-product-status='In development']",
-        ),
-      ).toHaveCount(2);
+      // Preview 2026-10-15: Sổ Trọ is in preview, Sổ Tâm in development.
+      for (const status of ["Preview", "In development"])
+        await expect(
+          page.locator(
+            `[data-about-composition] [data-product-status='${status}']`,
+          ),
+        ).toHaveCount(1);
     });
 
     test("product without captures shows no artwork, no device frame, status once", async ({
