@@ -211,7 +211,12 @@ test("negative proof: changing any mirrored claim is detected", () => {
       "publicLabel: Preview",
       "publicLabel: Available",
     ),
-    "jobs (en)": record.replace("what needs doing today", "what needs doing"),
+    // Anchored to the jobs list item: shortDescription repeats this phrase,
+    // and a bare replace() would mutate that field instead.
+    "jobs (en)": record.replace(
+      /^(\s+- See at a glance who still owes rent this month and what needs doing) today$/m,
+      "$1",
+    ),
     "jobs (vi)": record.replace("hôm nay cần làm gì", "hôm nay"),
     "capabilities (en)": record.replace(
       "a receipt to copy into Zalo",
