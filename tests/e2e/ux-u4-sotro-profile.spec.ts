@@ -25,6 +25,13 @@ const MAIN_HEIGHT: Record<"d1440" | "m390", Record<Lang, number>> = {
   d1440: { en: 6731, vi: 6825, zh: 6728, "zh-hant": 6728 },
   m390: { en: 7351, vi: 7416, zh: 7080, "zh-hant": 7105 },
 };
+// The [data-app-access] box (height + top margin) inside MAIN_HEIGHT, measured
+// at 441bb03; it was the same in every locale. Lifecycle status copy lives
+// there, outside the chapters, so both sides of the comparison drop it.
+const MAIN_ACCESS: Record<"d1440" | "m390", number> = {
+  d1440: 42.75,
+  m390: 65.5,
+};
 
 export const inFirstViewport = (bottom: number, viewportHeight: number) =>
   bottom > 0 && bottom <= viewportHeight;
@@ -191,10 +198,14 @@ for (const lang of LANGS) {
       await page.waitForTimeout(300);
       // MAIN_HEIGHT predates the Owner-approved U10 interim note, which adds
       // content outside the chapters; exclude its box so this guard keeps
-      // measuring the chapter layout only.
+      // measuring the chapter layout only. The app-access status line is
+      // likewise lifecycle copy (Preview wraps it to two lines at 390px), so
+      // it is excluded here and from the baseline via MAIN_ACCESS.
       const height = await page.evaluate(() => {
-        const note = [
-          ...document.querySelectorAll<HTMLElement>("[data-interim-note]"),
+        const excluded = [
+          ...document.querySelectorAll<HTMLElement>(
+            "[data-interim-note], [data-app-access]",
+          ),
         ].reduce(
           (sum, el) =>
             sum +
@@ -202,9 +213,9 @@ for (const lang of LANGS) {
             parseFloat(getComputedStyle(el).marginTop),
           0,
         );
-        return document.documentElement.scrollHeight - note;
+        return document.documentElement.scrollHeight - excluded;
       });
-      const before = MAIN_HEIGHT[name][lang];
+      const before = MAIN_HEIGHT[name][lang] - MAIN_ACCESS[name];
       // Wide: tighter chapters save about 7% in the static layout (8% with
       // the sticky stage, below); phones are already one phone per chapter,
       // so they must simply not grow.
