@@ -89,3 +89,68 @@ const labels = LABELS[lang];
     </ul>
   </article>
 )}
+
+<style is:global>
+  /* ---- C4-B G9 — Craft provenance story ---- */
+
+  .c4-craft {
+    margin-block-start: var(--space-10);
+    padding-block-start: var(--space-8);
+    border-top: 1px solid var(--c4-hairline);
+    max-width: var(--container-reading);
+  }
+
+  .c4-craft__sections {
+    display: grid;
+    gap: var(--space-8);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .c4-craft__heading {
+    margin: 0 0 var(--space-2);
+    font-size: var(--size-6);
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    line-height: 1.25;
+    color: var(--text-primary);
+  }
+
+  .c4-craft__sections + .c4-craft__heading {
+    margin-block-start: var(--space-8);
+  }
+
+  .c4-craft__text {
+    font-size: var(--c4-type-reading);
+    /* Sits on the theme-following page surface, so it must use the theme-aware
+       token: porcelain-on-porcelain in light mode was invisible (1:1). */
+    color: var(--text-secondary);
+  }
+
+  .c4-craft__evidence {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .c4-craft__evidence-link {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .c4-craft__evidence-link:hover {
+    text-decoration: underline;
+    text-underline-offset: 0.25em;
+  }
+
+  @media print {
+    .c4-craft__evidence-link {
+      min-height: 0;
+      text-decoration: underline;
+    }
+  }
+</style>

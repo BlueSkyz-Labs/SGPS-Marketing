@@ -68,3 +68,65 @@ const labels = LABELS[lang];
     </div>
   </section>
 ) : null}
+
+<style is:global>
+  .bilingual-mirror__title {
+    font-size: var(--size-4);
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    color: var(--text-primary);
+  }
+  .bilingual-mirror__note {
+    margin-top: 0.5rem;
+    color: var(--text-muted);
+    font-size: var(--size-2);
+    line-height: 1.6;
+  }
+  .bilingual-mirror__pairs {
+    margin-top: 1.25rem;
+    display: grid;
+    gap: 1rem;
+  }
+  .bilingual-mirror__pair {
+    display: grid;
+    gap: 0.75rem;
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-card, 0.75rem);
+    padding: 1rem 1.25rem;
+    background: var(--surface-subtle);
+  }
+  @media (min-width: 768px) {
+    .bilingual-mirror__pair {
+      /* minmax(0, 1fr): a bare `1fr` track refuses to shrink below its content's
+         min-content, so a long tag or word widened the pair and pushed the
+         document sideways at 200% text. */
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: 1.25rem;
+    }
+  }
+  .bilingual-mirror__cell {
+    min-width: 0;
+  }
+  .bilingual-mirror__tag {
+    display: inline-block;
+    font-size: var(--size-1);
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    /* The tag is an inline-block label; at 200% text it can be wider than a
+       narrow cell, so it must be allowed to break rather than overflow. */
+    overflow-wrap: anywhere;
+  }
+
+  /* Vietnamese: sentence case (cross-subset kerning, see .eyebrow). */
+  :lang(vi) .bilingual-mirror__tag {
+    text-transform: none;
+    letter-spacing: var(--tracking-eyebrow, 0.03em);
+  }
+  .bilingual-mirror__cell p {
+    margin-top: 0.375rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+</style>
