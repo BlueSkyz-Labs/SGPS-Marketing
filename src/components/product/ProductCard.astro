@@ -18,9 +18,23 @@ interface Props {
   emphasis?: "default" | "hero";
   /** Products index only: real capture (when one exists) or icon composition. */
   showThumb?: boolean;
+  /** Products index cards in the first row: their thumbnails can start in the
+   *  first viewport, so they load eagerly instead of waiting for lazy-load. */
+  eager?: boolean;
+  /** First card only: its thumbnail is the LCP image, fetched at high priority. */
+  priority?: boolean;
 }
 
-const { product, lang, emphasis = "default", showThumb = false } = Astro.props;
+const {
+  product,
+  lang,
+  emphasis = "default",
+  showThumb = false,
+  eager = false,
+  priority = false,
+} = Astro.props;
+const thumbLoading = eager || priority ? "eager" : "lazy";
+const thumbFetchPriority = priority ? "high" : undefined;
 const { data } = product;
 const profileHref = getProductProfilePath(lang, data.slug);
 const copy = productCopy(data, lang);
@@ -76,7 +90,8 @@ const ctaIsExternal = cta.external || /^https?:\/\//i.test(cta.href);
             height={capture.height}
             alt=""
             class="product-thumb__capture"
-            loading="lazy"
+            loading={thumbLoading}
+            fetchpriority={thumbFetchPriority}
             decoding="async"
           />
         ) : (
@@ -86,7 +101,8 @@ const ctaIsExternal = cta.external || /^https?:\/\//i.test(cta.href);
             height="112"
             alt=""
             class="product-thumb__icon"
-            loading="lazy"
+            loading={thumbLoading}
+            fetchpriority={thumbFetchPriority}
             decoding="async"
           />
         )}
