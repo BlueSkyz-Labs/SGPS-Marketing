@@ -14,7 +14,8 @@ test("support empty state offers contact and security recourse", () => {
   assert.match(support, /href="\/en\/security\/"/);
   assert.match(support, /SITE\.supportEmail/);
   assert.match(support, /hasSupportEmail/);
-  assert.match(support, /min-h-11/);
+  // Owner 2026-10-18 (audit A-02): a published mailbox is the primary action.
+  assert.match(support, /href=\{`mailto:\$\{SITE\.supportEmail\}`\}/);
   assert.match(support, /<ButtonLink\s+href="\/en\/contact\/"/);
 
   const rootStub = readFileSync("src/pages/support.astro", "utf8");

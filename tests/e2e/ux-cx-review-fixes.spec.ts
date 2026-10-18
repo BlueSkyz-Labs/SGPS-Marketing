@@ -86,16 +86,19 @@ for (const lang of LANGS) {
   });
 }
 
-test("negative proof (F2): a repeated Contact link on /support is caught", async ({
+test("negative proof (F2): a repeated primary link on /support is caught", async ({
   page,
 }) => {
   await page.goto("/en/support/");
-  await page.evaluate(() => {
+  // Duplicate whatever the primary action is (the mailbox, or Contact).
+  const href = await page.evaluate(() => {
+    const primary = document.querySelector("[data-support-primary]")!;
     const a = document.createElement("a");
-    a.href = "/en/contact/";
+    a.href = primary.getAttribute("href")!;
     document.querySelector("main")!.append(a);
+    return a.getAttribute("href");
   });
-  expect(await repeatedHrefs(page)).toEqual(["/en/contact/"]);
+  expect(await repeatedHrefs(page)).toEqual([href]);
 });
 
 test("F5: the Reviewed label and its date are separated; negative proof", async ({

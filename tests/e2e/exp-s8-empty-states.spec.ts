@@ -52,8 +52,20 @@ for (const lang of LOCALES) {
         budget(lang, 100),
       );
       const publishedEmails = text.match(new RegExp(EMAIL.source, "g")) ?? [];
-      expect(publishedEmails).toHaveLength(1);
+      // The business mailbox comes first; the published product-support
+      // mailbox (Owner 2026-10-18, A-02) may follow as a labelled secondary row.
+      const supportRow = main.locator('[data-public-email-role="support"]');
+      const hasSupport = (await supportRow.count()) > 0;
+      expect(publishedEmails).toHaveLength(hasSupport ? 2 : 1);
       expect(publishedEmails[0]).toMatch(/^(?:hello|tony)@blueskyzlabs\.com$/);
+      if (hasSupport) {
+        expect(publishedEmails[1]).toBe("support@blueskyzlabs.com");
+        await expect(supportRow.locator("a")).toHaveAttribute(
+          "href",
+          "mailto:support@blueskyzlabs.com",
+        );
+        await expect(supportRow.locator(".btn--primary")).toHaveCount(0);
+      }
       expect(text).not.toMatch(PHONE);
       const businessEmail = main.locator(
         '[data-public-email-role="contact"] a',
@@ -64,10 +76,12 @@ for (const lang of LOCALES) {
         /^mailto:(?:hello|tony)@blueskyzlabs\.com$/,
       );
       await expect(businessEmail).toHaveText(publishedEmails[0]);
-      await expect(main.locator('a[href^="mailto:"]')).toHaveCount(1);
+      await expect(main.locator('a[href^="mailto:"]')).toHaveCount(
+        hasSupport ? 2 : 1,
+      );
       await expect(
         main.locator(
-          '[data-public-email-role="support"], [data-public-email-role="privacy"], [data-public-email-role="security"]',
+          '[data-public-email-role="privacy"], [data-public-email-role="security"]',
         ),
       ).toHaveCount(0);
       await expect(page.locator('main a[href^="tel:"]')).toHaveCount(0);

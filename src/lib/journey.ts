@@ -99,31 +99,16 @@ export function getJourneyActions(
 
 /**
  * CX4 (audit M1): Home keeps no journey bar (`"": []`, one primary action);
- * its closing row is a separate, quiet About + Contact pair that reuses the
- * labels already approved for the other routes' Next steps rows.
+ * its closing row is a separate, quiet row that reuses the labels already
+ * approved for the other routes' Next steps rows. Audit A-06 (Owner
+ * 2026-10-18): Verify leads it, so a visitor weighing trust has a proof route
+ * above the footer.
  */
-const HOME_CLOSE_SEGMENTS = ["about", "contact"] as const;
+const HOME_CLOSE_SEGMENTS = ["verify", "about", "contact"] as const;
 
 export function getHomeCloseActions(lang: Language): JourneyAction[] {
   const allSteps = Object.values(JOURNEY).flat();
   return HOME_CLOSE_SEGMENTS.flatMap((segment) => {
-    const step = allSteps.find((candidate) => candidate.segment === segment);
-    return step
-      ? [{ href: `/${lang}/${segment}/`, label: step.label[lang] }]
-      : [];
-  });
-}
-
-/**
- * UX-U5 (P1-7): in-page next steps for a product profile that has no real
- * screens yet. Same approved labels and existing routes as the other Next steps
- * rows (Product status, Verify, Contact); no new copy.
- */
-const PROFILE_NEXT_SEGMENTS = ["products", "verify", "contact"] as const;
-
-export function getProfileNextActions(lang: Language): JourneyAction[] {
-  const allSteps = Object.values(JOURNEY).flat();
-  return PROFILE_NEXT_SEGMENTS.flatMap((segment) => {
     const step = allSteps.find((candidate) => candidate.segment === segment);
     return step
       ? [{ href: `/${lang}/${segment}/`, label: step.label[lang] }]

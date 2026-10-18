@@ -3,7 +3,9 @@ import { expect, test, type Locator, type Page } from "@playwright/test";
 /**
  * UX-U5 (P1-7): Sổ Tâm is no longer under-served. Home carries a tap-sized
  * secondary entry for it (not only the inline link in the product line), and its
- * profile has an early next-steps row and no redundant endorsed lockup.
+ * profile has no redundant endorsed lockup. Owner 2026-10-18 (A-01): the early
+ * next-steps row is gone; the closing journey bar makes Contact the one
+ * primary action while the product has no screens to show.
  */
 const LOCALES = ["en", "vi", "zh", "zh-hant"] as const;
 
@@ -21,8 +23,11 @@ async function isTapEntry(link: Locator): Promise<boolean> {
   });
 }
 
-async function nextStepLinks(nav: Locator): Promise<number> {
-  return nav.locator("a[href]").count();
+/** hrefs of the journey bar's primary buttons. */
+async function journeyPrimaries(page: Page): Promise<(string | null)[]> {
+  return page
+    .locator("nav[data-journey-bar] a.btn--primary")
+    .evaluateAll((els) => els.map((el) => el.getAttribute("href")));
 }
 
 for (const lang of LOCALES) {
@@ -47,16 +52,12 @@ for (const lang of LOCALES) {
       expect(await isTapEntry(inline)).toBe(false);
     });
 
-    test("profile: next steps row, no redundant lockup", async ({ page }) => {
+    test("profile: Contact is the one primary step, no early row or lockup", async ({
+      page,
+    }) => {
       await page.goto(`/${lang}/products/sotam/`);
-      const nav = page.locator("main nav[data-profile-next-steps]");
-      await expect(nav).toBeVisible();
-      expect(await nextStepLinks(nav)).toBeGreaterThanOrEqual(2);
-      for (const segment of ["products", "verify", "contact"]) {
-        await expect(nav.locator(`a[href="/${lang}/${segment}/"]`)).toHaveCount(
-          1,
-        );
-      }
+      await expect(page.locator("[data-profile-next-steps]")).toHaveCount(0);
+      expect(await journeyPrimaries(page)).toEqual([`/${lang}/contact/`]);
       await expect(page.locator("h1")).toHaveCount(1);
       await expect(page.locator(".profile-lockup")).toHaveCount(0);
       // Landmark names stay unique next to the closing journey bar.
@@ -78,9 +79,10 @@ test("negative proofs: the guards detect the old shapes", async ({
     `<p>In development: <a id="a" href="/x/">Sổ Tâm</a>, a journal.</p>`,
   );
   expect(await isTapEntry(page.locator("#a"))).toBe(false);
-  // A next-steps nav with a single link fails the >= 2 rule.
-  await page.setContent(`<nav id="n"><a href="/en/contact/">Contact</a></nav>`);
-  expect(await nextStepLinks(page.locator("#n"))).toBeLessThan(2);
+  // Sổ Trọ shows real screens, so its journey bar keeps no Contact primary:
+  // the primary check is driven by the profile, not true everywhere.
+  await page.goto("/en/products/sotro/");
+  expect(await journeyPrimaries(page)).not.toContain("/en/contact/");
   // Sổ Trọ keeps its endorsed lockup (it has real screens), proving the lockup
   // check measures something and that only the identity-art profile drops it.
   await page.goto("/en/products/sotro/");

@@ -1,7 +1,7 @@
 import { expect, test, type Page } from "@playwright/test";
 
 // Experience v6 S6 — one container/edge contract for the shell and sections,
-// and a desktop header that stays within six visible controls.
+// and a desktop header that stays within seven visible controls (Owner 2026-10-18, A-03).
 
 const ROUTES = ["/en/", "/en/products/", "/en/about/", "/en/security/"];
 const VIEWPORTS = [
@@ -68,7 +68,7 @@ test("negative proof: offsetting one container edge turns the contract RED", asy
   expect(spread(edges)).toBeGreaterThan(1);
 });
 
-test("desktop header shows at most six visible controls and a CTA distinct from Products", async ({
+test("desktop header shows at most seven visible controls and a CTA distinct from Products", async ({
   page,
 }) => {
   await page.setViewportSize(VIEWPORTS[0]);
@@ -85,7 +85,9 @@ test("desktop header shows at most six visible controls and a CTA distinct from 
         element.tagName,
     ),
   );
-  expect(names.length, names.join(" | ")).toBeLessThanOrEqual(6);
+  // Owner 2026-10-18 (audit A-03): Contact joins About in the desktop nav,
+  // so the cap moves from six to seven controls.
+  expect(names.length, names.join(" | ")).toBeLessThanOrEqual(7);
   expect(names.join(" ")).not.toContain("Explore products");
 
   const products = page.locator('header nav a[href="/en/products/"]:visible');

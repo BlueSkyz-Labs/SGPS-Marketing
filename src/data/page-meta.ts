@@ -1,4 +1,8 @@
 import type { Language } from "../lib/i18n.ts";
+import { SITE } from "./site.ts";
+
+// Support descriptions follow the published support mailbox, like the page.
+const hasSupportEmail = Boolean(SITE.supportEmail);
 
 /**
  * Search/social metadata for the pages whose copy is owned here (Copy/SEO
@@ -52,8 +56,9 @@ export const PAGE_META: Record<Language, Record<StaticPageKey, PageMeta>> = {
     },
     support: {
       title: "Hỗ trợ: cách được trợ giúp",
-      description:
-        "Cách nhận trợ giúp cho Sổ Trọ và Sổ Tâm. Hiện chưa có hộp thư hỗ trợ chung; kênh báo cáo bảo mật riêng tư chỉ dành cho lỗ hổng bảo mật.",
+      description: hasSupportEmail
+        ? "Cách nhận trợ giúp cho Sổ Trọ và Sổ Tâm: gửi email đến hộp thư hỗ trợ. Kênh báo cáo bảo mật riêng tư chỉ dành cho lỗ hổng bảo mật."
+        : "Cách nhận trợ giúp cho Sổ Trọ và Sổ Tâm. Hiện chưa có hộp thư hỗ trợ chung; kênh báo cáo bảo mật riêng tư chỉ dành cho lỗ hổng bảo mật.",
     },
     products: {
       title: "Sản phẩm: Sổ Trọ xem trước và Sổ Tâm",
@@ -109,8 +114,9 @@ export const PAGE_META: Record<Language, Record<StaticPageKey, PageMeta>> = {
     },
     support: {
       title: "Support: how to get help",
-      description:
-        "How to get help with Sổ Trọ and Sổ Tâm. No general support mailbox has been published yet; private security reporting is for vulnerabilities only.",
+      description: hasSupportEmail
+        ? "How to get help with Sổ Trọ and Sổ Tâm: email our support mailbox. Private security reporting is for vulnerabilities only."
+        : "How to get help with Sổ Trọ and Sổ Tâm. No general support mailbox has been published yet; private security reporting is for vulnerabilities only.",
     },
     products: {
       title: "Products: Sổ Trọ in preview and Sổ Tâm",
@@ -167,8 +173,9 @@ export const PAGE_META: Record<Language, Record<StaticPageKey, PageMeta>> = {
     },
     support: {
       title: "帮助与支持：如何获得帮助",
-      description:
-        "如何获得 Sổ Trọ 与 Sổ Tâm 的帮助：目前尚未公布通用支持邮箱。安全漏洞请走私密报告通道，而非支持渠道。",
+      description: hasSupportEmail
+        ? "如何获得 Sổ Trọ 与 Sổ Tâm 的帮助：请发邮件至支持邮箱。安全漏洞请走私密报告通道，而非支持渠道。"
+        : "如何获得 Sổ Trọ 与 Sổ Tâm 的帮助：目前尚未公布通用支持邮箱。安全漏洞请走私密报告通道，而非支持渠道。",
     },
     products: {
       title: "产品：Sổ Trọ 预览中，Sổ Tâm 开发中",
@@ -225,8 +232,9 @@ export const PAGE_META: Record<Language, Record<StaticPageKey, PageMeta>> = {
     },
     support: {
       title: "協助與支援：如何取得協助",
-      description:
-        "如何取得 Sổ Trọ 與 Sổ Tâm 的協助：目前尚未公布通用支援信箱。資安漏洞請走私密通報管道，而非支援管道。",
+      description: hasSupportEmail
+        ? "如何取得 Sổ Trọ 與 Sổ Tâm 的協助：請來信至支援信箱。資安漏洞請走私密通報管道，而非支援管道。"
+        : "如何取得 Sổ Trọ 與 Sổ Tâm 的協助：目前尚未公布通用支援信箱。資安漏洞請走私密通報管道，而非支援管道。",
     },
     products: {
       title: "產品：Sổ Trọ 預覽中，Sổ Tâm 開發中",

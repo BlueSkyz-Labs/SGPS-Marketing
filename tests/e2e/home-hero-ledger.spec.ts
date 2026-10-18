@@ -8,8 +8,9 @@ import { hasPublicProducts } from "./product-helpers.ts";
  * - F4: at 390 px the one primary action is inside the FIRST viewport, because
  *   the flagship name + CTA come before the capture in DOM order (not by CSS
  *   `order`), and the product-line links are plain inline links, so every line
- *   of that paragraph has the same pitch while each link stays >= 44 px tall
- *   (the project target standard; padding on an inline box adds no height).
+ *   of that paragraph has the same pitch. Owner 2026-10-18 (B-01): they take
+ *   the WCAG 2.5.8 inline exception (no vertical padding), and each must have
+ *   a tap-sized twin with the same destination (the hero entry chips).
  * - W1: the desktop mark is not hidden behind the capture (most of it reads),
  *   and the capture keeps its reserved ratio under the 3D tilt.
  * - W3 (retired 2026-10-12): the home ledger and its band were removed; the
@@ -70,6 +71,13 @@ async function productLine(page: Page) {
     const links = [...line.querySelectorAll("a")].map((a) => ({
       display: getComputedStyle(a).display,
       height: a.getBoundingClientRect().height,
+      // B-01: a tap-sized (>= 44 px) twin with the same destination.
+      twin: [...document.querySelectorAll("a[href]")].some((b) => {
+        if (b === a || b.getAttribute("href") !== a.getAttribute("href"))
+          return false;
+        const r = b.getBoundingClientRect();
+        return r.width >= 44 && r.height >= 44;
+      }),
     }));
     const lineHeight = Number.parseFloat(getComputedStyle(line).lineHeight);
     return { gaps, links, lineHeight };
@@ -92,7 +100,7 @@ for (const lang of LOCALES) {
 }
 
 for (const lang of ["en", "vi"] as const) {
-  test(`/${lang}/ at 390: product-line links are inline, >= 44 px tall, line pitch = line-height`, async ({
+  test(`/${lang}/ at 390: product-line links are inline with a tap-sized twin, line pitch = line-height`, async ({
     page,
   }) => {
     test.skip(!hasPublicProducts, "No published hero product is available");
@@ -102,7 +110,7 @@ for (const lang of ["en", "vi"] as const) {
     expect(links).toHaveLength(2);
     for (const link of links) {
       expect(link.display).toBe("inline");
-      expect(link.height).toBeGreaterThanOrEqual(44);
+      expect(link.twin, "a >= 44 px target reaches the same page").toBe(true);
     }
     expect(gaps.length, "the line wraps at 390").toBeGreaterThan(0);
     // Every line advances by the paragraph's own line-height: no link box

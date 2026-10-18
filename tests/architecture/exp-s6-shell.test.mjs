@@ -48,10 +48,10 @@ test("dark is composed: band token in every dark block and a distinct hero stage
   assert.doesNotMatch(atmosphere, /linear-gradient\(\s*90deg/);
 });
 
-test("header: one Products CTA, About as the plain link, compact theme trigger", () => {
-  // Owner decision 2026-10-01 (v7 A-12).
+test("header: one Products CTA, About and Contact as plain links, compact theme trigger", () => {
+  // Owner decision 2026-10-01 (v7 A-12); Contact added 2026-10-18 (audit A-03).
   assert.match(header, /const primaryCta = NAV\[0\]!;/);
-  assert.match(header, /const primaryLink = NAV\[1\]!;/);
+  assert.match(header, /const plainLinks = NAV\.slice\(1\);/);
   assert.doesNotMatch(header, /emptyRegistryPrimaryCta/);
   assert.doesNotMatch(header, /exploreProducts/);
   // SGPS-DEC-2026-037 HC-7: one icon in the header and the compact menu.
