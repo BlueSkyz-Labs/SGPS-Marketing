@@ -52,4 +52,4 @@ Browser shards of Source Assurance runs `39108039423` (`7232842`) and `391056265
 | #523 P0 verification   | Open — partial               | Source PASS; runtime crawlability/canonical/JSON-LD/no-leak PASS above. Remaining: mailbox round trip, Search Console, served revision.     |
 | #522 DEC-038           | Open — MAPPED                | `docs/sgps/adoption/SGPS_DEC_2026_038_EMAIL_IDENTITY.md`; five rules BLOCKED on tenant evidence.                                            |
 | #451 DEC-028           | Open — residual              | Lab gate ADOPTED; field CWV needs the beacon, which is absent from production today.                                                        |
-| #290 Test Intelligence | Open — executable            | Canonical `skills/test-audit/SKILL.md` exists in sgps-core; local mapping not yet written.                                                  |
+| #290 Test Intelligence | Open — executable            | MAPPED in `docs/sgps/adoption/SGPS_TEST_INTELLIGENCE.md` with a `/support` AUDIT ledger; the canonical skill is still a Candidate.          |
