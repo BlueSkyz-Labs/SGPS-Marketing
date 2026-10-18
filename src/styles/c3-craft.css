@@ -78,6 +78,14 @@ header[data-scene="ink"] {
   --c3-header-block-padding: 0.5rem;
 }
 
+/* Always-ink surfaces outside the header: the footer, the home hero and the
+   phone back-to-top strip. The light-theme ring is about 2.8:1 on ink, under
+   WCAG 1.4.11, so their focused links take the ink header scene's ring.
+   Buttons are left out: .btn already rings on its own porcelain halo. */
+:is(.site-footer, .hero-plane--ink, .back-to-top-nav) :focus-visible:not(.btn) {
+  outline-color: color-mix(in srgb, var(--brand-cobalt) 62%, white);
+}
+
 header[data-scene="product"] {
   /* Product scenes keep the porcelain surface and mark the boundary with the
      brand accent rather than a second surface colour. */
