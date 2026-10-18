@@ -206,26 +206,26 @@ test("negative proof: changing any mirrored claim is detected", () => {
       "availability: preview",
       "availability: public",
     ),
-    lifecycle: record.replace("lifecycle: development", "lifecycle: released"),
+    lifecycle: record.replace("lifecycle: beta", "lifecycle: active"),
     publicLabel: record.replace(
-      "publicLabel: In development",
+      "publicLabel: Preview",
       "publicLabel: Available",
     ),
+    // Anchored to the jobs list item: shortDescription repeats this phrase,
+    // and a bare replace() would mutate that field instead.
     "jobs (en)": record.replace(
-      "what needs attention today",
-      "what needs attention",
+      /^(\s+- See at a glance who still owes rent this month and what needs doing) today$/m,
+      "$1",
     ),
-    // Anchored to the jobs list item: the vi shortDescription repeats this
-    // line, and a bare replace() would mutate that field instead.
-    "jobs (vi)": record.replace(
-      /^(\s+- "Xem tháng này còn ai chưa đóng tiền và )hôm nay cần lo việc gì"$/m,
-      '$1hôm nay"',
-    ),
+    "jobs (vi)": record.replace("hôm nay cần làm gì", "hôm nay"),
     "capabilities (en)": record.replace(
-      "nothing is sent automatically",
-      "we open Zalo for you",
+      "a receipt to copy into Zalo",
+      "a receipt we send to Zalo for you",
     ),
-    "capabilities (vi)": record.replace("không tự động gửi", "tự động gửi"),
+    "capabilities (vi)": record.replace(
+      "biên nhận sao chép gửi qua Zalo",
+      "biên nhận tự động gửi qua Zalo",
+    ),
     "appAccess.signInUrl": record.replace(
       "sotro.blueskyzlabs.com/login",
       "sotro.blueskyzlabs.com/signup",
@@ -274,7 +274,7 @@ test("negative proof: price text, a pricing key or a support email is rejected",
   );
   assert.deepEqual(driftViolations(withText, profile, readme), []);
   const pricedCapability = record.replace(
-    "nothing is sent automatically",
+    "a receipt to copy into Zalo",
     "from 99,000 VND per month",
   );
   assert.ok(

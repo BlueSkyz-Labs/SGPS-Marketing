@@ -115,9 +115,11 @@ export function resolveLifecycleCta(
       : "learn";
 
   let label = lifecycleCtaVerbLabel(verb, lang);
-  // For view-development-status, append the product name if provided
-  if (verb === "view-development-status" && input.productName) {
-    label = `${label} ${input.productName}`;
+  // A named card that leads to the product's own page reads "See <name>"
+  // whether the product is in development or in preview (2026-10-15): the
+  // verb in `data-product-cta` still tells the two apart.
+  if (verb !== "try" && input.productName) {
+    label = `${lifecycleCtaVerbLabel("view-development-status", lang)} ${input.productName}`;
   }
 
   return {

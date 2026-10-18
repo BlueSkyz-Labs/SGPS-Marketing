@@ -7,6 +7,11 @@ const SIGN_IN: Record<string, string> = {
   sotam: "https://sotam.blueskyzlabs.com/auth/login",
 };
 const HIDDEN = ["apexagent", "fluentarc", "vungtaylai"];
+// Preview 2026-10-15: Sổ Trọ's web app is open as a preview; Sổ Tâm is not.
+const WEB_LINE: Record<string, [string, string]> = {
+  sotro: ["preview", "Web: bản xem trước đã mở, số chỗ có hạn"],
+  sotam: ["in-development", "Web: đang phát triển"],
+};
 
 test.describe("app access", () => {
   for (const slug of PUBLISHED) {
@@ -21,7 +26,12 @@ test.describe("app access", () => {
       await expect(block).toContainText(
         "Android và iOS: đang phát triển, chưa có bản trên cửa hàng ứng dụng",
       );
-      await expect(block).toContainText("Web: đang phát triển");
+      const [state, line] = WEB_LINE[slug]!;
+      await expect(block).toContainText(line);
+      await expect(block.locator("[data-web-state]")).toHaveAttribute(
+        "data-web-state",
+        state,
+      );
       await expect(block.locator("a")).toHaveCount(0);
       await expect(block.locator("[data-mobile-app]")).toHaveCount(0);
       await expect(
