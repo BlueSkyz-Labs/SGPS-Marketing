@@ -12,7 +12,7 @@ import {
   resolveLifecycleCta,
 } from "@/lib/lifecycle-cta";
 import { HOME_ONE_LINER } from "@/data/home-copy";
-import ProductCard from "./ProductCard.astro";
+import type ProductCardComponent from "./ProductCard.astro";
 import ProofFirstEmptyState from "./ProofFirstEmptyState.astro";
 
 /**
@@ -30,9 +30,11 @@ interface Props {
   mode?: "house" | "continuation";
   /** Experience v6 S1: heading + cards only (no body line, no index button). */
   compact?: boolean;
+  /** Required unless `compact`: the ProductCard component, injected by the caller. */
+  card?: typeof ProductCardComponent;
 }
 
-const { products, lang, mode = "house", compact = false } = Astro.props;
+const { products, lang, mode = "house", compact = false, card } = Astro.props;
 
 const flagship = products.find(
   (product) => product.data.featuredTier === "hero",
@@ -87,6 +89,18 @@ const rows = (compact && isContinuation ? visibleProducts : []).map(
     };
   },
 );
+
+// CSS diet (D-06): ProductCard carries its own scoped stylesheet and Astro
+// bundles CSS per static or dynamic import, rendered or not. The compact home
+// continuation renders `rows` and never mounts a card, so the card component is
+// injected by the callers that do render cards instead of being imported here.
+// A type-only import is erased at build time and ships no CSS.
+const ProductCard = card as typeof ProductCardComponent;
+if (!compact && products.length > 0 && !card) {
+  throw new Error(
+    "ProductHouse: pass `card={ProductCard}` unless `compact` is set.",
+  );
+}
 ---
 
 <section
