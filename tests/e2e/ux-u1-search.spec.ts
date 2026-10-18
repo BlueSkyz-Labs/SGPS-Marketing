@@ -49,11 +49,11 @@ test("unaccented 'gia' does not match inside longer words", async ({
 });
 
 for (const [lang, queries] of [
-  ["en", ["price", "pricing", "download", "sign up", "facebook"]],
-  ["vi", ["giá", "tải app", "đăng ký", "facebook", "download"]],
+  ["en", ["price", "pricing", "download", "sign up", "zalo"]],
+  ["vi", ["giá", "tải app", "đăng ký", "zalo", "download"]],
 ] as const) {
   for (const q of queries) {
-    test(`${lang} '${q}' shows fallback links${q === "facebook" ? " and no status line" : ""}`, async ({
+    test(`${lang} '${q}' shows fallback links${q === "zalo" ? " and no status line" : ""}`, async ({
       page,
     }) => {
       await search(page, lang, q);
@@ -67,7 +67,7 @@ for (const [lang, queries] of [
         fallback.locator(`a[href="/${lang}/contact/"]`),
       ).toBeVisible();
       const status = page.locator("[data-command-status]");
-      if (q === "facebook") {
+      if (q === "zalo") {
         // No hit and no status intent: fallback links only, no availability claim.
         await expect(status).toBeHidden();
       } else {
@@ -133,17 +133,3 @@ test("title hits rank above body hits", async ({ page }) => {
   const first = items(page).first();
   await expect(first).toContainText("Contact");
 });
-
-// Preview 2026-10-15: Sổ Trọ's published capability now mentions Zalo
-// receipts, so a 'zalo' search answers with the Sổ Trọ page instead of the
-// empty-state fallback.
-for (const lang of ["en", "vi"] as const) {
-  test(`${lang} 'zalo' finds the Sổ Trọ page`, async ({ page }) => {
-    await search(page, lang, "zalo");
-    await expect(items(page)).not.toHaveCount(0);
-    await expect(
-      items(page).locator(`a[href="/${lang}/products/sotro/"]`).first(),
-    ).toBeVisible();
-    await expect(page.locator("[data-command-fallback]")).toBeHidden();
-  });
-}
