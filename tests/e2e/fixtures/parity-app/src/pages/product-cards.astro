@@ -3,6 +3,7 @@
 import "@/styles/global.css";
 import "@/styles/c3-craft.css";
 import ProductHouse from "@/components/product/ProductHouse.astro";
+import ProductCard from "@/components/product/ProductCard.astro";
 import { FIXTURE_PRODUCTS } from "../data/fixture-products";
 ---
 
@@ -15,7 +16,7 @@ import { FIXTURE_PRODUCTS } from "../data/fixture-products";
   </head>
   <body>
     <main>
-      <ProductHouse products={FIXTURE_PRODUCTS} lang="en" />
+      <ProductHouse products={FIXTURE_PRODUCTS} lang="en" card={ProductCard} />
     </main>
   </body>
 </html>

@@ -40,44 +40,6 @@
   --c4-type-caption: var(--size-1);
 }
 
-/* C4-A S1 — Editorial grid roles.
- *
- * Desktop composition is deliberately asymmetric (a focal column beside a wider
- * supporting column); the phone composition is authored as a single column in
- * source order, so DOM reading order never depends on visual placement.
- */
-
-/* C4-A S2 — calibrated type role utilities (semantic element keeps its level). */
-
-/* C4-A S5 — Editorial folio: running context as real text, ordinal as ornament. */
-.c4-folio {
-  display: flex;
-  align-items: baseline;
-  gap: var(--space-3);
-  margin: 0;
-  font-size: var(--c4-type-meta);
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--text-muted);
-}
-
-/* Vietnamese: sentence case (cross-subset kerning, see .eyebrow). */
-:lang(vi) .c4-folio {
-  text-transform: none;
-  letter-spacing: var(--tracking-eyebrow, 0.03em);
-}
-
-.c4-folio__ordinal {
-  font-variant-numeric: tabular-nums;
-}
-
-.c4-folio__rule {
-  align-self: center;
-  width: var(--space-8);
-  height: 1px;
-  background: var(--c4-hairline);
-}
-
 /* C4-A S6 — signature colophon: identity, language, approved public routes. */
 .c4-colophon {
   display: flex;
@@ -106,12 +68,6 @@
 /* C4-A S8 — Quiet motion budget. The quiet-authority layer declares no
  * animation (W10 removed the unused focal entrance); a regression test pins
  * that. */
-
-@media print {
-  .c4-maison {
-    display: none;
-  }
-}
 
 /* ---- C4-B G6 — Collected editions ---- */
 
@@ -466,125 +422,6 @@
   }
 }
 
-/* ---- C4-B G1 — Maison orientation surface ---- */
-
-.c4-maison {
-  padding-block: var(--space-10);
-  border-top: 1px solid var(--c4-hairline);
-}
-
-.c4-maison__list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-4) var(--space-10);
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.c4-maison__item {
-  display: flex;
-  align-items: baseline;
-  gap: var(--space-3);
-}
-
-.c4-maison__ordinal {
-  font-size: var(--c4-type-meta);
-  font-variant-numeric: tabular-nums;
-  letter-spacing: 0.08em;
-  color: var(--text-muted);
-}
-
-.c4-maison__link {
-  display: inline-flex;
-  align-items: center;
-  min-height: 44px;
-  font-size: var(--c4-type-reading);
-  color: inherit;
-  text-decoration: none;
-}
-
-.c4-maison__link:hover {
-  text-decoration: underline;
-  text-underline-offset: 0.25em;
-}
-
-@media (max-width: 47.99rem) {
-  .c4-maison__list {
-    flex-direction: column;
-    gap: var(--space-2);
-  }
-}
-
-@media print {
-  .c4-maison {
-    display: none;
-  }
-}
-
-/* ---- C4-B G9 — Craft provenance story ---- */
-
-.c4-craft {
-  margin-block-start: var(--space-10);
-  padding-block-start: var(--space-8);
-  border-top: 1px solid var(--c4-hairline);
-  max-width: var(--container-reading);
-}
-
-.c4-craft__sections {
-  display: grid;
-  gap: var(--space-8);
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.c4-craft__heading {
-  margin: 0 0 var(--space-2);
-  font-size: var(--size-6);
-  font-weight: 600;
-  letter-spacing: -0.01em;
-  line-height: 1.25;
-  color: var(--text-primary);
-}
-
-.c4-craft__sections + .c4-craft__heading {
-  margin-block-start: var(--space-8);
-}
-
-.c4-craft__text {
-  font-size: var(--c4-type-reading);
-  /* Sits on the theme-following page surface, so it must use the theme-aware
-     token: porcelain-on-porcelain in light mode was invisible (1:1). */
-  color: var(--text-secondary);
-}
-
-.c4-craft__evidence {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.c4-craft__evidence-link {
-  display: inline-flex;
-  align-items: center;
-  min-height: 44px;
-  color: inherit;
-  text-decoration: none;
-}
-
-.c4-craft__evidence-link:hover {
-  text-decoration: underline;
-  text-underline-offset: 0.25em;
-}
-
-@media print {
-  .c4-craft__evidence-link {
-    min-height: 0;
-    text-decoration: underline;
-  }
-}
-
 /* ---- C4-C G2/G3 — Public dossier composer ---- */
 
 .c4-dossier {
@@ -769,73 +606,6 @@
   display: none;
 }
 
-/* Sources and freshness: same card grammar, one scale. */
-.c4-dossier-sources {
-  max-width: var(--container-reading);
-  margin-block-start: var(--space-10);
-  padding-block-start: var(--space-8);
-  border-top: 1px solid var(--c4-hairline);
-}
-
-.c4-dossier-sources > h2 {
-  margin: 0 0 var(--space-4);
-  font-size: var(--size-6);
-  font-weight: 600;
-  letter-spacing: -0.01em;
-  color: var(--text-primary);
-}
-
-.c4-dossier-sources > article {
-  margin-block-end: var(--space-3);
-  padding: var(--space-4);
-  border: 1px solid var(--border-subtle);
-  border-radius: 0.5rem;
-  background: var(--surface-raised);
-  font-size: var(--size-2);
-  color: var(--text-secondary);
-}
-
-.c4-dossier-sources h3 {
-  margin: 0 0 var(--space-2);
-  font-size: var(--size-3);
-  font-weight: 600;
-  line-height: 1.4;
-  color: var(--text-primary);
-}
-
-.c4-dossier-sources h4 {
-  margin: var(--space-2) 0 var(--space-1);
-  font-size: var(--size-1);
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--text-muted);
-}
-
-/* Vietnamese: sentence case (cross-subset kerning, see .eyebrow). */
-:lang(vi) .c4-dossier-sources h4 {
-  text-transform: none;
-  letter-spacing: var(--tracking-eyebrow, 0.03em);
-}
-
-.c4-dossier-sources ul {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.c4-dossier-sources p {
-  margin: var(--space-2) 0 0;
-}
-
-.c4-dossier-sources a {
-  display: inline-flex;
-  align-items: center;
-  min-height: 44px;
-  font-weight: 600;
-  color: var(--action-primary);
-}
-
 @media print {
   .c4-dossier__form,
   .c4-dossier__source {
@@ -923,66 +693,6 @@
 
   .c4-dossier-document__heading {
     break-after: avoid;
-  }
-}
-/* ---- C4-D G5 — provenance lens ---- */
-.c4-provenance {
-  max-width: var(--container-reading);
-}
-.c4-provenance__heading {
-  margin: 0 0 var(--space-2);
-  font-size: var(--c4-type-section);
-}
-.c4-provenance__statement,
-.c4-provenance__freshness,
-.c4-provenance__source,
-.c4-provenance__boundary dd {
-  font-size: var(--c4-type-reading);
-  overflow-wrap: anywhere;
-}
-.c4-provenance__disclosure {
-  margin-block-start: var(--space-4);
-  border-top: 1px solid var(--c4-hairline);
-}
-.c4-provenance__summary {
-  display: flex;
-  align-items: center;
-  min-height: 44px;
-  cursor: pointer;
-  font-weight: 600;
-}
-.c4-provenance__sources,
-.c4-provenance__boundary {
-  display: grid;
-  gap: var(--space-2);
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-.c4-provenance__source-link {
-  display: inline-flex;
-  align-items: center;
-  min-height: 44px;
-  color: inherit;
-}
-.c4-provenance__boundary dt {
-  font-weight: 600;
-}
-.c4-provenance__boundary dd {
-  margin: 0;
-}
-.c4-provenance--unknown {
-  color: var(--text-secondary);
-}
-@media print {
-  .c4-provenance__disclosure {
-    border: 0;
-  }
-  .c4-provenance__disclosure > summary {
-    list-style: none;
-  }
-  .c4-provenance__disclosure > summary::marker {
-    content: "";
   }
 }
 
