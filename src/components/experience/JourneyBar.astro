@@ -11,6 +11,11 @@ import { DEFAULT_EXPERIENCE_INTENT } from "@/lib/experience-intent";
 import { getLanguageFromPath } from "@/lib/i18n";
 import { SHARED_LABELS, labelFor } from "@/data/site";
 
+interface Props {
+  /** Route segment rendered as the bar's one primary action (audit A-01). */
+  primary?: string;
+}
+const { primary } = Astro.props;
 const pathname = Astro.url.pathname;
 const lang = getLanguageFromPath(pathname);
 const actions = getJourneyActions(pathname, lang);
@@ -44,7 +49,11 @@ const renderedActions =
             data-neutral-order={actions.indexOf(action)}
           >
             <ButtonLink
-              variant="secondary"
+              variant={
+                primary && routeKeyFromPath(action.href) === primary
+                  ? "primary"
+                  : "secondary"
+              }
               icon="arrow-right"
               href={action.href}
             >

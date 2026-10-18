@@ -1,7 +1,8 @@
 import { expect, test } from "@playwright/test";
 
 // CX4 (audit M1, Owner decision 2026-10-12): Home gets a quiet closing
-// "Next steps" row (About + Contact). The header does NOT gain Contact.
+// "Next steps" row. Audit A-06 / A-03 (Owner decision 2026-10-18): the row is
+// Verify + About + Contact, and the desktop header carries Contact too.
 const LOCALES = ["en", "vi", "zh", "zh-hant"] as const;
 
 const PRIMARY = {
@@ -12,13 +13,17 @@ const PRIMARY = {
 } as const;
 
 for (const lang of LOCALES) {
-  test(`/${lang}/ closes with a Next steps row linking About and Contact`, async ({
+  test(`/${lang}/ closes with a Next steps row linking Verify, About and Contact`, async ({
     page,
   }) => {
     await page.goto(`/${lang}/`);
     const row = page.locator("[data-home-next-steps]");
     await expect(row).toHaveCount(1);
-    await expect(row.locator("a")).toHaveCount(2);
+    await expect(row.locator("a")).toHaveCount(3);
+    await expect(row.locator("a").first()).toHaveAttribute(
+      "href",
+      `/${lang}/verify/`,
+    );
     await expect(row.locator(`a[href="/${lang}/about/"]`)).toHaveCount(1);
     await expect(row.locator(`a[href="/${lang}/contact/"]`)).toHaveCount(1);
     for (const a of await row.locator("a").all()) {
@@ -43,18 +48,20 @@ for (const lang of LOCALES) {
     await expect(page.locator("[data-journey-bar]")).toHaveCount(0);
   });
 
-  test(`/${lang}/ desktop header (Primary nav) has no Contact link (Owner decision)`, async ({
+  test(`/${lang}/ desktop header (Primary nav) links About and Contact (Owner decision)`, async ({
     page,
   }) => {
     await page.goto(`/${lang}/`);
     await expect(
       page.locator(`header nav[aria-label="${PRIMARY[lang]}"] a`),
     ).not.toHaveCount(0);
-    await expect(
-      page.locator(
-        `header nav[aria-label="${PRIMARY[lang]}"] a[href="/${lang}/contact/"]`,
-      ),
-    ).toHaveCount(0);
+    for (const segment of ["about", "contact"]) {
+      await expect(
+        page.locator(
+          `header nav[aria-label="${PRIMARY[lang]}"] a[href="/${lang}/${segment}/"]`,
+        ),
+      ).toHaveCount(1);
+    }
   });
 
   test(`/${lang}/ has no horizontal overflow at 390`, async ({ page }) => {
@@ -80,17 +87,18 @@ test("the row works without JavaScript", async ({ browser }) => {
 });
 
 // Negative proof: the guards must fail on the broken invariant.
-test("negative: a Contact link in the Primary nav and a missing row are detected", async ({
+test("negative: a Primary nav without Contact and a missing row are detected", async ({
   page,
 }) => {
   await page.goto("/en/");
   const primary = page.locator('header nav[aria-label="Primary"]');
+  await expect(primary.locator('a[href="/en/contact/"]')).toHaveCount(1);
   await page.evaluate(() => {
-    const a = document.createElement("a");
-    a.href = "/en/contact/";
-    document.querySelector('header nav[aria-label="Primary"]')!.appendChild(a);
+    document
+      .querySelector('header nav[aria-label="Primary"] a[href="/en/contact/"]')!
+      .remove();
     document.querySelector("[data-home-next-steps]")!.remove();
   });
-  await expect(primary.locator('a[href="/en/contact/"]')).toHaveCount(1);
+  await expect(primary.locator('a[href="/en/contact/"]')).toHaveCount(0);
   await expect(page.locator("[data-home-next-steps]")).toHaveCount(0);
 });

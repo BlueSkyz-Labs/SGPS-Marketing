@@ -6,10 +6,10 @@ import PageHeader from "@/components/layout/PageHeader.astro";
 import ButtonLink from "@/components/ui/ButtonLink.astro";
 import { SITE } from "@/data/site";
 
-// Contact is always the primary action: /zh/contact/ renders a real business
-// route (published mailbox when present, otherwise BusinessRouteState with the
-// private vulnerability channel), so it is never a dead end. Security stays a
-// secondary link for vulnerability reports only.
+// A published support mailbox is the primary action: the visitor gets one
+// direct way to ask for help. Without it, Contact is primary (it renders a
+// real business route, never a dead end). Security stays a secondary link
+// for vulnerability reports only.
 const hasSupportEmail = Boolean(SITE.supportEmail);
 ---
 
@@ -25,26 +25,24 @@ const hasSupportEmail = Boolean(SITE.supportEmail);
         title="如何获得帮助"
         lede={
           hasSupportEmail
-            ? "安全漏洞报告仅用于漏洞。"
+            ? "对我们的应用有疑问？请发邮件给我们。"
             : "目前尚未公布通用支持邮箱。安全漏洞报告仅用于漏洞。"
         }
       />
-      {hasSupportEmail ? (
-        <p class="mt-8 max-w-2xl text-[var(--text-secondary)]">
-          请发邮件至{" "}
-          <a
+      <div class="mt-10 flex flex-wrap items-center gap-3" data-support-actions>
+        {hasSupportEmail ? (
+          <ButtonLink
             href={`mailto:${SITE.supportEmail}`}
-            class="inline-flex min-h-11 items-center font-semibold text-[var(--action-primary)] underline underline-offset-4 hover:no-underline"
+            data-support-primary
+            data-support-mailbox
           >
             {SITE.supportEmail}
-          </a>{" "}
-          获取一般产品支持，直至发布各产品专属的支持渠道。
-        </p>
-      ) : null}
-      <div class="mt-10 flex flex-wrap items-center gap-3" data-support-actions>
-        <ButtonLink href="/zh/contact/" data-support-primary>
-          联系我们
-        </ButtonLink>
+          </ButtonLink>
+        ) : (
+          <ButtonLink href="/zh/contact/" data-support-primary>
+            联系我们
+          </ButtonLink>
+        )}
         <ButtonLink
           href="/zh/security/"
           variant="secondary"

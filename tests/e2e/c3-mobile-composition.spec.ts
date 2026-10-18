@@ -1,4 +1,5 @@
 import { expect, test, type Page } from "@playwright/test";
+import { isInlineSentenceLink } from "./helpers/inline-target";
 
 /**
  * C3-A Task 6 — Author Mobile Cinematic Composition (design S9).
@@ -44,7 +45,10 @@ type Report = {
 
 async function composition(page: Page): Promise<Report> {
   return page.evaluate(
-    ({ sceneSelector, sceneAction }) => {
+    ({ sceneSelector, sceneAction, inlineExemptSrc }) => {
+      const inlineExempt = new Function(`return ${inlineExemptSrc}`)() as (
+        el: Element,
+      ) => boolean;
       const doc = document.documentElement;
       const describe = (el: Element): string => {
         const rect = el.getBoundingClientRect();
@@ -73,7 +77,9 @@ async function composition(page: Page): Promise<Report> {
       )) {
         if (!visible(el)) continue;
         const rect = el.getBoundingClientRect();
-        if (rect.width < 24 || rect.height < 24)
+        // B-01: inline sentence links take the WCAG 2.5.8 inline exception;
+        // accessibility.spec guards their overlap and tap-sized twin.
+        if ((rect.width < 24 || rect.height < 24) && !inlineExempt(el))
           belowMinimum.push(describe(el));
         if (el.matches(sceneAction) && rect.height < 44) {
           belowTouchFloor.push(describe(el));
@@ -121,7 +127,11 @@ async function composition(page: Page): Promise<Report> {
         buried: buried.slice(0, 4),
       };
     },
-    { sceneSelector: SCENE_SELECTOR, sceneAction: SCENE_ACTION },
+    {
+      sceneSelector: SCENE_SELECTOR,
+      sceneAction: SCENE_ACTION,
+      inlineExemptSrc: isInlineSentenceLink.toString(),
+    },
   );
 }
 

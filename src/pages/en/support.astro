@@ -6,10 +6,10 @@ import PageHeader from "@/components/layout/PageHeader.astro";
 import ButtonLink from "@/components/ui/ButtonLink.astro";
 import { SITE } from "@/data/site";
 
-// Contact is always the primary action: /en/contact/ renders a real business
-// route (published mailbox when present, otherwise BusinessRouteState with the
-// private vulnerability channel), so it is never a dead end. Security stays a
-// secondary link for vulnerability reports only.
+// A published support mailbox is the primary action: the visitor gets one
+// direct way to ask for help. Without it, Contact is primary (it renders a
+// real business route, never a dead end). Security stays a secondary link
+// for vulnerability reports only.
 const hasSupportEmail = Boolean(SITE.supportEmail);
 ---
 
@@ -25,27 +25,24 @@ const hasSupportEmail = Boolean(SITE.supportEmail);
         title="How to get help"
         lede={
           hasSupportEmail
-            ? "Security reporting is for vulnerabilities only."
+            ? "Questions about our apps? Email us."
             : "No general support mailbox has been published yet. Security reporting is for vulnerabilities only."
         }
       />
-      {hasSupportEmail ? (
-        <p class="mt-8 max-w-2xl text-[var(--text-secondary)]">
-          Email{" "}
-          <a
+      <div class="mt-10 flex flex-wrap items-center gap-3" data-support-actions>
+        {hasSupportEmail ? (
+          <ButtonLink
             href={`mailto:${SITE.supportEmail}`}
-            class="inline-flex min-h-11 items-center font-semibold text-[var(--action-primary)] underline underline-offset-4 hover:no-underline"
+            data-support-primary
+            data-support-mailbox
           >
             {SITE.supportEmail}
-          </a>{" "}
-          for general product support until a product-specific path is
-          published.
-        </p>
-      ) : null}
-      <div class="mt-10 flex flex-wrap items-center gap-3" data-support-actions>
-        <ButtonLink href="/en/contact/" data-support-primary>
-          Contact
-        </ButtonLink>
+          </ButtonLink>
+        ) : (
+          <ButtonLink href="/en/contact/" data-support-primary>
+            Contact
+          </ButtonLink>
+        )}
         <ButtonLink
           href="/en/security/"
           variant="secondary"

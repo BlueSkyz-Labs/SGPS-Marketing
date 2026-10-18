@@ -7,10 +7,10 @@ import PageHeader from "@/components/layout/PageHeader.astro";
 import ButtonLink from "@/components/ui/ButtonLink.astro";
 import { SITE } from "@/data/site";
 
-// Contact is always the primary action: /zh-hant/contact/ renders a real business
-// route (published mailbox when present, otherwise BusinessRouteState with the
-// private vulnerability channel), so it is never a dead end. Security stays a
-// secondary link for vulnerability reports only.
+// A published support mailbox is the primary action: the visitor gets one
+// direct way to ask for help. Without it, Contact is primary (it renders a
+// real business route, never a dead end). Security stays a secondary link
+// for vulnerability reports only.
 const hasSupportEmail = Boolean(SITE.supportEmail);
 ---
 
@@ -26,26 +26,24 @@ const hasSupportEmail = Boolean(SITE.supportEmail);
         title="如何取得協助"
         lede={
           hasSupportEmail
-            ? "資安通報僅用於漏洞。"
+            ? "對我們的應用程式有疑問？請來信。"
             : "目前尚未公布通用支援信箱。資安通報僅用於漏洞。"
         }
       />
-      {hasSupportEmail ? (
-        <p class="mt-8 max-w-2xl text-[var(--text-secondary)]">
-          請來信{" "}
-          <a
+      <div class="mt-10 flex flex-wrap items-center gap-3" data-support-actions>
+        {hasSupportEmail ? (
+          <ButtonLink
             href={`mailto:${SITE.supportEmail}`}
-            class="inline-flex min-h-11 items-center font-semibold text-[var(--action-primary)] underline underline-offset-4 hover:no-underline"
+            data-support-primary
+            data-support-mailbox
           >
             {SITE.supportEmail}
-          </a>{" "}
-          取得一般產品支援，直至發布各產品專屬的支援管道。
-        </p>
-      ) : null}
-      <div class="mt-10 flex flex-wrap items-center gap-3" data-support-actions>
-        <ButtonLink href="/zh-hant/contact/" data-support-primary>
-          聯絡我們
-        </ButtonLink>
+          </ButtonLink>
+        ) : (
+          <ButtonLink href="/zh-hant/contact/" data-support-primary>
+            聯絡我們
+          </ButtonLink>
+        )}
         <ButtonLink
           href="/zh-hant/security/"
           variant="secondary"

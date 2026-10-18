@@ -77,7 +77,7 @@ export const TRUST_LEDGER: TrustLedgerEntry[] = [
     summary: SITE.supportEmail
       ? {
           en: "A product-support mailbox is published here. Security reporting is for vulnerabilities only.",
-          vi: "Trang này đã công bố hộp thư hỗ trợ sản phẩm. Kênh báo cáo bảo mật chỉ dành cho lỗ hổng bảo mật.",
+          vi: "Đã công bố hộp thư hỗ trợ sản phẩm. Kênh báo cáo bảo mật chỉ dành cho lỗ hổng bảo mật.",
           zh: "本站已公布产品支持邮箱。安全漏洞报告仅用于漏洞。",
           "zh-hant": "本站已公布產品支援信箱。資安通報僅用於漏洞。",
         }
