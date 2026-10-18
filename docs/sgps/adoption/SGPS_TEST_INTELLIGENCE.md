@@ -27,7 +27,30 @@ Always retained regardless of shape: public-truth and mailbox allowlist guards, 
 
 There is no form that submits a payload: the only `<form>` elements are the dossier composer (client-only) and a `method="dialog"` close. A misleading product promise is guarded against real rendered pages, not a mocked validator: `v7-truth-content.spec.ts` and `cx1-support-path.spec.ts` read the built HTML and fail if the support row or the response-time promise drift.
 
+## AUDIT ledger — `/support` and Contact boundary (baseline `main@6b07adc`)
+
+Production owner: `src/pages/{en,vi,zh,zh-hant}/support.astro` and the Contact pages, fed by `SITE.supportEmail` (`src/data/site.ts` → `src/lib/public-mailbox.ts`). Baseline status: all listed tests green on CI runs `39108039423` and `39105626506`.
+
+| Test                                                                                                    | Fault it catches (independent oracle)                                                       | Layer       | Disposition                                                                                           |
+| ------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- | ----------- | ----------------------------------------------------------------------------------------------------- |
+| `cx1-support-path` "first CTA is the support mailbox, Security is secondary"                            | Primary action swapped, security-first order, a second primary (rendered DOM vs Owner A-02) | e2e         | R, keeper for primary order                                                                           |
+| `cx1-support-path` "one mailbox, no response-time promise"                                              | Invented SLA copy, duplicate or wrong mailto                                                | e2e         | R, keeper for no-promise rule                                                                         |
+| `cx1-support-path` "Contact destination is a real page"                                                 | Contact recourse becomes a dead end                                                         | e2e         | R                                                                                                     |
+| `cx1-support-path` "Sổ Trọ guide button is Contact"                                                     | Product page re-promises "support"                                                          | e2e         | R (different page)                                                                                    |
+| `cx1-support-path` negative proof                                                                       | The guard passes on security-first order                                                    | unit-in-e2e | R                                                                                                     |
+| `ux-cx-review-fixes` F2 "links each destination once" + negative                                        | Any destination repeated (contact, security, mailbox)                                       | e2e         | R. Overlaps the mailto count above, but its oracle is broader (all hrefs unique), so no consolidation |
+| `exp-s8-empty-states` Contact rows                                                                      | Support row on Contact becomes primary, or the role order flips                             | e2e         | R (different page)                                                                                    |
+| `v7-truth-content` Verify support row + negative                                                        | `/verify` says "published" while `/support` has no mailto, or the reverse                   | e2e         | R (cross-page consistency)                                                                            |
+| `tests/architecture/trust-surfaces.test.mjs` "support empty state offers contact and security recourse" | The no-mailbox fallback branch is deleted from the template                                 | source      | R, the only guard for the fallback branch                                                             |
+| `public-organization-identity.test.mjs` allowlist cases                                                 | Admin or non-role address passes as a public mailbox                                        | unit        | R                                                                                                     |
+
+Route-only suites (`trust-routes`, `ux-p2-7-action-tiers`, `s-plus-journey`, `mission-paths`) visit `/support` for reachability or styling. They are outside this boundary and untouched.
+
+**Result:** 10 R, 0 F, 0 C, 0 D. No test retired.
+
+**Gap (NOT VERIFIED):** the rendered fallback (no mailbox → Contact is primary) is never exercised end to end. The production build always sets `PUBLIC_SUPPORT_EMAIL`, so only the source-regex guard covers it. Closing this needs a second build without the variable, which is a test-harness change and is not made here.
+
 ## Remaining to reach ADOPTED
 
-1. One AUDIT ledger for a single boundary (proposed: the `/support` and Contact journey), with keeper names and R/F/C/D per test.
-2. The canonical skill leaves Candidate status in sgps-core, or the Owner accepts it as is.
+1. The canonical skill leaves Candidate status in sgps-core, or the Owner accepts it as is.
+2. Optional: a fallback-build e2e lane for the gap above.
