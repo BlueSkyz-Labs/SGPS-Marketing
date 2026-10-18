@@ -1198,11 +1198,13 @@ summary {
    project's zero-sub-44px-target rule. This rule is deliberately unlayered:
    Tailwind utilities live in `@layer utilities`, and unlayered declarations beat
    layered ones, so a `min-w-*` utility on those links silently lost to the
-   `min-width: 0` guard above. Keep the 44px floor here instead. */
+   `min-width: 0` guard above. Keep the 44px floor here instead. The label
+   starts at the box edge (audit B-02): centring a 2-character label inside
+   the 44px floor set it 6-8px in from its column and its siblings. */
 .footer-nav-link,
 .breadcrumb-link {
   min-width: 2.75rem;
-  justify-content: center;
+  justify-content: flex-start;
 }
 
 /* Declared on the root of the page, not per element type: `overflow-wrap` is
