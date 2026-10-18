@@ -9,23 +9,30 @@ import type { Language } from "@/data/site";
  */
 type Localized = Record<Language, string>;
 
-/** hom-2: product line under the H1, as segments around the two product names. */
+/**
+ * hom-2: product line under the H1, as segments around the two product names.
+ * Preview 2026-10-15: Sổ Trọ (first name) is in preview, Sổ Tâm in development.
+ */
 export const HOME_PRODUCT_LINE: Record<
   Language,
   { lead: string; a: string; b: string }
 > = {
   en: {
-    lead: "In development: ",
-    a: ", a notebook for landlords, and ",
+    lead: "Now in preview: ",
+    a: ", a notebook for landlords. In development: ",
     b: ", a private journal.",
   },
   vi: {
-    lead: "Đang phát triển: ",
-    a: ", sổ tay cho chủ trọ; ",
+    lead: "Đang mở bản xem trước: ",
+    a: ", sổ tay cho chủ trọ. Đang phát triển: ",
     b: ", nhật ký riêng tư.",
   },
-  zh: { lead: "开发中：", a: "，房东记事本；", b: "，私密日记。" },
-  "zh-hant": { lead: "開發中：", a: "，房東記事本；", b: "，私密日記。" },
+  zh: { lead: "预览中：", a: "，房东记事本。开发中：", b: "，私密日记。" },
+  "zh-hant": {
+    lead: "預覽中：",
+    a: "，房東記事本。開發中：",
+    b: "，私密日記。",
+  },
 };
 
 /**

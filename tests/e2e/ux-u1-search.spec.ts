@@ -4,11 +4,14 @@ import { expect, test } from "@playwright/test";
 // must not dead-end. Desktop trigger pinned so projects behave identically.
 test.use({ viewport: { width: 1280, height: 800 } });
 
+// Preview 2026-10-15: the status line names each product's own state from the
+// registry, so an open preview is never called "in development".
 const STATUS: Record<string, RegExp> = {
-  en: /in development; no store release/i,
-  vi: /đang phát triển; chưa có bản trên cửa hàng ứng dụng/i,
-  zh: /开发中；尚未上架应用商店/,
-  "zh-hant": /開發中；尚未上架應用程式商店/,
+  en: /^Sổ Trọ: open preview, limited places; Sổ Tâm: in development; Android and iOS: no store release\.$/,
+  vi: /^Sổ Trọ: bản xem trước đã mở, số chỗ có hạn; Sổ Tâm: đang phát triển; Android và iOS: chưa có bản trên cửa hàng ứng dụng\.$/,
+  zh: /^Sổ Trọ：预览版已开放，名额有限；Sổ Tâm：开发中；Android 与 iOS：尚未上架应用商店\.$/,
+  "zh-hant":
+    /^Sổ Trọ：預覽版已開放，名額有限；Sổ Tâm：開發中；Android 與 iOS：尚未上架應用程式商店\.$/,
 };
 
 async function search(
@@ -65,7 +68,7 @@ for (const [lang, queries] of [
       ).toBeVisible();
       const status = page.locator("[data-command-status]");
       if (q === "zalo") {
-        // Contact intent: fallback links only, no availability claim.
+        // No hit and no status intent: fallback links only, no availability claim.
         await expect(status).toBeHidden();
       } else {
         await expect(status).toBeVisible();
