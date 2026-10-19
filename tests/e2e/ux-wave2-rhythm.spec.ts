@@ -113,3 +113,62 @@ test("negative proof: a secondary-text interim link is reported", async ({
     await colour(".profile-trust-link"),
   );
 });
+
+/**
+ * The interim-note contact link sits inside a sentence, so it takes the
+ * WCAG 2.5.8 inline exception (Owner 2026-10-18, B-01) instead of a 44 px
+ * inline-flex box that doubled the leading of its line. Its destination keeps
+ * a tap-sized twin (the Contact link in the footer).
+ */
+const interimLink = (page: Page) =>
+  page
+    .locator("[data-interim-note] a")
+    .first()
+    .evaluate((a) => {
+      const lineHeight = Number.parseFloat(
+        getComputedStyle(a.closest("p") as Element).lineHeight,
+      );
+      const twin = [...document.querySelectorAll("a[href]")].some((b) => {
+        if (b === a || b.getAttribute("href") !== a.getAttribute("href"))
+          return false;
+        const r = b.getBoundingClientRect();
+        return r.width >= 44 && r.height >= 44;
+      });
+      return {
+        display: getComputedStyle(a).display,
+        height: a.getBoundingClientRect().height,
+        lineHeight,
+        twin,
+      };
+    });
+
+for (const lang of LANGS) {
+  test(`${lang}: interim-note link keeps its sentence's leading`, async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto(`/${lang}/products/sotro/`);
+    test.skip(
+      (await page.locator("[data-interim-note] a").count()) === 0,
+      "no interim note on this record",
+    );
+    const link = await interimLink(page);
+    expect(link.display).toBe("inline");
+    expect(link.height).toBeLessThanOrEqual(link.lineHeight);
+    expect(link.twin).toBe(true);
+  });
+}
+
+test("negative proof: a 44 px inline-flex interim link is reported", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/en/products/sotro/");
+  await page.addStyleTag({
+    content:
+      "[data-interim-note] a{display:inline-flex!important;min-height:44px!important}",
+  });
+  const link = await interimLink(page);
+  expect(link.display).not.toBe("inline");
+  expect(link.height).toBeGreaterThan(link.lineHeight);
+});

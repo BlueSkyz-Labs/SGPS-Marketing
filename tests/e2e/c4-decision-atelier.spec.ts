@@ -4,13 +4,65 @@ const GOALS = ["explore", "evaluate", "verify", "work-with-blueskyz"];
 
 test.describe("C4-E decision atelier", () => {
   test("controls are hidden without JavaScript and the baseline room is complete", async ({
-    request,
+    browser,
   }) => {
-    const html = await (await request.get("/en/decision-room/")).text();
+    const context = await browser.newContext({ javaScriptEnabled: false });
+    const page = await context.newPage();
+    await page.goto("/en/decision-room/");
     // the baseline list is complete on its own
-    expect(html).toContain("data-decision-item=");
+    await expect(page.locator("[data-decision-item]").first()).toBeVisible();
     // and the controls are not offered as dead UI
-    expect(html).toMatch(/data-atelier-controls[^>]*hidden/);
+    await expect(page.locator("[data-atelier-controls]")).toBeHidden();
+    await context.close();
+  });
+
+  test("revealing the controls does not shift the item list (CLS)", async ({
+    page,
+    browserName,
+  }) => {
+    // The Layout Instability API ships only in Chromium; elsewhere the
+    // observer would report nothing and the check would pass vacuously.
+    test.skip(browserName !== "chromium", "layout-shift is Chromium-only");
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.addInitScript(() => {
+      const w = window as unknown as { __cls: number };
+      w.__cls = 0;
+      new PerformanceObserver((list) => {
+        for (const entry of list.getEntries() as unknown as {
+          value: number;
+          hadRecentInput: boolean;
+        }[]) {
+          if (!entry.hadRecentInput) w.__cls += entry.value;
+        }
+      }).observe({ type: "layout-shift", buffered: true });
+    });
+    await page.goto("/en/decision-room/", { waitUntil: "networkidle" });
+    await expect(page.locator("[data-atelier-controls]")).toHaveAttribute(
+      "data-atelier-ready",
+      "",
+    );
+    const cls = await page.evaluate(
+      () => (window as unknown as { __cls: number }).__cls,
+    );
+    // The good CWV threshold is 0.1; the room itself should add nothing.
+    expect(cls).toBeLessThan(0.02);
+  });
+
+  test("the controls hold their space before the script runs", async ({
+    page,
+  }) => {
+    // Deterministic twin of the CLS check above, whose result depends on
+    // whether the reveal lands before or after the first paint. With
+    // scripting on but the module not yet run, the controls must already
+    // take their place, so the item list cannot move when they initialise.
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.route("**/*.js", (route) => route.abort());
+    await page.goto("/en/decision-room/");
+    const controls = page.locator("[data-atelier-controls]");
+    await expect(controls).not.toHaveAttribute("data-atelier-ready", "");
+    await expect(controls).toBeVisible();
+    const box = await controls.boundingBox();
+    expect(box?.height ?? 0).toBeGreaterThan(100);
   });
 
   test("controls appear with JavaScript, are named, and can be operated by keyboard", async ({

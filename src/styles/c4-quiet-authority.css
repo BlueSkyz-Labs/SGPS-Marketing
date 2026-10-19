@@ -697,10 +697,27 @@
 }
 
 /* ---- C4-E G3 — decision atelier controls ---- */
+/* The controls take their space from the first paint when scripting is on,
+   so initialising them no longer pushes the item list down (measured CLS
+   0.27 at 390 px). Without scripting they never render (no dead UI). A
+   browser without the `scripting` media feature shows them once the script
+   marks them ready, which is the previous behaviour. */
 .decision-room__atelier {
-  display: grid;
+  display: none;
   gap: var(--space-3);
   margin-block: var(--space-6);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-card);
+  background: var(--surface-raised);
+  padding: 1.25rem;
+}
+@media (scripting: enabled) {
+  .decision-room__atelier {
+    display: grid;
+  }
+}
+.decision-room__atelier[data-atelier-ready] {
+  display: grid;
 }
 .decision-room__atelier-title {
   margin: 0;
@@ -737,6 +754,27 @@
   inline-size: min(100%, 32rem);
   min-inline-size: 0;
   max-inline-size: 100%;
+  /* A visible boundary, like the Dossier controls (WCAG 1.4.11). */
+  border: 1px solid var(--text-secondary);
+  border-radius: 0.5rem;
+  background-color: var(--surface-primary);
+  padding-inline: 0.75rem;
+  color: var(--text-primary);
+}
+/* Reset is a secondary action: same shape as the Dossier actions. */
+.decision-room__atelier-reset {
+  justify-self: start;
+  justify-content: center;
+  padding-inline: 1.25rem;
+  border: 1px solid var(--border-subtle);
+  border-radius: 0.5rem;
+  background: var(--surface-subtle);
+  font-weight: 600;
+  color: var(--text-primary);
+}
+.decision-room__atelier-reset:hover,
+.decision-room__atelier-select:hover {
+  border-color: var(--action-primary);
 }
 .decision-room__atelier-check {
   gap: var(--space-2);
