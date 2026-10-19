@@ -19,6 +19,6 @@
     }
   ],
   "retention": "Unsampled 7 days, then about a 10% sample; dashboard shows six months (provider FAQ, page dated 2026-07-14).",
-  "observedPayload": "NOT_VERIFIED until the Owner enables Web Analytics; capture one beacon request and compare its keys with declaredFields.",
+  "observedPayload": "OBSERVED 2026-10-20 (docs/evidence/2026-10-20-rum-beacon-observed-payload.md): no visitor identifier; three undeclared groups (pageloadId per page load, bi.* browser engine/version, memory.* JS heap); core-web-vitals delivery NOT VERIFIED. declaredFields unchanged pending the Owner decision.",
   "killSwitch": "Disable Web Analytics for blueskyzlabs.com in the Cloudflare dashboard; then remove the script-src path from public/_headers."
 }
