@@ -19,6 +19,6 @@
     }
   ],
   "retention": "Unsampled 7 days, then about a 10% sample; dashboard shows six months (provider FAQ, page dated 2026-07-14).",
-  "observedPayload": "OBSERVED 2026-10-20 (docs/evidence/2026-10-20-rum-beacon-observed-payload.md): no visitor identifier; three undeclared groups (pageloadId per page load, bi.* browser engine/version, memory.* JS heap); core-web-vitals delivery NOT VERIFIED. declaredFields unchanged pending the Owner decision.",
+  "observedPayload": "OBSERVED 2026-10-20 (docs/evidence/2026-10-20-rum-beacon-observed-payload.md): no visitor identifier; three undeclared groups (pageloadId per page load, bi.* browser engine/version, memory.* JS heap); core-web-vitals delivery NOT VERIFIED. Owner decision 2026-10-20: option A, keep the provider and state the observed fields in the privacy notice (done in all four locales). declaredFields stay unchanged until the contract PR, which needs an explicit page-scoped allowance in the protected identifier guard.",
   "killSwitch": "Disable Web Analytics for blueskyzlabs.com in the Cloudflare dashboard; then remove the script-src path from public/_headers."
 }
