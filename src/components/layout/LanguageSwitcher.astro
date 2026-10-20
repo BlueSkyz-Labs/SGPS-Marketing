@@ -165,6 +165,12 @@ const isMenu = placement === "menu";
     align-self: flex-start;
   }
 
+  /* ACQ-12: in the header row the trigger shares the row's centre line with
+     the other items, whatever the root font size (flex-start left it high). */
+  .lang-switch--header {
+    align-self: center;
+  }
+
   /* Compact menu: a full-width captioned row group, like the theme rows. */
   .lang-switch--menu {
     display: grid;

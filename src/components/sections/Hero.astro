@@ -112,11 +112,6 @@ const supportingLine = flagship ? null : proposition;
   aria-labelledby="hero-title"
 >
   <div class="hero-atmosphere hero-atmosphere--ink" aria-hidden="true"></div>
-  <div class="horizon-container">
-    <div class="horizon-signature">
-      <HorizonField />
-    </div>
-  </div>
   <!-- Plain container, not the rise wrapper: the LCP headline lives inside it and must
        not animate or move, so no ancestor may carry the 400 ms rise either. -->
   <div
@@ -322,6 +317,17 @@ const supportingLine = flagship ? null : proposition;
         </div>
       </div>
     ) : null}
+  </div>
+  <!-- VA-01 (throttled re-check): the field is bottom-anchored to the hero, so
+       it comes after the hero content in source order. Earlier in the source,
+       a progressive first paint placed it against a half-parsed, shorter hero
+       and it then jumped down (CLS 0.28 on /vi/ at 390 px, Slow 4G, 4x CPU).
+       Paint order is unchanged: .horizon-container keeps z-index 1, under
+       .hero-content and the capture (z-index 2). -->
+  <div class="horizon-container">
+    <div class="horizon-signature">
+      <HorizonField />
+    </div>
   </div>
   <!-- The hero's bottom edge is an intentional horizon line, not a hard cut.
        Static, decorative, no JS; out of flow so the layout never shifts. -->

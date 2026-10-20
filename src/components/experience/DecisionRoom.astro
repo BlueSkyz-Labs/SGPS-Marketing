@@ -398,6 +398,7 @@ const domId = (id: string): string =>
                 : undefined
             }
             class="decision-room__source"
+            aria-label={`${copy.source}: ${item.label[lang]}`}
           >
             {copy.source} →
           </a>
