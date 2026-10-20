@@ -2,8 +2,7 @@ import { expect, test } from "@playwright/test";
 
 /**
  * Aesthetic S4 (composition). Rendered guards:
- *  - endorsed product lockup is >= 160 px wide (Brand Kit v4 full-lockup
- *    digital minimum) from the sm breakpoint up, in every locale;
+ *  - product profiles render no endorsed lockup (BB-03) and never overflow;
  *  - a Verify source separator never begins a line;
  *  - the About founder art is square (bounded height) from 48rem up;
  *  - Verify sources sit directly under their claim (no side column).
@@ -12,40 +11,34 @@ const LOCALES = ["en", "vi", "zh", "zh-hant"] as const;
 
 test.describe("S4 composition guards", () => {
   for (const lang of LOCALES) {
-    test(`${lang}: endorsed lockup is at least 160px wide from 480px up`, async ({
+    test(`${lang}: profile pages render no endorsed lockup and do not overflow`, async ({
       page,
     }) => {
-      await page.goto(`/${lang}/products/sotro/`);
-      // The lockup shows from 480px; it must meet the minimum at every width.
-      for (const width of [480, 560, 640, 1440]) {
-        await page.setViewportSize({ width, height: 900 });
-        const box = await page
-          .locator(".profile-lockup-light")
-          .evaluate((el) => el.getBoundingClientRect().width);
-        expect(box, `width ${width}`).toBeGreaterThanOrEqual(160);
-        // Reserved box (1500:420) so the lazy lockup cannot shift layout.
-        const attrs = await page
-          .locator(".profile-lockup img")
-          .evaluateAll((els) =>
-            els.map((e) => [
-              e.getAttribute("width"),
-              e.getAttribute("height"),
-              e.getAttribute("loading"),
-            ]),
+      for (const slug of ["sotro", "sotam"]) {
+        await page.goto(`/${lang}/products/${slug}/`);
+        for (const width of [390, 480, 640, 1440]) {
+          await page.setViewportSize({ width, height: 900 });
+          await expect(
+            page.locator(".profile-lockup, .profile-lockup-light"),
+            `${slug} @${width}`,
+          ).toHaveCount(0);
+          const overflow = await page.evaluate(
+            () =>
+              document.documentElement.scrollWidth >
+              document.documentElement.clientWidth,
           );
-        expect(attrs, `lockup attrs at ${width}`).toEqual([
-          ["1500", "420", "lazy"],
-          ["1500", "420", "lazy"],
-        ]);
-        const overflow = await page.evaluate(
-          () =>
-            document.documentElement.scrollWidth >
-            document.documentElement.clientWidth,
-        );
-        expect(overflow, `overflow at ${width}`).toBe(false);
+          expect(overflow, `${slug} overflow at ${width}`).toBe(false);
+        }
       }
     });
   }
+
+  test("negative proof: the lockup selector counts a lockup when present", async ({
+    page,
+  }) => {
+    await page.setContent(`<div class="profile-lockup"></div>`);
+    await expect(page.locator(".profile-lockup")).toHaveCount(1);
+  });
 
   test("verify: separator never begins a line, touch target kept", async ({
     page,

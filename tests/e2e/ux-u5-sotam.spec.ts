@@ -83,8 +83,10 @@ test("negative proofs: the guards detect the old shapes", async ({
   // the primary check is driven by the profile, not true everywhere.
   await page.goto("/en/products/sotro/");
   expect(await journeyPrimaries(page)).not.toContain("/en/contact/");
-  // Sổ Trọ keeps its endorsed lockup (it has real screens), proving the lockup
-  // check measures something and that only the identity-art profile drops it.
-  await page.goto("/en/products/sotro/");
+  // BB-03: no profile renders the small endorsed lockup. Prove the selector
+  // measures something: a page that still had one is counted.
+  await page.setContent(`<div class="profile-lockup"><img alt="" /></div>`);
   await expect(page.locator(".profile-lockup")).toHaveCount(1);
+  await page.goto("/en/products/sotro/");
+  await expect(page.locator(".profile-lockup")).toHaveCount(0);
 });
