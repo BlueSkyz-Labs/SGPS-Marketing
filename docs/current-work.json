@@ -247,9 +247,9 @@
     },
     {
       "id": "c3-g-spatial",
-      "name": "C3-G Spatial Product House Halo Experiment",
-      "status": "PLANNED",
-      "evidence": "docs/superpowers/plans/2026-09-13-c3-g-spatial-halo-experiment.md"
+      "name": "C3-G Spatial Product House Halo Experiment (Task 1 hypothesis, metrics, budgets and NO-GO conditions in docs/evidence/2026-10-20-c3-spatial-halo-hypothesis.md; Task 2+ held: three of seven metrics need Human E4, which the Owner deferred, so a prototype could reach at most E3-within-budget with value NOT VERIFIED)",
+      "status": "BLOCKED",
+      "evidence": "docs/evidence/2026-10-20-c3-spatial-halo-hypothesis.md"
     },
     {
       "id": "c4-master-plan",
@@ -401,7 +401,7 @@
     "Lane-helguard guard: helper now emits 'LOCAL-AHEAD skip' and exits 0 on local-ahead branches; reset incident documented (operational, not committed)."
   ],
   "nextActionable": [
-    "Owner decisions 2026-10-20: (1) RUM option A, keep Cloudflare Web Analytics and state the observed beacon fields in the privacy notice (copy updated, zh/zh-Hant not native-reviewed); the contract and identifier-guard allowance for pageloadId follow in a protected PR. (2) Human E4 deferred by the Owner. (3) zh and zh-Hant stay live but are not promoted until a native review. (4) P2-6: typography comparison renders first, then decide. (5) BB-02: recapture real Sổ Trọ UI at mobile size with synthetic data, approved. (6) BB-03: lockup renders for Owner review first. (7) Spatial/WebGL: a small, separately budgeted experiment approved; NO-GO remains a valid outcome.",
+    "Owner decisions 2026-10-20: (1) RUM option A, keep Cloudflare Web Analytics and state the observed beacon fields in the privacy notice (merged #643 bfc34c5, production read back 2026-10-20 in en/vi/zh; vi word cap 210 to 225 for it; zh/zh-Hant not native-reviewed); the contract and identifier-guard allowance for pageloadId follow in a protected PR. (2) Human E4 deferred by the Owner. (3) zh and zh-Hant stay live but are not promoted until a native review. (4) P2-6: typography comparison renders first, then decide. (5) BB-02: recapture real Sổ Trọ UI at mobile size with synthetic data, approved. (6) BB-03: lockup renders for Owner review first. (7) Spatial/WebGL: a small, separately budgeted experiment approved; NO-GO remains a valid outcome.",
     "2026-10-19 visual runtime audit (docs/evidence/2026-10-19-visual-runtime-audit.md): VA-01..03 MERGED in #642 (9db3ab9) after 8/8 exact-head checks incl. Firefox/WebKit; production read-back VERIFIED (agent E3): Decision Room CLS 0 at 320/390/1440 (was 0.31/0.27/0.11), atelier hidden without JS, interim-note link inline. Not field CWV, not Human E4. BB-01/02/03 stay with their recorded owners.",
     "2026-10-18 triage at main@6b07adc (docs/evidence/2026-10-18-open-issue-triage-readback.md): audit waves #632-#637 and D-01 #635 merged; production read-back verified wave 4, crawlability, canonical/JSON-LD, mailboxes (tony@ contact, support@ support) and no admin leak. Closed with evidence: #557, #561, #562, #564, #565 (Horizon/Sail W0-W4), #284, #281 (into #522), #293, #310 (folded into Human E4). Open: #566 W5 served-version read-back (commit 6b07adc -> Worker version 58445d9b bound; deployed version needs provider access), #523 (mailbox round trip, Search Console), #522 DEC-038 MAPPED with EI-03/04/11/13/14 BLOCKED on tenant evidence (docs/sgps/adoption/SGPS_DEC_2026_038_EMAIL_IDENTITY.md), #451 (Web Analytics beacon absent from production HTML on 2026-10-18; Owner checks the dashboard), #290 Test Intelligence MAPPED (docs/sgps/adoption/SGPS_TEST_INTELLIGENCE.md; /support AUDIT ledger recorded: 10 retained, one NOT VERIFIED gap for the rendered no-mailbox fallback), #638 APK landing DEPENDENCY_WAIT on a Sổ Trọ signed artifact.",
     "2026-10-09: finish current exact-head PR integration and reconcile launch evidence with docs/evidence/2026-10-09-website-production-launch.md. Observed anonymous website launch/contact/founder facts are now published; do not restart completed Contact/About work or call mailbox delivery, Worker version, provider isolation, Human E4/native/legal/RUM gates verified from website publication. #523 closure requires checking its full acceptance list; #281/#522 operational mail evidence remains external.",
