@@ -271,7 +271,8 @@ test.describe("v7 decision room", () => {
     const page = await context.newPage();
     await page.goto("/en/decision-room/");
     await expect(page.locator("[data-decision-add]").first()).toBeHidden();
-    await expect(page.locator("[data-decision-empty-state]")).toBeVisible();
+    // TRU-11: the "nothing selected" line is hidden without scripting.
+    await expect(page.locator("[data-decision-empty-state]")).toBeHidden();
     const h = await page
       .locator("[data-decision-tray]")
       .evaluate((n) => n.getBoundingClientRect().height);

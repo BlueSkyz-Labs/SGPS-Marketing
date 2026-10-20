@@ -115,7 +115,7 @@ export const CLAIMS: readonly PublicClaim[] = [
       zh: "安全报告通过 GitHub 私有渠道送达维护者",
       "zh-hant": "安全報告透過 GitHub 私有管道送達維護者",
     },
-    evidenceIds: ["ev-security-advisory", "ev-security-route"],
+    evidenceIds: ["ev-security-route", "ev-security-advisory"],
     boundaryId: "bnd-security-reporting",
     reviewId: "security-private-reporting",
   },

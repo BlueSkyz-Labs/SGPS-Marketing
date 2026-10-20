@@ -5,7 +5,9 @@ import {
   ATELIER_GOALS,
   ATELIER_REASON_KEYS,
 } from "@/lib/decision-atelier";
+import { getEvidencePassportPath } from "@/lib/claims";
 import { getPublicProducts } from "@/lib/products";
+import ButtonLink from "@/components/ui/ButtonLink.astro";
 import type { Language } from "@/data/site";
 
 interface Props {
@@ -23,6 +25,8 @@ const COPY = {
   en: {
     heading: "Compare claims",
     lede: "Choose up to four public claims to view side by side. Nothing is ranked or recommended.",
+    ledeStatic: "Public claims, with their sources and limits.",
+    boundary: "Boundary",
     add: "Compare",
     remove: "Remove",
     reset: "Clear comparison",
@@ -35,6 +39,8 @@ const COPY = {
   vi: {
     heading: "So sánh tuyên bố",
     lede: "Chọn tối đa 4 tuyên bố công khai để xem cạnh nhau. Không xếp hạng, không đề xuất.",
+    ledeStatic: "Các tuyên bố công khai, kèm nguồn và giới hạn.",
+    boundary: "Ranh giới",
     add: "So sánh",
     remove: "Bỏ",
     reset: "Xóa so sánh",
@@ -47,6 +53,8 @@ const COPY = {
   zh: {
     heading: "比较声明",
     lede: "选择最多四条公开声明并排查看。不排名，不推荐。",
+    ledeStatic: "公开声明，附来源与边界。",
+    boundary: "边界",
     add: "对比",
     remove: "移除",
     reset: "清空对比",
@@ -59,6 +67,8 @@ const COPY = {
   "zh-hant": {
     heading: "比較聲明",
     lede: "選擇最多四則公開聲明並排檢視。不排名，不推薦。",
+    ledeStatic: "公開聲明，附來源與邊界。",
+    boundary: "邊界",
     add: "對比",
     remove: "移除",
     reset: "清空對比",
@@ -277,7 +287,10 @@ const domId = (id: string): string =>
   <h2 id="decision-room-title" class="sr-only">
     {copy.boardTitle}
   </h2>
-  <p class="decision-room__lede">{copy.lede}</p>
+  <p class="decision-room__lede decision-room__lede--js">{copy.lede}</p>
+  <p class="decision-room__lede decision-room__lede--static">
+    {copy.ledeStatic}
+  </p>
 
   <div class="decision-room__atelier" data-atelier-controls>
     <h3 class="decision-room__atelier-title">{atelierCopy.heading}</h3>
@@ -354,7 +367,22 @@ const domId = (id: string): string =>
         data-has-boundary={item.boundaryText ? "" : undefined}
       >
         <span class="decision-room__kind">{KIND_LABELS[item.kind][lang]}</span>
-        <h3 class="decision-room__label">{item.label[lang]}</h3>
+        <h3 class="decision-room__label">
+          {item.kind === "claim" ? (
+            <a
+              class="decision-room__label-link"
+              data-claim-passport-link
+              href={getEvidencePassportPath(
+                lang,
+                item.id.slice("claim:".length),
+              )}
+            >
+              {item.label[lang]}
+            </a>
+          ) : (
+            item.label[lang]
+          )}
+        </h3>
         {item.summary ? (
           <p class="decision-room__summary">{item.summary[lang]}</p>
         ) : null}
@@ -415,12 +443,13 @@ const domId = (id: string): string =>
         {copy.full.replace("{max}", String(MAX_COMPARISON))}
       </p>
       <div class="decision-room__handoff" data-atelier-handoff>
-        <a
+        <ButtonLink
+          variant="secondary"
           class="decision-room__handoff-link"
           data-atelier-handoff-link
           hidden
           href="#"
-        ></a>
+        />
         <p
           class="decision-room__handoff-report"
           data-atelier-handoff-report
@@ -437,8 +466,16 @@ const domId = (id: string): string =>
               </span>
             ) : null}
             {item.boundaryText ? (
-              <span class="decision-room__boundary">
-                {item.boundaryText[lang]}
+              <span
+                class="decision-room__row-boundary"
+                data-decision-row-boundary
+              >
+                <span class="decision-room__row-boundary-label">
+                  {copy.boundary}
+                </span>
+                <span class="decision-room__boundary">
+                  {item.boundaryText[lang]}
+                </span>
               </span>
             ) : null}
             {item.evidenceHref ? (
@@ -482,6 +519,15 @@ const domId = (id: string): string =>
     }
     .decision-room__tray {
       min-height: 0 !important;
+    }
+    /* Without JavaScript nothing can be selected: say what the page is, and
+       drop the "nothing selected" status line. */
+    .decision-room__lede--js,
+    [data-decision-empty-state] {
+      display: none !important;
+    }
+    .decision-room__lede--static {
+      display: block !important;
     }
   </style>
 </noscript>

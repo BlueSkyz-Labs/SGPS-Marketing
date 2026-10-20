@@ -27,6 +27,8 @@ interface Props {
   "aria-current"?: "page" | undefined;
   /** Language of the link text when it differs from the page (WCAG 3.1.2). */
   lang?: string;
+  /** Initially hidden action that a script reveals (pass-through attribute). */
+  hidden?: boolean;
   /** Pass-through data-* hooks (e.g. data-hero-primary). */
   [attribute: `data-${string}`]: string | boolean | undefined;
 }

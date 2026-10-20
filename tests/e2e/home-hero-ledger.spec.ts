@@ -68,17 +68,14 @@ async function productLine(page: Page) {
       if (!tops.length || b - tops.at(-1)! > 3) tops.push(b);
     }
     const gaps = tops.slice(1).map((top, i) => top - tops[i]!);
-    const links = [...line.querySelectorAll("a")].map((a) => ({
-      display: getComputedStyle(a).display,
-      height: a.getBoundingClientRect().height,
-      // B-01: a tap-sized (>= 44 px) twin with the same destination.
-      twin: [...document.querySelectorAll("a[href]")].some((b) => {
-        if (b === a || b.getAttribute("href") !== a.getAttribute("href"))
-          return false;
-        const r = b.getBoundingClientRect();
-        return r.width >= 44 && r.height >= 44;
+    // Owner 2026-10-20 (ACQ-10): the names are plain text, not links.
+    const links = [...line.querySelectorAll("[data-hero-product-name]")].map(
+      (a) => ({
+        display: getComputedStyle(a).display,
+        height: a.getBoundingClientRect().height,
+        anchors: line.querySelectorAll("a").length,
       }),
-    }));
+    );
     const lineHeight = Number.parseFloat(getComputedStyle(line).lineHeight);
     return { gaps, links, lineHeight };
   });
@@ -100,7 +97,7 @@ for (const lang of LOCALES) {
 }
 
 for (const lang of ["en", "vi"] as const) {
-  test(`/${lang}/ at 390: product-line links are inline with a tap-sized twin, line pitch = line-height`, async ({
+  test(`/${lang}/ at 390: product-line names are inline plain text, line pitch = line-height`, async ({
     page,
   }) => {
     test.skip(!hasPublicProducts, "No published hero product is available");
@@ -110,7 +107,7 @@ for (const lang of ["en", "vi"] as const) {
     expect(links).toHaveLength(2);
     for (const link of links) {
       expect(link.display).toBe("inline");
-      expect(link.twin, "a >= 44 px target reaches the same page").toBe(true);
+      expect(link.anchors, "names are not links").toBe(0);
     }
     expect(gaps.length, "the line wraps at 390").toBeGreaterThan(0);
     // Every line advances by the paragraph's own line-height: no link box
@@ -132,7 +129,7 @@ test("negative proof: an inline-flex 44 px link breaks the line pitch", async ({
   await page.goto("/vi/");
   await page.addStyleTag({
     content:
-      "[data-hero-product-line] a{display:inline-flex!important;min-height:2.75rem!important;align-items:center;vertical-align:middle}",
+      "[data-hero-product-line] [data-hero-product-name]{display:inline-flex!important;min-height:2.75rem!important;align-items:center;vertical-align:middle}",
   });
   const { gaps, links, lineHeight } = await productLine(page);
   expect(links[0]!.display).toBe("inline-flex");

@@ -75,7 +75,9 @@ for (const lang of LANGS) {
     const m = await supportGap(page);
     test.skip(m === null, "no published support mailbox in this build");
     expect(m!.sameLine).toBe(true);
-    expect(Math.abs(m!.gap - 8)).toBeLessThanOrEqual(1);
+    // Half a pixel absorbs engine sub-pixel text metrics (WebKit reads
+    // 8.01); a pull-back that forgets the 1px border reads 9 and fails.
+    expect(Math.abs(m!.gap - 8)).toBeLessThanOrEqual(0.5);
   });
 }
 
@@ -115,5 +117,17 @@ test.describe("ACQ-08 negative proofs", () => {
     const m = await supportGap(page);
     test.skip(m === null, "no published support mailbox in this build");
     expect(Math.abs(m!.gap - 8)).toBeGreaterThan(1);
+  });
+
+  test("a pull-back that ignores the border is caught", async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await page.goto("/en/contact/");
+    await page.addStyleTag({
+      content:
+        '[data-public-email-role="support"] a { margin-inline-start: -0.75rem !important; }',
+    });
+    const m = await supportGap(page);
+    test.skip(m === null, "no published support mailbox in this build");
+    expect(Math.abs(m!.gap - 8)).toBeGreaterThan(0.5);
   });
 });

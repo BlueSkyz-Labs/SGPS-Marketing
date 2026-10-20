@@ -40,16 +40,16 @@ for (const lang of LOCALES) {
       await expect(chip).toBeVisible();
       await expect(chip).toHaveAttribute("href", `/${lang}/products/sotam/`);
       expect(await isTapEntry(chip)).toBe(true);
-      // The chip is not the only link in its parent container.
+      // The chip is not the only element in its parent container.
       const siblings = await chip.evaluate(
         (el) => el.parentElement!.children.length,
       );
       expect(siblings).toBeGreaterThan(1);
-      // Negative proof: the bare inline link in the product line fails the same
-      // predicate, so the guard would catch a regression to that form.
-      const inline = page.locator("[data-hero-product-line] a").nth(1);
-      await expect(inline).toHaveAttribute("href", `/${lang}/products/sotam/`);
-      expect(await isTapEntry(inline)).toBe(false);
+      // Owner 2026-10-20 (ACQ-10): the inline product-line link is gone, so
+      // the chip is the product line's tap-sized entry, not a second link.
+      await expect(page.locator("[data-hero-product-line] a")).toHaveCount(0);
+      // The inline-link shape still fails the entry predicate (negative proof
+      // in "negative proofs" below).
     });
 
     test("profile: Contact is the one primary step, no early row or lockup", async ({

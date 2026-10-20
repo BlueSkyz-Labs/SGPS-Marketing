@@ -126,11 +126,18 @@ const GUIDE_LINK_TEXT: Record<Language, string> = {
 export function buildNavigatorIndex(
   lang: Language,
   products: ProductEntry[],
+  /** Gated routes that exist only when their data does (e.g. the Journal,
+   * TRU-15: see `journalNavItems`). Empty by default. */
+  extraRoutes: readonly { label: string; href: string }[] = [],
 ): NavigatorItem[] {
   const items: NavigatorItem[] = [];
   const byHref = new Map<string, NavigatorItem>();
 
-  for (const link of [...getNav(lang), ...getFooterLinks(lang)]) {
+  for (const link of [
+    ...getNav(lang),
+    ...extraRoutes,
+    ...getFooterLinks(lang),
+  ]) {
     if (byHref.has(link.href)) {
       continue;
     }
