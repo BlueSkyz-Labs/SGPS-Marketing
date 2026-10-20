@@ -33,11 +33,17 @@ new brand copy.
 ## Routing
 
 Unprotected PRs merge one at a time at 8/8 green on the exact head:
-#647, #648, #649, #651, #655.
+#648, #649, #651. #647 (TRU-01/02, G8) merged as `cab905d`.
 
 Protected PRs wait for the Owner's `owner-approved` label (agents never apply
 it): #645 (TRU-13, BB-03), #652 (ACQ-07), #653 (RUM contract), #654 (ACQ-09),
-#656 (G6, after its baselines).
+#655 (TRU-10, en-verify baselines), #656 (G6, vi-products-sotro baselines).
+
+TRU-10 follow-up (Owner choice, 2026-10-20): after the route-to-page rename,
+the en Verify sources line and the evidence atlas both read "Privacy page" and
+"Products page", which the unique-link guard rejects. The sources line now
+reads "View the privacy page" and "View the products page", matching the
+approved zh wording; the atlas keeps the shorter labels.
 
 ## Residuals
 

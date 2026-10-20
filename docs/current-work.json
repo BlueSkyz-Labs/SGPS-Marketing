@@ -361,7 +361,7 @@
     },
     {
       "id": "experience-audit-wave-2026-10-20",
-      "name": "Experience audit wave 2026-10-20 (ACQ-01..12, TRU-01..15; Chromium E3 on a local preview). G10 merged in #650 (0cfa331). Unprotected PRs #647 #648 #649 #651 #655 merge one at a time at 8/8 exact-head green; protected #645 #652 #653 #654 #656 wait for the Owner label. Residuals: stale visual baselines since #637, privacy as a self-only security source (TRU-12), #655 word-cap loosening, pageloadId allowance on one observation",
+      "name": "Experience audit wave 2026-10-20 (ACQ-01..12, TRU-01..15; Chromium E3 on a local preview). G10 merged in #650 (0cfa331). #647 merged (cab905d). Unprotected PRs #648 #649 #651 merge one at a time at 8/8 exact-head green; protected #645 #652 #653 #654 #655 #656 wait for the Owner label. Residuals: stale visual baselines since #637, privacy as a self-only security source (TRU-12), #655 word-cap loosening, pageloadId allowance on one observation",
       "status": "IN_PROGRESS",
       "evidence": "docs/evidence/2026-10-20-experience-audit-owner-decisions.md"
     }
