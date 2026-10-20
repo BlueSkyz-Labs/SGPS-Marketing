@@ -1394,6 +1394,14 @@ header details:not(:has(> summary)) {
   letter-spacing: -0.01em;
   color: var(--text-primary);
 }
+.decision-room__label-link {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+.decision-room__label-link:hover {
+  text-decoration-thickness: 2px;
+}
 .decision-room__summary {
   font-size: var(--size-2);
   color: var(--text-secondary);

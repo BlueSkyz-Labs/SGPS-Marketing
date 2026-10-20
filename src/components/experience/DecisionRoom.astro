@@ -5,6 +5,7 @@ import {
   ATELIER_GOALS,
   ATELIER_REASON_KEYS,
 } from "@/lib/decision-atelier";
+import { getEvidencePassportPath } from "@/lib/claims";
 import { getPublicProducts } from "@/lib/products";
 import type { Language } from "@/data/site";
 
@@ -354,7 +355,22 @@ const domId = (id: string): string =>
         data-has-boundary={item.boundaryText ? "" : undefined}
       >
         <span class="decision-room__kind">{KIND_LABELS[item.kind][lang]}</span>
-        <h3 class="decision-room__label">{item.label[lang]}</h3>
+        <h3 class="decision-room__label">
+          {item.kind === "claim" ? (
+            <a
+              class="decision-room__label-link"
+              data-claim-passport-link
+              href={getEvidencePassportPath(
+                lang,
+                item.id.slice("claim:".length),
+              )}
+            >
+              {item.label[lang]}
+            </a>
+          ) : (
+            item.label[lang]
+          )}
+        </h3>
         {item.summary ? (
           <p class="decision-room__summary">{item.summary[lang]}</p>
         ) : null}
