@@ -4,6 +4,8 @@ import { getPublicProducts } from "@/lib/products";
 import { getLanguageFromPath } from "@/lib/i18n";
 import { buildConciergeCorpus } from "@/lib/concierge-corpus";
 import { getNav } from "@/data/site";
+import { journalNavItems } from "@/lib/journal-nav";
+import { getCollection } from "astro:content";
 import {
   AVAILABILITY,
   webPreviewOpen,
@@ -15,7 +17,12 @@ const isVi = lang === "vi";
 const isZh = lang === "zh";
 const isZhHant = lang === "zh-hant";
 const publicProducts = await getPublicProducts();
-const items = buildNavigatorIndex(lang, publicProducts);
+// TRU-15: the Journal is searchable only once it holds a published entry.
+const items = buildNavigatorIndex(
+  lang,
+  publicProducts,
+  journalNavItems(lang, await getCollection("journal")),
+);
 
 // C3-E deterministic step: the concierge corpus feeds this navigator instead of
 // rendering a second surface. Each corpus record's verbatim canonical text
