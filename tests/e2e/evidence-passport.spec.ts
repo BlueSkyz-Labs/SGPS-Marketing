@@ -10,13 +10,18 @@ async function expandStep(
   expand: string,
   label: string,
 ): Promise<Locator> {
-  const button = passport.getByRole("button", {
-    name: `${expand}: ${label}`,
-  });
+  // Sources and Boundary are open by default (TRU-01); clicking only when
+  // collapsed keeps this helper valid for every step.
+  const button = passport.locator(
+    `[data-step-label="${label}"].evidence-explorer__step-btn`,
+  );
   await expect(button).toBeVisible();
   const panelId = await button.getAttribute("aria-controls");
   expect(panelId).toBeTruthy();
-  await button.click();
+  if ((await button.getAttribute("aria-expanded")) !== "true") {
+    await expect(button).toHaveAccessibleName(`${expand}: ${label}`);
+    await button.click();
+  }
   const panel = passport.locator(`#${panelId}`);
   await expect(panel).toBeVisible();
   return panel;
@@ -169,10 +174,12 @@ test.describe("evidence passport", () => {
       page.locator(`[data-evidence-passport="${ID}"]`),
     ).toBeVisible();
     const passport = page.locator(`[data-evidence-passport="${ID}"]`);
-    const staticSources = passport.locator(
-      ":scope > [data-evidence-static-sources]",
-    );
-    await expect(passport.locator("[data-evidence-chain]")).toBeHidden();
+    // Sources now live inside the (open) chain panel; print hides the step
+    // buttons and shows only the panels that carry sources/boundary.
+    const staticSources = passport.locator("[data-evidence-static-sources]");
+    await expect(
+      passport.locator(".evidence-explorer__step-btn").first(),
+    ).toBeHidden();
     await expect(staticSources).toBeVisible();
     await expect(
       staticSources.getByRole("link", {
@@ -180,9 +187,7 @@ test.describe("evidence passport", () => {
       }),
     ).toBeVisible();
     await expect(
-      passport.locator(
-        ":scope > [data-evidence-static-boundary] [data-boundary-card]",
-      ),
+      passport.locator("[data-evidence-static-boundary] [data-boundary-card]"),
     ).toBeVisible();
   });
 });
@@ -206,9 +211,7 @@ test.describe("evidence passport without JavaScript", () => {
       }),
     ).toBeVisible();
     await expect(
-      passport.locator(
-        ":scope > [data-evidence-static-boundary] [data-boundary-card]",
-      ),
+      passport.locator("[data-evidence-static-boundary] [data-boundary-card]"),
     ).toBeVisible();
   });
 });

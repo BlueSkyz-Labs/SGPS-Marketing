@@ -8,6 +8,8 @@ import {
   getEvidencePassportPath,
 } from "@/lib/claims";
 import { getProductProfilePath } from "@/lib/product-routes";
+import { productCopy } from "@/lib/product-copy";
+import { productPageCopy } from "@/components/product/product-page-copy";
 import type { ProductEntry } from "@/lib/products";
 
 export interface NavigatorItem {
@@ -243,4 +245,32 @@ export function buildNavigatorIndex(
   }
 
   return items;
+}
+
+/**
+ * ACQ-02: task-word search text per product profile path. It joins only the
+ * strings the profile already publishes in the reader's language (registry
+ * `jobs` and `capabilities`, and the profile's own "what it does" list), so a
+ * visitor can find a product by the task it serves ("rent", "thu tiền")
+ * without any new claim or visible label. The caller passes the public
+ * products only; a product that is not public has no entry here.
+ */
+export function buildProductSearchText(
+  lang: Language,
+  products: ProductEntry[],
+): Map<string, string> {
+  const out = new Map<string, string>();
+  for (const product of products) {
+    const copy = productCopy(product.data, lang);
+    const parts = new Set<string>([
+      ...copy.jobs,
+      ...copy.capabilities,
+      ...productPageCopy(product.data, lang).whatItDoes,
+    ]);
+    out.set(
+      getProductProfilePath(lang, product.data.slug),
+      [...parts].join(" "),
+    );
+  }
+  return out;
 }

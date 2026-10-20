@@ -800,6 +800,8 @@ html[data-intent="evaluate-product"] [data-journey-bar] a[href$="/products/"] {
 
 .command-navigator__status {
   margin: 0.25rem 0 0;
+  padding: 0 0.75rem;
+  font-size: var(--size-2);
   color: var(--text-muted);
 }
 
@@ -1108,14 +1110,43 @@ summary {
 .evidence-details__more {
   margin-top: 0.5rem;
 }
+/* TRU-09: this summary expands in place, it does not navigate, so it must not
+   read as a link: body-ink colour, no underline, and a chevron that turns when
+   the disclosure is open. The label text is unchanged. */
 .evidence-details__more > summary {
   cursor: pointer;
   font-size: var(--size-2);
   font-weight: 600;
-  color: var(--action-primary);
+  color: var(--text-primary);
+  text-decoration: none;
   min-height: 2.75rem;
   display: inline-flex;
   align-items: center;
+  gap: 0.5rem;
+  list-style: none;
+}
+.evidence-details__more > summary::-webkit-details-marker {
+  display: none;
+}
+.evidence-details__more > summary::after {
+  content: "";
+  flex: none;
+  width: 0.5rem;
+  height: 0.5rem;
+  margin-block-start: -0.25rem;
+  border-inline-end: 2px solid currentColor;
+  border-block-end: 2px solid currentColor;
+  transform: rotate(45deg);
+  transition: transform 160ms ease;
+}
+.evidence-details__more[open] > summary::after {
+  margin-block-start: 0.25rem;
+  transform: rotate(-135deg);
+}
+@media (prefers-reduced-motion: reduce) {
+  .evidence-details__more > summary::after {
+    transition: none;
+  }
 }
 .evidence-details__list {
   margin-top: 0.5rem;
@@ -1359,7 +1390,7 @@ summary {
 .decision-room__source {
   display: inline-flex;
   align-items: center;
-  min-height: 1.5rem; /* WCAG 2.5.8 target size */
+  min-height: 2.75rem; /* 44px site target norm */
   font-size: var(--size-2);
   font-weight: 600;
   color: var(--action-primary);
