@@ -8,6 +8,8 @@ import "@/components/layout/header-control.css";
 import ButtonLink from "@/components/ui/ButtonLink.astro";
 import { SHARED_LABELS, labelFor, getNav } from "@/data/site";
 import { getLanguageFromPath } from "@/lib/i18n";
+import { journalNavItems } from "@/lib/journal-nav";
+import { getCollection } from "astro:content";
 import { DEFAULT_SCENE, lockupSurface, type Scene } from "@/lib/scene";
 
 interface Props {
@@ -19,10 +21,16 @@ const { scene = DEFAULT_SCENE } = Astro.props;
 
 const currentPath = Astro.url.pathname;
 const lang = getLanguageFromPath(currentPath);
-const NAV = getNav(lang);
+// Owner decision 2026-10-20 (TRU-15): the Journal joins the navigation only
+// once the collection holds a published entry (empty today, so no item).
+const NAV = [
+  ...getNav(lang),
+  ...journalNavItems(lang, await getCollection("journal")),
+];
 
+const trimmed = (path: string): string => path.replace(/\/+$/, "");
 const isActive = (href: string): boolean =>
-  currentPath.replace(/\/+$/, "") === href.replace(/\/+$/, "");
+  trimmed(currentPath) === trimmed(href);
 
 // Owner decision 2026-10-01 (v7 A-12): the one filled CTA leads to Products.
 // Owner decision 2026-10-18 (audit A-03): About and Contact are the plain

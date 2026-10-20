@@ -113,20 +113,13 @@ function enhance(root: HTMLElement): void {
   claimStep.textContent = graph.claim;
   steps.push({ label: msgClaim, title: "1", body: claimStep });
 
-  // Step 2: sources
+  // Step 2: sources. The static list itself moves into the step (no clone),
+  // so the link set stays identical to the no-JS page and keeps its ids.
+  const staticSourcesBlock = root.querySelector<HTMLElement>(
+    "[data-evidence-static-sources]",
+  );
   const sourcesDiv = document.createElement("div");
-  const sourcesUl = document.createElement("ul");
-  for (const ref of graph.evidence) {
-    const li = document.createElement("li");
-    li.id = `evidence-${ref.id}`;
-    const a = document.createElement("a");
-    a.href = ref.href;
-    a.textContent = ref.label;
-    if (/^https?:\/\//i.test(ref.href)) a.rel = "noopener noreferrer";
-    li.appendChild(a);
-    sourcesUl.appendChild(li);
-  }
-  sourcesDiv.appendChild(sourcesUl);
+  if (staticSourcesBlock) sourcesDiv.appendChild(staticSourcesBlock);
   steps.push({ label: msgSources, title: "2", body: sourcesDiv });
 
   // Step 3: state
@@ -152,7 +145,7 @@ function enhance(root: HTMLElement): void {
       "[data-evidence-static-boundary]",
     );
     if (staticBoundary) {
-      bDiv.appendChild(staticBoundary.cloneNode(true));
+      bDiv.appendChild(staticBoundary);
     }
     steps.push({ label: msgBoundary, title: "4", body: bDiv });
   }
@@ -160,6 +153,8 @@ function enhance(root: HTMLElement): void {
   // Render stepper
   stepsOl.replaceChildren();
   const buttons: HTMLButtonElement[] = [];
+  // Sources and Boundary are the proof: open by default (several may be open).
+  const openByDefault = new Set([msgSources, msgBoundary]);
   steps.forEach((step, i) => {
     const li = document.createElement("li");
     li.className = "evidence-explorer__step";
@@ -194,23 +189,19 @@ function enhance(root: HTMLElement): void {
     panel.hidden = true;
     panel.appendChild(step.body);
 
+    const setOpen = (open: boolean) => {
+      btn.setAttribute("aria-expanded", String(open));
+      btn.setAttribute(
+        "aria-label",
+        `${open ? msgCollapse : msgExpand}: ${step.label}`,
+      );
+      panel.hidden = !open;
+    };
+    // Independent disclosure: several panels may be open at once.
     btn.addEventListener("click", () => {
-      const open = btn.getAttribute("aria-expanded") === "true";
-      // Accordion: close others
-      for (const b of buttons) {
-        b.setAttribute("aria-expanded", "false");
-        b.setAttribute("aria-label", `${msgExpand}: ${b.dataset.stepLabel}`);
-        const p = document.getElementById(
-          b.getAttribute("aria-controls") ?? "",
-        );
-        if (p) p.hidden = true;
-      }
-      if (!open) {
-        btn.setAttribute("aria-expanded", "true");
-        btn.setAttribute("aria-label", `${msgCollapse}: ${step.label}`);
-        panel.hidden = false;
-      }
+      setOpen(btn.getAttribute("aria-expanded") !== "true");
     });
+    if (openByDefault.has(step.label)) setOpen(true);
 
     // Keyboard: arrows move between steps
     btn.addEventListener("keydown", (e: KeyboardEvent) => {
@@ -229,12 +220,7 @@ function enhance(root: HTMLElement): void {
     buttons.push(btn);
   });
 
-  // Activate: show chain (CSS hides static sections when active)
-  root
-    .querySelectorAll<HTMLElement>(
-      "[data-evidence-static-sources] [id^='evidence-']",
-    )
-    .forEach((target) => target.removeAttribute("id"));
+  // Activate: show the chain; the static sources/boundary now live inside it.
   chain.hidden = false;
   root.setAttribute("data-explorer-active", "true");
 

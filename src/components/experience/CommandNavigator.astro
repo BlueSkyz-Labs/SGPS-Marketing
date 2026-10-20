@@ -1,9 +1,11 @@
 ---
-import { buildNavigatorIndex } from "@/lib/navigator";
+import { buildNavigatorIndex, buildProductSearchText } from "@/lib/navigator";
 import { getPublicProducts } from "@/lib/products";
 import { getLanguageFromPath } from "@/lib/i18n";
 import { buildConciergeCorpus } from "@/lib/concierge-corpus";
 import { getNav } from "@/data/site";
+import { journalNavItems } from "@/lib/journal-nav";
+import { getCollection } from "astro:content";
 import {
   AVAILABILITY,
   webPreviewOpen,
@@ -15,7 +17,12 @@ const isVi = lang === "vi";
 const isZh = lang === "zh";
 const isZhHant = lang === "zh-hant";
 const publicProducts = await getPublicProducts();
-const items = buildNavigatorIndex(lang, publicProducts);
+// TRU-15: the Journal is searchable only once it holds a published entry.
+const items = buildNavigatorIndex(
+  lang,
+  publicProducts,
+  journalNavItems(lang, await getCollection("journal")),
+);
 
 // C3-E deterministic step: the concierge corpus feeds this navigator instead of
 // rendering a second surface. Each corpus record's verbatim canonical text
@@ -39,6 +46,12 @@ for (const record of buildConciergeCorpus({
   if (record.kind === "claim") continue;
   const path = new URL(record.publicUrl).pathname;
   corpusText.set(path, `${corpusText.get(path) ?? ""} ${record.text}`.trim());
+}
+
+// ACQ-02: the profile's own published task strings (jobs, capabilities) join
+// the search text of the product's item, so task words find the product.
+for (const [path, text] of buildProductSearchText(lang, publicProducts)) {
+  corpusText.set(path, `${corpusText.get(path) ?? ""} ${text}`.trim());
 }
 
 const KIND_LABELS: Record<string, string> = {
@@ -225,16 +238,18 @@ const statusIntents = (STATUS_INTENTS[lang] ?? []).join("|");
     <p class="command-navigator__empty" data-command-empty hidden>
       {emptyLabel}
     </p>
+    {/* Outside the fallback: a status-intent query keeps this honest line even
+        when the query also finds a product (e.g. "download" finds Sổ Trọ). */}
+    <p
+      class="command-navigator__status"
+      data-command-status
+      data-intents={statusIntents}
+      hidden
+    >
+      {statusLine.charAt(0).toLocaleUpperCase(lang)}
+      {statusLine.slice(1)}.
+    </p>
     <div class="command-navigator__fallback" data-command-fallback hidden>
-      <p
-        class="command-navigator__status"
-        data-command-status
-        data-intents={statusIntents}
-        hidden
-      >
-        {statusLine.charAt(0).toLocaleUpperCase(lang)}
-        {statusLine.slice(1)}.
-      </p>
       <ul>
         {fallbackLinks.map((link) => (
           <li>

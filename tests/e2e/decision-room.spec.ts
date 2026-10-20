@@ -40,7 +40,9 @@ test.describe("decision room", () => {
     await expect(room.locator("[data-decision-item] a").first()).toBeVisible();
     await expect(room.locator("[data-decision-add]").first()).toBeHidden();
     await expect(room.locator("[data-decision-board]")).toBeHidden();
-    await expect(room.locator("[data-decision-empty-state]")).toBeVisible();
+    // TRU-11: with scripting off the "nothing selected" line is hidden (the
+    // page cannot select anything); the static lede replaces the JS lede.
+    await expect(room.locator("[data-decision-empty-state]")).toBeHidden();
     await context.close();
   });
 

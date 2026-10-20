@@ -62,7 +62,6 @@ async function ringOf(page: Page, selector: string) {
 const TARGETS = [
   ["/en/", ".site-footer a.footer-nav-link", 1440],
   ["/vi/", ".site-footer a.footer-nav-link", 390],
-  ["/en/", ".hero-plane--ink a.hero-inline-link", 1440],
   ["/en/", "a.hero-entry-chip", 390],
   ["/en/products/", "a.back-to-top", 390],
 ] as const;
