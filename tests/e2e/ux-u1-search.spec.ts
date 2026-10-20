@@ -49,11 +49,11 @@ test("unaccented 'gia' does not match inside longer words", async ({
 });
 
 for (const [lang, queries] of [
-  ["en", ["price", "pricing", "download", "sign up", "zalo"]],
-  ["vi", ["giá", "tải app", "đăng ký", "zalo", "download"]],
+  ["en", ["price", "pricing", "sign up", "zzqx"]],
+  ["vi", ["giá", "tải app", "đăng ký", "zzqx", "download"]],
 ] as const) {
   for (const q of queries) {
-    test(`${lang} '${q}' shows fallback links${q === "zalo" ? " and no status line" : ""}`, async ({
+    test(`${lang} '${q}' shows fallback links${q === "zzqx" ? " and no status line" : ""}`, async ({
       page,
     }) => {
       await search(page, lang, q);
@@ -67,7 +67,7 @@ for (const [lang, queries] of [
         fallback.locator(`a[href="/${lang}/contact/"]`),
       ).toBeVisible();
       const status = page.locator("[data-command-status]");
-      if (q === "zalo") {
+      if (q === "zzqx") {
         // No hit and no status intent: fallback links only, no availability claim.
         await expect(status).toBeHidden();
       } else {
@@ -77,6 +77,42 @@ for (const [lang, queries] of [
     });
   }
 }
+
+// ACQ-02 (wave 1c): a word that the product profile itself publishes now finds
+// the product instead of the fallback. 'zalo' (a receipt channel) is such a
+// word; the no-hit, no-status case is pinned above with 'zzqx'.
+for (const lang of ["en", "vi"] as const) {
+  test(`${lang} 'zalo' finds Sổ Trọ from its published text`, async ({
+    page,
+  }) => {
+    await search(page, lang, "zalo");
+    await expect(items(page).first()).toContainText("Sổ Trọ");
+    await expect(page.locator("[data-command-fallback]")).toBeHidden();
+    await expect(page.locator("[data-command-status]")).toBeHidden();
+  });
+}
+
+// A status-intent word keeps the honest availability line even when the query
+// also finds a product: EN 'download' matches the published "spreadsheet to
+// download" capability, but the visitor asking to download the app must still
+// read "no store release".
+test("en 'download' finds Sổ Trọ and keeps the status line", async ({
+  page,
+}) => {
+  await search(page, "en", "download");
+  await expect(items(page).first()).toContainText("Sổ Trọ");
+  const status = page.locator("[data-command-status]");
+  await expect(status).toBeVisible();
+  await expect(status).toHaveText(STATUS.en!);
+});
+
+test("negative proof: results without a status-intent word show no status line", async ({
+  page,
+}) => {
+  await search(page, "en", "rent");
+  await expect(items(page).first()).toContainText("Sổ Trọ");
+  await expect(page.locator("[data-command-status]")).toBeHidden();
+});
 
 // Search must distinguish a genuinely empty query from punctuation/emoji.
 // Both tokenize to zero words, but a non-empty input must never imply matches.

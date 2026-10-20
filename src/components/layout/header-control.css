@@ -103,9 +103,12 @@ header[data-scene="ink"] :is(.hc-trigger, .hc-group),
 .hc-glyph {
   display: block;
   flex-shrink: 0;
-  /* A5: px-sized, not rem — must not grow under 200% text zoom (WP-06). */
-  width: 20px;
-  height: 20px;
+  /* ACQ-12: 20px at the default root size, and it follows a larger root font
+     size at half rate (28px at 200%), so the glyphs stay in proportion with the
+     header text without the control growing as fast as its label (WP-06
+     keeps the 320px 200% no-overflow guard green). */
+  width: calc(20px + (1rem - 16px) / 2);
+  height: calc(20px + (1rem - 16px) / 2);
 }
 
 .hc-chevron {

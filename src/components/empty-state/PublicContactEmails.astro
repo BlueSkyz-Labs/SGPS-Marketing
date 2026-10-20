@@ -38,14 +38,17 @@ const hasPublicEmail = Boolean(SITE.contactEmail || SITE.supportEmail);
     ) : null}
     {SITE.supportEmail ? (
       <p
-        class="text-sm text-[var(--text-secondary)]"
+        class="flex flex-wrap items-center gap-2 text-sm text-[var(--text-secondary)]"
         data-public-email-role="support"
       >
         <span>{labelFor(SHARED_LABELS.productSupport, lang)}: </span>
+        {/* ACQ-08: the tertiary pulls back by its 0.75rem inline padding so
+            the label-to-address gap is exactly the 8px flex gap. */}
         <ButtonLink
           href={`mailto:${SITE.supportEmail}`}
           variant="tertiary"
           icon="none"
+          class="-ms-3"
         >
           {SITE.supportEmail}
         </ButtonLink>
