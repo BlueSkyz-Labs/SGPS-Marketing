@@ -1031,6 +1031,14 @@ summary {
   line-height: 1.5;
 }
 
+/* ACQ-08: both links in the Contact Security card share one treatment —
+ * weight 600 with a visible underline at rest. The tertiary action keeps its
+ * own 1px / 0.3em underline; only its rest colour is made visible here
+ * (0,2,1 outranks the scoped .btn--tertiary rule). */
+[data-contact-card="security"] a.btn--tertiary {
+  text-decoration-color: currentColor;
+}
+
 /* v3 Wave 2 — integrity lens, evidence depth, bilingual mirror. */
 .integrity-lens,
 .bilingual-mirror {
