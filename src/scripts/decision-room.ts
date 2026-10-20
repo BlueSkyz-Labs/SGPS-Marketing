@@ -121,8 +121,26 @@ export function initDecisionRoom(root: ParentNode = document): void {
     }
   }
 
+  // G5 / TRU-06: the first selection brings the tray into view, once. A
+  // comparison restored from the URL counts as already started.
+  const tray = room.querySelector("[data-decision-tray]");
+  let trayRevealed = selected.size > 0;
+  const revealTray = (): void => {
+    if (trayRevealed || !(tray instanceof HTMLElement)) return;
+    trayRevealed = true;
+    const reduced = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+    // scrollIntoView never moves focus: the pressed control keeps it.
+    tray.scrollIntoView({
+      behavior: reduced ? "auto" : "smooth",
+      block: "nearest",
+    });
+  };
+
   const toggle = (id: string, fromButton: boolean): void => {
     if (!id) return;
+    let added = false;
     if (selected.has(id)) {
       selected.delete(id);
       announce(template(msgCount, selected.size, max));
@@ -130,10 +148,12 @@ export function initDecisionRoom(root: ParentNode = document): void {
       announce(template(msgFull, selected.size, max));
     } else {
       selected.add(id);
+      added = true;
       announce(template(msgCount, selected.size, max));
     }
     render();
     persist();
+    if (added) revealTray();
     if (fromButton) {
       const button = addButtons.find(
         (candidate) => candidate.getAttribute("data-decision-add") === id,

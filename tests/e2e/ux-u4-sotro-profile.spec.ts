@@ -211,7 +211,12 @@ for (const lang of LANGS) {
             parseFloat(getComputedStyle(el).marginTop),
           0,
         );
-        return document.documentElement.scrollHeight - excluded;
+        // ACQ-05 (Owner 2026-10-20) restored the 16 px gap between the
+        // "What it does" H2 and its list; that list sits outside the
+        // chapters, so its top margin is excluded the same way.
+        const does = document.querySelector<HTMLElement>("[data-what-it-does]");
+        const doesGap = does ? parseFloat(getComputedStyle(does).marginTop) : 0;
+        return document.documentElement.scrollHeight - excluded - doesGap;
       });
       const before = MAIN_HEIGHT[name][lang] - MAIN_ACCESS[name];
       // Wide: tighter chapters save about 7% in the static layout (8% with
