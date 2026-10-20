@@ -965,6 +965,15 @@ summary {
   list-style: none;
 }
 
+/* The parser can yield between <details> and its <summary> (slow CPU or
+   network). In that frame the browser paints its default "Details" summary,
+   68x24 instead of the 44 px Menu control, and the swap is a layout shift on
+   every mobile page. Render the header disclosure only once it has its own
+   summary. */
+header details:not(:has(> summary)) {
+  display: none;
+}
+
 /* v3 Wave 1 — truth-state grammar (no color-only meaning, no animation). */
 .truth-state {
   display: inline-flex;
