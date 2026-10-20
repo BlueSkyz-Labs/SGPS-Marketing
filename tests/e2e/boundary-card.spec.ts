@@ -18,13 +18,17 @@ async function expandStep(
   expand: string,
   label: string,
 ): Promise<Locator> {
-  const button = passport.getByRole("button", {
-    name: `${expand}: ${label}`,
-  });
+  // Boundary is open by default (TRU-01); click only when collapsed.
+  const button = passport.locator(
+    `[data-step-label="${label}"].evidence-explorer__step-btn`,
+  );
   await expect(button).toBeVisible();
   const panelId = await button.getAttribute("aria-controls");
   expect(panelId).toBeTruthy();
-  await button.click();
+  if ((await button.getAttribute("aria-expanded")) !== "true") {
+    await expect(button).toHaveAccessibleName(`${expand}: ${label}`);
+    await button.click();
+  }
   const panel = passport.locator(`#${panelId}`);
   await expect(panel).toBeVisible();
   return panel;
