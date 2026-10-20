@@ -33,7 +33,8 @@ new brand copy.
 ## Routing
 
 Unprotected PRs merge one at a time at 8/8 green on the exact head:
-#648, #649, #651. #647 (TRU-01/02, G8) merged as `cab905d`.
+#649, #651. #647 (TRU-01/02, G8) merged as `cab905d`; #648 merged as
+`842725c`.
 
 Protected PRs wait for the Owner's `owner-approved` label (agents never apply
 it): #645 (TRU-13, BB-03), #652 (ACQ-07), #653 (RUM contract), #654 (ACQ-09),
