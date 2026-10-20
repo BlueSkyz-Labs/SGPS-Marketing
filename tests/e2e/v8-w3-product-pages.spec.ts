@@ -66,7 +66,12 @@ for (const lang of LOCALES) {
         await page.goto(`/${lang}/products/${slug}/`);
         const line = page.locator("[data-app-access]");
         await expect(line).toHaveCount(1);
-        await expect(line.locator("a")).toHaveCount(0);
+        // G6: the one link is the contact link, never a store link.
+        await expect(line.locator("a")).toHaveCount(1);
+        await expect(line.locator("a")).toHaveAttribute(
+          "href",
+          `/${lang}/contact/`,
+        );
         const text = (await line.textContent()) ?? "";
         expect(hasStoreCta(text, 0), text).toBe(false);
         await expect(page.locator("[data-mobile-state]")).toHaveCount(1);

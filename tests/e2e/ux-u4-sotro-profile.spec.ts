@@ -203,9 +203,7 @@ for (const lang of LANGS) {
       // it is excluded here and from the baseline via MAIN_ACCESS.
       const height = await page.evaluate(() => {
         const excluded = [
-          ...document.querySelectorAll<HTMLElement>(
-            "[data-interim-note], [data-app-access]",
-          ),
+          ...document.querySelectorAll<HTMLElement>("[data-app-access]"),
         ].reduce(
           (sum, el) =>
             sum +
