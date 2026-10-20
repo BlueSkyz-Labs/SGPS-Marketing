@@ -70,7 +70,7 @@ export const SECURITY_BOUNDARY: BoundaryStatement = {
   id: "bnd-security-reporting",
   claim: {
     en: "Private vulnerability reporting is available through GitHub security advisories, visible only to maintainers.",
-    vi: "Kênh báo cáo lỗ hổng riêng tư khả dụng qua GitHub security advisories, chỉ người bảo trì nhìn thấy.",
+    vi: "Kênh báo cáo lỗ hổng riêng tư khả dụng qua GitHub security advisories (kênh báo lỗ hổng riêng tư của GitHub), chỉ người bảo trì nhìn thấy.",
     zh: "可通过 GitHub 安全通告私下报告漏洞，仅维护者可见。",
     "zh-hant": "可透過 GitHub 安全通告私下報告漏洞，僅維護者可見。",
   },
@@ -94,7 +94,7 @@ export const PRIVACY_BOUNDARY: BoundaryStatement = {
   },
   doesNotImply: {
     en: "It does not establish that no data at all is processed: serving any website still requires infrastructure to handle network-level metadata such as IP addresses and request headers.",
-    vi: "Nó không xác lập rằng không có dữ liệu nào được xử lý: mọi trang web vẫn cần hạ tầng xử lý siêu dữ liệu mạng như địa chỉ IP và header yêu cầu.",
+    vi: "Nó không xác lập rằng không có dữ liệu nào được xử lý: mọi trang web vẫn cần hạ tầng xử lý siêu dữ liệu mạng như địa chỉ IP và header yêu cầu (thông tin kỹ thuật trình duyệt tự gửi kèm).",
     zh: "这并不表示完全不会处理任何数据：提供任何网站服务仍需要基础设施处理网络层面元数据，例如 IP 地址和请求头。",
     "zh-hant":
       "這並不表示完全不會處理任何資料：提供任何網站服務仍需要基礎設施處理網路層級的中繼資料，例如 IP 位址和請求標頭。",
@@ -176,7 +176,7 @@ export const INTEGRITY_ENTRIES: readonly IntegrityEntry[] = [
           "zh-hant": "/zh-hant/privacy/",
         },
         label: {
-          en: "Privacy route",
+          en: "Privacy page",
           vi: "Trang Quyền riêng tư",
           zh: "隐私页面",
           "zh-hant": "隱私頁面",
@@ -192,7 +192,7 @@ export const INTEGRITY_ENTRIES: readonly IntegrityEntry[] = [
           "zh-hant": "/zh-hant/security/",
         },
         label: {
-          en: "Security reporting route",
+          en: "Security reporting page",
           vi: "Trang báo cáo bảo mật",
           zh: "安全报告页面",
           "zh-hant": "安全報告頁面",
@@ -223,7 +223,7 @@ export const INTEGRITY_ENTRIES: readonly IntegrityEntry[] = [
           "zh-hant": "/zh-hant/products/",
         },
         label: {
-          en: "Products route",
+          en: "Products page",
           vi: "Trang Sản phẩm",
           zh: "产品页面",
           "zh-hant": "產品頁面",
@@ -260,7 +260,7 @@ export const MIRROR_PAIRS: readonly MirrorPair[] = [
   {
     id: "security-reporting",
     en: "Private vulnerability reporting is available through GitHub security advisories, visible only to maintainers.",
-    vi: "Kênh báo cáo lỗ hổng riêng tư khả dụng qua GitHub security advisories, chỉ người bảo trì nhìn thấy.",
+    vi: "Kênh báo cáo lỗ hổng riêng tư khả dụng qua GitHub security advisories (kênh báo lỗ hổng riêng tư của GitHub), chỉ người bảo trì nhìn thấy.",
   },
   {
     id: "security-limits",
