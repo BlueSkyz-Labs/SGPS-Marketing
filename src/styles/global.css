@@ -1402,6 +1402,7 @@ summary {
    it never reserves a box, so adding items cannot move anything above it. */
 .decision-room__tray {
   margin-top: 1.5rem;
+  scroll-margin-block: 1rem;
 }
 @media (min-width: 1024px) {
   .decision-room {
@@ -1480,15 +1481,23 @@ summary {
 .decision-room__row .decision-room__remove {
   margin-top: auto;
 }
-/* The boundary stays with its item card above; the tray compares the fact,
-   the summary and the source, which keeps the reserved height bounded. */
-.decision-room__row .decision-room__boundary {
-  display: none;
+/* G5 / TRU-07: each compared item carries its canonical boundary in the tray,
+   under the existing "Boundary" label. The tray sits below the items, so its
+   growth cannot move anything above it. */
+.decision-room__row-boundary {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  inline-size: 100%;
+}
+.decision-room__row-boundary-label {
+  font-size: var(--size-2);
+  font-weight: 600;
+  color: var(--text-secondary);
 }
 /* Below the wide breakpoint rows stay compact: label and Remove only. */
 @media (max-width: 1023.98px) {
   .decision-room__row-summary,
-  .decision-room__row .decision-room__boundary,
   .decision-room__row .decision-room__source {
     display: none;
   }
