@@ -144,7 +144,7 @@ export const INTEGRITY_ENTRIES: readonly IntegrityEntry[] = [
           "zh-hant": "/zh-hant/security/",
         },
         label: {
-          en: "Security route",
+          en: "Security page",
           vi: "Trang Bảo mật",
           zh: "安全页面",
           "zh-hant": "安全頁面",

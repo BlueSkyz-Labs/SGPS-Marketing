@@ -55,7 +55,7 @@ async function glossViolations(page: Page): Promise<string[]> {
 const routeLabel = (page: Page) =>
   page.evaluate(
     () =>
-      /(Privacy|Security reporting|Products) route\b/.exec(
+      /(Privacy|Security reporting|Security|Products) route\b/.exec(
         document.body.innerText,
       )?.[0] ?? null,
   );

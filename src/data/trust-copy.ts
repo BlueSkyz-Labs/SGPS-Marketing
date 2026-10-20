@@ -53,7 +53,7 @@ export const SECURITY_COPY: PerLang<SecurityCopy> = {
         id: "ev-security-advisory",
         label: "GitHub private vulnerability reporting",
       },
-      { id: "ev-security-route", label: "Security route" },
+      { id: "ev-security-route", label: "Security page" },
     ],
     reviewed: "Reviewed",
     emailLabel: "Email",
@@ -156,7 +156,7 @@ export const PRIVACY_COPY: PerLang<PrivacyCopy> = {
     sourcesLabel: "Sources:",
     sources: [
       { id: "ev-privacy-route", label: "Privacy page" },
-      { id: "ev-security-route", label: "Security route" },
+      { id: "ev-security-route", label: "Security page" },
     ],
   },
   vi: {
