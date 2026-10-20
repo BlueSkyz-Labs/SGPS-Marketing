@@ -347,6 +347,33 @@ header details nav a[aria-current="page"]:not(.lang-option) {
   text-decoration: none;
 }
 
+/* ACQ-09 (Owner 2026-10-20): a link whose section is current (a Products
+   profile) carries the same cue as an exact-current link. The Products control
+   is a filled pill, so it keeps its own colours and only takes the weight and
+   underline. `.btn.btn` raises specificity above the pill's scoped
+   `.btn[aria-current]` rule, which resets weight and decoration. */
+header
+  nav
+  a[data-nav-current]:not([class*="rounded-full"], .lang-option, .btn) {
+  color: var(--text-primary);
+  font-weight: 700;
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.5rem;
+}
+
+header nav a.btn.btn[data-nav-current] {
+  font-weight: 700;
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.5rem;
+}
+
+header details nav a[data-nav-current]:not(.lang-option) {
+  box-shadow: inset 3px 0 0 currentColor;
+  text-decoration: none;
+}
+
 /* Pressed state: a clear step back from hover. */
 header nav a:not(.lang-option):active,
 header button:not(:disabled):active,
