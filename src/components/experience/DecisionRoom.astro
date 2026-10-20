@@ -288,7 +288,7 @@ const domId = (id: string): string =>
     {copy.boardTitle}
   </h2>
   <p class="decision-room__lede decision-room__lede--js">{copy.lede}</p>
-  <p class="decision-room__lede decision-room__lede--static" hidden>
+  <p class="decision-room__lede decision-room__lede--static">
     {copy.ledeStatic}
   </p>
 
@@ -525,8 +525,7 @@ const domId = (id: string): string =>
     [data-decision-empty-state] {
       display: none !important;
     }
-    /* Specificity above the site-wide [hidden] rule, which is also !important. */
-    .decision-room .decision-room__lede--static {
+    .decision-room__lede--static {
       display: block !important;
     }
   </style>

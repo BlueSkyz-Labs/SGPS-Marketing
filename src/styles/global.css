@@ -1306,6 +1306,13 @@ summary {
   font-size: var(--size-3);
   color: var(--text-muted);
 }
+/* TRU-11: the no-JS lede is shown only by the <noscript> rule in
+   DecisionRoom.astro. (The hidden attribute cannot be used here: the
+   site-wide [hidden] rule is !important inside a cascade layer, which
+   outranks an unlayered !important override.) */
+.decision-room__lede--static {
+  display: none;
+}
 .decision-room__items {
   margin-top: 1.5rem;
   display: grid;
