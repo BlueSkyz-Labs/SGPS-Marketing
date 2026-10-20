@@ -74,10 +74,16 @@ for (const { name, mutate } of forgeries) {
       .getByRole("link")
       .first();
     await expect(source).toBeVisible();
-    await expect(source).toHaveAttribute(
-      "href",
-      "https://github.com/BlueSkyz-Labs/SGPS-Marketing/security/advisories/new",
-    );
+    // The canonical first source (TRU-04, Owner 2026-10-20: the Security
+    // page) survives the forged graph; the GitHub form stays listed too.
+    await expect(source).toHaveAttribute("href", "/en/security/");
+    await expect(
+      passport
+        .locator("[data-evidence-static-sources]")
+        .locator(
+          'a[href="https://github.com/BlueSkyz-Labs/SGPS-Marketing/security/advisories/new"]',
+        ),
+    ).toBeVisible();
     await expect(
       passport.locator("[data-evidence-static-boundary]"),
     ).toBeVisible();
