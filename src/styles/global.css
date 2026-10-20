@@ -1315,6 +1315,13 @@ header details:not(:has(> summary)) {
   font-size: var(--size-3);
   color: var(--text-muted);
 }
+/* TRU-11: the no-JS lede is shown only by the <noscript> rule in
+   DecisionRoom.astro. (The hidden attribute cannot be used here: the
+   site-wide [hidden] rule is !important inside a cascade layer, which
+   outranks an unlayered !important override.) */
+.decision-room__lede--static {
+  display: none;
+}
 .decision-room__items {
   margin-top: 1.5rem;
   display: grid;
@@ -1411,6 +1418,7 @@ header details:not(:has(> summary)) {
    it never reserves a box, so adding items cannot move anything above it. */
 .decision-room__tray {
   margin-top: 1.5rem;
+  scroll-margin-block: 1rem;
 }
 @media (min-width: 1024px) {
   .decision-room {
@@ -1462,8 +1470,12 @@ header details:not(:has(> summary)) {
 }
 @media (min-width: 1024px) {
   /* Truly side by side: one column per compared item, up to four. */
+  /* auto-fill, not auto-fit: the columns keep their width as rows are added,
+     so a compared row never re-wraps (and shifts) when the next one arrives.
+     The first selection scrolls the tray into view (TRU-06), so this reflow
+     would be visible. */
   .decision-room__rows {
-    grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));
     align-items: stretch;
   }
 }
@@ -1489,15 +1501,23 @@ header details:not(:has(> summary)) {
 .decision-room__row .decision-room__remove {
   margin-top: auto;
 }
-/* The boundary stays with its item card above; the tray compares the fact,
-   the summary and the source, which keeps the reserved height bounded. */
-.decision-room__row .decision-room__boundary {
-  display: none;
+/* G5 / TRU-07: each compared item carries its canonical boundary in the tray,
+   under the existing "Boundary" label. The tray sits below the items, so its
+   growth cannot move anything above it. */
+.decision-room__row-boundary {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  inline-size: 100%;
+}
+.decision-room__row-boundary-label {
+  font-size: var(--size-2);
+  font-weight: 600;
+  color: var(--text-secondary);
 }
 /* Below the wide breakpoint rows stay compact: label and Remove only. */
 @media (max-width: 1023.98px) {
   .decision-room__row-summary,
-  .decision-room__row .decision-room__boundary,
   .decision-room__row .decision-room__source {
     display: none;
   }
