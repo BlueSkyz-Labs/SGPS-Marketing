@@ -19,7 +19,7 @@ import { formatDisplayDate } from "@/lib/display-date";
 import TruthState from "./TruthState.astro";
 import { SOURCE_LINKED_LEGEND } from "@/data/integrity";
 import BoundaryCard from "./BoundaryCard.astro";
-import type { Language } from "@/data/site";
+import { getFooterLinks, type Language } from "@/data/site";
 
 interface Props {
   id: string;
@@ -89,6 +89,11 @@ const LABELS = {
 } as const;
 
 const labels = LABELS[lang];
+// Existing nav labels only (no new copy): the claims listing is the Verify
+// page; the second link is the Contact page.
+const navLinks = getFooterLinks(lang);
+const listingLink = navLinks.find((l) => l.href === `/${lang}/verify/`);
+const contactLink = navLinks.find((l) => l.href === `/${lang}/contact/`);
 // Serialize for the client enhancer (CSP-safe: application/json, not executable)
 const graphJson = passport
   ? JSON.stringify({
@@ -182,6 +187,28 @@ const graphJson = passport
       </a>
     </p>
 
+    {listingLink && contactLink ? (
+      <p
+        class="evidence-passport__next flex flex-wrap gap-x-6"
+        data-passport-next
+      >
+        <a
+          href={listingLink.href}
+          data-passport-next-claims
+          class="inline-flex min-h-11 items-center text-sm font-semibold text-[var(--action-primary)] underline underline-offset-4 hover:no-underline"
+        >
+          ← {listingLink.label}
+        </a>
+        <a
+          href={contactLink.href}
+          data-passport-next-contact
+          class="inline-flex min-h-11 items-center text-sm font-semibold text-[var(--action-primary)] underline underline-offset-4 hover:no-underline"
+        >
+          {contactLink.label}
+        </a>
+      </p>
+    ) : null}
+
     {/* Graph data for the client enhancer */}
     {graphJson ? (
       <script
@@ -198,7 +225,9 @@ const graphJson = passport
   initEvidenceExplorer();
 </script>
 
-<style>
+<style is:global>
+  /* Global: the step buttons/panels are created by the client script and
+     carry no scoped-style attribute. All selectors are evidence-explorer__*. */
   /* Chain is hidden until JS enhances (progressive enhancement) */
   .evidence-explorer__chain[hidden] {
     display: none;
@@ -224,22 +253,80 @@ const graphJson = passport
     display: grid;
     gap: 0.5rem;
   }
-  /* When JS is active, static sections hide (chain replaces them) */
-  .evidence-explorer[data-explorer-active] > [data-evidence-static-sources],
-  .evidence-explorer[data-explorer-active] > [data-evidence-static-boundary] {
+  .evidence-explorer__step-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    inline-size: 100%;
+    min-block-size: 2.75rem;
+    padding: 0.5rem 0.75rem;
+    border: 1px solid var(--border-subtle);
+    border-radius: 0.5rem;
+    background: var(--surface-subtle);
+    color: var(--text-primary);
+    font: inherit;
+    font-weight: 600;
+    text-align: start;
+    cursor: pointer;
+  }
+  .evidence-explorer__step-btn:focus-visible {
+    outline: 2px solid var(--action-primary);
+    outline-offset: 2px;
+  }
+  .evidence-explorer__step-num {
+    flex: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    inline-size: 1.5rem;
+    block-size: 1.5rem;
+    border-radius: 50%;
+    border: 1px solid var(--border-subtle);
+    font-size: var(--size-1);
+    font-weight: 700;
+    color: var(--text-muted);
+  }
+  .evidence-explorer__step-label {
+    flex: 1;
+    min-inline-size: 0;
+  }
+  .evidence-explorer__step-chev {
+    flex: none;
+    color: var(--text-muted);
+    transition: transform 0.15s ease;
+  }
+  .evidence-explorer__step-btn[aria-expanded="true"]
+    .evidence-explorer__step-chev {
+    transform: rotate(180deg);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .evidence-explorer__step-chev {
+      transition: none;
+    }
+  }
+  .evidence-explorer__step-panel {
+    padding: 0.25rem 0.75rem 0.75rem;
+  }
+  .evidence-explorer__step-panel[hidden] {
     display: none;
   }
-  .evidence-explorer__chain:not([hidden]) ~ [data-evidence-static-sources],
-  .evidence-explorer__chain:not([hidden]) ~ [data-evidence-static-boundary] {
-    display: none;
+  .evidence-explorer__step-panel .evidence-passport__sources,
+  .evidence-explorer__step-panel .evidence-passport__boundary {
+    margin-top: 0.5rem;
   }
 
   @media print {
-    .evidence-explorer__chain {
+    .evidence-explorer__step-btn,
+    .evidence-explorer__chain-title {
       display: none !important;
     }
-    .evidence-explorer > [data-evidence-static-sources],
-    .evidence-explorer > [data-evidence-static-boundary] {
+    .evidence-explorer__step-panel {
+      display: none !important;
+    }
+    .evidence-explorer__step-panel:has(
+      [data-evidence-static-sources],
+      [data-evidence-static-boundary]
+    ) {
       display: block !important;
     }
   }

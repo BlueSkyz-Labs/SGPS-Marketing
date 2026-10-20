@@ -128,9 +128,10 @@ export function initCommandNavigator(root: ParentNode = document): void {
     }
     if (status instanceof HTMLElement) {
       const folded = ` ${words(normalize(lowered)).join(" ")} `;
-      status.hidden = !(
-        visibleCount === 0 &&
-        intents.some((intent) => folded.includes(` ${normalize(intent)} `))
+      // A status-intent word keeps the availability line even when the query
+      // also finds a product through its published text (e.g. "download").
+      status.hidden = !intents.some((intent) =>
+        folded.includes(` ${normalize(intent)} `),
       );
     }
     if (live instanceof HTMLElement) {
