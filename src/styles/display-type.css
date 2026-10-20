@@ -141,11 +141,15 @@
     --type-t1: var(--size-6);
   }
 }
+@media (min-width: 768px) {
+  /* G10: the home H1 steps up at the same 768 px breakpoint as the inner-page
+     H1 (PageHeader), so it never reads smaller than the 32 px section H2s. */
+  .hero-headline--promise {
+    font-size: var(--size-8);
+  }
+}
 @media (min-width: 1024px) {
   :root {
     --type-d1: var(--size-9);
-  }
-  .hero-headline--promise {
-    font-size: var(--size-8);
   }
 }
