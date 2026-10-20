@@ -834,10 +834,6 @@
   align-items: center;
   min-block-size: 44px;
 }
-/* The button's own display must not defeat the hidden attribute. */
-.decision-room__handoff-link.btn[hidden] {
-  display: none;
-}
 
 /* ---- v8 W5b — dossier: wide layout, custom checkboxes, actions ---- */
 .c4-dossier {

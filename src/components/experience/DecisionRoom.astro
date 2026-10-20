@@ -525,7 +525,8 @@ const domId = (id: string): string =>
     [data-decision-empty-state] {
       display: none !important;
     }
-    .decision-room__lede--static {
+    /* Specificity above the site-wide [hidden] rule, which is also !important. */
+    .decision-room .decision-room__lede--static {
       display: block !important;
     }
   </style>
