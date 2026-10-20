@@ -1461,8 +1461,12 @@ summary {
 }
 @media (min-width: 1024px) {
   /* Truly side by side: one column per compared item, up to four. */
+  /* auto-fill, not auto-fit: the columns keep their width as rows are added,
+     so a compared row never re-wraps (and shifts) when the next one arrives.
+     The first selection scrolls the tray into view (TRU-06), so this reflow
+     would be visible. */
   .decision-room__rows {
-    grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));
     align-items: stretch;
   }
 }

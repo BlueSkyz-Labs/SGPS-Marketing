@@ -199,3 +199,39 @@ test.describe("Decision Room flow (G5)", () => {
     });
   }
 });
+
+/* The tray is in view after the first pick (TRU-06), so a compared row must
+   not re-wrap when the next one arrives: its width is fixed from the start. */
+async function firstRowWidths(page: Page): Promise<number[]> {
+  const adds = page.locator("[data-decision-add]");
+  const row = page.locator("[data-decision-tray] .decision-room__row").first();
+  const widths: number[] = [];
+  for (let i = 0; i < 4; i += 1) {
+    await adds.nth(i).dispatchEvent("click");
+    await expect(row).toBeVisible();
+    widths.push(Math.round((await row.boundingBox())!.width));
+  }
+  return widths;
+}
+
+test("wide tray: a compared row keeps its width as more are added", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("/en/decision-room/");
+  const widths = await firstRowWidths(page);
+  expect(new Set(widths).size, widths.join(",")).toBe(1);
+});
+
+test("negative proof: auto-fit tracks make the first row narrow as rows are added", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("/en/decision-room/");
+  await page.addStyleTag({
+    content:
+      ".decision-room__rows { grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr)) !important; }",
+  });
+  const widths = await firstRowWidths(page);
+  expect(new Set(widths).size).toBeGreaterThan(1);
+});
