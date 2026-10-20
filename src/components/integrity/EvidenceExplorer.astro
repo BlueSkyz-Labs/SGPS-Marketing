@@ -19,7 +19,7 @@ import { formatDisplayDate } from "@/lib/display-date";
 import TruthState from "./TruthState.astro";
 import { SOURCE_LINKED_LEGEND } from "@/data/integrity";
 import BoundaryCard from "./BoundaryCard.astro";
-import type { Language } from "@/data/site";
+import { getFooterLinks, type Language } from "@/data/site";
 
 interface Props {
   id: string;
@@ -89,6 +89,11 @@ const LABELS = {
 } as const;
 
 const labels = LABELS[lang];
+// Existing nav labels only (no new copy): the claims listing is the Verify
+// page; the second link is the Contact page.
+const navLinks = getFooterLinks(lang);
+const listingLink = navLinks.find((l) => l.href === `/${lang}/verify/`);
+const contactLink = navLinks.find((l) => l.href === `/${lang}/contact/`);
 // Serialize for the client enhancer (CSP-safe: application/json, not executable)
 const graphJson = passport
   ? JSON.stringify({
@@ -181,6 +186,28 @@ const graphJson = passport
         {labels.context} →
       </a>
     </p>
+
+    {listingLink && contactLink ? (
+      <p
+        class="evidence-passport__next flex flex-wrap gap-x-6"
+        data-passport-next
+      >
+        <a
+          href={listingLink.href}
+          data-passport-next-claims
+          class="inline-flex min-h-11 items-center text-sm font-semibold text-[var(--action-primary)] underline underline-offset-4 hover:no-underline"
+        >
+          ← {listingLink.label}
+        </a>
+        <a
+          href={contactLink.href}
+          data-passport-next-contact
+          class="inline-flex min-h-11 items-center text-sm font-semibold text-[var(--action-primary)] underline underline-offset-4 hover:no-underline"
+        >
+          {contactLink.label}
+        </a>
+      </p>
+    ) : null}
 
     {/* Graph data for the client enhancer */}
     {graphJson ? (
