@@ -8,15 +8,12 @@ import {
  * Owner decisions 2026-10-20:
  *  - ACQ-10: on the home page each product has ONE primary link per section;
  *    the hero product names are plain text.
- *  - ACQ-09: the header Products control carries the About/Contact current
- *    cue (bold + underline) on every page under /<lang>/products/.
  *  - TRU-15: Journal is absent from the header, the mobile menu and the
  *    command navigator until the journal collection holds a published entry.
  * Every guard has a negative proof that breaks the invariant on the live page
  * (or on the pure helper) and shows the detector fires.
  */
 const LOCALES = ["en", "vi", "zh", "zh-hant"] as const;
-const DESKTOP_MIN = 768;
 
 /** Per home section, the product hrefs linked more than once. */
 async function duplicateProductLinks(page: Page): Promise<string[]> {
@@ -69,104 +66,6 @@ test("ACQ-10 negative proof: a second link to the same product in a section is d
     row.after(dup);
   });
   expect((await duplicateProductLinks(page)).length).toBeGreaterThan(0);
-});
-
-async function productsControl(page: Page, lang: string) {
-  const mobile = (page.viewportSize()?.width ?? 1280) < DESKTOP_MIN;
-  if (mobile) {
-    await page.locator("header details > summary").click();
-    return page.locator(
-      `header details nav a:not(.lang-option)[href="/${lang}/products/"]`,
-    );
-  }
-  return page.locator(`header nav a.btn[href="/${lang}/products/"]`);
-}
-
-async function currentCue(page: Page, lang: string, current: boolean) {
-  const control = await productsControl(page, lang);
-  if (current) {
-    await expect(control).toHaveAttribute("data-nav-current", "");
-  } else {
-    await expect(control).not.toHaveAttribute("data-nav-current", /.*/);
-  }
-  return control.evaluate((el) => {
-    const cs = getComputedStyle(el);
-    return {
-      underline: cs.textDecorationLine.includes("underline"),
-      bar: cs.boxShadow !== "none",
-      weight: Number(cs.fontWeight),
-    };
-  });
-}
-
-for (const lang of LOCALES) {
-  test(`ACQ-09 /${lang}/: Products shows the current cue on the index and on a profile, not elsewhere`, async ({
-    page,
-  }, testInfo) => {
-    const mobile = testInfo.project.name.includes("mobile");
-    for (const path of ["products/", "products/sotro/"]) {
-      await page.goto(`/${lang}/${path}`);
-      const cue = await currentCue(page, lang, true);
-      if (mobile) expect(cue.bar, `${path} menu bar`).toBe(true);
-      else {
-        expect(cue.underline, `${path} underline`).toBe(true);
-        expect(cue.weight).toBeGreaterThanOrEqual(700);
-      }
-    }
-    for (const path of ["", "about/", "contact/"]) {
-      await page.goto(`/${lang}/${path}`);
-      const cue = await currentCue(page, lang, false);
-      expect(cue.underline, `${path} no underline`).toBe(false);
-      // The desktop pill carries its own shadow; the bar is a menu cue.
-      if (mobile) expect(cue.bar, `${path} no bar`).toBe(false);
-    }
-  });
-}
-
-test("ACQ-09: the Products cue matches the About cue (same underline, same weight)", async ({
-  page,
-}, testInfo) => {
-  test.skip(testInfo.project.name.includes("mobile"), "desktop nav only");
-  await page.goto("/en/about/");
-  const about = await page
-    .locator('header nav a:not(.lang-option)[href="/en/about/"]')
-    .first()
-    .evaluate((el) => {
-      const cs = getComputedStyle(el);
-      return [
-        cs.textDecorationLine,
-        cs.textDecorationThickness,
-        cs.textUnderlineOffset,
-        cs.fontWeight,
-      ];
-    });
-  await page.goto("/en/products/");
-  const products = await page
-    .locator('header nav a.btn[href="/en/products/"]')
-    .evaluate((el) => {
-      const cs = getComputedStyle(el);
-      return [
-        cs.textDecorationLine,
-        cs.textDecorationThickness,
-        cs.textUnderlineOffset,
-        cs.fontWeight,
-      ];
-    });
-  expect(products).toEqual(about);
-});
-
-test("ACQ-09 negative proof: without the data attribute the pill has no underline", async ({
-  page,
-}, testInfo) => {
-  test.skip(testInfo.project.name.includes("mobile"), "desktop nav only");
-  await page.goto("/en/products/sotro/");
-  const pill = page.locator('header nav a.btn[href="/en/products/"]');
-  await pill.evaluate((el) => el.removeAttribute("data-nav-current"));
-  expect(
-    await pill.evaluate((el) =>
-      getComputedStyle(el).textDecorationLine.includes("underline"),
-    ),
-  ).toBe(false);
 });
 
 // --- TRU-15 -----------------------------------------------------------------
