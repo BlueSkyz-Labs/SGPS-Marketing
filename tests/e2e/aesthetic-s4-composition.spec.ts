@@ -47,36 +47,34 @@ test.describe("S4 composition guards", () => {
     });
   }
 
-  test("verify: separator never ends a line, touch target kept", async ({
+  test("verify: separator never begins a line, touch target kept", async ({
     page,
   }) => {
-    // TRU-13 replaced the old "separator trails its link" rule: the dot is now
-    // the ::before of the item it introduces, so it can begin a wrapped row but
-    // never end one (no orphan "·" at a line end). Same breadth: 4 widths,
-    // touch-target floor, and a separator must actually render.
     for (const width of [320, 360, 390, 480]) {
       await page.setViewportSize({ width, height: 900 });
       await page.goto("/en/verify/");
       const bad = await page.evaluate(() => {
         const out: string[] = [];
-        let dots = 0;
-        for (const item of document.querySelectorAll<HTMLElement>(
-          "[data-sources-item]",
-        )) {
-          const c = getComputedStyle(item, "::before").content;
-          if (c === "none" || c === "normal") continue;
-          dots += 1;
-          const link = item.querySelector("a")!;
-          const i = item.getBoundingClientRect();
+        for (const sep of document.querySelectorAll(".sources-line__sep")) {
+          const link = sep.parentElement?.querySelector("a");
+          if (!link) continue;
+          const s = sep.getBoundingClientRect();
           const l = link.getBoundingClientRect();
-          // The link follows the dot inside the same item and row.
-          if (l.left < i.left + 1) out.push("dot-after-link");
-          if (Math.abs(l.top - i.top) > l.height) out.push("different-line");
+          // Same line as its link and strictly after it: it trails, never leads.
+          if (s.left < l.right - 1) out.push("leads-link");
+          const line = sep.closest("[data-sources-line]")!;
+          const first = line.getBoundingClientRect().left;
+          if (s.left - first < 4) out.push("line-start");
+          if (
+            Math.abs(s.top + s.height / 2 - (l.top + l.height / 2)) > l.height
+          )
+            out.push("different-line");
         }
         for (const a of document.querySelectorAll(".sources-line__link")) {
           if (a.getBoundingClientRect().height < 43.5) out.push("touch");
         }
-        if (dots === 0) out.push("no-separators-rendered");
+        if (document.querySelectorAll(".sources-line__sep").length === 0)
+          out.push("no-separators-rendered");
         return out;
       });
       expect(bad, `width ${width}`).toEqual([]);

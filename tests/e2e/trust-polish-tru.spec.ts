@@ -2,7 +2,9 @@ import { expect, test, type Page } from "@playwright/test";
 import { CLAIMS } from "../../src/data/claims.ts";
 
 /**
- * Trust-surface polish guards (audit TRU-03, TRU-09, TRU-13; TRU-14 was already fixed by #599).
+ * Trust-surface polish guards (audit TRU-03, TRU-09; TRU-14 was already fixed by #599).
+ * TRU-13 (sources-line punctuation) changes the visual baselines and ships
+ * with them in the protected PR #645.
  *
  * Every guard has a negative proof: the invariant is broken in the live DOM
  * or CSS and the same predicate must then report the breakage.
@@ -131,110 +133,4 @@ ${SUMMARY_SEL}::after { content: none !important; }`,
     expect(row.linkLike).toBe(true);
     expect(row.chevron).toBe(false);
   }
-});
-
-/* ── TRU-13: sources line punctuation ────────────────────────────────────── */
-
-const SOURCE_ROUTES = ["security", "privacy", "verify"] as const;
-
-async function sourceTexts(page: Page) {
-  return page.evaluate(() =>
-    [...document.querySelectorAll<HTMLElement>(".sources-line")].map(
-      (el) => el.innerText,
-    ),
-  );
-}
-
-const strayPunctuation = (texts: string[]) =>
-  texts.filter((t) => /\s[.。]/u.test(t));
-
-for (const lang of LOCALES) {
-  for (const route of SOURCE_ROUTES) {
-    test(`TRU-13 (${lang}) /${route}/: no space before a full stop`, async ({
-      page,
-    }) => {
-      await page.goto(`/${lang}/${route}/`);
-      const texts = await sourceTexts(page);
-      expect(texts.length).toBeGreaterThan(0);
-      expect(strayPunctuation(texts)).toEqual([]);
-    });
-  }
-}
-
-test("TRU-13 negative proof: a spaced full stop is detected", async ({
-  page,
-}) => {
-  await page.goto("/vi/security/");
-  await page.evaluate(() => {
-    const p = document.querySelector(".sources-line__date")!;
-    p.insertAdjacentHTML("beforeend", "<div>.</div>");
-  });
-  expect(strayPunctuation(await sourceTexts(page))).toHaveLength(1);
-});
-
-/** Items whose separator dot is not followed by the link on the same row. */
-async function trailingDots(page: Page) {
-  return page.evaluate(() => {
-    const out: string[] = [];
-    for (const item of document.querySelectorAll<HTMLElement>(
-      ".sources-line__item",
-    )) {
-      if (
-        !item.previousElementSibling?.classList.contains("sources-line__item")
-      )
-        continue;
-      const content = getComputedStyle(item, "::before").content;
-      if (content === "none" || content === "normal") continue;
-      const link = item.querySelector<HTMLElement>(
-        ".sources-line__link, .sources-line__current",
-      )!;
-      const dot = item.getBoundingClientRect();
-      const l = link.getBoundingClientRect();
-      // The dot sits at the item's start edge; the link must come after it.
-      const flow = getComputedStyle(item).flexDirection;
-      if (flow !== "row" || l.left < dot.left + 1) out.push(item.textContent!);
-    }
-    return out;
-  });
-}
-
-for (const route of ["verify", "security", "privacy"] as const) {
-  test(`TRU-13 /${route}/ at 320: no separator dot ends a line`, async ({
-    page,
-  }) => {
-    await page.setViewportSize({ width: 320, height: 800 });
-    for (const lang of LOCALES) {
-      await page.goto(`/${lang}/${route}/`);
-      expect(await trailingDots(page), lang).toEqual([]);
-      const dots = await page.evaluate(
-        () =>
-          [...document.querySelectorAll(".sources-line__item")].filter(
-            (el) =>
-              getComputedStyle(el, "::before").content !== "none" &&
-              getComputedStyle(el, "::before").content !== "normal",
-          ).length,
-      );
-      expect(dots, `${lang} has separators`).toBeGreaterThan(0);
-      // Touch targets of the links stay 44px.
-      const small = await page.evaluate(
-        () =>
-          [...document.querySelectorAll(".sources-line__link")].filter(
-            (a) => a.getBoundingClientRect().height < 43.5,
-          ).length,
-      );
-      expect(small, `${lang} touch`).toBe(0);
-    }
-  });
-}
-
-test("TRU-13 negative proof: a dot placed after its link is detected", async ({
-  page,
-}) => {
-  await page.setViewportSize({ width: 320, height: 800 });
-  await page.goto("/vi/verify/");
-  await page.addStyleTag({
-    content:
-      ".sources-line__item + .sources-line__item { flex-direction: row-reverse !important; }",
-  });
-  expect((await trailingDots(page)).length).toBeGreaterThan(0);
 });

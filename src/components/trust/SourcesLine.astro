@@ -67,15 +67,7 @@ const reviewedOn = reviewedLabel ? passport?.reviewedOn : undefined;
     {items.map((item, index) => (
       <>
         {index > 0 ? " " : null}
-        <span
-          class:list={[
-            "sources-line__item",
-            reviewedOn && index === items.length - 1
-              ? "sources-line__item--last"
-              : null,
-          ]}
-          data-sources-item
-        >
+        <span class="sources-line__item" data-sources-item>
           {item.current ? (
             <span
               id={
@@ -112,18 +104,21 @@ const reviewedOn = reviewedLabel ? passport?.reviewedOn : undefined;
               {item.label}
             </a>
           )}
+          {index < items.length - 1 ? (
+            <span class="sources-line__sep" aria-hidden="true">
+              {"\u00a0\u00b7"}
+            </span>
+          ) : reviewedOn ? (
+            <span class="sources-line__sep">{"."}</span>
+          ) : null}
         </span>
       </>
     ))}{" "}
     {reviewedOn ? (
       <span class="sources-line__reviewed">
         {reviewedLabel}{" "}
-        <span class="sources-line__date">
-          <time datetime={reviewedOn}>
-            {formatDisplayDate(reviewedOn, lang)}
-          </time>
-          {"."}
-        </span>
+        <time datetime={reviewedOn}>{formatDisplayDate(reviewedOn, lang)}</time>
+        {"."}
       </span>
     ) : null}
   </p>
@@ -134,8 +129,8 @@ const reviewedOn = reviewedLabel ? passport?.reviewedOn : undefined;
    * Rows are laid out by flex so each wrapped row owns its own 44px band: the
    * link boxes of adjacent rows never overlap and a tap on one link cannot be
    * captured by the next row. (44px is the WCAG 2.5.5 AAA target; 2.5.8 AA
-   * needs 24px.) Each source is one unit, the separator that PRECEDES it plus
-   * the link, so a "·" can begin a wrapped row but never end one.
+   * needs 24px.) Each source is one unit, the link plus the separator that
+   * FOLLOWS it, so a "·" can end a line but never begin one.
    */
   .sources-line {
     display: flex;
@@ -175,22 +170,8 @@ const reviewedOn = reviewedLabel ? passport?.reviewedOn : undefined;
     min-height: 2.75rem;
   }
 
-  /* TRU-13: separators are decoration, drawn by CSS, so they add no stray
-     whitespace to the text and leave the DOM text exactly the sources. The
-     dot belongs to the item it introduces: it can begin a wrapped row but it
-     never ends one (no orphan "·" at a line end). */
-  .sources-line__item + .sources-line__item::before {
-    content: "\00b7";
-    content: "\00b7" / "";
-    margin-inline-end: 0.375rem;
+  .sources-line__sep {
     white-space: nowrap;
-  }
-
-  /* The closing full stop of the source list hugs the last link (it is only
-     present when a review date follows). */
-  .sources-line__item--last::after {
-    content: ".";
-    content: "." / "";
   }
 
   .sources-line__link {
