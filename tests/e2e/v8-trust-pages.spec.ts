@@ -14,7 +14,10 @@ const LANGS = ["en", "vi", "zh", "zh-hant"] as const;
 const CAPS = {
   verify: { en: 160, vi: 215, zh: 160, "zh-hant": 160 },
   security: { en: 120, vi: 150, zh: 120, "zh-hant": 120 },
-  privacy: { en: 160, vi: 210, zh: 160, "zh-hant": 160 },
+  // vi 225 (was 210): ADR 0015 requires the notice to state what the beacon
+  // sends; the observed fields (Owner decision 2026-10-20, option A) need ~15
+  // more syllables than the 207 the page already used. The pre-v8 280 still fails.
+  privacy: { en: 160, vi: 225, zh: 160, "zh-hant": 160 },
 } as const;
 
 async function words(page: Page): Promise<number> {

@@ -73,6 +73,21 @@ All results below are from the fix build, run locally on Chromium:
 
 **Visual baselines:** the interim-note change alters `vi-products-sotro-*`. If CI reports a diff, the accepted baselines go to `tests/visual/`, which is a protected path that needs the Owner label.
 
+## Merge and production read-back
+
+- **Merged:** #642, squash `9db3ab9`, pinned to head `c84db45` after the Owner label. All 8 required checks passed on that head, including the Firefox and WebKit shards and the accepted visual baselines.
+  - The mobile-chromium shard failed once while downloading pnpm (`ECONNRESET`), before any test ran. One re-run passed.
+- **Production read-back** of `https://blueskyzlabs.com` after the deploy, Chromium, 2026-10-19:
+
+| Check                                                      | Before              | After                              |
+| ---------------------------------------------------------- | ------------------- | ---------------------------------- |
+| `/en/decision-room/` CLS at 320 / 390 / 1440 (3 runs each) | 0.31 / 0.27 / 0.11  | 0 / 0 / 0                          |
+| Atelier controls with JavaScript off                       | hidden              | hidden                             |
+| `/vi/products/sotro/` interim-note link at 390             | 44 px `inline-flex` | `inline`, 17 px in a 22.75 px line |
+
+- **Method limit:** the container's headless Chromium does not trust the egress proxy CA. Each request was therefore fetched by Node with TLS verification on and handed to the page. Request timing differs from a real visit.
+- This is agent (E3) evidence. It is not field Core Web Vitals and not Human E4.
+
 ## Weakest point
 
 The VA-01 fix shows the controls before the module has run. If the script fails to load on a modern browser, the controls stay visible but do nothing until a reload. The item list and the sources still work without them.
