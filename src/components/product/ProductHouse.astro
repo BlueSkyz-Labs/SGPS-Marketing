@@ -66,6 +66,8 @@ const ctaLabel = labelFor(SHARED_LABELS.exploreAllProducts, lang);
 const indexPath = getProductIndexPath(lang);
 // v8 W2: on the home the continuation is one full-width horizontal row per
 // product: icon, name, badge, one-liner (deck hom-14) and the lifecycle CTA.
+// Owner 2026-10-20 (ACQ-10): one primary link per product per section, so the
+// name is plain text when the CTA already leads to the same profile URL.
 const rows = (compact && isContinuation ? visibleProducts : []).map(
   (product) => {
     const copy = productCopy(product.data, lang);
@@ -166,12 +168,16 @@ if (!compact && products.length > 0 && !card) {
           />
           <div class="product-row__main">
             <h3 class="product-row__name">
-              <a
-                href={row.href}
-                class="inline-flex min-h-11 items-center text-inherit no-underline hover:underline"
-              >
-                {row.product.data.name}
-              </a>
+              {row.cta.href === row.href ? (
+                <span data-product-name>{row.product.data.name}</span>
+              ) : (
+                <a
+                  href={row.href}
+                  class="inline-flex min-h-11 items-center text-inherit no-underline hover:underline"
+                >
+                  {row.product.data.name}
+                </a>
+              )}
               <span
                 data-product-status={row.product.data.publicLabel}
                 class="status-badge"

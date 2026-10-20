@@ -130,19 +130,24 @@ test("the hero keeps the sample-data label and the date, not the revision", asyn
   ).toHaveAttribute("data-capture-revision", /^[0-9a-f]{7}$/);
 });
 
-test("product line sits directly under the H1 and links both product profiles", async ({
+test("product line sits directly under the H1 and names both products as plain text", async ({
   page,
 }) => {
   test.skip(!hasPublicProducts, "No published hero product is available");
   await page.goto("/en/");
   const line = page.locator("[data-hero-product-line]");
   await expect(line).toBeVisible();
-  await expect(line.locator("a")).toHaveCount(2);
-  await expect(line.locator("a").nth(0)).toHaveAttribute(
-    "href",
-    "/en/products/sotro/",
-  );
-  await expect(line.locator("a").nth(1)).toHaveAttribute(
+  // Owner 2026-10-20 (ACQ-10): names are text; the profiles stay one tap away
+  // through the hero CTA and the second-product entry chip.
+  await expect(line.locator("a")).toHaveCount(0);
+  await expect(line.locator("[data-hero-product-name]")).toHaveText([
+    "Sổ Trọ",
+    "Sổ Tâm",
+  ]);
+  await expect(
+    page.locator("[data-hero-flagship] [data-hero-primary]"),
+  ).toHaveAttribute("href", "/en/products/sotro/");
+  await expect(page.locator("[data-hero-entry='sotam']")).toHaveAttribute(
     "href",
     "/en/products/sotam/",
   );
