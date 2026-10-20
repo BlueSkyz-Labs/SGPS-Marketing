@@ -145,7 +145,7 @@ export const PRIVACY_COPY: PerLang<PrivacyCopy> = {
     lede: "This site sets no cookies. It stores only the language and theme you choose, in your browser, with no tracking or profiling.",
     collectedLead: "What is collected.",
     collectedBody:
-      "No accounts or forms. Server and CDN logs may record technical data such as your IP address, browser type and the page requested, for security, abuse prevention and reliable delivery, not advertising. Page speed is measured with Cloudflare Web Analytics: no cookies or local storage. For each page view it sends load timings, the page address, the browser name and version, browser memory figures and a random ID for that page load only, which is not linked across pages. Cloudflare keeps raw data for 7 days, then about a 10% sample. No ad pixels or session recording.",
+      "No accounts or forms. Server and CDN logs may record technical data such as your IP address, browser type and the page requested, for security, abuse prevention and reliable delivery, not advertising. Page speed is measured with Cloudflare Web Analytics: no cookies/storage, only load timings, page address, browser version, memory figures and a per-load random ID. Cloudflare keeps raw data for 7 days, then about a 10% sample. No ad pixels or session recording.",
     limitsLead: "Limits.",
     limitsBody:
       "This does not mean no data is processed. Any website needs infrastructure that handles network data such as IP addresses and request headers.",
@@ -164,7 +164,7 @@ export const PRIVACY_COPY: PerLang<PrivacyCopy> = {
     lede: "Trang web này không đặt cookie. Chỉ lưu ngôn ngữ và giao diện bạn chọn, trong trình duyệt của bạn; không theo dõi, không lập hồ sơ.",
     collectedLead: "Thu thập gì.",
     collectedBody:
-      "Không có tài khoản hay biểu mẫu. Nhật ký máy chủ và CDN có thể ghi dữ liệu kỹ thuật như địa chỉ IP, loại trình duyệt và trang được yêu cầu, cho bảo mật, chống lạm dụng và phân phối ổn định, không cho quảng cáo. Tốc độ tải trang được đo bằng Cloudflare Web Analytics: không cookie, không bộ nhớ trình duyệt. Mỗi lượt xem trang gửi thời gian tải, địa chỉ trang, tên và phiên bản trình duyệt, số liệu bộ nhớ trình duyệt và một mã ngẫu nhiên chỉ dùng cho lượt tải trang đó, không liên kết giữa các trang. Cloudflare giữ dữ liệu gốc 7 ngày, sau đó giữ mẫu ~10%. Không pixel quảng cáo, không ghi phiên.",
+      "Không có tài khoản hay biểu mẫu. Nhật ký máy chủ và CDN có thể ghi dữ liệu kỹ thuật như địa chỉ IP, loại trình duyệt và trang được yêu cầu, cho bảo mật, chống lạm dụng và phân phối ổn định, không cho quảng cáo. Tốc độ tải trang được đo bằng Cloudflare Web Analytics: không cookie hay lưu trữ; chỉ gửi thời gian tải, địa chỉ trang, phiên bản trình duyệt, bộ nhớ và mã ngẫu nhiên từng lượt tải. Cloudflare giữ dữ liệu gốc 7 ngày, sau đó giữ mẫu ~10%. Không pixel quảng cáo, không ghi phiên.",
     limitsLead: "Giới hạn.",
     limitsBody:
       "Điều này không có nghĩa là không có dữ liệu nào được xử lý. Mọi trang web đều cần hạ tầng xử lý dữ liệu mạng như địa chỉ IP và header yêu cầu.",
