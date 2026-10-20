@@ -118,7 +118,11 @@ test.describe("compare claims", () => {
     ).toBeLessThanOrEqual(0.02);
 
     // Positive control: the instrument must see a real shift (so a passing
-    // result above is not a silent measurement failure).
+    // result above is not a silent measurement failure). The first selection
+    // scrolls the tray into view (TRU-06), so return to the top first: scroll
+    // anchoring would otherwise cancel the injected shift above the viewport.
+    await page.evaluate(() => window.scrollTo(0, 0));
+    await page.waitForTimeout(200);
     await page.evaluate(() => {
       const spacer = document.createElement("div");
       spacer.style.height = "400px";
