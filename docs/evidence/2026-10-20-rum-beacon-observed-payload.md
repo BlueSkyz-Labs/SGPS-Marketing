@@ -34,3 +34,7 @@
 3. **Core Web Vitals delivery is still NOT VERIFIED.** It needs a real-browser visit with interaction, or the provider dashboard.
 
 `rum-beacon-fields.json` `declaredFields` is unchanged. Widening the contract, or falling back to a first-party beacon, waits for that decision.
+
+## Addendum, 2026-10-20: contract updated
+
+Owner decision 2026-10-20 (option A): keep the provider and state the observed fields in the privacy notice. `declaredFields` now lists `beacon-metadata`, `pageloadId`, `browser-engine` and `js-heap` with their keys. The identifier guard in `tests/architecture/rum-beacon-contract.test.mjs` admits `pageloadId` only while it is declared `scope: "page-load"` and `persistent: false`, and a negative proof shows that no wider scope or other identifier passes. Core Web Vitals delivery stays NOT VERIFIED.
