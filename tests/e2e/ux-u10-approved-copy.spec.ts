@@ -53,31 +53,26 @@ test.describe("U10 VI home, tagline and verify label", () => {
   });
 });
 
-const INTERIM = {
-  en: [
-    "Not yet open for sign-up or download. Check this page for updates, or get in touch.",
-  ],
-  vi: [
-    "Chưa mở đăng ký hoặc tải về. Bạn có thể theo dõi trang này, hoặc liên hệ với chúng tôi.",
-  ],
-  zh: ["目前尚未开放注册或下载。请关注本页更新，或与我们联系。"],
-  "zh-hant": ["目前尚未開放註冊或下載。歡迎持續關注本頁，或與我們聯絡。"],
+// G6 (Owner 2026-10-20): both profiles end their single Availability line
+// with the same contact sentence (the "Questions? Get in touch." clause of the
+// 2026-10-15 preview note); the separate prose paragraph is gone.
+const OLD_PROSE = {
+  en: "Not yet open for sign-up or download. Check this page for updates, or get in touch.",
+  vi: "Chưa mở đăng ký hoặc tải về. Bạn có thể theo dõi trang này, hoặc liên hệ với chúng tôi.",
+  zh: "目前尚未开放注册或下载。请关注本页更新，或与我们联系。",
+  "zh-hant": "目前尚未開放註冊或下載。歡迎持續關注本頁，或與我們聯絡。",
+} as const;
+const CONTACT = {
+  en: "Questions? Get in touch.",
+  vi: "Cần hỏi thêm? Liên hệ với chúng tôi.",
+  zh: "有疑问？与我们联系。",
+  "zh-hant": "有疑問？與我們聯絡。",
 } as const;
 
-// Preview 2026-10-15: Sổ Trọ's web preview is open, so its page shows the
-// preview note; Sổ Tâm keeps the approved interim sentence.
-const PREVIEW = {
-  en: "The web preview is open to a limited number of landlords; the Android and iOS apps are still in development. Questions? Get in touch.",
-  vi: "Bản xem trước trên web đã mở cho một số chủ trọ, số chỗ có hạn; ứng dụng Android và iOS vẫn đang phát triển. Cần hỏi thêm? Liên hệ với chúng tôi.",
-  zh: "网页预览版已向少量房东开放，名额有限；Android 与 iOS 应用仍在开发中。有疑问？与我们联系。",
-  "zh-hant":
-    "網頁預覽版已向少量房東開放，名額有限；Android 與 iOS 應用程式仍在開發中。有疑問？與我們聯絡。",
-} as const;
-
-for (const lang of Object.keys(INTERIM) as (keyof typeof INTERIM)[]) {
+for (const lang of Object.keys(CONTACT) as (keyof typeof CONTACT)[]) {
   for (const [slug, text, state] of [
-    ["sotro", PREVIEW[lang], "web-preview"],
-    ["sotam", INTERIM[lang][0], "closed"],
+    ["sotro", CONTACT[lang], "web-preview"],
+    ["sotam", CONTACT[lang], "closed"],
   ] as const) {
     test(`/${lang}/products/${slug}/ shows its ${state} note linking to Contact`, async ({
       page,
@@ -94,10 +89,9 @@ for (const lang of Object.keys(INTERIM) as (keyof typeof INTERIM)[]) {
       await expect(page.locator("main")).not.toContainText(
         /waitlist|danh sách chờ|候補|等候名單/i,
       );
-      if (slug === "sotro") {
-        // An open preview must not say it is closed for sign-up.
-        await expect(page.locator("main")).not.toContainText(INTERIM[lang][0]);
-      }
+      // The old prose paragraph is gone; an open preview must not say it is
+      // closed for sign-up.
+      await expect(page.locator("main")).not.toContainText(OLD_PROSE[lang]);
     });
   }
 }

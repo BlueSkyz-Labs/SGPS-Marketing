@@ -136,7 +136,9 @@ const interimLink = (page: Page) =>
       });
       return {
         display: getComputedStyle(a).display,
-        height: a.getBoundingClientRect().height,
+        // Per line box: G6 puts the link inside the availability line, where
+        // a narrow phone may wrap it over two lines (one box per line).
+        height: Math.max(...[...a.getClientRects()].map((r) => r.height)),
         lineHeight,
         twin,
       };

@@ -7,6 +7,10 @@ import {
 } from "@/lib/product-routes";
 import { platformLabel, productCopy } from "@/lib/product-copy";
 import {
+  AVAILABILITY,
+  webPreviewOpen,
+} from "@/components/product/product-page-copy";
+import {
   lifecycleCtaAccessibleName,
   resolveLifecycleCta,
 } from "@/lib/lifecycle-cta";
@@ -171,6 +175,9 @@ const ctaIsExternal = cta.external || /^https?:\/\//i.test(cta.href);
       {data.platforms?.map((platform: string) => (
         <span class="inline-flex max-w-full min-w-0 items-center gap-1.5 rounded-full border border-[var(--border-subtle)] bg-[var(--surface-subtle)] px-2.5 py-0.5 text-xs font-medium text-[var(--text-secondary)] [overflow-wrap:anywhere]">
           {platformLabel(platform, lang)}
+          {platform === "web" && !webPreviewOpen(data)
+            ? ` · ${AVAILABILITY.inDevelopment[lang]}`
+            : ""}
         </span>
       ))}
     </div>
