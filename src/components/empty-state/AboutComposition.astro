@@ -1,6 +1,5 @@
 ---
 import BlueSkyzIcon from "@/components/icon/BlueSkyzIcon.astro";
-import ButtonLink from "@/components/ui/ButtonLink.astro";
 import ProductStatus from "@/components/product/ProductStatus.astro";
 import { EMPTY_STATE_COPY } from "@/data/empty-state-copy";
 import { SITE, labelFor, SHARED_LABELS, type Language } from "@/data/site";
@@ -193,15 +192,6 @@ const founderLocation =
     </a>
   </p>
 ) : null}
-<div class="mt-12 flex flex-wrap gap-3">
-  <ButtonLink href={`/${lang}/products/`}>
-    {labelFor(SHARED_LABELS.exploreProducts, lang)}
-  </ButtonLink>
-  <ButtonLink href={`/${lang}/contact/`} variant="secondary">
-    {labelFor(EMPTY_STATE_COPY.aboutContactCta, lang)}
-  </ButtonLink>
-</div>
-
 <style>
   .about-founded {
     margin: 0 0 3rem;
