@@ -85,7 +85,9 @@ artifact (`*-actual.png`, not `retry`), inspect the diff, commit, push once.
 
 ## 3. Rules that apply to every wave
 
-- Branch → PR → exact-head 8/8 → squash merge at the pinned SHA, one at a time.
+- Branch → PR → every check green on the exact head (8 runs; 10 once #659
+  splits the firefox/webkit shards; `Browser Assurance` must be present) →
+  squash merge at the pinned SHA, one at a time.
 - Never add/remove/ask to bypass `owner-approved`; never auto-merge a protected PR.
 - No invented copy, claims, screenshots or facts; Owner-approved strings only.
 - Local runs: port 3000 free (`reuseExistingServer: false` after #659).
