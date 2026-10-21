@@ -98,14 +98,14 @@ export const CLAIMS: readonly PublicClaim[] = [
     surface: "security",
     statement: {
       en: "Security reports reach the maintainers through a private GitHub channel, never through a public issue.",
-      vi: "Báo cáo bảo mật đến người bảo trì qua kênh GitHub riêng tư, không bao giờ qua issue công khai.",
+      vi: "Báo cáo bảo mật đến người bảo trì (người quản lý kho mã nguồn trên GitHub) qua kênh GitHub riêng tư, không bao giờ qua issue công khai (mục báo lỗi công khai trên GitHub).",
       zh: "安全报告通过 GitHub 私有渠道送达维护者，绝不会通过公开 issue 提出。",
       "zh-hant":
         "安全報告透過 GitHub 私有管道送達維護者，絕不會透過公開 issue 提出。",
     },
     verifyStatement: {
       en: "Security reports go to the maintainers through a private GitHub channel, never a public issue.",
-      vi: "Báo cáo bảo mật đến người bảo trì qua kênh GitHub riêng tư, không bao giờ qua issue công khai.",
+      vi: "Báo cáo bảo mật đến người bảo trì (người quản lý kho mã nguồn trên GitHub) qua kênh GitHub riêng tư, không bao giờ qua issue công khai (mục báo lỗi công khai trên GitHub).",
       zh: "安全报告通过 GitHub 私有渠道送达维护者，绝不通过公开 issue。",
       "zh-hant": "資安通報透過 GitHub 私有管道送達維護者，絕不透過公開 issue。",
     },

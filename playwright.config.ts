@@ -34,7 +34,10 @@ export default defineConfig({
         webServer: {
           command: "pnpm start",
           url: "http://127.0.0.1:3000",
-          reuseExistingServer: !process.env.CI,
+          // LSN-marketing-002 recurrence (2026-10-20/21): a server left on
+          // port 3000 by another worktree was reused silently and the run
+          // tested the wrong build. Never reuse: a busy port fails the run.
+          reuseExistingServer: false,
           timeout: 120_000,
           stdout: "pipe" as const,
           stderr: "pipe" as const,

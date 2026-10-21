@@ -218,12 +218,26 @@ for (const reducedMotion of ["no-preference", "reduce"] as const) {
   });
 }
 
-test("the endorsed lockup is hidden at 390 px and visible at 1440", async ({
+test("no profile renders the endorsed lockup; the app icon carries the brand (BB-03)", async ({
   page,
 }) => {
-  await page.setViewportSize({ width: 390, height: 844 });
-  await page.goto("/en/products/sotro/");
-  await expect(page.locator(".profile-lockup")).toBeHidden();
-  await page.setViewportSize({ width: 1440, height: 900 });
-  await expect(page.locator(".profile-lockup")).toBeVisible();
+  for (const lang of LOCALES) {
+    for (const slug of ["sotro", "sotam"]) {
+      for (const width of [390, 1440]) {
+        await page.setViewportSize({ width, height: 900 });
+        await page.goto(`/${lang}/products/${slug}/`);
+        await expect(
+          page.locator(".profile-lockup"),
+          `${lang}/${slug} @${width}`,
+        ).toHaveCount(0);
+        await expect(
+          page.locator(`header img[src*="${slug}"]`).first(),
+          `${lang}/${slug} icon @${width}`,
+        ).toBeVisible();
+      }
+    }
+  }
+  // Negative proof: the selector counts a lockup when one is present.
+  await page.setContent(`<div class="profile-lockup"><img alt="" /></div>`);
+  await expect(page.locator(".profile-lockup")).toHaveCount(1);
 });

@@ -191,29 +191,6 @@ const awaitingScreens = !showcase && isIdentityArt;
             </h1>
             <ProductStatus label={data.publicLabel} lang="zh" />
           </div>
-          <!-- Endorsed lockup: hidden on phones (the page header already names the studio). -->
-          {!awaitingScreens ? (
-            <div class="profile-lockup mt-3" aria-hidden="true">
-              <img
-                src={`/brand/blueskyz/v4/products/${data.slug}_endorsed_lockup_light.svg`}
-                alt=""
-                class="profile-lockup-light h-12 w-auto"
-                width="1500"
-                height="420"
-                loading="lazy"
-                decoding="async"
-              />
-              <img
-                src={`/brand/blueskyz/v4/products/${data.slug}_endorsed_lockup_dark.svg`}
-                alt=""
-                class="profile-lockup-dark h-12 w-auto"
-                width="1500"
-                height="420"
-                loading="lazy"
-                decoding="async"
-              />
-            </div>
-          ) : null}
         </div>
       </header>
       <HorizonSeam class="horizon-rule" data-horizon-rule />
@@ -341,31 +318,6 @@ const awaitingScreens = !showcase && isIdentityArt;
 </BaseLayout>
 
 <style>
-  .profile-lockup-light {
-    display: block;
-  }
-  .profile-lockup-dark {
-    display: none;
-  }
-  :global([data-theme="dark"]) .profile-lockup-light {
-    display: none;
-  }
-  :global([data-theme="dark"]) .profile-lockup-dark {
-    display: block;
-  }
-  @media (prefers-color-scheme: dark) {
-    :global(:root:not([data-theme="light"])) .profile-lockup-light {
-      display: none;
-    }
-    :global(:root:not([data-theme="light"])) .profile-lockup-dark {
-      display: block;
-    }
-  }
-  @media (max-width: 479px) {
-    .profile-lockup {
-      display: none;
-    }
-  }
   .profile-trust-link {
     min-width: 2.75rem;
     justify-content: center;

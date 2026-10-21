@@ -10,7 +10,7 @@
  *   beacon can be switched on.
  */
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import test from "node:test";
 
 import { PRIVACY_COPY } from "../../src/data/trust-copy.ts";
@@ -61,12 +61,28 @@ export function scriptSrcProblems(csp) {
 const IDENTIFIER =
   /(^|[-_])(id|uid|uuid|session|visitor|user|client|cookie|ip|fingerprint|email|phone|device-id)([-_]|$)/i;
 
+// Owner decision 2026-10-20 (observed payload, option A): the provider's
+// per-page-load random ID is the one identifier-like field admitted, and only
+// while it is declared as page-load scoped and non-persistent. Nothing that
+// spans page loads (session, visitor, user, device) is ever admitted.
+const PAGE_SCOPED_ALLOWED = new Set(["pageloadId"]);
+
+const isPageScoped = (field) =>
+  PAGE_SCOPED_ALLOWED.has(field.name) &&
+  field.scope === "page-load" &&
+  field.persistent === false;
+
 export function fieldProblems(fields) {
   // camelCase and snake_case both normalise to kebab tokens before matching.
   const kebab = (name) =>
     name.replace(/([a-z0-9])([A-Z])/g, "$1-$2").replace(/_/g, "-");
   return fields
-    .filter((field) => IDENTIFIER.test(kebab(field.name)))
+    .filter((field) =>
+      [field.name, ...(field.keys ?? [])].some((name) =>
+        IDENTIFIER.test(kebab(name)),
+      ),
+    )
+    .filter((field) => !isPageScoped(field))
     .map((field) => `identifier-like beacon field: ${field.name}`);
 }
 
@@ -104,7 +120,12 @@ test("declared beacon fields carry no identifier", () => {
   assert.equal(contract.endpoint, "/cdn-cgi/rum");
   assert.ok(contract.declaredFields.length > 0);
   for (const field of contract.declaredFields) {
-    assert.match(field.source, /^https:\/\/developers\.cloudflare\.com\//);
+    // Provider documentation, or the repository's own observation record.
+    if (field.source.startsWith("docs/evidence/")) {
+      assert.ok(existsSync(field.source), field.source);
+    } else {
+      assert.match(field.source, /^https:\/\/developers\.cloudflare\.com\//);
+    }
   }
   assert.deepEqual(fieldProblems(contract.declaredFields), []);
   assert.match(contract.killSwitch, /Cloudflare dashboard/);
@@ -120,6 +141,21 @@ test("negative proof: a payload carrying an identifier fails review", () => {
     "fingerprint",
   ]) {
     assert.equal(fieldProblems([{ name }]).length, 1, name);
+  }
+});
+
+test("negative proof: the page-load allowance admits nothing wider", () => {
+  const ok = { name: "pageloadId", scope: "page-load", persistent: false };
+  assert.deepEqual(fieldProblems([ok]), []);
+  for (const broken of [
+    { name: "pageloadId" },
+    { ...ok, scope: "session" },
+    { ...ok, persistent: true },
+    { ...ok, name: "visitorId" },
+    { ...ok, name: "sessionId" },
+    { name: "browser-engine", keys: ["bi.be", "clientId"] },
+  ]) {
+    assert.equal(fieldProblems([broken]).length, 1, JSON.stringify(broken));
   }
 });
 

@@ -18,6 +18,20 @@ export const E2E_PROJECTS = [
   "mobile-chromium",
 ];
 
+// CI may split one project across parallel jobs with E2E_SHARD ("i/n").
+// Playwright's --shard partitions that project's tests, so the union of a
+// project's shards is the whole project; the matrix guard checks that every
+// sharded project lists each of 1..n exactly once.
+export function selectShard(requested) {
+  const value = (requested ?? "").trim();
+  if (value === "") return [];
+  const match = /^([1-9]\d*)\/([1-9]\d*)$/.exec(value);
+  if (!match || Number(match[1]) > Number(match[2])) {
+    throw new Error(`E2E_SHARD "${value}" is not i/n with 1 <= i <= n`);
+  }
+  return [`--shard=${value}`];
+}
+
 export function selectProjects(requested) {
   const value = (requested ?? "").trim();
   if (value === "") return E2E_PROJECTS;
@@ -45,8 +59,10 @@ if (
   import.meta.url === pathToFileURL(process.argv[1]).href
 ) {
   let projects;
+  let shard;
   try {
     projects = selectProjects(process.env.E2E_PROJECT);
+    shard = selectShard(process.env.E2E_SHARD);
   } catch (error) {
     console.error(error.message);
     process.exit(2);
@@ -59,6 +75,7 @@ if (
     "playwright",
     "test",
     ...projects.map((project) => `--project=${project}`),
+    ...shard,
     ...process.argv.slice(2),
   ]);
 }

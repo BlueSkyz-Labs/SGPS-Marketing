@@ -116,7 +116,7 @@ jobs:
   # equal E2E_PROJECTS in scripts/run-e2e.mjs
   # (tests/architecture/browser-assurance-matrix.test.mjs enforces it).
   browser-shards:
-    name: Browser shard (${{ matrix.project }})
+    name: Browser shard (${{ matrix.project }}${{ matrix.shard && format(' {0}', matrix.shard) || '' }})
     needs: quality-gates
     runs-on: ubuntu-24.04
     timeout-minutes: 45
@@ -135,10 +135,22 @@ jobs:
         include:
           - project: chromium
             browser: chromium
+          # WebKit and Firefox are the slowest engines (33 and 26 min on
+          # 2026-10-21), so each runs as two halves; E2E_SHARD passes the half
+          # to Playwright --shard. Coverage is unchanged: the guard requires
+          # every half 1..n of a split project.
           - project: firefox
             browser: firefox
+            shard: "1/2"
+          - project: firefox
+            browser: firefox
+            shard: "2/2"
           - project: webkit
             browser: webkit
+            shard: "1/2"
+          - project: webkit
+            browser: webkit
+            shard: "2/2"
           - project: mobile-chromium
             browser: chromium
     steps:
@@ -177,6 +189,7 @@ jobs:
       - name: Playwright and axe assurance
         env:
           E2E_PROJECT: ${{ matrix.project }}
+          E2E_SHARD: ${{ matrix.shard || '' }}
         run: pnpm test:e2e
 
   # Lighthouse keeps its own runner: parallel browser shards would add CPU
