@@ -218,61 +218,24 @@ export function webPreviewOpen(data: ProductData): boolean {
 }
 
 /**
- * Owner-approved 2026-10-12 (U10): interim sentence for a product that is
- * not yet open for sign-up or download. No waitlist, date or promise. The
- * link text is the last clause of the sentence, linking to Contact.
+ * G6 / ACQ-03 / ACQ-11 (Owner 2026-10-20): the contact sentence that closes
+ * the single Availability line while no native app is available. It is the
+ * existing "Questions? Get in touch." clause of the preview note, split so the
+ * link text is the last clause. No waitlist, date or promise. `join` is the
+ * space (none in Chinese) between the line's full stop and the question.
  */
-export const INTERIM_NOTE = {
-  en: {
-    before:
-      "Not yet open for sign-up or download. Check this page for updates, or ",
-    link: "get in touch",
-    after: ".",
-  },
+export const CONTACT_NOTE = {
+  en: { join: " ", before: "Questions? ", link: "Get in touch", after: "." },
   vi: {
-    before: "Chưa mở đăng ký hoặc tải về. Bạn có thể theo dõi trang này, hoặc ",
-    link: "liên hệ với chúng tôi",
-    after: ".",
-  },
-  zh: {
-    before: "目前尚未开放注册或下载。请关注本页更新，或",
-    link: "与我们联系",
-    after: "。",
-  },
-  "zh-hant": {
-    before: "目前尚未開放註冊或下載。歡迎持續關注本頁，或",
-    link: "與我們聯絡",
-    after: "。",
-  },
-} as const;
-
-/**
- * Preview 2026-10-15: the interim sentence once the web app is open as a
- * preview while native apps are still in development. No date, waitlist or
- * promise; the link is the last clause, to Contact.
- */
-export const PREVIEW_NOTE = {
-  en: {
-    before:
-      "The web preview is open to a limited number of landlords; the Android and iOS apps are still in development. Questions? ",
-    link: "Get in touch",
-    after: ".",
-  },
-  vi: {
-    before:
-      "Bản xem trước trên web đã mở cho một số chủ trọ, số chỗ có hạn; ứng dụng Android và iOS vẫn đang phát triển. Cần hỏi thêm? ",
+    join: " ",
+    before: "Cần hỏi thêm? ",
     link: "Liên hệ với chúng tôi",
     after: ".",
   },
-  zh: {
-    before:
-      "网页预览版已向少量房东开放，名额有限；Android 与 iOS 应用仍在开发中。有疑问？",
-    link: "与我们联系",
-    after: "。",
-  },
+  zh: { join: "", before: "有疑问？", link: "与我们联系", after: "。" },
   "zh-hant": {
-    before:
-      "網頁預覽版已向少量房東開放，名額有限；Android 與 iOS 應用程式仍在開發中。有疑問？",
+    join: "",
+    before: "有疑問？",
     link: "與我們聯絡",
     after: "。",
   },

@@ -83,14 +83,19 @@ test("Sổ Tâm renders no identity art (its tagline is unconfirmed)", () => {
   }
 });
 
-test("the endorsed lockup is hidden below 480 px", () => {
+/** BB-03: the small endorsed lockup is gone from every profile page. */
+const rendersProfileLockup = (src) => /profile-lockup/.test(src);
+
+test("no profile page renders or styles the endorsed lockup", () => {
   for (const lang of LANGS) {
-    assert.match(
-      page(lang),
-      /@media \(max-width: 479px\) \{\s*\.profile-lockup \{\s*display: none;/,
-      lang,
-    );
+    assert.equal(rendersProfileLockup(page(lang)), false, lang);
+    assert.match(page(lang), /getProductIconThumbPath\(data\.slug\)/, lang);
   }
+});
+
+test("negative proof: a profile page with the lockup is detected", () => {
+  const broken = `${page("en")}\n<div class="profile-lockup"></div>`;
+  assert.equal(rendersProfileLockup(broken), true);
 });
 
 test("the 'What it does' list has at most five items", () => {
