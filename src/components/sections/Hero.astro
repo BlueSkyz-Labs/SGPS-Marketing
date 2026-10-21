@@ -112,11 +112,6 @@ const supportingLine = flagship ? null : proposition;
   aria-labelledby="hero-title"
 >
   <div class="hero-atmosphere hero-atmosphere--ink" aria-hidden="true"></div>
-  <div class="horizon-container">
-    <div class="horizon-signature">
-      <HorizonField />
-    </div>
-  </div>
   <!-- Plain container, not the rise wrapper: the LCP headline lives inside it and must
        not animate or move, so no ancestor may carry the 400 ms rise either. -->
   <div
@@ -155,19 +150,13 @@ const supportingLine = flagship ? null : proposition;
           data-hero-product-line
         >
           <span class="whitespace-pre-wrap">{productLine.lead}</span>
-          <a
-            href={getProductProfilePath(lang, lineFirst.data.slug)}
-            class="hero-inline-link"
-          >
+          <span class="hero-product-name" data-hero-product-name>
             {lineFirst.data.name}
-          </a>
+          </span>
           <span class="whitespace-pre-wrap">{productLine.a}</span>
-          <a
-            href={getProductProfilePath(lang, lineSecond.data.slug)}
-            class="hero-inline-link"
-          >
+          <span class="hero-product-name" data-hero-product-name>
             {lineSecond.data.name}
-          </a>
+          </span>
           <span class="whitespace-pre-wrap">{productLine.b}</span>
         </p>
       ) : null}
@@ -329,6 +318,17 @@ const supportingLine = flagship ? null : proposition;
       </div>
     ) : null}
   </div>
+  <!-- VA-01 (throttled re-check): the field is bottom-anchored to the hero, so
+       it comes after the hero content in source order. Earlier in the source,
+       a progressive first paint placed it against a half-parsed, shorter hero
+       and it then jumped down (CLS 0.28 on /vi/ at 390 px, Slow 4G, 4x CPU).
+       Paint order is unchanged: .horizon-container keeps z-index 1, under
+       .hero-content and the capture (z-index 2). -->
+  <div class="horizon-container">
+    <div class="horizon-signature">
+      <HorizonField />
+    </div>
+  </div>
   <!-- The hero's bottom edge is an intentional horizon line, not a hard cut.
        Static, decorative, no JS; out of flow so the layout never shifts. -->
   <HorizonSeam class="hero-plane__seam" />
@@ -362,33 +362,17 @@ const supportingLine = flagship ? null : proposition;
     min-width: 0;
     width: 100%;
   }
-  /* Product line: plain inline links (no inline-flex box, so every line keeps
-     the same pitch). Vertical padding on an inline box does not change the line
-     box, so the target still measures >= 44 px tall (the project's 44 x 44
-     target standard, above WCAG 2.5.8) while the line-height alone sets the
-     rhythm. */
+  /* Product line: the two names are plain text (Owner 2026-10-20 ACQ-10: one
+     primary link per product per section). The tap-sized entries are the CTA
+     and the entry chip below the line. */
   .hero-product-line {
     line-height: 1.625;
   }
-  /* A product name never splits across lines: a wrapped link's box spans
-     both lines and reads as obscured focus (WCAG 2.4.11) at 1440px. */
-  /* Audit B-01: no vertical padding. On an inline link it enlarges the hit
-     box without moving layout, so when the two product names wrap onto
-     consecutive lines the second name's box covered the lower half of the
-     first. These are links inside a sentence (WCAG 2.5.8 inline exception);
-     the tap-sized entries are the CTA and entry chip below the line. */
-  .hero-inline-link {
+  /* A product name never splits across lines. */
+  .hero-product-name {
     white-space: nowrap;
     font-weight: 600;
     color: var(--brand-porcelain);
-    text-decoration-line: underline;
-    text-decoration-thickness: 1px;
-    text-underline-offset: 0.25em;
-    text-decoration-color: color-mix(
-      in srgb,
-      var(--brand-porcelain) 55%,
-      transparent
-    );
   }
   /* UX-U5: a tap-sized secondary entry for the second product, in the same
      ghost-on-ink treatment as the other hero secondary actions. */
@@ -421,9 +405,6 @@ const supportingLine = flagship ? null : proposition;
   }
   .hero-entry-chip:hover {
     border-color: var(--brand-porcelain);
-  }
-  .hero-inline-link:hover {
-    text-decoration-color: currentColor;
   }
 
   .hero-stage {

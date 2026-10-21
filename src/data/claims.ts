@@ -46,6 +46,12 @@ export interface PublicClaim {
   surface: string;
   statement: LocalizedStatement;
   /**
+   * Owner-approved wording the Verify page shows for this claim (v8 copy deck
+   * ver rows). Authored here so presentation never holds claim text; when a
+   * claim has none, Verify shows `statement`.
+   */
+  verifyStatement?: LocalizedStatement | undefined;
+  /**
    * Short label used only for the EN/VI evidence page <title> (SEO length).
    * Derived from, and never a replacement for, the full `statement`.
    */
@@ -97,13 +103,19 @@ export const CLAIMS: readonly PublicClaim[] = [
       "zh-hant":
         "安全報告透過 GitHub 私有管道送達維護者，絕不會透過公開 issue 提出。",
     },
+    verifyStatement: {
+      en: "Security reports go to the maintainers through a private GitHub channel, never a public issue.",
+      vi: "Báo cáo bảo mật đến người bảo trì (người quản lý kho mã nguồn trên GitHub) qua kênh GitHub riêng tư, không bao giờ qua issue công khai (mục báo lỗi công khai trên GitHub).",
+      zh: "安全报告通过 GitHub 私有渠道送达维护者，绝不通过公开 issue。",
+      "zh-hant": "資安通報透過 GitHub 私有管道送達維護者，絕不透過公開 issue。",
+    },
     titleLabel: {
       en: "Security reports go through a private GitHub channel",
       vi: "Báo cáo bảo mật qua kênh GitHub riêng tư",
       zh: "安全报告通过 GitHub 私有渠道送达维护者",
       "zh-hant": "安全報告透過 GitHub 私有管道送達維護者",
     },
-    evidenceIds: ["ev-security-advisory", "ev-security-route"],
+    evidenceIds: ["ev-security-route", "ev-security-advisory"],
     boundaryId: "bnd-security-reporting",
     reviewId: "security-private-reporting",
   },
@@ -117,6 +129,12 @@ export const CLAIMS: readonly PublicClaim[] = [
       zh: "本站不设置 Cookie；仅在访客明确选择语言或主题时于浏览器本地保存偏好，不进行跟踪或行为画像。",
       "zh-hant":
         "本站不設定 Cookie；僅在訪客明確選擇語言或主題時於瀏覽器本地儲存偏好，不進行追蹤或行為剖析。",
+    },
+    verifyStatement: {
+      en: "This site sets no cookies. It stores only the language and theme you choose, in your browser.",
+      vi: "Trang web này không đặt cookie. Chỉ lưu ngôn ngữ và giao diện bạn chọn trong trình duyệt.",
+      zh: "本站不设置 Cookie，只在浏览器中保存你选择的语言和主题。",
+      "zh-hant": "本站不設定 Cookie，只在瀏覽器中儲存你選擇的語言與主題。",
     },
     titleLabel: {
       en: "No cookies; only chosen language and theme are stored",
@@ -138,6 +156,12 @@ export const CLAIMS: readonly PublicClaim[] = [
       vi: "Sản phẩm chỉ xuất hiện trong danh mục công khai khi bằng chứng công khai của nó sẵn sàng để xác minh.",
       zh: "产品仅在其公开证据可核验时才会出现在公开登记表中。",
       "zh-hant": "產品僅在其公開證據可核驗時才會出現在公開登錄名單中。",
+    },
+    verifyStatement: {
+      en: "A product is listed here only when its public evidence is ready to check.",
+      vi: "Sản phẩm chỉ được liệt kê khi bằng chứng công khai sẵn sàng để kiểm chứng.",
+      zh: "只有公开证据可核验时，产品才会列在这里。",
+      "zh-hant": "只有公開證據可查證時，產品才會列在這裡。",
     },
     titleLabel: {
       en: "Registry lists only products with checkable sources",
