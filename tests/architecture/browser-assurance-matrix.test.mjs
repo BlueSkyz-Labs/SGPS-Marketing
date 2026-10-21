@@ -10,7 +10,11 @@ import assert from "node:assert/strict";
 import { spawnSync } from "node:child_process";
 import { readFileSync } from "node:fs";
 import test from "node:test";
-import { E2E_PROJECTS, selectProjects } from "../../scripts/run-e2e.mjs";
+import {
+  E2E_PROJECTS,
+  selectProjects,
+  selectShard,
+} from "../../scripts/run-e2e.mjs";
 
 const WORKFLOW = readFileSync(".github/workflows/quality-gates.yml", "utf8");
 const PLAYWRIGHT_CONFIG = readFileSync("playwright.config.ts", "utf8");
@@ -41,9 +45,15 @@ function auditBrowserAssurance(workflow) {
   const lighthouse = jobBlock(workflow, "lighthouse");
   const aggregator = jobBlock(workflow, "browser-assurance");
 
-  const shardProjects = [...shards.matchAll(/-\s*project:\s*([\w-]+)/g)].map(
-    ([, project]) => project,
-  );
+  const entries = [
+    ...shards.matchAll(
+      /-\s*project:\s*([\w-]+)\n\s*browser:\s*[\w-]+(?:\n\s*shard:\s*"(\d+)\/(\d+)")?/g,
+    ),
+  ].map(([, project, index, total]) => ({
+    project,
+    shard: index ? { index: Number(index), total: Number(total) } : null,
+  }));
+  const shardProjects = [...new Set(entries.map((entry) => entry.project))];
   for (const project of E2E_PROJECTS) {
     if (!shardProjects.includes(project)) {
       problems.push(`no shard runs the ${project} project`);
@@ -54,8 +64,33 @@ function auditBrowserAssurance(workflow) {
       problems.push(`shard ${project} is not in E2E_PROJECTS`);
     }
   }
-  if (new Set(shardProjects).size !== shardProjects.length) {
-    problems.push("a project appears in more than one shard");
+  // A project runs whole in one job, or split into halves 1..n that each
+  // appear exactly once, so a split can never drop part of a project.
+  for (const project of shardProjects) {
+    const own = entries.filter((entry) => entry.project === project);
+    if (own.some((entry) => entry.shard === null)) {
+      if (own.length !== 1) {
+        problems.push(`${project} runs whole and also in other shard jobs`);
+      }
+      continue;
+    }
+    const total = own[0].shard.total;
+    const indices = own.map((entry) => entry.shard.index).sort((a, b) => a - b);
+    const expected = Array.from({ length: total }, (_, i) => i + 1);
+    if (
+      own.some((entry) => entry.shard.total !== total) ||
+      indices.join(",") !== expected.join(",")
+    ) {
+      problems.push(
+        `${project} shards ${indices.join(",")} of ${total} do not cover 1..${total} exactly once`,
+      );
+    }
+  }
+  if (
+    entries.some((entry) => entry.shard !== null) &&
+    !/E2E_SHARD:\s*\$\{\{\s*matrix\.shard \|\| ''\s*\}\}/.test(shards)
+  ) {
+    problems.push("split shards must pass matrix.shard as E2E_SHARD");
   }
   for (const project of E2E_PROJECTS) {
     if (!PLAYWRIGHT_CONFIG.includes(`name: "${project}"`)) {
@@ -183,6 +218,39 @@ test("negative proof: narrowing the shard list is caught", () => {
       problem.includes("webkit"),
     ),
   );
+});
+
+test("negative proof: a split project missing or repeating a half is caught", () => {
+  const repeated = WORKFLOW.replace(
+    '            browser: webkit\n            shard: "2/2"',
+    '            browser: webkit\n            shard: "1/2"',
+  );
+  assert.notEqual(repeated, WORKFLOW, "mutation must change the workflow");
+  assert.ok(
+    auditBrowserAssurance(repeated).some((problem) =>
+      problem.includes("webkit shards 1,1 of 2"),
+    ),
+  );
+
+  const unwired = WORKFLOW.replace(
+    "          E2E_SHARD: ${{ matrix.shard || '' }}\n",
+    "",
+  );
+  assert.notEqual(unwired, WORKFLOW, "mutation must change the workflow");
+  assert.ok(
+    auditBrowserAssurance(unwired).some((problem) =>
+      problem.includes("E2E_SHARD"),
+    ),
+  );
+});
+
+test("the E2E runner passes a valid shard to Playwright and rejects others", () => {
+  assert.deepEqual(selectShard(undefined), []);
+  assert.deepEqual(selectShard(""), []);
+  assert.deepEqual(selectShard("2/2"), ["--shard=2/2"]);
+  for (const bad of ["0/2", "3/2", "1", "a/b", "1/2/3"]) {
+    assert.throws(() => selectShard(bad), /not i\/n/, bad);
+  }
 });
 
 test("negative proof: unpinned Playwright runtime or download-host override is caught", () => {
