@@ -53,16 +53,16 @@ export const SECURITY_COPY: PerLang<SecurityCopy> = {
         id: "ev-security-advisory",
         label: "GitHub private vulnerability reporting",
       },
-      { id: "ev-security-route", label: "Security route" },
+      { id: "ev-security-route", label: "Security page" },
     ],
     reviewed: "Reviewed",
     emailLabel: "Email",
   },
   vi: {
     title: "Bảo mật",
-    lede: "Báo cáo vấn đề bảo mật riêng tư qua GitHub. Đừng mở issue công khai.",
+    lede: "Báo cáo vấn đề bảo mật riêng tư qua GitHub. Đừng mở issue công khai (mục báo lỗi công khai trên GitHub).",
     cta: "Báo cáo lỗ hổng",
-    note: "Chỉ người bảo trì xem được.",
+    note: "Chỉ người bảo trì (người quản lý kho mã nguồn trên GitHub) xem được.",
     offerLead: "Chúng tôi không cung cấp:",
     offerBody:
       "chương trình thưởng lỗ hổng, cam kết thời gian phản hồi hay quyền công bố công khai. Chúng tôi không đăng huy hiệu chứng nhận nếu chưa có bằng chứng đã kiểm chứng.",
@@ -155,8 +155,8 @@ export const PRIVACY_COPY: PerLang<PrivacyCopy> = {
     contactLink: "Contact BlueSkyz Labs",
     sourcesLabel: "Sources:",
     sources: [
-      { id: "ev-privacy-route", label: "Privacy route" },
-      { id: "ev-security-route", label: "Security route" },
+      { id: "ev-privacy-route", label: "Privacy page" },
+      { id: "ev-security-route", label: "Security page" },
     ],
   },
   vi: {
@@ -167,7 +167,7 @@ export const PRIVACY_COPY: PerLang<PrivacyCopy> = {
       "Không có tài khoản hay biểu mẫu. Nhật ký máy chủ và CDN có thể ghi dữ liệu kỹ thuật như địa chỉ IP, loại trình duyệt và trang được yêu cầu, cho bảo mật, chống lạm dụng và phân phối ổn định, không cho quảng cáo. Tốc độ tải trang được đo bằng Cloudflare Web Analytics: không cookie hay lưu trữ; chỉ gửi thời gian tải, địa chỉ trang, phiên bản trình duyệt, bộ nhớ và mã ngẫu nhiên từng lượt tải. Cloudflare giữ dữ liệu gốc 7 ngày, sau đó giữ mẫu ~10%. Không pixel quảng cáo, không ghi phiên.",
     limitsLead: "Giới hạn.",
     limitsBody:
-      "Điều này không có nghĩa là không có dữ liệu nào được xử lý. Mọi trang web đều cần hạ tầng xử lý dữ liệu mạng như địa chỉ IP và header yêu cầu.",
+      "Điều này không có nghĩa là không có dữ liệu nào được xử lý. Mọi trang web đều cần hạ tầng xử lý dữ liệu mạng như địa chỉ IP và header yêu cầu (thông tin kỹ thuật trình duyệt tự gửi kèm).",
     deletion:
       "Trang web này không có tài khoản để xuất hoặc xoá. Thông báo này chỉ áp dụng cho blueskyzlabs.com; mỗi sản phẩm công khai có thông báo quyền riêng tư riêng.",
     contactLead: "Có câu hỏi về thông báo này?",
