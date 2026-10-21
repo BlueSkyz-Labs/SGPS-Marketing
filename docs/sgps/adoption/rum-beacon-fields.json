@@ -16,9 +16,45 @@
     {
       "name": "page-path",
       "source": "https://developers.cloudflare.com/web-analytics/faq"
+    },
+    {
+      "name": "beacon-metadata",
+      "keys": [
+        "eventType",
+        "versions.fl",
+        "versions.js",
+        "versions.timings",
+        "st",
+        "siteToken"
+      ],
+      "source": "docs/evidence/2026-10-20-rum-beacon-observed-payload.md",
+      "note": "Beacon and site metadata; siteToken identifies the site, not the visitor."
+    },
+    {
+      "name": "pageloadId",
+      "scope": "page-load",
+      "persistent": false,
+      "source": "docs/evidence/2026-10-20-rum-beacon-observed-payload.md",
+      "note": "Random ID per page load; differed between loads; no cookie or storage written."
+    },
+    {
+      "name": "browser-engine",
+      "keys": ["bi.be", "bi.bev", "bi.bv"],
+      "source": "docs/evidence/2026-10-20-rum-beacon-observed-payload.md",
+      "note": "Browser engine and major version."
+    },
+    {
+      "name": "js-heap",
+      "keys": [
+        "memory.totalJSHeapSize",
+        "memory.usedJSHeapSize",
+        "memory.jsHeapSizeLimit"
+      ],
+      "source": "docs/evidence/2026-10-20-rum-beacon-observed-payload.md",
+      "note": "JavaScript heap figures (Chromium only)."
     }
   ],
   "retention": "Unsampled 7 days, then about a 10% sample; dashboard shows six months (provider FAQ, page dated 2026-07-14).",
-  "observedPayload": "OBSERVED 2026-10-20 (docs/evidence/2026-10-20-rum-beacon-observed-payload.md): no visitor identifier; three undeclared groups (pageloadId per page load, bi.* browser engine/version, memory.* JS heap); core-web-vitals delivery NOT VERIFIED. Owner decision 2026-10-20: option A, keep the provider and state the observed fields in the privacy notice (done in all four locales). declaredFields stay unchanged until the contract PR, which needs an explicit page-scoped allowance in the protected identifier guard.",
+  "observedPayload": "OBSERVED 2026-10-20 (docs/evidence/2026-10-20-rum-beacon-observed-payload.md): no visitor identifier; three groups beyond the original contract (pageloadId per page load, bi.* browser engine/version, memory.* JS heap) are now declared. Owner decision 2026-10-20: option A, keep the provider and state the observed fields in the privacy notice (done in all four locales); the identifier guard admits pageloadId only as a page-load-scoped, non-persistent field. core-web-vitals delivery NOT VERIFIED.",
   "killSwitch": "Disable Web Analytics for blueskyzlabs.com in the Cloudflare dashboard; then remove the script-src path from public/_headers."
 }
