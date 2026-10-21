@@ -12,12 +12,15 @@ const LANGS = ["en", "vi", "zh", "zh-hant"] as const;
 // allowance for their script (Vietnamese is syllable-delimited, CJK is counted
 // by whitespace tokens, which under-counts, so it is bounded by the EN cap).
 const CAPS = {
-  verify: { en: 160, vi: 215, zh: 160, "zh-hant": 160 },
+  // vi 230 (was 215): TRU-10 (Owner 2026-10-20) glosses "người bảo trì" and
+  // "issue công khai" once on first use (+15 words, the verbatim glosses).
+  verify: { en: 160, vi: 230, zh: 160, "zh-hant": 160 },
   security: { en: 120, vi: 150, zh: 120, "zh-hant": 120 },
   // vi 225 (was 210): ADR 0015 requires the notice to state what the beacon
   // sends; the observed fields (Owner decision 2026-10-20, option A) need ~15
   // more syllables than the 207 the page already used. The pre-v8 280 still fails.
-  privacy: { en: 160, vi: 225, zh: 160, "zh-hant": 160 },
+  // vi 231 (was 225): TRU-10 glosses "header yêu cầu" once (+8 words).
+  privacy: { en: 160, vi: 231, zh: 160, "zh-hant": 160 },
 } as const;
 
 async function words(page: Page): Promise<number> {
