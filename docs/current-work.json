@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.0",
-  "updatedAt": "2026-10-21",
+  "updatedAt": "2026-10-22",
   "program": "SGPS Premium Experience & Design Excellence v2.0 (God-Tier × Tier S+)",
   "status": "sgps-v2-in-progress",
   "authorities": {
@@ -412,6 +412,7 @@
     "Lane-helguard guard: helper now emits 'LOCAL-AHEAD skip' and exits 0 on local-ahead branches; reset incident documented (operational, not committed)."
   ],
   "nextActionable": [
+    "2026-10-22 PROPOSED content-platform design docs/superpowers/specs/2026-10-22-journey-blog-content-platform-design.md: Journey = the existing v11 Journal shell (0 posts; J3-J7 open), Blog = a new AI-operated editorial pipeline whose publish gate stays a human (v11 section 7, ADR 0013 Option B, Google scaled-content policy 2026-08). Owner decisions D-1..D-9 in its section 10 gate any build; roadmap P0-P4 in section 9. Not adopted until the Owner answers.",
     "2026-10-21 successor plan docs/superpowers/plans/2026-10-21-next-waves.md: wave-4 protected PRs all MERGED: #652 (39be0ae), #653 (e7edff2), #654 (edf79f7), #655 (4322aa4), #659 (239ad24), #645 (96de169), #656 (ebe5b50). Next: W1 close the audit wave + production read-back, W2 measure the shard split, W3 visual baseline refresh (protected), W4 C3-G native prototype draft (not shipped), W5 #290 ledger, W6 hygiene. Owner-gated items are listed in its section 2.",
     "Owner decisions 2026-10-20: (1) RUM option A, keep Cloudflare Web Analytics and state the observed beacon fields in the privacy notice (merged #643 bfc34c5, production read back 2026-10-20 in en/vi/zh; vi word cap 210 to 225 for it; zh/zh-Hant not native-reviewed); the contract and identifier-guard allowance for pageloadId follow in a protected PR. (2) Human E4 deferred by the Owner. (3) zh and zh-Hant stay live but are not promoted until a native review. (4) P2-6: typography comparison renders first, then decide. (5) BB-02: recapture real Sổ Trọ UI at mobile size with synthetic data, approved. (6) BB-03: lockup renders for Owner review first. (7) Spatial/WebGL: a small, separately budgeted experiment approved; NO-GO remains a valid outcome.",
     "2026-10-19 visual runtime audit (docs/evidence/2026-10-19-visual-runtime-audit.md): VA-01..03 MERGED in #642 (9db3ab9) after 8/8 exact-head checks incl. Firefox/WebKit; production read-back VERIFIED (agent E3): Decision Room CLS 0 at 320/390/1440 (was 0.31/0.27/0.11), atelier hidden without JS, interim-note link inline. Not field CWV, not Human E4. BB-01/02/03 stay with their recorded owners.",
