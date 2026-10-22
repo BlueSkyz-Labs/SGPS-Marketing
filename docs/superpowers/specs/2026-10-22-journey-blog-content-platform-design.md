@@ -1,7 +1,7 @@
 # Journey & Blog: content platform, SEO/GEO program and customer-centric roadmap (2026-10-22)
 
-**Status:** PROPOSED. Owner decisions D-1..D-9 in §10 are required before any
-build card starts. Nothing in this document changes Product Truth, ADR 0011/0013
+**Status:** OWNER-DECIDED 2026-10-22 (12:40 PM GMT+7); see §13. Build cards may
+be planned; adoption is proven only by merged project-local evidence. Nothing in this document changes Product Truth, ADR 0011/0013
 or the SGPS pin. Baseline measured at `main` `959d03f` (#660), 2026-10-22
 12:20 PM GMT+7.
 
@@ -296,3 +296,30 @@ and Owner review slots, and W2 is still measuring the former.
 - Cloudflare AI Crawl Control changelog (read 2026-10): https://developers.cloudflare.com/ai-audit/changelog
 - Search Engine Land on Content Signals (2025-09): https://searchengineland.com/cloudflare-content-signals-462538
 - Repository truth: `docs/superpowers/plans/2026-10-03-v11-journal-news-and-product-updates.md`, `docs/decisions/0011-*.md`, `docs/decisions/0013-*.md`, `src/lib/journal-schema.ts`, `src/lib/journal-nav.ts`, `src/pages/robots.txt.ts`, `public/_headers`, `wrangler.toml`, `scripts/check-merge-policy.mjs`, `docs/current-work.json` at `959d03f`.
+
+## 13. Owner decisions (2026-10-22, 12:40 PM GMT+7, in-session multiple choice)
+
+| ID  | Decision                                                                                                                                              |
+| --- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
+| D-1 | Journey = the existing Journal (`/journal/`, branches `news` + `product`). No new route.                                                              |
+| D-2 | Display label becomes "Journey" / "Hành trình"; route unchanged. Lands in the first post PR (protected visual baselines, one `owner-approved` round). |
+| D-3 | Blog in VI + EN pairs; zh / zh-Hant excluded until a native reviewer exists.                                                                          |
+| D-4 | Blog cap: 4 articles per month in P2; revisit at P4 with retire-rate data.                                                                            |
+| D-5 | Publisher = CODEOWNERS review on `src/content/blog/`, ruleset-enforced.                                                                               |
+| D-6 | No auto-merge; a human always merges. Revisit at P4 only.                                                                                             |
+| D-7 | `Content-Signal: search=yes, ai-input=yes, ai-train=no` in production `robots.txt`.                                                                   |
+| D-8 | GitHub-native pipeline until ≥10 posts and a second human editor; no Studio now.                                                                      |
+| D-9 | Named author: Tony, with bio and photo (Owner supplies both; the agent authors neither).                                                              |
+
+Preconditions stated by the Owner in the same session (recorded as Owner
+statements; evidence to be attached in the P1 record):
+
+- **J0 Search Console:** Owner states verification and sitemap submission are
+  done. Evidence (property name, sitemap status) is still to be recorded in
+  `docs/evidence/`; until then this is `NOT VERIFIED`, not `PASS`.
+- **First public Sổ Trọ release:** the Owner will supply version, date and
+  user-facing changes; the agent creates `src/data/releases/sotro/<version>.json`
+  in a J2b PR for Owner approval. No release is written before that input.
+- **Sequencing:** W1 (next-waves) first, then P1 starts immediately and runs in
+  parallel with W2–W6; W3 (baseline refresh) and the D-2 label change should
+  share one protected PR cycle to avoid a second baseline round.
