@@ -9,7 +9,7 @@ author: tony-nguyen
 aiAssisted: true
 sources:
   - https://blueskyzlabs.com/en/products/sotro/
-ownerApproval: https://github.com/BlueSkyz-Labs/SGPS-Marketing/pull/0
+ownerApproval: https://github.com/BlueSkyz-Labs/SGPS-Marketing/pull/671
 draft: false
 ---
 
