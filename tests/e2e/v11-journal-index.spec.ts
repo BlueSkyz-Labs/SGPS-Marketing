@@ -32,6 +32,12 @@ for (const locale of LOCALES) {
       locale.posts > 0 ? 1 : 2,
     );
     await expect(page.locator("[data-journal-item]")).toHaveCount(locale.posts);
+    // Dates read as on the post page (localized), never a raw ISO string; the
+    // machine-readable date stays in `datetime`.
+    for (const time of await page.locator("[data-journal-item] time").all()) {
+      await expect(time).toHaveAttribute("datetime", /^\d{4}-\d{2}-\d{2}$/);
+      await expect(time).not.toHaveText(/^\s*\d{4}-\d{2}-\d{2}\s*$/);
+    }
     await expect(page.locator("[data-journal-language-note]")).toHaveCount(
       locale.note ? 1 : 0,
     );

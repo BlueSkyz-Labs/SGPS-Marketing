@@ -2,6 +2,7 @@
 import { getCollection } from "astro:content";
 import type { Language } from "@/data/site";
 import { JOURNAL_COPY } from "@/data/journal-copy";
+import { formatDate } from "@/lib/i18n";
 import { JOURNAL_BRANCHES, type JournalEntry } from "@/lib/journal-schema";
 import { journalPostPath } from "@/lib/journal-posts";
 
@@ -71,7 +72,7 @@ const heading = { news: copy.news, product: copy.product } as const;
                 </h3>
                 <p class="mt-1 text-sm text-[var(--text-secondary)]">
                   <time datetime={entry.datePublished}>
-                    {entry.datePublished}
+                    {formatDate(lang, entry.datePublished)}
                   </time>
                 </p>
                 <p class="mt-2 text-[var(--text-secondary)]">

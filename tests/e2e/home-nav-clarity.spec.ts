@@ -10,8 +10,8 @@ import {
  *    the hero product names are plain text.
  *  - TRU-15: Journal is absent from the header, the mobile menu and the
  *    command navigator until the journal collection holds a published entry
- *    (pure-helper test below); with the first posts it appears, labelled
- *    "Journey" / "Hành trình" (Owner D-2).
+ *    in that language (pure-helper test below); with the first posts it
+ *    appears, labelled "Journey" / "Hành trình" (Owner D-2).
  * Every guard has a negative proof that breaks the invariant on the live page
  * (or on the pure helper) and shows the detector fires.
  */
@@ -89,15 +89,21 @@ const JOURNAL_LABEL = {
   "zh-hant": "日誌",
 } as const;
 
+/** Locales holding published Journey posts (VI + EN pairs, P1-B). */
+const WITH_POSTS = new Set<string>(["en", "vi"]);
+
 for (const lang of LOCALES) {
-  // Journey P1-B: the collection now holds published posts, so the gate is open
-  // (the empty case is pinned by the pure-helper test below).
-  test(`TRU-15 /${lang}/: the Journal is in the header, mobile menu and navigator once a post is published`, async ({
+  // Journey P1-B: en and vi hold published posts, so their gate is open; zh and
+  // zh-Hant hold none, so they must not send a visitor to an empty index (the
+  // per-language rule is pinned by the pure-helper test below).
+  const open = WITH_POSTS.has(lang);
+  test(`TRU-15 /${lang}/: the Journal is ${open ? "in" : "absent from"} the header, mobile menu and navigator`, async ({
     page,
   }) => {
     await page.goto(`/${lang}/`);
     // desktop header + mobile menu + command navigator
-    expect(await journalLinkCount(page)).toBe(3);
+    expect(await journalLinkCount(page)).toBe(open ? 3 : 0);
+    if (!open) return;
     await expect(
       page.locator(`header a[href="/${lang}/journal/"]`).first(),
     ).toHaveText(JOURNAL_LABEL[lang]);
@@ -119,17 +125,22 @@ test("TRU-15 negative proof: an injected Journal link is detected", async ({
   expect(await journalLinkCount(page)).toBe(before + 1);
 });
 
-test("TRU-15 gate: Journal appears only with at least one published entry", () => {
-  const published = { data: { draft: false } };
-  const draft = { data: { draft: true } };
+test("TRU-15 gate: Journal appears only with a published entry in that language", () => {
   for (const lang of LOCALES) {
+    const published = { data: { draft: false, lang } };
+    const draft = { data: { draft: true, lang } };
     expect(journalNavItems(lang, [])).toEqual([]);
     expect(journalNavItems(lang, [draft])).toEqual([]);
     const items = journalNavItems(lang, [draft, published]);
     expect(items).toHaveLength(1);
     expect(items[0]!.href).toBe(`/${lang}/journal/`);
     expect(items[0]!.label.length).toBeGreaterThan(0);
+    // Negative proof: a post published only in another language opens no gate.
+    const other = lang === "en" ? "vi" : "en";
+    expect(
+      journalNavItems(lang, [{ data: { draft: false, lang: other } }]),
+    ).toEqual([]);
   }
   expect(hasPublishedJournalEntry([])).toBe(false);
-  expect(hasPublishedJournalEntry([published])).toBe(true);
+  expect(hasPublishedJournalEntry([{ data: { draft: false } }])).toBe(true);
 });
