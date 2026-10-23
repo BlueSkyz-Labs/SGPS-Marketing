@@ -1,4 +1,5 @@
 import { z } from "astro/zod";
+import { AUTHOR_IDS } from "../data/authors.ts";
 import { isHttpsUrl } from "./https-url.ts";
 
 /**
@@ -10,6 +11,9 @@ import { isHttpsUrl } from "./https-url.ts";
  *   substantive, visibly noted edit (v11 §7.6).
  * - Every factual post cites sources and the Owner approval PR (§7.1, §7.3).
  * - A `product` post must reference an approved public release record (§7.2).
+ * - Every post names a registered `author` (Journey design D-9); an unknown key
+ *   fails the build. `aiAssisted` drives the visible AI-disclosure line and
+ *   must match across the VI + EN pair.
  */
 export const JOURNAL_LANGUAGES = ["vi", "en"] as const;
 export type JournalLanguage = (typeof JOURNAL_LANGUAGES)[number];
@@ -32,6 +36,8 @@ export const journalEntrySchema = z
     id: z.string().regex(IDENTIFIER),
     lang: z.enum(JOURNAL_LANGUAGES),
     branch: z.enum(JOURNAL_BRANCHES),
+    author: z.enum(AUTHOR_IDS),
+    aiAssisted: z.boolean().default(false),
     title: z.string().min(1).max(110),
     description: z.string().min(50).max(160),
     datePublished: z.string().regex(ISO_DATE),
@@ -100,6 +106,8 @@ export function journalPairProblems(
       "dateModified",
       "releaseRecord",
       "ownerApproval",
+      "author",
+      "aiAssisted",
     ] as const) {
       if (a![key] !== b![key])
         problems.push(`${id}: ${key} differs between vi and en`);

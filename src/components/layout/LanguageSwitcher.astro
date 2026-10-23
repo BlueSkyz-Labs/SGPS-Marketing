@@ -16,10 +16,10 @@
  */
 import BlueSkyzIcon from "@/components/icon/BlueSkyzIcon.astro";
 import {
-  SUPPORTED_LANGUAGES,
   LANGUAGES,
   getAlternatePath,
   getLanguageFromPath,
+  languagesForPath,
   type Language,
 } from "@/lib/i18n";
 import { languageTransitionStyle } from "@/lib/route-transition";
@@ -113,7 +113,7 @@ const isMenu = placement === "menu";
       <span>{groupLabel}</span>
     </div>
     <ul class="lang-panel__list" role="list">
-      {SUPPORTED_LANGUAGES.map((lang) => {
+      {languagesForPath(currentPath).map((lang) => {
         const config = LANGUAGES[lang];
         const isActive = currentLang === lang;
         const showEnglish = config.englishLabel !== config.label;

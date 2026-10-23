@@ -4,20 +4,14 @@ const EN = {
   establishes: "What this covers",
   notEstablishes: "What this does not cover",
   boundaryStep: "Boundary",
-  expand: "Show details",
 };
 const VI = {
   establishes: "Phạm vi áp dụng",
   notEstablishes: "Ngoài phạm vi",
   boundaryStep: "Ranh giới",
-  expand: "Xem chi tiết",
 };
 
-async function expandStep(
-  passport: Locator,
-  expand: string,
-  label: string,
-): Promise<Locator> {
+async function expandStep(passport: Locator, label: string): Promise<Locator> {
   // Boundary is open by default (TRU-01); click only when collapsed.
   const button = passport.locator(
     `[data-step-label="${label}"].evidence-explorer__step-btn`,
@@ -26,7 +20,7 @@ async function expandStep(
   const panelId = await button.getAttribute("aria-controls");
   expect(panelId).toBeTruthy();
   if ((await button.getAttribute("aria-expanded")) !== "true") {
-    await expect(button).toHaveAccessibleName(`${expand}: ${label}`);
+    await expect(button).toHaveAccessibleName(label);
     await button.click();
   }
   const panel = passport.locator(`#${panelId}`);
@@ -44,11 +38,7 @@ test.describe("boundary cards on evidence pages", () => {
     test(`${route} shows both boundary concepts`, async ({ page }) => {
       await page.goto(route);
       const passport = page.locator("[data-evidence-passport]");
-      const panel = await expandStep(
-        passport,
-        labels.expand,
-        labels.boundaryStep,
-      );
+      const panel = await expandStep(passport, labels.boundaryStep);
       const card = panel.locator("[data-boundary-card]");
       await expect(card).toBeVisible();
       await expect(
@@ -65,7 +55,7 @@ test.describe("boundary cards on evidence pages", () => {
   }) => {
     await page.goto("/en/evidence/security-reporting-is-private/");
     const passport = page.locator("[data-evidence-passport]");
-    const panel = await expandStep(passport, EN.expand, EN.boundaryStep);
+    const panel = await expandStep(passport, EN.boundaryStep);
     const headings = await panel
       .locator("[data-boundary-card] h2")
       .allTextContents();
@@ -82,7 +72,7 @@ test.describe("boundary cards on evidence pages", () => {
     ]) {
       await page.goto(route);
       const passport = page.locator("[data-evidence-passport]");
-      const panel = await expandStep(passport, EN.expand, EN.boundaryStep);
+      const panel = await expandStep(passport, EN.boundaryStep);
       const text = await panel.locator("[data-boundary-card]").innerText();
       expect(text).not.toMatch(/certified|guaranteed|trust score|score/i);
     }
@@ -92,7 +82,7 @@ test.describe("boundary cards on evidence pages", () => {
     await page.setViewportSize({ width: 320, height: 900 });
     await page.goto("/vi/evidence/security-reporting-is-private/");
     const passport = page.locator("[data-evidence-passport]");
-    const panel = await expandStep(passport, VI.expand, VI.boundaryStep);
+    const panel = await expandStep(passport, VI.boundaryStep);
     await expect(panel.locator("[data-boundary-card]")).toBeVisible();
     const overflow = await page.evaluate(
       () =>

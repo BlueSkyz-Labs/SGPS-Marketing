@@ -30,6 +30,11 @@ import "@/styles/global.css";
 import "@/styles/c3-craft.css";
 import "@/styles/wave4-polish.css";
 
+interface FeedLink {
+  href: string;
+  title: string;
+}
+
 interface Props {
   title: string;
   description: string;
@@ -55,6 +60,8 @@ interface Props {
   extraJsonLd?: Record<string, unknown>[];
   /** Route segment of the one journey-bar action shown as primary. */
   journeyPrimary?: string | undefined;
+  /** Syndication feed advertised in `<head>` (journal index and posts). */
+  feed?: FeedLink;
 }
 
 const {
@@ -73,6 +80,7 @@ const {
   journeyPrimary,
   lastUpdated = false,
   extraJsonLd = [],
+  feed,
 } = Astro.props;
 
 /** One separator, descriptor first, brand last. A descriptor that already
@@ -211,6 +219,14 @@ const robotsContent =
         href={canonicalForPath(xDefaultPath(path), SITE.url)}
       />
     )}
+    {feed ? (
+      <link
+        rel="alternate"
+        type="application/rss+xml"
+        title={feed.title}
+        href={feed.href}
+      />
+    ) : null}
     {robotsNoindex ? <meta name="robots" content={robotsContent} /> : null}
     <meta property="og:type" content="website" />
     <meta property="og:locale" content={ogLocale} />

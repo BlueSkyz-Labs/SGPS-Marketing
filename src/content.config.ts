@@ -42,8 +42,14 @@ const showcases = defineCollection({
 });
 
 // v11 Journal: VI + EN Markdown posts; strict frontmatter (journal-schema).
+// Files are `<id>.<lang>.md`; the entry id is the file name so a VI + EN pair
+// (same frontmatter `id`) never collides on one collection key.
 const journal = defineCollection({
-  loader: glob({ pattern: "*.md", base: "./src/content/journal" }),
+  loader: glob({
+    pattern: "*.md",
+    base: "./src/content/journal",
+    generateId: ({ entry }) => entry.replace(/\.md$/, ""),
+  }),
   schema: journalEntrySchema,
 });
 
