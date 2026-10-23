@@ -1,3 +1,4 @@
+import { journalNavItems, type PublishedProbe } from "../lib/journal-nav.ts";
 import { publicMailboxForRole } from "../lib/public-mailbox.ts";
 
 const localFallback = "http://localhost:4321";
@@ -287,7 +288,12 @@ export function getNav(lang: Language): NavItem[] {
  * breadcrumbs and concierge read labels from here; the footer shows only the
  * subset picked in `getFooterGroups`.
  */
-export function getFooterLinks(lang: Language): NavItem[] {
+export function getFooterLinks(
+  lang: Language,
+  /** Journal collection entries; the Journey link appears only for a language
+   * with a published post of its own (`journalNavItems`, IX-02). */
+  journalEntries: readonly PublishedProbe[] = [],
+): NavItem[] {
   const l = NAV_LABELS[lang];
   return [
     { label: l.products, href: `/${lang}/products/` },
@@ -299,6 +305,7 @@ export function getFooterLinks(lang: Language): NavItem[] {
     { label: l.verify, href: `/${lang}/verify/` },
     { label: l.editions, href: `/${lang}/editions/` },
     { label: l.dossier, href: `/${lang}/dossier/` },
+    ...journalNavItems(lang, journalEntries),
   ];
 }
 
@@ -317,16 +324,27 @@ const FOOTER_GROUP_LABELS: Record<"trust", Record<Language, string>> = {
  * trust door, so Collections (/editions) and Printable summary (/dossier)
  * stay reachable by link and search but leave the footer.
  */
-export function getFooterGroups(lang: Language): FooterGroup[] {
+export function getFooterGroups(
+  lang: Language,
+  journalEntries: readonly PublishedProbe[] = [],
+): FooterGroup[] {
   const byPath = new Map(
-    getFooterLinks(lang).map((link) => [link.href.split("/")[2], link]),
+    getFooterLinks(lang, journalEntries).map((link) => [
+      link.href.split("/")[2],
+      link,
+    ]),
   );
   const pick = (...slugs: string[]): NavItem[] =>
-    slugs.map((slug) => byPath.get(slug)!);
+    slugs.flatMap((slug) => {
+      const link = byPath.get(slug);
+      // Only the gated Journey link may be absent; any other miss is a bug.
+      if (!link && slug !== "journal") throw new Error(`footer link ${slug}`);
+      return link ? [link] : [];
+    });
   return [
     {
       label: SITE.name,
-      links: pick("products", "about", "contact", "support"),
+      links: pick("products", "about", "contact", "support", "journal"),
     },
     {
       label: FOOTER_GROUP_LABELS.trust[lang],
