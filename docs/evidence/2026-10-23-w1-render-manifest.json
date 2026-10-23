@@ -1,0 +1,504 @@
+{
+  "observedAt": "2026-10-23T11:13:15.129Z",
+  "sourceReference": "76cbc5095029720402f758605b448e10ac5fe577",
+  "servedRevision": "NOT VERIFIED",
+  "browser": "151.0.7922.173",
+  "playwright": "1.63.0",
+  "node": "v24.19.0",
+  "os": "linux 6.18.55",
+  "scope": "Production anonymous Chromium, light theme and reduced motion, EN/VI, five routes, two widths; E3 only",
+  "results": [
+    {
+      "url": "https://blueskyzlabs.com/en/about/",
+      "width": 1440,
+      "status": 200,
+      "title": "About us | BlueSkyz Labs",
+      "h1": ["About BlueSkyz Labs"],
+      "overflow": false,
+      "nav": [
+        {
+          "text": "About",
+          "decoration": "underline",
+          "visible": true
+        },
+        {
+          "text": "About",
+          "decoration": "none",
+          "visible": false
+        }
+      ],
+      "pageHeaderLinks": 0,
+      "availability": [],
+      "profileLockupImages": [],
+      "beacon": true,
+      "screenshot": "en-about-1440.png",
+      "sha256": "c25ff0a27bf4d2927f9cb86d5c9920c4890df2d8700025fe14ba26c6ca4ad495"
+    },
+    {
+      "url": "https://blueskyzlabs.com/en/products/",
+      "width": 1440,
+      "status": 200,
+      "title": "Products: Sổ Trọ in preview and Sổ Tâm | BlueSkyz Labs",
+      "h1": ["Our products"],
+      "overflow": false,
+      "nav": [
+        {
+          "text": "Products",
+          "decoration": "underline",
+          "visible": true
+        },
+        {
+          "text": "Products",
+          "decoration": "none",
+          "visible": false
+        }
+      ],
+      "pageHeaderLinks": 0,
+      "availability": [],
+      "profileLockupImages": [],
+      "beacon": true,
+      "screenshot": "en-products-1440.png",
+      "sha256": "5d55a7dd63a39fd17949e1eb2700349ea65a401218d01c64115ab9675da4fc8d"
+    },
+    {
+      "url": "https://blueskyzlabs.com/en/verify/",
+      "width": 1440,
+      "status": 200,
+      "title": "Verify our claims: trust routes and evidence | BlueSkyz Labs",
+      "h1": ["Verify"],
+      "overflow": false,
+      "nav": [],
+      "pageHeaderLinks": 0,
+      "availability": [],
+      "profileLockupImages": [],
+      "beacon": true,
+      "screenshot": "en-verify-1440.png",
+      "sha256": "6d617a128890a2267a1e060d0d5eb2af9fbfb97b724332ae6d64d014d14925eb"
+    },
+    {
+      "url": "https://blueskyzlabs.com/en/products/sotro/",
+      "width": 1440,
+      "status": 200,
+      "title": "Sổ Trọ: a digital notebook for landlords | BlueSkyz Labs",
+      "h1": ["Sổ Trọ"],
+      "overflow": false,
+      "nav": [
+        {
+          "text": "Products",
+          "decoration": "underline",
+          "visible": true
+        },
+        {
+          "text": "Products",
+          "decoration": "none",
+          "visible": false
+        }
+      ],
+      "pageHeaderLinks": 0,
+      "availability": [
+        "Web: open preview, limited places · Android and iOS: in development. Questions? Get in touch."
+      ],
+      "profileLockupImages": [],
+      "beacon": true,
+      "screenshot": "en-products-sotro-1440.png",
+      "sha256": "fe28719a0a6fdb2a69bd6ea1f30613a0ed3a097b2a7e0a5c3b86ab4c92b2a775"
+    },
+    {
+      "url": "https://blueskyzlabs.com/en/products/sotam/",
+      "width": 1440,
+      "status": 200,
+      "title": "Sổ Tâm: a private, local-first journal | BlueSkyz Labs",
+      "h1": ["Sổ Tâm"],
+      "overflow": false,
+      "nav": [
+        {
+          "text": "Products",
+          "decoration": "underline",
+          "visible": true
+        },
+        {
+          "text": "Products",
+          "decoration": "none",
+          "visible": false
+        }
+      ],
+      "pageHeaderLinks": 0,
+      "availability": [
+        "Web: in development · Android and iOS: in development. Questions? Get in touch."
+      ],
+      "profileLockupImages": [],
+      "beacon": true,
+      "screenshot": "en-products-sotam-1440.png",
+      "sha256": "919fafc2a024765d6953b4947608f9254e9a322be86273d2563ff1273f867cc2"
+    },
+    {
+      "url": "https://blueskyzlabs.com/vi/about/",
+      "width": 1440,
+      "status": 200,
+      "title": "Về BlueSkyz | BlueSkyz Labs",
+      "h1": ["Về BlueSkyz Labs"],
+      "overflow": false,
+      "nav": [
+        {
+          "text": "Về BlueSkyz",
+          "decoration": "underline",
+          "visible": true
+        },
+        {
+          "text": "Về BlueSkyz",
+          "decoration": "none",
+          "visible": false
+        }
+      ],
+      "pageHeaderLinks": 0,
+      "availability": [],
+      "profileLockupImages": [],
+      "beacon": true,
+      "screenshot": "vi-about-1440.png",
+      "sha256": "353ebfa8132c39cc9b04d3e3ec61e32c8c0ba4fdf0f51ab9bbff50676983ae3e"
+    },
+    {
+      "url": "https://blueskyzlabs.com/vi/products/",
+      "width": 1440,
+      "status": 200,
+      "title": "Sản phẩm: Sổ Trọ xem trước và Sổ Tâm | BlueSkyz Labs",
+      "h1": ["Sản phẩm của BlueSkyz"],
+      "overflow": false,
+      "nav": [
+        {
+          "text": "Sản phẩm",
+          "decoration": "underline",
+          "visible": true
+        },
+        {
+          "text": "Sản phẩm",
+          "decoration": "none",
+          "visible": false
+        }
+      ],
+      "pageHeaderLinks": 0,
+      "availability": [],
+      "profileLockupImages": [],
+      "beacon": true,
+      "screenshot": "vi-products-1440.png",
+      "sha256": "7c7e575cd5b6adec2b964f5f09a508aae8856cecb6f83a9c0a0eaf227b2b4c70"
+    },
+    {
+      "url": "https://blueskyzlabs.com/vi/verify/",
+      "width": 1440,
+      "status": 200,
+      "title": "Kiểm chứng: tự đối chiếu điều chúng tôi nói | BlueSkyz Labs",
+      "h1": ["Kiểm chứng"],
+      "overflow": false,
+      "nav": [],
+      "pageHeaderLinks": 0,
+      "availability": [],
+      "profileLockupImages": [],
+      "beacon": true,
+      "screenshot": "vi-verify-1440.png",
+      "sha256": "b69e38a60b8a36dc603326f98e14c6a5fde5a4e06dfc8c1d34a3dd208d54efde"
+    },
+    {
+      "url": "https://blueskyzlabs.com/vi/products/sotro/",
+      "width": 1440,
+      "status": 200,
+      "title": "Sổ Trọ – sổ tay điện tử cho chủ trọ | BlueSkyz Labs",
+      "h1": ["Sổ Trọ"],
+      "overflow": false,
+      "nav": [
+        {
+          "text": "Sản phẩm",
+          "decoration": "underline",
+          "visible": true
+        },
+        {
+          "text": "Sản phẩm",
+          "decoration": "none",
+          "visible": false
+        }
+      ],
+      "pageHeaderLinks": 0,
+      "availability": [
+        "Web: bản xem trước đã mở, số chỗ có hạn · Android và iOS: đang phát triển. Cần hỏi thêm? Liên hệ với chúng tôi."
+      ],
+      "profileLockupImages": [],
+      "beacon": true,
+      "screenshot": "vi-products-sotro-1440.png",
+      "sha256": "f9b44f3fe7a6826c44c8870bad1f0bf3ce8e93483d3a462dfb028eb10141b08f"
+    },
+    {
+      "url": "https://blueskyzlabs.com/vi/products/sotam/",
+      "width": 1440,
+      "status": 200,
+      "title": "Sổ Tâm – nhật ký riêng tư | BlueSkyz Labs",
+      "h1": ["Sổ Tâm"],
+      "overflow": false,
+      "nav": [
+        {
+          "text": "Sản phẩm",
+          "decoration": "underline",
+          "visible": true
+        },
+        {
+          "text": "Sản phẩm",
+          "decoration": "none",
+          "visible": false
+        }
+      ],
+      "pageHeaderLinks": 0,
+      "availability": [
+        "Web: đang phát triển · Android và iOS: đang phát triển. Cần hỏi thêm? Liên hệ với chúng tôi."
+      ],
+      "profileLockupImages": [],
+      "beacon": true,
+      "screenshot": "vi-products-sotam-1440.png",
+      "sha256": "f6ab8b878ec5cb731c560a71281d786bf7650552b0e7ab9521092e52484a4220"
+    },
+    {
+      "url": "https://blueskyzlabs.com/en/about/",
+      "width": 390,
+      "status": 200,
+      "title": "About us | BlueSkyz Labs",
+      "h1": ["About BlueSkyz Labs"],
+      "overflow": false,
+      "nav": [
+        {
+          "text": "About",
+          "decoration": "underline",
+          "visible": false
+        },
+        {
+          "text": "About",
+          "decoration": "none",
+          "visible": true
+        }
+      ],
+      "pageHeaderLinks": 0,
+      "availability": [],
+      "profileLockupImages": [],
+      "beacon": true,
+      "screenshot": "en-about-390.png",
+      "sha256": "30863b088de8e4c82ebe9fc8033dc9b3a67c7884b489c0968d85603b0c5d369b"
+    },
+    {
+      "url": "https://blueskyzlabs.com/en/products/",
+      "width": 390,
+      "status": 200,
+      "title": "Products: Sổ Trọ in preview and Sổ Tâm | BlueSkyz Labs",
+      "h1": ["Our products"],
+      "overflow": false,
+      "nav": [
+        {
+          "text": "Products",
+          "decoration": "underline",
+          "visible": false
+        },
+        {
+          "text": "Products",
+          "decoration": "none",
+          "visible": true
+        }
+      ],
+      "pageHeaderLinks": 0,
+      "availability": [],
+      "profileLockupImages": [],
+      "beacon": true,
+      "screenshot": "en-products-390.png",
+      "sha256": "774a8e7d1bdb930b4e08b9d7c4702657dda0c56c2c295ba06669909a6351d57d"
+    },
+    {
+      "url": "https://blueskyzlabs.com/en/verify/",
+      "width": 390,
+      "status": 200,
+      "title": "Verify our claims: trust routes and evidence | BlueSkyz Labs",
+      "h1": ["Verify"],
+      "overflow": false,
+      "nav": [],
+      "pageHeaderLinks": 0,
+      "availability": [],
+      "profileLockupImages": [],
+      "beacon": true,
+      "screenshot": "en-verify-390.png",
+      "sha256": "2a4743e7564b80848d1f5511462aba01e496c00e08fdd43947eb56b5bd500978"
+    },
+    {
+      "url": "https://blueskyzlabs.com/en/products/sotro/",
+      "width": 390,
+      "status": 200,
+      "title": "Sổ Trọ: a digital notebook for landlords | BlueSkyz Labs",
+      "h1": ["Sổ Trọ"],
+      "overflow": false,
+      "nav": [
+        {
+          "text": "Products",
+          "decoration": "underline",
+          "visible": false
+        },
+        {
+          "text": "Products",
+          "decoration": "none",
+          "visible": true
+        }
+      ],
+      "pageHeaderLinks": 0,
+      "availability": [
+        "Web: open preview, limited places · Android and iOS: in development. Questions? Get in touch."
+      ],
+      "profileLockupImages": [],
+      "beacon": true,
+      "screenshot": "en-products-sotro-390.png",
+      "sha256": "c3fdf2f043c35a98ef4185e733409f408a15d90645b3a5c28bd40e841f1295f6"
+    },
+    {
+      "url": "https://blueskyzlabs.com/en/products/sotam/",
+      "width": 390,
+      "status": 200,
+      "title": "Sổ Tâm: a private, local-first journal | BlueSkyz Labs",
+      "h1": ["Sổ Tâm"],
+      "overflow": false,
+      "nav": [
+        {
+          "text": "Products",
+          "decoration": "underline",
+          "visible": false
+        },
+        {
+          "text": "Products",
+          "decoration": "none",
+          "visible": true
+        }
+      ],
+      "pageHeaderLinks": 0,
+      "availability": [
+        "Web: in development · Android and iOS: in development. Questions? Get in touch."
+      ],
+      "profileLockupImages": [],
+      "beacon": true,
+      "screenshot": "en-products-sotam-390.png",
+      "sha256": "86adff3d12246a32ef5e33855187b04debdceffd7ca6f7f13e8908dcef828c5c"
+    },
+    {
+      "url": "https://blueskyzlabs.com/vi/about/",
+      "width": 390,
+      "status": 200,
+      "title": "Về BlueSkyz | BlueSkyz Labs",
+      "h1": ["Về BlueSkyz Labs"],
+      "overflow": false,
+      "nav": [
+        {
+          "text": "Về BlueSkyz",
+          "decoration": "underline",
+          "visible": false
+        },
+        {
+          "text": "Về BlueSkyz",
+          "decoration": "none",
+          "visible": true
+        }
+      ],
+      "pageHeaderLinks": 0,
+      "availability": [],
+      "profileLockupImages": [],
+      "beacon": true,
+      "screenshot": "vi-about-390.png",
+      "sha256": "e654629950d04291003795ddaa0c95307888ceb01e60e4f1006f6e4f2fc03fd3"
+    },
+    {
+      "url": "https://blueskyzlabs.com/vi/products/",
+      "width": 390,
+      "status": 200,
+      "title": "Sản phẩm: Sổ Trọ xem trước và Sổ Tâm | BlueSkyz Labs",
+      "h1": ["Sản phẩm của BlueSkyz"],
+      "overflow": false,
+      "nav": [
+        {
+          "text": "Sản phẩm",
+          "decoration": "underline",
+          "visible": false
+        },
+        {
+          "text": "Sản phẩm",
+          "decoration": "none",
+          "visible": true
+        }
+      ],
+      "pageHeaderLinks": 0,
+      "availability": [],
+      "profileLockupImages": [],
+      "beacon": true,
+      "screenshot": "vi-products-390.png",
+      "sha256": "90640087c358bacb408e60a088326168381520cba7c3f7a2c12460f93d859bab"
+    },
+    {
+      "url": "https://blueskyzlabs.com/vi/verify/",
+      "width": 390,
+      "status": 200,
+      "title": "Kiểm chứng: tự đối chiếu điều chúng tôi nói | BlueSkyz Labs",
+      "h1": ["Kiểm chứng"],
+      "overflow": false,
+      "nav": [],
+      "pageHeaderLinks": 0,
+      "availability": [],
+      "profileLockupImages": [],
+      "beacon": true,
+      "screenshot": "vi-verify-390.png",
+      "sha256": "a40ed955117b91e637e21ac2360e10966bb91a4bccc6c98c19358bb44056c07f"
+    },
+    {
+      "url": "https://blueskyzlabs.com/vi/products/sotro/",
+      "width": 390,
+      "status": 200,
+      "title": "Sổ Trọ – sổ tay điện tử cho chủ trọ | BlueSkyz Labs",
+      "h1": ["Sổ Trọ"],
+      "overflow": false,
+      "nav": [
+        {
+          "text": "Sản phẩm",
+          "decoration": "underline",
+          "visible": false
+        },
+        {
+          "text": "Sản phẩm",
+          "decoration": "none",
+          "visible": true
+        }
+      ],
+      "pageHeaderLinks": 0,
+      "availability": [
+        "Web: bản xem trước đã mở, số chỗ có hạn · Android và iOS: đang phát triển. Cần hỏi thêm? Liên hệ với chúng tôi."
+      ],
+      "profileLockupImages": [],
+      "beacon": true,
+      "screenshot": "vi-products-sotro-390.png",
+      "sha256": "049c6371796ca389483cb644dcb258bd3904ecad8c70a0e6a4d1b10e59c76d44"
+    },
+    {
+      "url": "https://blueskyzlabs.com/vi/products/sotam/",
+      "width": 390,
+      "status": 200,
+      "title": "Sổ Tâm – nhật ký riêng tư | BlueSkyz Labs",
+      "h1": ["Sổ Tâm"],
+      "overflow": false,
+      "nav": [
+        {
+          "text": "Sản phẩm",
+          "decoration": "underline",
+          "visible": false
+        },
+        {
+          "text": "Sản phẩm",
+          "decoration": "none",
+          "visible": true
+        }
+      ],
+      "pageHeaderLinks": 0,
+      "availability": [
+        "Web: đang phát triển · Android và iOS: đang phát triển. Cần hỏi thêm? Liên hệ với chúng tôi."
+      ],
+      "profileLockupImages": [],
+      "beacon": true,
+      "screenshot": "vi-products-sotam-390.png",
+      "sha256": "c55e2fb5975d01b39b933da66801248c08b1f72770a4a3f992aebee28c00ac91"
+    }
+  ]
+}
