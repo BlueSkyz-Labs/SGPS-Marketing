@@ -6,6 +6,17 @@ import { absoluteUrl, isNoindexPath, PUBLIC_STATIC_PATHS } from "@/lib/seo";
 import { getEvidencePassportIds } from "@/lib/claims";
 import { EDITIONS } from "@/data/editions";
 import { SUPPORTED_LANGUAGES } from "@/lib/i18n";
+import { getCollection } from "astro:content";
+import {
+  JOURNAL_LANGUAGES,
+  journalIsIndexable,
+  type JournalEntry,
+} from "@/lib/journal-schema";
+import {
+  journalIndexPath,
+  journalPostPath,
+  publishedJournalPosts,
+} from "@/lib/journal-posts";
 import { isNonProductionSiteUrl } from "@/lib/truth";
 import { lastmodForPath } from "@/lib/git-lastmod";
 
@@ -33,6 +44,19 @@ export const GET: APIRoute = async () => {
     ({ product }) => product.data.slug,
   );
   const evidenceIds = getEvidencePassportIds(products);
+  // Journey P1-A: journal URLs come only from published entries (a draft has
+  // no route). The index joins once it is indexable, like its noindex tag.
+  const journal = await getCollection("journal");
+  const journalLocs = journalIsIndexable(
+    journal.map((entry: { data: JournalEntry }) => entry.data),
+  )
+    ? JOURNAL_LANGUAGES.flatMap((lang) => [
+        absoluteUrl(SITE.url, journalIndexPath(lang)),
+        ...publishedJournalPosts(journal, lang).map((entry) =>
+          absoluteUrl(SITE.url, journalPostPath(lang, entry.data.id)),
+        ),
+      ])
+    : [];
   const locs = isNonProductionSiteUrl(SITE.url)
     ? []
     : [
@@ -61,6 +85,7 @@ export const GET: APIRoute = async () => {
             absoluteUrl(SITE.url, `/${lang}/editions/${edition.id}/`),
           ),
         ),
+        ...journalLocs,
       ];
 
   const body = [

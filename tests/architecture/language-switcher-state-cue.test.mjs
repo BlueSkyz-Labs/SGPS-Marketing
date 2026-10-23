@@ -17,6 +17,7 @@
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import test from "node:test";
+import { SUPPORTED_LANGUAGES, languagesForPath } from "../../src/lib/i18n.ts";
 
 const SOURCE = readFileSync(
   "src/components/layout/LanguageSwitcher.astro",
@@ -109,7 +110,10 @@ test("every language is a real link with its own hreflang and lang", () => {
   assert.match(SOURCE, /hreflang=\{config\.hreflang\}/);
   assert.match(SOURCE, /lang=\{config\.hreflang\}/);
   assert.match(SOURCE, /data-language-choice=\{lang\}/);
-  assert.match(SOURCE, /SUPPORTED_LANGUAGES\.map\(/);
+  // The rows come from `languagesForPath`, which is all four languages for
+  // every route except a journal post (VI + EN only; see journal-post tests).
+  assert.match(SOURCE, /languagesForPath\(currentPath\)\.map\(/);
+  assert.deepEqual(languagesForPath("/en/products/"), SUPPORTED_LANGUAGES);
 });
 
 test("the disclosure is the native popover: no inline script, no JS gate", () => {

@@ -118,6 +118,31 @@ const SHAPES = {
     ...(isAbsoluteHttp(n.url) ? [] : ["url"]),
     ...(n.publisher?.["@type"] === "Organization" ? [] : ["publisher"]),
   ],
+  // Journey P1-A: journal posts. Dated, attributed to a named Person and
+  // published by the site-wide Organization node; no rating/review keys.
+  BlogPosting: (n) => [
+    ...(isText(n.headline) ? [] : ["headline"]),
+    ...(isText(n.description) ? [] : ["description"]),
+    ...(/^\d{4}-\d{2}-\d{2}$/.test(n.datePublished ?? "")
+      ? []
+      : ["datePublished"]),
+    ...(/^\d{4}-\d{2}-\d{2}$/.test(n.dateModified ?? "")
+      ? []
+      : ["dateModified"]),
+    ...(isText(n.inLanguage) ? [] : ["inLanguage"]),
+    ...(isAbsoluteHttp(n.mainEntityOfPage?.["@id"])
+      ? []
+      : ["mainEntityOfPage"]),
+    ...(n.author?.["@type"] === "Person" &&
+    isText(n.author.name) &&
+    isAbsoluteHttp(n.author.url)
+      ? []
+      : ["author"]),
+    ...(n.publisher?.["@type"] === "Organization" &&
+    isAbsoluteHttp(n.publisher["@id"])
+      ? []
+      : ["publisher"]),
+  ],
   BreadcrumbList: (n) => {
     const items = Array.isArray(n.itemListElement) ? n.itemListElement : [];
     if (items.length < 2) return ["itemListElement (needs 2+)"];

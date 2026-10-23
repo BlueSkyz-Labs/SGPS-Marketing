@@ -137,6 +137,18 @@ export function getAlternatePath(
   return `/${targetLang}${rest}`;
 }
 
+/**
+ * Languages in which `pathname` exists. A journal post (`/vi|en/journal/<id>/`)
+ * is published as a VI + EN pair only (Journey design D-3), so the zh locales
+ * must not be offered as alternates: they would lead to a 404. Every other
+ * route exists in all supported languages.
+ */
+export function languagesForPath(pathname: string): readonly Language[] {
+  return /^\/(?:vi|en)\/journal\/[^/]+\/?$/.test(pathname)
+    ? (["en", "vi"] as const)
+    : SUPPORTED_LANGUAGES;
+}
+
 export function stripLanguagePrefix(pathname: string): string {
   return pathname.replace(/^\/(en|vi|zh-hant|zh)(?=\/|$)/, "") || "/";
 }

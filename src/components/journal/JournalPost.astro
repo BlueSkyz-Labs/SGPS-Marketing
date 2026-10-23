@@ -1,0 +1,235 @@
+---
+import Container from "@/components/layout/Container.astro";
+import PageHeader from "@/components/layout/PageHeader.astro";
+import { AUTHORS } from "@/data/authors";
+import { JOURNAL_COPY, JOURNAL_POST_COPY } from "@/data/journal-copy";
+import { formatDate } from "@/lib/i18n";
+import {
+  journalFeedPath,
+  journalIndexPath,
+  partitionSources,
+} from "@/lib/journal-posts";
+import type { JournalEntry } from "@/lib/journal-schema";
+
+/**
+ * Journey P1-A: one journal post (VI or EN). The Markdown body arrives as the
+ * rendered `Content` component of the collection entry. Static HTML only:
+ * no client script, no third-party embed. Sources are external https links or
+ * plain evidence ids (no evidence anchor route exists for `ev-*` ids).
+ */
+interface Props {
+  entry: JournalEntry;
+  Content: (props: Record<string, unknown>) => unknown;
+}
+
+const { entry, Content } = Astro.props;
+const lang = entry.lang;
+const copy = JOURNAL_COPY[lang];
+const post = JOURNAL_POST_COPY[lang];
+const author = AUTHORS[entry.author];
+const branchLabel = entry.branch === "news" ? copy.news : copy.product;
+const { links, evidenceIds } = partitionSources(entry.sources);
+const modified =
+  entry.dateModified && entry.dateModified !== entry.datePublished
+    ? entry.dateModified
+    : null;
+---
+
+<article class="py-12 sm:py-16" data-journal-post={entry.id}>
+  <Container width="reading">
+    <nav
+      aria-label="Breadcrumb"
+      class="text-sm font-medium text-[var(--text-muted)]"
+    >
+      <ol class="flex flex-wrap items-center gap-x-2">
+        <li>
+          <a
+            href={journalIndexPath(lang)}
+            class="breadcrumb-link inline-flex min-h-11 items-center text-sm font-semibold text-[var(--action-primary)] underline underline-offset-4 hover:no-underline"
+          >
+            {copy.title}
+          </a>
+        </li>
+        <li aria-hidden="true" class="text-[var(--border-subtle)]">
+          /
+        </li>
+        <li aria-current="page" class="text-[var(--text-primary)]">
+          {entry.title}
+        </li>
+      </ol>
+    </nav>
+
+    <div class="mt-8">
+      <PageHeader
+        eyebrow={branchLabel}
+        title={entry.title}
+        lede={entry.description}
+      />
+    </div>
+
+    <p
+      class="mt-6 flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-[var(--text-secondary)]"
+      data-journal-meta
+    >
+      <span>
+        {post.published}{" "}
+        <time datetime={entry.datePublished} data-journal-published>
+          {formatDate(lang, entry.datePublished)}
+        </time>
+      </span>
+      {modified ? (
+        <span data-journal-updated>
+          {post.updated}{" "}
+          <time datetime={modified}>{formatDate(lang, modified)}</time>
+          {entry.updateNote ? <span>{` · ${entry.updateNote}`}</span> : null}
+        </span>
+      ) : null}
+      <span data-journal-byline>{author.name}</span>
+    </p>
+
+    {entry.aiAssisted ? (
+      <p
+        class="mt-4 text-sm text-[var(--text-secondary)]"
+        data-journal-ai-disclosure
+      >
+        {post.aiDisclosure}
+      </p>
+    ) : null}
+
+    <div class="journal-post__body mt-10" data-journal-body>
+      <Content />
+    </div>
+
+    <section
+      class="mt-12 border-t border-[var(--border-subtle)] pt-8"
+      aria-labelledby="journal-sources"
+      data-journal-sources
+    >
+      <h2 id="journal-sources" class="text-xl font-semibold tracking-tight">
+        {post.sources}
+      </h2>
+      <ul class="mt-4 grid gap-2 text-[var(--text-secondary)]">
+        {links.map((href) => (
+          <li>
+            <a
+              href={href}
+              rel="noopener"
+              target="_blank"
+              class="break-words font-medium text-[var(--action-primary)] underline underline-offset-4 hover:no-underline"
+            >
+              {href}
+            </a>
+          </li>
+        ))}
+        {evidenceIds.map((id) => (
+          <li data-journal-evidence-id>
+            <code>{id}</code>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <aside
+      class="journal-author mt-12 flex flex-wrap items-start gap-5 border-t border-[var(--border-subtle)] pt-8"
+      aria-label={post.aboutAuthor}
+      data-journal-author={entry.author}
+    >
+      <img
+        src={author.avatar}
+        alt={author.avatarAlt[lang]}
+        width="64"
+        height="64"
+        loading="lazy"
+        decoding="async"
+        class="size-16 flex-none rounded-full"
+      />
+      <div class="min-w-0 flex-1 basis-60">
+        <p class="text-lg font-semibold">{author.name}</p>
+        <p class="text-sm text-[var(--text-secondary)]">{author.role[lang]}</p>
+        <p class="mt-2 text-[var(--text-secondary)]">
+          {author.bio[lang].short}
+        </p>
+        <a
+          href={author.aboutPath[lang]}
+          class="mt-2 inline-flex min-h-11 items-center font-semibold text-[var(--action-primary)] underline underline-offset-4 hover:no-underline"
+        >
+          {post.aboutAuthor}
+        </a>
+      </div>
+    </aside>
+
+    <p class="mt-8 flex flex-wrap items-center gap-x-6 gap-y-1 text-sm">
+      <a
+        href={journalIndexPath(lang)}
+        class="inline-flex min-h-11 items-center font-semibold text-[var(--action-primary)] underline underline-offset-4 hover:no-underline"
+      >
+        {post.backToJournal}
+      </a>
+      <a
+        href={journalFeedPath(lang)}
+        class="inline-flex min-h-11 items-center font-semibold text-[var(--action-primary)] underline underline-offset-4 hover:no-underline"
+      >
+        {post.rss}
+      </a>
+    </p>
+  </Container>
+</article>
+
+<style>
+  .journal-post__body {
+    color: var(--text-primary);
+    line-height: 1.75;
+  }
+  .journal-post__body :global(h2) {
+    margin-block: 2.5rem 1rem;
+    font-size: var(--size-5);
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    line-height: 1.25;
+  }
+  .journal-post__body :global(h3) {
+    margin-block: 2rem 0.75rem;
+    font-size: var(--size-4);
+    font-weight: 600;
+    line-height: 1.3;
+  }
+  .journal-post__body :global(p),
+  .journal-post__body :global(ul),
+  .journal-post__body :global(ol),
+  .journal-post__body :global(blockquote),
+  .journal-post__body :global(pre) {
+    margin-block: 1rem;
+  }
+  .journal-post__body :global(ul),
+  .journal-post__body :global(ol) {
+    padding-inline-start: 1.5rem;
+  }
+  .journal-post__body :global(ul) {
+    list-style: disc;
+  }
+  .journal-post__body :global(ol) {
+    list-style: decimal;
+  }
+  .journal-post__body :global(li + li) {
+    margin-block-start: 0.375rem;
+  }
+  .journal-post__body :global(a) {
+    color: var(--action-primary);
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+  .journal-post__body :global(a:hover) {
+    text-decoration: none;
+  }
+  .journal-post__body :global(blockquote) {
+    padding-inline-start: 1rem;
+    border-inline-start: 2px solid var(--border-subtle);
+    color: var(--text-secondary);
+  }
+  .journal-post__body :global(code) {
+    font-size: 0.9em;
+  }
+  .journal-post__body :global(pre) {
+    overflow-x: auto;
+  }
+</style>

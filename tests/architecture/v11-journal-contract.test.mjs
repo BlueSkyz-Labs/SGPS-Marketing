@@ -18,6 +18,7 @@ const ENTRY = {
   id: "fixture-post",
   lang: "vi",
   branch: "news",
+  author: "tony-nguyen",
   title: "Fixture title",
   description:
     "A fixture description long enough to satisfy the fifty character minimum.",
@@ -220,7 +221,12 @@ test("J1: posts cannot land before their post route exists (J3)", () => {
   );
 });
 
-test("J1: the sitemap carries no journal URL while the journal is noindex", () => {
+test("J1: the sitemap lists journal URLs only through the published-entry gate", () => {
+  // Journey P1-A replaced the blanket "no journal in the sitemap" assertion:
+  // posts now have routes, so the sitemap must derive every journal URL from
+  // published entries, behind the same indexability gate as the noindex tag.
   const sitemap = readFileSync("src/pages/sitemap.xml.ts", "utf8");
-  assert.doesNotMatch(sitemap, /journal/);
+  assert.match(sitemap, /journalIsIndexable\(/);
+  assert.match(sitemap, /publishedJournalPosts\(/);
+  assert.doesNotMatch(sitemap, /\/journal\/[a-z0-9-]+\//);
 });
