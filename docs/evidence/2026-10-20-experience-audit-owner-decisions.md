@@ -36,9 +36,26 @@ All unprotected PRs merged one at a time at 8/8 green on the exact head:
 #647 (TRU-01/02, G8) as `cab905d`, #648 as `842725c`, this record (#657) as
 `7d586cd`, #651 as `f6e2067` and #649 as `94763a3`.
 
-Protected PRs wait for the Owner's `owner-approved` label (agents never apply
-it): #645 (TRU-13, BB-03), #652 (ACQ-07), #653 (RUM contract), #654 (ACQ-09),
-#655 (TRU-10, en-verify baselines), #656 (G6, vi-products-sotro baselines).
+The remaining protected PRs landed one at a time after Owner approval, with
+source assurance recorded on their exact heads:
+
+| PR   | Scope                       | Merge commit                               |
+| ---- | --------------------------- | ------------------------------------------ |
+| #645 | TRU-13, BB-03               | `96de169d8256df7007afc9592927bcad57aea8e4` |
+| #652 | ACQ-07                      | `39be0ae86aaebbc61fef959a7f45ab38362b0cf6` |
+| #653 | RUM contract                | `e7edff20e12f82fe0082ab2dbee74d0f520e6382` |
+| #654 | ACQ-09                      | `edf79f71a43bc4b7edfb292a5cc4865a874b3509` |
+| #655 | TRU-10, en-verify baselines | `4322aa4aba67713bdb1244b17a0003b5c0d31da8` |
+| #656 | G6 availability line        | `ebe5b506019f31a1539d996ada34d0aef3b32526` |
+
+The delivery-operations PR #659 also merged at
+`239ad24266ed201c88ad372af14e36c4f1457739`. These source merges establish the
+changes on `main`; they do not establish a served Worker SHA or Human E4.
+
+The production read-back for this wave is recorded in
+`docs/evidence/2026-10-23-w1-audit-wave-production-readback.md`. It records
+observed English/Vietnamese HTTP and HTML evidence separately from rendered
+browser evidence and leaves any unsupported conclusions NOT VERIFIED.
 
 TRU-10 follow-up (Owner choice, 2026-10-20): after the route-to-page rename,
 the en Verify sources line and the evidence atlas both read "Privacy page" and
