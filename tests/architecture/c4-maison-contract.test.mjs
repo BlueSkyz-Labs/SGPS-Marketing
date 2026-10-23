@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import { existsSync, readdirSync, readFileSync } from "node:fs";
+import { getFooterLinks } from "../../src/data/site.ts";
 import {
   getMaisonPendingSections,
   getMaisonSections,
@@ -45,14 +46,22 @@ test("C4-B maison: sections without a public route fail closed", () => {
         `${pending} must be omitted, not invented`,
       );
       // v11 J1: the journal index may exist before its first post, but only
-      // while it is noindex-gated on published posts and has none; the first
-      // published post must take it out of the pending list.
+      // while it is noindex-gated on published posts and has none. Journey
+      // P1-B: once posts exist, the journal may stay pending only while the
+      // approved footer helper (the sole href source this adapter may use)
+      // has no journal link, so it stays omitted rather than invented.
       const index = `src/pages/${lang}/${pending}/index.astro`;
-      const gatedEmptyJournal =
+      const journalGated =
         pending === "journal" &&
         existsSync(index) &&
-        /noindex=\{!indexable\}/.test(readFileSync(index, "utf8")) &&
-        !readdirSync("src/content/journal").some((f) => f.endsWith(".md"));
+        /noindex=\{!indexable\}/.test(readFileSync(index, "utf8"));
+      const hasPosts = readdirSync("src/content/journal").some((f) =>
+        f.endsWith(".md"),
+      );
+      const hasApprovedLink = getFooterLinks(lang).some(
+        (link) => link.href === `/${lang}/${pending}/`,
+      );
+      const gatedEmptyJournal = journalGated && (!hasPosts || !hasApprovedLink);
       assert.ok(
         gatedEmptyJournal ||
           (!existsSync(`src/pages/${lang}/${pending}.astro`) &&

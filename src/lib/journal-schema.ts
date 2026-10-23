@@ -116,7 +116,16 @@ export function journalPairProblems(
   return problems;
 }
 
-/** The index is indexable only once it lists at least one published post. */
-export function journalIsIndexable(entries: readonly JournalEntry[]): boolean {
-  return entries.some((entry) => !entry.draft);
+/**
+ * The index is indexable only once it lists at least one published post. With
+ * `lang`, only that language's posts count: zh / zh-Hant hold no posts (VI + EN
+ * pairs), so their empty index must stay noindex after en/vi publish.
+ */
+export function journalIsIndexable(
+  entries: readonly JournalEntry[],
+  lang?: string,
+): boolean {
+  return entries.some(
+    (entry) => !entry.draft && (lang === undefined || entry.lang === lang),
+  );
 }

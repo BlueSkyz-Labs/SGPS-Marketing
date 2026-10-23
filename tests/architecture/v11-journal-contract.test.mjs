@@ -90,6 +90,22 @@ test("the index is indexable only with at least one published post", () => {
     false,
   );
   assert.equal(journalIsIndexable(pair()), true);
+  // Per language: an en/vi pair leaves zh / zh-Hant empty, so not indexable.
+  assert.equal(journalIsIndexable(pair(), "vi"), true);
+  assert.equal(journalIsIndexable(pair(), "en"), true);
+  assert.equal(journalIsIndexable(pair(), "zh"), false);
+  assert.equal(journalIsIndexable(pair(), "zh-hant"), false);
+});
+
+test("each journal index gates noindex on its own language's posts", () => {
+  for (const lang of ["en", "vi", "zh", "zh-hant"]) {
+    const page = readFileSync(`src/pages/${lang}/journal/index.astro`, "utf8");
+    assert.match(
+      page,
+      new RegExp(`journalIsIndexable\\([\\s\\S]*?"${lang}",\\s*\\)`),
+      `${lang} journal index must pass its own language to journalIsIndexable`,
+    );
+  }
 });
 
 const RECORD = {

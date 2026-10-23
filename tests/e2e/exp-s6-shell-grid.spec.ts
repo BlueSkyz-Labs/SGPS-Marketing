@@ -68,7 +68,7 @@ test("negative proof: offsetting one container edge turns the contract RED", asy
   expect(spread(edges)).toBeGreaterThan(1);
 });
 
-test("desktop header shows at most seven visible controls and a CTA distinct from Products", async ({
+test("desktop header shows exactly the approved controls and a CTA distinct from Products", async ({
   page,
 }) => {
   await page.setViewportSize(VIEWPORTS[0]);
@@ -86,8 +86,21 @@ test("desktop header shows at most seven visible controls and a CTA distinct fro
     ),
   );
   // Owner 2026-10-18 (audit A-03): Contact joins About in the desktop nav,
-  // so the cap moves from six to seven controls.
-  expect(names.length, names.join(" | ")).toBeLessThanOrEqual(7);
+  // so the cap moved from six to seven controls.
+  // Owner 2026-10-20 (TRU-15) / D-2: Journey joins the desktop nav once a
+  // post exists in the page language, so the cap moves to eight. The exact
+  // ordered list makes any further addition an explicit decision.
+  expect(names.length, names.join(" | ")).toBeLessThanOrEqual(8);
+  expect(names).toEqual([
+    "A",
+    "About",
+    "Contact",
+    "Journey",
+    "Search",
+    "EN · Language: English",
+    "Theme: System",
+    "Products",
+  ]);
   expect(names.join(" ")).not.toContain("Explore products");
 
   const products = page.locator('header nav a[href="/en/products/"]:visible');
