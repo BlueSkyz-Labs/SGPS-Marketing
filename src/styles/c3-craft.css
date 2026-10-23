@@ -362,11 +362,25 @@ header
   text-underline-offset: 0.5rem;
 }
 
+/* EX-17: on its own section (Products and its profiles) the filled pill points
+   at the page the visitor is already on, so it steps down to the quiet nav
+   style of About and Contact: no fill, no border, no arrow, same weight and
+   underline cue. `aria-current="page"` stays on the exact route. */
 header nav a.btn.btn[data-nav-current] {
+  --btn-bg: transparent;
+  --btn-fg: var(--text-primary);
+  --btn-border: transparent;
+  --btn-shadow: 0 0 transparent;
+  padding-inline: 0.75rem;
+  font-size: var(--size-2);
   font-weight: 700;
   text-decoration: underline;
   text-decoration-thickness: 2px;
   text-underline-offset: 0.5rem;
+}
+
+header nav a.btn.btn[data-nav-current] .btn__icon {
+  display: none;
 }
 
 header details nav a[data-nav-current]:not(.lang-option) {

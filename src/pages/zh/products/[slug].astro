@@ -5,6 +5,8 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
 import Container from "@/components/layout/Container.astro";
 import ProductStatus from "@/components/product/ProductStatus.astro";
 import ProductLadder from "@/components/product/ProductLadder.astro";
+import ProductHero from "@/components/product/ProductHero.astro";
+import ProductContactAction from "@/components/product/ProductContactAction.astro";
 import AppAccess from "@/components/product/AppAccess.astro";
 import ProductShowcase from "@/components/product/ProductShowcase.astro";
 import ButtonLink from "@/components/ui/ButtonLink.astro";
@@ -20,6 +22,7 @@ import { EMPTY_STATE_COPY } from "@/data/empty-state-copy";
 import { productCopy, proofCaptionForKind } from "@/lib/product-copy";
 import { resolveLifecycleCta } from "@/lib/lifecycle-cta";
 import { getShowcase } from "@/lib/showcases";
+import { heroScreen } from "@/lib/product-hero";
 import {
   getProductIconThumbPath,
   localizeSiteHref,
@@ -60,6 +63,7 @@ const media = data.proof.media;
 const copy = productCopy(data, "zh");
 const page = productPageCopy(data, "zh");
 const showcase = (await getShowcase(data.slug))?.data ?? null;
+const heroShot = heroScreen(showcase);
 
 // This page already *is* the recorded status surface, so the mapper only adds
 // an action when it yields an eligible first-party Try destination and the
@@ -162,67 +166,76 @@ const awaitingScreens = !showcase && isIdentityArt;
         </ol>
       </nav>
 
-      <!-- Text zoom: the icon is rem-sized and grows with 200% text, so the
-           title block may drop under it instead of squeezing to ~40px. -->
-      <header class="mt-8 flex flex-wrap items-center gap-5 sm:gap-6">
-        <div
-          class="relative flex size-20 flex-shrink-0 items-center justify-center overflow-hidden rounded-2xl bg-white/5 p-2 shadow-[0_12px_32px_-8px_rgba(11,16,32,0.35)] ring-1 ring-inset ring-white/10 sm:size-28 sm:p-2.5"
-          aria-hidden="true"
-        >
-          <img
-            src={getProductIconThumbPath(data.slug)}
-            alt=""
-            class="h-full w-full rounded-[22%] object-contain"
-            loading="eager"
-            fetchpriority="low"
-            decoding="async"
-            width="128"
-            height="128"
-          />
-        </div>
-        <div class="min-w-0 flex-1 basis-40">
-          <div class="flex flex-wrap items-center gap-x-4 gap-y-2">
-            <h1
-              class="type-d2 profile-title text-[var(--text-primary)]"
-              style={productTransitionStyle("card", data.slug)}
-              data-product-profile-title
+      <ProductHero art={heroShot}>
+        <Fragment slot="intro">
+          <!-- Text zoom: the icon is rem-sized and grows with 200% text, so the
+               title block may drop under it instead of squeezing to ~40px. -->
+          <header class="flex flex-wrap items-center gap-5 sm:gap-6">
+            <div
+              class="relative flex size-20 flex-shrink-0 items-center justify-center overflow-hidden rounded-2xl bg-white/5 p-2 shadow-[0_12px_32px_-8px_rgba(11,16,32,0.35)] ring-1 ring-inset ring-white/10 sm:size-28 sm:p-2.5"
+              aria-hidden="true"
             >
-              {data.name}
-            </h1>
-            <ProductStatus label={data.publicLabel} lang="zh" />
-          </div>
-        </div>
-      </header>
-      <HorizonSeam class="horizon-rule" data-horizon-rule />
+              <img
+                src={getProductIconThumbPath(data.slug)}
+                alt=""
+                class="h-full w-full rounded-[22%] object-contain"
+                loading="eager"
+                fetchpriority="low"
+                decoding="async"
+                width="128"
+                height="128"
+              />
+            </div>
+            <div class="min-w-0 flex-1 basis-40">
+              <div class="flex flex-wrap items-center gap-x-4 gap-y-2">
+                <h1
+                  class="type-d2 profile-title text-[var(--text-primary)]"
+                  style={productTransitionStyle("card", data.slug)}
+                  data-product-profile-title
+                >
+                  {data.name}
+                </h1>
+                <ProductStatus label={data.publicLabel} lang="zh" />
+              </div>
+            </div>
+          </header>
+          <HorizonSeam class="horizon-rule" data-horizon-rule />
 
-      <p class="mt-8 max-w-3xl text-lg leading-relaxed text-[var(--text-secondary)] sm:text-xl">
-        {page.oneLiner}
-      </p>
-
-      <div class="mt-6 flex flex-wrap items-center gap-x-6 gap-y-3">
-        {showTryCta ? (
-          <ButtonLink
-            href={cta.href}
-            data-primary-action
-            data-product-cta={cta.verb}
-          >
-            {cta.label}
-          </ButtonLink>
-        ) : showcase ? (
-          <ButtonLink href="#profile-showcase" data-primary-action>
-            {PAGE_LABELS.seeScreens[lang]}
-          </ButtonLink>
-        ) : null}
-      </div>
-
-      <ProductSides showcase={showcase} lang="zh" />
-      <AppAccess
-        appAccess={data.appAccess}
-        lang="zh"
-        web={data.platforms.includes("web")}
-        webPreview={webPreviewOpen(data)}
-      />
-      <ProductLadder lifecycle={data.lifecycle} lang="zh" />
+          <p class="mt-8 max-w-3xl text-lg leading-relaxed text-[var(--text-secondary)] sm:text-xl">
+            {page.oneLiner}
+          </p>
+        </Fragment>
+        <Fragment slot="actions">
+          {showTryCta ? (
+            <ButtonLink
+              href={cta.href}
+              data-primary-action
+              data-product-cta={cta.verb}
+            >
+              {cta.label}
+            </ButtonLink>
+          ) : showcase ? (
+            <ButtonLink href="#profile-showcase" data-primary-action>
+              {PAGE_LABELS.seeScreens[lang]}
+            </ButtonLink>
+          ) : null}
+          <ProductContactAction
+            appAccess={data.appAccess}
+            lang="zh"
+            webPreview={webPreviewOpen(data)}
+          />
+        </Fragment>
+        <Fragment slot="status">
+          <ProductSides showcase={showcase} lang="zh" />
+          <AppAccess
+            appAccess={data.appAccess}
+            lang="zh"
+            web={data.platforms.includes("web")}
+            webPreview={webPreviewOpen(data)}
+          />
+          <ProductLadder lifecycle={data.lifecycle} lang="zh" />
+        </Fragment>
+      </ProductHero>
       {!showcase && media && !isIdentityArt ? (
         <NoCaptureStage media={media} lang="zh" />
       ) : null}
@@ -247,11 +260,8 @@ const awaitingScreens = !showcase && isIdentityArt;
             {PAGE_LABELS.whatItDoes[lang]}
           </h2>
           <ul class="profile-does mt-4" data-what-it-does>
-            {page.whatItDoes.map((item, index) => (
+            {page.whatItDoes.map((item) => (
               <li class="profile-does__tile">
-                <span class="profile-does__index" aria-hidden="true">
-                  {String(index + 1).padStart(2, "0")}
-                </span>
                 <span class="profile-does__text">{item}</span>
               </li>
             ))}
@@ -268,8 +278,9 @@ const awaitingScreens = !showcase && isIdentityArt;
       ) : null}
 
       {media && showcase ? (
-        <figure class="m-0 mt-14 max-w-4xl" data-profile-identity-stage>
+        <figure class="m-0 mt-14 max-w-lg" data-profile-identity-stage>
           <ProductVisual
+            sizes="(min-width: 32rem) 32rem, calc(100vw - 2.5rem)"
             media={media}
             alt={`${data.name} \u2014 ${PAGE_LABELS.artIdentity[lang]}`}
           />
@@ -368,15 +379,6 @@ const awaitingScreens = !showcase && isIdentityArt;
     :global(:root:not([data-theme="light"])) .profile-does__tile {
       --specular: color-mix(in srgb, white 9%, transparent);
     }
-  }
-  .profile-does__index {
-    flex: none;
-    padding-top: 0.2rem;
-    font-size: var(--size-1);
-    font-weight: 700;
-    font-variant-numeric: tabular-nums;
-    letter-spacing: 0.04em;
-    color: var(--action-primary);
   }
   .profile-does__text {
     min-width: 0;

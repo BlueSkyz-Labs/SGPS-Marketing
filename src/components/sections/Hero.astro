@@ -75,7 +75,7 @@ const taglineAccent = labelFor(
 const proposition = labelFor(
   {
     en: SITE.proposition,
-    vi: "Chúng tôi làm những sản phẩm thông minh, giúp mọi người làm việc nhẹ nhàng và hiệu quả hơn.",
+    vi: "Chúng tôi làm những sản phẩm thông minh, giúp mọi người làm việc nhẹ nhàng và hiệu quả hơn.",
     zh: "我们打造智能化产品，赋能个人并提升工作方式。",
     "zh-hant": "我們打造智慧化產品，賦能個人並提升工作方式。",
   },
@@ -428,6 +428,14 @@ const supportingLine = flagship ? null : proposition;
     aspect-ratio: 780 / 1440;
     object-fit: contain;
   }
+  /* EX-15: the recorded phone screen ends mid-sentence, so the capture fades
+     out at its floor, the same intentional fade the products page gives its
+     card captures, instead of a hard clip. The fade is a mask on the image
+     (same pixels, nothing redrawn); forced-colors keeps the plain image. */
+  .hero-flagship :global(.flagship-capture__image) {
+    -webkit-mask-image: linear-gradient(to bottom, #000 58%, transparent 100%);
+    mask-image: linear-gradient(to bottom, #000 58%, transparent 100%);
+  }
   /* The CTA is never allowed to break inside a word. Full width on phones. */
   .hero-flagship :global(.hero-flagship__cta) {
     width: 100%;
@@ -475,7 +483,7 @@ const supportingLine = flagship ? null : proposition;
       /* Stage height (capture slot + caption) in rem; the line sits at 44 %
          from its top, so 56 % of it lies below the line. */
       --hero-stage-h: 27.94rem;
-      --hero-field-h: 16rem;
+      --hero-field-h: 22rem;
       /* Field line = 24 % above the field's bottom (global.css). */
       --hero-field-bottom: calc(
         var(--hero-pad-b) + var(--hero-stage-h) * 0.56 - var(--hero-field-h) *
@@ -494,9 +502,19 @@ const supportingLine = flagship ? null : proposition;
     .hero-plane :global(.horizon-signature .horizon-field__depth) {
       display: none;
     }
+    /* EX-23: the halo used to stop at the horizon line with its brightest row,
+       a hard edge across the phone. It is now centred on the line and fades to
+       nothing at its own top and bottom, and the field is tall enough to hold
+       the whole glow, so no edge cuts the capture. */
     .hero-plane :global(.horizon-signature .horizon-field__halo) {
-      inset: auto -30% 24% -30%;
+      inset: auto -30% calc(24% - 7rem) -30%;
       height: 14rem;
+      background: radial-gradient(
+        ellipse 50% 50% at 50% 50%,
+        color-mix(in srgb, var(--brand-cobalt) 26%, transparent) 0%,
+        color-mix(in srgb, var(--brand-cobalt) 10%, transparent) 44%,
+        transparent 100%
+      );
     }
     .hero-stage__horizon {
       display: none;
@@ -546,13 +564,10 @@ const supportingLine = flagship ? null : proposition;
       transform-origin: 60% 50%;
     }
     .hero-flagship :global(.flagship-capture__image) {
-      box-shadow:
-        0 1px 0 0 color-mix(in srgb, var(--brand-porcelain) 30%, transparent)
-          inset,
-        0 2px 6px color-mix(in srgb, #000 30%, transparent),
-        0 36px 72px -24px color-mix(in srgb, #000 70%, transparent),
-        0 24px 64px -32px
-          color-mix(in srgb, var(--brand-cobalt) 55%, transparent);
+      /* The outer shadow layers sit outside the masked box, so they are gone
+         with the fade (EX-15); the specular top edge stays. */
+      box-shadow: 0 1px 0 0
+        color-mix(in srgb, var(--brand-porcelain) 30%, transparent) inset;
     }
   }
 
@@ -621,6 +636,10 @@ const supportingLine = flagship ? null : proposition;
   }
 
   @media (forced-colors: active) {
+    .hero-flagship :global(.flagship-capture__image) {
+      -webkit-mask-image: none;
+      mask-image: none;
+    }
     .hero-stage__horizon {
       display: none;
     }

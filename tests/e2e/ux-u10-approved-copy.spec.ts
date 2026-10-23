@@ -53,9 +53,10 @@ test.describe("U10 VI home, tagline and verify label", () => {
   });
 });
 
-// G6 (Owner 2026-10-20): both profiles end their single Availability line
-// with the same contact sentence (the "Questions? Get in touch." clause of the
-// 2026-10-15 preview note); the separate prose paragraph is gone.
+// G6 (Owner 2026-10-20): the separate prose paragraph is gone; both profiles
+// keep their single Availability line. Experience wave E (EX-01): the contact
+// clause of the 2026-10-15 preview note ("Get in touch") is now the secondary
+// button beside the primary action, with the same text and destination.
 const OLD_PROSE = {
   en: "Not yet open for sign-up or download. Check this page for updates, or get in touch.",
   vi: "Chưa mở đăng ký hoặc tải về. Bạn có thể theo dõi trang này, hoặc liên hệ với chúng tôi.",
@@ -63,10 +64,10 @@ const OLD_PROSE = {
   "zh-hant": "目前尚未開放註冊或下載。歡迎持續關注本頁，或與我們聯絡。",
 } as const;
 const CONTACT = {
-  en: "Questions? Get in touch.",
-  vi: "Cần hỏi thêm? Liên hệ với chúng tôi.",
-  zh: "有疑问？与我们联系。",
-  "zh-hant": "有疑問？與我們聯絡。",
+  en: "Get in touch",
+  vi: "Liên hệ với chúng tôi",
+  zh: "与我们联系",
+  "zh-hant": "與我們聯絡",
 } as const;
 
 for (const lang of Object.keys(CONTACT) as (keyof typeof CONTACT)[]) {
@@ -82,10 +83,9 @@ for (const lang of Object.keys(CONTACT) as (keyof typeof CONTACT)[]) {
       await expect(note).toHaveCount(1);
       await expect(note).toHaveText(text);
       await expect(note).toHaveAttribute("data-interim-state", state);
-      await expect(note.locator("a")).toHaveAttribute(
-        "href",
-        `/${lang}/contact/`,
-      );
+      await expect(note).toHaveAttribute("href", `/${lang}/contact/`);
+      await expect(note).toHaveAttribute("data-button-variant", "secondary");
+      await expect(page.locator("[data-app-access] a")).toHaveCount(0);
       await expect(page.locator("main")).not.toContainText(
         /waitlist|danh sách chờ|候補|等候名單/i,
       );

@@ -10,6 +10,26 @@ interface JourneyStep {
   label: Record<Language, string>;
 }
 
+/** Labels shared by several routes' Next steps rows (one approved string each). */
+const CONTACT_STEP: JourneyStep = {
+  segment: "contact",
+  label: {
+    en: "Contact",
+    vi: "Liên hệ",
+    zh: "联系我们",
+    "zh-hant": "聯絡我們",
+  },
+};
+const PRODUCT_STATUS_STEP: JourneyStep = {
+  segment: "products",
+  label: {
+    en: "Product status",
+    vi: "Trạng thái sản phẩm",
+    zh: "产品状态",
+    "zh-hant": "產品狀態",
+  },
+};
+
 /**
  * S+ Contextual Journey Bar (Task 6).
  * Deterministic route -> next-action map derived from the live approved
@@ -33,36 +53,9 @@ const JOURNEY: Record<string, JourneyStep[]> = {
         "zh-hant": "關於 BlueSkyz",
       },
     },
-    {
-      segment: "contact",
-      label: {
-        en: "Contact",
-        vi: "Liên hệ",
-        zh: "联系我们",
-        "zh-hant": "聯絡我們",
-      },
-    },
+    CONTACT_STEP,
   ],
-  about: [
-    {
-      segment: "products",
-      label: {
-        en: "Product status",
-        vi: "Trạng thái sản phẩm",
-        zh: "产品状态",
-        "zh-hant": "產品狀態",
-      },
-    },
-    {
-      segment: "contact",
-      label: {
-        en: "Contact",
-        vi: "Liên hệ",
-        zh: "联系我们",
-        "zh-hant": "聯絡我們",
-      },
-    },
-  ],
+  about: [PRODUCT_STATUS_STEP, CONTACT_STEP],
   contact: [
     {
       segment: "support",
@@ -73,9 +66,11 @@ const JOURNEY: Record<string, JourneyStep[]> = {
       label: { en: "Security", vi: "Bảo mật", zh: "安全", "zh-hant": "安全" },
     },
   ],
-  // Customer review F2: /support already ends with the same Contact and
-  // Security pair in-page; a second identical row is noise, not a next step.
-  support: [],
+  // Customer review F2: /support already carries the mailbox and the Security
+  // caveat in-page, so its row never repeats those destinations. EX-20: it
+  // still closes with the shared band, pointing to the two routes the page
+  // does not link (Contact, Product status), using the same approved labels.
+  support: [CONTACT_STEP, PRODUCT_STATUS_STEP],
 };
 
 export function getJourneyActions(

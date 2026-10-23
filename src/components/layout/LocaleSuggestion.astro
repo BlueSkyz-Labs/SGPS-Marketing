@@ -51,6 +51,27 @@
     transition: opacity 200ms ease-out;
   }
 
+  /* EX-14: on an authored ink page the header is the ink surface in both
+     schemes, so the strip takes the same surface, hairline and ink tokens
+     (the same re-pointing as header[data-scene="ink"]) and reads as part of
+     the chrome instead of a porcelain band between header and hero. */
+  body[data-scene="ink"] .locale-suggestion {
+    --surface-primary: var(--brand-ink);
+    --border-subtle: color-mix(
+      in srgb,
+      var(--brand-porcelain) 24%,
+      transparent
+    );
+    --text-primary: var(--brand-porcelain);
+    --text-secondary: color-mix(
+      in srgb,
+      var(--brand-porcelain) 82%,
+      transparent
+    );
+    --focus-ring: color-mix(in srgb, var(--brand-cobalt) 62%, white);
+    border-bottom-color: rgba(255, 255, 255, 0.1);
+  }
+
   .locale-suggestion__text {
     margin: 0;
     font-size: var(--size-2);

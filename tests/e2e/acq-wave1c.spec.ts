@@ -19,6 +19,9 @@ async function doubleExposure(page: Page): Promise<number> {
           .filter(
             (i) =>
               /op-0[1-5]/.test(i.currentSrc || i.src) &&
+              // EX-01: the hero poster repeats the first capture outside the
+              // sticky stage; it is not a stage frame.
+              !i.closest("[data-product-hero]") &&
               i.getBoundingClientRect().left > 800,
           )
           .map((i) => {

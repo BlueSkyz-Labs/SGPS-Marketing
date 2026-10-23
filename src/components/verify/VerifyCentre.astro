@@ -4,8 +4,9 @@
  *
  * Presentation only: claims, evidence references and the trust lanes come from
  * the canonical data modules. Nothing here authors or strengthens a claim.
- * Each claim is shown once with its limit and its sources inline (sources rail
- * on the right from 1024 px). "What backs it" lists the three trust lanes, one
+ * Each claim is shown once with its limit and its sources directly under the
+ * statement at every width (EX-19: no far-right rail), and both sections share
+ * one column width. "What backs it" lists the three trust lanes, one
  * pointer leads to Compare claims, and the claim map sits in a native
  * <details> that is closed by default and complete without JavaScript.
  */
@@ -239,7 +240,7 @@ for (const item of items) {
     <PageHeader title={c.title} lede={c.lede} />
 
     {items.length > 0 ? (
-      <div class="mt-12">
+      <div class="mt-12 max-w-3xl" data-verify-claims>
         <h2 class="text-xl font-semibold tracking-tight sm:text-2xl">
           {c.claims}
         </h2>
@@ -277,7 +278,7 @@ for (const item of items) {
       </div>
     ) : null}
 
-    <div class="mt-12 max-w-3xl">
+    <div class="mt-12 max-w-3xl" data-verify-backs>
       <h2 class="text-xl font-semibold tracking-tight sm:text-2xl">
         {c.backs}
       </h2>
@@ -330,18 +331,6 @@ for (const item of items) {
   .verify-claim__main {
     min-width: 0;
     max-width: 46rem;
-  }
-
-  /* v8 contract: the sources rail sits beside its claim from 1024px. The
-     columns hug their content widths so the rail reads as attached to the
-     claim (gap = --space-8) instead of floating at the far edge. */
-  @media (min-width: 1024px) {
-    .verify-claim {
-      grid-template-columns: minmax(0, 46rem) minmax(0, 28rem);
-      column-gap: var(--space-8);
-      justify-content: start;
-      align-items: start;
-    }
   }
 
   .verify-claim__statement {

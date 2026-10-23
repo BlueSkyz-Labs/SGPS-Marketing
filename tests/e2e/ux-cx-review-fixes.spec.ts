@@ -62,7 +62,17 @@ for (const lang of LANGS) {
   }) => {
     await page.goto(`/${lang}/support/`);
     expect(await repeatedHrefs(page)).toEqual([]);
-    await expect(page.locator("[data-journey-bar]")).toHaveCount(0);
+    // EX-20: the shared Next steps band closes the page with exactly the two
+    // routes the page does not already link (Contact, Product status); it never
+    // repeats the Security caveat, so every destination is still linked once.
+    const bar = page.locator("[data-journey-bar]");
+    await expect(bar).toHaveCount(1);
+    await expect(bar.locator("a")).toHaveCount(2);
+    await expect(bar.locator(`a[href="/${lang}/contact/"]`)).toHaveCount(1);
+    await expect(bar.locator(`a[href="/${lang}/products/"]`)).toHaveCount(1);
+    await expect(bar.locator(`a[href="/${lang}/security/"]`)).toHaveCount(0);
+    // EX-18: like About, Contact and Verify, Support has no eyebrow-with-rule.
+    await expect(page.locator("main .page-header__eyebrow")).toHaveCount(0);
   });
 
   test(`${lang}: /security cites itself as text, not a link (F6)`, async ({

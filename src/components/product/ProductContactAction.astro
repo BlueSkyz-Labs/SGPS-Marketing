@@ -1,0 +1,33 @@
+---
+import ButtonLink from "@/components/ui/ButtonLink.astro";
+import type { Language } from "@/data/site";
+import type { ProductEntry } from "@/lib/products";
+import { CONTACT_NOTE, showsContactAction } from "./product-page-copy";
+
+/**
+ * Experience wave E (EX-01): the contact action of a product profile as a
+ * secondary button beside the primary action. It was the "Questions? Get in
+ * touch" link that closed the Availability line (G6); the destination and the
+ * link text are the same strings, only the arrangement changes. It renders
+ * while no native app is available. No waitlist, date or promise.
+ */
+interface Props {
+  appAccess: ProductEntry["data"]["appAccess"];
+  lang: Language;
+  /** The web app is open to new users as a preview. */
+  webPreview?: boolean;
+}
+const { appAccess, lang, webPreview = false } = Astro.props;
+---
+
+{showsContactAction(appAccess) ? (
+  <ButtonLink
+    href={`/${lang}/contact/`}
+    variant="secondary"
+    data-product-contact
+    data-interim-note
+    data-interim-state={webPreview ? "web-preview" : "closed"}
+  >
+    {CONTACT_NOTE[lang].link}
+  </ButtonLink>
+) : null}
