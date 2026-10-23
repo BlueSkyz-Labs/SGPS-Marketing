@@ -55,8 +55,8 @@ test("the author registry holds the Owner-directed copy verbatim", () => {
   assert.equal(tony.name, "Tony Nguyen");
   assert.equal(tony.role.vi, "Nhà sáng lập kiêm CEO");
   assert.equal(tony.role.en, "Founder & CEO");
-  assert.equal(tony.avatarAlt.vi, "Ảnh chân dung Tony Nguyen");
-  assert.equal(tony.avatarAlt.en, "Portrait of Tony Nguyen");
+  assert.equal(tony.avatarAlt.vi, "Chân dung phác họa Tony Nguyen");
+  assert.equal(tony.avatarAlt.en, "Sketch portrait of Tony Nguyen");
   assert.equal(tony.aboutPath.vi, "/vi/about/");
   assert.equal(tony.aboutPath.en, "/en/about/");
   assert.equal(
@@ -105,7 +105,7 @@ test("the avatar is a committed, EXIF-free WebP pair with honest provenance", ()
   );
   assert.equal(
     tony.avatarProvenance,
-    "Portrait photograph supplied by the Owner for use as the author avatar (2026-10-22/23); background light streaks retouched, circular crop; no other alteration.",
+    "Pencil-sketch illustration derived from a portrait photograph supplied by the Owner, made at the Owner's request (2026-10-23) by deterministic local image processing (no generative model); background replaced with a brand tint, circular crop.",
   );
 });
 
