@@ -23,6 +23,7 @@ import {
 import { EMPTY_STATE_COPY } from "@/data/empty-state-copy";
 import { productCopy, proofCaptionForKind } from "@/lib/product-copy";
 import { resolveLifecycleCta } from "@/lib/lifecycle-cta";
+import { appOpenAction } from "@/lib/app-open-action";
 import { getShowcase } from "@/lib/showcases";
 import { heroScreen } from "@/lib/product-hero";
 import {
@@ -81,6 +82,7 @@ const cta = resolveLifecycleCta(
   },
   "zh-hant",
 );
+const openApp = appOpenAction(data.slug, data.appAccess, lang);
 const showTryCta = cta.verb === "try" && !data.appAccess?.signInUrl;
 
 const privacyHref = data.proof.privacyUrl
@@ -213,7 +215,15 @@ const awaitingScreens = !showcase && isIdentityArt;
           </p>
         </Fragment>
         <Fragment slot="actions">
-          {showTryCta ? (
+          {openApp ? (
+            <ButtonLink
+              href={openApp.href}
+              data-primary-action
+              data-product-cta="try"
+            >
+              {openApp.label}
+            </ButtonLink>
+          ) : showTryCta ? (
             <ButtonLink
               href={cta.href}
               data-primary-action

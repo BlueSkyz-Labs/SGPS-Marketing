@@ -188,6 +188,13 @@ const mobileApp = z
   });
 const appAccess = z.object({
   signInUrl: httpsUrl.optional(),
+  /**
+   * Owner 2026-10-24 (O-03): the app accepts new sign-ups from the public.
+   * Default false; only `true` lets the product page offer an action into the
+   * app (`appOpenAction`). Owner decision #575 (no public sign-in link) holds
+   * while this is false.
+   */
+  publicSignup: z.boolean().default(false),
   android: mobileApp.optional(),
   ios: mobileApp.optional(),
 });
