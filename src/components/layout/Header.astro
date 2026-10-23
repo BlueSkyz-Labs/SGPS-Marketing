@@ -57,7 +57,7 @@ const plainLinks = NAV.slice(1);
 
     <nav
       aria-label={labelFor(SHARED_LABELS.primaryNav, lang)}
-      class="hidden flex-wrap items-center gap-2 md:flex"
+      class="hidden flex-wrap items-center gap-2 lg:flex"
     >
       {plainLinks.map((link) => (
         <a
@@ -91,7 +91,7 @@ const plainLinks = NAV.slice(1);
       </ButtonLink>
     </nav>
 
-    <details class="md:hidden">
+    <details class="lg:hidden">
       <summary class="inline-flex min-h-11 min-w-11 list-none items-center justify-center rounded-lg border border-[var(--border-subtle)] px-3 text-sm font-medium">
         {labelFor(SHARED_LABELS.menu, lang)}
       </summary>

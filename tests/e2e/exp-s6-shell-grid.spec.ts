@@ -119,6 +119,45 @@ test("compact header keeps 44px targets and the full route list in the menu", as
   }
 });
 
+// With nine desktop controls the en / vi nav wrapped to two or three rows
+// between 768 and 1023px. The desktop nav starts at 1024px; below that the
+// compact menu carries the routes, so the header bar is one row at every width.
+test("header bar stays one row from tablet to desktop in en, vi and zh", async ({
+  page,
+}) => {
+  for (const lang of ["en", "vi", "zh"]) {
+    for (const width of [768, 900, 1023, 1024, 1280, 1440]) {
+      await page.setViewportSize({ width, height: 800 });
+      await page.goto(`/${lang}/`);
+      const bar = page.locator("header .header-bar").first();
+      const brand = await bar.locator(".brand-lockup").first().boundingBox();
+      const items = await bar
+        .locator(":scope > nav:visible, :scope > details:visible")
+        .evaluateAll((nodes) =>
+          nodes.map((node) => node.getBoundingClientRect().top),
+        );
+      expect(items.length, `${lang} ${width}`).toBe(1);
+      const box = await bar.boundingBox();
+      expect(
+        box!.height,
+        `${lang} ${width}: header bar ${box!.height}px`,
+      ).toBeLessThanOrEqual(brand!.height + 32);
+      const rows = await bar.locator(":scope > nav:visible > *").evaluateAll(
+        (nodes) =>
+          new Set(
+            nodes
+              .filter((node) => node.getBoundingClientRect().height > 0)
+              .map((node) => {
+                const r = node.getBoundingClientRect();
+                return Math.round((r.top + r.bottom) / 2 / 16);
+              }),
+          ).size,
+      );
+      expect(rows, `${lang} ${width}: nav rows`).toBeLessThanOrEqual(1);
+    }
+  }
+});
+
 test("desktop theme icon flips the theme on Enter with no popup (HC-7)", async ({
   page,
 }) => {
