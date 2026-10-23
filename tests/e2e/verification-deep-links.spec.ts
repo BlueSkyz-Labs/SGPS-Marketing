@@ -1,30 +1,23 @@
+import AxeBuilder from "@axe-core/playwright";
 import { expect, test } from "@playwright/test";
 
 const EXPLORER_COPY = {
   en: {
-    expand: "Show details",
-    collapse: "Hide details",
     claim: "Claim",
     state: "Verification state",
     stateValue: "Source-linked",
   },
   vi: {
-    expand: "Xem chi tiết",
-    collapse: "Ẩn chi tiết",
     claim: "Tuyên bố",
     state: "Trạng thái xác minh",
     stateValue: "Đã gắn nguồn",
   },
   zh: {
-    expand: "查看详情",
-    collapse: "隐藏详情",
     claim: "声明",
     state: "验证状态",
     stateValue: "已关联来源",
   },
   "zh-hant": {
-    expand: "檢視詳情",
-    collapse: "隱藏詳情",
     claim: "聲明",
     state: "驗證狀態",
     stateValue: "已關聯來源",
@@ -73,7 +66,7 @@ test.describe("verification deep links", () => {
     );
     await expect(page.locator("#evidence-ev-security-advisory")).toBeVisible();
     await expect(
-      page.getByRole("button", { name: "Hide details: Sources" }),
+      page.getByRole("button", { name: "Sources", exact: true }),
     ).toHaveAttribute("aria-expanded", "true");
   });
 
@@ -89,18 +82,29 @@ test.describe("verification deep links", () => {
 
       const steps = chain.getByRole("button");
       await expect(steps).toHaveCount(4);
-      await expect(steps.nth(0)).toHaveAccessibleName(
-        `${copy.expand}: ${copy.claim}`,
-      );
+      // WCAG 2.5.3 Label in Name: the accessible name IS the visible label
+      // (no aria-label, which axe 4.14 flags because the aria-hidden number
+      // and chevron count as visible text). State is aria-expanded only.
+      await expect(steps.nth(0)).toHaveAccessibleName(copy.claim);
       const stateStep = steps.nth(2);
-      await expect(stateStep).toHaveAccessibleName(
-        `${copy.expand}: ${copy.state}`,
-      );
+      await expect(stateStep).toHaveAccessibleName(copy.state);
+      await expect(stateStep).toHaveAttribute("aria-expanded", "false");
+      for (const step of await steps.all()) {
+        await expect(step).not.toHaveAttribute("aria-label", /.*/);
+        await expect(step).toHaveAccessibleName(
+          (await step
+            .locator(".evidence-explorer__step-label")
+            .textContent()) ?? "",
+        );
+      }
+      const labelInName = await new AxeBuilder({ page })
+        .include("[data-evidence-chain]")
+        .withRules(["label-content-name-mismatch"])
+        .analyze();
+      expect(labelInName.violations).toEqual([]);
       await stateStep.click();
       await expect(stateStep).toHaveAttribute("aria-expanded", "true");
-      await expect(stateStep).toHaveAccessibleName(
-        `${copy.collapse}: ${copy.state}`,
-      );
+      await expect(stateStep).toHaveAccessibleName(copy.state);
 
       const panelId = await stateStep.getAttribute("aria-controls");
       await expect(explorer.locator(`#${panelId}`)).toContainText(

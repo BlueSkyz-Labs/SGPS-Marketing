@@ -98,8 +98,6 @@ function enhance(root: HTMLElement): void {
     return;
   }
 
-  const msgExpand = root.dataset.msgExpand ?? "Show details";
-  const msgCollapse = root.dataset.msgCollapse ?? "Hide details";
   const msgClaim = root.dataset.msgClaim ?? "Claim";
   const msgSources = root.dataset.msgSources ?? "Sources";
   const msgState = root.dataset.msgState ?? "Verification state";
@@ -165,7 +163,10 @@ function enhance(root: HTMLElement): void {
     btn.setAttribute("aria-expanded", "false");
     btn.setAttribute("aria-controls", `ee-panel-${graph.id}-${i}`);
     btn.dataset.stepLabel = step.label;
-    btn.setAttribute("aria-label", `${msgExpand}: ${step.label}`);
+    // No aria-label: the accessible name is the visible label (WCAG 2.5.3
+    // Label in Name; axe 4.14 label-content-name-mismatch also counts the
+    // aria-hidden number and chevron as visible text, so any aria-label
+    // fails). Open/closed state is conveyed by aria-expanded alone.
 
     const num = document.createElement("span");
     num.className = "evidence-explorer__step-num";
@@ -191,10 +192,6 @@ function enhance(root: HTMLElement): void {
 
     const setOpen = (open: boolean) => {
       btn.setAttribute("aria-expanded", String(open));
-      btn.setAttribute(
-        "aria-label",
-        `${open ? msgCollapse : msgExpand}: ${step.label}`,
-      );
       panel.hidden = !open;
     };
     // Independent disclosure: several panels may be open at once.
