@@ -3,6 +3,7 @@ import { getCollection } from "astro:content";
 import type { Language } from "@/data/site";
 import { JOURNAL_COPY } from "@/data/journal-copy";
 import { JOURNAL_BRANCHES, type JournalEntry } from "@/lib/journal-schema";
+import { journalPostPath } from "@/lib/journal-posts";
 
 /**
  * v11 J1: the journal index. Lists published posts of this language by
@@ -60,7 +61,14 @@ const heading = { news: copy.news, product: copy.product } as const;
           <ul class="mt-6 grid gap-6">
             {items.map((entry) => (
               <li data-journal-item={entry.id}>
-                <h3 class="text-lg font-semibold">{entry.title}</h3>
+                <h3 class="text-lg font-semibold">
+                  <a
+                    href={journalPostPath(entry.lang, entry.id)}
+                    class="text-[var(--action-primary)] underline underline-offset-4 hover:no-underline"
+                  >
+                    {entry.title}
+                  </a>
+                </h3>
                 <p class="mt-1 text-sm text-[var(--text-secondary)]">
                   <time datetime={entry.datePublished}>
                     {entry.datePublished}

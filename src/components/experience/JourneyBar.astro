@@ -13,7 +13,7 @@ import { SHARED_LABELS, labelFor } from "@/data/site";
 
 interface Props {
   /** Route segment rendered as the bar's one primary action (audit A-01). */
-  primary?: string;
+  primary?: string | undefined;
 }
 const { primary } = Astro.props;
 const pathname = Astro.url.pathname;

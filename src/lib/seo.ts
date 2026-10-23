@@ -2,6 +2,7 @@ import {
   SUPPORTED_LANGUAGES,
   LANGUAGES,
   getAlternatePath,
+  languagesForPath,
   type Language,
 } from "./i18n.ts";
 
@@ -37,7 +38,7 @@ export function websiteId(siteUrl: string): string {
 }
 
 /** The publisher reference every non-Organization node uses. */
-function publisherRef(siteUrl: string) {
+export function publisherRef(siteUrl: string) {
   return {
     "@type": "Organization",
     "@id": organizationId(siteUrl),
@@ -247,7 +248,7 @@ export interface HreflangLink {
 }
 
 export function hreflangLinks(path: string, siteUrl: string): HreflangLink[] {
-  return SUPPORTED_LANGUAGES.map((lang) => ({
+  return languagesForPath(path).map((lang) => ({
     hreflang: LANGUAGES[lang].hreflang,
     href: canonicalForPath(getAlternatePath(path, lang), siteUrl),
   }));

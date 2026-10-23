@@ -6,6 +6,8 @@ import JournalIndex from "@/components/journal/JournalIndex.astro";
 import { getCollection } from "astro:content";
 import { JOURNAL_COPY } from "@/data/journal-copy";
 import { journalIsIndexable, type JournalEntry } from "@/lib/journal-schema";
+import { journalFeedPath } from "@/lib/journal-posts";
+import { SITE } from "@/data/site";
 
 const copy = JOURNAL_COPY["en"];
 // v11 J1: noindex (and out of the sitemap) until a post is published.
@@ -21,6 +23,7 @@ const indexable = journalIsIndexable(
   description={copy.lede}
   path="/en/journal/"
   noindex={!indexable}
+  feed={{ href: journalFeedPath("en"), title: `${copy.title} | ${SITE.name}` }}
   followLinks
 >
   <section class="py-16 lg:py-24">
