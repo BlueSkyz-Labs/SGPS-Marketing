@@ -19,6 +19,10 @@ platforms:
 # schema.org SoftwareApplication category (Owner delegated best practice, 2026-10-04):
 # rent, utilities and receipts for a landlord's rental business.
 applicationCategory: BusinessApplication
+# Owner 2026-10-24 (O-04): the app interface is Vietnamese (sotro.blueskyzlabs.com serves
+# <html lang="vi">). A local fact, not mirrored from the upstream profile.
+appLanguages:
+  - vi
 primaryAction:
   type: preview
   label: Preview Sổ Trọ
