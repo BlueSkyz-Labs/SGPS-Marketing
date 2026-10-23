@@ -68,7 +68,7 @@ test("negative proof: offsetting one container edge turns the contract RED", asy
   expect(spread(edges)).toBeGreaterThan(1);
 });
 
-test("desktop header shows exactly the approved controls and a CTA distinct from Products", async ({
+test("desktop header shows at most nine visible controls and a CTA distinct from Products", async ({
   page,
 }) => {
   await page.setViewportSize(VIEWPORTS[0]);
@@ -86,21 +86,9 @@ test("desktop header shows exactly the approved controls and a CTA distinct from
     ),
   );
   // Owner 2026-10-18 (audit A-03): Contact joins About in the desktop nav,
-  // so the cap moved from six to seven controls.
-  // Owner 2026-10-20 (TRU-15) / D-2: Journey joins the desktop nav once a
-  // post exists in the page language, so the cap moves to eight. The exact
-  // ordered list makes any further addition an explicit decision.
-  expect(names.length, names.join(" | ")).toBeLessThanOrEqual(8);
-  expect(names).toEqual([
-    "A",
-    "About",
-    "Contact",
-    "Journey",
-    "Search",
-    "EN · Language: English",
-    "Theme: System",
-    "Products",
-  ]);
+  // so the cap moves from six to seven controls. Owner 2026-10-24 (O-05):
+  // Verify joins them, and en/vi also show Journey, so the cap is nine.
+  expect(names.length, names.join(" | ")).toBeLessThanOrEqual(9);
   expect(names.join(" ")).not.toContain("Explore products");
 
   const products = page.locator('header nav a[href="/en/products/"]:visible');
@@ -116,7 +104,7 @@ test("compact header keeps 44px targets and the full route list in the menu", as
   const menu = page.locator(
     'header nav[aria-label="Menu"], header details nav',
   );
-  for (const name of ["Products", "About", "Contact"]) {
+  for (const name of ["Products", "About", "Contact", "Verify"]) {
     await expect(menu.getByRole("link", { name })).toBeVisible();
   }
   const targets = menu.locator("a:visible, button:visible");

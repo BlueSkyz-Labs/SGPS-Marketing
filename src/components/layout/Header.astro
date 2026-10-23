@@ -39,9 +39,11 @@ const isInSection = (href: string): boolean =>
 
 // Owner decision 2026-10-01 (v7 A-12): the one filled CTA leads to Products.
 // Owner decision 2026-10-18 (audit A-03): About and Contact are the plain
-// links, so desktop carries the same routes as the compact menu (seven
-// controls: lockup, About, Contact, search, language, theme, CTA). Every
-// other route stays in the command navigator and the footer.
+// links, so desktop carries the same routes as the compact menu. Owner
+// 2026-10-24 (O-05): Verify joins them as the one trust door (eight controls:
+// lockup, About, Contact, Verify, search, language, theme, CTA; plus Journey
+// where a post exists). Every other route stays in the command navigator and
+// the footer.
 const primaryCta = NAV[0]!;
 const plainLinks = NAV.slice(1);
 ---

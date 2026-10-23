@@ -278,6 +278,7 @@ export function getNav(lang: Language): NavItem[] {
     { label: l.products, href: `/${lang}/products/` },
     { label: l.about, href: `/${lang}/about/` },
     { label: l.contact, href: `/${lang}/contact/` },
+    { label: l.verify, href: `/${lang}/verify/` },
   ];
 }
 
