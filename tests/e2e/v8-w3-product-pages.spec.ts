@@ -66,9 +66,10 @@ for (const lang of LOCALES) {
         await page.goto(`/${lang}/products/${slug}/`);
         const line = page.locator("[data-app-access]");
         await expect(line).toHaveCount(1);
-        // G6: the one link is the contact link, never a store link.
-        await expect(line.locator("a")).toHaveCount(1);
-        await expect(line.locator("a")).toHaveAttribute(
+        // G6: never a store link. EX-01: no link in the line at all; the
+        // contact action is the one secondary button beside the primary one.
+        await expect(line.locator("a")).toHaveCount(0);
+        await expect(page.locator("a[data-product-contact]")).toHaveAttribute(
           "href",
           `/${lang}/contact/`,
         );

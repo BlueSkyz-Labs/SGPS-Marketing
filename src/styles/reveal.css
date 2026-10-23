@@ -161,12 +161,12 @@
 /* v12 S1 Feature Story: a chapter screen's opacity across its chapter's view
    timeline (cover range). ACQ-01: the screens HARD-SWAP, they never cross-fade,
    because two semi-transparent text-bearing screenshots read as ghosted text.
-   Opacity is only ever 0 or 1 (a step at 30% in, at 69.5% out), so no frame is
+   Opacity is only ever 0 or 1 (a step at 30% in, at 63.8% out), so no frame is
    translucent and the later screen, which paints above the earlier one, covers
-   it completely. Each chapter is 64svh tall, so its view range is 1.64
-   viewports and the next chapter starts 0.39 of that range later: the next
-   screen steps in at 69% of this one, a hair before this one steps out at 69.5%,
-   so the stage is never empty. --story-in / --story-out keep the first and
+   it completely. Each chapter is 51svh tall (EX-06, was 64svh), so its
+   view range is 1.51 viewports and the next chapter starts 0.338 of that range
+   later: the next screen steps in at 63.77% of this one (0.338 + 0.30), a hair
+   before this one steps out at 63.8%, so the stage is never empty. --story-in / --story-out keep the first and
    last screen on stage (1) or dim the progress dots (0.25). Consumed only under
    @supports (animation-timeline: view()) + reduced-motion no-preference. */
 @keyframes story-screen {
@@ -175,10 +175,10 @@
     opacity: var(--story-in, 0);
   }
   30%,
-  69.49% {
+  63.79% {
     opacity: 1;
   }
-  69.5%,
+  63.8%,
   100% {
     opacity: var(--story-out, 0);
   }

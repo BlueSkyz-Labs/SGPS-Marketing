@@ -211,12 +211,34 @@ for (const lang of LANGS) {
             parseFloat(getComputedStyle(el).marginTop),
           0,
         );
+        // EX-01 (2026-10-23): below 1024 px the hero poster stacks under the
+        // copy as new content outside the chapters (capped at 60vh); it is
+        // excluded like the status line so this guard keeps measuring the
+        // chapter layout. Beside the copy (wide) it adds no height.
+        const stage = document.querySelector<HTMLElement>(
+          "[data-hero-art-stage]",
+        );
+        const copy = document.querySelector<HTMLElement>(".phero__copy");
+        const stacked =
+          stage && copy
+            ? stage.getBoundingClientRect().top >=
+              copy.getBoundingClientRect().bottom - 1
+            : false;
+        const poster =
+          stage && stacked
+            ? stage.getBoundingClientRect().height +
+              parseFloat(
+                getComputedStyle(stage.parentElement as Element).rowGap,
+              )
+            : 0;
         // ACQ-05 (Owner 2026-10-20) restored the 16 px gap between the
         // "What it does" H2 and its list; that list sits outside the
         // chapters, so its top margin is excluded the same way.
         const does = document.querySelector<HTMLElement>("[data-what-it-does]");
         const doesGap = does ? parseFloat(getComputedStyle(does).marginTop) : 0;
-        return document.documentElement.scrollHeight - excluded - doesGap;
+        return (
+          document.documentElement.scrollHeight - excluded - doesGap - poster
+        );
       });
       const before = MAIN_HEIGHT[name][lang] - MAIN_ACCESS[name];
       // Wide: tighter chapters save about 7% in the static layout (8% with

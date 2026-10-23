@@ -46,7 +46,10 @@ async function inkRatio(page: Page, selector: string): Promise<number> {
     probe.remove();
     return c.match(/\d+/g)!.slice(0, 3).map(Number);
   });
-  const png = await page.screenshot({ clip: box!, animations: "disabled" });
+  // Capture the element itself, not a page clip from an earlier bounding box:
+  // a reflow between measuring and capturing (seen in CI on the long Sổ Trọ
+  // page) moved the logo out of the clip and the ratio fell to one stray row.
+  const png = await el.screenshot({ animations: "disabled" });
   return page.evaluate(
     async ({ b64, canvas }) => {
       const blob = await (await fetch(`data:image/png;base64,${b64}`)).blob();

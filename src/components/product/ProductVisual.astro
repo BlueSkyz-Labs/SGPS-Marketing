@@ -15,14 +15,19 @@ interface Props {
   media: ProductMedia;
   /** Localized override; falls back to the record's media.alt (English). */
   alt?: string;
+  /** `sizes` of the srcset; defaults to the full-width identity stage. */
+  sizes?: string;
   loading?: "eager" | "lazy";
   transitionStyle?: string;
   continuity?: "media";
 }
 
+/** Identity art renders full-width of its figure (max-w-4xl stage). */
+const SIZES = "(min-width: 64rem) 56rem, calc(100vw - 2.5rem)";
 const {
   media,
   alt = media.alt,
+  sizes = SIZES,
   loading = "lazy",
   transitionStyle,
   continuity,
@@ -40,8 +45,6 @@ const srcSet = [
   `${webpSrc(media.src, "-768")} 768w`,
   `${webpSrc(media.src, "")} ${media.width}w`,
 ].join(", ");
-/** Identity art renders full-width of its figure (max-w-4xl stage). */
-const SIZES = "(min-width: 64rem) 56rem, calc(100vw - 2.5rem)";
 ---
 
 <div
@@ -54,7 +57,7 @@ const SIZES = "(min-width: 64rem) 56rem, calc(100vw - 2.5rem)";
   <img
     src={media.src}
     srcset={srcSet}
-    sizes={SIZES}
+    sizes={sizes}
     alt={alt}
     width={media.width}
     height={media.height}
