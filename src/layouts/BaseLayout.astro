@@ -54,7 +54,7 @@ interface Props {
   /** Page-specific JSON-LD nodes appended after the site-wide graph. */
   extraJsonLd?: Record<string, unknown>[];
   /** Route segment of the one journey-bar action shown as primary. */
-  journeyPrimary?: string;
+  journeyPrimary?: string | undefined;
 }
 
 const {
