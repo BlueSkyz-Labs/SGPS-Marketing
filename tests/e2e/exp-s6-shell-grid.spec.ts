@@ -87,9 +87,13 @@ test("desktop header shows at most nine visible controls and a CTA distinct from
   );
   // Owner 2026-10-18 (audit A-03): Contact joins About in the desktop nav,
   // so the cap moves from six to seven controls. Owner 2026-10-24 (O-05):
-  // Verify joins them, and en/vi also show Journey, so the cap is nine.
-  expect(names.length, names.join(" | ")).toBeLessThanOrEqual(9);
+  // Verify joins the desktop nav; with Journey (en/vi, TRU-15) the cap is
+  // exactly nine, and the ordered link list below fails on any further addition.
+  expect(names.length, names.join(" | ")).toBe(9);
   expect(names.join(" ")).not.toContain("Explore products");
+  await expect(
+    page.locator('header nav[aria-label="Primary"] a:visible'),
+  ).toHaveText(["About", "Contact", "Verify", "Journey", "Products"]);
 
   const products = page.locator('header nav a[href="/en/products/"]:visible');
   await expect(products).toHaveCount(1);
