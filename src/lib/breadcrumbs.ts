@@ -7,7 +7,7 @@ export interface Crumb {
   path: string;
 }
 
-const HOME_LABELS: Record<Language, string> = {
+export const HOME_LABELS: Record<Language, string> = {
   en: "Home",
   vi: "Trang chủ",
   zh: "首页",

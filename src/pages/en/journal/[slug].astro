@@ -1,0 +1,47 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import JournalPost from "@/components/journal/JournalPost.astro";
+import { getCollection, render } from "astro:content";
+import { SITE } from "@/data/site";
+import { JOURNAL_COPY } from "@/data/journal-copy";
+import {
+  blogPostingJsonLd,
+  journalFeedPath,
+  journalPostBreadcrumbJsonLd,
+  journalPostPath,
+  journalPostStaticPaths,
+} from "@/lib/journal-posts";
+
+// Journey P1-A: published posts only (drafts get no route); an unpaired VI/EN
+// post fails the build. zh / zh-Hant have no post pages (posts are VI + EN).
+export async function getStaticPaths() {
+  return journalPostStaticPaths(await getCollection("journal"), "en");
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+const post = entry.data;
+const extraJsonLd = [
+  blogPostingJsonLd(post, SITE.url),
+  journalPostBreadcrumbJsonLd({
+    lang: "en",
+    id: post.id,
+    title: post.title,
+    journalLabel: JOURNAL_COPY["en"].title,
+    siteUrl: SITE.url,
+  }),
+];
+---
+
+<BaseLayout
+  title={post.title}
+  description={post.description}
+  path={journalPostPath("en", post.id)}
+  extraJsonLd={extraJsonLd}
+  feed={{
+    href: journalFeedPath("en"),
+    title: `${JOURNAL_COPY["en"].title} | ${SITE.name}`,
+  }}
+>
+  <JournalPost entry={post} Content={Content} />
+</BaseLayout>

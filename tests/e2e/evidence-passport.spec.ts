@@ -5,11 +5,7 @@ const EN = `/en/evidence/${ID}/`;
 const VI = `/vi/evidence/${ID}/`;
 const ZH = `/zh/evidence/${ID}/`;
 
-async function expandStep(
-  passport: Locator,
-  expand: string,
-  label: string,
-): Promise<Locator> {
+async function expandStep(passport: Locator, label: string): Promise<Locator> {
   // Sources and Boundary are open by default (TRU-01); clicking only when
   // collapsed keeps this helper valid for every step.
   const button = passport.locator(
@@ -19,7 +15,7 @@ async function expandStep(
   const panelId = await button.getAttribute("aria-controls");
   expect(panelId).toBeTruthy();
   if ((await button.getAttribute("aria-expanded")) !== "true") {
-    await expect(button).toHaveAccessibleName(`${expand}: ${label}`);
+    await expect(button).toHaveAccessibleName(label);
     await button.click();
   }
   const panel = passport.locator(`#${panelId}`);
@@ -45,7 +41,7 @@ test.describe("evidence passport", () => {
     await expect(
       passport.locator('[data-truth-state="source-linked"]'),
     ).toHaveText(/Source-linked/);
-    const sourcesPanel = await expandStep(passport, "Show details", "Sources");
+    const sourcesPanel = await expandStep(passport, "Sources");
     await expect(
       sourcesPanel.getByRole("link", {
         name: /GitHub private vulnerability reporting/i,
@@ -54,11 +50,7 @@ test.describe("evidence passport", () => {
       "href",
       "https://github.com/BlueSkyz-Labs/SGPS-Marketing/security/advisories/new",
     );
-    const boundaryPanel = await expandStep(
-      passport,
-      "Show details",
-      "Boundary",
-    );
+    const boundaryPanel = await expandStep(passport, "Boundary");
     await expect(boundaryPanel.locator("[data-boundary-card]")).toBeVisible();
     await expect(passport.locator("[data-passport-review]")).toHaveText(
       /September 12, 2026/,
@@ -131,7 +123,7 @@ test.describe("evidence passport", () => {
         name: "安全报告通过 GitHub 私有渠道送达维护者，绝不会通过公开 issue 提出。",
       }),
     ).toBeVisible();
-    const sourcesPanel = await expandStep(passport, "查看详情", "来源");
+    const sourcesPanel = await expandStep(passport, "来源");
     await expect(
       sourcesPanel.getByRole("link", { name: "GitHub 私有漏洞报告" }),
     ).toBeVisible();

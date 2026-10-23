@@ -49,3 +49,41 @@ export const JOURNAL_COPY: Record<
     languageNote: "文章以越南語和英語發布。",
   },
 };
+
+/**
+ * Post-page UI strings (Journey P1-A). Only vi and en have post pages: posts
+ * are published as VI + EN pairs (design D-3), so zh / zh-Hant have no entry.
+ * Owner-directed copy; descriptive labels only, no product claim.
+ */
+export interface JournalPostCopy {
+  published: string;
+  updated: string;
+  sources: string;
+  aiDisclosure: string;
+  aboutAuthor: string;
+  backToJournal: string;
+  rss: string;
+}
+
+export const JOURNAL_POST_COPY: Record<"vi" | "en", JournalPostCopy> = {
+  vi: {
+    published: "Đăng ngày",
+    updated: "Cập nhật",
+    sources: "Nguồn",
+    aiDisclosure:
+      "Bài viết có sự hỗ trợ của AI khi soạn nháp; nội dung đã được tác giả kiểm tra và duyệt.",
+    aboutAuthor: "Về tác giả",
+    backToJournal: "Tất cả bài viết",
+    rss: "RSS",
+  },
+  en: {
+    published: "Published",
+    updated: "Updated",
+    sources: "Sources",
+    aiDisclosure:
+      "Drafted with AI assistance; reviewed and approved by the author.",
+    aboutAuthor: "About the author",
+    backToJournal: "All posts",
+    rss: "RSS",
+  },
+};

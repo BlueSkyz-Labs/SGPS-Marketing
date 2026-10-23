@@ -3,6 +3,7 @@ import type { Language } from "@/lib/i18n";
 import type { ShowcaseSchema } from "@/lib/showcase-schema";
 import ShowcaseGroup from "@/components/product/ShowcaseGroup.astro";
 import FeatureStory from "@/components/product/FeatureStory.astro";
+import ButtonLink from "@/components/ui/ButtonLink.astro";
 import { STORY_COPY } from "@/components/product/story-copy";
 import { resolveFeatureStory } from "@/lib/feature-story";
 import { getPublicProducts } from "@/lib/products";
@@ -197,6 +198,14 @@ const defaultTrack = wanted
     </figure>
   ) : null}
 
+  {guideHref ? (
+    <p class="showcase__guide mt-6" data-showcase-guide>
+      <ButtonLink href={guideHref} variant="secondary" data-showcase-guide-link>
+        {t.guide}
+      </ButtonLink>
+    </p>
+  ) : null}
+
   {heroPhones.length + heroDesktops.length > 0 ? (
     <ShowcaseGroup
       phones={heroPhones}
@@ -228,15 +237,6 @@ const defaultTrack = wanted
       />
     </details>
   ) : null}
-
-  {guideHref ? (
-    <p class="mt-10">
-      <a class="showcase__guide" href={guideHref} data-showcase-guide-link>
-        {t.guide}
-        <span aria-hidden="true">→</span>
-      </a>
-    </p>
-  ) : null}
 </section>
 
 <style is:inline>
@@ -245,18 +245,19 @@ const defaultTrack = wanted
      collapsed (Sổ Trọ with its Feature Story, 2026-10-04, reduced motion:
      4431-4660 px at 390, 4554-4572 px at 1024, 4630-4648 px at 1440 across
      the four locales) so the scrollbar does not jump. Where the sticky story
-     stage runs, each of the five chapters is 64svh tall, so the placeholder
-     follows the viewport height (measured 2026-10-12, UX-U4: 1875 px + 5 x 64svh at 1024,
-     1950 px + 5 x 64svh at 1440; static: 4019-4038 px at 1024, 4095-4114 px
-     at 1440, 4577-4813 px at 390). Guarded by
+     stage runs, each of the five chapters is 51svh tall (EX-06), so the
+     placeholder follows the viewport height (1875 px + 5 x 51svh at 1024,
+     1950 px + 5 x 51svh at 1440; static: 4003-4022 px at 1024, 4079-4098 px
+     at 1440, 4288-4524 px at 390, all four locales, measured 2026-10-23 with
+     the desktop sheet hidden below 40rem, EX-05). Guarded by
      tests/e2e/wp-c-product-surfaces.spec.ts; re-measure after any layout
      change. */
   .showcase {
     content-visibility: auto;
-    /* W2: five real-screen inspection links plus coda increased the
-       390px collapsed-gallery height. Chromium/WebKit/mobile CI measured
-       4938–4972px (vi/en, reduced motion); retain the strict 6% CLS guard. */
-    contain-intrinsic-size: auto 4700px;
+    /* 390px collapsed-gallery height, EX-05 (the 1920px sheet is not drawn
+       below 40rem): measured 4288-4524px across the four locales, reduced
+       motion; retain the strict 6% CLS guard. */
+    contain-intrinsic-size: auto 4450px;
   }
   @media (min-width: 64rem) {
     .showcase {
@@ -436,17 +437,6 @@ const defaultTrack = wanted
     width: 100%;
     height: auto;
   }
-  .showcase__guide {
-    display: inline-flex;
-    min-height: 2.75rem;
-    align-items: center;
-    gap: 0.5rem;
-    font-size: var(--size-2);
-    font-weight: 600;
-    color: var(--action-primary);
-    text-decoration: underline;
-    text-underline-offset: 0.25em;
-  }
   .showcase__more > summary {
     display: inline-flex;
     min-height: 2.75rem;
@@ -462,7 +452,6 @@ const defaultTrack = wanted
     outline: 2px solid var(--brand-cobalt);
     outline-offset: 3px;
   }
-  .showcase__guide:focus-visible,
   .showcase__rail:focus-visible {
     outline: 2px solid var(--brand-cobalt);
     outline-offset: 3px;
@@ -534,14 +523,14 @@ const defaultTrack = wanted
   @media (min-width: 64rem) and (prefers-reduced-motion: no-preference) {
     @supports (animation-timeline: view()) and (timeline-scope: --story) {
       .showcase:has([data-feature-story]) {
-        contain-intrinsic-size: auto calc(1875px + 320svh);
+        contain-intrinsic-size: auto calc(1875px + 255svh);
       }
     }
   }
   @media (min-width: 80rem) and (prefers-reduced-motion: no-preference) {
     @supports (animation-timeline: view()) and (timeline-scope: --story) {
       .showcase:has([data-feature-story]) {
-        contain-intrinsic-size: auto calc(1950px + 320svh);
+        contain-intrinsic-size: auto calc(1950px + 255svh);
       }
     }
   }

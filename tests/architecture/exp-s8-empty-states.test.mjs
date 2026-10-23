@@ -46,9 +46,12 @@ test("rendered sources carry no phone number or tel: link", () => {
 });
 
 test("rendered sources carry no founder or biography literal outside the About composition", () => {
+  // The Owner-approved author bio (Journey design D-9) lives in exactly one
+  // registry, which the schema also uses to reject unregistered bylines.
   const hits = SCANNED.filter(
     (p) =>
       !p.endsWith("empty-state/AboutComposition.astro") &&
+      p !== "src/data/authors.ts" &&
       FOUNDER.test(readFileSync(p, "utf8")),
   );
   assert.deepEqual(hits, []);

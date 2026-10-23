@@ -1,0 +1,156 @@
+---
+import { phoneSmallSrc } from "@/components/product/story-copy";
+
+/**
+ * Experience wave E (EX-01): the product profile hero as one poster.
+ *
+ * Three named slots keep the copy in the page (so the page remains the single
+ * owner of its text and actions): `intro` (icon, name, status chip, lead),
+ * `actions` (the primary action and the secondary contact action) and `status`
+ * (the compact status block: two-sided sentence, availability line, stage).
+ * With a recorded capture, wide screens put it beside the copy; below 64rem it
+ * follows the status block, capped at 60vh, with the same soft bottom fade.
+ * The capture is decorative here (alt=""): the Feature Story below carries the
+ * same screen with its description. Static HTML and CSS only, no script.
+ */
+interface Props {
+  art?: { src: string; width: number; height: number } | null;
+}
+const { art = null } = Astro.props;
+// 18rem on wide screens, min(78vw, 17rem) on phones; the 480w derivative is
+// enough below 2x on most screens.
+const SIZES = "(min-width: 64rem) 18rem, min(78vw, 17rem)";
+---
+
+<div class="phero" data-product-hero data-hero-art={art ? "" : undefined}>
+  <div class="phero__copy">
+    <div class="phero__intro">
+      <slot name="intro" />
+    </div>
+    <div class="phero__actions">
+      <slot name="actions" />
+    </div>
+    <div class="phero__status" data-product-status-block>
+      <slot name="status" />
+    </div>
+  </div>
+  {art ? (
+    <div class="phero__stage" data-hero-art-stage>
+      <figure class="phero__art">
+        <img
+          src={art.src}
+          srcset={`${phoneSmallSrc(art.src)} 480w, ${art.src} ${art.width}w`}
+          sizes={SIZES}
+          alt=""
+          width={art.width}
+          height={art.height}
+          loading="lazy"
+          decoding="async"
+        />
+      </figure>
+    </div>
+  ) : null}
+</div>
+
+<style>
+  .phero {
+    display: grid;
+    gap: 2rem;
+    margin-top: 2rem;
+  }
+  .phero__copy {
+    min-width: 0;
+  }
+  .phero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem 1rem;
+    margin-top: 1.5rem;
+  }
+  .phero__actions:not(:has(*)) {
+    display: none;
+  }
+  /* The compact status block: the three small paragraphs of the old hero as
+     one raised card, rows split by a hairline. Component rules are repeated
+     once (.phero__status twice) so they outrank each row's own margin. */
+  .phero__status {
+    margin-top: 1.75rem;
+    padding: 1rem 1.25rem;
+    max-width: 44rem;
+    border: 1px solid var(--border-hairline);
+    border-radius: var(--radius-md);
+    background: var(--surface-raised);
+    box-shadow: inset 0 1px 0 var(--specular);
+    --specular: color-mix(in srgb, white 70%, transparent);
+  }
+  :global([data-theme="dark"]) .phero__status {
+    --specular: color-mix(in srgb, white 9%, transparent);
+  }
+  @media (prefers-color-scheme: dark) {
+    :global(:root:not([data-theme="light"])) .phero__status {
+      --specular: color-mix(in srgb, white 9%, transparent);
+    }
+  }
+  .phero__status:not(:has(*)) {
+    display: none;
+  }
+  .phero__status.phero__status > :global(*) {
+    margin: 0;
+    max-width: none;
+  }
+  .phero__status.phero__status > :global(* + *) {
+    margin-top: 0.75rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--border-hairline);
+  }
+
+  /* The poster: the first story capture, cropped and faded at the floor like
+     the products page thumbnail, on a soft cobalt horizon glow. */
+  .phero__stage {
+    display: flex;
+    justify-content: center;
+    padding: 1.5rem 1rem 0;
+    border-radius: var(--radius-card);
+    background: radial-gradient(
+      ellipse at 50% 0%,
+      color-mix(in srgb, var(--brand-cobalt) 14%, transparent),
+      transparent 72%
+    );
+  }
+  .phero__art {
+    margin: 0;
+    width: min(78vw, 17rem);
+    max-height: 60vh;
+    overflow: hidden;
+    border: 1px solid var(--border-subtle);
+    border-bottom: 0;
+    border-radius: var(--radius-media) var(--radius-media) 0 0;
+    background: var(--surface-raised);
+    box-shadow: 0 12px 32px -12px rgba(11, 16, 32, 0.4);
+    -webkit-mask-image: linear-gradient(to bottom, #000 58%, transparent 100%);
+    mask-image: linear-gradient(to bottom, #000 58%, transparent 100%);
+  }
+  .phero__art img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+  @media (min-width: 64rem) {
+    .phero[data-hero-art] {
+      grid-template-columns: minmax(0, 1fr) 20rem;
+      column-gap: clamp(2.5rem, 6vw, 5rem);
+      align-items: center;
+    }
+    .phero__art {
+      width: 18rem;
+      max-height: min(60vh, 34rem);
+    }
+  }
+  @media (forced-colors: active) {
+    .phero__art {
+      -webkit-mask-image: none;
+      mask-image: none;
+    }
+  }
+</style>
