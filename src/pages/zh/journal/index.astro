@@ -13,6 +13,7 @@ const indexable = journalIsIndexable(
   (await getCollection("journal")).map(
     (entry: { data: JournalEntry }) => entry.data,
   ),
+  "zh",
 );
 ---
 
