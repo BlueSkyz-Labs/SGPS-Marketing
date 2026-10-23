@@ -100,22 +100,58 @@ test("security CTA is as wide as its label, not the 1256 px container", async ({
   expect(box?.width ?? 9999).toBeLessThanOrEqual(header?.width ?? 0);
 });
 
-test("verify puts the sources rail beside the claim from 1024 px", async ({
+// EX-19 replaces the v8 "rail beside the claim from 1024 px" assertion: the
+// sources now sit directly under their statement at every width, left-aligned
+// with it, and both sections share one column width.
+test("verify puts the sources under the claim at every width and keeps one column", async ({
   page,
 }) => {
-  await page.setViewportSize({ width: 1280, height: 900 });
+  for (const width of [1440, 1280, 1024, 768, 390]) {
+    await page.setViewportSize({ width, height: 900 });
+    await page.goto("/en/verify/");
+    const claim = await page
+      .locator(".verify-claim__main")
+      .first()
+      .boundingBox();
+    const rail = await page
+      .locator(".verify-claim__sources")
+      .first()
+      .boundingBox();
+    expect(rail!.y, `${width}: sources below the statement`).toBeGreaterThan(
+      claim!.y + claim!.height - 1,
+    );
+    expect(
+      Math.abs(rail!.x - claim!.x),
+      `${width}: sources share the statement's left edge`,
+    ).toBeLessThanOrEqual(1);
+    expect(
+      rail!.y - (claim!.y + claim!.height),
+      `${width}: sources sit directly under the claim`,
+    ).toBeLessThanOrEqual(40);
+    const claims = await page.locator("[data-verify-claims]").boundingBox();
+    const backs = await page.locator("[data-verify-backs]").boundingBox();
+    expect(
+      Math.abs(claims!.width - backs!.width),
+      `${width}: both sections share one max width`,
+    ).toBeLessThanOrEqual(1);
+  }
+});
+
+test("negative proof (EX-19): a sources rail beside the claim is caught", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto("/en/verify/");
+  await page.addStyleTag({
+    content:
+      "@media (min-width:1024px){.verify-claim{grid-template-columns:20rem 20rem!important}}",
+  });
   const claim = await page.locator(".verify-claim__main").first().boundingBox();
   const rail = await page
     .locator(".verify-claim__sources")
     .first()
     .boundingBox();
-  expect(rail!.x).toBeGreaterThan(claim!.x + claim!.width - 1);
-  await page.setViewportSize({ width: 390, height: 844 });
-  await page.goto("/en/verify/");
-  const m = await page.locator(".verify-claim__main").first().boundingBox();
-  const r = await page.locator(".verify-claim__sources").first().boundingBox();
-  expect(r!.y).toBeGreaterThan(m!.y + m!.height - 1);
+  expect(rail!.y > claim!.y + claim!.height - 1).toBe(false);
 });
 
 test("the CTA-count guard fails when the retired layers are opened", async ({
