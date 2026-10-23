@@ -134,11 +134,11 @@ const DESKTOP_SIZES = "(min-width: 64rem) 64rem, calc(100vw - 2.5rem)";
         <a
           href={story.coda.src}
           class="story__inspect"
-          aria-label={`${t.inspect}: ${story.coda.title[lang]} (${t.inspectOpens})`}
+          aria-label={`${t.inspect}: ${t.desktop}: ${story.coda.title[lang]} (${t.inspectOpens})`}
           target="_blank"
           rel="noopener noreferrer"
           data-capture-inspect
-          data-viewer-label={`${t.inspect}: ${story.coda.title[lang]}`}
+          data-viewer-label={`${t.inspect}: ${t.desktop}: ${story.coda.title[lang]}`}
           data-viewer-title={story.coda.title[lang]}
           data-viewer-alt={story.coda.alt[lang]}
           data-viewer-close={t.viewerClose}
@@ -271,7 +271,8 @@ const DESKTOP_SIZES = "(min-width: 64rem) 64rem, calc(100vw - 2.5rem)";
     color: var(--text-secondary);
   }
   .story__screen {
-    margin: 0;
+    /* EX-05: the stacked phone sits on the centre line, not on the text edge. */
+    margin: 0 auto;
     width: min(64vw, 15rem);
     padding: 0.5rem;
     border-radius: var(--radius-media);
@@ -324,15 +325,25 @@ const DESKTOP_SIZES = "(min-width: 64rem) 64rem, calc(100vw - 2.5rem)";
     background: color-mix(in srgb, var(--text-primary) 22%, transparent);
   }
 
-  /* Wide, static: each chapter is a row, text beside its phone. */
+  /* EX-05: below 40rem the 1920px desktop sheet renders at about 350px, too
+     small to read; the chapter keeps its text and the "view large" link. */
+  @media (max-width: 39.999rem) {
+    .story__browser {
+      display: none;
+    }
+  }
+
+  /* Wide, static: each chapter is a row, text beside its phone, the pair on
+     the centre line (EX-06). */
   @media (min-width: 64rem) {
     .story__chapters {
       gap: 2.5rem;
     }
     .story__chapter {
-      grid-template-columns: minmax(0, 1fr) 14rem;
+      grid-template-columns: minmax(0, 30rem) 14rem;
+      justify-content: center;
       align-items: center;
-      column-gap: clamp(2rem, 5vw, 4rem);
+      column-gap: clamp(2.5rem, 6vw, 5rem);
     }
     .story__screen {
       width: 14rem;
@@ -370,10 +381,10 @@ const DESKTOP_SIZES = "(min-width: 64rem) 64rem, calc(100vw - 2.5rem)";
         --stage-w: min(19rem, calc((100svh - 11rem) * 0.5417 + 1.25rem));
         --stage-pad: 0.625rem;
         --stage-top: max(5.5rem, calc(50svh + 2.25rem - var(--stage-w) * 0.92));
-        grid-template-columns: minmax(0, 30rem) var(--stage-w);
+        grid-template-columns: minmax(0, 28rem) var(--stage-w);
         grid-template-rows: repeat(var(--story-rows), auto);
         justify-content: center;
-        column-gap: clamp(4rem, 10vw, 10rem);
+        column-gap: clamp(3rem, 7vw, 6rem);
         row-gap: 0;
       }
       .story__chapter {
@@ -385,7 +396,8 @@ const DESKTOP_SIZES = "(min-width: 64rem) 64rem, calc(100vw - 2.5rem)";
         display: flex;
         flex-direction: column;
         justify-content: center;
-        min-height: 64svh;
+        /* EX-06: 51svh, about a fifth less empty runway per chapter. */
+        min-height: 51svh;
         view-timeline-name: var(--story-tl);
         view-timeline-axis: block;
       }

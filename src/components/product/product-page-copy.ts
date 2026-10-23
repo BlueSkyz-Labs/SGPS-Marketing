@@ -240,3 +240,18 @@ export const CONTACT_NOTE = {
     after: "。",
   },
 } as const;
+
+/**
+ * While no native app of the record is available (every declared Android/iOS
+ * app is still in development) the profile offers the contact action, as a
+ * secondary button beside the primary action. A store-listed app replaces it.
+ */
+export function showsContactAction(appAccess: ProductData["appAccess"]) {
+  const apps = [appAccess?.android, appAccess?.ios].filter(
+    (app): app is NonNullable<typeof app> => Boolean(app),
+  );
+  return (
+    apps.length > 0 &&
+    !apps.some((app) => app.state === "available" && app.storeUrl)
+  );
+}

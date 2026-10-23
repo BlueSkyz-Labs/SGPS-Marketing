@@ -23,8 +23,8 @@ test.describe("app access", () => {
       // in-development native app is plain text and is never linked.
       const block = page.locator("[data-app-access]");
       await expect(block).toHaveCount(1);
-      // G6 (Owner 2026-10-20): the store clause is gone; the contact sentence
-      // closes this same line.
+      // G6 (Owner 2026-10-20): the store clause is gone. EX-01: the contact
+      // link is the hero's secondary button, not part of this line.
       await expect(block).toContainText("Android và iOS: đang phát triển.");
       await expect(block).not.toContainText("chưa có bản trên cửa hàng");
       const [state, line] = WEB_LINE[slug]!;
@@ -33,9 +33,13 @@ test.describe("app access", () => {
         "data-web-state",
         state,
       );
-      // The only link in the line is the contact link; no store link.
-      await expect(block.locator("a")).toHaveCount(1);
-      await expect(block.locator("a")).toHaveAttribute("href", "/vi/contact/");
+      // The line carries no link at all (no store link, no contact link); the
+      // contact action is the one secondary button beside the primary action.
+      await expect(block.locator("a")).toHaveCount(0);
+      await expect(page.locator("a[data-product-contact]")).toHaveAttribute(
+        "href",
+        "/vi/contact/",
+      );
       await expect(block.locator("[data-mobile-app]")).toHaveCount(0);
       await expect(
         block.locator('[data-mobile-state="in-development"]'),

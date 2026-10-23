@@ -2,39 +2,47 @@ import { expect, test, type Page } from "@playwright/test";
 
 /**
  * G6 / ACQ-03 / ACQ-11 (Owner 2026-10-20): a product profile has ONE
- * availability line (the Availability line plus the contact sentence), no
- * separate prose paragraph, a de-emphasised stage row, and the Sổ Tâm card chip
- * says "Web · in development".
+ * availability line, no separate prose paragraph, a de-emphasised stage row,
+ * and the Sổ Tâm card chip says "Web · in development".
+ *
+ * Experience wave E (EX-01, 2026-10-23): the contact link that used to close
+ * the line is now the secondary button beside the primary action
+ * (`[data-product-contact]`, same text and `/{lang}/contact/` destination).
+ * The line therefore ends at its full stop and carries no link; the contact
+ * action is asserted as a separate predicate with its own negative proof.
  */
 const LANGS = ["en", "vi", "zh", "zh-hant"] as const;
 type Lang = (typeof LANGS)[number];
 const SLUGS = ["sotro", "sotam"] as const;
 
-// Every string here already exists in product-page-copy.ts (AVAILABILITY and
-// the contact clause of the preview note); only their arrangement is new.
+// Every string here already exists in product-page-copy.ts (AVAILABILITY).
 const LINE: Record<Lang, Record<(typeof SLUGS)[number], string>> = {
   en: {
     sotro:
-      "Web: open preview, limited places · Android and iOS: in development. Questions? Get in touch.",
-    sotam:
-      "Web: in development · Android and iOS: in development. Questions? Get in touch.",
+      "Web: open preview, limited places · Android and iOS: in development.",
+    sotam: "Web: in development · Android and iOS: in development.",
   },
   vi: {
     sotro:
-      "Web: bản xem trước đã mở, số chỗ có hạn · Android và iOS: đang phát triển. Cần hỏi thêm? Liên hệ với chúng tôi.",
-    sotam:
-      "Web: đang phát triển · Android và iOS: đang phát triển. Cần hỏi thêm? Liên hệ với chúng tôi.",
+      "Web: bản xem trước đã mở, số chỗ có hạn · Android và iOS: đang phát triển.",
+    sotam: "Web: đang phát triển · Android và iOS: đang phát triển.",
   },
   zh: {
-    sotro:
-      "网页：预览版已开放，名额有限 · Android 与 iOS：开发中。有疑问？与我们联系。",
-    sotam: "网页：开发中 · Android 与 iOS：开发中。有疑问？与我们联系。",
+    sotro: "网页：预览版已开放，名额有限 · Android 与 iOS：开发中。",
+    sotam: "网页：开发中 · Android 与 iOS：开发中。",
   },
   "zh-hant": {
-    sotro:
-      "網頁：預覽版已開放，名額有限 · Android 與 iOS：開發中。有疑問？與我們聯絡。",
-    sotam: "網頁：開發中 · Android 與 iOS：開發中。有疑問？與我們聯絡。",
+    sotro: "網頁：預覽版已開放，名額有限 · Android 與 iOS：開發中。",
+    sotam: "網頁：開發中 · Android 與 iOS：開發中。",
   },
+};
+
+// The contact button text: CONTACT_NOTE[lang].link in product-page-copy.ts.
+const CONTACT: Record<Lang, string> = {
+  en: "Get in touch",
+  vi: "Liên hệ với chúng tôi",
+  zh: "与我们联系",
+  "zh-hant": "與我們聯絡",
 };
 
 const OLD_PROSE =
@@ -48,9 +56,9 @@ const CHIP: Record<Lang, string> = {
 };
 
 /** Violations of the one-line contract on a product profile (empty = pass). */
-async function lineViolations(page: Page, lang: Lang, expected: string) {
+async function lineViolations(page: Page, expected: string) {
   return page.evaluate(
-    ({ lang, expected, oldProse }) => {
+    ({ expected, oldProse }) => {
       const out: string[] = [];
       const norm = (s: string) => s.replace(/\s+/g, " ").trim();
       const lines = document.querySelectorAll("[data-app-access]");
@@ -58,9 +66,7 @@ async function lineViolations(page: Page, lang: Lang, expected: string) {
       const line = lines[0] as HTMLElement | undefined;
       if (line && norm(line.innerText) !== expected)
         out.push(`line text: ${norm(line.innerText)}`);
-      const link = line?.querySelector("a");
-      if (!link || link.getAttribute("href") !== `/${lang}/contact/`)
-        out.push("contact link missing from the line");
+      if (line?.querySelector("a")) out.push("link inside the line");
       const prose = [...document.querySelectorAll("main p")].filter(
         (p) =>
           p !== line &&
@@ -72,7 +78,35 @@ async function lineViolations(page: Page, lang: Lang, expected: string) {
         out.push("separate interim paragraph");
       return out;
     },
-    { lang, expected, oldProse: OLD_PROSE.source },
+    { expected, oldProse: OLD_PROSE.source },
+  );
+}
+
+/** Violations of the contact-action contract (empty = pass). */
+async function contactViolations(page: Page, lang: Lang, text: string) {
+  return page.evaluate(
+    ({ lang, text }) => {
+      const out: string[] = [];
+      const buttons = document.querySelectorAll<HTMLAnchorElement>(
+        "a[data-product-contact]",
+      );
+      if (buttons.length !== 1) out.push(`${buttons.length} contact buttons`);
+      const button = buttons[0];
+      if (button) {
+        if (button.getAttribute("href") !== `/${lang}/contact/`)
+          out.push("contact button href");
+        if ((button.textContent ?? "").replace(/\s+/g, " ").trim() !== text)
+          out.push("contact button text");
+        if (button.getAttribute("data-button-variant") !== "secondary")
+          out.push("contact button is not secondary");
+        const r = button.getBoundingClientRect();
+        if (r.height < 44) out.push(`contact button height ${r.height}`);
+        if (button.closest("[data-app-access]"))
+          out.push("contact button inside the availability line");
+      }
+      return out;
+    },
+    { lang, text },
   );
 }
 
@@ -137,11 +171,12 @@ async function chipText(page: Page, slug: string) {
 
 for (const lang of LANGS) {
   for (const slug of SLUGS) {
-    test(`/${lang}/products/${slug}/ has one availability line with the contact link`, async ({
+    test(`/${lang}/products/${slug}/ has one availability line and one contact button`, async ({
       page,
     }) => {
       await page.goto(`/${lang}/products/${slug}/`);
-      expect(await lineViolations(page, lang, LINE[lang][slug])).toEqual([]);
+      expect(await lineViolations(page, LINE[lang][slug])).toEqual([]);
+      expect(await contactViolations(page, lang, CONTACT[lang])).toEqual([]);
     });
 
     for (const scheme of ["light", "dark"] as const) {
@@ -168,26 +203,55 @@ for (const lang of LANGS) {
 }
 
 test.describe("negative proofs (the same predicates, invariant broken live)", () => {
-  test("a second prose paragraph, or a removed contact link, is caught", async ({
+  test("a second prose paragraph, or a link inside the line, is caught", async ({
     page,
   }) => {
     await page.goto("/vi/products/sotro/");
-    expect(await lineViolations(page, "vi", LINE.vi.sotro)).toEqual([]);
+    expect(await lineViolations(page, LINE.vi.sotro)).toEqual([]);
     await page.evaluate(() => {
       const p = document.createElement("p");
       p.setAttribute("data-interim-note", "");
       p.textContent =
         "Bản xem trước trên web đã mở cho một số chủ trọ; ứng dụng Android và iOS vẫn đang phát triển.";
       document.querySelector("[data-app-access]")!.after(p);
-      document.querySelector("[data-app-access] a")!.remove();
+      const a = document.createElement("a");
+      a.href = "/vi/contact/";
+      document.querySelector("[data-app-access]")!.append(a);
     });
-    const v = await lineViolations(page, "vi", LINE.vi.sotro);
+    const v = await lineViolations(page, LINE.vi.sotro);
     expect(v).toEqual(
       expect.arrayContaining([
-        "contact link missing from the line",
+        "link inside the line",
         "1 prose paragraph(s)",
         "separate interim paragraph",
       ]),
+    );
+  });
+
+  test("a removed, moved or restyled contact button is caught", async ({
+    page,
+  }) => {
+    await page.goto("/vi/products/sotro/");
+    expect(await contactViolations(page, "vi", CONTACT.vi)).toEqual([]);
+    await page.evaluate(() => {
+      const b = document.querySelector("a[data-product-contact]")!;
+      b.setAttribute("data-button-variant", "tertiary");
+      b.setAttribute("href", "/vi/about/");
+      document.querySelector("[data-app-access]")!.append(b);
+    });
+    const v = await contactViolations(page, "vi", CONTACT.vi);
+    expect(v).toEqual(
+      expect.arrayContaining([
+        "contact button href",
+        "contact button is not secondary",
+        "contact button inside the availability line",
+      ]),
+    );
+    await page.evaluate(() =>
+      document.querySelector("a[data-product-contact]")!.remove(),
+    );
+    expect(await contactViolations(page, "vi", CONTACT.vi)).toContain(
+      "0 contact buttons",
     );
   });
 
@@ -197,7 +261,7 @@ test.describe("negative proofs (the same predicates, invariant broken live)", ()
       const l = document.querySelector("[data-app-access]")!;
       l.after(l.cloneNode(true));
     });
-    expect(await lineViolations(page, "en", LINE.en.sotam)).toContain(
+    expect(await lineViolations(page, LINE.en.sotam)).toContain(
       "2 availability lines",
     );
   });

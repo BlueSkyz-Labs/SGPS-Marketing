@@ -1,7 +1,11 @@
 ---
 import type { Language } from "@/data/site";
 import type { ProductEntry } from "@/lib/products";
-import { AVAILABILITY, CONTACT_NOTE } from "./product-page-copy";
+import {
+  AVAILABILITY,
+  CONTACT_NOTE,
+  showsContactAction,
+} from "./product-page-copy";
 
 /**
  * v8 W3: one "Availability" line replaces the separate Access, Current stage,
@@ -11,8 +15,10 @@ import { AVAILABILITY, CONTACT_NOTE } from "./product-page-copy";
  * Preview 2026-10-15: the web line says "open preview, limited places" when
  * the record's web app accepts new users (`webPreviewOpen`), else "in
  * development". No app link is rendered (Owner 2026-10-12, #575).
- * G6 (Owner 2026-10-20): the contact sentence ends this same line while no
- * native app is available, so a profile has one availability line only.
+ * G6 (Owner 2026-10-20): a profile has one availability line only. Experience
+ * wave E (EX-01): the contact link no longer closes this line; it is the
+ * secondary button of the hero actions (`ProductContactAction`), same strings
+ * and destination. The line keeps its full stop.
  */
 interface Props {
   appAccess: ProductEntry["data"]["appAccess"];
@@ -41,9 +47,10 @@ const nativeName =
     ? A.native[lang]
     : pending.map((a) => a.name).join(" · ");
 const colon = A.colon[lang];
-// G6: while no native app is available the contact sentence closes this same
-// line (one line, no separate paragraph); the store clause is then dropped.
-const contact = apps.length > 0 && live.length === 0;
+// G6: while no native app is available the line ends with a full stop and the
+// store clause is dropped; the contact action is a button beside the hero's
+// primary action (EX-01).
+const contact = showsContactAction(appAccess);
 const N = CONTACT_NOTE[lang];
 ---
 
@@ -84,24 +91,6 @@ const N = CONTACT_NOTE[lang];
         </a>
       </>
     ))}
-    {contact ? (
-      <>
-        {N.after}
-        {N.join}
-        <span
-          data-interim-note
-          data-interim-state={webPreview ? "web-preview" : "closed"}
-        >
-          {N.before}
-          <a
-            href={`/${lang}/contact/`}
-            class="font-semibold text-[var(--action-primary)] underline underline-offset-4 hover:no-underline"
-          >
-            {N.link}
-          </a>
-          {N.after}
-        </span>
-      </>
-    ) : null}
+    {contact ? N.after : null}
   </p>
 ) : null}
