@@ -97,8 +97,12 @@ const showcaseScreens: { id: string }[] = compact
   : [];
 const hasCapture = showcaseScreens.some((s) => s.id === "owner-collect");
 // UX P2-9: the full owner console scaled into this slot reads at 4-7px. Wide
-// screens show the same capture cropped to the collections panel; narrow
-// screens show the recorded phone capture of the same screen when there is one.
+// screens show the same capture cropped to a strip of the collections page;
+// narrow screens show the recorded phone capture of the same screen when there
+// is one. EX-02: this act is the proof act, so the wide crop is the readable
+// strip of the same recorded 1920x1200 file (the offline card and the
+// "Biên niên thu chi" card with its three counts) at a legible scale; no pixel
+// is edited.
 const narrowScreen = showcaseScreens.some((s) => s.id === "collect")
   ? "collect"
   : undefined;
@@ -121,7 +125,16 @@ const ctaIsExternal = cta.external || /^https?:\/\//i.test(cta.href);
   aria-labelledby="flagship-theatre-title"
   data-flagship-theatre
 >
-  <div class="grid gap-10 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:items-center">
+  <div
+    class:list={[
+      "grid gap-10 lg:items-center",
+      // EX-02: the proof act gives the strip more of the row so its text
+      // renders at a readable scale (>= 0.45 rendered px per source px).
+      compact
+        ? "lg:grid-cols-[minmax(0,0.75fr)_minmax(0,1.25fr)]"
+        : "lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]",
+    ]}
+  >
     <div class="c2-flagship-theatre__copy">
       {!compact ? (
         <>
@@ -301,7 +314,7 @@ const ctaIsExternal = cta.external || /^https?:\/\//i.test(cta.href);
             sizes={narrowScreen ? "44rem" : "(min-width: 1024px) 34rem, 92vw"}
             crop={
               narrowScreen
-                ? { x: 400, y: 400, width: 1500, height: 800 }
+                ? { x: 420, y: 690, width: 1460, height: 510 }
                 : undefined
             }
             smallSrc={
@@ -400,7 +413,7 @@ const ctaIsExternal = cta.external || /^https?:\/\//i.test(cta.href);
   }
 
   .c2-flagship-theatre__capture-stage {
-    padding: 0.75rem 0.75rem 1rem;
+    padding: 0.75rem;
   }
 
   /* UX P2-9: one capture per width (the hidden one is lazy and never loads). */

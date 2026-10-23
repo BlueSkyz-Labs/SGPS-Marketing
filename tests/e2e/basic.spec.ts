@@ -33,9 +33,11 @@ test.describe("Smoke — Astro foundation", () => {
   test("Vietnamese homepage renders correctly", async ({ page }) => {
     await page.goto("/vi/");
     await expect(page.locator("html")).toHaveAttribute("lang", "vi");
+    // EX-13: the approved wording is unchanged; its two-word phrases carry a
+    // no-break space, so the match treats any whitespace as a space.
     await expect(page.getByRole("heading", { level: 1 })).toContainText(
       hasPublicProducts
-        ? /Chúng tôi làm những sản phẩm thông minh, giúp mọi người làm việc nhẹ nhàng/
+        ? /Chúng\s+tôi\s+làm\s+những\s+sản\s+phẩm\s+thông\s+minh,\s+giúp\s+mọi\s+người\s+làm\s+việc\s+nhẹ\s+nhàng/
         : /Trí tuệ|Tầm nhìn|Tác động/,
     );
     await expect(page.getByRole("contentinfo")).toContainText(/Trí tuệ/);

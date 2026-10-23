@@ -322,9 +322,15 @@
   color: var(--text-muted);
 }
 
-/* Vietnamese: sentence case (cross-subset kerning, see .eyebrow). */
+/* Vietnamese: sentence case (cross-subset kerning, see .eyebrow). EX-18: the
+   same 12 px label reads as a small shout in uppercase English too, so English
+   joins it with the tracking a sentence-case label needs. */
 :lang(vi) .eyebrow {
   text-transform: none;
+}
+:lang(en) .eyebrow {
+  text-transform: none;
+  letter-spacing: 0.04em;
 }
 
 .site-container {

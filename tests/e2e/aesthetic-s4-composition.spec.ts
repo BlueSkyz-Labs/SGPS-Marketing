@@ -76,7 +76,9 @@ test.describe("S4 composition guards", () => {
     }
   });
 
-  test("verify: rail sits beside its claim at 1440, gap at most --space-8", async ({
+  // EX-19 replaces the rail-beside assertion: the sources sit directly under
+  // the statement, left-aligned with it, at most --space-8 below.
+  test("verify: sources sit directly under their claim at 1440, gap at most --space-8", async ({
     page,
   }) => {
     await page.setViewportSize({ width: 1440, height: 900 });
@@ -102,12 +104,12 @@ test.describe("S4 composition guards", () => {
         .nth(i)
         .locator("[data-sources-line]")
         .boundingBox();
-      expect(rail!.x, `claim ${i} beside`).toBeGreaterThan(
-        main!.x + main!.width - 1,
+      expect(rail!.y, `claim ${i} below`).toBeGreaterThan(
+        main!.y + main!.height - 1,
       );
-      expect(rail!.y, `claim ${i} aligned`).toBeLessThan(main!.y + 40);
+      expect(Math.abs(rail!.x - main!.x), `claim ${i} aligned`).toBeLessThan(2);
       expect(
-        rail!.x - (main!.x + main!.width),
+        rail!.y - (main!.y + main!.height),
         `claim ${i} gap`,
       ).toBeLessThanOrEqual(space8 + 1);
     }
