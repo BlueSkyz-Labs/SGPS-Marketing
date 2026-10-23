@@ -1,0 +1,31 @@
+---
+id: so-tro-xem-truoc
+lang: vi
+branch: news
+title: "Sổ Trọ mở xem trước: sổ thu tiền trọ gọn gàng cho chủ trọ"
+description: "Sổ Trọ đang mở xem trước trên web cho chủ trọ ở Việt Nam: biết ngay tháng này ai còn chưa đóng tiền, thu tiền có bước xem lại, chữ to và nút lớn."
+datePublished: "2026-10-23"
+author: tony-nguyen
+aiAssisted: true
+sources:
+  - https://blueskyzlabs.com/vi/products/sotro/
+ownerApproval: https://github.com/BlueSkyz-Labs/SGPS-Marketing/pull/0
+draft: false
+---
+
+Sổ Trọ là sản phẩm của BlueSkyz Labs dành cho chủ trọ ở Việt Nam. Ý tưởng rất đơn giản: mở ra là biết tháng này phòng nào còn nợ tiền và hôm nay cần lo việc gì.
+
+## Sổ Trọ giúp gì
+
+- **Nhìn một lần là biết** tháng này phòng nào còn nợ tiền và hôm nay cần làm gì.
+- **Thu tiền và ghi nhận mỗi khoản đúng một lần**, có bước xem lại rồi mới xác nhận, kèm mã QR chuyển khoản ngân hàng và biên nhận sao chép gửi qua Zalo.
+- **Giữ phòng, người thuê, chỉ số điện nước và sổ tạm trú ở cùng một nơi**, kèm bảng C06 tạm trú tải về.
+- **Chữ to, nút lớn**, làm cho người lớn tuổi; điện thoại của người nhà tham gia chỉ bằng cách quét mã QR.
+
+## Hiện trạng
+
+- Sổ Trọ đang ở giai đoạn xem trước trên web và nhận không gian làm việc mới với số lượng có hạn.
+- Ứng dụng Android và iOS đang được phát triển, chưa có trên cửa hàng ứng dụng.
+- Ảnh màn hình trên trang sản phẩm được chụp ngày 30/9/2026 từ bản dựng thử, dùng dữ liệu mẫu.
+
+Xem giới thiệu, ảnh màn hình và video ngắn tại [trang Sổ Trọ](/vi/products/sotro/). Khi có bản phát hành chính thức, chúng tôi sẽ đăng ở mục Cập nhật sản phẩm.

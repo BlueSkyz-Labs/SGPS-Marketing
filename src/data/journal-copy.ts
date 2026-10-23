@@ -18,14 +18,14 @@ export const JOURNAL_COPY: Record<
   }
 > = {
   en: {
-    title: "Journal",
+    title: "Journey",
     lede: "News and real product updates from BlueSkyz Labs. Every post lists its sources.",
     news: "News and updates",
     product: "Product updates",
     empty: "No posts yet.",
   },
   vi: {
-    title: "Nhật ký",
+    title: "Hành trình",
     lede: "Tin tức và cập nhật sản phẩm thật của BlueSkyz Labs. Mỗi bài đều ghi nguồn.",
     news: "Tin tức & cập nhật",
     product: "Cập nhật sản phẩm",

@@ -9,7 +9,9 @@ import {
  *  - ACQ-10: on the home page each product has ONE primary link per section;
  *    the hero product names are plain text.
  *  - TRU-15: Journal is absent from the header, the mobile menu and the
- *    command navigator until the journal collection holds a published entry.
+ *    command navigator until the journal collection holds a published entry
+ *    (pure-helper test below); with the first posts it appears, labelled
+ *    "Journey" / "Hành trình" (Owner D-2).
  * Every guard has a negative proof that breaks the invariant on the live page
  * (or on the pure helper) and shows the detector fires.
  */
@@ -79,13 +81,26 @@ async function journalLinkCount(page: Page): Promise<number> {
   );
 }
 
+/** The section's own label (Owner D-2, 2026-10-22), from JOURNAL_COPY. */
+const JOURNAL_LABEL = {
+  en: "Journey",
+  vi: "Hành trình",
+  zh: "日志",
+  "zh-hant": "日誌",
+} as const;
+
 for (const lang of LOCALES) {
-  test(`TRU-15 /${lang}/: no Journal in header, mobile menu or navigator while it is empty`, async ({
+  // Journey P1-B: the collection now holds published posts, so the gate is open
+  // (the empty case is pinned by the pure-helper test below).
+  test(`TRU-15 /${lang}/: the Journal is in the header, mobile menu and navigator once a post is published`, async ({
     page,
   }) => {
     await page.goto(`/${lang}/`);
-    expect(await journalLinkCount(page)).toBe(0);
-    // The route itself is not deleted.
+    // desktop header + mobile menu + command navigator
+    expect(await journalLinkCount(page)).toBe(3);
+    await expect(
+      page.locator(`header a[href="/${lang}/journal/"]`).first(),
+    ).toHaveText(JOURNAL_LABEL[lang]);
     const res = await page.goto(`/${lang}/journal/`);
     expect(res?.status()).toBe(200);
   });
@@ -95,12 +110,13 @@ test("TRU-15 negative proof: an injected Journal link is detected", async ({
   page,
 }) => {
   await page.goto("/en/");
+  const before = await journalLinkCount(page);
   await page.evaluate(() => {
     const a = document.createElement("a");
     a.href = "/en/journal/";
     document.querySelector("header nav")!.append(a);
   });
-  expect(await journalLinkCount(page)).toBe(1);
+  expect(await journalLinkCount(page)).toBe(before + 1);
 });
 
 test("TRU-15 gate: Journal appears only with at least one published entry", () => {
