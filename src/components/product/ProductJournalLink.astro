@@ -1,0 +1,45 @@
+---
+import { JOURNAL_COPY } from "@/data/journal-copy";
+import { journalPostPath } from "@/lib/journal-posts";
+import type { JournalLanguage } from "@/lib/journal-schema";
+
+/**
+ * Audit IX-03: a product profile links the journal post(s) that cite it among
+ * their sources, so a visitor who finished the page can read the announcement.
+ * The page derives `posts` from the journal collection with
+ * `journalPostsForProduct` (no hardcoded URL; components never read the
+ * collection). A language with no matching post (zh, zh-Hant) renders nothing. The heading is the Journal's own
+ * existing title and the link text is the post's own title.
+ */
+interface Props {
+  lang: JournalLanguage;
+  posts: { data: { id: string; title: string } }[];
+}
+
+const { lang, posts } = Astro.props;
+const heading = JOURNAL_COPY[lang].title;
+---
+
+{posts.length > 0 ? (
+  <section class="mt-14" aria-labelledby="profile-journal" data-product-journal>
+    <h2
+      id="profile-journal"
+      class="text-xl font-semibold tracking-tight text-[var(--text-primary)] sm:text-2xl"
+    >
+      {heading}
+    </h2>
+    <ul class="mt-4 list-none p-0">
+      {posts.map((post) => (
+        <li>
+          <a
+            href={journalPostPath(lang, post.data.id)}
+            class="inline-flex min-h-11 items-center text-base font-semibold text-[var(--action-primary)] underline underline-offset-4 hover:no-underline"
+            data-product-journal-link
+          >
+            {post.data.title}
+          </a>
+        </li>
+      ))}
+    </ul>
+  </section>
+) : null}
