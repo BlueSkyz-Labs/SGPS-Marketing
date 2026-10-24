@@ -95,6 +95,48 @@ for (const page of pages) {
   }
 }
 
+// G14 (2026-10-24): every built localized route needs an exact one-hop 301
+// from its no-slash form in public/_redirects; otherwise Workers static
+// assets answer it with html_handling's 307. Runs here because it needs dist/.
+// Fixture runs (tests/architecture/static-links-*.test.mjs) have no
+// public/_redirects; the repository always does (edge-config-contract).
+const REDIRECTS = resolve("public/_redirects");
+if (existsSync(REDIRECTS)) {
+  const LOCALES = ["en", "vi", "zh", "zh-hant"];
+  const redirectRules = new Map(
+    readFileSync(REDIRECTS, "utf8")
+      .split(/\r?\n/)
+      .map((line) => line.trim())
+      .filter((line) => line && !line.startsWith("#"))
+      .map((line) => line.split(/\s+/))
+      .map(([from, to, status]) => [from, { to, status }]),
+  );
+  const localizedRoutes = pages
+    .filter((page) => page.endsWith(`${sep}index.html`))
+    .map((page) => `/${relative(DIST, dirname(page)).replaceAll("\\", "/")}`)
+    .filter((route) => LOCALES.some((lang) => route.startsWith(`/${lang}/`)));
+  if (localizedRoutes.length < 50) {
+    broken.push({
+      page: "public/_redirects",
+      url: "(route discovery)",
+      detail: `only ${localizedRoutes.length} localized routes discovered`,
+    });
+  }
+  for (const route of localizedRoutes) {
+    const rule = redirectRules.get(route);
+    const finalDest = redirectRules.get(`${route}/`)?.to ?? `${route}/`;
+    if (!rule || rule.status !== "301" || rule.to !== finalDest) {
+      broken.push({
+        page: "public/_redirects",
+        url: route,
+        detail: rule
+          ? `expected "${route} ${finalDest} 301", found "${route} ${rule.to} ${rule.status}"`
+          : `missing "${route} ${finalDest} 301"`,
+      });
+    }
+  }
+}
+
 if (broken.length > 0) {
   console.error(
     JSON.stringify(
