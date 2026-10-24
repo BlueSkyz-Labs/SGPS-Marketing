@@ -45,15 +45,13 @@ export function tileProblems(label, source) {
     out.push(`${label}: tile lacks the C4 hairline top rule`);
   if (/border:\s|border-(left|right|bottom):/.test(joined))
     out.push(`${label}: tile carries a full or side border`);
-  if (!/<span class="profile-does__index" aria-hidden="true">/.test(source))
-    out.push(`${label}: index is not aria-hidden`);
-  const index = ruleBodies(source, /^\.profile-does__index$/).join("\n");
-  if (
-    !/--c4-type-meta/.test(index) ||
-    !/--text-secondary/.test(index) ||
-    !/tabular-nums/.test(index)
-  )
-    out.push(`${label}: index is not meta/secondary/tabular`);
+  // EX-07 (wave E): no numerals in the list; story chapters carry "01 / 05".
+  if (/profile-does__index/.test(source))
+    out.push(`${label}: list carries a profile-does__index numeral`);
+  if (/padStart\(\s*2\s*,\s*["']0["']\s*\)/.test(source))
+    out.push(`${label}: list derives a two-digit numeral`);
+  if (/<li class="profile-does__tile">\s*(?:<[^>]+>\s*)*0\d\b/.test(source))
+    out.push(`${label}: a tile starts with a 0N numeral`);
   return out;
 }
 
@@ -127,7 +125,7 @@ const sources = () => ({
   ),
 });
 
-test("WG3-04: the feature list is a hairline list with an aria-hidden index, all locales", () => {
+test("WG3-04: the feature list is a hairline list with no numerals, all locales", () => {
   for (const [lang, source] of sources().tiles) {
     assert.deepEqual(tileProblems(lang, source), []);
   }
@@ -153,7 +151,7 @@ test("WG3-06: default card stays; ledger is opt-in and index-only", () => {
   assert.deepEqual(cardProblems(s.card, s.house, s.index), []);
 });
 
-test("negative proof G-04: a tile with radius, shadow, background or lost hairline FAILS", () => {
+test("negative proof G-04: a tile with radius, shadow, background, lost hairline or a numeral FAILS", () => {
   const [, base] = sources().tiles[0];
   const withRule = (extra) =>
     base.replace(/(\.profile-does__tile \{[^}]*)\}/, `$1  ${extra}\n  }`);
@@ -170,14 +168,27 @@ test("negative proof G-04: a tile with radius, shadow, background or lost hairli
       base.replace("border-top: 1px solid var(--c4-hairline);", ""),
     ).length > 0,
   );
+  const withIndex = base.replace(
+    '<li class="profile-does__tile">',
+    '<li class="profile-does__tile"><span class="profile-does__index">01</span>',
+  );
+  assert.ok(tileProblems("fixture", withIndex).length > 0, "index span");
   assert.ok(
     tileProblems(
       "fixture",
       base.replace(
-        'class="profile-does__index" aria-hidden="true"',
-        'class="profile-does__index"',
+        '<li class="profile-does__tile">',
+        '<li class="profile-does__tile">01 ',
       ),
     ).length > 0,
+    "leading 0N",
+  );
+  assert.ok(
+    tileProblems(
+      "fixture",
+      base.replace("{item}", '{String(1).padStart(2, "0")}{item}'),
+    ).length > 0,
+    "padStart",
   );
 });
 

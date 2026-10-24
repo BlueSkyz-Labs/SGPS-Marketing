@@ -287,11 +287,8 @@ const awaitingScreens = !showcase && isIdentityArt;
             {PAGE_LABELS.whatItDoes[lang]}
           </h2>
           <ul class="profile-does mt-4" data-what-it-does>
-            {page.whatItDoes.map((item, index) => (
+            {page.whatItDoes.map((item) => (
               <li class="profile-does__tile">
-                <span class="profile-does__index" aria-hidden="true">
-                  {String(index + 1).padStart(2, "0")}
-                </span>
                 <span class="profile-does__text">{item}</span>
               </li>
             ))}
@@ -388,18 +385,9 @@ const awaitingScreens = !showcase && isIdentityArt;
   }
   /* G-04: a hairline list, not a card grid. Each row rules its own column. */
   .profile-does__tile {
-    display: flex;
-    gap: var(--space-3);
-    align-items: baseline;
     min-width: 0;
     padding: var(--space-3) 0;
     border-top: 1px solid var(--c4-hairline);
-  }
-  .profile-does__index {
-    flex: 0 0 2.25rem;
-    color: var(--text-secondary);
-    font-size: var(--c4-type-meta);
-    font-variant-numeric: tabular-nums;
   }
   .profile-does__text {
     min-width: 0;

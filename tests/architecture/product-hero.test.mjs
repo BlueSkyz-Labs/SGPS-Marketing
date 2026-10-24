@@ -90,13 +90,10 @@ test("the availability line carries no contact link; the button does", () => {
   assert.match(action, /\/contact\//);
 });
 
-test("retired idioms stay out: the inline guide link (G3: the list index is derived and aria-hidden)", () => {
+test("retired idioms stay out: feature-card numerals and the inline guide link", () => {
   for (const lang of LANGS) {
-    assert.match(
-      page(lang),
-      /<span class="profile-does__index" aria-hidden="true">\s*\{String\(index \+ 1\)\.padStart\(2, "0"\)\}/,
-      lang,
-    );
+    assert.doesNotMatch(page(lang), /profile-does__index/, lang);
+    assert.doesNotMatch(page(lang), /padStart\(2, "0"\)/, lang);
   }
   const showcase = read("src/components/product/ProductShowcase.astro");
   assert.match(showcase, /variant="secondary"/);
@@ -112,10 +109,10 @@ test("retired idioms stay out: the inline guide link (G3: the list index is deri
   );
 });
 
-test("negative proof: a visible (not aria-hidden) list index is not accepted", () => {
-  assert.doesNotMatch(
-    '<span class="profile-does__index">{String(index + 1).padStart(2, "0")}',
-    /<span class="profile-does__index" aria-hidden="true">/,
+test("negative proof: a feature numeral is detected", () => {
+  assert.match(
+    `${page("vi")}\n<span class="profile-does__index">01</span>`,
+    /profile-does__index/,
   );
 });
 

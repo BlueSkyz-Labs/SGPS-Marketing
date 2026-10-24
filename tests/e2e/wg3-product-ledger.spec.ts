@@ -3,7 +3,7 @@ import { expect, test, type Page } from "@playwright/test";
 
 /**
  * Wave G3-A: product surfaces in the quiet-authority grammar.
- * G-04 feature list = hairline rows with a derived, aria-hidden index.
+ * G-04 feature list = hairline rows, no numerals (EX-07).
  * G-05 inspect links = meta voice (secondary at rest, primary on focus).
  * G-06 products index = ledger rows; the home ProductHouse keeps its cards.
  * Computed styles, tap target, no horizontal overflow at 320/390, axe.
@@ -93,7 +93,7 @@ async function axe(page: Page) {
 
 for (const lang of LANGS) {
   for (const theme of THEMES) {
-    test(`${lang} ${theme}: feature list is a hairline list with an aria-hidden index`, async ({
+    test(`${lang} ${theme}: feature list is a hairline list with no numerals`, async ({
       page,
     }) => {
       await page.setViewportSize({ width: 1280, height: 900 });
@@ -110,20 +110,13 @@ for (const lang of LANGS) {
         expect(b.top).toBe("1px");
         expect(b.topColor).toBe(hairline);
         expect(b.other).toEqual(["0px", "0px"]);
-        const index = tiles.nth(i).locator(".profile-does__index");
-        await expect(index).toHaveAttribute("aria-hidden", "true");
-        await expect(index).toHaveText(String(i + 1).padStart(2, "0"));
-        const style = await index.evaluate((el) => {
-          const cs = getComputedStyle(el);
-          return {
-            numeric: cs.fontVariantNumeric,
-            width: el.getBoundingClientRect().width,
-            color: cs.color,
-          };
-        });
-        expect(style.numeric).toContain("tabular-nums");
-        expect(Math.round(style.width)).toBe(36);
-        expect(style.color).toBe(await resolve(page, "var(--text-secondary)"));
+        // EX-07: no numerals in the list; the story chapters carry "01 / 05".
+        await expect(tiles.nth(i).locator(".profile-does__index")).toHaveCount(
+          0,
+        );
+        expect((await tiles.nth(i).textContent())?.trim() ?? "").not.toMatch(
+          /^0\d\b/,
+        );
       }
     });
 

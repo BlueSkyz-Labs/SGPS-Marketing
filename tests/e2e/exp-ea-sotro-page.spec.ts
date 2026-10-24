@@ -163,24 +163,17 @@ for (const lang of LANGS) {
     });
     expect(off).toBeLessThanOrEqual(24);
   });
-  test(`${lang}: the Features list carries a derived, aria-hidden index and no numeral in the copy`, async ({
-    page,
-  }) => {
+  test(`${lang}: Features cards have no numerals`, async ({ page }) => {
     await open(page, lang, 1440);
     const r = await page.evaluate(() => ({
       tiles: document.querySelectorAll("[data-what-it-does] > li").length,
-      index: document.querySelectorAll(
-        '[data-what-it-does] > li > .profile-does__index[aria-hidden="true"]',
-      ).length,
+      index: document.querySelectorAll(".profile-does__index").length,
       lead: [...document.querySelectorAll("[data-what-it-does] > li")].filter(
-        (li) =>
-          /^\s*0\d\b/.test(
-            li.querySelector(".profile-does__text")?.textContent ?? "",
-          ),
+        (li) => /^\s*0\d\b/.test(li.textContent ?? ""),
       ).length,
     }));
     expect(r.tiles).toBe(5);
-    expect(r.index).toBe(5);
+    expect(r.index).toBe(0);
     expect(r.lead).toBe(0);
   });
   test(`${lang}: the guide is a secondary button right after the video, the identity card is a strip`, async ({
