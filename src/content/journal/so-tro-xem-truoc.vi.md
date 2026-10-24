@@ -10,6 +10,13 @@ aiAssisted: true
 sources:
   - https://blueskyzlabs.com/vi/products/sotro/
 ownerApproval: https://github.com/BlueSkyz-Labs/SGPS-Marketing/pull/671
+hero:
+  src: /images/journal/so-tro-xem-truoc/hero.vi.webp
+  alt: "Ảnh màn hình Sổ Trọ: trang Thu tiền trên máy tính và hai màn hình điện thoại, Hôm nay và Thu tiền."
+  caption: "Ảnh màn hình chụp ngày 30/9/2026 từ bản dựng thử, dùng dữ liệu mẫu."
+infographic:
+  src: /images/journal/so-tro-xem-truoc/infographic.vi.webp
+  alt: "Infographic tóm tắt: bốn việc Sổ Trọ giúp chủ trọ (nhìn một lần là biết, ghi mỗi khoản đúng một lần, mọi thứ ở một nơi, chữ to nút lớn) và hiện trạng: web đang xem trước, Android và iOS đang phát triển."
 draft: false
 ---
 

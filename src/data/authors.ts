@@ -45,11 +45,11 @@ export const AUTHORS = {
     avatar: "/images/authors/tony-nguyen-256.webp",
     avatarLarge: "/images/authors/tony-nguyen-512.webp",
     avatarAlt: {
-      vi: "Chân dung phác họa Tony Nguyen",
-      en: "Sketch portrait of Tony Nguyen",
+      vi: "Chân dung nét khắc Tony Nguyen",
+      en: "Line-engraving portrait of Tony Nguyen",
     },
     avatarProvenance:
-      "Pencil-sketch illustration derived from a portrait photograph supplied by the Owner, made at the Owner's request (2026-10-23) by deterministic local image processing (no generative model); background replaced with a brand tint, circular crop.",
+      "Line-engraving (hedcut-style) illustration derived from a portrait photograph supplied by the Owner, made at the Owner's request (2026-10-24: art, not the original photo) by deterministic local image processing (tools/journal-art/hedcut.py, no generative model); brand ink on a porcelain tint, circular crop, cobalt ring.",
     aboutPath: {
       vi: "/vi/about/",
       en: "/en/about/",
