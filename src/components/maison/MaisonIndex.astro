@@ -1,4 +1,5 @@
 ---
+import { getCollection } from "astro:content";
 import { getMaisonSections } from "@/lib/maison";
 import { SHARED_LABELS, labelFor, type Language } from "@/data/site";
 
@@ -14,7 +15,7 @@ interface Props {
 }
 
 const { lang = "en" } = Astro.props;
-const sections = getMaisonSections(lang);
+const sections = getMaisonSections(lang, await getCollection("journal"));
 const heading = labelFor(SHARED_LABELS.houseIndex, lang);
 ---
 

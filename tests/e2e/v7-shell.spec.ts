@@ -130,9 +130,16 @@ test.describe("v7 shell", () => {
       ).toHaveCount(1);
     }
     // 2026-10-11: the retired "How this site is built" link left the Trust group.
+    // Audit IX-02: en and vi add the Journey link (a published post of their
+    // own), so /en/ has eight; /zh/ keeps seven.
+    expect(await page.locator("footer nav ul[aria-labelledby] a").count()).toBe(
+      8,
+    );
+    await page.goto("/zh/about/");
     expect(await page.locator("footer nav ul[aria-labelledby] a").count()).toBe(
       7,
     );
+    await page.goto("/en/about/");
     await expect(
       page.locator("footer nav").getByRole("list", { name: "Evidence" }),
     ).toHaveCount(0);

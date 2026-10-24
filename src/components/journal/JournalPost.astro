@@ -59,7 +59,7 @@ const modified =
       </ol>
     </nav>
 
-    <div class="mt-8">
+    <div class="journal-post__head mt-8">
       <PageHeader
         eyebrow={branchLabel}
         title={entry.title}
@@ -108,14 +108,15 @@ const modified =
       <h2 id="journal-sources" class="text-xl font-semibold tracking-tight">
         {post.sources}
       </h2>
-      <ul class="mt-4 grid gap-2 text-[var(--text-secondary)]">
+      <ul class="mt-4 grid gap-2 text-sm text-[var(--text-secondary)]">
         {links.map((href) => (
           <li>
             <a
               href={href}
               rel="noopener"
               target="_blank"
-              class="break-words font-medium text-[var(--action-primary)] underline underline-offset-4 hover:no-underline"
+              class="journal-post__source"
+              data-journal-source
             >
               {href}
             </a>
@@ -176,6 +177,24 @@ const modified =
 </article>
 
 <style>
+  /* IX-08: the title block takes the column's measure, the same as the body,
+     instead of the page header's own rem caps. */
+  .journal-post__head :global(.page-header),
+  .journal-post__head :global(.page-header__title),
+  .journal-post__head :global(.page-header__lede) {
+    max-width: none;
+  }
+  /* IX-08: the full URL stays visible as the link text; it wraps anywhere so
+     a long address never widens the column, in the quiet meta-text tone. */
+  .journal-post__source {
+    overflow-wrap: anywhere;
+    color: var(--text-secondary);
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+  .journal-post__source:hover {
+    text-decoration: none;
+  }
   .journal-post__body {
     color: var(--text-primary);
     line-height: 1.75;

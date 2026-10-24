@@ -188,6 +188,13 @@ const mobileApp = z
   });
 const appAccess = z.object({
   signInUrl: httpsUrl.optional(),
+  /**
+   * Owner 2026-10-24 (O-03): the app accepts new sign-ups from the public.
+   * Default false; only `true` lets the product page offer an action into the
+   * app (`appOpenAction`). Owner decision #575 (no public sign-in link) holds
+   * while this is false.
+   */
+  publicSignup: z.boolean().default(false),
   android: mobileApp.optional(),
   ios: mobileApp.optional(),
 });
@@ -211,6 +218,27 @@ export const applicationCategory = z.enum([
   "ReferenceApplication",
 ]);
 
+/**
+ * Owner 2026-10-24 (O-04): the languages of the app's own interface as BCP 47
+ * codes. A product-owned fact (Sổ Trọ: the app UI is Vietnamese), optional,
+ * rendered as one fact row and emitted as `inLanguage` in the product JSON-LD.
+ */
+export const appLanguages = z
+  .array(
+    z.string().refine((code) => {
+      try {
+        const [canonical] = Intl.getCanonicalLocales(code);
+        return (
+          canonical === code && /^[a-z]{2,3}(?:-[A-Za-z0-9]+)*$/.test(code)
+        );
+      } catch {
+        return false;
+      }
+    }, "must be a canonical BCP 47 language tag"),
+  )
+  .min(1)
+  .refine((codes) => new Set(codes).size === codes.length, "no duplicates");
+
 export const productSchema = z
   .object({
     slug: z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/),
@@ -225,6 +253,7 @@ export const productSchema = z
     capabilities: z.array(z.string().min(1).max(120)).min(2).max(3).optional(),
     platforms: z.array(platform).min(1),
     applicationCategory: applicationCategory.optional(),
+    appLanguages: appLanguages.optional(),
     primaryAction: action,
     secondaryAction: action.optional(),
     appAccess: appAccess.optional(),
