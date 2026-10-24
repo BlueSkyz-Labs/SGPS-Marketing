@@ -40,8 +40,8 @@
       "repository": "BlueSkyz-Labs/VungTayLai",
       "defaultBranch": "main",
       "sourceRevision": "69e43e0d0339a8b741f8eb21b82c92a2a6ed2c32",
-      "checkedDefaultHead": "69e43e0d0339a8b741f8eb21b82c92a2a6ed2c32",
-      "relationship": "EXACT_DEFAULT_HEAD"
+      "checkedDefaultHead": "c35e7e5785ce022e8f3f64b920056949d28c3015",
+      "relationship": "ANCESTOR_OF_DEFAULT_HEAD"
     }
   }
 }
