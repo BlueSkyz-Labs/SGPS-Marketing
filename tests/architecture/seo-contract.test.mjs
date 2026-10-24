@@ -107,6 +107,18 @@ test("robots and sitemap endpoints exist and reference public routes only", () =
   assert.doesNotMatch(sitemap, /portfolio\.tonydemo\.com/);
 });
 
+test("production robots.txt carries the D-7 Content-Signal inside the wildcard group", () => {
+  const robots = readFileSync("src/pages/robots.txt.ts", "utf8");
+  assert.match(
+    robots,
+    /CONTENT_SIGNAL =\s*"Content-Signal: search=yes, ai-input=yes, ai-train=no";/,
+  );
+  // Production branch: signal sits directly after the wildcard User-agent line.
+  assert.match(robots, /"User-agent: \*",\s*CONTENT_SIGNAL,\s*"Allow: \/",/);
+  // Non-production branch stays byte-identical fail-closed (no signal).
+  assert.match(robots, /\["User-agent: \*", "Disallow: \/", ""\]/);
+});
+
 test("default OG asset is committed masterbrand art", () => {
   assert.equal(existsSync("public/social/og-default.png"), true);
 });
