@@ -1,7 +1,7 @@
 /**
  * Owner 2026-10-24 publishes the Vững Tay Lái listing at the In-development
- * state. The product's Product Truth keeps public launch BLOCKED and forbids
- * accounts and native apps, so this record must carry no appAccess,
+ * state. Product Truth V0 has no accounts or native apps and public launch is
+ * BLOCKED, so this record must carry no appAccess,
  * releaseGate or applicationCategory, and its lifecycle may not advance past
  * prototype/preview here. Runtime reachability of the product host is not a
  * capability or launch claim.
@@ -34,6 +34,13 @@ export function listingViolations(text) {
     if (new RegExp(`^${key}:`, "m").test(text))
       out.push(`${key} must be absent`);
   if (/signInUrl:|storeUrl:/.test(text)) out.push("no sign-in or store URL");
+  for (const host of [
+    "vungtaylai.blueskyzlabs.com",
+    "play.google.com",
+    "apps.apple.com",
+    "itunes.apple.com",
+  ])
+    if (text.includes(host)) out.push(`no app or store host: ${host}`);
   if (!/^sourceRevision:\s*[0-9a-f]{40}\s*$/m.test(text))
     out.push("sourceRevision must be a 40-hex SHA");
   return out;
@@ -73,6 +80,27 @@ test("localized strings mirror the English counts", () => {
     assert.equal(jobsN, jobs, `${lang} jobs`);
     assert.equal(capsN, caps, `${lang} capabilities`);
   }
+  const prefixes = {
+    vi: "Mục tiêu phát triển:",
+    zh: "开发目标：",
+    "zh-hant": "開發目標：",
+  };
+  for (const [lang, prefix] of Object.entries(prefixes)) {
+    const block = new RegExp(`^ {2}${lang}:\\n((?: {4,}.*\\n)+)`, "m").exec(
+      record,
+    )?.[1];
+    if (!block) continue;
+    const caps = new RegExp(`^ {4}capabilities:\\n((?: {6}- .*\\n)+)`, "m")
+      .exec(block)?.[1]
+      .trim()
+      .split("\n");
+    assert.ok(caps?.length, `${lang} capabilities present`);
+    for (const line of caps)
+      assert.ok(
+        line.replace(/^\s*- "?/, "").startsWith(prefix),
+        `${lang} capability must start with ${prefix}: ${line}`,
+      );
+  }
   assert.equal(
     (record.match(/^ {2}- "Development target:/gm) ?? []).length,
     caps,
@@ -97,4 +125,38 @@ test("negative proof: active lifecycle without a releaseGate is rejected", () =>
   const v = listingViolations(bad);
   assert.ok(v.includes("lifecycle must stay prototype"), v.join("; "));
   assert.ok(!/^releaseGate:/m.test(bad));
+});
+
+test("negative proof: moving publicUrl to the app host is rejected", () => {
+  const bad = record.replace(
+    /^( {2}publicUrl: ).*$/m,
+    "$1https://vungtaylai.blueskyzlabs.com/",
+  );
+  assert.notEqual(bad, record);
+  const v = listingViolations(bad);
+  assert.ok(
+    v.includes("no app or store host: vungtaylai.blueskyzlabs.com"),
+    v.join("; "),
+  );
+  console.log(`NEGATIVE PROOF FAIL: ${v.join("; ")}`);
+});
+
+test("negative proof: a store host anywhere is rejected", () => {
+  for (const host of [
+    "play.google.com",
+    "apps.apple.com",
+    "itunes.apple.com",
+  ]) {
+    const v = listingViolations(`${record}\n# https://${host}/x\n`);
+    assert.ok(v.includes(`no app or store host: ${host}`), v.join("; "));
+  }
+});
+
+test("negative proof: dropping the VI capability prefix is detected", () => {
+  const bad = record.replace("Mục tiêu phát triển: bài học", "Bài học");
+  assert.notEqual(bad, record);
+  const viBlock = /^ {2}vi:\n((?: {4,}.*\n)+)/m.exec(bad)[1];
+  const first = /^ {4}capabilities:\n {6}- "?(.*)$/m.exec(viBlock)[1];
+  assert.ok(!first.startsWith("Mục tiêu phát triển:"), first);
+  console.log(`NEGATIVE PROOF FAIL: VI capability lacks prefix: ${first}`);
 });

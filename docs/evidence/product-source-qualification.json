@@ -38,6 +38,7 @@
     },
     "vungtaylai": {
       "repository": "BlueSkyz-Labs/VungTayLai",
+      "verifiedAt": "2026-10-24",
       "defaultBranch": "main",
       "sourceRevision": "69e43e0d0339a8b741f8eb21b82c92a2a6ed2c32",
       "checkedDefaultHead": "c35e7e5785ce022e8f3f64b920056949d28c3015",

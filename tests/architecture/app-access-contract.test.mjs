@@ -3,7 +3,7 @@
  * "app access" block — a direct sign-in link once the Owner supplies it, and
  * native Android/iOS apps that stay "in development" until store-listed.
  * Owner 2026-10-24 adds Vững Tay Lái at the In-development state. Its Product
- * Truth keeps public launch BLOCKED and forbids accounts and native apps, so
+ * Truth V0 has no accounts or native apps and public launch is BLOCKED, so
  * it is the one published product with NO appAccess block (no sign-in URL, no
  * store URL); it is exempt from the sign-in and Android/iOS rules below and is
  * held to the stricter "no appAccess" rule instead.
@@ -15,8 +15,12 @@ import { test } from "node:test";
 
 const DIR = "src/content/products";
 const PUBLISHED = ["sotam", "sotro", "vungtaylai"];
-// Products whose Product Truth forbids accounts and native apps (2026-10-24).
+// Products whose Product Truth V0 has no accounts or native apps (2026-10-24).
 const NO_APP_ACCESS = ["vungtaylai"];
+assert.ok(
+  NO_APP_ACCESS.every((s) => PUBLISHED.includes(s)),
+  "NO_APP_ACCESS must be a subset of PUBLISHED",
+);
 const WITH_APP_ACCESS = PUBLISHED.filter((s) => !NO_APP_ACCESS.includes(s));
 
 const records = readdirSync(DIR)
@@ -143,10 +147,10 @@ test("negative proof: prematurely listing a native OS fails", () => {
 
 export function appAccessViolation(text) {
   const out = [];
-  if (/^appAccess:/m.test(text)) out.push("has an appAccess block");
-  if (/signInUrl:/.test(text)) out.push("has a signInUrl");
-  if (/storeUrl:/.test(text)) out.push("has a storeUrl");
-  if (/^releaseGate:/m.test(text)) out.push("has a releaseGate");
+  if (/^"?appAccess"?:/m.test(text)) out.push("has an appAccess block");
+  if (/"?signInUrl"?:/.test(text)) out.push("has a signInUrl");
+  if (/"?storeUrl"?:/.test(text)) out.push("has a storeUrl");
+  if (/^"?releaseGate"?:/m.test(text)) out.push("has a releaseGate");
   return out;
 }
 
