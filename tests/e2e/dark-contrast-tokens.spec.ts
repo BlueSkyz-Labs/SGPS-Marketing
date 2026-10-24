@@ -60,13 +60,15 @@ test("hero primary CTA carries white text on its fill in dark", async ({
 });
 
 test("trust-ledger chips keep 4.5:1 in dark", async ({ page }) => {
-  for (const route of ["/en/privacy/", "/en/security/", "/en/support/"]) {
+  for (const route of [
+    "/en/verify/",
+    "/en/privacy/",
+    "/en/security/",
+    "/en/support/",
+  ]) {
     await page.goto(route, { waitUntil: "networkidle" });
     await page.evaluate(() => document.fonts.ready);
-    const measured = await ratioOf(
-      page,
-      "[data-trust-surface] [class*='color-mix']",
-    );
+    const measured = await ratioOf(page, "[data-trust-status]");
     if (!measured) continue;
     expect(
       measured.ratio,

@@ -20,16 +20,16 @@ import { labelFor, SECURITY_ADVISORY_URL } from "@/data/site";
         title="Contact"
         lede={labelFor(EMPTY_STATE_COPY.contactLede, "en")}
       />
-      <ul class="mt-12 grid gap-4 sm:grid-cols-2">
+      <ul class="mt-12 grid gap-x-8 sm:grid-cols-2">
         <PublicContactEmails
           lang="en"
           boundary="Business and general enquiries. Private security reporting is only for suspected vulnerabilities."
         />
         <li
           data-contact-card="security"
-          class="flex min-w-0 flex-col justify-center rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-raised)] p-6"
+          class="contact-section flex min-w-0 flex-col"
         >
-          <h2 class="text-lg font-semibold tracking-tight">Security</h2>
+          <h2 class="contact-section__heading">Security</h2>
           <p class="mt-2 text-sm leading-relaxed text-[var(--text-secondary)]">
             <a
               href="/en/security/"
