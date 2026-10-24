@@ -15,28 +15,33 @@ const POSTS = [
 ] as const;
 
 for (const path of INDEXES) {
-  test(`${path} has one lead and quiet titles`, async ({ page }) => {
-    await page.goto(path);
-    await expect(page.locator("[data-journal-lead]")).toHaveCount(1);
-    const titles = page.locator("[data-journal-item] h3 a");
-    expect(await titles.count()).toBeGreaterThan(1);
-    const primary = await page.evaluate(() => {
-      const probe = document.createElement("span");
-      probe.style.color = "var(--text-primary)";
-      document.body.append(probe);
-      const value = getComputedStyle(probe).color;
-      probe.remove();
-      return value;
-    });
-    for (const title of await titles.all()) {
-      const style = await title.evaluate((el) => {
-        const cs = getComputedStyle(el);
-        return { color: cs.color, line: cs.textDecorationLine };
+  for (const scheme of ["light", "dark"] as const) {
+    test(`${path} has one lead and quiet titles (${scheme})`, async ({
+      page,
+    }) => {
+      await page.emulateMedia({ colorScheme: scheme });
+      await page.goto(path);
+      await expect(page.locator("[data-journal-lead]")).toHaveCount(1);
+      const titles = page.locator("[data-journal-item] h3 a");
+      expect(await titles.count()).toBeGreaterThan(1);
+      const primary = await page.evaluate(() => {
+        const probe = document.createElement("span");
+        probe.style.color = "var(--text-primary)";
+        document.body.append(probe);
+        const value = getComputedStyle(probe).color;
+        probe.remove();
+        return value;
       });
-      expect(style.color).toBe(primary);
-      expect(style.line).toBe("none");
-    }
-  });
+      for (const title of await titles.all()) {
+        const style = await title.evaluate((el) => {
+          const cs = getComputedStyle(el);
+          return { color: cs.color, line: cs.textDecorationLine };
+        });
+        expect(style.color).toBe(primary);
+        expect(style.line).toBe("none");
+      }
+    });
+  }
 
   test(`${path} @390 does not overflow and passes axe`, async ({ page }) => {
     await page.setViewportSize({ width: 390, height: 844 });

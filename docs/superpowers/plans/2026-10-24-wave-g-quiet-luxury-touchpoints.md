@@ -24,15 +24,7 @@ Audit (lead, screenshots `scratchpad/shots/g/`, /vi/journal/ + one post, 390 and
   local `<time>` markup (Dossier*, Evidence*, SourcesLine, EditionStory,
   AboutComposition). Weight, numerals and tone differ per surface.
 
-Authority order: AGENTS.md hard rules > Brand Kit v4 tokens > C4 spec
-(`docs/superpowers/specs/2026-09-16-c4-quiet-authority-digital-maison-design.md`)
-
-> C2 contract tests > this plan. Quiet luxury = confidence through omission:
-> no new palette, no gold, no glass, no scroll hijack, no particles, no fake
-> telemetry, no new font, no new motion grammar, no new dependency, no new copy
-> except strings composed from existing ones or derived from data (a hostname is
-> data, not copy). Static/no-JS, reduced-motion, forced-colors, 320 px and 200 %
-> zoom must hold. EN/VI parity; zh/zh-hant keep their current empty state.
+Authority order: AGENTS.md hard rules → Brand Kit v4 tokens → C4 spec (`docs/superpowers/specs/2026-09-16-c4-quiet-authority-digital-maison-design.md`) → C2 contract tests → this plan. Quiet luxury = confidence through omission: no new palette, no gold, no glass, no scroll hijack, no particles, no fake telemetry, no new font, no new motion grammar, no new dependency, no new copy except strings composed from existing ones or derived from data (a hostname is data, not copy). Static/no-JS, reduced-motion, forced-colors, 320 px and 200 % zoom must hold. EN/VI parity; zh/zh-hant keep their current empty state.
 
 ## Lanes
 
@@ -75,13 +67,7 @@ Merge order: G1 → G2 (G2 touches `JournalIndex`/`JournalPost` datelines last, 
 
 ## G2 — lead decisions
 
-- New `src/components/shared/Dateline.astro`: props `{ iso: string; lang: Language;
-label?: string; class?: string }`. Renders `<time datetime={iso}>` with
-  `formatDate(lang, iso)`, class `dateline` → `font-variant-numeric: tabular-nums;
-font-size: var(--c4-type-meta); color: var(--text-secondary); letter-spacing:
-0.01em`. Optional `label` (an existing string passed by the caller) renders before
-  the time inside the same element. Non-ISO input falls through unchanged
-  (`display-date.ts` already guarantees this). No clock, no client script.
+- New `src/components/shared/Dateline.astro`: props `{ iso: string; lang: Language; label?: string; class?: string }`. Renders `<time datetime={iso}>` with `formatDate(lang, iso)`, class `dateline` with `font-variant-numeric: tabular-nums; font-size: var(--c4-type-meta); color: var(--text-secondary); letter-spacing: 0.01em`. Optional `label` (an existing string passed by the caller) renders before the time inside the same element. Non-ISO input falls through unchanged (`display-date.ts` already guarantees this). No clock, no client script.
 - Migrate every visible date to `Dateline`: `Footer` lastUpdated, `FlagshipCapture`
   caption (keep `data-capture-date` ISO attribute; the visible caption gains the
   localized capture date after the existing label, joined by the existing `·`),
@@ -101,17 +87,13 @@ font-size: var(--c4-type-meta); color: var(--text-secondary); letter-spacing:
 
 ## Both lanes — execution contract
 
-- Worktrees: G1 `scratchpad/wt/g1`, G2 `scratchpad/wt/g2`. Env: `PATH=
-$S/node-v24.20.0-linux-x64/bin:/opt/node22/bin:$PATH`, `PLAYWRIGHT_BROWSERS_PATH=
-$S/pwb`; Playwright and `git commit` run under `flock $S/port3000.lock`.
+- Worktrees: G1 `scratchpad/wt/g1`, G2 `scratchpad/wt/g2`. Env: `PATH=$S/node-v24.20.0-linux-x64/bin:/opt/node22/bin:$PATH`, `PLAYWRIGHT_BROWSERS_PATH=$S/pwb`; Playwright and `git commit` run under `flock $S/port3000.lock`.
 - Gates before push: `pnpm typecheck`, `pnpm lint`, `pnpm format:check` (or the
   repo's equivalents from `package.json`), `pnpm build`, `pnpm architecture:*`
   tests, the touched e2e specs on chromium, axe on the touched routes. Never
   `--no-verify`, never amend a pushed commit, never raise `maxDiffPixelRatio`,
   never touch `tests/visual/*-snapshots`.
-- Commit trailer: `Co-Authored-By: Claude Fable 5.1 <noreply@anthropic.com>` /
-  `Claude-Session: https://claude.ai/code/session_01SCqxvNgLgL6f3GWTLYLZNu`. No
-  model names anywhere inside the repository tree.
+- Commit trailer: the session attribution trailer (not written into any other repository file).
 - Push with `git push -u origin <branch>`; do NOT open the PR — the lead opens it
   as a draft and runs the reviewer red-team.
 - Report: files changed, tests added (with the negative-proof command and its
