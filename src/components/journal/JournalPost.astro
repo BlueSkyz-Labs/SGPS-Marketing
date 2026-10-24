@@ -29,6 +29,14 @@ const post = JOURNAL_POST_COPY[lang];
 const author = AUTHORS[entry.author];
 const branchLabel = entry.branch === "news" ? copy.news : copy.product;
 const { links, evidenceIds } = partitionSources(entry.sources);
+/** A source's publisher label is data: the URL's hostname without `www.`. */
+const sourceHost = (href: string): string | null => {
+  try {
+    return new URL(href).hostname.replace(/^www\./, "");
+  } catch {
+    return null;
+  }
+};
 const modified =
   entry.dateModified && entry.dateModified !== entry.datePublished
     ? entry.dateModified
@@ -67,10 +75,7 @@ const modified =
       />
     </div>
 
-    <p
-      class="mt-6 flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-[var(--text-secondary)]"
-      data-journal-meta
-    >
+    <p class="journal-post__folio" data-journal-meta>
       <span>
         {post.published}{" "}
         <time datetime={entry.datePublished} data-journal-published>
@@ -78,20 +83,21 @@ const modified =
         </time>
       </span>
       {modified ? (
-        <span data-journal-updated>
-          {post.updated}{" "}
-          <time datetime={modified}>{formatDate(lang, modified)}</time>
-          {entry.updateNote ? <span>{` · ${entry.updateNote}`}</span> : null}
-        </span>
+        <>
+          <span aria-hidden="true">·</span>
+          <span data-journal-updated>
+            {post.updated}{" "}
+            <time datetime={modified}>{formatDate(lang, modified)}</time>
+            {entry.updateNote ? <span>{` · ${entry.updateNote}`}</span> : null}
+          </span>
+        </>
       ) : null}
+      <span aria-hidden="true">·</span>
       <span data-journal-byline>{author.name}</span>
     </p>
 
     {entry.aiAssisted ? (
-      <p
-        class="mt-4 text-sm text-[var(--text-secondary)]"
-        data-journal-ai-disclosure
-      >
+      <p class="journal-post__ai" data-journal-ai-disclosure>
         {post.aiDisclosure}
       </p>
     ) : null}
@@ -101,16 +107,21 @@ const modified =
     </div>
 
     <section
-      class="mt-12 border-t border-[var(--border-subtle)] pt-8"
+      class="journal-post__sources"
       aria-labelledby="journal-sources"
       data-journal-sources
     >
-      <h2 id="journal-sources" class="text-xl font-semibold tracking-tight">
+      <h2 id="journal-sources" class="journal-post__sources-title">
         {post.sources}
       </h2>
-      <ul class="mt-4 grid gap-2 text-sm text-[var(--text-secondary)]">
+      <ul class="journal-post__sources-list">
         {links.map((href) => (
-          <li>
+          <li class="journal-post__source-item">
+            {sourceHost(href) ? (
+              <span class="journal-post__source-host" data-journal-source-host>
+                {sourceHost(href)}
+              </span>
+            ) : null}
             <a
               href={href}
               rel="noopener"
@@ -123,7 +134,7 @@ const modified =
           </li>
         ))}
         {evidenceIds.map((id) => (
-          <li data-journal-evidence-id>
+          <li class="journal-post__source-item" data-journal-evidence-id>
             <code>{id}</code>
           </li>
         ))}
@@ -131,7 +142,7 @@ const modified =
     </section>
 
     <aside
-      class="journal-author mt-12 flex flex-wrap items-start gap-5 border-t border-[var(--border-subtle)] pt-8"
+      class="journal-author"
       aria-label={post.aboutAuthor}
       data-journal-author={entry.author}
     >
@@ -142,36 +153,21 @@ const modified =
         height="64"
         loading="lazy"
         decoding="async"
-        class="size-16 flex-none rounded-full"
+        class="journal-author__avatar"
       />
-      <div class="min-w-0 flex-1 basis-60">
-        <p class="text-lg font-semibold">{author.name}</p>
-        <p class="text-sm text-[var(--text-secondary)]">{author.role[lang]}</p>
-        <p class="mt-2 text-[var(--text-secondary)]">
-          {author.bio[lang].short}
-        </p>
-        <a
-          href={author.aboutPath[lang]}
-          class="mt-2 inline-flex min-h-11 items-center font-semibold text-[var(--action-primary)] underline underline-offset-4 hover:no-underline"
-        >
+      <div class="journal-author__text">
+        <p class="journal-author__name">{author.name}</p>
+        <p class="journal-author__role">{author.role[lang]}</p>
+        <p class="journal-author__bio">{author.bio[lang].short}</p>
+        <a href={author.aboutPath[lang]} class="journal-author__link">
           {post.aboutAuthor}
         </a>
       </div>
     </aside>
 
-    <p class="mt-8 flex flex-wrap items-center gap-x-6 gap-y-1 text-sm">
-      <a
-        href={journalIndexPath(lang)}
-        class="inline-flex min-h-11 items-center font-semibold text-[var(--action-primary)] underline underline-offset-4 hover:no-underline"
-      >
-        {post.backToJournal}
-      </a>
-      <a
-        href={journalFeedPath(lang)}
-        class="inline-flex min-h-11 items-center font-semibold text-[var(--action-primary)] underline underline-offset-4 hover:no-underline"
-      >
-        {post.rss}
-      </a>
+    <p class="journal-post__end">
+      <a href={journalIndexPath(lang)}>{post.backToJournal}</a>
+      <a href={journalFeedPath(lang)}>{post.rss}</a>
     </p>
   </Container>
 </article>
@@ -186,8 +182,57 @@ const modified =
   }
   /* IX-08: the full URL stays visible as the link text; it wraps anywhere so
      a long address never widens the column, in the quiet meta-text tone. */
+  /* Wave G1: a quiet folio line under the header, hairline above and below. */
+  .journal-post__folio {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0 0.5rem;
+    margin: var(--space-6) 0 0;
+    padding-block: var(--space-3);
+    border-block: 1px solid var(--c4-hairline);
+    font-size: var(--c4-type-meta);
+    font-variant-numeric: tabular-nums;
+    color: var(--text-secondary);
+  }
+  .journal-post__ai {
+    margin: var(--space-4) 0 0;
+    font-size: var(--c4-type-meta);
+    color: var(--text-secondary);
+  }
+  /* Sources: the publisher hostname leads; the full URL stays visible as the
+     link text, wrapping anywhere, in the quiet meta tone. */
+  .journal-post__sources {
+    margin-block-start: var(--space-12);
+    padding-block-start: var(--space-6);
+    border-block-start: 1px solid var(--c4-hairline);
+  }
+  .journal-post__sources-title {
+    margin: 0;
+    font-size: var(--c4-type-evidence);
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+  .journal-post__sources-list {
+    display: grid;
+    gap: var(--space-4);
+    margin: var(--space-4) 0 0;
+    padding: 0;
+    list-style: none;
+  }
+  .journal-post__source-item {
+    display: grid;
+    gap: 0.125rem;
+    min-width: 0;
+  }
+  .journal-post__source-host {
+    font-size: var(--c4-type-meta);
+    font-weight: 600;
+    color: var(--text-primary);
+  }
   .journal-post__source {
     overflow-wrap: anywhere;
+    font-size: var(--c4-type-caption);
     color: var(--text-secondary);
     text-decoration: underline;
     text-underline-offset: 4px;
@@ -195,20 +240,26 @@ const modified =
   .journal-post__source:hover {
     text-decoration: none;
   }
+  .journal-post__source-item code {
+    font-size: var(--c4-type-caption);
+    overflow-wrap: anywhere;
+    color: var(--text-secondary);
+  }
   .journal-post__body {
+    font-size: var(--c4-type-reading);
     color: var(--text-primary);
     line-height: 1.75;
   }
   .journal-post__body :global(h2) {
-    margin-block: 2.5rem 1rem;
-    font-size: var(--size-5);
+    margin-block: var(--space-12) var(--space-4);
+    font-size: var(--c4-type-product);
     font-weight: 600;
     letter-spacing: -0.01em;
     line-height: 1.25;
   }
   .journal-post__body :global(h3) {
-    margin-block: 2rem 0.75rem;
-    font-size: var(--size-4);
+    margin-block: var(--space-8) var(--space-3);
+    font-size: var(--c4-type-evidence);
     font-weight: 600;
     line-height: 1.3;
   }
@@ -217,11 +268,11 @@ const modified =
   .journal-post__body :global(ol),
   .journal-post__body :global(blockquote),
   .journal-post__body :global(pre) {
-    margin-block: 1rem;
+    margin-block: var(--space-4);
   }
   .journal-post__body :global(ul),
   .journal-post__body :global(ol) {
-    padding-inline-start: 1.5rem;
+    padding-inline-start: var(--space-6);
   }
   .journal-post__body :global(ul) {
     list-style: disc;
@@ -241,8 +292,8 @@ const modified =
     text-decoration: none;
   }
   .journal-post__body :global(blockquote) {
-    padding-inline-start: 1rem;
-    border-inline-start: 2px solid var(--border-subtle);
+    padding-inline-start: var(--space-4);
+    border-inline-start: 2px solid var(--c4-hairline);
     color: var(--text-secondary);
   }
   .journal-post__body :global(code) {
@@ -250,5 +301,81 @@ const modified =
   }
   .journal-post__body :global(pre) {
     overflow-x: auto;
+  }
+  /* Author card: hairline, 48 px portrait, name / role / bio in the C4 roles. */
+  .journal-author {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: var(--space-4);
+    margin-block-start: var(--space-12);
+    padding-block-start: var(--space-6);
+    border-block-start: 1px solid var(--c4-hairline);
+  }
+  .journal-author__avatar {
+    flex: none;
+    inline-size: 3rem;
+    block-size: 3rem;
+    border-radius: 50%;
+  }
+  .journal-author__text {
+    flex: 1 1 15rem;
+    min-width: 0;
+  }
+  .journal-author__name,
+  .journal-author__role,
+  .journal-author__bio {
+    margin: 0;
+  }
+  .journal-author__name {
+    font-size: var(--c4-type-reading);
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+  .journal-author__role {
+    font-size: var(--c4-type-meta);
+    color: var(--text-secondary);
+  }
+  .journal-author__bio {
+    max-width: var(--c4-reading-measure);
+    margin-block-start: var(--space-3);
+    color: var(--text-secondary);
+  }
+  .journal-author__link {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.75rem;
+    font-size: var(--c4-type-meta);
+    font-weight: 600;
+    color: var(--action-primary);
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+  .journal-author__link:hover {
+    text-decoration: none;
+  }
+  /* Back / RSS row: hairline above, meta tone, links quiet until hovered. */
+  .journal-post__end {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 var(--space-6);
+    margin: var(--space-8) 0 0;
+    padding-block-start: var(--space-3);
+    border-block-start: 1px solid var(--c4-hairline);
+    font-size: var(--c4-type-meta);
+  }
+  .journal-post__end a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.75rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    text-decoration: none;
+  }
+  .journal-post__end a:hover,
+  .journal-post__end a:focus-visible {
+    color: var(--text-primary);
+    text-decoration: underline;
+    text-underline-offset: 4px;
   }
 </style>
