@@ -296,10 +296,13 @@ test.describe("S3 product thumbnail edge", () => {
   const edges = (page: Page) =>
     page.evaluate(() => {
       const thumb = document.querySelector(".product-thumb")!;
-      const card = document.querySelector(".product-card")!;
+      // G3 G-06: the index card is a hairline row whose visible rule is the
+      // card's own border-top (--c4-hairline); the thumbnail edge is pinned to
+      // that rendered rule, not to a token probe, so drift is caught.
+      const row = thumb.closest(".product-card--ledger")!;
       return {
         thumb: getComputedStyle(thumb).borderTopColor,
-        card: getComputedStyle(card).borderTopColor,
+        card: getComputedStyle(row).borderTopColor,
       };
     });
 
@@ -313,7 +316,7 @@ test.describe("S3 product thumbnail edge", () => {
       expect(thumb).toBe(card);
     });
 
-  test("negative proof: the stronger control border is detected", async ({
+  test("negative proof: a thumb edge off the visible ledger rule is detected", async ({
     page,
   }) => {
     await page.setViewportSize({ width: 1440, height: 900 });
@@ -321,7 +324,7 @@ test.describe("S3 product thumbnail edge", () => {
     await page.evaluate(() => {
       (
         document.querySelector(".product-thumb") as HTMLElement
-      ).style.borderColor = "var(--border-subtle)";
+      ).style.borderColor = "var(--border-hairline)";
     });
     const { thumb, card } = await edges(page);
     expect(thumb).not.toBe(card);

@@ -65,6 +65,31 @@
   background: var(--c4-hairline);
 }
 
+/* G3 G-05 — inspect links speak in the meta voice: secondary colour, meta
+ * size, medium weight, a softened underline that firms up on hover/focus. One
+ * rule for Feature Story chapters and Showcase groups; `:where()` keeps it at
+ * zero specificity, the components keep only their layout. */
+:where(.story__inspect, .showcase__inspect) {
+  color: var(--text-secondary);
+  font-size: var(--c4-type-meta);
+  font-weight: 500;
+  text-decoration-line: underline;
+  text-decoration-color: color-mix(in srgb, currentColor 45%, transparent);
+  text-underline-offset: 0.2em;
+}
+
+:where(.story__inspect, .showcase__inspect):hover,
+:where(.story__inspect, .showcase__inspect):focus-visible {
+  color: var(--text-primary);
+  text-decoration-color: currentColor;
+}
+
+/* G3 G-06 — products index ledger: the list closes with a hairline under the
+ * last row (each row carries its own top rule). */
+.product-ledger {
+  border-bottom: 1px solid var(--c4-hairline);
+}
+
 /* C4-A S8 — Quiet motion budget. The quiet-authority layer declares no
  * animation (W10 removed the unused focal entrance); a regression test pins
  * that. */
