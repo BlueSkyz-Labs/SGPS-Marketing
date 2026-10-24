@@ -81,6 +81,15 @@ Automated/browser assurance is necessary but does **not** substitute for the rea
 
 ---
 
+## Local preview hygiene
+
+Checklist for any lane that runs a local preview or Playwright (LSN-marketing-003, LSN-marketing-002):
+
+- [ ] Start your preview on a lane-unique port (for example 3600), never on 3000, which `pnpm test:e2e` owns. Run `PLAYWRIGHT_BASE_URL=http://127.0.0.1:<port>` against it; the global setup accepts only loopback and checks that the server reports this worktree's HEAD.
+- [ ] Record the pid. `astro preview` daemonizes, so the shell's `$!` is a wrapper that exits; take the pid from the server's own line (`Preview server running at ... (pid N)`, start it with `--json` or read `astro preview logs`).
+- [ ] Before hand-back, stop exactly that pid (`kill <pid>`) and confirm with `ps -p <pid>`. Never `pkill -f` a substring: it can match your own shell's command line.
+- [ ] To find a process you started, filter `ps -eo pid,args` with `$2 ~ /node$/` and a port match. Do not kill a process you did not start; report it instead.
+
 ## 5. Cloudflare promotion flow
 
 ```text
