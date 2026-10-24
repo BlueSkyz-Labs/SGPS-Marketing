@@ -12,6 +12,7 @@ import ProductShowcase from "@/components/product/ProductShowcase.astro";
 import ButtonLink from "@/components/ui/ButtonLink.astro";
 import NoCaptureStage from "@/components/empty-state/NoCaptureStage.astro";
 import ProductVisual from "@/components/product/ProductVisual.astro";
+import ProductJournalLink from "@/components/product/ProductJournalLink.astro";
 import ProductSides from "@/components/product/ProductSides.astro";
 import {
   AVAILABILITY,
@@ -32,6 +33,8 @@ import {
 import { appLanguageNames } from "@/lib/app-languages";
 import { safeJsonLd, productJsonLd } from "@/lib/seo";
 import { productBreadcrumbJsonLd } from "@/lib/breadcrumbs";
+import { getCollection } from "astro:content";
+import { journalPostsForProduct } from "@/lib/journal-posts";
 import { getPublicProducts } from "@/lib/products";
 import { productMeta } from "@/data/page-meta";
 import { productTransitionStyle } from "@/lib/product-transition";
@@ -67,6 +70,11 @@ const copy = productCopy(data, "en");
 const page = productPageCopy(data, "en");
 const showcase = (await getShowcase(data.slug))?.data ?? null;
 const heroShot = heroScreen(showcase);
+const journalPosts = journalPostsForProduct(
+  await getCollection("journal"),
+  lang,
+  data.slug,
+);
 
 // This page already *is* the recorded status surface, so the mapper only adds
 // an action when it yields an eligible first-party Try destination and the
@@ -313,6 +321,8 @@ const awaitingScreens = !showcase && isIdentityArt;
           </figcaption>
         </figure>
       ) : null}
+
+      <ProductJournalLink lang="en" posts={journalPosts} />
 
       {proofLinks.length > 0 ? (
         <div
