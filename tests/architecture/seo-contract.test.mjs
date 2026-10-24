@@ -107,7 +107,7 @@ test("robots and sitemap endpoints exist and reference public routes only", () =
   assert.doesNotMatch(sitemap, /portfolio\.tonydemo\.com/);
 });
 
-test("production robots.txt carries the D-7 Content-Signal inside the wildcard group", () => {
+test("production robots.txt carries the D-7 Content-Signal in every Allow group", () => {
   const robots = readFileSync("src/pages/robots.txt.ts", "utf8");
   assert.match(
     robots,
@@ -115,6 +115,11 @@ test("production robots.txt carries the D-7 Content-Signal inside the wildcard g
   );
   // Production branch: signal sits directly after the wildcard User-agent line.
   assert.match(robots, /"User-agent: \*",\s*CONTENT_SIGNAL,\s*"Allow: \/",/);
+  // Named AI crawlers read only their own group, so each group repeats it.
+  assert.match(
+    robots,
+    /`User-agent: \$\{bot\}`,\s*CONTENT_SIGNAL,\s*"Allow: \/",/,
+  );
   // Non-production branch stays byte-identical fail-closed (no signal).
   assert.match(robots, /\["User-agent: \*", "Disallow: \/", ""\]/);
 });
