@@ -29,7 +29,7 @@ import {
 } from "@/lib/product-routes";
 import { safeJsonLd, productJsonLd } from "@/lib/seo";
 import { productBreadcrumbJsonLd } from "@/lib/breadcrumbs";
-import { getPublicProducts } from "@/lib/products";
+import { displayableMedia, getPublicProducts } from "@/lib/products";
 import { productMeta } from "@/data/page-meta";
 import { productTransitionStyle } from "@/lib/product-transition";
 import { labelFor, SITE } from "@/data/site";
@@ -60,6 +60,8 @@ const { product } = Astro.props;
 const lang = "vi" as const;
 const { data } = product;
 const media = data.proof.media;
+// OG-3: everything that renders or links the art goes through the hold.
+const shownMedia = displayableMedia(media);
 const copy = productCopy(data, "vi");
 const page = productPageCopy(data, "vi");
 const showcase = (await getShowcase(data.slug))?.data ?? null;
@@ -96,8 +98,10 @@ const productStructuredData = productJsonLd(
     name: data.name,
     description: copy.shortDescription,
     slug: data.slug,
-    mediaUrl: media?.src,
-    ...(media ? { mediaCaption: proofCaptionForKind(media.kind, "vi") } : {}),
+    mediaUrl: shownMedia?.src,
+    ...(shownMedia
+      ? { mediaCaption: proofCaptionForKind(shownMedia.kind, "vi") }
+      : {}),
     platforms: data.platforms,
     ...(data.applicationCategory
       ? { applicationCategory: data.applicationCategory }
@@ -236,8 +240,8 @@ const awaitingScreens = !showcase && isIdentityArt;
           <ProductLadder lifecycle={data.lifecycle} lang="vi" />
         </Fragment>
       </ProductHero>
-      {!showcase && media && !isIdentityArt ? (
-        <NoCaptureStage media={media} lang="vi" />
+      {!showcase && shownMedia && !isIdentityArt ? (
+        <NoCaptureStage media={shownMedia} lang="vi" />
       ) : null}
       {!showcase && isIdentityArt ? (
         // Identity art is not shown here: the Sổ Tâm artwork carries an
@@ -277,11 +281,11 @@ const awaitingScreens = !showcase && isIdentityArt;
         />
       ) : null}
 
-      {media && showcase ? (
+      {shownMedia && showcase ? (
         <figure class="m-0 mt-14 max-w-lg" data-profile-identity-stage>
           <ProductVisual
             sizes="(min-width: 32rem) 32rem, calc(100vw - 2.5rem)"
-            media={media}
+            media={shownMedia}
             alt={`${data.name} \u2014 ${PAGE_LABELS.artIdentity[lang]}`}
           />
           <figcaption class="mt-3 text-sm text-[var(--text-muted)]">

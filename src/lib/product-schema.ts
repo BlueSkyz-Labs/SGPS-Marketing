@@ -158,6 +158,13 @@ const productMedia = z.object({
   alt: z.string().min(1).max(160),
   width: z.number().int().positive().max(8192),
   height: z.number().int().positive().max(8192),
+  /**
+   * OG-3: identity artwork whose baked-in tagline is not confirmed against the
+   * product's own truth (for example an "AI …" line on a product without a
+   * runtime AI dependency). The profile page never renders it; it stays in the
+   * record only until a tagline-free lockup replaces it.
+   */
+  taglineHold: z.boolean().optional(),
 });
 
 /**
