@@ -182,7 +182,7 @@ const modified =
   }
   /* IX-08: the full URL stays visible as the link text; it wraps anywhere so
      a long address never widens the column, in the quiet meta-text tone. */
-  /* Wave G1: a quiet folio line under the header, hairline above and below. */
+  /* Wave G1: a quiet folio line under the header, hairline below the header's rule. */
   .journal-post__folio {
     display: flex;
     flex-wrap: wrap;
@@ -190,7 +190,8 @@ const modified =
     gap: 0 0.5rem;
     margin: var(--space-6) 0 0;
     padding-block: var(--space-3);
-    border-block: 1px solid var(--c4-hairline);
+    /* The header's horizon rule is the only rule above the folio line. */
+    border-block-end: 1px solid var(--c4-hairline);
     font-size: var(--c4-type-meta);
     font-variant-numeric: tabular-nums;
     color: var(--text-secondary);

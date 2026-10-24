@@ -74,8 +74,6 @@ const heading = { news: copy.news, product: copy.product } as const;
               data-journal-lead={entry === lead ? "" : undefined}
             >
               <p class="journal-item__eyebrow">
-                <span>{heading[entry.branch]}</span>
-                <span aria-hidden="true">·</span>
                 <time datetime={entry.datePublished}>
                   {formatDate(lang, entry.datePublished)}
                 </time>
