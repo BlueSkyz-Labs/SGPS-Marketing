@@ -376,6 +376,12 @@ for (const item of items) {
     cursor: pointer;
   }
 
+  /* Open: the body carries the closing rule, so the block reads as one
+     summary rule on top and one rule underneath, never two adjacent. */
+  .verify-layer[open] > .verify-layer__summary {
+    border-bottom: 0;
+  }
+
   :lang(vi) .verify-layer__summary {
     text-transform: none;
     letter-spacing: 0.03em;

@@ -68,6 +68,10 @@ function boxOf(locator: ReturnType<Page["locator"]>): Promise<Box> {
 
 const TRANSPARENT = "rgba(0, 0, 0, 0)";
 
+/** Vietnamese keeps sentence case (cross-subset kerning); other locales uppercase. */
+const expectedTransform = (lang: string) =>
+  lang === "vi" ? "none" : "uppercase";
+
 async function expectHairlineRow(page: Page, selector: string) {
   const box = await boxOf(page.locator(selector));
   expect(box.radius, `${selector} radius`).toBe("0px");
@@ -115,6 +119,29 @@ for (const lang of LANGS) {
         expect(summary.color).toBe(
           await token(page, "--text-secondary", "color"),
         );
+        expect(
+          await page
+            .locator(".verify-layer__summary")
+            .evaluate((el) => getComputedStyle(el).textTransform),
+          "summary eyebrow text-transform",
+        ).toBe(expectedTransform(lang));
+        // Open: the body closes the block, so the summary drops its bottom
+        // rule and exactly one rule sits under the summary row.
+        await page.locator(".verify-layer__summary").click();
+        const openState = await page.evaluate(() => {
+          const summary = document.querySelector(".verify-layer__summary")!;
+          const body = document.querySelector(".verify-layer__body")!;
+          return {
+            summaryBottom: getComputedStyle(summary).borderBottomWidth,
+            bodyTop: getComputedStyle(body).borderTopWidth,
+            bodyBottom: getComputedStyle(body).borderBottomWidth,
+          };
+        });
+        expect(openState).toEqual({
+          summaryBottom: "0px",
+          bodyTop: "0px",
+          bodyBottom: "1px",
+        });
       });
 
       test("verify: the status is quiet text in eyebrow voice", async ({
@@ -129,10 +156,18 @@ for (const lang of LANGS) {
         expect(box.topWidth).toBe("0px");
         const text = await status.first().evaluate((el) => {
           const cs = getComputedStyle(el);
-          return { color: cs.color, size: cs.fontSize, weight: cs.fontWeight };
+          return {
+            color: cs.color,
+            size: cs.fontSize,
+            weight: cs.fontWeight,
+            transform: cs.textTransform,
+          };
         });
         expect(text.color).toBe(await token(page, "--text-secondary", "color"));
         expect(text.size).toBe("14px");
+        expect(text.transform, "status text-transform").toBe(
+          expectedTransform(lang),
+        );
         // Every status keeps its label text (the state is carried by words).
         for (const label of await status.allTextContents()) {
           expect(label.trim().length).toBeGreaterThan(0);
@@ -157,12 +192,19 @@ for (const lang of LANGS) {
             .locator(`[data-contact-card="${card}"] h2`)
             .evaluate((el) => {
               const cs = getComputedStyle(el);
-              return { color: cs.color, size: cs.fontSize };
+              return {
+                color: cs.color,
+                size: cs.fontSize,
+                transform: cs.textTransform,
+              };
             });
           expect(heading.color).toBe(
             await token(page, "--text-secondary", "color"),
           );
           expect(heading.size).toBe("14px");
+          expect(heading.transform, `${card} heading text-transform`).toBe(
+            expectedTransform(lang),
+          );
         }
       });
 
@@ -242,6 +284,38 @@ test("forced colors: the numeral falls back to CanvasText", async ({
     return value;
   });
   expect(color).toBe(canvasText);
+});
+
+test("forced colors: the verify rules stay painted, one under the open summary", async ({
+  page,
+}) => {
+  await page.emulateMedia({ forcedColors: "active" });
+  await page.goto("/en/verify/");
+  await page.locator(".verify-layer__summary").click();
+  const rules = await page.evaluate(() => {
+    const read = (selector: string) => {
+      const cs = getComputedStyle(document.querySelector(selector)!);
+      return {
+        top: [cs.borderTopWidth, cs.borderTopStyle, cs.borderTopColor],
+        bottom: [
+          cs.borderBottomWidth,
+          cs.borderBottomStyle,
+          cs.borderBottomColor,
+        ],
+      };
+    };
+    return {
+      claim: read(".verify-claim"),
+      summary: read(".verify-layer__summary"),
+      body: read(".verify-layer__body"),
+    };
+  });
+  for (const rule of [rules.claim.top, rules.summary.top, rules.body.bottom]) {
+    expect(rule[0]).toBe("1px");
+    expect(rule[1]).toBe("solid");
+    expect(rule[2]).not.toBe(TRANSPARENT);
+  }
+  expect(rules.summary.bottom[0]).toBe("0px");
 });
 
 test("negative proof: a boxed claim is caught by the same check", async ({
