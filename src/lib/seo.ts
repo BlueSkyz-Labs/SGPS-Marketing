@@ -86,6 +86,8 @@ export function productJsonLd(
     platforms: readonly string[];
     /** schema.org category from the product record; omitted when absent. */
     applicationCategory?: string;
+    /** BCP 47 codes of the app's own interface; replaces the page language. */
+    appLanguages?: readonly string[];
   },
   siteUrl: string,
   lang: string,
@@ -111,7 +113,9 @@ export function productJsonLd(
     name: product.name,
     description: product.description,
     url: absoluteUrl(siteUrl, `/${lang}/products/${product.slug}/`),
-    inLanguage: languageTag(lang),
+    inLanguage: product.appLanguages?.length
+      ? [...product.appLanguages]
+      : languageTag(lang),
     // Do not invent product category/availability or OS from the masterbrand.
     // Category and platform evidence are owned by each product record, never a
     // global default: either is omitted when the record does not declare it.

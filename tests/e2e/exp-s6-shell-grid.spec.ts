@@ -68,7 +68,7 @@ test("negative proof: offsetting one container edge turns the contract RED", asy
   expect(spread(edges)).toBeGreaterThan(1);
 });
 
-test("desktop header shows exactly the approved controls and a CTA distinct from Products", async ({
+test("desktop header shows exactly nine visible controls and a CTA distinct from Products", async ({
   page,
 }) => {
   await page.setViewportSize(VIEWPORTS[0]);
@@ -86,22 +86,14 @@ test("desktop header shows exactly the approved controls and a CTA distinct from
     ),
   );
   // Owner 2026-10-18 (audit A-03): Contact joins About in the desktop nav,
-  // so the cap moved from six to seven controls.
-  // Owner 2026-10-20 (TRU-15) / D-2: Journey joins the desktop nav once a
-  // post exists in the page language, so the cap moves to eight. The exact
-  // ordered list makes any further addition an explicit decision.
-  expect(names.length, names.join(" | ")).toBeLessThanOrEqual(8);
-  expect(names).toEqual([
-    "A",
-    "About",
-    "Contact",
-    "Journey",
-    "Search",
-    "EN · Language: English",
-    "Theme: System",
-    "Products",
-  ]);
+  // so the cap moves from six to seven controls. Owner 2026-10-24 (O-05):
+  // Verify joins the desktop nav; with Journey (en/vi, TRU-15) the cap is
+  // exactly nine, and the ordered link list below fails on any further addition.
+  expect(names.length, names.join(" | ")).toBe(9);
   expect(names.join(" ")).not.toContain("Explore products");
+  await expect(
+    page.locator('header nav[aria-label="Primary"] a:visible'),
+  ).toHaveText(["About", "Contact", "Verify", "Journey", "Products"]);
 
   const products = page.locator('header nav a[href="/en/products/"]:visible');
   await expect(products).toHaveCount(1);
@@ -116,7 +108,7 @@ test("compact header keeps 44px targets and the full route list in the menu", as
   const menu = page.locator(
     'header nav[aria-label="Menu"], header details nav',
   );
-  for (const name of ["Products", "About", "Contact"]) {
+  for (const name of ["Products", "About", "Contact", "Verify"]) {
     await expect(menu.getByRole("link", { name })).toBeVisible();
   }
   const targets = menu.locator("a:visible, button:visible");
@@ -124,6 +116,75 @@ test("compact header keeps 44px targets and the full route list in the menu", as
   for (let index = 0; index < count; index++) {
     const box = await targets.nth(index).boundingBox();
     expect(box!.height).toBeGreaterThanOrEqual(44);
+  }
+});
+
+// With nine desktop controls the en / vi nav wrapped to two or three rows
+// between 768 and 1023px. The desktop nav starts at 1024px; below that the
+// compact menu carries the routes, so the header bar is one row at every width.
+test("header bar stays one row from tablet to desktop in en, vi and zh", async ({
+  page,
+}) => {
+  for (const lang of ["en", "vi", "zh"]) {
+    for (const width of [768, 900, 1023, 1024, 1280, 1440]) {
+      await page.setViewportSize({ width, height: 800 });
+      await page.goto(`/${lang}/`);
+      const bar = page.locator("header .header-bar").first();
+      const brand = await bar.locator(".brand-lockup").first().boundingBox();
+      const items = await bar
+        .locator(":scope > nav:visible, :scope > details:visible")
+        .evaluateAll((nodes) =>
+          nodes.map((node) => node.getBoundingClientRect().top),
+        );
+      // Tablet: the utility controls plus the compact menu; desktop: the
+      // full nav alone.
+      expect(items.length, `${lang} ${width}`).toBe(width < 1024 ? 2 : 1);
+      const box = await bar.boundingBox();
+      expect(
+        box!.height,
+        `${lang} ${width}: header bar ${box!.height}px`,
+      ).toBeLessThanOrEqual(brand!.height + 32);
+      // Count every visible control (links sit inside a display:contents
+      // wrapper, so direct children would miss them).
+      const rows = await bar
+        .locator(":scope > nav:visible :is(a, button, summary)")
+        .evaluateAll(
+          (nodes) =>
+            new Set(
+              nodes
+                .filter((node) => node.getBoundingClientRect().height > 0)
+                .map((node) => {
+                  const r = node.getBoundingClientRect();
+                  return Math.round((r.top + r.bottom) / 2 / 16);
+                }),
+            ).size,
+        );
+      expect(rows, `${lang} ${width}: nav rows`).toBeLessThanOrEqual(1);
+    }
+  }
+});
+
+test("tablet bar keeps search, language and theme; routes move to the menu", async ({
+  page,
+}) => {
+  for (const width of [768, 1023]) {
+    await page.setViewportSize({ width, height: 800 });
+    await page.goto("/vi/");
+    const bar = page.locator("header .header-bar").first();
+    await expect(bar.locator("> nav [data-command-trigger]")).toBeVisible();
+    await expect(bar.locator("> nav [data-theme-trigger]")).toBeVisible();
+    await expect(bar.locator("> nav [data-language-trigger]")).toBeVisible();
+    await expect(bar.locator("> nav a:visible")).toHaveCount(0);
+    const menu = bar.locator("> details");
+    await menu.locator("summary").click();
+    // The open menu carries every route but not a second copy of the
+    // utilities the bar already shows.
+    await expect(menu.locator("nav a:visible")).not.toHaveCount(0);
+    await expect(menu.locator("[data-command-trigger]:visible")).toHaveCount(0);
+    await expect(menu.locator("[data-theme-trigger]:visible")).toHaveCount(0);
+    await expect(menu.locator("[data-language-trigger]:visible")).toHaveCount(
+      0,
+    );
   }
 });
 

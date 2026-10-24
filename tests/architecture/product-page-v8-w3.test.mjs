@@ -17,10 +17,13 @@ const COPY = readFileSync(
   "utf8",
 );
 
-/** The primary action is one mutually exclusive chain: Try, else See the screens, else none. */
+/**
+ * The primary action is one mutually exclusive chain: open the app (only with
+ * appAccess.publicSignup, O-03), else Try, else See the screens, else none.
+ */
 const primaryActionIsSingle = (src) =>
-  (src.match(/data-primary-action/g) ?? []).length === 2 &&
-  /showTryCta \? \([\s\S]*?data-primary-action[\s\S]*?\) : showcase \? \([\s\S]*?data-primary-action[\s\S]*?\) : null/.test(
+  (src.match(/data-primary-action/g) ?? []).length === 3 &&
+  /openApp \? \([\s\S]*?data-primary-action[\s\S]*?\) : showTryCta \? \([\s\S]*?data-primary-action[\s\S]*?\) : showcase \? \([\s\S]*?data-primary-action[\s\S]*?\) : null/.test(
     src,
   ) &&
   /href="#profile-showcase"/.test(src);

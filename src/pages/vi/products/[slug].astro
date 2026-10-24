@@ -12,8 +12,10 @@ import ProductShowcase from "@/components/product/ProductShowcase.astro";
 import ButtonLink from "@/components/ui/ButtonLink.astro";
 import NoCaptureStage from "@/components/empty-state/NoCaptureStage.astro";
 import ProductVisual from "@/components/product/ProductVisual.astro";
+import ProductJournalLink from "@/components/product/ProductJournalLink.astro";
 import ProductSides from "@/components/product/ProductSides.astro";
 import {
+  AVAILABILITY,
   PAGE_LABELS,
   productPageCopy,
   webPreviewOpen,
@@ -21,14 +23,18 @@ import {
 import { EMPTY_STATE_COPY } from "@/data/empty-state-copy";
 import { productCopy, proofCaptionForKind } from "@/lib/product-copy";
 import { resolveLifecycleCta } from "@/lib/lifecycle-cta";
+import { appOpenAction } from "@/lib/app-open-action";
 import { getShowcase } from "@/lib/showcases";
 import { heroScreen } from "@/lib/product-hero";
 import {
   getProductIconThumbPath,
   localizeSiteHref,
 } from "@/lib/product-routes";
+import { appLanguageNames } from "@/lib/app-languages";
 import { safeJsonLd, productJsonLd } from "@/lib/seo";
 import { productBreadcrumbJsonLd } from "@/lib/breadcrumbs";
+import { getCollection } from "astro:content";
+import { journalPostsForProduct } from "@/lib/journal-posts";
 import { displayableMedia, getPublicProducts } from "@/lib/products";
 import { productMeta } from "@/data/page-meta";
 import { productTransitionStyle } from "@/lib/product-transition";
@@ -66,6 +72,11 @@ const copy = productCopy(data, "vi");
 const page = productPageCopy(data, "vi");
 const showcase = (await getShowcase(data.slug))?.data ?? null;
 const heroShot = heroScreen(showcase);
+const journalPosts = journalPostsForProduct(
+  await getCollection("journal"),
+  lang,
+  data.slug,
+);
 
 // This page already *is* the recorded status surface, so the mapper only adds
 // an action when it yields an eligible first-party Try destination and the
@@ -80,6 +91,7 @@ const cta = resolveLifecycleCta(
   },
   "vi",
 );
+const openApp = appOpenAction(data.slug, data.appAccess, lang);
 const showTryCta = cta.verb === "try" && !data.appAccess?.signInUrl;
 
 const privacyHref = data.proof.privacyUrl
@@ -106,6 +118,7 @@ const productStructuredData = productJsonLd(
     ...(data.applicationCategory
       ? { applicationCategory: data.applicationCategory }
       : {}),
+    ...(data.appLanguages ? { appLanguages: data.appLanguages } : {}),
   },
   SITE.url,
   "vi",
@@ -120,6 +133,7 @@ const breadcrumbStructuredData = productBreadcrumbJsonLd(
   data.name,
   SITE.url,
 );
+const appLanguage = appLanguageNames(data.appLanguages, lang);
 const isIdentityArt = media?.kind === "identity-art";
 // UX-U5: a profile with no real screens yet (Sổ Tâm) gets next steps, no lockup.
 const awaitingScreens = !showcase && isIdentityArt;
@@ -210,7 +224,15 @@ const awaitingScreens = !showcase && isIdentityArt;
           </p>
         </Fragment>
         <Fragment slot="actions">
-          {showTryCta ? (
+          {openApp ? (
+            <ButtonLink
+              href={openApp.href}
+              data-primary-action
+              data-product-cta="try"
+            >
+              {openApp.label}
+            </ButtonLink>
+          ) : showTryCta ? (
             <ButtonLink
               href={cta.href}
               data-primary-action
@@ -237,6 +259,16 @@ const awaitingScreens = !showcase && isIdentityArt;
             web={data.platforms.includes("web")}
             webPreview={webPreviewOpen(data)}
           />
+          {appLanguage ? (
+            <p
+              class="mt-2 text-sm leading-relaxed text-[var(--text-secondary)]"
+              data-app-language
+            >
+              {PAGE_LABELS.appLanguage[lang]}
+              {AVAILABILITY.colon[lang]}
+              {appLanguage}
+            </p>
+          ) : null}
           <ProductLadder lifecycle={data.lifecycle} lang="vi" />
         </Fragment>
       </ProductHero>
@@ -293,6 +325,8 @@ const awaitingScreens = !showcase && isIdentityArt;
           </figcaption>
         </figure>
       ) : null}
+
+      <ProductJournalLink lang="vi" posts={journalPosts} />
 
       {proofLinks.length > 0 ? (
         <div
