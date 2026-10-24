@@ -117,6 +117,34 @@ for (const lang of LANGS) {
         expect((await tiles.nth(i).textContent())?.trim() ?? "").not.toMatch(
           /^0\d\b/,
         );
+        // EX-07, generated channel: no pseudo-element content, counters, or
+        // any text besides the item string itself (the item may hold digits,
+        // e.g. "24/7"; only what is added around it is forbidden).
+        const generated = await tiles.nth(i).evaluate((li) => {
+          const cs = getComputedStyle(li);
+          const text = li.querySelector(".profile-does__text");
+          const item = text?.textContent ?? "";
+          const rendered = (li as HTMLElement).innerText;
+          return {
+            before: getComputedStyle(li, "::before").content,
+            after: getComputedStyle(li, "::after").content,
+            counter: cs.counterIncrement,
+            textBefore: getComputedStyle(text!, "::before").content,
+            textAfter: getComputedStyle(text!, "::after").content,
+            item,
+            extra: rendered.replace(item, "").trim(),
+            children: li.children.length,
+          };
+        });
+        expect(["none", '""', "normal"]).toContain(generated.before);
+        expect(["none", '""', "normal"]).toContain(generated.after);
+        expect(["none", '""', "normal"]).toContain(generated.textBefore);
+        expect(["none", '""', "normal"]).toContain(generated.textAfter);
+        expect(generated.counter).toBe("none");
+        expect(generated.item.trim().length).toBeGreaterThan(0);
+        expect(generated.children).toBe(1);
+        expect(generated.extra).not.toMatch(/\d/);
+        expect(generated.extra).toBe("");
       }
     });
 

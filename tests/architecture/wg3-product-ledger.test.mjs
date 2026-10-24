@@ -55,6 +55,31 @@ export function tileProblems(label, source) {
   return out;
 }
 
+const FEATURE_LIST = /profile-does|data-what-it-does/;
+
+/**
+ * EX-07, CSS channel: a numeral can also be generated, not just authored.
+ * Scans every `<style>` block of a page (or a plain stylesheet) for counter
+ * properties and numeric / counter() `content` inside rules whose selector
+ * mentions the feature list.
+ */
+export function generatedNumeralProblems(label, source) {
+  const css = [...source.matchAll(/<style[^>]*>([\s\S]*?)<\/style>/g)]
+    .map((m) => m[1])
+    .join("\n");
+  const scanned = css || source;
+  const out = [];
+  for (const body of ruleBodies(scanned, FEATURE_LIST)) {
+    if (/counter-(increment|reset|set)\s*:/.test(body))
+      out.push(`${label}: feature list rule uses a CSS counter property`);
+    if (/content\s*:\s*["'][^"']*\d/.test(body))
+      out.push(`${label}: feature list rule generates numeric content`);
+    if (/content\s*:[^;]*counters?\(/.test(body))
+      out.push(`${label}: feature list rule generates content from counter()`);
+  }
+  return out;
+}
+
 const INSPECT = /^\.(story|showcase)__inspect$/;
 
 export function inspectProblems(css, story, showcase) {
@@ -131,6 +156,14 @@ test("WG3-04: the feature list is a hairline list with no numerals, all locales"
   }
 });
 
+test("WG3-04: no CSS counter or numeric generated content on the feature list, all locales", () => {
+  const s = sources();
+  for (const [lang, source] of s.tiles) {
+    assert.deepEqual(generatedNumeralProblems(lang, source), []);
+  }
+  assert.deepEqual(generatedNumeralProblems("c4", s.css), []);
+});
+
 test("WG3-04: the four locale pages carry identical list markup and rules", () => {
   const slice = (s) =>
     s.slice(
@@ -189,6 +222,49 @@ test("negative proof G-04: a tile with radius, shadow, background, lost hairline
       base.replace("{item}", '{String(1).padStart(2, "0")}{item}'),
     ).length > 0,
     "padStart",
+  );
+});
+
+test("negative proof G-04 (CSS channel): generated numerals, counters or counter() content FAIL", () => {
+  const s = sources();
+  const inject = (source, rule) => {
+    const at = source.lastIndexOf("</style>");
+    return at === -1
+      ? `${source}\n${rule}`
+      : source.slice(0, at) + `${rule}\n` + source.slice(at);
+  };
+  const fixtures = [
+    ['.profile-does__tile::before{content:"01"}', "numeric content"],
+    [".profile-does__tile{counter-increment: tile}", "counter-increment"],
+    ["[data-what-it-does]{counter-reset: tile}", "counter-reset"],
+    ["[data-what-it-does]{counter-set: tile 3}", "counter-set"],
+    [".profile-does__tile::after{content: counter(tile)}", "counter() content"],
+    [
+      '.profile-does li::before{content:"No. 7"}',
+      "numeric content, descendant selector",
+    ],
+  ];
+  for (const [lang, source] of s.tiles) {
+    for (const [rule, why] of fixtures) {
+      const problems = generatedNumeralProblems(lang, inject(source, rule));
+      assert.ok(problems.length > 0, `${lang}: ${why}`);
+      if (lang === "en")
+        console.log(`FAIL(expected) ${why}: ${problems.join(" | ")}`);
+    }
+  }
+  for (const [rule, why] of fixtures) {
+    assert.ok(
+      generatedNumeralProblems("c4", inject(s.css, rule)).length > 0,
+      `c4: ${why}`,
+    );
+  }
+  // Not over-eager: a non-numeric glyph is allowed.
+  assert.deepEqual(
+    generatedNumeralProblems(
+      "ok",
+      inject(s.tiles[0][1], '.profile-does__tile::before{content:"\u2014"}'),
+    ),
+    [],
   );
 });
 
