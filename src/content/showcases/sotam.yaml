@@ -1,0 +1,137 @@
+# Sổ Tâm showcase — real screens of the running web application.
+# Captured 2026-10-24 from a local build of BlueSkyz-Labs/sotam at the revision
+# below (apps/web, no sign-in needed to reach these screens), with a sample
+# reflection typed by hand: no real person, account or journal content. Phone
+# screens: 390x844 CSS px at 2x; desktop coda: 1440x900 CSS px. The page shows
+# today's date and season from the device clock. The web build is a preview:
+# its Journal screen supports the active local draft only, so no dated entry
+# list is shown. Local export is not reachable on web and is not pictured.
+# Wording below describes only what each screen shows at that revision.
+# zh / zh-hant text: machine-assisted (zh-hant via OpenCC s2twp), pending native
+# review. Copy is an Owner-approval candidate.
+product: sotam
+capture:
+  kind: ui-screenshot
+  data: synthetic-demo
+  environment: local-test-build
+  sourceRepository: https://github.com/BlueSkyz-Labs/sotam
+  sourceRevision: abde8fdc22cdf0440e1c9a6faf3fe73440378a3f
+  capturedAt: 2026-10-24
+
+screens:
+  - id: today
+    surface: phone
+    src: /products/sotam/showcase/ph-01-today.webp
+    width: 780
+    height: 1688
+    title:
+      en: "Today"
+      vi: "Hôm nay"
+      zh: "今天"
+      zh-hant: "今天"
+    caption:
+      en: "a calm start: the season, a mood check and a place to write."
+      vi: "khởi đầu nhẹ nhàng: mùa tiết, chọn tâm trạng và chỗ để viết."
+      zh: "平静的开始：节气、心情选择，以及写字的地方。"
+      zh-hant: "平靜的開始：節氣、心情選擇，以及寫字的地方。"
+    alt:
+      en: "Sổ Tâm phone Today screen titled “Settling into Reflection” with a season card and a gentle morning note."
+      vi: "Màn hình Hôm nay của Sổ Tâm trên điện thoại, tiêu đề “Settling into Reflection”, có thẻ mùa tiết và lời nhắc sớm mai."
+      zh: "Sổ Tâm 手机“今天”页面，标题为“Settling into Reflection”，含节气卡片与清晨提示。"
+      zh-hant: "Sổ Tâm 手機「今天」頁面，標題為「Settling into Reflection」，含節氣卡片與清晨提示。"
+  - id: write
+    surface: phone
+    src: /products/sotam/showcase/ph-02-write.webp
+    width: 780
+    height: 1688
+    title:
+      en: "Write"
+      vi: "Viết"
+      zh: "书写"
+      zh-hant: "書寫"
+    caption:
+      en: "a private page for your own words, with a running count of characters and words."
+      vi: "một trang riêng cho lời của bạn, có đếm ký tự và từ."
+      zh: "属于你自己的私密页面，并显示字数统计。"
+      zh-hant: "屬於你自己的私密頁面，並顯示字數統計。"
+    alt:
+      en: "Sổ Tâm phone writing box holding a short sample reflection, with Save draft and Start fresh buttons."
+      vi: "Khung viết của Sổ Tâm trên điện thoại chứa một đoạn suy nghĩ mẫu ngắn, có nút Save draft và Start fresh."
+      zh: "Sổ Tâm 手机书写框，内有一段简短示例文字，下方有 Save draft 与 Start fresh 按钮。"
+      zh-hant: "Sổ Tâm 手機書寫框，內有一段簡短範例文字，下方有 Save draft 與 Start fresh 按鈕。"
+  - id: saved
+    surface: phone
+    src: /products/sotam/showcase/ph-03-saved.webp
+    width: 780
+    height: 1688
+    title:
+      en: "Saved on this device"
+      vi: "Lưu trên máy"
+      zh: "保存在本机"
+      zh-hant: "儲存在本機"
+    caption:
+      en: "saving the draft says plainly that it stays on this device."
+      vi: "khi lưu nháp, ứng dụng nói rõ bản nháp nằm trên máy này."
+      zh: "保存草稿时，会明确告知草稿留在这台设备上。"
+      zh-hant: "儲存草稿時，會明確告知草稿留在這台裝置上。"
+    alt:
+      en: "Sổ Tâm phone writing box with the notice “Draft saved on this device” shown after tapping Save draft."
+      vi: "Khung viết của Sổ Tâm trên điện thoại với thông báo “Draft saved on this device” sau khi bấm Save draft."
+      zh: "Sổ Tâm 手机书写框，点击 Save draft 后显示“Draft saved on this device”提示。"
+      zh-hant: "Sổ Tâm 手機書寫框，點選 Save draft 後顯示「Draft saved on this device」提示。"
+  - id: journal
+    surface: phone
+    src: /products/sotam/showcase/ph-04-journal.webp
+    width: 780
+    height: 1688
+    title:
+      en: "Journal (preview)"
+      vi: "Nhật ký (xem trước)"
+      zh: "日记（预览）"
+      zh-hant: "日記（預覽）"
+    caption:
+      en: "the web preview offers the active local draft to continue; it does not show full history."
+      vi: "bản web xem trước cho viết tiếp bản nháp trên máy; chưa hiện toàn bộ lịch sử."
+      zh: "网页预览可继续本机上的当前草稿，尚不显示完整历史。"
+      zh-hant: "網頁預覽可繼續本機上的目前草稿，尚不顯示完整歷史。"
+    alt:
+      en: "Sổ Tâm phone Journal preview saying an active local draft is available, with a Continue writing button."
+      vi: "Màn hình Nhật ký xem trước của Sổ Tâm trên điện thoại, báo có bản nháp trên máy, kèm nút Continue writing."
+      zh: "Sổ Tâm 手机日记预览页，提示有本机草稿可用，并有 Continue writing 按钮。"
+      zh-hant: "Sổ Tâm 手機日記預覽頁，提示有本機草稿可用，並有 Continue writing 按鈕。"
+  - id: desktop-write
+    surface: desktop
+    src: /products/sotam/showcase/dk-01-write.webp
+    width: 1440
+    height: 900
+    title:
+      en: "On a larger screen"
+      vi: "Trên màn hình lớn"
+      zh: "在大屏幕上"
+      zh-hant: "在大螢幕上"
+    caption:
+      en: "the same writing box and saved notice in a desktop browser."
+      vi: "cùng khung viết và thông báo đã lưu trên trình duyệt máy tính."
+      zh: "同样的书写框与已保存提示，显示在桌面浏览器中。"
+      zh-hant: "同樣的書寫框與已儲存提示，顯示在桌面瀏覽器中。"
+    alt:
+      en: "Sổ Tâm in a desktop browser showing the writing box with a sample reflection and the “Draft saved on this device” notice."
+      vi: "Sổ Tâm trên trình duyệt máy tính: khung viết có đoạn mẫu và thông báo “Draft saved on this device”."
+      zh: "桌面浏览器中的 Sổ Tâm：书写框内有示例文字，并显示“Draft saved on this device”提示。"
+      zh-hant: "桌面瀏覽器中的 Sổ Tâm：書寫框內有範例文字，並顯示「Draft saved on this device」提示。"
+
+# Feature story: writing a reflection, told with the screens above. `fact`
+# binds the registered job or capability (src/content/products/sotam.yaml,
+# 1-based) this chapter's task relates to; it is not a claim about what the
+# screen shows. The coda is the same writing box on a desktop browser.
+story:
+  chapters:
+    - screen: today
+      fact: job-1
+    - screen: write
+      fact: capability-1
+    - screen: saved
+      fact: capability-1
+    - screen: journal
+      fact: job-2
+  coda: desktop-write

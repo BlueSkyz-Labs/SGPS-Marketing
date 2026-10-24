@@ -53,9 +53,17 @@ for (const lang of LOCALES) {
       await expect(page.locator("[data-app-signin]")).toHaveCount(0);
     });
 
-    test("Sổ Tâm has no primary action", async ({ page }) => {
+    test("Sổ Tâm has exactly one primary action, anchored to its screens", async ({
+      page,
+    }) => {
+      // Sổ Tâm gained a real-capture showcase (2026-10-24), so it follows the
+      // Sổ Trọ rule: the one primary action points at the screens, never at
+      // a sign-in or store.
       await page.goto(`/${lang}/products/sotam/`);
-      await expect(page.locator("[data-primary-action]")).toHaveCount(0);
+      const primary = page.locator("[data-primary-action]");
+      await expect(primary).toHaveCount(1);
+      await expect(primary).toHaveAttribute("href", "#profile-showcase");
+      await expect(page.locator("#profile-showcase")).toHaveCount(1);
       await expect(page.locator("[data-app-signin]")).toHaveCount(0);
     });
 
@@ -98,7 +106,14 @@ for (const lang of LOCALES) {
       page,
     }) => {
       await page.goto(`/${lang}/products/sotam/`);
-      await expect(page.locator("[data-product-visual] img")).toHaveCount(0);
+      // Only real captures from the showcase may fill the product visual;
+      // the old tagline identity art stays out.
+      const visuals = page.locator("[data-product-visual] img");
+      for (const src of await visuals.evaluateAll((imgs) =>
+        imgs.map((img) => img.getAttribute("src") ?? ""),
+      )) {
+        expect(src).toMatch(/^\/products\/sotam\/showcase\//);
+      }
       await expect(page.locator("main")).not.toContainText(
         /AI Journal for Clarity/i,
       );

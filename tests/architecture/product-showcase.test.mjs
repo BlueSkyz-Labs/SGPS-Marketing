@@ -22,6 +22,14 @@ const COMPONENT = readFileSync(
 const GUIDE = readFileSync("src/components/product/ProductGuide.astro", "utf8");
 const SCHEMA = readFileSync("src/lib/showcase-schema.ts", "utf8");
 
+/** The Sổ Trọ record: the fixture the negative proofs mutate (its paths are
+ * named below), picked by name so a new record cannot change it. */
+function sotroRecord() {
+  const record = records().find(({ name }) => /^sotro\.ya?ml$/.test(name));
+  assert.ok(record, "sotro showcase record present");
+  return record;
+}
+
 function records() {
   return readdirSync(DIR)
     .filter((name) => /\.ya?ml$/.test(name))
@@ -132,7 +140,7 @@ test("schema refuses remote, foreign and non-synthetic captures", () => {
 });
 
 test("negative proof: a real-data or remote-asset record is caught", () => {
-  const [{ text }] = records();
+  const { text } = sotroRecord();
   const realData = text.replace(
     /data:\s*synthetic-demo/,
     "data: production-export",
