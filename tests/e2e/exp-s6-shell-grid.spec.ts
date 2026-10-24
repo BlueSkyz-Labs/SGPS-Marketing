@@ -68,7 +68,7 @@ test("negative proof: offsetting one container edge turns the contract RED", asy
   expect(spread(edges)).toBeGreaterThan(1);
 });
 
-test("desktop header shows at most nine visible controls and a CTA distinct from Products", async ({
+test("desktop header shows exactly nine visible controls and a CTA distinct from Products", async ({
   page,
 }) => {
   await page.setViewportSize(VIEWPORTS[0]);
@@ -136,25 +136,55 @@ test("header bar stays one row from tablet to desktop in en, vi and zh", async (
         .evaluateAll((nodes) =>
           nodes.map((node) => node.getBoundingClientRect().top),
         );
-      expect(items.length, `${lang} ${width}`).toBe(1);
+      // Tablet: the utility controls plus the compact menu; desktop: the
+      // full nav alone.
+      expect(items.length, `${lang} ${width}`).toBe(width < 1024 ? 2 : 1);
       const box = await bar.boundingBox();
       expect(
         box!.height,
         `${lang} ${width}: header bar ${box!.height}px`,
       ).toBeLessThanOrEqual(brand!.height + 32);
-      const rows = await bar.locator(":scope > nav:visible > *").evaluateAll(
-        (nodes) =>
-          new Set(
-            nodes
-              .filter((node) => node.getBoundingClientRect().height > 0)
-              .map((node) => {
-                const r = node.getBoundingClientRect();
-                return Math.round((r.top + r.bottom) / 2 / 16);
-              }),
-          ).size,
-      );
+      // Count every visible control (links sit inside a display:contents
+      // wrapper, so direct children would miss them).
+      const rows = await bar
+        .locator(":scope > nav:visible :is(a, button, summary)")
+        .evaluateAll(
+          (nodes) =>
+            new Set(
+              nodes
+                .filter((node) => node.getBoundingClientRect().height > 0)
+                .map((node) => {
+                  const r = node.getBoundingClientRect();
+                  return Math.round((r.top + r.bottom) / 2 / 16);
+                }),
+            ).size,
+        );
       expect(rows, `${lang} ${width}: nav rows`).toBeLessThanOrEqual(1);
     }
+  }
+});
+
+test("tablet bar keeps search, language and theme; routes move to the menu", async ({
+  page,
+}) => {
+  for (const width of [768, 1023]) {
+    await page.setViewportSize({ width, height: 800 });
+    await page.goto("/vi/");
+    const bar = page.locator("header .header-bar").first();
+    await expect(bar.locator("> nav [data-command-trigger]")).toBeVisible();
+    await expect(bar.locator("> nav [data-theme-trigger]")).toBeVisible();
+    await expect(bar.locator("> nav [data-language-trigger]")).toBeVisible();
+    await expect(bar.locator("> nav a:visible")).toHaveCount(0);
+    const menu = bar.locator("> details");
+    await menu.locator("summary").click();
+    // The open menu carries every route but not a second copy of the
+    // utilities the bar already shows.
+    await expect(menu.locator("nav a:visible")).not.toHaveCount(0);
+    await expect(menu.locator("[data-command-trigger]:visible")).toHaveCount(0);
+    await expect(menu.locator("[data-theme-trigger]:visible")).toHaveCount(0);
+    await expect(menu.locator("[data-language-trigger]:visible")).toHaveCount(
+      0,
+    );
   }
 });
 

@@ -57,18 +57,23 @@ const plainLinks = NAV.slice(1);
 
     <nav
       aria-label={labelFor(SHARED_LABELS.primaryNav, lang)}
-      class="hidden flex-wrap items-center gap-2 lg:flex"
+      class="hidden flex-wrap items-center gap-2 md:flex"
     >
-      {plainLinks.map((link) => (
-        <a
-          href={link.href}
-          aria-current={isActive(link.href) ? "page" : undefined}
-          data-nav-current={isInSection(link.href) ? "" : undefined}
-          class="inline-flex min-h-11 items-center px-3 text-sm font-medium text-[var(--text-secondary)] no-underline hover:text-[var(--text-primary)]"
-        >
-          {link.label}
-        </a>
-      ))}
+      {/* Tablet (md to lg): the bar keeps search, language and theme; the
+          routes and the CTA live in the compact menu until lg so the bar
+          stays one row. `contents` keeps the desktop flex flow unchanged. */}
+      <span class="hidden lg:contents">
+        {plainLinks.map((link) => (
+          <a
+            href={link.href}
+            aria-current={isActive(link.href) ? "page" : undefined}
+            data-nav-current={isInSection(link.href) ? "" : undefined}
+            class="inline-flex min-h-11 items-center px-3 text-sm font-medium text-[var(--text-secondary)] no-underline hover:text-[var(--text-primary)]"
+          >
+            {link.label}
+          </a>
+        ))}
+      </span>
       <button
         type="button"
         data-command-trigger
@@ -81,14 +86,16 @@ const plainLinks = NAV.slice(1);
       </button>
       <LanguageSwitcher placement="header" />
       <ThemeToggle lang={lang} placement="header" />
-      <ButtonLink
-        href={primaryCta.href}
-        variant="primary"
-        aria-current={isActive(primaryCta.href) ? "page" : undefined}
-        data-nav-current={isInSection(primaryCta.href) ? "" : undefined}
-      >
-        {primaryCta.label}
-      </ButtonLink>
+      <span class="hidden lg:contents">
+        <ButtonLink
+          href={primaryCta.href}
+          variant="primary"
+          aria-current={isActive(primaryCta.href) ? "page" : undefined}
+          data-nav-current={isInSection(primaryCta.href) ? "" : undefined}
+        >
+          {primaryCta.label}
+        </ButtonLink>
+      </span>
     </nav>
 
     <details class="lg:hidden">
@@ -104,7 +111,7 @@ const plainLinks = NAV.slice(1);
             type="button"
             data-command-trigger
             aria-keyshortcuts="Control+K Meta+K"
-            class="inline-flex min-h-11 items-center gap-2 rounded-md border border-[var(--border-subtle)] px-3 py-2 text-left text-sm font-medium text-[var(--text-primary)]"
+            class="inline-flex md:hidden min-h-11 items-center gap-2 rounded-md border border-[var(--border-subtle)] px-3 py-2 text-left text-sm font-medium text-[var(--text-primary)]"
           >
             <BlueSkyzIcon name="search" class="h-4 w-4 shrink-0" />
             {labelFor(SHARED_LABELS.searchPages, lang)}
@@ -119,9 +126,11 @@ const plainLinks = NAV.slice(1);
               {item.label}
             </a>
           ))}
-          <hr class="my-1 border-[var(--border-subtle)]" />
-          <LanguageSwitcher placement="menu" />
-          <ThemeToggle lang={lang} placement="menu" />
+          <div class="flex flex-col gap-2 md:hidden">
+            <hr class="my-1 border-[var(--border-subtle)]" />
+            <LanguageSwitcher placement="menu" />
+            <ThemeToggle lang={lang} placement="menu" />
+          </div>
         </nav>
       </div>
     </details>
