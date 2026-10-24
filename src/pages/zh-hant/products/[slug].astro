@@ -28,7 +28,7 @@ import {
   getProductIconThumbPath,
   localizeSiteHref,
 } from "@/lib/product-routes";
-import { safeJsonLd, productJsonLd } from "@/lib/seo";
+import { safeJsonLd, productJsonLd, showcaseScreenshots } from "@/lib/seo";
 import { productBreadcrumbJsonLd } from "@/lib/breadcrumbs";
 import { getPublicProducts } from "@/lib/products";
 import { productMeta } from "@/data/page-meta";
@@ -102,6 +102,7 @@ const productStructuredData = productJsonLd(
       ? { mediaCaption: proofCaptionForKind(media.kind, "zh-hant") }
       : {}),
     platforms: data.platforms,
+    screenshots: showcaseScreenshots(showcase),
     ...(data.applicationCategory
       ? { applicationCategory: data.applicationCategory }
       : {}),
