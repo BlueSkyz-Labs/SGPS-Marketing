@@ -96,7 +96,7 @@ const productStructuredData = productJsonLd(
     name: data.name,
     description: copy.shortDescription,
     slug: data.slug,
-    mediaUrl: media?.src,
+    mediaUrl: media?.taglineHold ? undefined : media?.src,
     ...(media ? { mediaCaption: proofCaptionForKind(media.kind, "en") } : {}),
     platforms: data.platforms,
     ...(data.applicationCategory
@@ -277,7 +277,7 @@ const awaitingScreens = !showcase && isIdentityArt;
         />
       ) : null}
 
-      {media && showcase ? (
+      {media && showcase && !media.taglineHold ? (
         <figure class="m-0 mt-14 max-w-lg" data-profile-identity-stage>
           <ProductVisual
             sizes="(min-width: 32rem) 32rem, calc(100vw - 2.5rem)"
