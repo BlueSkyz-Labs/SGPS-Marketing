@@ -14,7 +14,8 @@
   "root_cause": "Playwright's webServer default shutdown SIGKILLs the runner's process group. `astro preview` runs as a daemon in its own process group, so it survived, and scripts/run-preview.mjs never got the SIGTERM that runs `astro preview stop`.",
   "rule": "Playwright stops the local preview with SIGTERM (webServer.gracefulShutdown) so the runner can stop the astro preview daemon before exiting.",
   "source": {
-    "commit": "pending",
+    "commit": "65b4ee9",
+    "pr": 688,
     "repo": "SGPS-Marketing"
   },
   "state": "GUARDED",
