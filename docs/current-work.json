@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.0",
-  "updatedAt": "2026-10-23",
+  "updatedAt": "2026-10-24",
   "program": "SGPS Premium Experience & Design Excellence v2.0 (God-Tier × Tier S+)",
   "status": "sgps-v2-in-progress",
   "authorities": {
@@ -364,6 +364,12 @@
       "name": "Experience audit wave 2026-10-20 (ACQ-01..12, TRU-01..15; source wave merged). G10 #650 (0cfa331), unprotected #647 (cab905d), #648 (842725c), #657 (7d586cd), #651 (f6e2067), #649 (94763a3), and protected #645 (96de169), #652 (39be0ae), #653 (e7edff2), #654 (edf79f7), #655 (4322aa4), #656 (ebe5b50) are merged; delivery-ops #659 (239ad24) is merged. Production EN/VI read-back recorded separately. Source merges and HTTP/HTML observations do not establish the served Worker SHA or Human E4. Residuals: stale visual baselines since #637, privacy as a self-only security source (TRU-12), #655 word-cap loosening, pageloadId allowance on one observation",
       "status": "MERGED",
       "evidence": "docs/evidence/2026-10-23-w1-audit-wave-production-readback.md"
+    },
+    {
+      "id": "wave-g-quiet-luxury-touchpoints-2026-10-24",
+      "name": "Wave G quiet-luxury touchpoints + Vững Tay Lái listing + lessons (2026-10-24). Drafts open, none merged: G1 #677 (Journey editorial craft), G2 #678 (single Dateline role; carries G1), G3-A #680 (product ledger, no numerals), G3-B #679 (trust ledger), VTL #681 (Vững Tay Lái listed at In development, no app or store link while the VungTayLai Product Truth LOCK holds), lessons #682 (LSN-001 schema fix, LSN-002 recurrence guard, LSN-003 preview hygiene, LSN-004 brief cites decisions). Pre-stack #675, #676, #674 carry the owner-approved label with green CI and await the Owner's merge. llms.txt Beta label #683 is merged and read back on production. Each draft fails Quality Gates only at merge-policy (protected paths, no label); Browser Assurance is skipped downstream, so no exact-head browser or Lighthouse PASS exists yet for the stack. Visual baselines refresh only from CI first-attempt actuals after the label.",
+      "status": "IN_PROGRESS",
+      "evidence": "docs/superpowers/plans/2026-10-24-wave-g-quiet-luxury-touchpoints.md"
     }
   ],
   "openOwnerDecisions": [
@@ -396,6 +402,16 @@
       "id": "tru-12-privacy-source",
       "question": "TRU-12: dropping privacy as a source of the security claim leaves the claim citing only itself. Add a second independent source, or set a rule that a self-only chain is acceptable for this claim.",
       "blocks": ["tru-12-source-fit"]
+    },
+    {
+      "id": "wave-g-stack-landing",
+      "question": "Merge #675 then #676 then #674 (labelled, green), then add owner-approved to #677, #678, #679, #680, #681, #682 in that order; agents never add or bypass the label and the Owner merges gated PRs.",
+      "blocks": ["wave-g-quiet-luxury-touchpoints-2026-10-24"]
+    },
+    {
+      "id": "vungtaylai-listing-copy",
+      "question": "Vững Tay Lái listing (#681): keep featuredTier featured or move to ecosystem; approve or rewrite the VI phrase 'câu trả lời ưu tiên độ tự tin' (confidence-first answers); decide whether the home hero sentence and PRODUCT_META get Vững Tay Lái copy (new copy in four locales, none invented by agents); confirm no app, sign-in or store link until the VungTayLai Product Truth LOCK is lifted.",
+      "blocks": ["vungtaylai-listing-publication"]
     }
   ],
   "residualExternal": [
@@ -412,6 +428,7 @@
     "Lane-helguard guard: helper now emits 'LOCAL-AHEAD skip' and exits 0 on local-ahead branches; reset incident documented (operational, not committed)."
   ],
   "nextActionable": [
+    "2026-10-24 wave G stack: after each Owner merge of #675, #676, #674, merge main into the remaining branches and push; after each label, read the first CI attempt, refresh visual baselines only from inspected first-attempt actuals, un-draft #677 then #678, re-run the production read-back after each deploy. Lessons #682 flips LSN-004 to GUARDED once #680 merges. Audit loop on main reached saturation on 2026-10-24: pnpm audit clean, the six open issues keep their earlier blockers.",
     "2026-10-22 content-platform design docs/superpowers/specs/2026-10-22-journey-blog-content-platform-design.md: Owner decided D-1..D-9 in session (section 13): Journey = existing Journal relabelled Journey/Hanh trinh, Blog VI+EN capped at 4/month, CODEOWNERS publisher, no auto-merge, Content-Signal search=yes ai-input=yes ai-train=no, GitHub-native pipeline, author Tony. Next: W1 source wave is MERGED; integrate the W1 read-back record by PR, then P1 (Journey live: J2b release record from Owner input, J3 launch post, J5 topic post, J4 product post, RSS, Article JSON-LD, author registry, product-page latest-update line). Search Console J0 is an Owner statement until evidence is recorded.",
     "2026-10-21 successor plan docs/superpowers/plans/2026-10-21-next-waves.md: wave-4 protected PRs all MERGED: #652 (39be0ae), #653 (e7edff2), #654 (edf79f7), #655 (4322aa4), #659 (239ad24), #645 (96de169), #656 (ebe5b50). Next: W1 source wave is MERGED; read-back record PR integration is pending. Then W2 measure the shard split, W3 visual baseline refresh (protected), W4 C3-G native prototype draft (not shipped), W5 #290 ledger, W6 hygiene. Owner-gated items are listed in its section 2.",
     "Owner decisions 2026-10-20: (1) RUM option A, keep Cloudflare Web Analytics and state the observed beacon fields in the privacy notice (merged #643 bfc34c5, production read back 2026-10-20 in en/vi/zh; vi word cap 210 to 225 for it; zh/zh-Hant not native-reviewed); the contract and identifier-guard allowance for pageloadId follow in a protected PR. (2) Human E4 deferred by the Owner. (3) zh and zh-Hant stay live but are not promoted until a native review. (4) P2-6: typography comparison renders first, then decide. (5) BB-02: recapture real Sổ Trọ UI at mobile size with synthetic data, approved. (6) BB-03: lockup renders for Owner review first. (7) Spatial/WebGL: a small, separately budgeted experiment approved; NO-GO remains a valid outcome.",
