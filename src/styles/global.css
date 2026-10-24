@@ -1602,21 +1602,6 @@ html[data-intent] [data-journey-bar] li[data-evidence-first="true"] a {
     0 2px 4px rgba(11, 16, 32, 0.06), 0 18px 44px -18px rgba(11, 16, 32, 0.24);
 }
 
-.trust-ledger-card {
-  box-shadow: var(--elevation-1);
-  transition:
-    box-shadow var(--motion-normal) var(--motion-ease-standard),
-    border-color var(--motion-normal) var(--motion-ease-standard);
-}
-.trust-ledger-card:hover {
-  box-shadow: var(--elevation-2);
-  border-color: color-mix(
-    in srgb,
-    var(--brand-cobalt) 30%,
-    var(--border-subtle)
-  );
-}
-
 .evidence-passport {
   box-shadow: var(--elevation-1);
 }

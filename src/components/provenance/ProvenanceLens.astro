@@ -1,6 +1,6 @@
 ---
 import { getPublicProvenance } from "@/lib/provenance-lens";
-import { formatDisplayDate } from "@/lib/display-date";
+import Dateline from "@/components/shared/Dateline.astro";
 import type { Language } from "@/lib/i18n";
 
 /**
@@ -83,9 +83,7 @@ const labels = LABELS[lang];
     {view.freshness && (
       <p class="c4-provenance__freshness">
         {labels.freshness}:{" "}
-        <time datetime={view.freshness}>
-          {formatDisplayDate(view.freshness, lang)}
-        </time>
+        <Dateline iso={view.freshness} lang={lang} class="dateline--inherit" />
       </p>
     )}
 

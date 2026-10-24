@@ -81,7 +81,7 @@ const founderLocation =
   </section>
 )}
 <p class="about-founded" data-organization-founding-year>
-  {labelFor(SHARED_LABELS.operatingSince, lang)}{" "}
+  {labelFor(SHARED_LABELS.operatingSince, lang)} {/* dateline-exempt: year */}
   <time datetime={String(SITE.operatingSinceYear)}>
     {SITE.operatingSinceYear}
   </time>
