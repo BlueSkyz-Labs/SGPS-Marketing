@@ -15,6 +15,13 @@ sources:
   - https://tuoitre.vn/nam-2026-nguoi-cho-thue-nha-phai-chiu-thue-gia-tri-gia-tang-nhu-the-nao-20260114165921867.htm
   - https://baochinhphu.vn/quy-dinh-doi-tuong-su-dung-hoa-don-dien-tu-10226070308163723.htm
 ownerApproval: https://github.com/BlueSkyz-Labs/SGPS-Marketing/pull/671
+hero:
+  src: /images/journal/thue-cho-thue-tro-2026/hero.vi.webp
+  alt: "Minh hoạ nét khắc: dãy phòng trọ hai tầng, cuốn sổ ghi chép và thước đo có vạch ngưỡng 1 tỷ đồng."
+  caption: "Ngưỡng doanh thu 1 tỷ đồng/năm áp dụng từ ngày 1/1/2026."
+infographic:
+  src: /images/journal/thue-cho-thue-tro-2026/infographic.vi.webp
+  alt: "Infographic tóm tắt: ngưỡng 1 tỷ đồng/năm từ 1/1/2026; các mốc 10/12/2025 và 29/4/2026; trên ngưỡng, thuế TNCN 5% phần vượt và thuế GTGT 5% trên doanh thu; ví dụ doanh thu 1,2 tỷ đồng thì thuế TNCN 10 triệu đồng; cho thuê bất động sản không bắt buộc dùng hoá đơn điện tử."
 draft: false
 ---
 

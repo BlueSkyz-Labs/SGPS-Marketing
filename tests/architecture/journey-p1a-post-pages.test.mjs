@@ -39,8 +39,21 @@ const BASE = {
   sources: ["https://example.org/source", "ev-products-route"],
   ownerApproval: APPROVAL,
 };
-const parse = (overrides = {}) =>
-  journalEntrySchema.parse({ ...BASE, ...overrides });
+/** Press standard R2: a published post carries both figures for its own id and lang. */
+const art = (id, lang, name) => ({
+  src: `/images/journal/${id}/${name}.${lang}.webp`,
+  alt: "A fixture figure description long enough for the schema.",
+});
+const parse = (overrides = {}) => {
+  const lang = overrides.lang ?? BASE.lang;
+  const id = overrides.id ?? BASE.id;
+  return journalEntrySchema.parse({
+    ...BASE,
+    hero: art(id, lang, "hero"),
+    infographic: art(id, lang, "infographic"),
+    ...overrides,
+  });
+};
 const wrap = (...entries) => entries.map((data) => ({ data }));
 const pair = (overrides = {}) => [
   parse(overrides),
@@ -55,8 +68,8 @@ test("the author registry holds the Owner-directed copy verbatim", () => {
   assert.equal(tony.name, "Tony Nguyen");
   assert.equal(tony.role.vi, "Nhà sáng lập kiêm CEO");
   assert.equal(tony.role.en, "Founder & CEO");
-  assert.equal(tony.avatarAlt.vi, "Chân dung phác họa Tony Nguyen");
-  assert.equal(tony.avatarAlt.en, "Sketch portrait of Tony Nguyen");
+  assert.equal(tony.avatarAlt.vi, "Chân dung nét khắc Tony Nguyen");
+  assert.equal(tony.avatarAlt.en, "Line-engraving portrait of Tony Nguyen");
   assert.equal(tony.aboutPath.vi, "/vi/about/");
   assert.equal(tony.aboutPath.en, "/en/about/");
   assert.equal(
@@ -105,7 +118,7 @@ test("the avatar is a committed, EXIF-free WebP pair with honest provenance", ()
   );
   assert.equal(
     tony.avatarProvenance,
-    "Pencil-sketch illustration derived from a portrait photograph supplied by the Owner, made at the Owner's request (2026-10-23) by deterministic local image processing (no generative model); background replaced with a brand tint, circular crop.",
+    "Line-engraving (hedcut-style) illustration derived from a portrait photograph supplied by the Owner, made at the Owner's request (2026-10-24: art, not the original photo) by deterministic local image processing (tools/journal-art/hedcut.py, no generative model); brand ink on a porcelain tint, circular crop, cobalt ring.",
   );
 });
 
@@ -282,7 +295,14 @@ test("BlogPosting JSON-LD reuses the Organization node and cites only https sour
     image: "https://blueskyzlabs.com/images/authors/tony-nguyen-512.webp",
   });
   assert.deepEqual(node.citation, ["https://example.org/source"]);
-  assert.equal("image" in node, false, "the avatar is not the article image");
+  // Press standard R3: the article image is the stamped hero share render,
+  // never the avatar; the rights holder is the publisher Organization.
+  assert.equal(
+    node.image,
+    "https://blueskyzlabs.com/images/journal/fixture-post/hero.vi.og.jpg",
+  );
+  assert.equal(node.copyrightHolder["@id"], organizationId(SITE_URL));
+  assert.equal(node.copyrightYear, 2026);
   // dateModified falls back to datePublished.
   assert.equal(blogPostingJsonLd(parse(), SITE_URL).dateModified, "2026-10-03");
   // Safe to embed: the layout's serializer escapes `<`.
@@ -338,10 +358,16 @@ test("UI copy exists for vi and en only", () => {
   assert.deepEqual(Object.keys(JOURNAL_POST_COPY).sort(), ["en", "vi"]);
   assert.equal(JOURNAL_POST_COPY.vi.published, "Đăng ngày");
   assert.equal(JOURNAL_POST_COPY.en.aboutAuthor, "About the author");
-  assert.equal(
-    JOURNAL_POST_COPY.en.aiDisclosure,
-    "Drafted with AI assistance; reviewed and approved by the author.",
-  );
+  // Owner, 2026-10-24: no AI-assistance line is rendered; aiAssisted stays an
+  // internal record. Press standard R1: credit, summary heading, rights line.
+  for (const lang of ["vi", "en"]) {
+    assert.equal("aiDisclosure" in JOURNAL_POST_COPY[lang], false, lang);
+    assert.match(
+      JOURNAL_POST_COPY[lang].copyright,
+      /^© \{year\} BlueSkyz Labs\. /,
+    );
+    assert.match(JOURNAL_POST_COPY[lang].figureCredit, /BlueSkyz Labs$/);
+  }
 });
 
 // ---- route and wiring invariants (source level, with negative proofs) ---------
@@ -401,7 +427,11 @@ test("index items link to their post page; the post page shows the required part
     "<PageHeader",
     "data-journal-published",
     "data-journal-updated",
-    "data-journal-ai-disclosure",
+    "data-journal-hero",
+    'fetchpriority="high"',
+    "data-journal-infographic",
+    "data-journal-credit",
+    "data-journal-rights",
     "data-journal-sources",
     'rel="noopener"',
     "data-journal-author",
@@ -411,7 +441,7 @@ test("index items link to their post page; the post page shows the required part
   ]) {
     assert.ok(post.includes(marker), marker);
   }
-  assert.match(post, /entry\.aiAssisted \?/);
+  assert.doesNotMatch(post, /aiAssisted|ai-disclosure|aiDisclosure/);
   assert.doesNotMatch(post, /<script/);
 });
 
