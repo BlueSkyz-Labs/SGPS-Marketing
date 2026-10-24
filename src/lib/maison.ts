@@ -1,4 +1,5 @@
 import { getFooterLinks, type Language } from "../data/site.ts";
+import type { PublishedProbe } from "./journal-nav.ts";
 
 /**
  * C4-B G1 — Maison information architecture adapter.
@@ -28,11 +29,11 @@ export const MAISON_ORDER: readonly MaisonSectionId[] = [
 /**
  * Sections that have no resolvable public route yet. They stay in the house
  * order but are omitted from output — an edition may curate only items that
- * actually resolve.
+ * actually resolve. Empty since the Journey link joined the approved footer
+ * helper (IX-02): the journal now resolves through it, per language, and is
+ * omitted for a language with no published post of its own.
  */
-export const MAISON_PENDING_SECTIONS: readonly MaisonSectionId[] = [
-  "journal",
-] as const;
+export const MAISON_PENDING_SECTIONS: readonly MaisonSectionId[] = [] as const;
 
 /**
  * Which approved footer link backs each live section. `proof` reads as the
@@ -42,6 +43,7 @@ const SECTION_ROUTE_KEY: Readonly<Partial<Record<MaisonSectionId, string>>> =
   Object.freeze({
     products: "products",
     proof: "security",
+    journal: "journal",
     studio: "about",
   });
 
@@ -50,8 +52,11 @@ const SECTION_ROUTE_KEY: Readonly<Partial<Record<MaisonSectionId, string>>> =
  * whose backing route is absent from the approved helper is dropped, never
  * given a synthesized href.
  */
-export function getMaisonSections(lang: Language): MaisonSection[] {
-  const approved = getFooterLinks(lang);
+export function getMaisonSections(
+  lang: Language,
+  journalEntries: readonly PublishedProbe[] = [],
+): MaisonSection[] {
+  const approved = getFooterLinks(lang, journalEntries);
   const sections: MaisonSection[] = [];
 
   for (const id of MAISON_ORDER) {
