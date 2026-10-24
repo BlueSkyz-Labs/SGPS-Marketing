@@ -13,6 +13,16 @@ export async function getPublicProducts(): Promise<ProductEntry[]> {
   );
 }
 
+/**
+ * OG-3: the proof media a surface may render. Identity art on tagline hold
+ * (`proof.media.taglineHold`) is never displayed, on any surface.
+ */
+export function displayableMedia(
+  media: ProductEntry["data"]["proof"]["media"],
+): ProductEntry["data"]["proof"]["media"] {
+  return media && !media.taglineHold ? media : undefined;
+}
+
 export async function getFlagshipProduct(): Promise<ProductEntry | null> {
   return (
     (await getPublicProducts()).find(

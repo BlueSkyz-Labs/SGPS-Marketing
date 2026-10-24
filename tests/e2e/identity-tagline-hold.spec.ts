@@ -27,6 +27,19 @@ test.describe("identity art with a held tagline", () => {
     });
   }
 
+  // The hold lives in one helper (displayableMedia), so it also covers the
+  // home flagship theatre and any future surface that renders proof media.
+  for (const lang of LOCALES) {
+    test(`${lang}: the home page never points at the held identity art`, async ({
+      page,
+    }) => {
+      await page.goto(`/${lang}/`);
+      expect(await page.content()).not.toContain(
+        "/products/vungtaylai/identity",
+      );
+    });
+  }
+
   test("Sổ Trọ keeps its identity strip (no hold)", async ({ page }) => {
     await page.goto("/en/products/sotro/");
     await expect(page.locator("[data-profile-identity-stage]")).toHaveCount(1);
