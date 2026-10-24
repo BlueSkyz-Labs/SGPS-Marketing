@@ -26,6 +26,9 @@ proof:
     alt: Vững Tay Lái by BlueSkyz Labs — brand identity
     width: 1800
     height: 504
+    # OG-3: the art reads "AI Driving Coach"; Product Truth V0 has no remote
+    # runtime AI dependency, so the profile page does not show it.
+    taglineHold: true
   repositoryUrl: https://github.com/BlueSkyz-Labs/VungTayLai
   publicUrl: https://blueskyzlabs.com/en/products/vungtaylai/
   privacyUrl: https://blueskyzlabs.com/en/privacy/
