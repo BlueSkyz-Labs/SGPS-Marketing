@@ -59,7 +59,12 @@ export interface JournalPostCopy {
   published: string;
   updated: string;
   sources: string;
-  aiDisclosure: string;
+  /** Credit under every journal figure (press standard R1, R3). */
+  figureCredit: string;
+  /** Heading of the end-of-article summary infographic (press standard R1). */
+  summary: string;
+  /** Closing rights line; `{year}` is the post's publication year. */
+  copyright: string;
   aboutAuthor: string;
   backToJournal: string;
   rss: string;
@@ -70,8 +75,9 @@ export const JOURNAL_POST_COPY: Record<"vi" | "en", JournalPostCopy> = {
     published: "Đăng ngày",
     updated: "Cập nhật",
     sources: "Nguồn",
-    aiDisclosure:
-      "Bài viết có sự hỗ trợ của AI khi soạn nháp; nội dung đã được tác giả kiểm tra và duyệt.",
+    figureCredit: "Minh hoạ: BlueSkyz Labs",
+    summary: "Tóm tắt",
+    copyright: "© {year} BlueSkyz Labs. Bảo lưu mọi quyền.",
     aboutAuthor: "Về tác giả",
     backToJournal: "Tất cả bài viết",
     rss: "RSS",
@@ -80,8 +86,9 @@ export const JOURNAL_POST_COPY: Record<"vi" | "en", JournalPostCopy> = {
     published: "Published",
     updated: "Updated",
     sources: "Sources",
-    aiDisclosure:
-      "Drafted with AI assistance; reviewed and approved by the author.",
+    figureCredit: "Illustration: BlueSkyz Labs",
+    summary: "In brief",
+    copyright: "© {year} BlueSkyz Labs. All rights reserved.",
     aboutAuthor: "About the author",
     backToJournal: "All posts",
     rss: "RSS",

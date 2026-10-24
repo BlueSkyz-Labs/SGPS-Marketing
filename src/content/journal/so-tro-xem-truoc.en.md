@@ -10,6 +10,13 @@ aiAssisted: true
 sources:
   - https://blueskyzlabs.com/en/products/sotro/
 ownerApproval: https://github.com/BlueSkyz-Labs/SGPS-Marketing/pull/671
+hero:
+  src: /images/journal/so-tro-xem-truoc/hero.en.webp
+  alt: "Sổ Trọ screenshots: the Collect rent page on desktop and two phone screens, Today and Collect rent."
+  caption: "Screenshots captured on 30 September 2026 from a test build with sample data."
+infographic:
+  src: /images/journal/so-tro-xem-truoc/infographic.en.webp
+  alt: "Summary infographic: four things Sổ Trọ does for landlords (see it at a glance, record each payment once, everything in one place, large text and big buttons) and where it stands: web in preview, Android and iOS in development."
 draft: false
 ---
 
