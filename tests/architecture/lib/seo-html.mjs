@@ -241,7 +241,45 @@ const APP_KEYS = new Set([
   "operatingSystem",
   "publisher",
   "image",
+  "screenshot",
 ]);
+
+/**
+ * Problems in a SoftwareApplication `screenshot` list. Screens may only come
+ * from the page's own origin and the product's own showcase folder (real captures of the showcase
+ * record); the exact match against that record is the dist spec's job
+ * (tests/e2e/seo-media-dist.spec.ts).
+ */
+export function screenshotProblems(screenshot, slug, appUrl) {
+  if (screenshot === undefined) return [];
+  if (!Array.isArray(screenshot) || screenshot.length === 0) {
+    return ["screenshot is not a non-empty list"];
+  }
+  const problems = [];
+  for (const [i, shot] of screenshot.entries()) {
+    if (shot?.["@type"] !== "ImageObject") {
+      problems.push(`screenshot[${i}] is not an ImageObject`);
+      continue;
+    }
+    let url;
+    try {
+      url = new URL(String(shot.url));
+    } catch {
+      problems.push(`screenshot[${i}] url ${shot.url}`);
+      continue;
+    }
+    if (
+      url.origin !== new URL(String(appUrl), "https://invalid.test").origin ||
+      !url.pathname.startsWith(`/products/${slug}/showcase/`)
+    ) {
+      problems.push(`screenshot[${i}] url ${shot.url}`);
+    }
+    if (!Number.isInteger(shot.width) || !Number.isInteger(shot.height)) {
+      problems.push(`screenshot[${i}] size`);
+    }
+  }
+  return problems;
+}
 
 /** Problems where a SoftwareApplication node departs from its registry record. */
 export function appRegistryProblems(app, facts, lang) {
@@ -265,6 +303,7 @@ export function appRegistryProblems(app, facts, lang) {
   for (const key of Object.keys(app)) {
     if (!APP_KEYS.has(key)) problems.push(`non-registry key ${key}`);
   }
+  problems.push(...screenshotProblems(app.screenshot, facts.slug, app.url));
   return problems;
 }
 
