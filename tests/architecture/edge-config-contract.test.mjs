@@ -3,8 +3,7 @@
  * behaviour (Cloudflare applying _headers / _redirects) is verified post-deploy.
  */
 import assert from "node:assert/strict";
-import { existsSync, readdirSync, readFileSync } from "node:fs";
-import { join } from "node:path";
+import { readFileSync } from "node:fs";
 import test from "node:test";
 
 const LOCALES = ["en", "vi", "zh", "zh-hant"];
@@ -46,39 +45,26 @@ test("G8: the global security headers rule is intact", () => {
   }
 });
 
-function walk(dir) {
-  const out = [];
-  for (const e of readdirSync(dir, { withFileTypes: true })) {
-    const p = join(dir, e.name);
-    if (e.isDirectory()) out.push(...walk(p));
-    else if (e.name === "index.html") out.push(dir);
-  }
-  return out;
-}
+// Route coverage (every built localized route has an exact one-hop 301) needs
+// dist/, so it runs post-build in scripts/check-static-links.mjs; this suite
+// runs before the build in Quality Gates.
+test("G14: the post-build static-links check owns the no-slash 301 coverage", () => {
+  const script = readFileSync("scripts/check-static-links.mjs", "utf8");
+  assert.match(script, /public\/_redirects/);
+  assert.match(script, /missing "\$\{route\} \$\{finalDest\} 301"/);
+});
 
-test("G14: every built localized route has an exact one-hop 301 from its no-slash form", () => {
-  assert.ok(existsSync("dist"), "run the build first");
-  const rules = new Map(
-    readFileSync("public/_redirects", "utf8")
-      .split(/\r?\n/)
-      .map((l) => l.trim())
-      .filter((l) => l && !l.startsWith("#"))
-      .map((l) => l.split(/\s+/))
-      .map(([from, to, status]) => [from, { to, status }]),
-  );
-  const routes = walk("dist")
-    .map((d) => d.slice("dist".length).replace(/\\/g, "/"))
-    .filter((p) => LOCALES.some((l) => p.startsWith(`/${l}/`)));
-  assert.ok(routes.length > 50, "localized routes must be discovered");
-  for (const route of routes) {
-    const rule = rules.get(route);
-    assert.ok(rule, `missing no-slash redirect for ${route}`);
-    assert.equal(rule.status, "301", `${route} must be 301`);
-    const finalDest = rules.get(`${route}/`)?.to ?? `${route}/`;
-    assert.equal(
-      rule.to,
-      finalDest,
-      `${route} must reach its final URL in one hop`,
+test("G14: the four locale roots keep their 301", () => {
+  const rules = readFileSync("public/_redirects", "utf8")
+    .split(/\r?\n/)
+    .map((l) => l.trim().split(/\s+/));
+  for (const lang of LOCALES) {
+    assert.ok(
+      rules.some(
+        ([from, to, status]) =>
+          from === `/${lang}` && to === `/${lang}/` && status === "301",
+      ),
+      `/${lang} must 301 to /${lang}/`,
     );
   }
 });
