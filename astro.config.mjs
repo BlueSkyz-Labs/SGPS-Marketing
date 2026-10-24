@@ -4,6 +4,7 @@ import cjkHeadingBreaks from "./src/integrations/cjk-heading-breaks.mjs";
 import localizedNotFound from "./src/integrations/localized-not-found.mjs";
 import { execSync } from "node:child_process";
 import { mkdirSync, writeFileSync } from "node:fs";
+import { fileURLToPath } from "node:url";
 
 const site = process.env.PUBLIC_SITE_URL?.trim() || "http://localhost:4321";
 
@@ -11,12 +12,17 @@ const site = process.env.PUBLIC_SITE_URL?.trim() || "http://localhost:4321";
  * WP-12 (LSN-marketing-002): stamp the build with the built commit.
  * Writes .astro/build-commit (git-ignored, outside the deployed dist/) at
  * build done. If git is unavailable, writes "unknown". Never fails the build.
+ * 2026-10-24 recurrence: local builds (not CI / Workers Builds) also write the
+ * commit to dist/.well-known/build-commit so global-setup can verify the
+ * SERVED build on a loopback PLAYWRIGHT_BASE_URL. The file holds only the
+ * commit sha (public on GitHub) and is never emitted by CI, so deployments
+ * do not carry it.
  */
 function buildStamp() {
   return {
     name: "build-stamp",
     hooks: {
-      "astro:build:done": () => {
+      "astro:build:done": ({ dir }) => {
         let commit = "unknown";
         try {
           commit = execSync("git rev-parse HEAD", {
@@ -31,6 +37,23 @@ function buildStamp() {
           writeFileSync(".astro/build-commit", commit + "\n", "utf8");
         } catch {
           // Filesystem write failed: do not fail the build.
+        }
+        if (
+          commit !== "unknown" &&
+          !process.env.CI &&
+          !process.env.WORKERS_CI
+        ) {
+          try {
+            const target = fileURLToPath(
+              new URL(".well-known/build-commit", dir),
+            );
+            mkdirSync(fileURLToPath(new URL(".well-known/", dir)), {
+              recursive: true,
+            });
+            writeFileSync(target, commit + "\n", "utf8");
+          } catch {
+            // Filesystem write failed: do not fail the build.
+          }
         }
       },
     },
