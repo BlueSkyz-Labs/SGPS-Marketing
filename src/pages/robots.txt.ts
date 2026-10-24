@@ -22,6 +22,11 @@ const AI_CRAWLERS = [
   "cohere-ai",
 ];
 
+// Owner decision D-7 (journey-blog design spec section 13): Cloudflare Content
+// Signals Policy, production only. A crawler obeys only the group that names
+// it, so every Allow group (the wildcard and each named AI crawler) carries it.
+const CONTENT_SIGNAL = "Content-Signal: search=yes, ai-input=yes, ai-train=no";
+
 export const GET: APIRoute = () => {
   const disallowIndexing = isNonProductionSiteUrl(SITE.url);
   const sitemap = absoluteUrl(SITE.url, "/sitemap.xml");
@@ -29,9 +34,15 @@ export const GET: APIRoute = () => {
     ? ["User-agent: *", "Disallow: /", ""].join("\n")
     : [
         "User-agent: *",
+        CONTENT_SIGNAL,
         "Allow: /",
         "",
-        ...AI_CRAWLERS.flatMap((bot) => [`User-agent: ${bot}`, "Allow: /", ""]),
+        ...AI_CRAWLERS.flatMap((bot) => [
+          `User-agent: ${bot}`,
+          CONTENT_SIGNAL,
+          "Allow: /",
+          "",
+        ]),
         `Sitemap: ${sitemap}`,
         "",
       ].join("\n");
