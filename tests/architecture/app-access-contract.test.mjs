@@ -2,6 +2,11 @@
  * Owner 2026-09-28: only Sổ Trọ and Sổ Tâm are published, and each shows an
  * "app access" block — a direct sign-in link once the Owner supplies it, and
  * native Android/iOS apps that stay "in development" until store-listed.
+ * Owner 2026-10-24 adds Vững Tay Lái at the In-development state. Its Product
+ * Truth keeps public launch BLOCKED and forbids accounts and native apps, so
+ * it is the one published product with NO appAccess block (no sign-in URL, no
+ * store URL); it is exempt from the sign-in and Android/iOS rules below and is
+ * held to the stricter "no appAccess" rule instead.
  */
 import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
@@ -9,7 +14,10 @@ import { join } from "node:path";
 import { test } from "node:test";
 
 const DIR = "src/content/products";
-const PUBLISHED = ["sotam", "sotro"];
+const PUBLISHED = ["sotam", "sotro", "vungtaylai"];
+// Products whose Product Truth forbids accounts and native apps (2026-10-24).
+const NO_APP_ACCESS = ["vungtaylai"];
+const WITH_APP_ACCESS = PUBLISHED.filter((s) => !NO_APP_ACCESS.includes(s));
 
 const records = readdirSync(DIR)
   .filter((f) => f.endsWith(".yaml"))
@@ -32,7 +40,7 @@ export function mobileViolations(text) {
     .map((a) => a.key);
 }
 
-test("only Sổ Trọ and Sổ Tâm are published", () => {
+test("only Sổ Trọ, Sổ Tâm and Vững Tay Lái are published", () => {
   const published = records
     .filter(([, text]) => /^public:\s*true\s*$/m.test(text))
     .map(([slug]) => slug)
@@ -45,7 +53,7 @@ test("only Sổ Trọ and Sổ Tâm are published", () => {
 });
 
 test("published products declare Android and iOS honestly", () => {
-  for (const slug of PUBLISHED) {
+  for (const slug of WITH_APP_ACCESS) {
     const text = records.find(([s]) => s === slug)[1];
     const keys = mobileStates(text)
       .map((a) => a.key)
@@ -66,7 +74,7 @@ export function signInViolation(slug, text) {
 }
 
 test("sign-in links go to the product's own subdomain", () => {
-  for (const slug of PUBLISHED) {
+  for (const slug of WITH_APP_ACCESS) {
     const text = records.find(([s]) => s === slug)[1];
     assert.equal(signInViolation(slug, text), null, slug);
   }
@@ -111,7 +119,7 @@ export function prematureNativePlatforms(text) {
 }
 
 test("pending native apps cannot appear as supported platforms", () => {
-  for (const slug of PUBLISHED) {
+  for (const slug of WITH_APP_ACCESS) {
     const record = records.find(([key]) => key === slug)?.[1] ?? "";
     assert.deepEqual(prematureNativePlatforms(record), [], slug);
   }
@@ -131,4 +139,36 @@ test("negative proof: prematurely listing a native OS fails", () => {
   );
   assert.notEqual(altered, sotam);
   assert.deepEqual(prematureNativePlatforms(altered), ["android"]);
+});
+
+export function appAccessViolation(text) {
+  const out = [];
+  if (/^appAccess:/m.test(text)) out.push("has an appAccess block");
+  if (/signInUrl:/.test(text)) out.push("has a signInUrl");
+  if (/storeUrl:/.test(text)) out.push("has a storeUrl");
+  if (/^releaseGate:/m.test(text)) out.push("has a releaseGate");
+  return out;
+}
+
+test("Vững Tay Lái is published with no appAccess block (Product Truth)", () => {
+  for (const slug of NO_APP_ACCESS) {
+    const text = records.find(([s]) => s === slug)[1];
+    assert.deepEqual(appAccessViolation(text), [], slug);
+    assert.deepEqual(supportedPlatforms(text), ["web"], slug);
+  }
+});
+
+test("negative proof: a sign-in or store URL on Vững Tay Lái is rejected", () => {
+  const text = records.find(([s]) => s === "vungtaylai")[1];
+  const withSignIn = text.replace(
+    "featuredTier:",
+    "appAccess:\n  signInUrl: https://vungtaylai.blueskyzlabs.com/login\nfeaturedTier:",
+  );
+  assert.notEqual(withSignIn, text);
+  assert.ok(appAccessViolation(withSignIn).length > 0);
+  const withStore = text.replace(
+    "featuredTier:",
+    "appAccess:\n  android:\n    state: available\n    storeUrl: https://play.google.com/x\nfeaturedTier:",
+  );
+  assert.ok(appAccessViolation(withStore).length > 0);
 });

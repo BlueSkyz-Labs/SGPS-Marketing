@@ -32,11 +32,15 @@ proof:
   securityUrl: https://blueskyzlabs.com/en/security/
   supportUrl: https://blueskyzlabs.com/en/support/
 endorsement: A BlueSkyz Labs product
-featuredTier: hidden
-displayOrder: 5
-public: false
-sourceRevision: 228ea827f2af66ee46aea38c6aecb934ec99878c
-lastReviewedAt: 2026-09-27
+featuredTier: featured
+displayOrder: 3
+public: true
+# Owner 2026-10-24 publishes this listing at the In-development state. The
+# product's Product Truth keeps public launch BLOCKED and forbids accounts and
+# native apps, so there is no appAccess block and no link into the running app.
+# sourceRevision is VungTayLai main on that date.
+sourceRevision: 69e43e0d0339a8b741f8eb21b82c92a2a6ed2c32
+lastReviewedAt: 2026-10-24
 # Localized copy: faithful translations of the English claims above; the
 # English record stays canonical for claim/proof binding. Native VI/ZH review
 # is an Owner feedback checkpoint (plan v5 W3.4).
