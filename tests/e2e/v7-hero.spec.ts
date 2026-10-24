@@ -124,7 +124,7 @@ test("the hero keeps the sample-data label and the date, not the revision", asyn
   await page.goto("/en/");
   const caption = page.locator("[data-hero-flagship] figcaption");
   await expect(caption).toContainText("sample data");
-  await expect(caption).toContainText("2026-09-30");
+  await expect(caption).toContainText("2026-10-25");
   await expect(
     page.locator("[data-hero-flagship] [data-flagship-capture]"),
   ).toHaveAttribute("data-capture-revision", /^[0-9a-f]{7}$/);
