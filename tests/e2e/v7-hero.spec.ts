@@ -124,10 +124,19 @@ test("the hero keeps the sample-data label and the date, not the revision", asyn
   await page.goto("/en/");
   const caption = page.locator("[data-hero-flagship] figcaption");
   await expect(caption).toContainText("sample data");
-  await expect(caption).toContainText("2026-09-30");
-  await expect(
-    page.locator("[data-hero-flagship] [data-flagship-capture]"),
-  ).toHaveAttribute("data-capture-revision", /^[0-9a-f]{7}$/);
+  // Wave G2: the visible date goes through Dateline (localized); the ISO
+  // capture date stays pinned on the <time> element and the data hook.
+  await expect(caption).toContainText("September 30, 2026");
+  await expect(caption.locator("time")).toHaveAttribute(
+    "datetime",
+    "2026-09-30",
+  );
+  const capture = page.locator("[data-hero-flagship] [data-flagship-capture]");
+  await expect(capture).toHaveAttribute("data-capture-date", "2026-09-30");
+  await expect(capture).toHaveAttribute(
+    "data-capture-revision",
+    /^[0-9a-f]{7}$/,
+  );
 });
 
 test("product line sits directly under the H1 and names both products as plain text", async ({
