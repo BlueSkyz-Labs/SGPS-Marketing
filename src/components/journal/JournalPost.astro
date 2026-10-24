@@ -1,9 +1,9 @@
 ---
+import Dateline from "@/components/shared/Dateline.astro";
 import Container from "@/components/layout/Container.astro";
 import PageHeader from "@/components/layout/PageHeader.astro";
 import { AUTHORS } from "@/data/authors";
 import { JOURNAL_COPY, JOURNAL_POST_COPY } from "@/data/journal-copy";
-import { formatDate } from "@/lib/i18n";
 import {
   journalFeedPath,
   journalIndexPath,
@@ -73,14 +73,17 @@ const modified =
     >
       <span>
         {post.published}{" "}
-        <time datetime={entry.datePublished} data-journal-published>
-          {formatDate(lang, entry.datePublished)}
-        </time>
+        <Dateline
+          iso={entry.datePublished}
+          lang={lang}
+          class="dateline--inherit"
+          data-journal-published
+        />
       </span>
       {modified ? (
         <span data-journal-updated>
           {post.updated}{" "}
-          <time datetime={modified}>{formatDate(lang, modified)}</time>
+          <Dateline iso={modified} lang={lang} class="dateline--inherit" />
           {entry.updateNote ? <span>{` · ${entry.updateNote}`}</span> : null}
         </span>
       ) : null}

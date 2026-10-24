@@ -1,0 +1,56 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import { formatDate, type Language } from "@/lib/i18n";
+
+/**
+ * Wave G2: the one role for a visible date.
+ *
+ * The authored ISO date stays in `<time datetime>`; the visible text is the
+ * locale display of that date. Non-ISO input is returned unchanged by
+ * `formatDate` (never guessed). No clock, no client script. `label` is an
+ * existing string supplied by the caller; it renders before the date inside
+ * the same `.dateline` element.
+ *
+ * Guarded by tests/architecture/wg-dateline-single-role.test.mjs: every other
+ * time element in the Astro sources must be a year-only element marked with
+ * the exemption token.
+ */
+interface Props extends Omit<HTMLAttributes<"time">, "datetime" | "class"> {
+  iso: string;
+  lang: Language;
+  label?: string;
+  class?: string;
+}
+
+const { iso, lang, label, class: className, ...rest } = Astro.props;
+const text = formatDate(lang, iso);
+const classes = ["dateline", className].filter(Boolean).join(" ");
+---
+
+{label ? (
+  <span class={classes}>
+    {label}{" "}
+    <time datetime={iso} {...rest}>
+      {text}
+    </time>
+  </span>
+) : (
+  <time datetime={iso} class={classes} {...rest}>
+    {text}
+  </time>
+)}
+
+<style is:global>
+  /* :where() keeps specificity at zero so a caller's class can override. */
+  :where(.dateline) {
+    font-variant-numeric: tabular-nums;
+    font-size: var(--c4-type-meta);
+    color: var(--text-secondary);
+    letter-spacing: 0.01em;
+  }
+  /* Inline in a sentence or label that already sets its own size and tone. */
+  :where(.dateline--inherit) {
+    font-size: inherit;
+    color: inherit;
+  }
+</style>

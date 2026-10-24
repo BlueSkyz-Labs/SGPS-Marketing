@@ -495,18 +495,25 @@ test("D-20: display dates localize per locale and keep ISO in the datetime attri
     ["src/components/editorial/EditionStory.astro", "view.published"],
   ]) {
     const source = read(file);
+    // Wave G2: these surfaces no longer own `<time>` markup; the shared
+    // Dateline renders `<time datetime={iso}>` and the localized text. The
+    // truth intent is unchanged: the authored ISO value is what reaches the
+    // component, and the raw ISO is never printed as the visible text.
     assert.match(
       source,
-      new RegExp(`datetime=\\{${iso.replace(".", "\\.")}\\}`),
+      new RegExp(`<Dateline[^>]*iso=\\{${iso.replace(".", "\\.")}\\}`),
       file,
     );
-    assert.match(source, /formatDisplayDate\(/, file);
+    assert.doesNotMatch(source, /<time[\s>]/, `${file} keeps no raw <time>`);
     assert.doesNotMatch(
       source,
-      new RegExp(`>\\s*\\{${iso.replace(".", "\\.")}\\}\\s*</time>`),
+      new RegExp(`>\\s*\\{${iso.replace(".", "\\.")}\\}\\s*</`),
       `${file} must not print the raw ISO date`,
     );
   }
+  const dateline = read("src/components/shared/Dateline.astro");
+  assert.match(dateline, /<time datetime=\{iso\}/);
+  assert.match(dateline, /formatDate\(lang, iso\)/);
 });
 
 /* ------------------------------------------------------------------ */
