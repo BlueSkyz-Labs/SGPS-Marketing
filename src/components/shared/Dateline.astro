@@ -7,9 +7,8 @@ import { formatDate, type Language } from "@/lib/i18n";
  *
  * The authored ISO date stays in `<time datetime>`; the visible text is the
  * locale display of that date. Non-ISO input is returned unchanged by
- * `formatDate` (never guessed). No clock, no client script. `label` is an
- * existing string supplied by the caller; it renders before the date inside
- * the same `.dateline` element.
+ * `formatDate` (never guessed), so this component refuses any value that is
+ * not a plain `YYYY-MM-DD` at build time. No clock, no client script.
  *
  * Guarded by tests/architecture/wg-dateline-single-role.test.mjs: every other
  * time element in the Astro sources must be a year-only element marked with
@@ -18,27 +17,22 @@ import { formatDate, type Language } from "@/lib/i18n";
 interface Props extends Omit<HTMLAttributes<"time">, "datetime" | "class"> {
   iso: string;
   lang: Language;
-  label?: string;
   class?: string;
 }
 
-const { iso, lang, label, class: className, ...rest } = Astro.props;
+const { iso, lang, class: className, ...rest } = Astro.props;
+if (!/^\d{4}-\d{2}-\d{2}$/.test(iso)) {
+  throw new Error(
+    `Dateline: "${iso}" is not an ISO YYYY-MM-DD date; render year-only values as a marked time element instead.`,
+  );
+}
 const text = formatDate(lang, iso);
 const classes = ["dateline", className].filter(Boolean).join(" ");
 ---
 
-{label ? (
-  <span class={classes}>
-    {label}{" "}
-    <time datetime={iso} {...rest}>
-      {text}
-    </time>
-  </span>
-) : (
-  <time datetime={iso} class={classes} {...rest}>
-    {text}
-  </time>
-)}
+<time datetime={iso} class={classes} {...rest}>
+  {text}
+</time>
 
 <style is:global>
   /* :where() keeps specificity at zero so a caller's class can override. */

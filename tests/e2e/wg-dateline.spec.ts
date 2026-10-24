@@ -50,24 +50,37 @@ for (const lang of ["en", "vi"] as const) {
   });
 }
 
-test("showcase disclosure shows the localized capture date, the ISO stays in data attributes", async ({
+for (const lang of LOCALES) {
+  test(`${lang}: home capture caption shows the localized capture date, ISO stays in data-capture-date`, async ({
+    page,
+  }) => {
+    await page.goto(`/${lang}/`);
+    const captures = page.locator("[data-capture-date]");
+    const count = await captures.count();
+    expect(count, "home hero has a capture").toBeGreaterThan(0);
+    let checked = 0;
+    for (let i = 0; i < count; i += 1) {
+      const capture = captures.nth(i);
+      const iso = (await capture.getAttribute("data-capture-date")) ?? "";
+      expect(iso).toMatch(ISO);
+      const time = capture.locator(
+        "figcaption .flagship-capture__provenance time[datetime]",
+      );
+      if ((await time.count()) === 0) continue; // label dropped by a sibling
+      await expect(time).toHaveAttribute("datetime", iso);
+      await expect(time).toHaveText(formatDate(lang, iso));
+      await expect(capture.locator("figcaption")).not.toContainText(iso);
+      checked += 1;
+    }
+    expect(checked, "a caption date was checked").toBeGreaterThan(0);
+  });
+}
+
+test("showcase disclosure shows no raw ISO date on a product page", async ({
   page,
 }) => {
-  await page.goto("/en/products/");
-  const slug = (await page.content()).match(
-    /href="\/en\/products\/([a-z0-9-]+)\/"/,
-  )?.[1];
-  expect(slug, "a product profile link").toBeTruthy();
-  await page.goto(`/en/products/${slug}/`);
-  const captures = page.locator("[data-capture-date]");
-  const n = await captures.count();
-  for (let i = 0; i < n; i += 1) {
-    const iso = (await captures.nth(i).getAttribute("data-capture-date")) ?? "";
-    expect(iso).toMatch(ISO);
-    await expect(captures.nth(i)).toContainText(formatDate("en", iso));
-  }
+  await page.goto("/en/products/sotro/");
   const disclosure = page.locator("[data-showcase-disclosure]");
-  if ((await disclosure.count()) > 0) {
-    await expect(disclosure.first()).not.toHaveText(/\d{4}-\d{2}-\d{2}/);
-  }
+  expect(await disclosure.count()).toBeGreaterThan(0);
+  await expect(disclosure.first()).not.toHaveText(/\d{4}-\d{2}-\d{2}/);
 });

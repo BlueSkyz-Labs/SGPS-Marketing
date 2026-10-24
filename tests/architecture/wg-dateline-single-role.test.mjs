@@ -7,22 +7,30 @@ import test from "node:test";
  * Wave G2 guard: a visible date has one role, `Dateline.astro`.
  *
  * Rule 1: a time element (`<time` followed by whitespace, `>` or end of line)
- * may appear only inside `Dateline.astro`, or on a line directly after the
- * exemption comment `dateline-exempt: year` (year-only elements).
+ * may appear only inside `Dateline.astro`, or when the previous line carries
+ * a JSX comment holding the token `dateline-exempt: year` AND the element itself is
+ * year-only (`datetime={String(<x>Year)}` or `datetime="YYYY"`). The token in
+ * an attribute or plain text does not exempt anything.
  *
- * Rule 2: a variable assigned from `...toISOString().slice(0, 10)` must not be
- * printed as visible text: neither interpolated in a template literal
- * (`${var}`) nor as a text child (`{var}` not preceded by `=`). Attribute and
- * prop positions (`data-x={var}`, `iso={var}`) are allowed.
+ * Rule 2: a variable assigned from an ISO-day expression (`toISOString()`
+ * followed by `.slice(0, 10)`, `.substring(0, 10)` or `.split("T")[0]`, or any
+ * `toLocaleDateString(`) must not be printed as visible text: neither
+ * interpolated in a template literal (`${var}`) nor as a text child (`{var}`
+ * not preceded by `=`). Such an expression written inline inside `{...}` or
+ * `${...}` is flagged too. Attribute and prop positions are allowed.
  *
- * Limits (heuristic, source-level): it does not follow the variable through a
- * function call, an object or another file; it ignores `.slice(0, 10)` on
- * values other than `toISOString()`; and rule 1 is a text scan, not a parse,
- * so a time element built by string concatenation would not be seen.
+ * Remaining limits (source-level heuristic, not a parse): the variable is not
+ * followed through a rename (`const b = a`), a function call, an object or
+ * another file; rule 1 is a text scan, so a time element built by string
+ * concatenation is not seen. The dist-level backstop in
+ * wg-dateline-dist.test.mjs covers rendered output when `dist/` exists.
  */
 const ROOT = new URL("../../", import.meta.url).pathname;
 const DATELINE = ["src", "components", "shared", "Dateline.astro"].join("/");
 const EXEMPT = "dateline-exempt: year";
+const YEAR_ONLY = /^\s*<time datetime=(\{String\([\w.]+Year\)\}|"\d{4}")>/;
+const ISO_DAY =
+  "toISOString\\(\\)\\s*(?:\\.slice\\(\\s*0\\s*,\\s*10\\s*\\)|\\.substring\\(\\s*0\\s*,\\s*10\\s*\\)|\\.split\\(\\s*[\"']T[\"']\\s*\\)\\s*\\[\\s*0\\s*\\])";
 
 function* astroFiles(dir) {
   for (const name of readdirSync(dir)) {
@@ -39,16 +47,23 @@ export function datelineProblems(file, source) {
     lines.forEach((line, i) => {
       if (!/<time(?=[\s>]|$)/.test(line)) return;
       const previous = lines[i - 1] ?? "";
-      if (!previous.includes(EXEMPT)) {
+      const marked = new RegExp(`\\{/\\*\\s*${EXEMPT}\\s*\\*/\\}`).test(
+        previous,
+      );
+      if (!marked || !YEAR_ONLY.test(line)) {
         problems.push(`${file}:${i + 1}: raw <time> outside Dateline`);
       }
     });
   }
+  const ISO_EXPR = `(?:${ISO_DAY}|toLocaleDateString\\()`;
   const vars = [
     ...source.matchAll(
-      /(?:const|let)\s+(\w+)\s*=[^;\n]*toISOString\(\)\s*\.slice\(\s*0\s*,\s*10\s*\)/g,
+      new RegExp(`(?:const|let)\\s+(\\w+)\\s*=[^;\\n]*${ISO_EXPR}`, "g"),
     ),
   ].map((m) => m[1]);
+  if (new RegExp(`(?:\\$|(?<![=\\s]))\\{[^{}]*${ISO_EXPR}`).test(source)) {
+    problems.push(`${file}: ISO-day expression printed inline as visible text`);
+  }
   for (const name of vars) {
     if (new RegExp(`\\$\\{\\s*${name}\\s*\\}`).test(source)) {
       problems.push(`${file}: ISO slice "${name}" interpolated in a template`);
@@ -97,8 +112,16 @@ test("WG-02 negative proof: the guard fails on a reintroduced raw <time>", () =>
   assert.equal(problems.length, 1);
   assert.match(problems[0], /raw <time> outside Dateline/);
   // The year exemption passes only with the token on the preceding line.
-  const exempt = `{/* ${EXEMPT} */}\n<time datetime="2024">2024</time>`;
+  const exempt = `{/* ${EXEMPT} */}\n<time datetime="2024">2024</time>\n{/* ${EXEMPT} */}\n<time datetime={String(SITE.operatingSinceYear)}>`;
   assert.deepEqual(datelineProblems("src/components/Y.astro", exempt), []);
+  const wrongElement = `{/* ${EXEMPT} */}\n<time datetime={entry.datePublished}>x</time>`;
+  const wrong = datelineProblems("src/components/Y.astro", wrongElement);
+  console.log(
+    `NEGATIVE PROOF (exempt on a full date): FAIL -> ${wrong.join(" | ")}`,
+  );
+  assert.equal(wrong.length, 1);
+  const attrToken = `<p data-x="${EXEMPT}">\n<time datetime="2024">2024</time>`;
+  assert.equal(datelineProblems("src/components/Y.astro", attrToken).length, 1);
   const sameLine = `<time datetime="2024">2024</time> {/* ${EXEMPT} */}`;
   assert.equal(datelineProblems("src/components/Y.astro", sameLine).length, 1);
 });
@@ -122,6 +145,25 @@ test("WG-02 negative proof: the guard fails on an ISO slice printed as text", ()
   const asText = datelineProblems("src/components/F2.astro", textChild);
   console.log(`NEGATIVE PROOF (text child): FAIL -> ${asText.join(" | ")}`);
   assert.equal(asText.length, 1);
+  const inline = datelineProblems(
+    "src/components/F4.astro",
+    "<p>{capture.capturedAt.toISOString().slice(0, 10)}</p>",
+  );
+  console.log(`NEGATIVE PROOF (inline): FAIL -> ${inline.join(" | ")}`);
+  assert.equal(inline.length, 1);
+  for (const expr of [
+    "d.toISOString().substring(0, 10)",
+    'd.toISOString().split("T")[0]',
+  ]) {
+    const src = `---\nconst when = ${expr};\n---\n<p>{when}</p>`;
+    assert.equal(
+      datelineProblems("src/components/F5.astro", src).length,
+      1,
+      expr,
+    );
+  }
+  const locale = `---\nconst when = d.toLocaleDateString("en");\n---\n<p>{when}</p>`;
+  assert.equal(datelineProblems("src/components/F6.astro", locale).length, 1);
   // Attribute and prop positions stay legal.
   const legal = [
     "---",
@@ -148,4 +190,14 @@ test("WG-02: Dateline output per locale and non-ISO fall-through", async () => {
     assert.equal(formatDate(lang, "2026-02-31"), "2026-02-31");
     assert.equal(formatDate(lang, "2026"), "2026");
   }
+});
+
+test("WG-02: Dateline refuses a non-ISO value at build time", () => {
+  const source = readFileSync(join(ROOT, DATELINE), "utf8");
+  assert.match(source, /\^\\d\{4\}-\\d\{2\}-\\d\{2\}\$\/\.test\(iso\)/);
+  assert.match(source, /throw new Error\(\s*`Dateline:/);
+  // astro/container exists in this Astro version, but rendering a .astro file
+  // needs the Vite/Astro compiler pipeline that node --test does not run and
+  // the repo has no vitest harness: NOT AVAILABLE here. Rendered output is
+  // covered by tests/e2e/wg-dateline.spec.ts and the dist backstop.
 });
