@@ -252,6 +252,10 @@ const ctaIsExternal = cta.external || /^https?:\/\//i.test(cta.href);
     color: var(--text-primary);
     text-decoration: underline;
   }
+  /* The thumb edge matches the row rule above it, ledger variant only. */
+  .product-card--ledger .product-thumb {
+    border-color: var(--c4-hairline);
+  }
   .product-thumb {
     position: relative;
     display: flex;
