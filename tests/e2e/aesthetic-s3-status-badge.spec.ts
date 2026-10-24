@@ -296,10 +296,16 @@ test.describe("S3 product thumbnail edge", () => {
   const edges = (page: Page) =>
     page.evaluate(() => {
       const thumb = document.querySelector(".product-thumb")!;
-      const card = document.querySelector(".product-card")!;
+      // G3 G-06: the index card is a hairline row (C4 rule above, no box), so
+      // the thumbnail edge is pinned to the shared card hairline token itself.
+      const probe = document.createElement("span");
+      probe.style.border = "1px solid var(--border-hairline)";
+      document.body.append(probe);
+      const card = getComputedStyle(probe).borderTopColor;
+      probe.remove();
       return {
         thumb: getComputedStyle(thumb).borderTopColor,
-        card: getComputedStyle(card).borderTopColor,
+        card,
       };
     });
 
