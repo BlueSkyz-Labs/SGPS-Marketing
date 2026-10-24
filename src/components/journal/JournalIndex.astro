@@ -23,12 +23,16 @@ const copy = JOURNAL_COPY[lang];
 const entries: JournalEntry[] = (await getCollection("journal"))
   .map((entry: { data: JournalEntry }) => entry.data)
   .filter((entry: JournalEntry) => !entry.draft && entry.lang === lang)
-  .sort((a: JournalEntry, b: JournalEntry) =>
-    b.datePublished.localeCompare(a.datePublished),
+  .sort(
+    (a: JournalEntry, b: JournalEntry) =>
+      b.datePublished.localeCompare(a.datePublished) ||
+      (b.dateModified ?? "").localeCompare(a.dateModified ?? "") ||
+      a.id.localeCompare(b.id),
   );
 const branches = JOURNAL_BRANCHES.filter((branch) =>
   entries.some((entry) => entry.branch === branch),
 );
+const lead = entries[0];
 const heading = { news: copy.news, product: copy.product } as const;
 ---
 
@@ -55,33 +59,32 @@ const heading = { news: copy.news, product: copy.product } as const;
     return (
       <section
         id={branch}
-        class="mt-12"
+        class="journal-branch"
         aria-labelledby={`journal-${branch}`}
         data-journal-branch={branch}
       >
-        <h2
-          id={`journal-${branch}`}
-          class="text-xl font-semibold tracking-tight sm:text-2xl"
-        >
+        <h2 id={`journal-${branch}`} class="journal-branch__heading">
           {heading[branch]}
         </h2>
-        <ul class="mt-6 grid gap-6">
+        <ul class="journal-list">
           {items.map((entry) => (
-            <li data-journal-item={entry.id}>
-              <h3 class="text-lg font-semibold">
-                <a
-                  href={journalPostPath(entry.lang, entry.id)}
-                  class="text-[var(--action-primary)] underline underline-offset-4 hover:no-underline"
-                >
+            <li
+              class:list={[
+                "journal-item",
+                entry === lead && "journal-item--lead",
+              ]}
+              data-journal-item={entry.id}
+              data-journal-lead={entry === lead ? "" : undefined}
+            >
+              <p class="journal-item__eyebrow">
+                <Dateline iso={entry.datePublished} lang={lang} />
+              </p>
+              <h3 class="journal-item__title">
+                <a href={journalPostPath(entry.lang, entry.id)}>
                   {entry.title}
                 </a>
               </h3>
-              <p class="mt-1 text-sm text-[var(--text-secondary)]">
-                <Dateline iso={entry.datePublished} lang={lang} />
-              </p>
-              <p class="mt-2 text-[var(--text-secondary)]">
-                {entry.description}
-              </p>
+              <p class="journal-item__description">{entry.description}</p>
             </li>
           ))}
         </ul>
@@ -89,3 +92,82 @@ const heading = { news: copy.news, product: copy.product } as const;
     );
   })}
 </div>
+
+<style>
+  /* Wave G1: an edition page, not an archive. One lead, then hairline rows.
+     Only existing tokens; no colour, no motion, no client script. */
+  .journal-branch {
+    margin-block-start: var(--space-12);
+  }
+  /* C4 eyebrow voice: small, tracked, one cobalt hairline before the label. */
+  .journal-branch__heading {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    margin: 0;
+    font-size: var(--c4-type-meta);
+    font-weight: 600;
+    letter-spacing: var(--tracking-eyebrow);
+    text-transform: uppercase;
+    color: var(--text-secondary);
+  }
+  :lang(vi) .journal-branch__heading {
+    text-transform: none;
+  }
+  .journal-branch__heading::before {
+    content: "";
+    inline-size: var(--space-6);
+    border-block-start: 1px solid var(--action-primary);
+    flex: none;
+  }
+  .journal-list {
+    margin: var(--space-6) 0 0;
+    padding: 0;
+    list-style: none;
+  }
+  .journal-item {
+    padding-block: var(--space-6);
+    border-block-start: 1px solid var(--c4-hairline);
+  }
+  .journal-item--lead {
+    padding-block-end: var(--space-8);
+  }
+  .journal-item__eyebrow {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 var(--space-2);
+    margin: 0;
+    font-size: var(--c4-type-meta);
+    font-variant-numeric: tabular-nums;
+    color: var(--text-secondary);
+  }
+  .journal-item__title {
+    margin: var(--space-2) 0 0;
+    font-size: var(--c4-type-evidence);
+    font-weight: 600;
+    line-height: 1.3;
+    letter-spacing: -0.01em;
+    text-wrap: balance;
+  }
+  .journal-item--lead .journal-item__title {
+    font-size: var(--c4-type-section);
+    line-height: 1.2;
+  }
+  .journal-item__title a {
+    color: var(--text-primary);
+    text-decoration: none;
+  }
+  .journal-item__title a:hover,
+  .journal-item__title a:focus-visible {
+    text-decoration: underline;
+    text-underline-offset: 0.25em;
+  }
+  .journal-item__description {
+    max-width: var(--c4-reading-measure);
+    margin: var(--space-3) 0 0;
+    color: var(--text-secondary);
+  }
+  .journal-item--lead .journal-item__description {
+    font-size: var(--c4-type-reading);
+  }
+</style>
