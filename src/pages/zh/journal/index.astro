@@ -5,7 +5,12 @@ import PageHeader from "@/components/layout/PageHeader.astro";
 import JournalIndex from "@/components/journal/JournalIndex.astro";
 import { getCollection } from "astro:content";
 import { JOURNAL_COPY } from "@/data/journal-copy";
-import { journalIsIndexable, type JournalEntry } from "@/lib/journal-schema";
+import {
+  journalIndexableLanguages,
+  journalIsIndexable,
+  type JournalEntry,
+} from "@/lib/journal-schema";
+import { SUPPORTED_LANGUAGES } from "@/lib/i18n";
 
 const copy = JOURNAL_COPY["zh"];
 // v11 J1: noindex (and out of the sitemap) until a post is published.
@@ -15,6 +20,13 @@ const indexable = journalIsIndexable(
   ),
   "zh",
 );
+// hreflang names only the journal indexes that are themselves indexable.
+const indexableLanguages = journalIndexableLanguages(
+  (await getCollection("journal")).map(
+    (entry: { data: JournalEntry }) => entry.data,
+  ),
+  SUPPORTED_LANGUAGES,
+);
 ---
 
 <BaseLayout
@@ -22,6 +34,7 @@ const indexable = journalIsIndexable(
   description={copy.lede}
   path="/zh/journal/"
   noindex={!indexable}
+  indexableLanguages={indexableLanguages}
   followLinks
 >
   <section class="py-16 lg:py-24">
