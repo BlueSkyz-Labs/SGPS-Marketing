@@ -56,6 +56,18 @@ const JOURNEY: Record<string, JourneyStep[]> = {
     CONTACT_STEP,
   ],
   about: [PRODUCT_STATUS_STEP, CONTACT_STEP],
+  // Audit IX-01: the Journal index and every post end in the shared band, with
+  // the same approved labels, instead of a dead end above the footer.
+  // (Verify repeats the products row's approved label; the products row stays
+  // a literal because exp-s3-verify pins it.)
+  journal: [
+    PRODUCT_STATUS_STEP,
+    {
+      segment: "verify",
+      label: { en: "Verify", vi: "Kiểm chứng", zh: "核实", "zh-hant": "查證" },
+    },
+    CONTACT_STEP,
+  ],
   contact: [
     {
       segment: "support",
