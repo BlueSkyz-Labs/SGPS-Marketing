@@ -21,8 +21,9 @@ for (const lang of LOCALES) {
     await expect(page.locator("[data-verify-link]")).toHaveCount(0);
 
     const cards = page.locator("[data-product-card]");
-    await expect(cards).toHaveCount(2);
-    for (let i = 0; i < 2; i += 1) {
+    // Owner 2026-10-24 adds Vững Tay Lái (In development) as the third card.
+    await expect(cards).toHaveCount(3);
+    for (let i = 0; i < 3; i += 1) {
       const card = cards.nth(i);
       await expect(card.locator("[data-product-thumb]")).toHaveCount(1);
       await expect(card.locator("[data-product-status]")).toHaveCount(1);
