@@ -160,6 +160,17 @@ export function journalPairProblems(
 }
 
 /**
+ * The site languages whose journal index is indexable (has a published post).
+ * Indexable journal pages offer hreflang only to these.
+ */
+export function journalIndexableLanguages<L extends string>(
+  entries: readonly JournalEntry[],
+  languages: readonly L[],
+): L[] {
+  return languages.filter((lang) => journalIsIndexable(entries, lang));
+}
+
+/**
  * The index is indexable only once it lists at least one published post. With
  * `lang`, only that language's posts count: zh / zh-Hant hold no posts (VI + EN
  * pairs), so their empty index must stay noindex after en/vi publish.
