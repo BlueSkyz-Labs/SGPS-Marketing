@@ -28,12 +28,25 @@ test("negative proof: the placeholder and baseline predicates can fail", () => {
 test("product card actions share one baseline at 1440", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto("/en/products/");
-  const bottoms = await page
+  // G3 ledger: cards sit in rows of two and an odd last card spans its row,
+  // so the baseline is compared within each row that holds several cards.
+  const cells = await page
     .locator("[data-product-card] [data-product-cta]")
     .evaluateAll((els) =>
-      els.map((el) => Math.round(el.getBoundingClientRect().bottom)),
+      els.map((el) => [
+        Math.round(
+          el.closest("[data-product-card]")!.getBoundingClientRect().top,
+        ),
+        Math.round(el.getBoundingClientRect().bottom),
+      ]),
     );
-  expect(sameBaseline(bottoms), JSON.stringify(bottoms)).toBe(true);
+  const rows = new Map<number, number[]>();
+  for (const [top, bottom] of cells)
+    rows.set(top, [...(rows.get(top) ?? []), bottom]);
+  const shared = [...rows.values()].filter((row) => row.length > 1);
+  expect(shared.length, JSON.stringify(cells)).toBeGreaterThan(0);
+  for (const row of shared)
+    expect(sameBaseline(row), JSON.stringify(cells)).toBe(true);
 });
 
 test("the profile H1 outranks the showcase H2 at 1440", async ({ page }) => {

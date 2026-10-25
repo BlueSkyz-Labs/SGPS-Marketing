@@ -132,7 +132,7 @@ test("schema refuses remote, foreign and non-synthetic captures", () => {
 });
 
 test("negative proof: a real-data or remote-asset record is caught", () => {
-  const [{ text }] = records();
+  const { text } = records().find(({ text: t }) => /product:\s*sotro/.test(t));
   const realData = text.replace(
     /data:\s*synthetic-demo/,
     "data: production-export",
