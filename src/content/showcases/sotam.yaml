@@ -1,0 +1,141 @@
+# Sổ Tâm showcase — real screens of the running web application.
+# Captured 2026-10-25 from a local build of BlueSkyz-Labs/sotam at the revision
+# below (apps/web bundled with esbuild and served statically; no sign-in, no
+# backend, no account: the web app's local-first draft surface only) with
+# synthetic demo text typed by the capture script. Phone screens: 390x844 CSS px
+# at 2x. The product is In development: every screen is a development build,
+# not a launched app, and several screens are labelled "Xem trước" (preview) in
+# the app itself. Wording below describes only what each screen shows; no
+# export, recovery or sync feature is shown as working.
+# zh / zh-hant text: machine-assisted (zh-hant via OpenCC s2twp), pending
+# native review. Copy is an Owner-approval candidate.
+product: sotam
+capture:
+  kind: ui-screenshot
+  data: synthetic-demo
+  environment: local-test-build
+  sourceRepository: https://github.com/BlueSkyz-Labs/sotam
+  sourceRevision: abde8fdc22cdf0440e1c9a6faf3fe73440378a3f
+  capturedAt: 2026-10-25
+
+screens:
+  - id: write
+    surface: phone
+    src: /products/sotam/showcase/sotam-01-write.webp
+    width: 780
+    height: 1688
+    title:
+      en: "Write"
+      vi: "Viết"
+      zh: "书写"
+      zh-hant: "書寫"
+    caption:
+      en: "a sample entry typed into the writing area, with touchpoint chips and a character count. The draft is saved on the device. Development build."
+      vi: "một bài mẫu được gõ vào khung viết, kèm các thẻ điểm chạm và số ký tự. Bản nháp được lưu trên thiết bị. Bản đang phát triển."
+      zh: "在书写区输入的一篇示例条目，附触点标签和字数统计。草稿保存在设备上。开发版本。"
+      zh-hant: "在書寫區輸入的一篇示例條目，附觸點標籤和字數統計。草稿儲存在裝置上。開發版本。"
+    alt:
+      en: "Sổ Tâm phone screen with the touchpoint chips, with “Tri Ân” selected, and a writing area holding the sample entry “Nhật ký mẫu”."
+      vi: "Màn hình Sổ Tâm trên điện thoại với các thẻ điểm chạm, “Tri Ân” được chọn, và khung viết chứa bài mẫu “Nhật ký mẫu”."
+      zh: "Sổ Tâm 手机页面，含触点标签（已选“Tri Ân”）和写有示例条目“Nhật ký mẫu”的书写区。"
+      zh-hant: "Sổ Tâm 手機頁面，含觸點標籤（已選「Tri Ân」）和寫有示例條目「Nhật ký mẫu」的書寫區。"
+  - id: journal
+    surface: phone
+    src: /products/sotam/showcase/sotam-02-journal.webp
+    width: 780
+    height: 1688
+    title:
+      en: "Journal"
+      vi: "Ghi chép"
+      zh: "记录"
+      zh-hant: "記錄"
+    caption:
+      en: "the Journal tab labelled preview, noting that on the web only the local draft being written is supported, with a button to continue writing. Development build."
+      vi: "tab Ghi chép gắn nhãn xem trước, ghi rõ trên Web chỉ hỗ trợ bản nháp cục bộ đang viết, kèm nút tiếp tục viết. Bản đang phát triển."
+      zh: "标有“预览”的记录页，说明网页端目前仅支持正在书写的本地草稿，并有继续书写按钮。开发版本。"
+      zh-hant: "標有「預覽」的記錄頁，說明網頁端目前僅支援正在書寫的本機草稿，並有繼續書寫按鈕。開發版本。"
+    alt:
+      en: "Sổ Tâm phone screen “Ghi chép” with a card “Có một bản nháp cục bộ đang viết” and a “Tiếp tục viết” button."
+      vi: "Màn hình “Ghi chép” của Sổ Tâm trên điện thoại với thẻ “Có một bản nháp cục bộ đang viết” và nút “Tiếp tục viết”."
+      zh: "Sổ Tâm 手机“Ghi chép”页面，含“Có một bản nháp cục bộ đang viết”卡片和“Tiếp tục viết”按钮。"
+      zh-hant: "Sổ Tâm 手機「Ghi chép」頁面，含「Có một bản nháp cục bộ đang viết」卡片和「Tiếp tục viết」按鈕。"
+  - id: memories
+    surface: phone
+    src: /products/sotam/showcase/sotam-03-memories.webp
+    width: 780
+    height: 1688
+    title:
+      en: "Memories"
+      vi: "Ký ức"
+      zh: "记忆"
+      zh-hant: "記憶"
+    caption:
+      en: "the Memories tab labelled preview, stating there is no dated history on the web yet, above a list of further spaces. Development build."
+      vi: "tab Ký ức gắn nhãn xem trước, ghi rõ Web chưa có lịch sử theo ngày, phía trên danh sách các không gian khác. Bản đang phát triển."
+      zh: "标有“预览”的记忆页，说明网页端尚无按日期的历史记录，其下为其他空间列表。开发版本。"
+      zh-hant: "標有「預覽」的記憶頁，說明網頁端尚無依日期的歷史記錄，其下為其他空間列表。開發版本。"
+    alt:
+      en: "Sổ Tâm phone screen “Ký ức” labelled preview, with a note that the web has no dated history yet and a list of spaces."
+      vi: "Màn hình “Ký ức” của Sổ Tâm trên điện thoại gắn nhãn xem trước, có ghi chú Web chưa có lịch sử theo ngày và danh sách các không gian."
+      zh: "Sổ Tâm 手机“Ký ức”页面，标有预览，注明网页端尚无按日期的历史记录，并列出各空间。"
+      zh-hant: "Sổ Tâm 手機「Ký ức」頁面，標有預覽，註明網頁端尚無依日期的歷史記錄，並列出各空間。"
+  - id: recovery-copy
+    surface: phone
+    src: /products/sotam/showcase/sotam-04-recovery-copy.webp
+    width: 780
+    height: 1688
+    title:
+      en: "Recovery copy"
+      vi: "Bản sao khôi phục"
+      zh: "恢复副本"
+      zh-hant: "還原副本"
+    caption:
+      en: "a preview of a future offline recovery copy, with an empty area stating that no recovery code is generated and no backup has been created. Development build."
+      vi: "bản xem trước một bản sao khôi phục ngoại tuyến trong tương lai, vùng trống ghi rõ chưa tạo mã khôi phục và chưa tạo bản sao lưu. Bản đang phát triển."
+      zh: "未来离线恢复副本的预览，空白区域注明尚未生成恢复码，也未创建备份。开发版本。"
+      zh-hant: "未來離線還原副本的預覽，空白區域註明尚未產生還原碼，也未建立備份。開發版本。"
+    alt:
+      en: "Sổ Tâm phone screen “Bản sao khôi phục vật lý” labelled preview, with a dashed empty box “Không có mã khôi phục được tạo”."
+      vi: "Màn hình “Bản sao khôi phục vật lý” của Sổ Tâm trên điện thoại gắn nhãn xem trước, với khung trống nét đứt “Không có mã khôi phục được tạo”."
+      zh: "Sổ Tâm 手机“Bản sao khôi phục vật lý”页面，标有预览，含虚线空框“Không có mã khôi phục được tạo”。"
+      zh-hant: "Sổ Tâm 手機「Bản sao khôi phục vật lý」頁面，標有預覽，含虛線空框「Không có mã khôi phục được tạo」。"
+  - id: memory-book
+    surface: phone
+    src: /products/sotam/showcase/sotam-05-memory-book.webp
+    width: 780
+    height: 1688
+    title:
+      en: "Memory book"
+      vi: "Sách ký ức"
+      zh: "记忆册"
+      zh-hant: "記憶冊"
+    caption:
+      en: "a preview of an A5 memory-book cover layout, noting that no file is exported and no entries are selected from the vault. Development build."
+      vi: "bản xem trước bố cục bìa sách ký ức A5, ghi rõ chưa xuất file và chưa chọn nhật ký nào từ Két. Bản đang phát triển."
+      zh: "A5 记忆册封面版式预览，注明尚未导出文件，也未从保险库选取任何条目。开发版本。"
+      zh-hant: "A5 記憶冊封面版式預覽，註明尚未匯出檔案，也未從保險庫選取任何條目。開發版本。"
+    alt:
+      en: "Sổ Tâm phone screen “Bố cục sách ký ức A5” labelled preview, with a cream cover card titled “Sổ Tâm”."
+      vi: "Màn hình “Bố cục sách ký ức A5” của Sổ Tâm trên điện thoại gắn nhãn xem trước, với thẻ bìa màu kem đề “Sổ Tâm”."
+      zh: "Sổ Tâm 手机“Bố cục sách ký ức A5”页面，标有预览，含题为“Sổ Tâm”的米色封面卡片。"
+      zh-hant: "Sổ Tâm 手機「Bố cục sách ký ức A5」頁面，標有預覽，含題為「Sổ Tâm」的米色封面卡片。"
+  - id: family-seal
+    surface: phone
+    src: /products/sotam/showcase/sotam-06-family-seal.webp
+    width: 780
+    height: 1688
+    title:
+      en: "Family seal"
+      vi: "Dấu triện"
+      zh: "印章"
+      zh-hant: "印章"
+    caption:
+      en: "a preview of a family seal layout, noting that the change exists only on this screen and is not saved to the vault. Development build."
+      vi: "bản xem trước bố cục dấu triện gia đình, ghi rõ thay đổi chỉ có trên màn hình này và chưa lưu vào Két. Bản đang phát triển."
+      zh: "家庭印章版式预览，注明改动仅存在于此屏幕，未保存到保险库。开发版本。"
+      zh-hant: "家庭印章版式預覽，註明改動僅存在於此畫面，未儲存到保險庫。開發版本。"
+    alt:
+      en: "Sổ Tâm phone screen “Bản xem trước dấu triện” labelled preview, with a red square seal reading “Gia đình · Điều muốn giữ lại”."
+      vi: "Màn hình “Bản xem trước dấu triện” của Sổ Tâm trên điện thoại gắn nhãn xem trước, với dấu triện vuông đỏ “Gia đình · Điều muốn giữ lại”."
+      zh: "Sổ Tâm 手机“Bản xem trước dấu triện”页面，标有预览，含红色方形印章“Gia đình · Điều muốn giữ lại”。"
+      zh-hant: "Sổ Tâm 手機「Bản xem trước dấu triện」頁面，標有預覽，含紅色方形印章「Gia đình · Điều muốn giữ lại」。"
