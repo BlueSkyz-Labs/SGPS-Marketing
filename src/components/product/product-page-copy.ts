@@ -143,6 +143,13 @@ export const PAGE_LABELS = {
     "查看界面截图",
     "查看畫面截圖",
   ),
+  // Owner 2026-10-24 (O-04): label of the app-language fact row.
+  appLanguage: S(
+    "App language",
+    "Ngôn ngữ ứng dụng",
+    "应用语言",
+    "應用程式語言",
+  ),
   // sro-8 / stm-8 heading
   whatItDoes: S("What it does", "Tính năng", "功能", "功能"),
   // sro-14
