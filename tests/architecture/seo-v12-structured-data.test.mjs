@@ -257,6 +257,41 @@ test("negative proof: a node that departs from its record is rejected", () => {
   assert.notDeepEqual(jsonLdProblems({ ...app, "@context": "http://x" }), []);
 });
 
+test("negative proof: a screenshot outside the product's showcase is rejected", () => {
+  const { facts } = publicRecords[0];
+  const app = appFor(facts, "en");
+  const shot = (url, extra = {}) => ({
+    "@type": "ImageObject",
+    url,
+    width: 780,
+    height: 1688,
+    ...extra,
+  });
+  const origin = new URL(app.url).origin;
+  const own = `${origin}/products/${facts.slug}/showcase/a.webp`;
+  assert.deepEqual(
+    appRegistryProblems({ ...app, screenshot: [shot(own)] }, facts, "en"),
+    [],
+  );
+  for (const screenshot of [
+    [],
+    "not-a-list",
+    [shot("https://example.com/products/x/showcase/a.webp")],
+    [shot(`${origin}/products/${facts.slug}/identity.png`)],
+    [shot(`${origin}/products/other/showcase/a.webp`)],
+    [shot(`https://cdn.example${new URL(own).pathname}`)],
+    [shot(own, { "@type": "Photograph" })],
+    [shot(own, { width: "780" })],
+    [shot("not a url")],
+  ]) {
+    assert.notDeepEqual(
+      appRegistryProblems({ ...app, screenshot }, facts, "en"),
+      [],
+      JSON.stringify(screenshot),
+    );
+  }
+});
+
 // --- authored titles and descriptions ----------------------------------------
 
 const composeTitle = (title) =>

@@ -1,0 +1,25 @@
+{
+  "id": "LSN-marketing-004",
+  "title": "A lane brief must cite the standing decision it touches",
+  "project": "marketing",
+  "source": {
+    "repo": "SGPS-Marketing",
+    "commit": "2257d12",
+    "pr": 680
+  },
+  "captured_at": "2026-10-24",
+  "class": "brief-contradicts-standing-decision",
+  "tags": ["process", "brief", "regression"],
+  "trigger": "2026-10-24 (wave G3): the lane brief asked for a derived 01-05 numeral column on the product feature list, contradicting EX-07 (PR #670, 2026-10-23: no numerals on that list because the story chapters already carry \"01 / 05\"). The lane implemented it and re-pinned two tests; a correction commit removed it and added the opposite guard.",
+  "root_cause": "The brief did not list the prior decisions and test pins that govern the surface it changed, so a standing decision was overridden implicitly and the lane re-pinned existing tests to match the new request.",
+  "rule": "Before changing a surface, the brief lists the prior decisions and pins that govern it (grep the decisions index and the tests that pin the surface) and states explicitly when it overrides one; re-pinning an existing test in a lane requires a cited decision.",
+  "reuse_boundary": "Surfaces that already carry a recorded decision or a test pin. A new surface with no prior decision needs no citation. Does not replace the Owner's authority to override a decision; it only makes the override explicit.",
+  "guard": {
+    "level": "G2",
+    "kind": "test",
+    "path": "tests/architecture/wg3-product-ledger.test.mjs (\"WG3-04: the feature list is a hairline list with no numerals, all locales\"; lands via PR #680, present on branch claude/marketing-project-audit-623e4t-wave-g3a at 2257d12 and NOT on main yet)",
+    "negative_proof": "Per the lane report on the #680 branch: reintroducing a numeral (profile-does__index, a derived two-digit numeral, a 0N tile prefix, or CSS counter() content) makes the test fail. Not re-run in this change and not verifiable on main until #680 merges: NOT VERIFIED on main."
+  },
+  "recurrences": [],
+  "state": "CANDIDATE"
+}
