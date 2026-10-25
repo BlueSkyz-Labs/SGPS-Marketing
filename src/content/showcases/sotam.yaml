@@ -1,0 +1,141 @@
+# Sổ Tâm showcase — real screens of the running web application.
+# Captured 2026-10-25 from a local build of BlueSkyz-Labs/sotam at the revision
+# below (apps/web bundled with esbuild and served statically; no sign-in, no
+# backend, no account: the web app's local-first draft surface only) with
+# synthetic demo text typed by the capture script. Phone screens: 390x844 CSS px
+# at 2x. The product is In development: every screen is a development build,
+# not a launched app, and some screens are labelled "Xem trước" (preview) in
+# the app itself. Wording below describes only what each screen shows; no
+# export, recovery, sync or payment feature is shown as working.
+# zh / zh-hant text: machine-assisted (zh-hant via OpenCC s2twp), pending
+# native review. Copy is an Owner-approval candidate.
+product: sotam
+capture:
+  kind: ui-screenshot
+  data: synthetic-demo
+  environment: local-test-build
+  sourceRepository: https://github.com/BlueSkyz-Labs/sotam
+  sourceRevision: 43b7ea3806e93fe5700117951f1380b69a72b93b
+  capturedAt: 2026-10-25
+
+screens:
+  - id: welcome
+    surface: phone
+    src: /products/sotam/showcase/sotam-01-welcome.webp
+    width: 780
+    height: 1688
+    title:
+      en: "Welcome"
+      vi: "Chào mừng"
+      zh: "欢迎"
+      zh-hant: "歡迎"
+    caption:
+      en: "the first-run welcome card: the Sổ Tâm mark, a note that no account is needed and the web draft stays in this browser, unencrypted, and a start button. Development build."
+      vi: "thẻ chào mừng lần đầu: biểu tượng Sổ Tâm, ghi chú không cần tài khoản và bản viết trên Web lưu trong trình duyệt này, không mã hóa, cùng nút bắt đầu. Bản đang phát triển."
+      zh: "首次打开的欢迎卡片：Sổ Tâm 标志，注明无需账号、网页端文字保存在此浏览器中，未加密也不同步，另有开始按钮。开发版本。"
+      zh-hant: "首次開啟的歡迎卡片：Sổ Tâm 標誌，註明無需帳號、網頁端文字儲存在此瀏覽器中，未加密也不同步，另有開始按鈕。開發版本。"
+    alt:
+      en: "Sổ Tâm phone screen with a welcome card headed “Giữ điều có ý nghĩa.”, a language menu at the top and a green “Bắt đầu” button."
+      vi: "Màn hình Sổ Tâm trên điện thoại với thẻ chào mừng đề “Giữ điều có ý nghĩa.”, menu ngôn ngữ phía trên và nút xanh “Bắt đầu”."
+      zh: "Sổ Tâm 手机页面，欢迎卡片标题为“Giữ điều có ý nghĩa.”，顶部有语言菜单和绿色“Bắt đầu”按钮。"
+      zh-hant: "Sổ Tâm 手機頁面，歡迎卡片標題為「Giữ điều có ý nghĩa.」，頂部有語言選單和綠色「Bắt đầu」按鈕。"
+  - id: write
+    surface: phone
+    src: /products/sotam/showcase/sotam-02-write.webp
+    width: 780
+    height: 1688
+    title:
+      en: "Today"
+      vi: "Hôm nay"
+      zh: "今天"
+      zh-hant: "今天"
+    caption:
+      en: "the Today page with a sample entry typed into the writing area, a “saved on this device” marker and a word count. Development build."
+      vi: "trang Hôm nay với một bài mẫu được gõ vào khung viết, nhãn “đã lưu trên thiết bị” và số từ. Bản đang phát triển."
+      zh: "“今天”页面，书写区中输入了一篇示例条目，并有“已保存在设备上”标记和字数统计。开发版本。"
+      zh-hant: "「今天」頁面，書寫區中輸入了一篇示例條目，並有「已儲存在裝置上」標記和字數統計。開發版本。"
+    alt:
+      en: "Sổ Tâm phone screen “Chủ Nhật, 25 tháng 10” with the sample entry “Nhật ký mẫu” in the writing area and “Đã lưu trên thiết bị”."
+      vi: "Màn hình Sổ Tâm trên điện thoại “Chủ Nhật, 25 tháng 10” với bài mẫu “Nhật ký mẫu” trong khung viết và nhãn “Đã lưu trên thiết bị”."
+      zh: "Sổ Tâm 手机页面“Chủ Nhật, 25 tháng 10”，书写区含示例条目“Nhật ký mẫu”和“Đã lưu trên thiết bị”标记。"
+      zh-hant: "Sổ Tâm 手機頁面「Chủ Nhật, 25 tháng 10」，書寫區含示例條目「Nhật ký mẫu」和「Đã lưu trên thiết bị」標記。"
+  - id: mood-touchpoints
+    surface: phone
+    src: /products/sotam/showcase/sotam-03-mood-touchpoints.webp
+    width: 780
+    height: 1688
+    title:
+      en: "Mood and touchpoints"
+      vi: "Tâm trạng và điểm chạm"
+      zh: "心情与触点"
+      zh-hant: "心情與觸點"
+    caption:
+      en: "the optional mood row, shown as plain words with one selected, and the touchpoint words, each with a small ink mark and one selected. Development build."
+      vi: "hàng tâm trạng tùy chọn, hiển thị bằng chữ với một lựa chọn đang chọn, cùng các từ điểm chạm, mỗi từ kèm dấu mực nhỏ và một từ đang chọn. Bản đang phát triển."
+      zh: "可选的心情一行，以文字呈现并选中其一，以及各带一枚小墨印的触点词，其中一个已选中。开发版本。"
+      zh-hant: "可選的心情一行，以文字呈現並選中其一，以及各帶一枚小墨印的觸點詞，其中一個已選中。開發版本。"
+    alt:
+      en: "Sổ Tâm phone screen with mood words (“Nhẹ lòng” selected) and touchpoint words (“Tri ân” selected) under the writing controls."
+      vi: "Màn hình Sổ Tâm trên điện thoại với các từ tâm trạng (“Nhẹ lòng” được chọn) và điểm chạm (“Tri ân” được chọn) dưới phần điều khiển viết."
+      zh: "Sổ Tâm 手机页面，书写控件下方有心情词（已选“Nhẹ lòng”）和触点词（已选“Tri ân”）。"
+      zh-hant: "Sổ Tâm 手機頁面，書寫控制項下方有心情詞（已選「Nhẹ lòng」）和觸點詞（已選「Tri ân」）。"
+  - id: journal
+    surface: phone
+    src: /products/sotam/showcase/sotam-04-journal.webp
+    width: 780
+    height: 1688
+    title:
+      en: "Journal"
+      vi: "Ghi chép"
+      zh: "记录"
+      zh-hant: "記錄"
+    caption:
+      en: "the Journal tab labelled preview, with a row for the unfinished local draft and a link to continue it. Development build."
+      vi: "tab Ghi chép gắn nhãn xem trước, có một dòng cho bản nháp cục bộ đang viết dở và liên kết để tiếp tục. Bản đang phát triển."
+      zh: "标有“预览”的记录页，有一行显示未写完的本地草稿及继续的链接。开发版本。"
+      zh-hant: "標有「預覽」的記錄頁，有一行顯示未寫完的本機草稿及繼續的連結。開發版本。"
+    alt:
+      en: "Sổ Tâm phone screen “Ghi chép” with a row “đang viết dở” showing the start of the sample entry and a “tiếp →” link."
+      vi: "Màn hình “Ghi chép” của Sổ Tâm trên điện thoại với dòng “đang viết dở” hiện phần đầu bài mẫu và liên kết “tiếp →”."
+      zh: "Sổ Tâm 手机“Ghi chép”页面，“đang viết dở”一行显示示例条目开头，并有“tiếp →”链接。"
+      zh-hant: "Sổ Tâm 手機「Ghi chép」頁面，「đang viết dở」一行顯示示例條目開頭，並有「tiếp →」連結。"
+  - id: memories
+    surface: phone
+    src: /products/sotam/showcase/sotam-05-memories.webp
+    width: 780
+    height: 1688
+    title:
+      en: "Memories"
+      vi: "Ký ức"
+      zh: "记忆"
+      zh-hant: "記憶"
+    caption:
+      en: "the Memories tab empty state: a brush-stroke circle and a line saying finished pages will be kept in the Journal on this device, with a link to write one. Development build."
+      vi: "trạng thái trống của tab Ký ức: vòng tròn nét cọ và dòng ghi các trang hoàn tất sẽ được giữ trong Ghi chép trên thiết bị này, kèm liên kết viết một trang. Bản đang phát triển."
+      zh: "“记忆”页的空状态：一个笔触圆环，并注明完成的页面将保存在此设备的记录中，附写一页的链接。开发版本。"
+      zh-hant: "「記憶」頁的空狀態：一個筆觸圓環，並註明完成的頁面將儲存在此裝置的記錄中，附寫一頁的連結。開發版本。"
+    alt:
+      en: "Sổ Tâm phone screen “Ký ức” with a grey brush-stroke circle, a short sentence and a “Viết một trang” link."
+      vi: "Màn hình “Ký ức” của Sổ Tâm trên điện thoại với vòng tròn nét cọ màu xám, một câu ngắn và liên kết “Viết một trang”."
+      zh: "Sổ Tâm 手机“Ký ức”页面，含灰色笔触圆环、一句短文和“Viết một trang”链接。"
+      zh-hant: "Sổ Tâm 手機「Ký ức」頁面，含灰色筆觸圓環、一句短文和「Viết một trang」連結。"
+  - id: settings
+    surface: phone
+    src: /products/sotam/showcase/sotam-06-settings.webp
+    width: 780
+    height: 1688
+    title:
+      en: "Settings"
+      vi: "Cài đặt"
+      zh: "设置"
+      zh-hant: "設定"
+    caption:
+      en: "the top of Settings: the language menu, a note that appearance follows the device, and the mindful-bell sound toggle. Development build."
+      vi: "đầu trang Cài đặt: menu ngôn ngữ, ghi chú giao diện theo thiết bị và nút bật tắt tiếng chuông chánh niệm. Bản đang phát triển."
+      zh: "设置页顶部：语言菜单、外观跟随设备的说明，以及正念钟声开关。开发版本。"
+      zh-hant: "設定頁頂部：語言選單、外觀跟隨裝置的說明，以及正念鐘聲開關。開發版本。"
+    alt:
+      en: "Sổ Tâm phone screen “Cài đặt” with a language menu set to VI, an appearance note and a “Tiếng chuông chánh niệm: Đang bật” button."
+      vi: "Màn hình “Cài đặt” của Sổ Tâm trên điện thoại với menu ngôn ngữ VI, ghi chú giao diện và nút “Tiếng chuông chánh niệm: Đang bật”."
+      zh: "Sổ Tâm 手机“Cài đặt”页面，语言菜单为 VI，含外观说明和“Tiếng chuông chánh niệm: Đang bật”按钮。"
+      zh-hant: "Sổ Tâm 手機「Cài đặt」頁面，語言選單為 VI，含外觀說明和「Tiếng chuông chánh niệm: Đang bật」按鈕。"

@@ -41,23 +41,21 @@ test("negative proof: the height and store-CTA predicates can fail", () => {
 
 for (const lang of LOCALES) {
   test.describe(lang, () => {
-    test("Sổ Trọ has exactly one primary action, anchored to the screens", async ({
-      page,
-    }) => {
-      await page.goto(`/${lang}/products/sotro/`);
-      const primary = page.locator("[data-primary-action]");
-      await expect(primary).toHaveCount(1);
-      await expect(primary).toHaveAttribute("href", "#profile-showcase");
-      await expect(page.locator("#profile-showcase")).toHaveCount(1);
-      // Owner 2026-10-12: no public app sign-in link.
-      await expect(page.locator("[data-app-signin]")).toHaveCount(0);
-    });
-
-    test("Sổ Tâm has no primary action", async ({ page }) => {
-      await page.goto(`/${lang}/products/sotam/`);
-      await expect(page.locator("[data-primary-action]")).toHaveCount(0);
-      await expect(page.locator("[data-app-signin]")).toHaveCount(0);
-    });
+    // Sổ Tâm gained real screens (#698), so it now has the same single
+    // primary action as Sổ Trọ: an in-page anchor, never an app link.
+    for (const slug of ["sotro", "sotam"]) {
+      test(`${slug} has exactly one primary action, anchored to the screens`, async ({
+        page,
+      }) => {
+        await page.goto(`/${lang}/products/${slug}/`);
+        const primary = page.locator("[data-primary-action]");
+        await expect(primary).toHaveCount(1);
+        await expect(primary).toHaveAttribute("href", "#profile-showcase");
+        await expect(page.locator("#profile-showcase")).toHaveCount(1);
+        // Owner 2026-10-12: no public app sign-in link.
+        await expect(page.locator("[data-app-signin]")).toHaveCount(0);
+      });
+    }
 
     for (const slug of ["sotro", "sotam"]) {
       test(`${slug}: one Availability line, no store CTA, no audience`, async ({

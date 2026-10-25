@@ -155,14 +155,19 @@ const desktopSmallSrc = (src: string) => src.replace(/\.webp$/, "-768.webp");
   // a11y 2026-10-08: the phone rail is a tab stop only while it scrolls
   // (below 64rem). At desktop widths it is a plain grid; remove the dead stop.
   // `matchMedia` mirrors the CSS breakpoint — no layout measurement needed.
+  // A spanning book display stacks the rail (ProductShowcase.astro), so it
+  // does not scroll there either.
   const mq = window.matchMedia("(max-width: 63.99rem)");
+  const spanning = window.matchMedia("(horizontal-viewport-segments: 2)");
   const syncRailTabindex = () => {
+    const scrolls = mq.matches && !spanning.matches;
     for (const rail of document.querySelectorAll("[data-showcase-rail]")) {
-      rail.setAttribute("tabindex", mq.matches ? "0" : "-1");
+      rail.setAttribute("tabindex", scrolls ? "0" : "-1");
     }
   };
   syncRailTabindex();
   mq.addEventListener("change", syncRailTabindex);
+  spanning.addEventListener("change", syncRailTabindex);
 </script>
 
 <script>
