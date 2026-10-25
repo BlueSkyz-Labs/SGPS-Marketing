@@ -344,6 +344,21 @@ const defaultTrack = wanted
       margin-inline: -1.5rem;
     }
   }
+  /* A spanning book display below 64rem: the scrolling rail would lay later
+     phones across the hinge, so the rail becomes one column inside the
+     leading segment (the reading column there, see global.css). */
+  @media (horizontal-viewport-segments: 2) and (max-width: 63.99rem) {
+    .showcase__rail {
+      margin-inline: 0;
+      padding-inline: 0;
+      grid-auto-flow: row;
+      grid-auto-columns: auto;
+      grid-template-columns: minmax(0, 17rem);
+      row-gap: 2.75rem;
+      overflow: visible;
+      scroll-snap-type: none;
+    }
+  }
   .showcase__device {
     position: relative;
     border-radius: var(--radius-media);

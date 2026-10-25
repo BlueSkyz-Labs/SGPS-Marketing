@@ -1,46 +1,48 @@
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test } from "@playwright/test";
+import { publishedPosts } from "./helpers/journal-source";
 
 /**
  * v11 J1: the journal index renders in every locale, stays noindex while it
  * has no published post, shows honest empty states, and passes axe.
  * Journey P1-B: the section label is "Journey" / "Hành trình" (Owner D-2) and
- * en/vi list the two first posts; zh / zh-hant (no posts, language note)
- * keep the honest empty state.
+ * en/vi list every published post, newest first, read from the content source
+ * (helpers/journal-source); zh / zh-hant (no posts, language note) keep the
+ * honest empty state.
  */
 const LOCALES = [
-  { lang: "en", title: "Journey", note: false, posts: 2 },
-  { lang: "vi", title: "Hành trình", note: false, posts: 2 },
-  { lang: "zh", title: "日志", note: true, posts: 0 },
-  { lang: "zh-hant", title: "日誌", note: true, posts: 0 },
+  { lang: "en", title: "Journey", note: false },
+  { lang: "vi", title: "Hành trình", note: false },
+  { lang: "zh", title: "日志", note: true },
+  { lang: "zh-hant", title: "日誌", note: true },
 ] as const;
 
 for (const locale of LOCALES) {
   test(`${locale.lang}: journal index is noindex, honest about its posts and accessible`, async ({
     page,
   }) => {
+    const expected = publishedPosts(locale.lang);
+    const posts = expected.length;
+    expect(posts > 0).toBe(!locale.note);
     await page.goto(`/${locale.lang}/journal/`);
     await expect(page.locator("h1")).toHaveText(locale.title);
     await expect(page.locator('meta[name="robots"]')).toHaveAttribute(
       "content",
       /noindex/,
     );
-    // Audit IX-09: only branches that hold a post render (both first posts are
-    // in the news branch, so the product branch is absent); with no post the
+    // Audit IX-09: only branches that hold a post render; with no post the
     // page keeps one honest empty state and no branch heading.
-    await expect(page.locator("[data-journal-branch]")).toHaveCount(
-      locale.posts > 0 ? 1 : 0,
-    );
-    if (locale.posts > 0) {
-      await expect(page.locator("[data-journal-branch]")).toHaveAttribute(
-        "data-journal-branch",
-        "news",
+    const branches = [...new Set(expected.map((post) => post.branch))];
+    const rendered = await page
+      .locator("[data-journal-branch]")
+      .evaluateAll((els) =>
+        els.map((el) => el.getAttribute("data-journal-branch")),
       );
-    }
+    expect([...rendered].sort()).toEqual([...branches].sort());
     await expect(page.locator("[data-journal-empty]")).toHaveCount(
-      locale.posts > 0 ? 0 : 1,
+      posts > 0 ? 0 : 1,
     );
-    await expect(page.locator("[data-journal-item]")).toHaveCount(locale.posts);
+    await expect(page.locator("[data-journal-item]")).toHaveCount(posts);
     // Dates read as on the post page (localized), never a raw ISO string; the
     // machine-readable date stays in `datetime`.
     for (const time of await page.locator("[data-journal-item] time").all()) {
