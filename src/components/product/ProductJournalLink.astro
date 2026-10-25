@@ -10,6 +10,11 @@ import type { JournalLanguage } from "@/lib/journal-schema";
  * `journalPostsForProduct` (no hardcoded URL; components never read the
  * collection). A language with no matching post (zh, zh-Hant) renders nothing. The heading is the Journal's own
  * existing title and the link text is the post's own title.
+ *
+ * The section carries no accessible name, so it is not a region landmark: its
+ * heading is the Journal title ("Journey" / "Hành trình"), which a story
+ * chapter on the same page may also use, and two regions sharing one name
+ * fail axe landmark-unique. The h2 keeps it reachable by heading navigation.
  */
 interface Props {
   lang: JournalLanguage;
@@ -21,7 +26,7 @@ const heading = JOURNAL_COPY[lang].title;
 ---
 
 {posts.length > 0 ? (
-  <section class="mt-14" aria-labelledby="profile-journal" data-product-journal>
+  <section class="mt-14" data-product-journal>
     <h2
       id="profile-journal"
       class="text-xl font-semibold tracking-tight text-[var(--text-primary)] sm:text-2xl"
