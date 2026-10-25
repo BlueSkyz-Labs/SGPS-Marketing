@@ -1,0 +1,142 @@
+{
+  "/images/journal/so-tro-xem-truoc/hero.en-1200.webp": {
+    "sha256": "35b9aeda9850aca9d30b7c417423fde2a6b34301176f3710941e1ae03e6ff632",
+    "width": 1200,
+    "height": 675,
+    "template": "tools/journal-art/figures/so-tro-xem-truoc.mjs",
+    "rightsHolder": "BlueSkyz Labs"
+  },
+  "/images/journal/so-tro-xem-truoc/hero.en.og.jpg": {
+    "sha256": "d326e25e4f24a4e3763439440cf9082506fd19d8e6d8aca16a308945151e8190",
+    "width": 1200,
+    "height": 675,
+    "template": "tools/journal-art/figures/so-tro-xem-truoc.mjs",
+    "rightsHolder": "BlueSkyz Labs"
+  },
+  "/images/journal/so-tro-xem-truoc/hero.en.webp": {
+    "sha256": "08887f59dd2a45d8e100d2372cbdd02eb531960d8ca08a5c61a43e6ccfbe128d",
+    "width": 2400,
+    "height": 1350,
+    "template": "tools/journal-art/figures/so-tro-xem-truoc.mjs",
+    "rightsHolder": "BlueSkyz Labs"
+  },
+  "/images/journal/so-tro-xem-truoc/hero.vi-1200.webp": {
+    "sha256": "78b59045cdee91ffeb08c681640603cd734c4abcae62a6f2eec32cc14a8560d2",
+    "width": 1200,
+    "height": 675,
+    "template": "tools/journal-art/figures/so-tro-xem-truoc.mjs",
+    "rightsHolder": "BlueSkyz Labs"
+  },
+  "/images/journal/so-tro-xem-truoc/hero.vi.og.jpg": {
+    "sha256": "40a470a52074eb79d03ad8fe08cc970c7d7da393b6f1331af81fbc070fbb073b",
+    "width": 1200,
+    "height": 675,
+    "template": "tools/journal-art/figures/so-tro-xem-truoc.mjs",
+    "rightsHolder": "BlueSkyz Labs"
+  },
+  "/images/journal/so-tro-xem-truoc/hero.vi.webp": {
+    "sha256": "891be72a8432d216ebfa6fb93cd76e27f7eee622104aed61a5c6e6a2a0d98761",
+    "width": 2400,
+    "height": 1350,
+    "template": "tools/journal-art/figures/so-tro-xem-truoc.mjs",
+    "rightsHolder": "BlueSkyz Labs"
+  },
+  "/images/journal/so-tro-xem-truoc/infographic.en-1200.webp": {
+    "sha256": "6aa00fb41644cf0075bc27fcfbd0124f858b897cfeecb62c9e65fac466ab1e8b",
+    "width": 1200,
+    "height": 1260,
+    "template": "tools/journal-art/figures/so-tro-xem-truoc.mjs",
+    "rightsHolder": "BlueSkyz Labs"
+  },
+  "/images/journal/so-tro-xem-truoc/infographic.en.webp": {
+    "sha256": "355f7edca60a30d98709508ef305cf4d9e284ff20cb4d6b369e34b788bcf1a56",
+    "width": 2400,
+    "height": 2520,
+    "template": "tools/journal-art/figures/so-tro-xem-truoc.mjs",
+    "rightsHolder": "BlueSkyz Labs"
+  },
+  "/images/journal/so-tro-xem-truoc/infographic.vi-1200.webp": {
+    "sha256": "8211aac5d4eaa9d107c28b5e708e0624fc8266e3432dc010cc47d9d81f771c94",
+    "width": 1200,
+    "height": 1260,
+    "template": "tools/journal-art/figures/so-tro-xem-truoc.mjs",
+    "rightsHolder": "BlueSkyz Labs"
+  },
+  "/images/journal/so-tro-xem-truoc/infographic.vi.webp": {
+    "sha256": "5a3559fe12397bf2618fafd63bc79b6e28bcf592473ff115ef146fd3c753f232",
+    "width": 2400,
+    "height": 2520,
+    "template": "tools/journal-art/figures/so-tro-xem-truoc.mjs",
+    "rightsHolder": "BlueSkyz Labs"
+  },
+  "/images/journal/thue-cho-thue-tro-2026/hero.en-1200.webp": {
+    "sha256": "bdd2be0f7b7bad0ae54c6233d8df317e39540751daaa39d1c0ec9592f34d3b74",
+    "width": 1200,
+    "height": 675,
+    "template": "tools/journal-art/figures/thue-cho-thue-tro-2026.mjs",
+    "rightsHolder": "BlueSkyz Labs"
+  },
+  "/images/journal/thue-cho-thue-tro-2026/hero.en.og.jpg": {
+    "sha256": "6e3354aa136b6169e101eb8f03891d8dc04a92335134315d57aee6a4e39a9fc2",
+    "width": 1200,
+    "height": 675,
+    "template": "tools/journal-art/figures/thue-cho-thue-tro-2026.mjs",
+    "rightsHolder": "BlueSkyz Labs"
+  },
+  "/images/journal/thue-cho-thue-tro-2026/hero.en.webp": {
+    "sha256": "9aab88a9da0fb697b5a8c4ec6eb0facb89bbca44a15dbf7de14384ee4aee409a",
+    "width": 2400,
+    "height": 1350,
+    "template": "tools/journal-art/figures/thue-cho-thue-tro-2026.mjs",
+    "rightsHolder": "BlueSkyz Labs"
+  },
+  "/images/journal/thue-cho-thue-tro-2026/hero.vi-1200.webp": {
+    "sha256": "1e351ac26b88c0d2e08014e88ad64aa4eb9169b36b0835d36c9b0d44a937f607",
+    "width": 1200,
+    "height": 675,
+    "template": "tools/journal-art/figures/thue-cho-thue-tro-2026.mjs",
+    "rightsHolder": "BlueSkyz Labs"
+  },
+  "/images/journal/thue-cho-thue-tro-2026/hero.vi.og.jpg": {
+    "sha256": "b5501ae8b80cf7849200e52974529372026bd4a1963428bd46b3ecf397ad0cc9",
+    "width": 1200,
+    "height": 675,
+    "template": "tools/journal-art/figures/thue-cho-thue-tro-2026.mjs",
+    "rightsHolder": "BlueSkyz Labs"
+  },
+  "/images/journal/thue-cho-thue-tro-2026/hero.vi.webp": {
+    "sha256": "ffe7b662758fe98fdd7814c9f41109af108f593fce8e46d0eebb34a638e04b92",
+    "width": 2400,
+    "height": 1350,
+    "template": "tools/journal-art/figures/thue-cho-thue-tro-2026.mjs",
+    "rightsHolder": "BlueSkyz Labs"
+  },
+  "/images/journal/thue-cho-thue-tro-2026/infographic.en-1200.webp": {
+    "sha256": "42fd8acc92da3810cd7cf4c6cf3feadfc9c92cbf1e630e0dca2f879bf27e266a",
+    "width": 1200,
+    "height": 1700,
+    "template": "tools/journal-art/figures/thue-cho-thue-tro-2026.mjs",
+    "rightsHolder": "BlueSkyz Labs"
+  },
+  "/images/journal/thue-cho-thue-tro-2026/infographic.en.webp": {
+    "sha256": "c1dd3b0e88e0362e3b2309d80688222f972c7e96ae5d2bff21c67b07bec4631c",
+    "width": 2400,
+    "height": 3400,
+    "template": "tools/journal-art/figures/thue-cho-thue-tro-2026.mjs",
+    "rightsHolder": "BlueSkyz Labs"
+  },
+  "/images/journal/thue-cho-thue-tro-2026/infographic.vi-1200.webp": {
+    "sha256": "c975784e33ebbea5c0c950786359e7009a0a6e180d456d6d47b619c1eea47621",
+    "width": 1200,
+    "height": 1700,
+    "template": "tools/journal-art/figures/thue-cho-thue-tro-2026.mjs",
+    "rightsHolder": "BlueSkyz Labs"
+  },
+  "/images/journal/thue-cho-thue-tro-2026/infographic.vi.webp": {
+    "sha256": "53564abb45574b5de98f89655eb8a66529eaee15bd436a28344409e61cc26fd4",
+    "width": 2400,
+    "height": 3400,
+    "template": "tools/journal-art/figures/thue-cho-thue-tro-2026.mjs",
+    "rightsHolder": "BlueSkyz Labs"
+  }
+}

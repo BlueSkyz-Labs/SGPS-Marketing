@@ -272,7 +272,7 @@ const robotsNoindex = isNonProductionSiteUrl(SITE.url);
         <h2 id="company-name">{SITE.name}</h2>
         <p>{SITE.proposition}</p>
         <p>
-          Operating since{" "}
+          Operating since {/* dateline-exempt: year */}
           <time datetime={String(SITE.operatingSinceYear)}>
             {SITE.operatingSinceYear}
           </time>

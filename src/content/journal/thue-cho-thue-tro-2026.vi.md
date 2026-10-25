@@ -3,7 +3,7 @@ id: thue-cho-thue-tro-2026
 lang: vi
 branch: news
 title: "Thuế cho thuê trọ năm 2026: ngưỡng 1 tỷ đồng và những điều chủ trọ cần biết"
-description: "Từ 1/1/2026, ngưỡng doanh thu không phải nộp thuế của hộ, cá nhân kinh doanh là 1 tỷ đồng/năm. Tóm tắt điểm chính cho chủ trọ, kèm nguồn chính thức."
+description: "Từ 1/1/2026, ngưỡng doanh thu không phải nộp thuế của hộ, cá nhân kinh doanh là 1 tỷ đồng/năm. Tóm tắt điểm chính cho chủ trọ, kèm các nguồn dẫn."
 datePublished: "2026-10-23"
 author: tony-nguyen
 aiAssisted: true
@@ -15,6 +15,13 @@ sources:
   - https://tuoitre.vn/nam-2026-nguoi-cho-thue-nha-phai-chiu-thue-gia-tri-gia-tang-nhu-the-nao-20260114165921867.htm
   - https://baochinhphu.vn/quy-dinh-doi-tuong-su-dung-hoa-don-dien-tu-10226070308163723.htm
 ownerApproval: https://github.com/BlueSkyz-Labs/SGPS-Marketing/pull/671
+hero:
+  src: /images/journal/thue-cho-thue-tro-2026/hero.vi.webp
+  alt: "Minh hoạ nét khắc: dãy phòng trọ hai tầng, cuốn sổ ghi chép và thước đo có vạch ngưỡng 1 tỷ đồng."
+  caption: "Ngưỡng doanh thu 1 tỷ đồng/năm áp dụng từ ngày 1/1/2026."
+infographic:
+  src: /images/journal/thue-cho-thue-tro-2026/infographic.vi.webp
+  alt: "Infographic tóm tắt: ngưỡng 1 tỷ đồng/năm từ 1/1/2026; các mốc 10/12/2025 và 29/4/2026; trên ngưỡng, thuế TNCN 5% phần vượt và thuế GTGT 5% trên doanh thu; ví dụ doanh thu 1,2 tỷ đồng thì thuế TNCN 10 triệu đồng; cho thuê bất động sản không bắt buộc dùng hoá đơn điện tử."
 draft: false
 ---
 
@@ -24,7 +31,7 @@ draft: false
 
 - Ngưỡng doanh thu không phải nộp thuế giá trị gia tăng (GTGT) và thuế thu nhập cá nhân (TNCN) của hộ, cá nhân kinh doanh hiện là **1 tỷ đồng/năm**, áp dụng từ ngày 1/1/2026.
 - Mức này do Nghị định 141/2026/NĐ-CP (ban hành ngày 29/4/2026) nâng lên từ 500 triệu đồng.
-- Người cho thuê bất động sản không thuộc diện bắt buộc dùng hoá đơn điện tử theo Nghị định 254/2026/NĐ-CP.
+- Người cho thuê bất động sản không thuộc diện bắt buộc dùng hoá đơn điện tử theo Nghị định 254/2026/NĐ-CP (xem mục Hoá đơn điện tử).
 
 ## Ngưỡng 1 tỷ đồng đến từ đâu?
 
@@ -34,12 +41,12 @@ Nhiều bài viết về thuế cho thuê nhà đăng trước cuối tháng 4/2
 
 ## Khi doanh thu cho thuê vượt 1 tỷ đồng/năm
 
-Theo các nguồn dẫn ở cuối bài, với cho thuê nhà, phòng trọ dài hạn:
+Theo các nguồn ở cuối bài, với nhà và phòng trọ cho thuê dài hạn:
 
 - **Thuế TNCN**: tính trên phần doanh thu vượt ngưỡng, thuế suất 5%.
 - **Thuế GTGT**: 5% trên doanh thu.
 
-Ví dụ minh hoạ cho phần thuế TNCN: doanh thu cho thuê 1,2 tỷ đồng/năm thì phần vượt ngưỡng là 200 triệu đồng, thuế TNCN là 200 triệu × 5% = 10 triệu đồng.
+Ví dụ về thuế TNCN: doanh thu cho thuê 1,2 tỷ đồng/năm thì phần vượt ngưỡng là 200 triệu đồng, thuế TNCN là 200 triệu × 5% = 10 triệu đồng.
 
 Cho thuê lưu trú ngắn ngày (nhà nghỉ, homestay) được tính theo cách khác. Nếu bạn đăng ký hộ kinh doanh và áp dụng phương pháp tính thuế khác, kết quả cũng có thể khác.
 
@@ -53,4 +60,4 @@ Nghị định 141/2026/NĐ-CP yêu cầu hộ, cá nhân kinh doanh có doanh t
 
 ## Ghi chép rõ ràng giúp bạn chủ động
 
-Dù dưới hay trên ngưỡng, ghi đủ từng khoản thu là cách đơn giản nhất để biết doanh thu năm của mình. [Sổ Trọ](/vi/products/sotro/), sản phẩm của BlueSkyz Labs đang mở xem trước, giúp chủ trọ thu tiền và ghi nhận mỗi khoản đúng một lần.
+Dù dưới hay trên ngưỡng, ghi đủ từng khoản thu là cách đơn giản để biết doanh thu năm của mình. [Sổ Trọ](/vi/products/sotro/), sản phẩm của BlueSkyz Labs đang mở xem trước, giúp chủ trọ thu tiền và ghi mỗi khoản đúng một lần.

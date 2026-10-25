@@ -45,11 +45,11 @@ export const AUTHORS = {
     avatar: "/images/authors/tony-nguyen-256.webp",
     avatarLarge: "/images/authors/tony-nguyen-512.webp",
     avatarAlt: {
-      vi: "Chân dung phác họa Tony Nguyen",
-      en: "Sketch portrait of Tony Nguyen",
+      vi: "Chân dung chibi minh hoạ Tony Nguyen",
+      en: "Chibi illustration of Tony Nguyen",
     },
     avatarProvenance:
-      "Pencil-sketch illustration derived from a portrait photograph supplied by the Owner, made at the Owner's request (2026-10-23) by deterministic local image processing (no generative model); background replaced with a brand tint, circular crop.",
+      "Chibi-style vector illustration of the author's recognisable features (glasses, side-parted hair, smile, suit and tie), chosen by the Owner on 2026-10-25 (option L). Drawn by a deterministic local script (tools/journal-art/chibi.py) with no photo pixels and no generative model; circular crop, cobalt ring.",
     aboutPath: {
       vi: "/vi/about/",
       en: "/en/about/",
