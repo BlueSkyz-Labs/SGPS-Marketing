@@ -1,0 +1,24 @@
+{
+  "id": "LSN-marketing-003",
+  "title": "Lane previews are owned by their lane and stopped by pid",
+  "project": "marketing",
+  "source": {
+    "repo": "SGPS-Marketing",
+    "commit": "1e8a7c6"
+  },
+  "captured_at": "2026-10-24",
+  "class": "orphaned-local-process",
+  "tags": ["local-dev", "playwright", "process-hygiene"],
+  "trigger": "2026-10-24: five astro preview processes (ports 3000, 3100, 3200, 3300, 3400) were left orphaned (ppid 1) by finished lanes. One pkill -f on the preview command line matched the invoking shell's own command line and killed it (exit 144), losing a screenshot run. One lane could not stop its own preview and handed the kill to the coordinator.",
+  "root_cause": "Lanes started previews without recording who owned them, and stopped processes by a command-line substring that also appears in the caller's own command line. Nothing tied a preview's lifetime to the lane that started it.",
+  "rule": "A lane starts its preview on a lane-unique port, records the pid, and stops exactly that pid before hand-back; match processes by $2 ~ /node$/ on `ps -eo pid,args` output and never by a substring that appears in the caller's own command line.",
+  "reuse_boundary": "Local development lanes only. CI runs a fresh runner per job. Applies to any project that runs a local preview server per lane. It never authorises killing a process the lane did not start.",
+  "guard": {
+    "level": "G1",
+    "kind": "checklist",
+    "path": "docs/QA_STRATEGY.md (Local preview hygiene)",
+    "judgment_only_reason": "A process-level guard (a wrapper that owns and reaps previews) would live in scripts/, which is a protected path and out of this change. The failure is also lane behaviour at hand-back, not repository content a test can inspect. The adjacent failure, a busy port 3000, is already refused by reuseExistingServer: false (LSN-marketing-002); a lane-unique port plus recorded pid is a judgment-level checklist."
+  },
+  "recurrences": [],
+  "state": "GUARDED"
+}

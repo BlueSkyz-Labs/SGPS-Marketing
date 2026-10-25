@@ -4,7 +4,10 @@
  * belong to another worktree and serve a different build.
  */
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
+import { mkdtempSync, readFileSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join, resolve } from "node:path";
+import { pathToFileURL } from "node:url";
 import test from "node:test";
 
 const CONFIG = readFileSync("playwright.config.ts", "utf8");
@@ -36,4 +39,58 @@ test("negative proof: local reuse is caught", () => {
   const unset = CONFIG.replace(/\n\s*reuseExistingServer: false,/, "");
   assert.notEqual(unset, CONFIG);
   assert.equal(auditServerReuse(unset).length, 1);
+});
+
+/**
+ * LSN-marketing-002 recurrence (2026-10-24): a loopback PLAYWRIGHT_BASE_URL
+ * skips the webServer, so global-setup itself must still refuse a non-local
+ * lane. Behavioural: run the real module (or a mutant) with the env set.
+ */
+const SETUP_PATH = resolve("tests/e2e/global-setup.mjs");
+const SETUP_SRC = readFileSync(SETUP_PATH, "utf8");
+
+async function runSetup(source, baseURL) {
+  const dir = mkdtempSync(join(tmpdir(), "gsetup-"));
+  const file = join(dir, "global-setup.mjs");
+  const stampUrl = pathToFileURL(resolve("tests/e2e/build-stamp.mjs")).href;
+  writeFileSync(file, source.replace('"./build-stamp.mjs"', `"${stampUrl}"`));
+  const mod = await import(pathToFileURL(file).href);
+  const saved = { ...process.env };
+  delete process.env.CI;
+  process.env.PLAYWRIGHT_BASE_URL = baseURL;
+  try {
+    await mod.default();
+    return null;
+  } catch (error) {
+    return error.message;
+  } finally {
+    process.env = saved;
+  }
+}
+
+test("global-setup refuses a remote PLAYWRIGHT_BASE_URL", async () => {
+  const msg = await runSetup(SETUP_SRC, "https://blueskyzlabs.com");
+  assert.match(msg ?? "", /remote base URL is not a local evidence lane/);
+});
+
+test("global-setup runs the stamp check when PLAYWRIGHT_BASE_URL is loopback", () => {
+  assert.doesNotMatch(
+    SETUP_SRC,
+    /if\s*\(\s*process\.env\.PLAYWRIGHT_BASE_URL[^)]*\)\s*return/,
+  );
+  assert.match(SETUP_SRC, /checkStamp\(stamped, head\)/);
+  assert.match(SETUP_SRC, /checkLaneURL/);
+});
+
+test("negative proof: a global-setup that returns early on PLAYWRIGHT_BASE_URL is caught", async () => {
+  const mutant = SETUP_SRC.replace(
+    "if (process.env.CI) return;",
+    "if (process.env.CI || process.env.PLAYWRIGHT_BASE_URL) return;",
+  );
+  assert.notEqual(mutant, SETUP_SRC);
+  const msg = await runSetup(mutant, "https://blueskyzlabs.com");
+  // The mutant lets a remote lane through (no refusal), which the real
+  // module's test above would reject; assert the detector sees the difference.
+  assert.equal(msg, null);
+  assert.match(mutant, /process\.env\.PLAYWRIGHT_BASE_URL\) return/);
 });
