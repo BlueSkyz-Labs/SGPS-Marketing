@@ -1,4 +1,74 @@
 {
+  "/images/journal/so-tro-ngay-dau-thang/hero.en-1200.webp": {
+    "sha256": "02905077caa09b2e282b0af544f22572b53282d3841de70bfbd2985d18bace95",
+    "width": 1200,
+    "height": 675,
+    "template": "tools/journal-art/figures/so-tro-ngay-dau-thang.mjs",
+    "rightsHolder": "BlueSkyz Labs"
+  },
+  "/images/journal/so-tro-ngay-dau-thang/hero.en.og.jpg": {
+    "sha256": "f70276de00a6838c884759f6fea7c71c53868b4370855f6de5748668a806dd8b",
+    "width": 1200,
+    "height": 675,
+    "template": "tools/journal-art/figures/so-tro-ngay-dau-thang.mjs",
+    "rightsHolder": "BlueSkyz Labs"
+  },
+  "/images/journal/so-tro-ngay-dau-thang/hero.en.webp": {
+    "sha256": "4345e1aad93cd947dac6529c3d826c76bec3fd2395804f5de50acad36bfaad73",
+    "width": 2400,
+    "height": 1350,
+    "template": "tools/journal-art/figures/so-tro-ngay-dau-thang.mjs",
+    "rightsHolder": "BlueSkyz Labs"
+  },
+  "/images/journal/so-tro-ngay-dau-thang/hero.vi-1200.webp": {
+    "sha256": "715795def88e72d42ad316d150e7e31d7e87db5eab7a15430a5cb57299c672a7",
+    "width": 1200,
+    "height": 675,
+    "template": "tools/journal-art/figures/so-tro-ngay-dau-thang.mjs",
+    "rightsHolder": "BlueSkyz Labs"
+  },
+  "/images/journal/so-tro-ngay-dau-thang/hero.vi.og.jpg": {
+    "sha256": "c6c8bccc34d38c84bd1dad44a6239db18f0f3c8d71379bfa96029a09f74e4a63",
+    "width": 1200,
+    "height": 675,
+    "template": "tools/journal-art/figures/so-tro-ngay-dau-thang.mjs",
+    "rightsHolder": "BlueSkyz Labs"
+  },
+  "/images/journal/so-tro-ngay-dau-thang/hero.vi.webp": {
+    "sha256": "50e8b5638aa88df824a11d6630230e151c6b098bc348934256bf21f3d1081064",
+    "width": 2400,
+    "height": 1350,
+    "template": "tools/journal-art/figures/so-tro-ngay-dau-thang.mjs",
+    "rightsHolder": "BlueSkyz Labs"
+  },
+  "/images/journal/so-tro-ngay-dau-thang/infographic.en-1200.webp": {
+    "sha256": "367850b8063cb4d6d86e3c2413abd6663d33a82018dc0830f562703f8b2cbad0",
+    "width": 1200,
+    "height": 1260,
+    "template": "tools/journal-art/figures/so-tro-ngay-dau-thang.mjs",
+    "rightsHolder": "BlueSkyz Labs"
+  },
+  "/images/journal/so-tro-ngay-dau-thang/infographic.en.webp": {
+    "sha256": "74d364ccd856cf4861a306ff3eca1dba8d8821ab8bf456d31bb8e5b49977e968",
+    "width": 2400,
+    "height": 2520,
+    "template": "tools/journal-art/figures/so-tro-ngay-dau-thang.mjs",
+    "rightsHolder": "BlueSkyz Labs"
+  },
+  "/images/journal/so-tro-ngay-dau-thang/infographic.vi-1200.webp": {
+    "sha256": "d216af84feaa7b9ab8c2fc76cabb468e84d94003845c478124178f0a011ca9f8",
+    "width": 1200,
+    "height": 1260,
+    "template": "tools/journal-art/figures/so-tro-ngay-dau-thang.mjs",
+    "rightsHolder": "BlueSkyz Labs"
+  },
+  "/images/journal/so-tro-ngay-dau-thang/infographic.vi.webp": {
+    "sha256": "ff7f633158f9f6a13cd6a030f2dc16e973cdd0ed62896bd04e1f551ce71df8ac",
+    "width": 2400,
+    "height": 2520,
+    "template": "tools/journal-art/figures/so-tro-ngay-dau-thang.mjs",
+    "rightsHolder": "BlueSkyz Labs"
+  },
   "/images/journal/so-tro-xem-truoc/hero.en-1200.webp": {
     "sha256": "35b9aeda9850aca9d30b7c417423fde2a6b34301176f3710941e1ae03e6ff632",
     "width": 1200,
@@ -137,6 +207,76 @@
     "width": 2400,
     "height": 3400,
     "template": "tools/journal-art/figures/thue-cho-thue-tro-2026.mjs",
+    "rightsHolder": "BlueSkyz Labs"
+  },
+  "/images/journal/vung-tay-lai-ban-demo/hero.en-1200.webp": {
+    "sha256": "afc0db559f8c84551040d614a1ad286e3972ace2e1c5230690f2f896f41ff7e2",
+    "width": 1200,
+    "height": 675,
+    "template": "tools/journal-art/figures/vung-tay-lai-ban-demo.mjs",
+    "rightsHolder": "BlueSkyz Labs"
+  },
+  "/images/journal/vung-tay-lai-ban-demo/hero.en.og.jpg": {
+    "sha256": "d09761b79cc7fb5fad0d5d8be54c1d8317804afc0ea4c2eb8dc67085391b4abd",
+    "width": 1200,
+    "height": 675,
+    "template": "tools/journal-art/figures/vung-tay-lai-ban-demo.mjs",
+    "rightsHolder": "BlueSkyz Labs"
+  },
+  "/images/journal/vung-tay-lai-ban-demo/hero.en.webp": {
+    "sha256": "ee949e34774c80c918ad342649f3f1175a8468eb9470a8f83cb4e28b4a9c904a",
+    "width": 2400,
+    "height": 1350,
+    "template": "tools/journal-art/figures/vung-tay-lai-ban-demo.mjs",
+    "rightsHolder": "BlueSkyz Labs"
+  },
+  "/images/journal/vung-tay-lai-ban-demo/hero.vi-1200.webp": {
+    "sha256": "f072f36866c970b0bbeef40b1c0648fdf7b0af190bd129f12610bb1ebb194ac8",
+    "width": 1200,
+    "height": 675,
+    "template": "tools/journal-art/figures/vung-tay-lai-ban-demo.mjs",
+    "rightsHolder": "BlueSkyz Labs"
+  },
+  "/images/journal/vung-tay-lai-ban-demo/hero.vi.og.jpg": {
+    "sha256": "294eb1cb4367d1f2c7fa7a0348f6e4f3e52806b7f6da76db104b0c0e385ce72c",
+    "width": 1200,
+    "height": 675,
+    "template": "tools/journal-art/figures/vung-tay-lai-ban-demo.mjs",
+    "rightsHolder": "BlueSkyz Labs"
+  },
+  "/images/journal/vung-tay-lai-ban-demo/hero.vi.webp": {
+    "sha256": "d931caa353725f4267bdccf9a57410f0571f68ca98e8cfb3f1978e2de6f6838d",
+    "width": 2400,
+    "height": 1350,
+    "template": "tools/journal-art/figures/vung-tay-lai-ban-demo.mjs",
+    "rightsHolder": "BlueSkyz Labs"
+  },
+  "/images/journal/vung-tay-lai-ban-demo/infographic.en-1200.webp": {
+    "sha256": "9661d27f8f4ced5eceac18feb0358f3952d53f850f6971fa4ecc0eacb3e04a53",
+    "width": 1200,
+    "height": 1260,
+    "template": "tools/journal-art/figures/vung-tay-lai-ban-demo.mjs",
+    "rightsHolder": "BlueSkyz Labs"
+  },
+  "/images/journal/vung-tay-lai-ban-demo/infographic.en.webp": {
+    "sha256": "12cd438a92f4e62b7ec39e78555ac072994f6525f7382e45e6f3af0afc731eb0",
+    "width": 2400,
+    "height": 2520,
+    "template": "tools/journal-art/figures/vung-tay-lai-ban-demo.mjs",
+    "rightsHolder": "BlueSkyz Labs"
+  },
+  "/images/journal/vung-tay-lai-ban-demo/infographic.vi-1200.webp": {
+    "sha256": "6a19936f780e9321286b7a63cdd9e2a4416b12d041062e850dbc5601df993a13",
+    "width": 1200,
+    "height": 1260,
+    "template": "tools/journal-art/figures/vung-tay-lai-ban-demo.mjs",
+    "rightsHolder": "BlueSkyz Labs"
+  },
+  "/images/journal/vung-tay-lai-ban-demo/infographic.vi.webp": {
+    "sha256": "5c1d790fb4b6e6d2b1929e5346732d045d29cf011116e1caa2b9e06b8476f6ed",
+    "width": 2400,
+    "height": 2520,
+    "template": "tools/journal-art/figures/vung-tay-lai-ban-demo.mjs",
     "rightsHolder": "BlueSkyz Labs"
   }
 }
