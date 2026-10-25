@@ -5,6 +5,11 @@ import type { Language } from "@/lib/i18n";
  * here: they come from the showcase record (screen title and caption) and the
  * product record (job or capability), through `resolveFeatureStory`.
  * zh and zh-hant: NOT VERIFIED (native review pending).
+ *
+ * `title`, `lead` and `desktop` frame a landlord's month, which is Sổ Trọ's
+ * story only. Every other product gets the neutral `NEUTRAL_STORY_COPY`
+ * through `storyFrame`, so a learner's or a writer's app is never headed
+ * "A landlord's month".
  */
 export const STORY_COPY = {
   en: {
@@ -50,6 +55,40 @@ export const STORY_COPY = {
     viewerClose: string;
   }
 >;
+
+/** Story framing for products whose story is not a landlord's month. */
+export const NEUTRAL_STORY_COPY = {
+  en: {
+    title: (name: string) => `${name}, screen by screen`,
+    lead: "Screens from the app, shown with sample data.",
+    desktop: "On a computer",
+  },
+  vi: {
+    title: (name: string) => `${name} qua từng màn hình`,
+    lead: "Các màn hình của ứng dụng, hiển thị với dữ liệu mẫu.",
+    desktop: "Trên máy tính",
+  },
+  zh: {
+    title: (name: string) => `${name} 逐屏一览`,
+    lead: "应用的各个界面，使用示例数据展示。",
+    desktop: "电脑端",
+  },
+  "zh-hant": {
+    title: (name: string) => `${name} 逐屏一覽`,
+    lead: "應用程式的各個畫面，使用範例資料展示。",
+    desktop: "電腦端",
+  },
+} as const satisfies Record<
+  Language,
+  { title: (name: string) => string; lead: string; desktop: string }
+>;
+
+/** Sổ Trọ is the one product whose screens tell a landlord's month. */
+export const isLandlordStory = (product: string) => product === "sotro";
+
+/** Title, lead and desktop kicker for one product's story. */
+export const storyFrame = (lang: Language, product: string) =>
+  isLandlordStory(product) ? STORY_COPY[lang] : NEUTRAL_STORY_COPY[lang];
 
 /** The phone derivative next to each master (`<name>-480.webp`). */
 export const phoneSmallSrc = (src: string) =>
