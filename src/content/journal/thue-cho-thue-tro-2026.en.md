@@ -15,6 +15,13 @@ sources:
   - https://tuoitre.vn/nam-2026-nguoi-cho-thue-nha-phai-chiu-thue-gia-tri-gia-tang-nhu-the-nao-20260114165921867.htm
   - https://baochinhphu.vn/quy-dinh-doi-tuong-su-dung-hoa-don-dien-tu-10226070308163723.htm
 ownerApproval: https://github.com/BlueSkyz-Labs/SGPS-Marketing/pull/671
+hero:
+  src: /images/journal/thue-cho-thue-tro-2026/hero.en.webp
+  alt: "Engraved illustration: a two-storey row of rental rooms, a ledger and a gauge marked at the 1 billion dong threshold."
+  caption: "The 1 billion dong annual revenue threshold applies from 1 January 2026."
+infographic:
+  src: /images/journal/thue-cho-thue-tro-2026/infographic.en.webp
+  alt: "Summary infographic: a 1 billion dong a year threshold from 1 January 2026; the 10 December 2025 and 29 April 2026 milestones; above it, 5% PIT on the excess and 5% VAT on revenue; a 1.2 billion dong example owes 10 million dong PIT; renting out property does not require e-invoices."
 draft: false
 ---
 
@@ -24,7 +31,7 @@ draft: false
 
 - Household and individual businesses owe no value-added tax (VAT) or personal income tax (PIT) on annual revenue up to **1 billion dong**, from 1 January 2026.
 - Decree 141/2026/NĐ-CP, issued on 29 April 2026, raised the threshold from 500 million dong.
-- Under Decree 254/2026/NĐ-CP, people who earn income from renting out property are not required to use e-invoices.
+- Under Decree 254/2026/NĐ-CP, people who earn income from renting out property are not required to use e-invoices (see E-invoices below).
 
 ## Where the 1 billion dong threshold comes from
 
@@ -53,4 +60,4 @@ Decree 141/2026/NĐ-CP requires household and individual businesses with annual 
 
 ## Clear records help
 
-Below or above the threshold, recording every payment is the simplest way to know your annual revenue. [Sổ Trọ](/en/products/sotro/), a BlueSkyz Labs product now in preview, helps landlords collect rent and record each payment once.
+Below or above the threshold, recording every payment is a simple way to know your annual revenue. [Sổ Trọ](/en/products/sotro/), a BlueSkyz Labs product now in preview, helps landlords collect rent and record each payment once.
