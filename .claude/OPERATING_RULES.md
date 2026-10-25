@@ -84,3 +84,15 @@ time median 3.5 h, p90 43 h (dominated by the `owner-approved` wait).
   most three improvements, ship the safe ones as PRs, report to the Owner in
   Vietnamese with GMT+7 times.
 - These rules change only through a protected PR with the Owner's label.
+
+## O7. Public content (Owner, 2026-10-25)
+
+- Every article and customer-facing sentence meets
+  `docs/editorial/PUBLIC_CONTENT_STANDARD.md` and the journal press standard.
+  The bar is a top-tier global publication; the words "top tier" or "elite"
+  are never printed about ourselves.
+- Before publication: an independent copy review (reviewer lane or a person
+  who did not write it), findings resolved, Owner approval of the post.
+- After publication: read the live page in every language within 24 hours of
+  the deploy and fix what is wrong in a follow-up PR; re-read when a cited
+  fact changes and at least quarterly.
