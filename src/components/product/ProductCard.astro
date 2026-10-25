@@ -67,6 +67,16 @@ const CAPTURES: Record<string, { src: string; width: number; height: number }> =
 const capture = showThumb ? CAPTURES[data.slug] : undefined;
 const showProfileLink = cta.href !== profileHref;
 const ctaIsExternal = cta.external || /^https?:\/\//i.test(cta.href);
+// Owner 2026-10-25: native apps on the roadmap show on the card as their own
+// "in development" chips, never as supported platforms and never linked.
+const nativeRoadmap = (
+  [
+    ["ios", "iOS"],
+    ["android", "Android"],
+  ] as const
+).flatMap(([key, name]) =>
+  data.appAccess?.[key]?.state === "in-development" ? [name] : [],
+);
 ---
 
 <!-- F6: the shell is the size container the card's thumb/body layout
@@ -178,6 +188,14 @@ const ctaIsExternal = cta.external || /^https?:\/\//i.test(cta.href);
           {platform === "web" && !webPreviewOpen(data)
             ? ` · ${AVAILABILITY.inDevelopment[lang]}`
             : ""}
+        </span>
+      ))}
+      {nativeRoadmap.map((name) => (
+        <span
+          data-mobile-state="in-development"
+          class="inline-flex max-w-full min-w-0 items-center gap-1.5 rounded-full border border-dashed border-[var(--border-subtle)] px-2.5 py-0.5 text-xs font-medium text-[var(--text-secondary)] [overflow-wrap:anywhere]"
+        >
+          {name} · {AVAILABILITY.inDevelopment[lang]}
         </span>
       ))}
     </div>

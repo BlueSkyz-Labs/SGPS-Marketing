@@ -21,13 +21,6 @@ const STATUS_LABELS: Record<TrustState, Record<Language, string>> = {
   },
 };
 
-const STATUS_CLASSES: Record<TrustState, string> = {
-  available:
-    "border-[color-mix(in_srgb,var(--brand-cobalt)_35%,transparent)] bg-[color-mix(in_srgb,var(--brand-cobalt)_6%,var(--surface-raised))] text-[var(--action-primary)]",
-  "not-published":
-    "border-[var(--border-subtle)] bg-[var(--surface-subtle)] text-[var(--text-muted)]",
-};
-
 const OPEN_LABEL: Record<Language, string> = {
   en: "Open",
   vi: "Mở",
@@ -50,20 +43,15 @@ const COMPARE_LABEL: Record<Language, string> = {
 };
 ---
 
-<ul class="mt-10 flex flex-col gap-3" data-trust-ledger>
+<ul class="trust-ledger mt-10 flex flex-col" data-trust-ledger>
   {TRUST_LEDGER.map((entry) => (
     <li data-trust-surface={entry.id}>
-      <div class="trust-ledger-card grid gap-3 rounded-lg border border-[var(--border-subtle)] bg-[var(--surface-raised)] p-5 sm:grid-cols-[minmax(0,14rem)_minmax(0,1fr)] sm:items-start sm:gap-6">
+      <div class="trust-ledger-card grid gap-3 sm:grid-cols-[minmax(0,14rem)_minmax(0,1fr)] sm:items-start sm:gap-6">
         <div class="flex flex-wrap items-center gap-3">
           <span class="text-base font-semibold tracking-tight text-[var(--text-primary)]">
             {entry.label[lang]}
           </span>
-          <span
-            class:list={[
-              "inline-flex items-center rounded-md border px-2.5 py-1 text-xs font-semibold",
-              STATUS_CLASSES[entry.state],
-            ]}
-          >
+          <span class="trust-ledger-status" data-trust-status={entry.state}>
             {STATUS_LABELS[entry.state][lang]}
           </span>
         </div>
@@ -93,3 +81,31 @@ const COMPARE_LABEL: Record<Language, string> = {
     </li>
   ))}
 </ul>
+
+<style>
+  /* G-07: hairline ledger rows; status is label text in eyebrow voice (the
+     state is carried by the words, so no tint is needed). */
+  .trust-ledger {
+    padding: 0;
+    list-style: none;
+    border-bottom: 1px solid var(--c4-hairline);
+  }
+
+  .trust-ledger-card {
+    padding: var(--space-6) 0;
+    border-top: 1px solid var(--c4-hairline);
+  }
+
+  .trust-ledger-status {
+    font-size: var(--c4-type-meta);
+    font-weight: 600;
+    letter-spacing: var(--tracking-eyebrow);
+    text-transform: uppercase;
+    color: var(--text-secondary);
+  }
+
+  :lang(vi) .trust-ledger-status {
+    text-transform: none;
+    letter-spacing: 0.03em;
+  }
+</style>

@@ -16,9 +16,9 @@ const hasPublicEmail = Boolean(SITE.contactEmail || SITE.supportEmail);
 {hasPublicEmail ? (
   <li
     data-contact-card="business"
-    class="flex min-w-0 flex-col gap-3 rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-raised)] p-6"
+    class="contact-section flex min-w-0 flex-col gap-3"
   >
-    <h2 class="text-lg font-semibold tracking-tight">
+    <h2 class="contact-section__heading">
       {labelFor(SHARED_LABELS.generalContact, lang)}
     </h2>
     {SITE.contactEmail ? (
