@@ -66,12 +66,12 @@ for (const lang of LOCALES) {
         document.documentElement.clientWidth,
     );
     expect(overflow).toBeLessThanOrEqual(0);
-    // The card is visibly a card: it has a border.
+    // G-07: the row is ruled by a hairline on top (no box).
     const border = await page
       .locator("[data-claim-id]")
       .first()
       .evaluate((el) => getComputedStyle(el).borderTopWidth);
-    expect(border).not.toBe("0px");
+    expect(border).toBe("1px");
   });
 }
 
