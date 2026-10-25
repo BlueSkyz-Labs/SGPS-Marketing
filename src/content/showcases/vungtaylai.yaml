@@ -1,0 +1,158 @@
+# Vững Tay Lái showcase — real screens of the running application.
+# Captured 2026-10-25 from a local build of BlueSkyz-Labs/VungTayLai at the
+# revision below, in a fresh guest session (no account exists in V0) with
+# synthetic demo answers. Phone screens: 390x844 CSS px at 2x. The product is
+# In development: every screen is a development build, not a launched app, and
+# the road-sign and question content shown does not imply government
+# affiliation. Wording below describes only what each screen shows.
+# zh / zh-hant text: machine-assisted (zh-hant via OpenCC s2twp), pending
+# native review. Copy is an Owner-approval candidate.
+product: vungtaylai
+capture:
+  kind: ui-screenshot
+  data: synthetic-demo
+  environment: local-test-build
+  sourceRepository: https://github.com/BlueSkyz-Labs/VungTayLai
+  sourceRevision: 337b7a00036217903fe39cac9d38903c2582b27f
+  capturedAt: 2026-10-25
+
+screens:
+  - id: today
+    surface: phone
+    src: /products/vungtaylai/showcase/vtl-01-today.webp
+    width: 780
+    height: 1688
+    title:
+      en: "Today"
+      vi: "Hôm nay"
+      zh: "今天"
+      zh-hant: "今天"
+    caption:
+      en: "one task for the learner's chosen stage, with shortcuts to mock exam, road signs and practical driving. Development build."
+      vi: "một việc cho giai đoạn người học đã chọn, kèm lối tắt đến thi thử, biển báo và sa hình. Bản đang phát triển."
+      zh: "针对学员所选阶段的一项任务，并附模拟考试、交通标志和实操的快捷入口。开发版本。"
+      zh-hant: "針對學員所選階段的一項任務，並附模擬考試、交通標誌和實操的快捷入口。開發版本。"
+    alt:
+      en: "Vững Tay Lái phone screen “Việc hôm nay” with a stage progress line, a “Học một chủ đề chính thức mới” card and Thi thử, Biển báo, Sa hình shortcuts."
+      vi: "Màn hình “Việc hôm nay” của Vững Tay Lái trên điện thoại với thanh giai đoạn, thẻ “Học một chủ đề chính thức mới” và lối tắt Thi thử, Biển báo, Sa hình."
+      zh: "Vững Tay Lái 手机“Việc hôm nay”页面，含阶段进度线、“Học một chủ đề chính thức mới”卡片及 Thi thử、Biển báo、Sa hình 入口。"
+      zh-hant: "Vững Tay Lái 手機「Việc hôm nay」頁面，含階段進度線、「Học một chủ đề chính thức mới」卡片及 Thi thử、Biển báo、Sa hình 入口。"
+  - id: journey
+    surface: phone
+    src: /products/vungtaylai/showcase/vtl-05-journey.webp
+    width: 780
+    height: 1688
+    title:
+      en: "Journey"
+      vi: "Hành trình"
+      zh: "旅程"
+      zh-hant: "旅程"
+    caption:
+      en: "the learner's path drawn as stages, with the current stage marked and finished ones checked. Stored on the device; no account."
+      vi: "lộ trình của người học vẽ thành các giai đoạn, giai đoạn hiện tại được đánh dấu, giai đoạn đã qua có dấu tích. Lưu trên máy, không cần tài khoản."
+      zh: "学员路径以阶段呈现，当前阶段有标记，已完成阶段打勾。数据存于设备，无需账号。"
+      zh-hant: "學員路徑以階段呈現，目前階段有標記，已完成階段打勾。資料存於裝置，無需帳號。"
+    alt:
+      en: "Vững Tay Lái phone screen “Hành trình” with the chip “Bạn đang ở: Học & luyện tập” and a stage path with finished stages checked."
+      vi: "Màn hình “Hành trình” của Vững Tay Lái trên điện thoại với nhãn “Bạn đang ở: Học & luyện tập” và đường các giai đoạn, giai đoạn đã qua có dấu tích."
+      zh: "Vững Tay Lái 手机“Hành trình”页面，含“Bạn đang ở: Học & luyện tập”标签和阶段路径，已完成阶段打勾。"
+      zh-hant: "Vững Tay Lái 手機「Hành trình」頁面，含「Bạn đang ở: Học & luyện tập」標籤和階段路徑，已完成階段打勾。"
+  - id: question
+    surface: phone
+    src: /products/vungtaylai/showcase/vtl-02-question.webp
+    width: 780
+    height: 1688
+    title:
+      en: "A practice question"
+      vi: "Một câu luyện tập"
+      zh: "一道练习题"
+      zh-hant: "一道練習題"
+    caption:
+      en: "a situation question with lettered answers, tagged when it is a critical question. Nothing is revealed yet."
+      vi: "một câu tình huống với các đáp án có chữ cái, có nhãn khi là câu điểm liệt. Chưa hiện đáp án đúng."
+      zh: "带字母选项的情境题，若为关键题则带标签。此时尚未揭晓答案。"
+      zh-hant: "帶字母選項的情境題，若為關鍵題則帶標籤。此時尚未揭曉答案。"
+    alt:
+      en: "Vững Tay Lái phone screen “Luyện tập” showing a “Câu điểm liệt” question about alcohol and driving home, with three answers A, B and C."
+      vi: "Màn hình “Luyện tập” của Vững Tay Lái trên điện thoại hiện câu điểm liệt về đồ uống có cồn và đi về nhà, với ba đáp án A, B, C."
+      zh: "Vững Tay Lái 手机“Luyện tập”页面，显示一道关于饮酒后回家的“Câu điểm liệt”题，含 A、B、C 三个选项。"
+      zh-hant: "Vững Tay Lái 手機「Luyện tập」頁面，顯示一道關於飲酒後回家的「Câu điểm liệt」題，含 A、B、C 三個選項。"
+  - id: confidence
+    surface: phone
+    src: /products/vungtaylai/showcase/vtl-03-confidence.webp
+    width: 780
+    height: 1688
+    title:
+      en: "Confidence first"
+      vi: "Tự tin trước"
+      zh: "先选信心"
+      zh-hant: "先選信心"
+    caption:
+      en: "after choosing an answer, the learner records how sure they are. The correct answer is still hidden."
+      vi: "sau khi chọn đáp án, người học ghi lại mức tự tin của mình. Đáp án đúng vẫn chưa hiện."
+      zh: "选好答案后，学员先记录自己的把握程度。正确答案仍未显示。"
+      zh-hant: "選好答案後，學員先記錄自己的把握程度。正確答案仍未顯示。"
+    alt:
+      en: "Vững Tay Lái phone screen with answer A marked “Đã chọn” and a “Mức tự tin của bạn?” panel offering four levels, “Tạm chắc” recorded."
+      vi: "Màn hình Vững Tay Lái trên điện thoại với đáp án A “Đã chọn” và khung “Mức tự tin của bạn?” có bốn mức, đã ghi “Tạm chắc”."
+      zh: "Vững Tay Lái 手机页面，答案 A 标为“Đã chọn”，“Mức tự tin của bạn?”面板提供四个等级，已记录“Tạm chắc”。"
+      zh-hant: "Vững Tay Lái 手機頁面，答案 A 標為「Đã chọn」，「Mức tự tin của bạn?」面板提供四個等級，已記錄「Tạm chắc」。"
+  - id: feedback
+    surface: phone
+    src: /products/vungtaylai/showcase/vtl-04-feedback.webp
+    width: 780
+    height: 1688
+    title:
+      en: "Feedback"
+      vi: "Phản hồi"
+      zh: "反馈"
+      zh-hant: "回饋"
+    caption:
+      en: "the result, a short explanation labelled as written by Vững Tay Lái rather than the legal text, and a note tied to the confidence recorded."
+      vi: "kết quả, lời giải thích ngắn ghi rõ do Vững Tay Lái biên soạn chứ không phải nguyên văn luật, và lời nhắn gắn với mức tự tin đã ghi."
+      zh: "显示结果、一段注明由 Vững Tay Lái 编写而非法律原文的简短解释，以及与所记录信心相关的提示。"
+      zh-hant: "顯示結果、一段註明由 Vững Tay Lái 編寫而非法律原文的簡短解釋，以及與所記錄信心相關的提示。"
+    alt:
+      en: "Vững Tay Lái phone screen with a “Chưa đúng” result, a “Hiểu nhanh” explanation, a “Nguồn tham chiếu” fold-out and “Chưa chắc và cần ôn lại”."
+      vi: "Màn hình Vững Tay Lái trên điện thoại với kết quả “Chưa đúng”, phần giải thích “Hiểu nhanh”, mục mở “Nguồn tham chiếu” và “Chưa chắc và cần ôn lại”."
+      zh: "Vững Tay Lái 手机页面，显示“Chưa đúng”结果、“Hiểu nhanh”解释、可展开的“Nguồn tham chiếu”以及“Chưa chắc và cần ôn lại”。"
+      zh-hant: "Vững Tay Lái 手機頁面，顯示「Chưa đúng」結果、「Hiểu nhanh」解釋、可展開的「Nguồn tham chiếu」以及「Chưa chắc và cần ôn lại」。"
+  - id: sources
+    surface: phone
+    src: /products/vungtaylai/showcase/vtl-06-source.webp
+    width: 780
+    height: 1688
+    title:
+      en: "Sources"
+      vi: "Nguồn"
+      zh: "来源"
+      zh-hant: "來源"
+    caption:
+      en: "legal sources listed apart from the app's own study content, each with its effective dates and the date it was last checked. Not an official app."
+      vi: "nguồn pháp lý tách biệt với nội dung học của ứng dụng, mỗi nguồn có ngày hiệu lực và ngày kiểm tra gần nhất. Không phải ứng dụng chính thức."
+      zh: "法律来源与应用自编学习内容分开列出，每项含生效日期和最近核查日期。并非官方应用。"
+      zh-hant: "法律來源與應用自編學習內容分開列出，每項含生效日期和最近核查日期。並非官方應用。"
+    alt:
+      en: "Vững Tay Lái phone screen “Nguồn chính thống” listing a regulation with its authority, effective dates and a “Kiểm tra nguồn” date."
+      vi: "Màn hình “Nguồn chính thống” của Vững Tay Lái trên điện thoại liệt kê một văn bản quy định kèm cơ quan, ngày hiệu lực và ngày “Kiểm tra nguồn”."
+      zh: "Vững Tay Lái 手机“Nguồn chính thống”页面，列出一项法规及其发布机关、生效日期和“Kiểm tra nguồn”日期。"
+      zh-hant: "Vững Tay Lái 手機「Nguồn chính thống」頁面，列出一項法規及其發布機關、生效日期和「Kiểm tra nguồn」日期。"
+
+# Feature story: a learner's first practice question told with the screens
+# above. `fact` binds the registered job or capability
+# (src/content/products/vungtaylai.yaml, 1-based) the chapter's task relates
+# to, at its "Development target" framing. It is not a claim that the screen
+# is shipped. Journey binds none: no registered entry is its task.
+story:
+  chapters:
+    - screen: today
+      fact: job-1
+    - screen: journey
+    - screen: question
+      fact: job-2
+    - screen: confidence
+      fact: capability-2
+    - screen: feedback
+      fact: capability-2
+    - screen: sources
+      fact: capability-1

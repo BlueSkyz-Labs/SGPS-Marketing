@@ -20,7 +20,7 @@ import {
   websiteJsonLd,
   webPageJsonLd,
 } from "@/lib/seo";
-import { getLanguageFromPath } from "@/lib/i18n";
+import { getLanguageFromPath, LANGUAGES, type Language } from "@/lib/i18n";
 import { breadcrumbJsonLd } from "@/lib/breadcrumbs";
 import { isNonProductionSiteUrl } from "@/lib/truth";
 import { lastmodForPath } from "@/lib/git-lastmod";
@@ -62,6 +62,10 @@ interface Props {
   journeyPrimary?: string | undefined;
   /** Syndication feed advertised in `<head>` (journal index and posts). */
   feed?: FeedLink;
+  /** Languages whose version of this page is indexable. hreflang lists only
+   * these, so no alternate points at a noindex page. Default: every language
+   * the route exists in. x-default stays on English. */
+  indexableLanguages?: readonly Language[];
 }
 
 const {
@@ -81,6 +85,7 @@ const {
   lastUpdated = false,
   extraJsonLd = [],
   feed,
+  indexableLanguages,
 } = Astro.props;
 
 /** One separator, descriptor first, brand last. A descriptor that already
@@ -129,6 +134,11 @@ const ogAlternates = Object.values(OG_LOCALES).filter(
   (locale) => locale !== ogLocale,
 );
 const canonical = canonicalForPath(path, SITE.url);
+const indexableHreflangs = indexableLanguages?.map(
+  (lang) => LANGUAGES[lang].hreflang,
+);
+const isIndexableAlternate = (hreflang: string) =>
+  indexableHreflangs === undefined || indexableHreflangs.includes(hreflang);
 const ogImageUrl = absoluteUrl(SITE.url, ogImage);
 /** Pixel size and alt are only known for the committed default card. */
 const ogImageMeta =
@@ -209,9 +219,11 @@ const robotsContent =
     <link rel="canonical" href={canonical} />
     {isNotFoundPage
       ? null
-      : hreflangLinks(path, SITE.url).map((link) => (
-          <link rel="alternate" hreflang={link.hreflang} href={link.href} />
-        ))}
+      : hreflangLinks(path, SITE.url)
+          .filter((link) => isIndexableAlternate(link.hreflang))
+          .map((link) => (
+            <link rel="alternate" hreflang={link.hreflang} href={link.href} />
+          ))}
     {isNotFoundPage ? null : (
       <link
         rel="alternate"
