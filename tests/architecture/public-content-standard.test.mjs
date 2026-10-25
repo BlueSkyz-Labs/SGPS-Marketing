@@ -27,6 +27,16 @@ export const BANNED = [
   /\btop[- ]tier\b/i,
   /\belite\b/i,
   /#1\b/,
+  // Owner 2026-10-25: extended list.
+  /vượt trội/i,
+  /duy nhất/i,
+  /toàn diện/i,
+  /cách mạng/i,
+  /\bunique\b/i,
+  /\bseamless(?:ly)?\b/i,
+  /\bpowerful\b/i,
+  /\brevolutionary\b/i,
+  /\bcutting[- ]edge\b/i,
 ];
 
 const TITLE_MAX = 80;
@@ -96,6 +106,10 @@ test("negative proof: a superlative, a long title or a short deck is caught", ()
   assert.equal(contentProblems({ [name]: superlative }).length, 1);
   const english = source.replace(/\n## /, "\nThe best rent book.\n\n## ");
   assert.equal(contentProblems({ [name]: english }).length, 1);
+  for (const phrase of ["Giải pháp vượt trội.", "A seamless, powerful app."]) {
+    const extended = source.replace(/\n## /, `\n${phrase}\n\n## `);
+    assert.ok(contentProblems({ [name]: extended }).length >= 1, phrase);
+  }
   const longTitle = source.replace(
     /^title: "(.*)"$/m,
     `title: "${"x".repeat(TITLE_MAX + 1)}"`,

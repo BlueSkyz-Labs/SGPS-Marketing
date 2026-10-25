@@ -50,7 +50,10 @@ ourselves (C3).
    truth; nothing is added in polishing.
 2. No unsupported superlative or self-praise in published text: the banned
    list in the test (for example "tốt nhất", "đơn giản nhất", "hàng đầu",
-   "số 1", "the best", "the simplest", "world-class", "top tier", "elite").
+   "số 1", "the best", "the simplest", "world-class", "top tier", "elite";
+   extended by the Owner on 2026-10-25 with "vượt trội", "duy nhất",
+   "toàn diện", "cách mạng", "unique", "seamless", "powerful",
+   "revolutionary", "cutting-edge").
    A superlative that a source proves is quoted and attributed instead.
 3. A source is called "official" (chính thức) only when it is a government or
    issuing-body publication.
