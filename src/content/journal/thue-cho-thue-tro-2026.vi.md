@@ -3,7 +3,7 @@ id: thue-cho-thue-tro-2026
 lang: vi
 branch: news
 title: "Thuế cho thuê trọ năm 2026: ngưỡng 1 tỷ đồng và những điều chủ trọ cần biết"
-description: "Từ 1/1/2026, ngưỡng doanh thu không phải nộp thuế của hộ, cá nhân kinh doanh là 1 tỷ đồng/năm. Tóm tắt điểm chính cho chủ trọ, kèm các nguồn dẫn."
+description: "Từ 1/1/2026, ngưỡng doanh thu không phải nộp thuế của hộ, cá nhân kinh doanh là 1 tỷ đồng/năm. Tóm tắt điểm chính cho chủ trọ, kèm nguồn."
 datePublished: "2026-10-23"
 author: tony-nguyen
 aiAssisted: true
@@ -17,25 +17,25 @@ sources:
 ownerApproval: https://github.com/BlueSkyz-Labs/SGPS-Marketing/pull/671
 hero:
   src: /images/journal/thue-cho-thue-tro-2026/hero.vi.webp
-  alt: "Minh hoạ nét khắc: dãy phòng trọ hai tầng, cuốn sổ ghi chép và thước đo có vạch ngưỡng 1 tỷ đồng."
-  caption: "Ngưỡng doanh thu 1 tỷ đồng/năm áp dụng từ ngày 1/1/2026."
+  alt: "Minh họa nét khắc: dãy phòng trọ hai tầng, cuốn sổ ghi chép và thước đo có vạch ngưỡng 1 tỷ đồng."
+  caption: "Minh họa: ngưỡng doanh thu 1 tỷ đồng/năm, áp dụng từ ngày 1/1/2026."
 infographic:
   src: /images/journal/thue-cho-thue-tro-2026/infographic.vi.webp
-  alt: "Infographic tóm tắt: ngưỡng 1 tỷ đồng/năm từ 1/1/2026; các mốc 10/12/2025 và 29/4/2026; trên ngưỡng, thuế TNCN 5% phần vượt và thuế GTGT 5% trên doanh thu; ví dụ doanh thu 1,2 tỷ đồng thì thuế TNCN 10 triệu đồng; cho thuê bất động sản không bắt buộc dùng hoá đơn điện tử."
+  alt: "Infographic tóm tắt: ngưỡng 1 tỷ đồng/năm từ 1/1/2026; các mốc 10/12/2025 và 29/4/2026; trên ngưỡng, thuế TNCN 5% phần vượt và thuế GTGT 5% trên doanh thu; ví dụ doanh thu 1,2 tỷ đồng thì thuế TNCN 10 triệu đồng; cho thuê bất động sản không bắt buộc dùng hóa đơn điện tử."
 draft: false
 ---
-
-> Bài viết tóm tắt thông tin công khai để bạn dễ theo dõi, không phải tư vấn thuế. Quy định về thuế đã thay đổi nhiều lần trong năm 2026; hãy đối chiếu với cơ quan thuế quản lý trước khi kê khai.
 
 ## Tóm tắt nhanh
 
 - Ngưỡng doanh thu không phải nộp thuế giá trị gia tăng (GTGT) và thuế thu nhập cá nhân (TNCN) của hộ, cá nhân kinh doanh hiện là **1 tỷ đồng/năm**, áp dụng từ ngày 1/1/2026.
 - Mức này do Nghị định 141/2026/NĐ-CP (ban hành ngày 29/4/2026) nâng lên từ 500 triệu đồng.
-- Người cho thuê bất động sản không thuộc diện bắt buộc dùng hoá đơn điện tử theo Nghị định 254/2026/NĐ-CP (xem mục Hoá đơn điện tử).
+- Người cho thuê bất động sản không thuộc diện bắt buộc dùng hóa đơn điện tử theo Nghị định 254/2026/NĐ-CP (xem mục Hóa đơn điện tử).
+
+> Bài viết tóm tắt thông tin công khai để bạn dễ theo dõi, không phải tư vấn thuế. Quy định về thuế đã được điều chỉnh trong năm 2026; hãy đối chiếu với cơ quan thuế quản lý trước khi kê khai.
 
 ## Ngưỡng 1 tỷ đồng đến từ đâu?
 
-Luật Thuế TNCN (sửa đổi), được Quốc hội thông qua ngày 10/12/2025, đặt mức doanh thu không phải nộp thuế của hộ kinh doanh là 500 triệu đồng/năm. Ngày 29/4/2026, Chính phủ ban hành Nghị định 141/2026/NĐ-CP, sửa Nghị định 68/2026/NĐ-CP: cụm "500 triệu đồng" được thay bằng "01 tỷ đồng" trong các điều về thuế GTGT, thuế TNCN và kê khai. Báo Điện tử Chính phủ cho biết mức mới áp dụng từ ngày 1/1/2026.
+Luật Thuế TNCN (sửa đổi), được Quốc hội thông qua ngày 10/12/2025, đặt mức doanh thu không phải nộp thuế của hộ kinh doanh là 500 triệu đồng/năm. Ngày 29/4/2026, Chính phủ ban hành Nghị định 141/2026/NĐ-CP, nâng mức này lên 01 tỷ đồng/năm. Báo Điện tử Chính phủ cho biết mức mới áp dụng từ ngày 1/1/2026.
 
 Nhiều bài viết về thuế cho thuê nhà đăng trước cuối tháng 4/2026 vẫn dùng mốc 500 triệu đồng. Khi đọc, hãy để ý ngày đăng.
 
@@ -52,11 +52,11 @@ Cho thuê lưu trú ngắn ngày (nhà nghỉ, homestay) được tính theo cá
 
 ## Dưới ngưỡng vẫn nên làm gì?
 
-Không phải nộp thuế không có nghĩa là không có thủ tục nào. Hãy hỏi cơ quan thuế quản lý về nghĩa vụ kê khai hoặc thông báo doanh thu áp dụng cho trường hợp của bạn.
+Không phải nộp thuế chưa chắc là không có thủ tục nào. Hãy hỏi cơ quan thuế quản lý về nghĩa vụ kê khai hoặc thông báo doanh thu áp dụng cho trường hợp của bạn.
 
-## Hoá đơn điện tử
+## Hóa đơn điện tử
 
-Nghị định 141/2026/NĐ-CP yêu cầu hộ, cá nhân kinh doanh có doanh thu năm trên 1 tỷ đồng dùng hoá đơn điện tử. Tuy vậy, Nghị định 254/2026/NĐ-CP về hoá đơn, chứng từ điện tử liệt kê "hộ kinh doanh, cá nhân kinh doanh có thu nhập từ hoạt động cho thuê bất động sản" trong nhóm không phải sử dụng hoá đơn điện tử. Ai có nhu cầu vẫn có thể đăng ký sử dụng.
+Nghị định 141/2026/NĐ-CP yêu cầu hộ, cá nhân kinh doanh có doanh thu năm trên 1 tỷ đồng dùng hóa đơn điện tử. Tuy vậy, Nghị định 254/2026/NĐ-CP về hóa đơn, chứng từ điện tử liệt kê "hộ kinh doanh, cá nhân kinh doanh có thu nhập từ hoạt động cho thuê bất động sản" trong nhóm không phải sử dụng hóa đơn điện tử. Ai có nhu cầu vẫn có thể đăng ký sử dụng.
 
 ## Ghi chép rõ ràng giúp bạn chủ động
 
