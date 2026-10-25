@@ -3,7 +3,7 @@ import { expect, test } from "@playwright/test";
 // v5 W5.1: the served per-product card resolves, is a JPEG under the size
 // ceiling and is exactly what the profile page advertises in every locale.
 for (const lang of ["en", "vi", "zh", "zh-hant"]) {
-  for (const slug of ["sotro", "sotam"]) {
+  for (const slug of ["sotro", "sotam", "vungtaylai"]) {
     test(`${lang}/${slug} advertises its own served 1200x630 card`, async ({
       page,
       request,
