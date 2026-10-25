@@ -27,9 +27,9 @@ export const JOURNAL_COPY: Record<
   vi: {
     title: "Hành trình",
     lede: "Tin tức và cập nhật sản phẩm từ BlueSkyz Labs.",
-    news: "Tin tức & cập nhật",
+    news: "Tin tức và cập nhật",
     product: "Cập nhật sản phẩm",
-    empty: "Chưa có bài viết.",
+    empty: "Chưa có bài viết nào.",
   },
   zh: {
     title: "日志",
@@ -73,9 +73,9 @@ export interface JournalPostCopy {
 export const JOURNAL_POST_COPY: Record<"vi" | "en", JournalPostCopy> = {
   vi: {
     published: "Đăng ngày",
-    updated: "Cập nhật",
+    updated: "Cập nhật lần cuối",
     sources: "Nguồn",
-    figureCredit: "Minh hoạ: BlueSkyz Labs",
+    figureCredit: "Hình ảnh: BlueSkyz Labs",
     summary: "Tóm tắt",
     copyright: "© {year} BlueSkyz Labs. Bảo lưu mọi quyền.",
     aboutAuthor: "Về tác giả",
@@ -86,7 +86,7 @@ export const JOURNAL_POST_COPY: Record<"vi" | "en", JournalPostCopy> = {
     published: "Published",
     updated: "Updated",
     sources: "Sources",
-    figureCredit: "Illustration: BlueSkyz Labs",
+    figureCredit: "Image: BlueSkyz Labs",
     summary: "In brief",
     copyright: "© {year} BlueSkyz Labs. All rights reserved.",
     aboutAuthor: "About the author",

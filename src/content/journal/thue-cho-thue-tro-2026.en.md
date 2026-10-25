@@ -31,7 +31,7 @@ draft: false
 
 - Household and individual businesses owe no value-added tax (VAT) or personal income tax (PIT) on annual revenue up to **1 billion dong**, from 1 January 2026.
 - Decree 141/2026/NĐ-CP, issued on 29 April 2026, raised the threshold from 500 million dong.
-- Under Decree 254/2026/NĐ-CP, people who earn income from renting out property are not required to use e-invoices.
+- Under Decree 254/2026/NĐ-CP, people who earn income from renting out property are not required to use e-invoices (see E-invoices below).
 
 ## Where the 1 billion dong threshold comes from
 
@@ -60,4 +60,4 @@ Decree 141/2026/NĐ-CP requires household and individual businesses with annual 
 
 ## Clear records help
 
-Below or above the threshold, recording every payment is the simplest way to know your annual revenue. [Sổ Trọ](/en/products/sotro/), a BlueSkyz Labs product now in preview, helps landlords collect rent and record each payment once.
+Below or above the threshold, recording every payment is a simple way to know your annual revenue. [Sổ Trọ](/en/products/sotro/), a BlueSkyz Labs product now in preview, helps landlords collect rent and record each payment once.

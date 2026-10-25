@@ -3,7 +3,7 @@ id: so-tro-xem-truoc
 lang: en
 branch: news
 title: "Sổ Trọ is in preview: a simple rent book for landlords in Vietnam"
-description: "Sổ Trọ is now in web preview for landlords in Vietnam: see who still owes rent this month, collect rent with a review step, large text and big buttons."
+description: "Sổ Trọ is now in web preview for landlords in Vietnam: see who still owes rent this month, collect rent with a review step, and use large text and big buttons."
 datePublished: "2026-10-23"
 author: tony-nguyen
 aiAssisted: true
@@ -27,7 +27,7 @@ Sổ Trọ is a BlueSkyz Labs product for landlords in Vietnam. The idea is simp
 - **See it at a glance**: who still owes rent this month and what needs doing today.
 - **Collect rent and record each payment once**, with a review-then-confirm step, a bank-transfer QR code and a receipt to copy into Zalo.
 - **Keep rooms, tenants, meter readings and the residence register in one place**, with a C06 residence spreadsheet to download.
-- **Large text and big buttons** built for older landlords; a family helper's phone joins by scanning a QR code.
+- **Large text and big buttons** built for older landlords; a family member's phone can join just by scanning a QR code.
 
 ## Where it stands
 
