@@ -1,69 +1,69 @@
 {
   "/images/journal/so-tro-ngay-dau-thang/hero.en-1200.webp": {
-    "sha256": "02905077caa09b2e282b0af544f22572b53282d3841de70bfbd2985d18bace95",
+    "sha256": "75d2d8c7ddbb9bf1949a1133c6860f6c34174f9701f8cbdd25b4f4d9c1d1d754",
     "width": 1200,
     "height": 675,
     "template": "tools/journal-art/figures/so-tro-ngay-dau-thang.mjs",
     "rightsHolder": "BlueSkyz Labs"
   },
   "/images/journal/so-tro-ngay-dau-thang/hero.en.og.jpg": {
-    "sha256": "f70276de00a6838c884759f6fea7c71c53868b4370855f6de5748668a806dd8b",
+    "sha256": "18bddb64371d4dc85669c01f496011439a524015d0249ff9110cb2e97248da26",
     "width": 1200,
     "height": 675,
     "template": "tools/journal-art/figures/so-tro-ngay-dau-thang.mjs",
     "rightsHolder": "BlueSkyz Labs"
   },
   "/images/journal/so-tro-ngay-dau-thang/hero.en.webp": {
-    "sha256": "4345e1aad93cd947dac6529c3d826c76bec3fd2395804f5de50acad36bfaad73",
+    "sha256": "6997a693a9b3389a94fd0beeae97460ad1e37e3be4a5b2042bcbac2f234f37ee",
     "width": 2400,
     "height": 1350,
     "template": "tools/journal-art/figures/so-tro-ngay-dau-thang.mjs",
     "rightsHolder": "BlueSkyz Labs"
   },
   "/images/journal/so-tro-ngay-dau-thang/hero.vi-1200.webp": {
-    "sha256": "715795def88e72d42ad316d150e7e31d7e87db5eab7a15430a5cb57299c672a7",
+    "sha256": "552fd4ecfd3536140cdb983339d008b47fcebb626df5d06ce3c48c6e1a0ad6a0",
     "width": 1200,
     "height": 675,
     "template": "tools/journal-art/figures/so-tro-ngay-dau-thang.mjs",
     "rightsHolder": "BlueSkyz Labs"
   },
   "/images/journal/so-tro-ngay-dau-thang/hero.vi.og.jpg": {
-    "sha256": "c6c8bccc34d38c84bd1dad44a6239db18f0f3c8d71379bfa96029a09f74e4a63",
+    "sha256": "4c19b6e3a4fc3c4f49516df634e7d24d4187e96696c7f3601154dbd2f3362320",
     "width": 1200,
     "height": 675,
     "template": "tools/journal-art/figures/so-tro-ngay-dau-thang.mjs",
     "rightsHolder": "BlueSkyz Labs"
   },
   "/images/journal/so-tro-ngay-dau-thang/hero.vi.webp": {
-    "sha256": "50e8b5638aa88df824a11d6630230e151c6b098bc348934256bf21f3d1081064",
+    "sha256": "bb84eb8920c19a51ee7166493fe09b29d0b74c6c5b2d7ebe0634039fe93b0b40",
     "width": 2400,
     "height": 1350,
     "template": "tools/journal-art/figures/so-tro-ngay-dau-thang.mjs",
     "rightsHolder": "BlueSkyz Labs"
   },
   "/images/journal/so-tro-ngay-dau-thang/infographic.en-1200.webp": {
-    "sha256": "367850b8063cb4d6d86e3c2413abd6663d33a82018dc0830f562703f8b2cbad0",
+    "sha256": "ab96a6e532a4fbcf8b18a0086af4d8a28deceb84361eb6cf1c32ce91ba0907cb",
     "width": 1200,
     "height": 1260,
     "template": "tools/journal-art/figures/so-tro-ngay-dau-thang.mjs",
     "rightsHolder": "BlueSkyz Labs"
   },
   "/images/journal/so-tro-ngay-dau-thang/infographic.en.webp": {
-    "sha256": "74d364ccd856cf4861a306ff3eca1dba8d8821ab8bf456d31bb8e5b49977e968",
+    "sha256": "8f8ab8c52c9188c1bcc35d1854622f1ce4478fd93e6a25aafc88be8b89646609",
     "width": 2400,
     "height": 2520,
     "template": "tools/journal-art/figures/so-tro-ngay-dau-thang.mjs",
     "rightsHolder": "BlueSkyz Labs"
   },
   "/images/journal/so-tro-ngay-dau-thang/infographic.vi-1200.webp": {
-    "sha256": "d216af84feaa7b9ab8c2fc76cabb468e84d94003845c478124178f0a011ca9f8",
+    "sha256": "4e70cd7345f7006724c5bccf2dd32323b4ce33a0ffc3b8f23f9a3c78eb0309fa",
     "width": 1200,
     "height": 1260,
     "template": "tools/journal-art/figures/so-tro-ngay-dau-thang.mjs",
     "rightsHolder": "BlueSkyz Labs"
   },
   "/images/journal/so-tro-ngay-dau-thang/infographic.vi.webp": {
-    "sha256": "ff7f633158f9f6a13cd6a030f2dc16e973cdd0ed62896bd04e1f551ce71df8ac",
+    "sha256": "e5d4e14d007fc19a81b790a3491761d9fac14aa494fd3eea589f090d947c7a3f",
     "width": 2400,
     "height": 2520,
     "template": "tools/journal-art/figures/so-tro-ngay-dau-thang.mjs",

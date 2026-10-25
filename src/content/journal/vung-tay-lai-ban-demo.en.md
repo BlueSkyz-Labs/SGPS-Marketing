@@ -9,7 +9,7 @@ author: tony-nguyen
 aiAssisted: true
 sources:
   - https://blueskyzlabs.com/en/products/vungtaylai/
-ownerApproval: https://github.com/BlueSkyz-Labs/SGPS-Marketing/pull/698
+ownerApproval: https://github.com/BlueSkyz-Labs/SGPS-Marketing/pull/699
 hero:
   src: /images/journal/vung-tay-lai-ban-demo/hero.en.webp
   alt: "Five Vững Tay Lái phone screens: Today, a critical question, the confidence panel, the feedback view and the “Nguồn chính thống” (legal sources) list."

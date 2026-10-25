@@ -9,7 +9,7 @@ author: tony-nguyen
 aiAssisted: true
 sources:
   - https://blueskyzlabs.com/vi/products/vungtaylai/
-ownerApproval: https://github.com/BlueSkyz-Labs/SGPS-Marketing/pull/698
+ownerApproval: https://github.com/BlueSkyz-Labs/SGPS-Marketing/pull/699
 hero:
   src: /images/journal/vung-tay-lai-ban-demo/hero.vi.webp
   alt: "Năm màn hình điện thoại của Vững Tay Lái: Việc hôm nay, một câu điểm liệt, khung Mức tự tin, phần phản hồi và màn hình “Nguồn chính thống” (nguồn pháp lý)."

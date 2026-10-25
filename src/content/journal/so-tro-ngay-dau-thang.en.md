@@ -9,10 +9,10 @@ author: tony-nguyen
 aiAssisted: true
 sources:
   - https://blueskyzlabs.com/en/products/sotro/
-ownerApproval: https://github.com/BlueSkyz-Labs/SGPS-Marketing/pull/698
+ownerApproval: https://github.com/BlueSkyz-Labs/SGPS-Marketing/pull/699
 hero:
   src: /images/journal/so-tro-ngay-dau-thang/hero.en.webp
-  alt: "Sổ Trọ screenshots: the whole-building Collections page on desktop and three phone screens, Today, meter readings and Collect rent."
+  alt: "Sổ Trọ screenshots: the Collect rent page with its list of rooms to collect from on desktop, and three phone screens, Today, meter readings and Collect rent."
   caption: "Screenshots captured on 25 October 2026 from a test build with sample data. A demo, still being finished."
 infographic:
   src: /images/journal/so-tro-ngay-dau-thang/infographic.en.webp
@@ -30,20 +30,20 @@ The scenario below uses sample data to show how the product works. The people in
 
 **Meter readings.** First, the month's readings. On the **meter readings** screen she picks a room, enters the numbers and moves to the next, down the whole row.
 
-**Collecting rent.** In the afternoon, the tenant in room 3 brings the rent. On the **Collect rent** screen she sees who still owes, confirms the amount, and only then records it. The calendar strip shows both solar and lunar dates. For tenants who pay by transfer, Sổ Trọ has a bank-transfer QR code and a receipt to copy into Zalo.
+**Collecting rent.** In the afternoon, the tenant in room P13 brings the rent. On the **Collect rent** screen, the **Cần thu** (to collect) list puts the rooms that need attention first. The screen says it plainly: settle the amount before recording it as received; just opening the screen settles nothing. She settles the amount, then taps **Đã nhận tiền** (money received). For tenants who pay by transfer, there is a button to send a Zalo message with a bank-transfer QR code; the QR code appears only once the building has a receiving bank account set up. Solar and lunar dates sit in the month's money overview.
 
-**Family helps.** Her son wants to help her. His phone opens the link she sends and he taps **Kết nối điện thoại này** (connect this phone) once, with no account or password. On the desktop, under **Family and devices**, the owner chooses who uses which phone.
+**Family helps.** Her son wants to help her. His phone opens the link she sends and he taps **Kết nối điện thoại này** (connect this phone) once, with no account or password. On the desktop, under **Gia đình & thiết bị** (family and devices), the owner chooses who uses which phone.
 
-**The whole building on the computer.** In the evening, she opens the owner console on her computer. **Collections** shows the whole building: how many rooms have paid, how many are due soon and how many are overdue. **Buildings and rooms** shows which rooms are occupied and which are vacant, with meters and prices.
+**The whole building on the computer.** In the evening, she opens the owner console on her computer. **Collect rent** shows the whole building's list of rooms to collect from; pick a room to see the total due and its payment check. **Dãy trọ & phòng** (buildings and rooms) shows which rooms are occupied and which are vacant, with meters and prices.
 
-**Night.** From 9 pm the screen switches to a warmer tone. It can be switched off.
+**Night.** The settings include **Màu ấm ban đêm** (warm night colours): automatic from 9 pm, always on, or off. It is off by default.
 
 ## Highlights
 
 - **What needs doing today.** The home screen shows only things to remember and this month's unpaid rent.
-- **Rent collection with a review step.** Confirm the amount, then record it; a bank-transfer QR code and a receipt to copy into Zalo.
+- **Settle first, then record.** The list of rooms to collect from puts urgent ones first; a button sends a Zalo message with a bank-transfer QR code.
 - **Family joins with one tap.** No account or password; the owner decides who uses which phone.
-- **Large text and big buttons**, built for older landlords, with a night mode from 9 pm.
+- **Large text and big buttons**, built for older landlords, with optional warm night colours.
 - **Four-step setup** on desktop: building, rooms, and electricity and water prices.
 
 ## Where it stands

@@ -40,7 +40,7 @@ const T = {
       ["Ghi điện nước", "Chọn phòng, nhập số, sang phòng kế tiếp."],
       [
         "Thu tiền",
-        "Xác nhận số tiền rồi mới ghi vào sổ; mã QR chuyển khoản; biên nhận gửi qua Zalo.",
+        "Chốt số tiền rồi mới ghi đã nhận; có nút gửi Zalo kèm mã QR chuyển khoản.",
       ],
       [
         "Người nhà cùng giúp",
@@ -74,7 +74,7 @@ const T = {
       ],
       [
         "Collect rent",
-        "Confirm the amount, then record it; a bank-transfer QR code; a receipt to copy into Zalo.",
+        "Settle the amount, then record it as received; a button sends a Zalo message with a transfer QR code.",
       ],
       ["Family helps", "Connect a phone with one tap, no account or password."],
     ],

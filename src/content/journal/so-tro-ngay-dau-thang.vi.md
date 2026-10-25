@@ -9,10 +9,10 @@ author: tony-nguyen
 aiAssisted: true
 sources:
   - https://blueskyzlabs.com/vi/products/sotro/
-ownerApproval: https://github.com/BlueSkyz-Labs/SGPS-Marketing/pull/698
+ownerApproval: https://github.com/BlueSkyz-Labs/SGPS-Marketing/pull/699
 hero:
   src: /images/journal/so-tro-ngay-dau-thang/hero.vi.webp
-  alt: "Ảnh màn hình Sổ Trọ: trang Thu tiền của cả dãy trọ trên máy tính và ba màn hình điện thoại, Hôm nay, Nhập điện nước và Thu tiền."
+  alt: "Ảnh màn hình Sổ Trọ: trang Thu tiền với danh sách Cần thu trên máy tính và ba màn hình điện thoại, Hôm nay, Nhập điện nước và Thu tiền."
   caption: "Ảnh màn hình chụp ngày 25/10/2026 từ bản chạy thử, dùng dữ liệu mẫu. Bản demo, đang trong giai đoạn hoàn thiện."
 infographic:
   src: /images/journal/so-tro-ngay-dau-thang/infographic.vi.webp
@@ -30,20 +30,20 @@ Tình huống dưới đây dùng dữ liệu mẫu để giới thiệu cách s
 
 **Ghi điện nước.** Việc đầu tiên là chốt chỉ số. Ở màn hình **Nhập điện nước**, bà chọn phòng, nhập số rồi sang phòng kế tiếp, cứ thế đi hết dãy.
 
-**Thu tiền.** Buổi chiều, người thuê phòng 3 mang tiền xuống. Ở màn hình **Thu tiền**, bà xem phòng nào chưa đóng tiền, xác nhận số tiền rồi mới ghi vào sổ. Dải lịch có cả ngày dương và ngày âm. Với người chuyển khoản, Sổ Trọ có mã QR chuyển khoản ngân hàng và biên nhận để sao chép gửi qua Zalo.
+**Thu tiền.** Buổi chiều, người thuê phòng P13 mang tiền xuống. Ở màn hình **Thu tiền**, danh sách **Cần thu** xếp phòng cần xử lý lên trước. Màn hình ghi rõ: chốt số tiền rồi mới ghi đã nhận, chỉ mở xem thì không tự chốt. Bà chốt số tiền rồi bấm **Đã nhận tiền**. Với người chuyển khoản, có nút gửi Zalo kèm mã QR chuyển khoản; mã QR chỉ hiện khi dãy trọ đã khai tài khoản nhận tiền. Ngày dương và ngày âm nằm trong phần tổng quan tiền tháng này.
 
-**Người nhà cùng giúp.** Con trai bà muốn đỡ việc cho mẹ. Điện thoại của anh mở liên kết bà gửi rồi chạm **Kết nối điện thoại này** một lần, không cần tài khoản hay mật khẩu. Trên máy tính, ở mục **Gia đình và thiết bị**, chủ trọ chọn ai dùng điện thoại nào.
+**Người nhà cùng giúp.** Con trai bà muốn đỡ việc cho mẹ. Điện thoại của anh mở liên kết bà gửi rồi chạm **Kết nối điện thoại này** một lần, không cần tài khoản hay mật khẩu. Trên máy tính, ở mục **Gia đình & thiết bị**, chủ trọ chọn ai dùng điện thoại nào.
 
-**Cả dãy trọ trên máy tính.** Tối đến, bà mở trang quản lý trên máy tính. Mục **Thu tiền** cho thấy cả dãy: bao nhiêu phòng đã đóng, bao nhiêu sắp đến hạn, bao nhiêu quá hạn. Mục **Dãy trọ và phòng** cho thấy phòng nào đang thuê, phòng nào trống, kèm công tơ và giá.
+**Cả dãy trọ trên máy tính.** Tối đến, bà mở trang quản lý trên máy tính. Mục **Thu tiền** hiện danh sách **Cần thu** của cả dãy; chọn một phòng là thấy tổng tiền cần thu và phần đối soát thanh toán. Mục **Dãy trọ & phòng** cho thấy phòng nào đang thuê, phòng nào trống, kèm công tơ và giá.
 
-**Buổi tối.** Từ 21:00, màn hình chuyển sang tông ấm hơn. Nếu không cần, có thể tắt.
+**Buổi tối.** Trong phần cài đặt có **Màu ấm ban đêm**: tự động từ 21:00, luôn bật hoặc tắt. Mặc định là tắt.
 
 ## Điểm nổi bật
 
 - **Hôm nay cần làm gì.** Màn hình chính chỉ hiện việc cần nhớ và tiền trọ tháng này chưa đóng.
-- **Thu tiền có bước xem lại.** Xác nhận số tiền rồi mới ghi vào sổ; có mã QR chuyển khoản và biên nhận gửi qua Zalo.
+- **Thu tiền: chốt số rồi mới ghi.** Danh sách Cần thu xếp việc gấp lên trước; có nút gửi Zalo kèm mã QR chuyển khoản.
 - **Người nhà tham gia bằng một lần chạm.** Không cần tài khoản hay mật khẩu; chủ trọ quyết định ai dùng điện thoại nào.
-- **Chữ to, nút lớn** cho chủ trọ lớn tuổi, có chế độ ban đêm từ 21:00.
+- **Chữ to, nút lớn** cho chủ trọ lớn tuổi, và màu ấm ban đêm tùy chọn.
 - **Cài đặt bốn bước** trên máy tính: dãy trọ, phòng và giá điện nước.
 
 ## Hiện trạng
