@@ -60,22 +60,22 @@ export const STORY_COPY = {
 export const NEUTRAL_STORY_COPY = {
   en: {
     title: (name: string) => `${name}, screen by screen`,
-    lead: "Screens from the app, shown with sample data.",
+    lead: "Screens from the development build, shown with sample data.",
     desktop: "On a computer",
   },
   vi: {
     title: (name: string) => `${name} qua từng màn hình`,
-    lead: "Các màn hình của ứng dụng, hiển thị với dữ liệu mẫu.",
+    lead: "Các màn hình của bản đang phát triển, hiển thị với dữ liệu mẫu.",
     desktop: "Trên máy tính",
   },
   zh: {
     title: (name: string) => `${name} 逐屏一览`,
-    lead: "应用的各个界面，使用示例数据展示。",
+    lead: "开发版本的各个界面，使用示例数据展示。",
     desktop: "电脑端",
   },
   "zh-hant": {
     title: (name: string) => `${name} 逐屏一覽`,
-    lead: "應用程式的各個畫面，使用範例資料展示。",
+    lead: "開發版本的各個畫面，使用範例資料展示。",
     desktop: "電腦端",
   },
 } as const satisfies Record<
