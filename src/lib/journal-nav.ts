@@ -17,7 +17,7 @@ export interface JournalNavItem {
   href: string;
 }
 
-interface PublishedProbe {
+export interface PublishedProbe {
   data: { draft?: boolean; lang?: string };
 }
 

@@ -236,8 +236,21 @@ for (const lang of LANGS) {
         // chapters, so its top margin is excluded the same way.
         const does = document.querySelector<HTMLElement>("[data-what-it-does]");
         const doesGap = does ? parseFloat(getComputedStyle(does).marginTop) : 0;
+        // IX-03 (2026-10-23): the journal link section is new content outside
+        // the chapters, excluded like the status line.
+        const journal = document.querySelector<HTMLElement>(
+          "[data-product-journal]",
+        );
+        const journalBox = journal
+          ? journal.getBoundingClientRect().height +
+            parseFloat(getComputedStyle(journal).marginTop)
+          : 0;
         return (
-          document.documentElement.scrollHeight - excluded - doesGap - poster
+          document.documentElement.scrollHeight -
+          excluded -
+          doesGap -
+          poster -
+          journalBox
         );
       });
       const before = MAIN_HEIGHT[name][lang] - MAIN_ACCESS[name];
