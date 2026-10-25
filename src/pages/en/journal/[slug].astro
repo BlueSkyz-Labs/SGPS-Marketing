@@ -6,6 +6,7 @@ import { SITE } from "@/data/site";
 import { JOURNAL_COPY } from "@/data/journal-copy";
 import {
   blogPostingJsonLd,
+  journalArtVariant,
   journalFeedPath,
   journalPostBreadcrumbJsonLd,
   journalPostPath,
@@ -21,6 +22,14 @@ export async function getStaticPaths() {
 const { entry } = Astro.props;
 const { Content } = await render(entry);
 const post = entry.data;
+// Press standard R3: the stamped 1200x675 hero render is the share image.
+const og = post.hero
+  ? {
+      ogImage: journalArtVariant(post.hero.src, "og"),
+      ogImageSize: { width: 1200, height: 675 },
+      ogImageAltText: post.hero.alt,
+    }
+  : {};
 const extraJsonLd = [
   blogPostingJsonLd(post, SITE.url),
   journalPostBreadcrumbJsonLd({
@@ -38,6 +47,7 @@ const extraJsonLd = [
   description={post.description}
   path={journalPostPath("en", post.id)}
   extraJsonLd={extraJsonLd}
+  {...og}
   feed={{
     href: journalFeedPath("en"),
     title: `${JOURNAL_COPY["en"].title} | ${SITE.name}`,

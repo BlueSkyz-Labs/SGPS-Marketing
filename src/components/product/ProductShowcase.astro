@@ -1,5 +1,5 @@
 ---
-import type { Language } from "@/lib/i18n";
+import { formatDate, type Language } from "@/lib/i18n";
 import type { ShowcaseSchema } from "@/lib/showcase-schema";
 import ShowcaseGroup from "@/components/product/ShowcaseGroup.astro";
 import FeatureStory from "@/components/product/FeatureStory.astro";
@@ -63,7 +63,8 @@ const heroDesktops = story ? [] : desktops.slice(0, 1);
 const morePhones = story ? phones : phones.slice(3);
 const moreDesktops = story ? desktops : desktops.slice(1);
 const hasMore = morePhones.length + moreDesktops.length > 0;
-const capturedOn = showcase.capture.capturedAt.toISOString().slice(0, 10);
+const capturedIso = showcase.capture.capturedAt.toISOString().slice(0, 10);
+const capturedOn = formatDate(lang, capturedIso);
 
 const COPY = {
   en: {
