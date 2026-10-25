@@ -1,10 +1,12 @@
 /**
  * Owner 2026-10-24 publishes the Vững Tay Lái listing at the In-development
- * state. Product Truth V0 has no accounts or native apps and public launch is
- * BLOCKED, so this record must carry no appAccess,
- * releaseGate or applicationCategory, and its lifecycle may not advance past
+ * state. Product Truth V0 has no accounts and public launch is BLOCKED, so
+ * this record must carry no sign-in, store URL, releaseGate or
+ * applicationCategory, and its lifecycle may not advance past
  * prototype/preview here. Runtime reachability of the product host is not a
- * capability or launch claim.
+ * capability or launch claim. Owner 2026-10-25: Android and iOS apps are on
+ * the development roadmap, so the only appAccess allowed is exactly those two
+ * apps in development.
  */
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
@@ -19,6 +21,9 @@ const record = readFileSync(
 const top = (text, key) =>
   new RegExp(`^${key}:\\s*(.*?)\\s*$`, "m").exec(text)?.[1];
 
+const ROADMAP_ONLY =
+  "appAccess:\n  android:\n    state: in-development\n  ios:\n    state: in-development\n";
+
 export function listingViolations(text) {
   const out = [];
   if (top(text, "public") !== "true") out.push("public must be true");
@@ -30,7 +35,10 @@ export function listingViolations(text) {
     out.push("availability must stay preview");
   if (top(text, "publicLabel") !== "In development")
     out.push("publicLabel must be In development");
-  for (const key of ["appAccess", "releaseGate", "applicationCategory"])
+  const access = /^appAccess:\n((?: {2,}.*\n)*)/m.exec(text)?.[0];
+  if (access !== undefined && access !== ROADMAP_ONLY)
+    out.push("appAccess may only list Android and iOS in development");
+  for (const key of ["releaseGate", "applicationCategory"])
     if (new RegExp(`^${key}:`, "m").test(text))
       out.push(`${key} must be absent`);
   if (/signInUrl:|storeUrl:/.test(text)) out.push("no sign-in or store URL");
@@ -110,13 +118,27 @@ test("localized strings mirror the English counts", () => {
 
 test("negative proof: adding a signInUrl is rejected", () => {
   const bad = record.replace(
-    "featuredTier:",
-    "appAccess:\n  signInUrl: https://vungtaylai.blueskyzlabs.com/login\nfeaturedTier:",
+    "appAccess:\n",
+    "appAccess:\n  signInUrl: https://vungtaylai.blueskyzlabs.com/login\n",
   );
   assert.notEqual(bad, record);
   const v = listingViolations(bad);
-  assert.ok(v.includes("appAccess must be absent"), v.join("; "));
+  assert.ok(
+    v.includes("appAccess may only list Android and iOS in development"),
+    v.join("; "),
+  );
   assert.ok(v.includes("no sign-in or store URL"), v.join("; "));
+});
+
+test("negative proof: a native app marked available is rejected", () => {
+  const bad = record.replace(
+    "  ios:\n    state: in-development\n",
+    "  ios:\n    state: available\n",
+  );
+  assert.notEqual(bad, record);
+  assert.deepEqual(listingViolations(bad), [
+    "appAccess may only list Android and iOS in development",
+  ]);
 });
 
 test("negative proof: active lifecycle without a releaseGate is rejected", () => {
