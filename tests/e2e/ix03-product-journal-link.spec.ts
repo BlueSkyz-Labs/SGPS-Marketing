@@ -33,6 +33,30 @@ for (const { lang, heading } of WITH_POST) {
     const link = links.first();
     const text = (await link.innerText()).trim();
     expect(text.length).toBeGreaterThan(0);
+    // WebKit has no scroll anchoring. Jumping straight to this section can
+    // skip the showcase above (content-visibility: auto) before its rendered
+    // size is remembered; it then falls back to its placeholder height, which
+    // wp-c-product-surfaces allows within 6% of the real one, and the link
+    // moves after the click was aimed (vi at 1280: 4100 vs 4127 px). Click
+    // once the link has stopped moving.
+    await link.scrollIntoViewIfNeeded();
+    await expect
+      .poll(() =>
+        link.evaluate(
+          (el) =>
+            new Promise<boolean>((resolve) => {
+              const top = el.getBoundingClientRect().top;
+              setTimeout(
+                () =>
+                  requestAnimationFrame(() =>
+                    resolve(el.getBoundingClientRect().top === top),
+                  ),
+                250,
+              );
+            }),
+        ),
+      )
+      .toBe(true);
     await link.click();
     await expect(page).toHaveURL(
       new RegExp(`/${lang}/journal/${expected[0].id}/$`),
