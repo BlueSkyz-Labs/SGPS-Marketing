@@ -1,5 +1,5 @@
 # Vững Tay Lái showcase — real screens of the running application.
-# Captured 2026-10-24 from a local build of BlueSkyz-Labs/VungTayLai at the
+# Captured 2026-10-25 from a local build of BlueSkyz-Labs/VungTayLai at the
 # revision below, in a fresh guest session (no account exists in V0) with
 # synthetic demo answers. Phone screens: 390x844 CSS px at 2x. The product is
 # In development: every screen is a development build, not a launched app, and
@@ -13,8 +13,8 @@ capture:
   data: synthetic-demo
   environment: local-test-build
   sourceRepository: https://github.com/BlueSkyz-Labs/VungTayLai
-  sourceRevision: 69e43e0d0339a8b741f8eb21b82c92a2a6ed2c32
-  capturedAt: 2026-10-24
+  sourceRevision: 337b7a00036217903fe39cac9d38903c2582b27f
+  capturedAt: 2026-10-25
 
 screens:
   - id: today

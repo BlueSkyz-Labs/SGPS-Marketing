@@ -38,6 +38,11 @@ export default defineConfig({
           // port 3000 by another worktree was reused silently and the run
           // tested the wrong build. Never reuse: a busy port fails the run.
           reuseExistingServer: false,
+          // LSN-marketing-005: `astro preview` runs in its own process group, so
+          // the default SIGKILL of the runner's group left it serving on port
+          // 3000 and the next run failed "already used". SIGTERM lets
+          // scripts/run-preview.mjs run `astro preview stop` first.
+          gracefulShutdown: { signal: "SIGTERM" as const, timeout: 10_000 },
           timeout: 120_000,
           stdout: "pipe" as const,
           stderr: "pipe" as const,
