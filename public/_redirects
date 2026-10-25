@@ -17,10 +17,8 @@
 /products/sotro /vi/products/sotro/ 301
 /products/sotam/ /en/products/sotam/ 301
 /products/sotam /en/products/sotam/ 301
-/products/:slug/ /en/products/ 301
-/products/:slug /en/products/ 301
 # RT-03: explicit one-hop 301s for the no-slash forms so the platform's
-# 307 trailing-slash normalization never chains into the 301 above
+# 307 trailing-slash normalization never chains into a second 301
 # (remaining product-slug rules and bare locale roots).
 # Exact-match only (no splat/placeholder); same-origin destinations only.
 # Guarded by tests/architecture/rt03-single-hop-redirects.test.mjs.
@@ -136,3 +134,11 @@
 /zh/security /zh/security/ 301
 /zh/support /zh/support/ 301
 /zh/verify /zh/verify/ 301
+# Dynamic rules (placeholders/splats) go LAST. Cloudflare counts every rule
+# from the first dynamic one onward against the 100-rule dynamic limit
+# (error 100324), so a dynamic rule near the top fails the deploy once the
+# file passes ~100 rules. No static rule above overlaps /products/<slug>,
+# so moving these here keeps the same matches. Guarded by
+# tests/architecture/redirects-platform-limits.test.mjs.
+/products/:slug/ /en/products/ 301
+/products/:slug /en/products/ 301
