@@ -1,5 +1,5 @@
 # Sổ Trọ showcase — real screens of the running application.
-# Captured 2026-09-30 from a local test build of BlueSkyz-Labs/sotro at the
+# Captured 2026-10-25 (GMT+7) from a local test build of BlueSkyz-Labs/sotro at the
 # revision below, with the repository's synthetic demo seed (db/seeds): no real
 # tenant, payment or identity data. Phone screens: 390x844 CSS px at 2x,
 # cropped above the bottom navigation bar; desktop screens: 1440x900 CSS px.
@@ -11,10 +11,11 @@ capture:
   data: synthetic-demo
   environment: local-test-build
   sourceRepository: https://github.com/BlueSkyz-Labs/sotro
-  sourceRevision: b2b3388264c9cf6582f407d0c52f96d05753a755
-  capturedAt: 2026-09-30
+  sourceRevision: 610fb0f63fa5a4e99079814d31797934bb560cdb
+  capturedAt: 2026-10-25
 
-# Silent 49.5 s intro built from the screens below (Vietnamese text burned in).
+# Silent 49.5 s intro built from the 2026-09-30 screens at sotro b2b3388
+# (Vietnamese text burned in); not yet rebuilt from the capture above.
 # A narrated voice-over is an Owner step: no approved TTS or recording exists.
 video:
   src: /products/sotro/showcase/intro.mp4
@@ -55,10 +56,10 @@ screens:
       zh: "只显示需要记住的事，以及本月未收款项。"
       zh-hant: "只顯示需要記住的事，以及本月未收款項。"
     alt:
-      en: Sổ Trọ phone home screen titled “Hôm nay cần làm gì?” with an unpaid-this-month card.
-      vi: Màn hình chính Sổ Trọ trên điện thoại với tiêu đề “Hôm nay cần làm gì?” và thẻ còn chưa thu tháng này.
-      zh: Sổ Trọ 手机首页，标题为“Hôm nay cần làm gì?”，并显示本月未收款卡片。
-      zh-hant: Sổ Trọ 手機首頁，標題為「Hôm nay cần làm gì?」，並顯示本月未收款卡片。
+      en: Sổ Trọ phone home screen titled “Hôm nay cần làm gì?” with a “Việc cần làm ngay” list of urgent tasks.
+      vi: Màn hình chính Sổ Trọ trên điện thoại với tiêu đề “Hôm nay cần làm gì?” và danh sách “Việc cần làm ngay”.
+      zh: Sổ Trọ 手机首页，标题为“Hôm nay cần làm gì?”，并显示“Việc cần làm ngay”紧急事项列表。
+      zh-hant: Sổ Trọ 手機首頁，標題為「Hôm nay cần làm gì?」，並顯示「Việc cần làm ngay」緊急事項列表。
   - id: utilities
     surface: phone
     src: /products/sotro/showcase/op-03-utilities.webp
@@ -95,10 +96,10 @@ screens:
       zh: "看谁还欠款，先确认金额，再记录。显示公历与农历。"
       zh-hant: "看誰還欠款，先確認金額，再記錄。顯示國曆與農曆。"
     alt:
-      en: Sổ Trọ phone screen “Thu tiền” with a solar and lunar calendar strip and payment status counts.
-      vi: Màn hình “Thu tiền” trên điện thoại với dải lịch âm dương và số phòng theo trạng thái thu.
-      zh: Sổ Trọ 手机“Thu tiền”页面，含公历农历日期条与收款状态统计。
-      zh-hant: Sổ Trọ 手機「Thu tiền」頁面，含國曆農曆日期條與收款狀態統計。
+      en: Sổ Trọ phone screen “Thu tiền” with a cash hand-over button and a solar and lunar calendar strip.
+      vi: Màn hình “Thu tiền” trên điện thoại với nút “Bàn giao tiền mặt” và dải lịch âm dương.
+      zh: Sổ Trọ 手机“Thu tiền”页面，含现金交接按钮与公历农历日期条。
+      zh-hant: Sổ Trọ 手機「Thu tiền」頁面，含現金交接按鈕與國曆農曆日期條。
   - id: rooms
     surface: phone
     src: /products/sotro/showcase/op-04-rooms.webp
@@ -110,15 +111,15 @@ screens:
       zh: "房间"
       zh-hant: "房間"
     caption:
-      en: "vacant rooms are listed first, with a deposit reminder."
-      vi: "phòng trống hiện trước, kèm nhắc thu tiền cọc."
-      zh: "空房排在最前，并提醒收订金。"
-      zh-hant: "空房排在最前，並提醒收訂金。"
+      en: "occupied and vacant counts, filtered by status."
+      vi: "số phòng đang thuê và phòng trống, lọc theo trạng thái."
+      zh: "在租与空房数量，可按状态筛选。"
+      zh-hant: "在租與空房數量，可按狀態篩選。"
     alt:
-      en: Sổ Trọ phone screen “Phòng trọ” listing vacant rooms with a deposit reminder.
-      vi: Màn hình “Phòng trọ” trên điện thoại liệt kê phòng trống kèm lời nhắc nhận cọc.
-      zh: Sổ Trọ 手机“Phòng trọ”页面，列出空房并提醒收取订金。
-      zh-hant: Sổ Trọ 手機「Phòng trọ」頁面，列出空房並提醒收取訂金。
+      en: Sổ Trọ phone screen “Phòng trọ” with occupied and vacant room counts and status filters.
+      vi: Màn hình “Phòng trọ” trên điện thoại với số phòng đang thuê, phòng trống và bộ lọc theo trạng thái.
+      zh: Sổ Trọ 手机“Phòng trọ”页面，显示在租与空房数量及状态筛选。
+      zh-hant: Sổ Trọ 手機「Phòng trọ」頁面，顯示在租與空房數量及狀態篩選。
   - id: pair
     surface: phone
     src: /products/sotro/showcase/op-00-pair.webp
@@ -135,10 +136,10 @@ screens:
       zh: "打开房东的链接，点一下即可。无需账号或密码。"
       zh-hant: "開啟房東的連結，點一下即可。不需帳號或密碼。"
     alt:
-      en: Sổ Trọ phone screen “Kết nối với Sổ Trọ” with a single “connect this phone” button.
-      vi: Màn hình “Kết nối với Sổ Trọ” trên điện thoại với một nút “Kết nối điện thoại này”.
-      zh: Sổ Trọ 手机“Kết nối với Sổ Trọ”页面，只有一个“连接此手机”按钮。
-      zh-hant: Sổ Trọ 手機「Kết nối với Sổ Trọ」頁面，只有一個「連線此手機」按鈕。
+      en: Sổ Trọ phone screen “Ghép nối điện thoại với Sổ Trọ” with a “Kết nối điện thoại này” button.
+      vi: Màn hình “Ghép nối điện thoại với Sổ Trọ” trên điện thoại với nút “Kết nối điện thoại này”.
+      zh: Sổ Trọ 手机“Ghép nối điện thoại với Sổ Trọ”页面，含“Kết nối điện thoại này”按钮。
+      zh-hant: Sổ Trọ 手機「Ghép nối điện thoại với Sổ Trọ」頁面，含「Kết nối điện thoại này」按鈕。
   - id: candlelight
     surface: phone
     src: /products/sotro/showcase/op-05-candlelight.webp
