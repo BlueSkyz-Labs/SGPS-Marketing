@@ -975,3 +975,24 @@
     --c4-type-reading: var(--size-4);
   }
 }
+
+/* G3-B (G-08): Contact sections are hairline rows, not boxes. Self-contained
+ * block: heading in eyebrow voice, a rule on top, no radius, fill or inline
+ * padding. Business and Security share it in all four locales. */
+:where(.contact-section) {
+  padding-block: var(--space-6);
+  padding-inline: 0;
+  border-top: 1px solid var(--c4-hairline);
+}
+.contact-section__heading {
+  margin: 0;
+  font-size: var(--c4-type-meta);
+  font-weight: 600;
+  letter-spacing: var(--tracking-eyebrow);
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+:lang(vi) .contact-section__heading {
+  text-transform: none;
+  letter-spacing: 0.03em;
+}
