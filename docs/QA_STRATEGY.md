@@ -73,13 +73,22 @@ Active ruleset `main-promotion-governance` (`22500299`) protects `main`: a pull 
 - Protected PR/main assurance: one parallel shard per Playwright project (`chromium`, `firefox`, `webkit`, `mobile-chromium`). Browser shards run in Microsoft's Playwright `v1.64.0-noble` image pinned to OCI digest `sha256:06a9939e57531807f8d5fd76ce44b53165ffb7d7501d87ab10e285c20b1e971f`, as non-root uid 1001, with `PLAYWRIGHT_BROWSERS_PATH=/ms-playwright`. CI does not run `playwright install` and fails if a Playwright download-host override is present. This binds browser bytes to an immutable MCR artifact instead of accepting an unverified archive download on every run; it does **not** claim a publisher signature/SLSA attestation because none is verified here. Each shard still runs `pnpm test:e2e` with `E2E_PROJECT` set to its project; Lighthouse remains a separate job. The required check `Browser Assurance` fails unless every shard and Lighthouse succeeded. `scripts/run-e2e.mjs` owns the project list and `tests/architecture/browser-assurance-matrix.test.mjs` keeps the workflow's shard list equal to it, so provenance hardening never narrows coverage. All four shards run on every event, pull requests and pushes to `main` alike; the temporary pre-go-live PR lane (chromium and mobile-chromium only) has ended, and no lane flag or per-event shard gating may be reintroduced.
 - axe tags: WCAG 2.0 / 2.1 / 2.2 A+AA (`wcag2a`, `wcag2aa`, `wcag21a`, `wcag21aa`, `wcag22a`, `wcag22aa`)
 - Static internal links/assets: `pnpm check:static-links` (after `pnpm build`)
-- Optional remote target: `PLAYWRIGHT_BASE_URL`
+- Optional loopback target: `PLAYWRIGHT_BASE_URL=http://127.0.0.1:<port>` for a preview you started yourself. Local runs refuse a non-loopback host (see "Local preview hygiene"); CI is unaffected.
 - Local server: `pnpm start` (Astro preview on `127.0.0.1:3000`)
 - Lighthouse CI: three desktop runs against Astro preview; categories ≥0.90; CLS ≤0.05
 
 Automated/browser assurance is necessary but does **not** substitute for the real-user customer-task and brand-interpretation evidence required by the authoritative C1.1 E4 contract. An agent walkthrough is preflight evidence, not human acceptance.
 
 ---
+
+## Local preview hygiene
+
+Checklist for any lane that runs a local preview or Playwright (LSN-marketing-003, LSN-marketing-002):
+
+- [ ] Start your preview on a lane-unique port (for example 3600), never on 3000, which `pnpm test:e2e` owns. Run `PLAYWRIGHT_BASE_URL=http://127.0.0.1:<port>` against it; the global setup accepts only loopback and checks that the server reports this worktree's HEAD.
+- [ ] Record the pid. `astro preview` daemonizes, so the shell's `$!` is a wrapper that exits; take the pid from the server's own line (`Preview server running at ... (pid N)`, start it with `--json` or read `astro preview logs`).
+- [ ] Before hand-back, stop exactly that pid (`kill <pid>`) and confirm with `ps -p <pid>`. Never `pkill -f` a substring: it can match your own shell's command line.
+- [ ] To find a process you started, filter `ps -eo pid,args` with `$2 ~ /node$/` and a port match. Do not kill a process you did not start; report it instead.
 
 ## 5. Cloudflare promotion flow
 
