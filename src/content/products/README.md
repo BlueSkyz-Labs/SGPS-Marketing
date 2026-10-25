@@ -18,4 +18,6 @@ proof:
     height: 900
 ```
 
+Set `taglineHold: true` on identity art whose baked-in tagline is not confirmed against the product's own truth (OG-3). Every surface reads media through `displayableMedia()` in `src/lib/products.ts`, so held art is never rendered or linked. The file itself is still served at its public path until a tagline-free lockup replaces it.
+
 Remote media URLs are rejected: CSP `img-src 'self' data:` cannot load them, and invented proof is prohibited.

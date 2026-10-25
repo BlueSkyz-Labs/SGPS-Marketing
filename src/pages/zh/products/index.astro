@@ -51,13 +51,13 @@ const emptyDescription = "产品仅在具备可核验的公开证据时发布。
           >
             {allInDevelopment ? "开发中" : "产品"}
           </h2>
-          <div class="mt-6 grid gap-4 md:grid-cols-2">
+          <div class="mt-6 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
             {products.map((product, index) => (
               <ProductCard
                 product={product}
                 lang="zh"
                 showThumb
-                eager={index < 2}
+                eager={index < 3}
                 priority={index === 0}
               />
             ))}
