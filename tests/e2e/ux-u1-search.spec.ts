@@ -7,11 +7,11 @@ test.use({ viewport: { width: 1280, height: 800 } });
 // Preview 2026-10-15: the status line names each product's own state from the
 // registry, so an open preview is never called "in development".
 const STATUS: Record<string, RegExp> = {
-  en: /^Sổ Trọ: open preview, limited places; Sổ Tâm: in development; Android and iOS: no store release\.$/,
-  vi: /^Sổ Trọ: bản xem trước đã mở, số chỗ có hạn; Sổ Tâm: đang phát triển; Android và iOS: chưa có bản trên cửa hàng ứng dụng\.$/,
-  zh: /^Sổ Trọ：预览版已开放，名额有限；Sổ Tâm：开发中；Android 与 iOS：尚未上架应用商店\.$/,
+  en: /^Sổ Trọ: open preview, limited places; Sổ Tâm: in development; Vững Tay Lái: in development; Android and iOS: no store release\.$/,
+  vi: /^Sổ Trọ: bản xem trước đã mở, số chỗ có hạn; Sổ Tâm: đang phát triển; Vững Tay Lái: đang phát triển; Android và iOS: chưa có bản trên cửa hàng ứng dụng\.$/,
+  zh: /^Sổ Trọ：预览版已开放，名额有限；Sổ Tâm：开发中；Vững Tay Lái：开发中；Android 与 iOS：尚未上架应用商店\.$/,
   "zh-hant":
-    /^Sổ Trọ：預覽版已開放，名額有限；Sổ Tâm：開發中；Android 與 iOS：尚未上架應用程式商店\.$/,
+    /^Sổ Trọ：預覽版已開放，名額有限；Sổ Tâm：開發中；Vững Tay Lái：開發中；Android 與 iOS：尚未上架應用程式商店\.$/,
 };
 
 async function search(
