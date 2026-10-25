@@ -119,14 +119,18 @@ for (const lang of LOCALES) {
       const products = page.locator(
         "[data-about-composition] [data-about-product]",
       );
-      await expect(products).toHaveCount(2);
+      await expect(products).toHaveCount(3);
       // Preview 2026-10-15: Sổ Trọ is in preview, Sổ Tâm in development.
-      for (const status of ["Preview", "In development"])
+      // Owner 2026-10-24 adds Vững Tay Lái, also In development.
+      for (const [status, count] of [
+        ["Preview", 1],
+        ["In development", 2],
+      ] as const)
         await expect(
           page.locator(
             `[data-about-composition] [data-product-status='${status}']`,
           ),
-        ).toHaveCount(1);
+        ).toHaveCount(count);
     });
 
     test("product without captures shows no artwork, no device frame, status once", async ({

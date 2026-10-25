@@ -6,7 +6,17 @@ const SIGN_IN: Record<string, string> = {
   sotro: "https://sotro.blueskyzlabs.com/login",
   sotam: "https://sotam.blueskyzlabs.com/auth/login",
 };
-const HIDDEN = ["apexagent", "fluentarc", "vungtaylai"];
+const HIDDEN = ["apexagent", "fluentarc"];
+// Owner 2026-10-24 publishes Vững Tay Lái at In development. Its Product Truth
+// keeps public launch BLOCKED and forbids accounts and native apps, so it has
+// no appAccess block: the page states "in development" and links nowhere into
+// the running app.
+const NO_APP_ACCESS = "vungtaylai";
+const APP_HOST = "vungtaylai.blueskyzlabs.com";
+const IN_DEVELOPMENT: Record<string, string> = {
+  en: "In development",
+  vi: "Đang phát triển",
+};
 // Preview 2026-10-15: Sổ Trọ's web app is open as a preview; Sổ Tâm is not.
 const WEB_LINE: Record<string, [string, string]> = {
   sotro: ["preview", "Web: bản xem trước đã mở, số chỗ có hạn"],
@@ -66,6 +76,24 @@ test.describe("app access", () => {
         }
       });
     }
+  }
+
+  for (const lang of ["en", "vi"]) {
+    test(`${lang}/${NO_APP_ACCESS}: In development, no store badge, no sign-in or app link`, async ({
+      page,
+    }) => {
+      await page.goto(`/${lang}/products/${NO_APP_ACCESS}/`);
+      await expect(page.locator("main")).toContainText(IN_DEVELOPMENT[lang]!);
+      await expect(page.locator("[data-app-signin]")).toHaveCount(0);
+      await expect(page.locator("[data-mobile-app]")).toHaveCount(0);
+      await expect(page.locator("[data-mobile-state]")).toHaveCount(0);
+      await expect(
+        page.locator(
+          'a[href*="play.google.com"], a[href*="apps.apple.com"], a[href*="itunes.apple.com"]',
+        ),
+      ).toHaveCount(0);
+      await expect(page.locator(`a[href*="${APP_HOST}"]`)).toHaveCount(0);
+    });
   }
 
   test("hidden products have no profile page and are not listed", async ({
