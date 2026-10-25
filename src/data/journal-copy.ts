@@ -73,7 +73,7 @@ export interface JournalPostCopy {
 export const JOURNAL_POST_COPY: Record<"vi" | "en", JournalPostCopy> = {
   vi: {
     published: "Đăng ngày",
-    updated: "Cập nhật lần cuối",
+    updated: "Cập nhật",
     sources: "Nguồn",
     figureCredit: "Hình ảnh: BlueSkyz Labs",
     summary: "Tóm tắt",

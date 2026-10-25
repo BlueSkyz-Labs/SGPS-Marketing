@@ -8,9 +8,9 @@ const SIGN_IN: Record<string, string> = {
 };
 const HIDDEN = ["apexagent", "fluentarc"];
 // Owner 2026-10-24 publishes Vững Tay Lái at In development. Its Product Truth
-// keeps public launch BLOCKED and forbids accounts and native apps, so it has
-// no appAccess block: the page states "in development" and links nowhere into
-// the running app.
+// keeps public launch BLOCKED, so the page links nowhere into the running app.
+// Owner 2026-10-25: its Android and iOS apps are on the roadmap, so appAccess
+// lists them as "in development" only: never available, never linked.
 const NO_APP_ACCESS = "vungtaylai";
 const APP_HOST = "vungtaylai.blueskyzlabs.com";
 const IN_DEVELOPMENT: Record<string, string> = {
@@ -86,7 +86,14 @@ test.describe("app access", () => {
       await expect(page.locator("main")).toContainText(IN_DEVELOPMENT[lang]!);
       await expect(page.locator("[data-app-signin]")).toHaveCount(0);
       await expect(page.locator("[data-mobile-app]")).toHaveCount(0);
-      await expect(page.locator("[data-mobile-state]")).toHaveCount(0);
+      await expect(
+        page.locator('[data-app-access] [data-mobile-state="in-development"]'),
+      ).toHaveCount(1);
+      await expect(
+        page.locator(
+          '[data-mobile-state]:not([data-mobile-state="in-development"])',
+        ),
+      ).toHaveCount(0);
       await expect(
         page.locator(
           'a[href*="play.google.com"], a[href*="apps.apple.com"], a[href*="itunes.apple.com"]',
