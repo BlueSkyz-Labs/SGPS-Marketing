@@ -37,7 +37,10 @@ test("C4-B maison: every href is a resolvable public page", () => {
 });
 
 test("C4-B maison: sections without a public route fail closed", () => {
-  assert.deepEqual(getMaisonPendingSections(), ["journal"]);
+  // IX-02: the journal resolves through the approved footer helper (per
+  // language, gated on a published post), so nothing is pending any more; a
+  // language without its own post still omits it (next test).
+  assert.deepEqual(getMaisonPendingSections(), []);
   for (const lang of LANGS) {
     const ids = getMaisonSections(lang).map((section) => section.id);
     for (const pending of getMaisonPendingSections()) {
@@ -92,5 +95,34 @@ test("C4-B maison: EN/VI parity", () => {
   for (let index = 0; index < en.length; index += 1) {
     assert.equal(vi[index].href, en[index].href.replace(/^\/en\//, "/vi/"));
     assert.ok(vi[index].label.trim().length > 0, "VI label must be authored");
+  }
+});
+
+const post = (lang, draft = false) => ({ data: { lang, draft } });
+
+test("IX-02 maison: the journal joins the house only for a language with its own published post", () => {
+  for (const lang of ["en", "vi", "zh", "zh-hant"]) {
+    const ids = (entries) =>
+      getMaisonSections(lang, entries).map((section) => section.id);
+    assert.ok(!ids([]).includes("journal"), `${lang}: no entries`);
+    assert.ok(!ids([post(lang, true)]).includes("journal"), `${lang}: draft`);
+    assert.ok(
+      !ids([post(lang === "en" ? "vi" : "en")]).includes("journal"),
+      `${lang}: only another language has a post`,
+    );
+    const live = getMaisonSections(lang, [post(lang)]);
+    assert.deepEqual(
+      live.map((section) => section.id),
+      ["products", "proof", "journal", "studio"],
+      `${lang}: house order with a post`,
+    );
+    const journal = live.find((section) => section.id === "journal");
+    assert.equal(journal.href, `/${lang}/journal/`);
+    assert.equal(
+      journal.label,
+      getFooterLinks(lang, [post(lang)]).find(
+        (link) => link.href === journal.href,
+      ).label,
+    );
   }
 });

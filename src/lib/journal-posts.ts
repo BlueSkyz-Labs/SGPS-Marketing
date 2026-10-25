@@ -7,6 +7,7 @@ import {
 } from "./journal-schema.ts";
 import { HOME_LABELS } from "./breadcrumbs.ts";
 import { isHttpsUrl } from "./https-url.ts";
+import { CANONICAL_PUBLIC_SITE_ORIGIN } from "./truth.ts";
 import { absoluteUrl, canonicalForPath, publisherRef } from "./seo.ts";
 
 /**
@@ -45,6 +46,26 @@ export function publishedJournalPosts<T extends JournalCollectionEntry>(
         b.data.datePublished.localeCompare(a.data.datePublished) ||
         a.data.id.localeCompare(b.data.id),
     );
+}
+
+/**
+ * Published posts of one language that cite this product's own profile page
+ * (`<canonical origin>/<lang>/products/<slug>/`) among their sources. Derived from
+ * the collection, so no URL is hardcoded; a language with no matching post
+ * yields nothing: fail closed.
+ */
+export function journalPostsForProduct<T extends JournalCollectionEntry>(
+  entries: readonly T[],
+  lang: string,
+  slug: string,
+): T[] {
+  const profile = canonicalForPath(
+    `/${lang}/products/${slug}/`,
+    CANONICAL_PUBLIC_SITE_ORIGIN,
+  );
+  return publishedJournalPosts(entries, lang).filter((entry) =>
+    entry.data.sources.includes(profile),
+  );
 }
 
 /**

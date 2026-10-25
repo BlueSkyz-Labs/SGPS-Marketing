@@ -25,11 +25,20 @@ for (const locale of LOCALES) {
       "content",
       /noindex/,
     );
-    await expect(page.locator("[data-journal-branch]")).toHaveCount(2);
-    // Both first posts are in the news branch, so the product branch stays
-    // honestly empty; with no posts both branches are empty.
+    // Audit IX-09: only branches that hold a post render (both first posts are
+    // in the news branch, so the product branch is absent); with no post the
+    // page keeps one honest empty state and no branch heading.
+    await expect(page.locator("[data-journal-branch]")).toHaveCount(
+      locale.posts > 0 ? 1 : 0,
+    );
+    if (locale.posts > 0) {
+      await expect(page.locator("[data-journal-branch]")).toHaveAttribute(
+        "data-journal-branch",
+        "news",
+      );
+    }
     await expect(page.locator("[data-journal-empty]")).toHaveCount(
-      locale.posts > 0 ? 1 : 2,
+      locale.posts > 0 ? 0 : 1,
     );
     await expect(page.locator("[data-journal-item]")).toHaveCount(locale.posts);
     // Dates read as on the post page (localized), never a raw ISO string; the

@@ -10,6 +10,9 @@ import { journalPostPath } from "@/lib/journal-posts";
  * v11 J1: the journal index. Lists published posts of this language by
  * branch, newest first. zh / zh-Hant list nothing and point readers to the
  * Vietnamese and English editions (posts are VI + EN only).
+ * Audit IX-09: only branches that hold a post render; a language with no post
+ * at all shows the one honest empty state instead of an empty heading per
+ * branch.
  */
 interface Props {
   lang: Language;
@@ -23,6 +26,9 @@ const entries: JournalEntry[] = (await getCollection("journal"))
   .sort((a: JournalEntry, b: JournalEntry) =>
     b.datePublished.localeCompare(a.datePublished),
   );
+const branches = JOURNAL_BRANCHES.filter((branch) =>
+  entries.some((entry) => entry.branch === branch),
+);
 const heading = { news: copy.news, product: copy.product } as const;
 ---
 
@@ -39,7 +45,12 @@ const heading = { news: copy.news, product: copy.product } as const;
       </a>
     </p>
   ) : null}
-  {JOURNAL_BRANCHES.map((branch) => {
+  {branches.length === 0 ? (
+    <p class="mt-12 text-[var(--text-secondary)]" data-journal-empty>
+      {copy.empty}
+    </p>
+  ) : null}
+  {branches.map((branch) => {
     const items = entries.filter((entry) => entry.branch === branch);
     return (
       <section
@@ -54,34 +65,28 @@ const heading = { news: copy.news, product: copy.product } as const;
         >
           {heading[branch]}
         </h2>
-        {items.length === 0 ? (
-          <p class="mt-4 text-[var(--text-secondary)]" data-journal-empty>
-            {copy.empty}
-          </p>
-        ) : (
-          <ul class="mt-6 grid gap-6">
-            {items.map((entry) => (
-              <li data-journal-item={entry.id}>
-                <h3 class="text-lg font-semibold">
-                  <a
-                    href={journalPostPath(entry.lang, entry.id)}
-                    class="text-[var(--action-primary)] underline underline-offset-4 hover:no-underline"
-                  >
-                    {entry.title}
-                  </a>
-                </h3>
-                <p class="mt-1 text-sm text-[var(--text-secondary)]">
-                  <time datetime={entry.datePublished}>
-                    {formatDate(lang, entry.datePublished)}
-                  </time>
-                </p>
-                <p class="mt-2 text-[var(--text-secondary)]">
-                  {entry.description}
-                </p>
-              </li>
-            ))}
-          </ul>
-        )}
+        <ul class="mt-6 grid gap-6">
+          {items.map((entry) => (
+            <li data-journal-item={entry.id}>
+              <h3 class="text-lg font-semibold">
+                <a
+                  href={journalPostPath(entry.lang, entry.id)}
+                  class="text-[var(--action-primary)] underline underline-offset-4 hover:no-underline"
+                >
+                  {entry.title}
+                </a>
+              </h3>
+              <p class="mt-1 text-sm text-[var(--text-secondary)]">
+                <time datetime={entry.datePublished}>
+                  {formatDate(lang, entry.datePublished)}
+                </time>
+              </p>
+              <p class="mt-2 text-[var(--text-secondary)]">
+                {entry.description}
+              </p>
+            </li>
+          ))}
+        </ul>
       </section>
     );
   })}
