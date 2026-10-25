@@ -4,7 +4,11 @@ import type { ShowcaseSchema } from "@/lib/showcase-schema";
 import ShowcaseGroup from "@/components/product/ShowcaseGroup.astro";
 import FeatureStory from "@/components/product/FeatureStory.astro";
 import ButtonLink from "@/components/ui/ButtonLink.astro";
-import { STORY_COPY } from "@/components/product/story-copy";
+import {
+  STORY_COPY,
+  isLandlordStory,
+  storyFrame,
+} from "@/components/product/story-copy";
 import { resolveFeatureStory } from "@/lib/feature-story";
 import { getPublicProducts } from "@/lib/products";
 import { productCopy } from "@/lib/product-copy";
@@ -115,8 +119,36 @@ const COPY = {
   },
 } as const satisfies Record<Language, Record<string, string>>;
 
-const t = COPY[lang];
-const heading = story ? STORY_COPY[lang].title(productName) : t.heading;
+// The landlord framing (tenants, a family phone, the owner's computer) is Sổ
+// Trọ's. Other products keep the same structure with neutral wording.
+const NEUTRAL_COPY = {
+  en: {
+    disclosure: `Screens from the development build. Captured ${capturedOn} with sample data only: no real users or personal data.`,
+    phone: "On a phone",
+    desktop: "On a computer",
+  },
+  vi: {
+    disclosure: `Giao diện của bản đang phát triển. Chụp ngày ${capturedOn}, chỉ dùng dữ liệu mẫu: không có người dùng hay dữ liệu cá nhân thật.`,
+    phone: "Trên điện thoại",
+    desktop: "Trên máy tính",
+  },
+  zh: {
+    disclosure: `开发版本的界面。截取于 ${capturedOn}，仅使用示例数据：没有真实用户或个人数据。`,
+    phone: "手机端",
+    desktop: "电脑端",
+  },
+  "zh-hant": {
+    disclosure: `開發版本的畫面。擷取於 ${capturedOn}，僅使用範例資料：沒有真實使用者或個人資料。`,
+    phone: "手機端",
+    desktop: "電腦端",
+  },
+} as const satisfies Record<Language, Record<string, string>>;
+
+const t = isLandlordStory(showcase.product)
+  ? COPY[lang]
+  : { ...COPY[lang], ...NEUTRAL_COPY[lang] };
+const frame = storyFrame(lang, showcase.product);
+const heading = story ? frame.title(productName) : t.heading;
 const guideHref = showcase.guide
   ? `/${lang}/products/${showcase.product}/guide/`
   : null;
@@ -149,7 +181,7 @@ const defaultTrack = wanted
     </h2>
     {story ? (
       <p class="showcase__lead mt-4 max-w-3xl" data-story-lead>
-        {STORY_COPY[lang].lead}
+        {frame.lead}
       </p>
     ) : null}
     <p
@@ -160,7 +192,9 @@ const defaultTrack = wanted
     </p>
   </div>
 
-  {story ? <FeatureStory story={story} lang={lang} /> : null}
+  {story ? (
+    <FeatureStory story={story} lang={lang} product={showcase.product} />
+  ) : null}
 
   {showcase.video ? (
     <figure

@@ -7,6 +7,7 @@ import {
   STORY_COPY,
   desktopSmallSrc,
   phoneSmallSrc,
+  storyFrame,
 } from "@/components/product/story-copy";
 
 /**
@@ -26,10 +27,13 @@ type Screen = ShowcaseSchema["screens"][number];
 interface Props {
   story: ResolvedStory<Screen>;
   lang: Language;
+  /** Showcase product slug; picks the story framing (`storyFrame`). */
+  product: string;
 }
 
-const { story, lang } = Astro.props;
-const t = STORY_COPY[lang];
+const { story, lang, product } = Astro.props;
+// The kicker on the coda follows the product's story framing.
+const t = { ...STORY_COPY[lang], ...storyFrame(lang, product) };
 const total = story.chapters.length;
 const pad = (n: number) => String(n).padStart(2, "0");
 const timeline = (index: number) => `--story-${index + 1}`;
