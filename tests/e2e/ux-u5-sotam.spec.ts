@@ -4,8 +4,10 @@ import { expect, test, type Locator, type Page } from "@playwright/test";
  * UX-U5 (P1-7): Sổ Tâm is no longer under-served. Home carries a tap-sized
  * secondary entry for it (not only the inline link in the product line), and its
  * profile has no redundant endorsed lockup. Owner 2026-10-18 (A-01): the early
- * next-steps row is gone; the closing journey bar makes Contact the one
- * primary action while the product has no screens to show.
+ * next-steps row is gone; the closing journey bar made Contact the one
+ * primary action while the product had no screens to show. With real screens
+ * (#698) the one primary action is the hero's "See the screens" anchor, as on
+ * the other showcased products, and the journey bar adds no second primary.
  */
 const LOCALES = ["en", "vi", "zh", "zh-hant"] as const;
 
@@ -52,12 +54,17 @@ for (const lang of LOCALES) {
       // in "negative proofs" below).
     });
 
-    test("profile: Contact is the one primary step, no early row or lockup", async ({
+    test("profile: one primary step (the screens), no early row or lockup", async ({
       page,
     }) => {
       await page.goto(`/${lang}/products/sotam/`);
       await expect(page.locator("[data-profile-next-steps]")).toHaveCount(0);
-      expect(await journeyPrimaries(page)).toEqual([`/${lang}/contact/`]);
+      expect(await journeyPrimaries(page)).toEqual([]);
+      await expect(page.locator("main a.btn--primary")).toHaveCount(1);
+      await expect(page.locator("main a.btn--primary")).toHaveAttribute(
+        "href",
+        "#profile-showcase",
+      );
       await expect(page.locator("h1")).toHaveCount(1);
       await expect(page.locator(".profile-lockup")).toHaveCount(0);
       // Landmark names stay unique next to the closing journey bar.
