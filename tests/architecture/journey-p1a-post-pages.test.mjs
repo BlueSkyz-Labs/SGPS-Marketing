@@ -68,8 +68,8 @@ test("the author registry holds the Owner-directed copy verbatim", () => {
   assert.equal(tony.name, "Tony Nguyen");
   assert.equal(tony.role.vi, "Nhà sáng lập kiêm CEO");
   assert.equal(tony.role.en, "Founder & CEO");
-  assert.equal(tony.avatarAlt.vi, "Chân dung nét khắc Tony Nguyen");
-  assert.equal(tony.avatarAlt.en, "Line-engraving portrait of Tony Nguyen");
+  assert.equal(tony.avatarAlt.vi, "Chân dung chibi minh hoạ Tony Nguyen");
+  assert.equal(tony.avatarAlt.en, "Chibi illustration of Tony Nguyen");
   assert.equal(tony.aboutPath.vi, "/vi/about/");
   assert.equal(tony.aboutPath.en, "/en/about/");
   assert.equal(
@@ -118,7 +118,7 @@ test("the avatar is a committed, EXIF-free WebP pair with honest provenance", ()
   );
   assert.equal(
     tony.avatarProvenance,
-    "Line-engraving (hedcut-style) illustration derived from a portrait photograph supplied by the Owner, made at the Owner's request (2026-10-24: art, not the original photo) by deterministic local image processing (tools/journal-art/hedcut.py, no generative model); brand ink on a porcelain tint, circular crop, cobalt ring.",
+    "Chibi-style vector illustration of the author's recognisable features (glasses, side-parted hair, smile, suit and tie), chosen by the Owner on 2026-10-25 (option L). Drawn by a deterministic local script (tools/journal-art/chibi.py) with no photo pixels and no generative model; circular crop, cobalt ring.",
   );
 });
 

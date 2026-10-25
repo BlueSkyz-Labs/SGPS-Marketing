@@ -1,9 +1,9 @@
 import type { Language } from "@/data/site";
 
 /**
- * v11 Journal index copy. Descriptive UI text only: it states the section's
- * rules (sources on every post), which the schema enforces, and makes no
- * product claim. zh / zh-Hant are machine-assisted (O-10.6) and say that
+ * v11 Journal index copy. Descriptive UI text only; it makes no product claim.
+ * The "every post lists its sources" line was removed (Owner, 2026-10-25);
+ * the schema still requires sources on every post. zh / zh-Hant are machine-assisted (O-10.6) and say that
  * posts are published in Vietnamese and English.
  */
 export const JOURNAL_COPY: Record<
@@ -19,21 +19,21 @@ export const JOURNAL_COPY: Record<
 > = {
   en: {
     title: "Journey",
-    lede: "News and real product updates from BlueSkyz Labs. Every post lists its sources.",
+    lede: "News and product updates from BlueSkyz Labs.",
     news: "News and updates",
     product: "Product updates",
     empty: "No posts yet.",
   },
   vi: {
     title: "Hành trình",
-    lede: "Tin tức và cập nhật sản phẩm thật của BlueSkyz Labs. Mỗi bài đều ghi nguồn.",
+    lede: "Tin tức và cập nhật sản phẩm từ BlueSkyz Labs.",
     news: "Tin tức & cập nhật",
     product: "Cập nhật sản phẩm",
     empty: "Chưa có bài viết.",
   },
   zh: {
     title: "日志",
-    lede: "BlueSkyz Labs 的新闻与真实产品更新。每篇文章都注明来源。",
+    lede: "BlueSkyz Labs 的新闻与产品更新。",
     news: "新闻与动态",
     product: "产品更新",
     empty: "暂无文章。",
@@ -42,7 +42,7 @@ export const JOURNAL_COPY: Record<
   // zh-Hant copy: machine-assisted (OpenCC s2twp), pending native review.
   "zh-hant": {
     title: "日誌",
-    lede: "BlueSkyz Labs 的新聞與真實產品更新。每篇文章都註明來源。",
+    lede: "BlueSkyz Labs 的新聞與產品更新。",
     news: "新聞與動態",
     product: "產品更新",
     empty: "暫無文章。",

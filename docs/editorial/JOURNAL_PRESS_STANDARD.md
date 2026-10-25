@@ -77,8 +77,8 @@ re-encoding, which is why the visible mark is the primary control.
 ## R5 — Author and AI
 
 1. The byline names a registered author (`src/data/authors.ts`). The portrait is
-   an engraving derived from a photo the Owner supplied, not the photo itself
-   (`tools/journal-art/hedcut.py`, deterministic, no generative model). The
+   a chibi vector drawing the Owner chose (2026-10-25), not a photo and with no
+   photo pixels (`tools/journal-art/chibi.py`, deterministic, no generative model). The
    portrait files carry no metadata at all: the author-photo privacy rule (no
    EXIF, XMP or ICC chunk) stays stricter than R3.
 2. `aiAssisted` stays in frontmatter as a truthful internal record. It is not
