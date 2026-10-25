@@ -1,4 +1,5 @@
 ---
+import Dateline from "@/components/shared/Dateline.astro";
 import type { Language } from "@/lib/i18n";
 import { getShowcase } from "@/lib/showcases";
 
@@ -126,7 +127,9 @@ const label = LABEL[lang];
   {showLabel ? (
     <figcaption class="flagship-capture__label">
       {label}
-      <span class="flagship-capture__provenance">{capturedOn}</span>
+      <span class="flagship-capture__provenance">
+        <Dateline iso={capturedOn} lang={lang} class="dateline--inherit" />
+      </span>
     </figcaption>
   ) : null}
 </figure>

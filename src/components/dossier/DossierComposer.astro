@@ -7,7 +7,7 @@ import {
 } from "@/lib/dossier";
 import DossierPreview from "@/components/dossier/DossierPreview.astro";
 import BoardroomDeck from "@/components/dossier/BoardroomDeck.astro";
-import { formatDisplayDate } from "@/lib/display-date";
+import Dateline from "@/components/shared/Dateline.astro";
 
 /**
  * C4-C Task 2 — dossier composer.
@@ -154,9 +154,11 @@ const bySection = (section: (typeof SECTIONS)[number]): DossierEntry[] =>
           )}
           {entry.freshness && (
             <p class="c4-dossier__entry-freshness" data-dossier-freshness>
-              <time datetime={entry.freshness}>
-                {formatDisplayDate(entry.freshness, lang)}
-              </time>
+              <Dateline
+                iso={entry.freshness}
+                lang={lang}
+                class="dateline--inherit"
+              />
             </p>
           )}
         </li>

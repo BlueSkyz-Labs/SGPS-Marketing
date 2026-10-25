@@ -1,5 +1,6 @@
 ---
 import BrandLockup from "@/components/brand/BrandLockup.astro";
+import Dateline from "@/components/shared/Dateline.astro";
 import Container from "@/components/layout/Container.astro";
 import LanguageSwitcher from "@/components/layout/LanguageSwitcher.astro";
 import { SITE, SHARED_LABELS, labelFor, getFooterGroups } from "@/data/site";
@@ -101,7 +102,11 @@ const languageName = isVi
           <span class="c4-colophon__rule" aria-hidden="true"></span>
           <span class="c4-colophon__updated" data-last-updated>
             {lastUpdated.label}{" "}
-            <time datetime={lastUpdated.datetime}>{lastUpdated.text}</time>
+            <Dateline
+              iso={lastUpdated.datetime}
+              lang={lang}
+              class="dateline--inherit"
+            />
           </span>
         </>
       ) : null}

@@ -183,6 +183,17 @@ export function buildJournalRss(input: {
  * the author is a Person built from the registry. No `image`: the author
  * portrait is not the article image, and no post-specific card exists.
  */
+/**
+ * Press standard R3: tools/journal-art/render.mjs writes, next to each
+ * `<name>.<lang>.webp`, a 1200 px `-1200.webp` and (heroes) a 1200x675
+ * `.og.jpg`, all stamped and listed in src/data/journal-art.json.
+ */
+export function journalArtVariant(src: string, variant: "1200" | "og"): string {
+  return variant === "1200"
+    ? src.replace(/\.webp$/, "-1200.webp")
+    : src.replace(/\.webp$/, ".og.jpg");
+}
+
 export function blogPostingJsonLd(entry: JournalEntry, siteUrl: string) {
   const lang = entry.lang;
   const author = AUTHORS[entry.author];
@@ -205,6 +216,11 @@ export function blogPostingJsonLd(entry: JournalEntry, siteUrl: string) {
       image: absoluteUrl(siteUrl, author.avatarLarge),
     },
     publisher: publisherRef(siteUrl),
+    ...(entry.hero
+      ? { image: absoluteUrl(siteUrl, journalArtVariant(entry.hero.src, "og")) }
+      : {}),
+    copyrightHolder: publisherRef(siteUrl),
+    copyrightYear: Number(entry.datePublished.slice(0, 4)),
     ...(citation.length > 0 ? { citation } : {}),
   };
 }

@@ -1,5 +1,5 @@
 ---
-import { formatDisplayDate } from "@/lib/display-date";
+import Dateline from "@/components/shared/Dateline.astro";
 import { compilePublicDossier, type Language } from "@/lib/dossier";
 
 /**
@@ -181,9 +181,11 @@ const sectionLabels: Record<string, string> = {
 
           {entry.freshness && (
             <p class="c4-boardroom__freshness">
-              <time datetime={entry.freshness}>
-                {formatDisplayDate(entry.freshness, lang)}
-              </time>
+              <Dateline
+                iso={entry.freshness}
+                lang={lang}
+                class="dateline--inherit"
+              />
             </p>
           )}
         </article>

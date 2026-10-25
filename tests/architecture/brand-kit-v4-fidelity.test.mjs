@@ -225,6 +225,9 @@ test("public review dates render as semantic <time datetime>", () => {
     "src/components/integrity/EvidencePassport.astro",
     "utf8",
   );
-  assert.match(details, /<time datetime=\{review\.reviewedOn\}>/);
-  assert.match(passport, /<time datetime=\{passport\.reviewedOn\}>/);
+  // Wave G2: the semantic <time datetime> lives once in the shared Dateline.
+  const dateline = readFileSync("src/components/shared/Dateline.astro", "utf8");
+  assert.match(dateline, /<time datetime=\{iso\}/);
+  assert.match(details, /<Dateline[^>]*iso=\{review\.reviewedOn\}/);
+  assert.match(passport, /<Dateline[^>]*iso=\{passport\.reviewedOn\}/);
 });

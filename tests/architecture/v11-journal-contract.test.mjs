@@ -26,9 +26,22 @@ const ENTRY = {
   sources: ["https://example.org/source"],
   ownerApproval: APPROVAL,
 };
+/** Press standard R2: a published post's figures, for its own id and lang. */
+const figures = (lang) => ({
+  hero: {
+    src: `/images/journal/fixture-post/hero.${lang}.webp`,
+    alt: "A fixture figure description long enough for the schema.",
+  },
+  infographic: {
+    src: `/images/journal/fixture-post/infographic.${lang}.webp`,
+    alt: "A fixture figure description long enough for the schema.",
+  },
+});
+Object.assign(ENTRY, figures("vi"));
+const EN = { ...ENTRY, lang: "en", ...figures("en") };
 const pair = (overrides = {}) => [
   journalEntrySchema.parse({ ...ENTRY, ...overrides }),
-  journalEntrySchema.parse({ ...ENTRY, lang: "en", ...overrides }),
+  journalEntrySchema.parse({ ...EN, ...overrides }),
 ];
 
 test("journal schema accepts a sourced, Owner-approved news entry", () => {
@@ -42,6 +55,18 @@ test("negative proofs: the schema rejects unsourced, unapproved, unknown-key and
     { ...ENTRY, sources: ["http://insecure.example"] },
     { ...ENTRY, ownerApproval: "https://github.com/other/repo/pull/1" },
     { ...ENTRY, lang: "zh" },
+    { ...ENTRY, hero: undefined },
+    { ...ENTRY, infographic: undefined },
+    {
+      ...ENTRY,
+      hero: { ...ENTRY.hero, src: "/images/journal/other-post/hero.vi.webp" },
+    },
+    {
+      ...ENTRY,
+      hero: { ...ENTRY.hero, src: "/images/journal/fixture-post/hero.en.webp" },
+    },
+    { ...ENTRY, hero: { ...ENTRY.hero, src: "https://cdn.example/stock.jpg" } },
+    { ...EN, hero: ENTRY.hero },
     { ...ENTRY, rating: 5 },
     { ...ENTRY, dateModified: "2026-10-01" },
     { ...ENTRY, dateModified: "2026-10-05" },
@@ -73,13 +98,22 @@ test("pairing: a published post needs matching vi and en versions", () => {
   const mismatched = [
     vi,
     journalEntrySchema.parse({
-      ...ENTRY,
-      lang: "en",
+      ...EN,
       datePublished: "2026-10-02",
     }),
   ];
   assert.match(journalPairProblems(mismatched)[0], /datePublished differs/);
   const draftOnly = [journalEntrySchema.parse({ ...ENTRY, draft: true })];
+  // A draft may omit its figures until it is published.
+  assert.equal(
+    journalEntrySchema.safeParse({
+      ...ENTRY,
+      hero: undefined,
+      infographic: undefined,
+      draft: true,
+    }).success,
+    true,
+  );
   assert.deepEqual(journalPairProblems(draftOnly), []);
 });
 

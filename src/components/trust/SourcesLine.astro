@@ -14,7 +14,7 @@
  */
 import { getEvidencePassport } from "@/lib/claims";
 import { getPublicProducts } from "@/lib/products";
-import { formatDisplayDate } from "@/lib/display-date";
+import Dateline from "@/components/shared/Dateline.astro";
 import type { SourceRef } from "@/data/trust-copy";
 import type { Language } from "@/data/site";
 
@@ -119,9 +119,7 @@ const reviewedOn = reviewedLabel ? passport?.reviewedOn : undefined;
       <span class="sources-line__reviewed">
         {reviewedLabel}{" "}
         <span class="sources-line__date">
-          <time datetime={reviewedOn}>
-            {formatDisplayDate(reviewedOn, lang)}
-          </time>
+          <Dateline iso={reviewedOn} lang={lang} class="dateline--inherit" />
           {"."}
         </span>
       </span>
@@ -156,7 +154,7 @@ const reviewedOn = reviewedLabel ? passport?.reviewedOn : undefined;
     min-height: 2.75rem;
   }
 
-  /* F5: the flex box drops the text-node space before <time>. */
+  /* F5: the flex box drops the text-node space before the date. */
   .sources-line__reviewed {
     column-gap: 0.25em;
   }

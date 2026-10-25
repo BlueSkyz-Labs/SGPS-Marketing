@@ -201,7 +201,8 @@ test("dossier sources render known canonical and unknown states from the shipped
   assert.match(component, /provenance\.sourceRefs\.length > 0/);
   assert.match(component, /provenance\.freshness/);
   assert.doesNotMatch(component, /entry\.freshness/);
-  assert.match(component, /<time datetime=\{provenance\.freshness\}>/);
+  // Wave G2: the semantic <time datetime> is rendered by the shared Dateline.
+  assert.match(component, /<Dateline[^>]*iso=\{provenance\.freshness\}/);
   assert.match(component, /data-dossier-source-link href=\{source\.href\}/);
   assert.equal(
     component.includes(canonical.href.en),
