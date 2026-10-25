@@ -14,6 +14,7 @@ import {
   type ResolvedClaim,
 } from "@/lib/claims";
 import { getShowcase } from "@/lib/showcases";
+import { displayableMedia } from "@/lib/products";
 import { HOME_FLAGSHIP_LEAD, HOME_PROOF_POINTS } from "@/data/home-copy";
 import { productTransitionStyle } from "@/lib/product-transition";
 
@@ -64,7 +65,8 @@ if (!product) {
 }
 
 const { data } = product;
-const media = data.proof.media;
+// OG-3: held identity art never reaches the home theatre either.
+const media = displayableMedia(data.proof.media);
 const copy = productCopy(data, lang);
 const capabilities = copy.capabilities;
 const profileHref = getProductProfilePath(lang, data.slug);
