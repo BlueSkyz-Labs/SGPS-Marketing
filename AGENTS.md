@@ -65,6 +65,7 @@ Before any material work, refresh live `main`, open PRs/issues, `docs/current-wo
 
 - Do **not** invent corporate emails, legal prose, product claims, screenshots, photography, owner/product facts, user-research participants, quotes, completion rates or acceptance outcomes.
 - Prefer the smallest **sufficient** root-cause change over symptom patches.
+- Public content (Owner, 2026-10-25, MANDATORY): every article and customer-facing sentence meets `docs/editorial/PUBLIC_CONTENT_STANDARD.md` (reader first, plain natural VI/EN, truthful claims with no self-praise or unsupported superlatives, VI = EN, search/share hygiene, WCAG 2.2 AA) and `docs/editorial/JOURNAL_PRESS_STANDARD.md`; copy is independently reviewed and polished before publication and re-read on the live site after it.
 - Customer-centric decisions (`SGPS-DEC-2026-041`, LOCK): judge the whole customer journey first (CC-1), state any customer degradation explicitly (CC-2), never rank it above security, money safety, privacy or legal constraints (CC-3), and bring customer-vs-cost/speed/prior-choice conflicts to the Owner instead of resolving them silently (CC-5).
 - Never weaken tests, lint, truth gates, dependency audit, security controls, source assurance, provider governance or accessibility/performance budgets to go green.
 - Canonical organizational origin is `https://blueskyzlabs.com` per ADR 0006. `tonydemo.com` is retired/transition history and must not pass the production public-truth gate.

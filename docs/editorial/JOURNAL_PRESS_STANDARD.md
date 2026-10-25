@@ -17,7 +17,7 @@ line is not shown.
 ## R1 — Presentation: a top-tier newspaper page
 
 1. Kicker (branch), headline, deck (the `description`), then a byline block:
-   the dateline and the author's engraved portrait and name. The role and bio
+   the dateline and the author's portrait and name. The role and bio
    sit in the author card at the end.
 2. A lead illustration directly under the byline, full reading width, with a
    caption and a credit line.
