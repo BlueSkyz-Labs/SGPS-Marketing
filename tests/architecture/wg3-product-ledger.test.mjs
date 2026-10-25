@@ -342,3 +342,27 @@ test("negative proof G-06: a boxed ledger, a lost default card or a ProductHouse
     }).length > 0,
   );
 });
+
+/** Owner 2026-10-25: the odd last ledger row spans both columns at md+. */
+export function oddRowProblems(css) {
+  const block = css.match(
+    /@media \(min-width: 48rem\)\s*\{\s*\.product-ledger > :last-child:nth-child\(odd\)\s*\{([^}]*)\}/,
+  );
+  return block && /grid-column:\s*1 \/ -1/.test(block[1])
+    ? []
+    : ["odd last ledger row does not span both columns"];
+}
+
+test("G-06: an odd last ledger row spans both columns", () => {
+  assert.deepEqual(
+    oddRowProblems(read("src/styles/c4-quiet-authority.css")),
+    [],
+  );
+});
+
+test("negative proof: removing the span rule is caught", () => {
+  const css = read("src/styles/c4-quiet-authority.css");
+  const broken = css.replace("grid-column: 1 / -1;", "grid-column: auto;");
+  assert.notEqual(broken, css);
+  assert.equal(oddRowProblems(broken).length, 1);
+});
