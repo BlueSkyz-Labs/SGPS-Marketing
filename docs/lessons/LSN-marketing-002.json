@@ -4,8 +4,8 @@
   "guard": {
     "kind": "preflight",
     "level": "G3",
-    "negative_proof": "tests/architecture/build-stamp.test.mjs: checkStamp() refuses a stamp from another commit and a missing stamp; disabling the commit comparison turns the test red. 2026-10-21: with a decoy server on 127.0.0.1:3000, `playwright test` refuses to start (\"is already used\", exit 1); the architecture test rejects !process.env.CI, true and an unset value.",
-    "path": "tests/e2e/build-stamp.mjs (checkStamp) + tests/e2e/global-setup.mjs + astro.config.mjs buildStamp integration + playwright.config.ts webServer.reuseExistingServer: false (tests/architecture/local-server-isolation.test.mjs)"
+    "negative_proof": "tests/architecture/build-stamp.test.mjs: checkStamp() refuses a stamp from another commit and a missing stamp; disabling the commit comparison turns the test red. 2026-10-21: with a decoy server on 127.0.0.1:3000, `playwright test` refuses to start (\"is already used\", exit 1); the architecture test rejects !process.env.CI, true and an unset value. 2026-10-24: a global-setup that returns early when PLAYWRIGHT_BASE_URL is set fails tests/architecture/local-server-isolation.test.mjs (remote base URL no longer refused); checkLaneURL rejects remote, lookalike (127.0.0.1.evil.example), private-IP and malformed URLs; checkServedCommit rejects a missing or foreign served commit.",
+    "path": "tests/e2e/build-stamp.mjs (checkStamp) + tests/e2e/global-setup.mjs (loopback-only lane, stamp check with PLAYWRIGHT_BASE_URL set, served-commit check) + astro.config.mjs buildStamp integration + playwright.config.ts webServer.reuseExistingServer: false (tests/architecture/local-server-isolation.test.mjs)"
   },
   "id": "LSN-marketing-002",
   "project": "marketing",
@@ -16,9 +16,16 @@
       "level_at_recurrence": "G3",
       "guard_root_cause": "The stamp check compares the local dist/ to HEAD, but Playwright then reused whatever server already answered on port 3000, so the build under test was never the one that was checked.",
       "reason_if_not": "Already G3 (preflight). G4 is an SGPS portable guard and not this project's to ship; the guard is widened at G3 instead: playwright.config.ts sets reuseExistingServer: false and tests/architecture/local-server-isolation.test.mjs pins it. Flagged to the control plane as a portable candidate."
+    },
+    {
+      "at": "2026-10-24",
+      "evidence": "Three parallel lanes ran Playwright with PLAYWRIGHT_BASE_URL=http://127.0.0.1:<port> against their own astro preview. That skips webServer; one lane reported the webServer step was bypassed. The run was therefore tied to no checked build: nothing verified that the server on the URL served this worktree's HEAD, and a remote URL was equally accepted.",
+      "level_at_recurrence": "G3",
+      "guard_root_cause": "The guard verified the local dist/ stamp and the webServer port, never the server the browser actually talked to. A base URL pointing at any host (or at another worktree's loopback preview) was outside the guard's reach.",
+      "reason_if_not": "Already G3 (preflight). G4 is an SGPS portable guard and not this project's to ship; the guard is widened at G3 instead: global-setup now refuses a non-loopback PLAYWRIGHT_BASE_URL, still runs checkStamp when the base URL is set, and compares the commit served at /.well-known/build-commit with HEAD (tests/architecture/local-server-isolation.test.mjs, build-stamp.test.mjs). Flagged to the control plane as a portable candidate."
     }
   ],
-  "reuse_boundary": "Local development only. CI builds fresh, so the check is a no-op there (guarded by !process.env.CI). Known gaps: uncommitted edits on the same HEAD are not detected, and the run is allowed when git is unavailable. The stamp lives in .astro/ (git-ignored), never in the deployed dist/.",
+  "reuse_boundary": "Local development only. CI builds fresh, so the check is a no-op there (guarded by !process.env.CI). Known gaps: uncommitted edits on the same HEAD are not detected, and the run is allowed when git is unavailable. The served-build check runs only when this worktree's dist/ carries .well-known/build-commit (written by local builds, never by CI or Workers Builds); otherwise only the local stamp is verified. A non-loopback PLAYWRIGHT_BASE_URL is refused for local runs by design. The stamp lives in .astro/ (git-ignored), never in the deployed dist/.",
   "root_cause": "Local Playwright runs served dist/ via `astro preview` with no check that dist/ matched HEAD. A stale build produced failures unrelated to the working tree.",
   "rule": "Local Playwright runs only against a dist/ built from the current HEAD. A build stamp (.astro/build-commit) is compared to `git rev-parse HEAD` in a local-only globalSetup; mismatch refuses the run. Playwright never reuses an existing server on the port.",
   "source": {
