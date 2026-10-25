@@ -91,7 +91,7 @@ test.describe("C2 product continuity — static-first no-JS contract", () => {
     // server per run. Under CI worker contention that cold-start tax (browser
     // launch + ephemeral HTTP server bring-up) stacks on top of ordinary
     // navigation and can exceed the framework's 30s default once (observed:
-    // BlueSkyz-Labs/SGPS-Marketing#284). Widen only this test's own budget —
+    // BlueSkyz-Labs/blueskyz-web#284). Widen only this test's own budget —
     // the global config timeout stays untouched and assertions are unchanged.
     test.setTimeout(60_000);
     const server = await startFixtureServer();

@@ -300,7 +300,7 @@ export function normalizeEvidencePaths(evidence) {
 }
 
 /**
- * Local repository slug, e.g. "BlueSkyz-Labs/SGPS-Marketing".
+ * Local repository slug, e.g. "BlueSkyz-Labs/blueskyz-web".
  * Returns null when the origin is a local path / file:// URL, in which case
  * every entry is verified against the local object store (the safe default).
  */

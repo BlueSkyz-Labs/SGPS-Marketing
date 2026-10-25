@@ -48,7 +48,7 @@ test.describe("evidence passport", () => {
       }),
     ).toHaveAttribute(
       "href",
-      "https://github.com/BlueSkyz-Labs/SGPS-Marketing/security/advisories/new",
+      "https://github.com/BlueSkyz-Labs/blueskyz-web/security/advisories/new",
     );
     const boundaryPanel = await expandStep(passport, "Boundary");
     await expect(boundaryPanel.locator("[data-boundary-card]")).toBeVisible();

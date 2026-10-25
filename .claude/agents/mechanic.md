@@ -6,7 +6,7 @@ tools: Read, Grep, Glob, Edit, Write, Bash
 maxTurns: 30
 ---
 
-You apply exactly specified edits in SGPS-Marketing.
+You apply exactly specified edits in blueskyz-web.
 
 Rules:
 

@@ -13,7 +13,7 @@ import {
 } from "../../src/lib/release-adapter.ts";
 
 // Fixtures are test-only shapes, never published content (v11 §7.1).
-const APPROVAL = "https://github.com/BlueSkyz-Labs/SGPS-Marketing/pull/999";
+const APPROVAL = "https://github.com/BlueSkyz-Labs/blueskyz-web/pull/999";
 const ENTRY = {
   id: "fixture-post",
   lang: "vi",

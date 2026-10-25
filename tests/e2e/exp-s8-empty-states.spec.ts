@@ -89,7 +89,7 @@ for (const lang of LOCALES) {
       await expect(primary).toHaveCount(1);
       await expect(primary).toHaveAttribute(
         "href",
-        /^https:\/\/github\.com\/BlueSkyz-Labs\/SGPS-Marketing\/security\/advisories\/new$/,
+        /^https:\/\/github\.com\/BlueSkyz-Labs\/blueskyz-web\/security\/advisories\/new$/,
       );
       // Owner 2026-10-12: Contact shows no product sign-in lane.
       await expect(page.locator("[data-contact-signin]")).toHaveCount(0);

@@ -1,7 +1,7 @@
 import { expect, test } from "@playwright/test";
 
 const ADVISORY_URL =
-  "https://github.com/BlueSkyz-Labs/SGPS-Marketing/security/advisories/new";
+  "https://github.com/BlueSkyz-Labs/blueskyz-web/security/advisories/new";
 
 test.describe("safe action preflight on external trust actions", () => {
   for (const [route, context] of [

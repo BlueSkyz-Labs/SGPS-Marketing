@@ -129,23 +129,20 @@ test("SGPS marketing system binds architecture claims to immutable Git evidence"
   );
   assert.ok(system, "missing system.sgps-marketing");
   assert.equal(system.kind, "System");
-  assert.equal(system.repository, "BlueSkyz-Labs/SGPS-Marketing");
+  assert.equal(system.repository, "BlueSkyz-Labs/blueskyz-web");
   assert.equal(system.owner, "BlueSkyz Labs");
   assert.ok(system.lifecycle);
   assert.ok(system.criticality);
   assert.ok(system.dataClassification);
   assert.ok(system.trustBoundary);
-  assert.equal(
-    system.sourceEvidence?.repository,
-    "BlueSkyz-Labs/SGPS-Marketing",
-  );
+  assert.equal(system.sourceEvidence?.repository, "BlueSkyz-Labs/blueskyz-web");
   assert.match(system.sourceEvidence?.revision ?? "", /^[0-9a-f]{40}$/);
 });
 
 test("local architecture source-evidence paths exist in the verified checkout", () => {
   for (const entity of model.entities) {
     const evidence = entity.sourceEvidence;
-    if (!evidence || evidence.repository !== "BlueSkyz-Labs/SGPS-Marketing") {
+    if (!evidence || evidence.repository !== "BlueSkyz-Labs/blueskyz-web") {
       continue;
     }
     assert.ok(
@@ -159,7 +156,7 @@ test("source evidence resolves to real Git objects, not SHA-shaped strings", () 
   const problems = [];
   for (const entity of model.entities) {
     const evidence = entity.sourceEvidence;
-    if (!evidence || evidence.repository !== "BlueSkyz-Labs/SGPS-Marketing") {
+    if (!evidence || evidence.repository !== "BlueSkyz-Labs/blueskyz-web") {
       continue;
     }
     assert.match(

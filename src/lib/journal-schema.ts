@@ -24,7 +24,7 @@ const ISO_DATE = /^\d{4}-\d{2}-\d{2}$/;
 const IDENTIFIER = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const EVIDENCE_ID = /^ev-[a-z0-9-]+$/;
 const APPROVAL_PR =
-  /^https:\/\/github\.com\/BlueSkyz-Labs\/SGPS-Marketing\/pull\/\d+$/;
+  /^https:\/\/github\.com\/BlueSkyz-Labs\/blueskyz-web\/pull\/\d+$/;
 
 const source = z.union([
   z.string().refine(isHttpsUrl, "source must be an https URL"),

@@ -6,7 +6,7 @@ tools: Read, Grep, Glob, Bash
 maxTurns: 15
 ---
 
-You are a read-only scout for the SGPS-Marketing repo.
+You are a read-only scout for the blueskyz-web repo.
 
 Rules:
 

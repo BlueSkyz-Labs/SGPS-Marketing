@@ -109,7 +109,7 @@ feature branch
 Production:
 
 ```text
-repo: BlueSkyz-Labs/SGPS-Marketing
+repo: BlueSkyz-Labs/blueskyz-web
 branch: main
 command: pnpm install --frozen-lockfile && pnpm validate:public-truth && pnpm build && pnpm check:client-budget && pnpm check:static-links
 preview branches: enabled
