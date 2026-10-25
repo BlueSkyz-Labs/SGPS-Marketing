@@ -25,13 +25,13 @@ infographic:
 draft: false
 ---
 
-> This post summarises public information for convenience. It is not tax advice. Vietnam's tax rules were adjusted in 2026; check with your local tax office before you file.
-
 ## In short
 
 - Household and individual businesses owe no value-added tax (VAT) or personal income tax (PIT) on annual revenue up to **1 billion dong**, from 1 January 2026.
 - Decree 141/2026/NĐ-CP, issued on 29 April 2026, raised the threshold from 500 million dong.
 - Under Decree 254/2026/NĐ-CP, people who earn income from renting out property are not required to use e-invoices (see E-invoices below).
+
+> This post summarises public information for convenience. It is not tax advice. Vietnam's tax rules were adjusted in 2026; check with your local tax office before you file.
 
 ## Where the 1 billion dong threshold comes from
 
