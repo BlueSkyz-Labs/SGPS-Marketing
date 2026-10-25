@@ -42,28 +42,28 @@
     "rightsHolder": "BlueSkyz Labs"
   },
   "/images/journal/so-tam-ban-demo/infographic.en-1200.webp": {
-    "sha256": "37587121b94f7ed524334a428aaca32a4be74c17a3467235fffe2294b50781ad",
+    "sha256": "9d0828f76341824dafea7393c16ed596018363ea33b29e7cff2e63ad6b34a71a",
     "width": 1200,
     "height": 1260,
     "template": "tools/journal-art/figures/so-tam-ban-demo.mjs",
     "rightsHolder": "BlueSkyz Labs"
   },
   "/images/journal/so-tam-ban-demo/infographic.en.webp": {
-    "sha256": "87e39b4adf0dcc8a8f5dd0cbdbe9dcbf36f378a3c143dd3838604a6b368ada71",
+    "sha256": "a2b01f2b96854f495f07afb5ca81d6bb5118f339b71cb4a4b054e7d9d55d6a39",
     "width": 2400,
     "height": 2520,
     "template": "tools/journal-art/figures/so-tam-ban-demo.mjs",
     "rightsHolder": "BlueSkyz Labs"
   },
   "/images/journal/so-tam-ban-demo/infographic.vi-1200.webp": {
-    "sha256": "cf90947e85c345e1ff5fef308dc79bd7f5926c5c82416ba1d20e2221e6a0c21f",
+    "sha256": "a7a845d43bc8fdee6e707152fac831c4c4f93db622e6895e139075e7c134acef",
     "width": 1200,
     "height": 1260,
     "template": "tools/journal-art/figures/so-tam-ban-demo.mjs",
     "rightsHolder": "BlueSkyz Labs"
   },
   "/images/journal/so-tam-ban-demo/infographic.vi.webp": {
-    "sha256": "02c899841d164efb17cd64faf4cb557bebb2eb926c0dd0c7886bc2a161ef82cc",
+    "sha256": "bfbdbee9ca3064d9be1c5710e22e30d1b941c53b5881f8d21ac807e90b7a7824",
     "width": 2400,
     "height": 2520,
     "template": "tools/journal-art/figures/so-tam-ban-demo.mjs",

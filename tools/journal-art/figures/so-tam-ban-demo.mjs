@@ -39,7 +39,7 @@ const T = {
       ],
       [
         "Viết một trang",
-        "Trang Hôm nay ghi ngày kèm tiết khí; bản viết được lưu trên thiết bị.",
+        "Trang Hôm nay ghi ngày và tiết khí của hôm đó; bản viết được lưu trên thiết bị.",
       ],
       [
         "Gọi tên cảm xúc, nếu muốn",
@@ -47,14 +47,14 @@ const T = {
       ],
       [
         "Nhìn lại",
-        "Ghi chép và Ký ức giữ các trang theo tháng; đang ở dạng xem trước.",
+        "Ghi chép và Ký ức đang ở dạng xem trước; trang hoàn tất sẽ được giữ trên thiết bị.",
       ],
     ],
     statusHead: "Hiện trạng",
     status: [
       [
         "Web",
-        "Bản demo đang hoàn thiện; bản viết lưu trong trình duyệt, chưa mã hóa, chưa đồng bộ.",
+        "Bản demo đang hoàn thiện; bản viết lưu trong trình duyệt, không mã hóa, không tự đồng bộ.",
       ],
       ["Android, iOS", "Đang phát triển, chưa có trên cửa hàng ứng dụng."],
     ],
@@ -70,7 +70,7 @@ const T = {
       ["Start without an account", "The app says where web writing is stored."],
       [
         "Write a page",
-        "The Today page shows the date with the solar term; writing is saved on the device.",
+        "The Today page shows the date and that day's solar term; writing is saved on the device.",
       ],
       [
         "Name a feeling, if you want",
@@ -78,14 +78,14 @@ const T = {
       ],
       [
         "Look back",
-        "Journal and Memories keep pages by month; both are previews.",
+        "Journal and Memories are previews; finished pages will be kept on the device.",
       ],
     ],
     statusHead: "Where it stands",
     status: [
       [
         "Web",
-        "A demo still being finished; writing stays in the browser, not yet encrypted or synced.",
+        "A demo still being finished; writing stays in the browser, unencrypted and not synced automatically.",
       ],
       ["Android, iOS", "In development, not in the app stores."],
     ],
