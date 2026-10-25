@@ -72,6 +72,21 @@ export function websiteJsonLd(siteUrl: string) {
   } as const;
 }
 
+/** One showcase screen as it enters `SoftwareApplication.screenshot`. */
+export type ShowcaseShot = {
+  src: string;
+  width: number;
+  height: number;
+  alt: Record<string, string>;
+};
+
+/** Screens of a showcase record, in record order; empty when no showcase. */
+export function showcaseScreenshots(
+  showcase: { screens: readonly ShowcaseShot[] } | null,
+): readonly ShowcaseShot[] {
+  return showcase?.screens ?? [];
+}
+
 export function productJsonLd(
   product: {
     name: string;
@@ -88,6 +103,8 @@ export function productJsonLd(
     applicationCategory?: string;
     /** BCP 47 codes of the app's own interface; replaces the page language. */
     appLanguages?: readonly string[];
+    /** Real app screens from the product's showcase record; omitted when none. */
+    screenshots?: readonly ShowcaseShot[];
   },
   siteUrl: string,
   lang: string,
@@ -132,6 +149,17 @@ export function productJsonLd(
             url: absoluteUrl(siteUrl, product.mediaUrl),
             ...(product.mediaCaption ? { caption: product.mediaCaption } : {}),
           },
+        }
+      : {}),
+    ...(product.screenshots && product.screenshots.length > 0
+      ? {
+          screenshot: product.screenshots.map((shot) => ({
+            "@type": "ImageObject",
+            url: absoluteUrl(siteUrl, shot.src),
+            width: shot.width,
+            height: shot.height,
+            caption: shot.alt[lang] ?? shot.alt.en,
+          })),
         }
       : {}),
   };
