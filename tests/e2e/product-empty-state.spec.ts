@@ -1,8 +1,8 @@
 import { expect, test } from "@playwright/test";
 import { getPublicProductCount } from "./product-helpers.ts";
 
-// Owner 2026-09-28: only Sổ Trọ and Sổ Tâm are published.
-const PRODUCT_SLUGS = ["sotam", "sotro"];
+// Owner 2026-09-28: Sổ Trọ and Sổ Tâm; Owner 2026-10-24 adds Vững Tay Lái.
+const PRODUCT_SLUGS = ["sotam", "sotro", "vungtaylai"];
 
 test.describe("published products render without client scripting", () => {
   test.use({ javaScriptEnabled: false });

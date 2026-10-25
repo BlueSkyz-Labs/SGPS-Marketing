@@ -44,8 +44,8 @@ for (const lang of LANGS) {
       expect(lazyAboveFold(thumbs, h)).toEqual([]);
       expect(thumbs[0].priority).toBe("high");
       expect(thumbs.slice(1).every((t) => t.priority === null)).toBe(true);
-      // Only the first row (two columns from md up) loads eagerly.
-      expect(thumbs.slice(2).every((t) => t.loading === "lazy")).toBe(true);
+      // Only the first desktop row (three columns from lg) loads eagerly.
+      expect(thumbs.slice(3).every((t) => t.loading === "lazy")).toBe(true);
     });
   }
 }
