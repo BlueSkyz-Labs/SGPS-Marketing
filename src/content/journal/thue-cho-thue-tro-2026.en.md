@@ -35,7 +35,7 @@ draft: false
 
 ## Where the 1 billion dong threshold comes from
 
-The amended Personal Income Tax Law, passed by the National Assembly on 10 December 2025, set the threshold for household businesses at 500 million dong a year. On 29 April 2026 the Government issued Decree 141/2026/NĐ-CP, amending Decree 68/2026/NĐ-CP: "500 million dong" became "1 billion dong" in the articles on VAT, PIT and filing. The Government's news portal reports that the new threshold applies from 1 January 2026.
+The amended Personal Income Tax Law, passed by the National Assembly on 10 December 2025, set the threshold for household businesses at 500 million dong a year. On 29 April 2026 the Government issued Decree 141/2026/NĐ-CP, raising it to 1 billion dong a year. The Government's news portal reports that the new threshold applies from 1 January 2026.
 
 Many articles about rental tax published before late April 2026 still use the 500 million dong figure. Check the publication date when you read them.
 

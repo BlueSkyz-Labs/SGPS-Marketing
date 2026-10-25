@@ -35,7 +35,7 @@ draft: false
 
 ## Ngưỡng 1 tỷ đồng đến từ đâu?
 
-Luật Thuế TNCN (sửa đổi), được Quốc hội thông qua ngày 10/12/2025, đặt mức doanh thu không phải nộp thuế của hộ kinh doanh là 500 triệu đồng/năm. Ngày 29/4/2026, Chính phủ ban hành Nghị định 141/2026/NĐ-CP, sửa Nghị định 68/2026/NĐ-CP: cụm "500 triệu đồng" được thay bằng "01 tỷ đồng" trong các điều về thuế GTGT, thuế TNCN và kê khai. Báo Điện tử Chính phủ cho biết mức mới áp dụng từ ngày 1/1/2026.
+Luật Thuế TNCN (sửa đổi), được Quốc hội thông qua ngày 10/12/2025, đặt mức doanh thu không phải nộp thuế của hộ kinh doanh là 500 triệu đồng/năm. Ngày 29/4/2026, Chính phủ ban hành Nghị định 141/2026/NĐ-CP, nâng mức này lên 01 tỷ đồng/năm. Báo Điện tử Chính phủ cho biết mức mới áp dụng từ ngày 1/1/2026.
 
 Nhiều bài viết về thuế cho thuê nhà đăng trước cuối tháng 4/2026 vẫn dùng mốc 500 triệu đồng. Khi đọc, hãy để ý ngày đăng.
 

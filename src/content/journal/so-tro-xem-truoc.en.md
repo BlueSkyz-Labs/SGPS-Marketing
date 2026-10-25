@@ -31,7 +31,7 @@ Sổ Trọ, BlueSkyz Labs' rent book, is now in web preview for landlords in Vie
 
 ## Where it stands
 
-- Sổ Trọ is in web preview and accepts new workspaces in limited numbers.
+- Sổ Trọ is in web preview and accepts new rent books in limited numbers.
 - Android and iOS apps are in development and not yet in the app stores.
 - The screenshots on the product page were captured on 30 September 2026 from a test build with sample data.
 
