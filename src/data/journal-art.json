@@ -1,4 +1,74 @@
 {
+  "/images/journal/so-tam-ban-demo/hero.en-1200.webp": {
+    "sha256": "a32527db8a0d3100ee6e366887e51183a70f0eba819a0a364db9a24c6b84a70c",
+    "width": 1200,
+    "height": 675,
+    "template": "tools/journal-art/figures/so-tam-ban-demo.mjs",
+    "rightsHolder": "BlueSkyz Labs"
+  },
+  "/images/journal/so-tam-ban-demo/hero.en.og.jpg": {
+    "sha256": "33128952ee8ec7cf223df5c211d041c68276c19fbb7b2b24daff122f1dcc591d",
+    "width": 1200,
+    "height": 675,
+    "template": "tools/journal-art/figures/so-tam-ban-demo.mjs",
+    "rightsHolder": "BlueSkyz Labs"
+  },
+  "/images/journal/so-tam-ban-demo/hero.en.webp": {
+    "sha256": "384d515bfea37ae0bc2b6dbffca9af62cde9aab8c5e787b20ba5fd641f415992",
+    "width": 2400,
+    "height": 1350,
+    "template": "tools/journal-art/figures/so-tam-ban-demo.mjs",
+    "rightsHolder": "BlueSkyz Labs"
+  },
+  "/images/journal/so-tam-ban-demo/hero.vi-1200.webp": {
+    "sha256": "d833d952cde79168d35021d6f8d6f09ca6f312e7728b0e1a2e321576af195006",
+    "width": 1200,
+    "height": 675,
+    "template": "tools/journal-art/figures/so-tam-ban-demo.mjs",
+    "rightsHolder": "BlueSkyz Labs"
+  },
+  "/images/journal/so-tam-ban-demo/hero.vi.og.jpg": {
+    "sha256": "2a94d126724f50a4d3d315ae2b18edfb490e4d36657f4157cbf8f00dcb6fad72",
+    "width": 1200,
+    "height": 675,
+    "template": "tools/journal-art/figures/so-tam-ban-demo.mjs",
+    "rightsHolder": "BlueSkyz Labs"
+  },
+  "/images/journal/so-tam-ban-demo/hero.vi.webp": {
+    "sha256": "dce434dca0f52a9ebaec935b77e5b06ed4fb83bf37b5b0442cc5598ac70eae39",
+    "width": 2400,
+    "height": 1350,
+    "template": "tools/journal-art/figures/so-tam-ban-demo.mjs",
+    "rightsHolder": "BlueSkyz Labs"
+  },
+  "/images/journal/so-tam-ban-demo/infographic.en-1200.webp": {
+    "sha256": "37587121b94f7ed524334a428aaca32a4be74c17a3467235fffe2294b50781ad",
+    "width": 1200,
+    "height": 1260,
+    "template": "tools/journal-art/figures/so-tam-ban-demo.mjs",
+    "rightsHolder": "BlueSkyz Labs"
+  },
+  "/images/journal/so-tam-ban-demo/infographic.en.webp": {
+    "sha256": "87e39b4adf0dcc8a8f5dd0cbdbe9dcbf36f378a3c143dd3838604a6b368ada71",
+    "width": 2400,
+    "height": 2520,
+    "template": "tools/journal-art/figures/so-tam-ban-demo.mjs",
+    "rightsHolder": "BlueSkyz Labs"
+  },
+  "/images/journal/so-tam-ban-demo/infographic.vi-1200.webp": {
+    "sha256": "cf90947e85c345e1ff5fef308dc79bd7f5926c5c82416ba1d20e2221e6a0c21f",
+    "width": 1200,
+    "height": 1260,
+    "template": "tools/journal-art/figures/so-tam-ban-demo.mjs",
+    "rightsHolder": "BlueSkyz Labs"
+  },
+  "/images/journal/so-tam-ban-demo/infographic.vi.webp": {
+    "sha256": "02c899841d164efb17cd64faf4cb557bebb2eb926c0dd0c7886bc2a161ef82cc",
+    "width": 2400,
+    "height": 2520,
+    "template": "tools/journal-art/figures/so-tam-ban-demo.mjs",
+    "rightsHolder": "BlueSkyz Labs"
+  },
   "/images/journal/so-tro-xem-truoc/hero.en-1200.webp": {
     "sha256": "35b9aeda9850aca9d30b7c417423fde2a6b34301176f3710941e1ae03e6ff632",
     "width": 1200,
