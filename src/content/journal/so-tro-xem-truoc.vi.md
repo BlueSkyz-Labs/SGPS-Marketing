@@ -35,4 +35,4 @@ Sổ Trọ là sản phẩm của BlueSkyz Labs dành cho chủ trọ ở Việt
 - Ứng dụng Android và iOS đang được phát triển, chưa có trên cửa hàng ứng dụng.
 - Ảnh màn hình trên trang sản phẩm được chụp ngày 30/9/2026 từ bản dựng thử, dùng dữ liệu mẫu.
 
-Xem giới thiệu, ảnh màn hình và video ngắn tại [trang Sổ Trọ](/vi/products/sotro/). Khi có bản phát hành chính thức, chúng tôi sẽ đăng ở mục Cập nhật sản phẩm.
+Xem giới thiệu, ảnh màn hình và video ngắn tại [trang Sổ Trọ](/vi/products/sotro/). Khi có bản phát hành mới, chúng tôi sẽ đăng ở mục Cập nhật sản phẩm.

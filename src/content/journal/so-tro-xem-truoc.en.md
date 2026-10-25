@@ -35,4 +35,4 @@ Sổ Trọ is a BlueSkyz Labs product for landlords in Vietnam. The idea is simp
 - Android and iOS apps are in development and not yet in the app stores.
 - The screenshots on the product page were captured on 30 September 2026 from a test build with sample data.
 
-See the overview, screenshots and a short video on the [Sổ Trọ page](/en/products/sotro/). When an official release ships, we will post it under Product updates.
+See the overview, screenshots and a short video on the [Sổ Trọ page](/en/products/sotro/). When a new release ships, we will post it under Product updates.
