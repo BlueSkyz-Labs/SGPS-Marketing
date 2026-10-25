@@ -1,0 +1,25 @@
+{
+  "captured_at": "2026-10-24T13:10:00Z",
+  "class": "orphaned-local-preview-server",
+  "guard": {
+    "kind": "test",
+    "level": "G2",
+    "negative_proof": "tests/architecture/local-server-isolation.test.mjs: replacing SIGTERM with SIGKILL, or removing gracefulShutdown, turns the audit red. Runtime, 2026-10-24: `playwright test tests/e2e/seo.spec.ts` (9 passed, exit 0) left no astro preview behind with the setting; with the line removed the same run left one astro preview serving port 3000.",
+    "path": "playwright.config.ts webServer.gracefulShutdown + tests/architecture/local-server-isolation.test.mjs (auditShutdown)"
+  },
+  "id": "LSN-marketing-005",
+  "project": "marketing",
+  "recurrences": [],
+  "reuse_boundary": "Local Playwright runs on POSIX. CI containers are discarded after the job, so the orphan never mattered there. Windows ignores gracefulShutdown and keeps Playwright's default kill.",
+  "root_cause": "Playwright's webServer default shutdown SIGKILLs the runner's process group. `astro preview` runs as a daemon in its own process group, so it survived, and scripts/run-preview.mjs never got the SIGTERM that runs `astro preview stop`.",
+  "rule": "Playwright stops the local preview with SIGTERM (webServer.gracefulShutdown) so the runner can stop the astro preview daemon before exiting.",
+  "source": {
+    "commit": "65b4ee9",
+    "pr": 688,
+    "repo": "SGPS-Marketing"
+  },
+  "state": "GUARDED",
+  "tags": ["testing", "local-dev", "playwright", "harness"],
+  "title": "Local Playwright must not leave an astro preview on port 3000",
+  "trigger": "2026-10-24: every local Playwright run left an astro preview on port 3000 (parent pid 1); the next run then failed \"is already used\" (correctly, per LSN-marketing-002) until the orphan was killed by hand."
+}

@@ -31,7 +31,7 @@ import {
   localizeSiteHref,
 } from "@/lib/product-routes";
 import { appLanguageNames } from "@/lib/app-languages";
-import { safeJsonLd, productJsonLd } from "@/lib/seo";
+import { safeJsonLd, productJsonLd, showcaseScreenshots } from "@/lib/seo";
 import { productBreadcrumbJsonLd } from "@/lib/breadcrumbs";
 import { displayableMedia, getPublicProducts } from "@/lib/products";
 import { productMeta } from "@/data/page-meta";
@@ -108,6 +108,7 @@ const productStructuredData = productJsonLd(
       ? { mediaCaption: proofCaptionForKind(shownMedia.kind, "zh-hant") }
       : {}),
     platforms: data.platforms,
+    screenshots: showcaseScreenshots(showcase),
     ...(data.applicationCategory
       ? { applicationCategory: data.applicationCategory }
       : {}),
