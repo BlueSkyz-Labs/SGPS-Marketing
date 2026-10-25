@@ -56,7 +56,7 @@ Không phải nộp thuế chưa chắc là không có thủ tục nào. Hãy h�
 
 ## Hóa đơn điện tử
 
-Nghị định 141/2026/NĐ-CP yêu cầu hộ, cá nhân kinh doanh có doanh thu năm trên 1 tỷ đồng dùng hóa đơn điện tử. Tuy vậy, Nghị định 254/2026/NĐ-CP về hóa đơn, chứng từ điện tử liệt kê "hộ kinh doanh, cá nhân kinh doanh có thu nhập từ họat động cho thuê bất động sản" trong nhóm không phải sử dụng hóa đơn điện tử. Ai có nhu cầu vẫn có thể đăng ký sử dụng.
+Nghị định 141/2026/NĐ-CP yêu cầu hộ, cá nhân kinh doanh có doanh thu năm trên 1 tỷ đồng dùng hóa đơn điện tử. Tuy vậy, Nghị định 254/2026/NĐ-CP về hóa đơn, chứng từ điện tử liệt kê "hộ kinh doanh, cá nhân kinh doanh có thu nhập từ hoạt động cho thuê bất động sản" trong nhóm không phải sử dụng hóa đơn điện tử. Ai có nhu cầu vẫn có thể đăng ký sử dụng.
 
 ## Ghi chép rõ ràng giúp bạn chủ động
 

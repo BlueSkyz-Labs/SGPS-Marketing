@@ -12,7 +12,7 @@ sources:
 ownerApproval: https://github.com/BlueSkyz-Labs/SGPS-Marketing/pull/671
 hero:
   src: /images/journal/so-tro-xem-truoc/hero.vi.webp
-  alt: "Ảnh màn hình Sổ Trọ: trang Thu tiền trên máy tính và hai màn hình điện thọai, Hôm nay và Thu tiền."
+  alt: "Ảnh màn hình Sổ Trọ: trang Thu tiền trên máy tính và hai màn hình điện thoại, Hôm nay và Thu tiền."
   caption: "Ảnh màn hình chụp ngày 30/9/2026 từ bản chạy thử, dùng dữ liệu mẫu."
 infographic:
   src: /images/journal/so-tro-xem-truoc/infographic.vi.webp
@@ -27,7 +27,7 @@ Sổ Trọ, sổ thu tiền trọ của BlueSkyz Labs, đang mở xem trước t
 - **Nhìn một lần là biết** tháng này phòng nào chưa đóng tiền trọ và hôm nay cần làm gì.
 - **Thu tiền và ghi mỗi khoản đúng một lần**, có bước xem lại rồi mới xác nhận, kèm mã QR chuyển khoản ngân hàng và biên nhận để sao chép gửi qua Zalo.
 - **Gom phòng, người thuê, chỉ số điện nước và sổ tạm trú về một nơi**, kèm bảng tạm trú tải về.
-- **Chữ to, nút lớn**, dành cho chủ trọ lớn tuổi; điện thọai của người nhà chỉ cần quét mã QR là tham gia được.
+- **Chữ to, nút lớn**, dành cho chủ trọ lớn tuổi; điện thoại của người nhà chỉ cần quét mã QR là tham gia được.
 
 ## Hiện trạng
 
