@@ -7,6 +7,7 @@ import {
   STORY_COPY,
   desktopSmallSrc,
   phoneSmallSrc,
+  storyFrame,
 } from "@/components/product/story-copy";
 
 /**
@@ -26,10 +27,13 @@ type Screen = ShowcaseSchema["screens"][number];
 interface Props {
   story: ResolvedStory<Screen>;
   lang: Language;
+  /** Showcase product slug; picks the story framing (`storyFrame`). */
+  product: string;
 }
 
-const { story, lang } = Astro.props;
-const t = STORY_COPY[lang];
+const { story, lang, product } = Astro.props;
+// The kicker on the coda follows the product's story framing.
+const t = { ...STORY_COPY[lang], ...storyFrame(lang, product) };
 const total = story.chapters.length;
 const pad = (n: number) => String(n).padStart(2, "0");
 const timeline = (index: number) => `--story-${index + 1}`;
@@ -252,11 +256,8 @@ const DESKTOP_SIZES = "(min-width: 64rem) 64rem, calc(100vw - 2.5rem)";
     align-items: center;
     gap: 0.5rem;
     margin-top: 0.5rem;
-    color: var(--action-primary);
-    font-size: var(--size-2);
-    font-weight: 600;
-    text-decoration: underline;
-    text-underline-offset: 0.2em;
+    /* Meta voice (colour, size, weight, underline): shared G-05 rule in
+       c4-quiet-authority.css. */
   }
   .story__inspect:focus-visible {
     outline: 2px solid var(--brand-cobalt);

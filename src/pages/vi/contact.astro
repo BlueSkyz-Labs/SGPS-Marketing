@@ -20,16 +20,16 @@ import { labelFor, SECURITY_ADVISORY_URL } from "@/data/site";
         title="Liên hệ BlueSkyz"
         lede={labelFor(EMPTY_STATE_COPY.contactLede, "vi")}
       />
-      <ul class="mt-12 grid gap-4 sm:grid-cols-2">
+      <ul class="mt-12 grid gap-x-8 sm:grid-cols-2">
         <PublicContactEmails
           lang="vi"
           boundary="Hợp tác và câu hỏi chung. Kênh báo cáo bảo mật riêng tư chỉ dành cho lỗ hổng bảo mật, không dùng cho hợp tác hay hỗ trợ thông thường."
         />
         <li
           data-contact-card="security"
-          class="flex min-w-0 flex-col justify-center rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-raised)] p-6"
+          class="contact-section flex min-w-0 flex-col"
         >
-          <h2 class="text-lg font-semibold tracking-tight">Bảo mật</h2>
+          <h2 class="contact-section__heading">Bảo mật</h2>
           <p class="mt-2 text-sm leading-relaxed text-[var(--text-secondary)]">
             <a
               href="/vi/security/"

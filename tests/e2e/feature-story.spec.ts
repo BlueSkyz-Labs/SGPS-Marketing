@@ -14,8 +14,14 @@ import { expect, test, type Page } from "@playwright/test";
  */
 const CHAPTERS = ["today", "utilities", "collect", "rooms", "candlelight"];
 const HEADINGS: Record<string, string[]> = {
-  en: ["Today", "Meter readings", "Collect rent", "Rooms", "Night mode"],
-  vi: ["Hôm nay", "Điện nước", "Thu tiền", "Phòng", "Chế độ ban đêm"],
+  en: [
+    "Today",
+    "Meter readings",
+    "Collect rent",
+    "Rooms",
+    "Warm night colours",
+  ],
+  vi: ["Hôm nay", "Điện nước", "Thu tiền", "Phòng", "Màu ấm ban đêm"],
 };
 
 /** Stage samples: opacities of the stacked screens at successive scroll steps. */
@@ -99,7 +105,7 @@ for (const lang of ["en", "vi"]) {
     }
     await expect(page.locator("[data-story-coda] h3")).toHaveCount(1);
     // Facts come from the record: Today, Meter readings and Collect rent
-    // carry one; Rooms and Night mode none.
+    // carry one; Rooms and Warm night colours none.
     await expect(page.locator("[data-story-fact]")).toHaveCount(3);
   });
 }

@@ -20,16 +20,16 @@ import { labelFor, SECURITY_ADVISORY_URL } from "@/data/site";
         title="联系我们"
         lede={labelFor(EMPTY_STATE_COPY.contactLede, "zh")}
       />
-      <ul class="mt-12 grid gap-4 sm:grid-cols-2">
+      <ul class="mt-12 grid gap-x-8 sm:grid-cols-2">
         <PublicContactEmails
           lang="zh"
           boundary="商务与一般咨询。私密安全报告仅用于报告疑似漏洞。"
         />
         <li
           data-contact-card="security"
-          class="flex min-w-0 flex-col justify-center rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-raised)] p-6"
+          class="contact-section flex min-w-0 flex-col"
         >
-          <h2 class="text-lg font-semibold tracking-tight">安全</h2>
+          <h2 class="contact-section__heading">安全</h2>
           <p class="mt-2 text-sm leading-relaxed text-[var(--text-secondary)]">
             <a
               href="/zh/security/"

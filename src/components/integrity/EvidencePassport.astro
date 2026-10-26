@@ -1,6 +1,6 @@
 ---
 import { getEvidencePassport, getClaimAnchor } from "@/lib/claims";
-import { formatDisplayDate } from "@/lib/display-date";
+import Dateline from "@/components/shared/Dateline.astro";
 import TruthState from "./TruthState.astro";
 import { SOURCE_LINKED_LEGEND } from "@/data/integrity";
 import BoundaryCard from "./BoundaryCard.astro";
@@ -63,9 +63,11 @@ const labels = LABELS[lang];
       {passport.reviewedOn ? (
         <span class="evidence-passport__review" data-passport-review>
           {labels.reviewed}:{" "}
-          <time datetime={passport.reviewedOn}>
-            {formatDisplayDate(passport.reviewedOn, lang)}
-          </time>
+          <Dateline
+            iso={passport.reviewedOn}
+            lang={lang}
+            class="dateline--inherit"
+          />
         </span>
       ) : null}
     </p>

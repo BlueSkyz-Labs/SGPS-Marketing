@@ -3,7 +3,7 @@ id: thue-cho-thue-tro-2026
 lang: en
 branch: news
 title: "Renting out rooms in Vietnam in 2026: the 1 billion dong tax threshold"
-description: "From 1 January 2026, household and individual businesses in Vietnam owe no VAT or income tax up to 1 billion dong a year. A summary for landlords."
+description: "From 1 January 2026, household and individual businesses in Vietnam owe no VAT or income tax up to 1 billion dong a year. A summary for landlords, with sources."
 datePublished: "2026-10-23"
 author: tony-nguyen
 aiAssisted: true
@@ -15,20 +15,27 @@ sources:
   - https://tuoitre.vn/nam-2026-nguoi-cho-thue-nha-phai-chiu-thue-gia-tri-gia-tang-nhu-the-nao-20260114165921867.htm
   - https://baochinhphu.vn/quy-dinh-doi-tuong-su-dung-hoa-don-dien-tu-10226070308163723.htm
 ownerApproval: https://github.com/BlueSkyz-Labs/blueskyz-web/pull/671
+hero:
+  src: /images/journal/thue-cho-thue-tro-2026/hero.en.webp
+  alt: "Engraved illustration: a two-storey row of rental rooms, a ledger and a gauge marked at the 1 billion dong threshold."
+  caption: "Illustration: the 1 billion dong annual revenue threshold, applied from 1 January 2026."
+infographic:
+  src: /images/journal/thue-cho-thue-tro-2026/infographic.en.webp
+  alt: "Summary infographic: a 1 billion dong a year threshold from 1 January 2026; the 10 December 2025 and 29 April 2026 milestones; above it, 5% PIT on the excess and 5% VAT on revenue; a 1.2 billion dong example owes 10 million dong PIT; renting out property does not require e-invoices."
 draft: false
 ---
-
-> This post summarises public information for convenience. It is not tax advice. Vietnam's tax rules changed several times in 2026; check with your local tax office before you file.
 
 ## In short
 
 - Household and individual businesses owe no value-added tax (VAT) or personal income tax (PIT) on annual revenue up to **1 billion dong**, from 1 January 2026.
 - Decree 141/2026/NĐ-CP, issued on 29 April 2026, raised the threshold from 500 million dong.
-- Under Decree 254/2026/NĐ-CP, people who earn income from renting out property are not required to use e-invoices.
+- Under Decree 254/2026/NĐ-CP, people who earn income from renting out property are not required to use e-invoices (see E-invoices below).
+
+> This post summarises public information for convenience. It is not tax advice. Vietnam's tax rules were adjusted in 2026; check with your local tax office before you file.
 
 ## Where the 1 billion dong threshold comes from
 
-The amended Personal Income Tax Law, passed by the National Assembly on 10 December 2025, set the threshold for household businesses at 500 million dong a year. On 29 April 2026 the Government issued Decree 141/2026/NĐ-CP, amending Decree 68/2026/NĐ-CP: "500 million dong" became "1 billion dong" in the articles on VAT, PIT and filing. The Government's news portal reports that the new threshold applies from 1 January 2026.
+The amended Personal Income Tax Law, passed by the National Assembly on 10 December 2025, set the threshold for household businesses at 500 million dong a year. On 29 April 2026 the Government issued Decree 141/2026/NĐ-CP, raising it to 1 billion dong a year. The Government's news portal reports that the new threshold applies from 1 January 2026.
 
 Many articles about rental tax published before late April 2026 still use the 500 million dong figure. Check the publication date when you read them.
 
@@ -43,7 +50,7 @@ A worked PIT example: with rental revenue of 1.2 billion dong a year, the amount
 
 Short-stay accommodation (guesthouses, homestays) is taxed differently. If you register as a household business and use another tax method, the result can differ too.
 
-## Below the threshold
+## What to do below the threshold
 
 Owing no tax does not always mean there is nothing to file. Ask your tax office which declaration or revenue notice applies to you.
 
@@ -51,6 +58,6 @@ Owing no tax does not always mean there is nothing to file. Ask your tax office 
 
 Decree 141/2026/NĐ-CP requires household and individual businesses with annual revenue above 1 billion dong to use e-invoices. Decree 254/2026/NĐ-CP on e-invoices, however, lists "household and individual businesses with income from renting out real estate" among those not required to use them. Anyone who wants to can still register.
 
-## Clear records help
+## Clear records keep you in control
 
-Below or above the threshold, recording every payment is the simplest way to know your annual revenue. [Sổ Trọ](/en/products/sotro/), a BlueSkyz Labs product now in preview, helps landlords collect rent and record each payment once.
+Below or above the threshold, recording every payment is a simple way to know your annual revenue. [Sổ Trọ](/en/products/sotro/), a BlueSkyz Labs product now in preview, helps landlords collect rent and record each payment once.

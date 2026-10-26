@@ -1,6 +1,6 @@
 ---
 import { CLAIMS } from "@/data/claims";
-import { formatDisplayDate } from "@/lib/display-date";
+import Dateline from "@/components/shared/Dateline.astro";
 import { getPublicProvenance } from "@/lib/provenance-lens";
 import type { Language } from "@/lib/dossier";
 
@@ -80,9 +80,11 @@ const resolved = entries.map((entry) => ({
         {provenance.freshness && (
           <p data-dossier-freshness={provenance.freshness}>
             {labels.freshness}:{" "}
-            <time datetime={provenance.freshness}>
-              {formatDisplayDate(provenance.freshness, lang)}
-            </time>
+            <Dateline
+              iso={provenance.freshness}
+              lang={lang}
+              class="dateline--inherit"
+            />
           </p>
         )}
       </article>

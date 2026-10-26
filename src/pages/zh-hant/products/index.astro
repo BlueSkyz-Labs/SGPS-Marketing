@@ -54,10 +54,11 @@ const emptyDescription = "產品僅在具備可核驗的公開證據時發布。
           >
             {allInDevelopment ? "開發中" : "產品"}
           </h2>
-          <div class="mt-6 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+          <div class="product-ledger mt-6 grid gap-x-8 md:grid-cols-2">
             {products.map((product, index) => (
               <ProductCard
                 product={product}
+                variant="ledger"
                 lang="zh-hant"
                 showThumb
                 eager={index < 3}

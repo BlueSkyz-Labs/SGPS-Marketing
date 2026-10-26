@@ -12,8 +12,12 @@ import { isHttpsUrl } from "./https-url.ts";
  * - Every factual post cites sources and the Owner approval PR (§7.1, §7.3).
  * - A `product` post must reference an approved public release record (§7.2).
  * - Every post names a registered `author` (Journey design D-9); an unknown key
- *   fails the build. `aiAssisted` drives the visible AI-disclosure line and
- *   must match across the VI + EN pair.
+ *   fails the build. `aiAssisted` is a truthful internal record that must
+ *   match across the VI + EN pair; it is not rendered (Owner, 2026-10-24).
+ * - Press standard (docs/editorial/JOURNAL_PRESS_STANDARD.md, R1–R3): a
+ *   published post carries a lead illustration (`hero`) and an end-of-article
+ *   summary infographic (`infographic`), both rendered and stamped by
+ *   tools/journal-art/ under this post's id and language.
  */
 export const JOURNAL_LANGUAGES = ["vi", "en"] as const;
 export type JournalLanguage = (typeof JOURNAL_LANGUAGES)[number];
@@ -25,6 +29,20 @@ const IDENTIFIER = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const EVIDENCE_ID = /^ev-[a-z0-9-]+$/;
 const APPROVAL_PR =
   /^https:\/\/github\.com\/BlueSkyz-Labs\/blueskyz-web\/pull\/\d+$/;
+
+/** `/images/journal/<post-id>/<name>.<lang>.webp`, written by tools/journal-art/render.mjs. */
+const ART_PATH =
+  /^\/images\/journal\/([a-z0-9-]+)\/(hero|infographic)\.(vi|en)\.webp$/;
+
+const figure = z
+  .object({
+    src: z
+      .string()
+      .regex(ART_PATH, "journal art comes from tools/journal-art/"),
+    alt: z.string().min(20).max(400),
+    caption: z.string().min(1).max(200).optional(),
+  })
+  .strict();
 
 const source = z.union([
   z.string().refine(isHttpsUrl, "source must be an https URL"),
@@ -46,6 +64,8 @@ export const journalEntrySchema = z
     sources: z.array(source).min(1),
     ownerApproval: z.string().regex(APPROVAL_PR),
     releaseRecord: z.string().regex(IDENTIFIER).optional(),
+    hero: figure.optional(),
+    infographic: figure.optional(),
     draft: z.boolean().default(false),
   })
   .strict()
@@ -69,6 +89,29 @@ export const journalEntrySchema = z
         code: "custom",
         message: "a product post must reference a public release record",
       });
+    }
+    for (const [key, name] of [
+      ["hero", "hero"],
+      ["infographic", "infographic"],
+    ] as const) {
+      const art = entry[key];
+      if (!art) {
+        if (!entry.draft)
+          ctx.addIssue({
+            code: "custom",
+            message: `a published post needs a ${name} (press standard R2)`,
+          });
+        continue;
+      }
+      const match = ART_PATH.exec(art.src);
+      if (
+        match &&
+        (match[1] !== entry.id || match[2] !== name || match[3] !== entry.lang)
+      )
+        ctx.addIssue({
+          code: "custom",
+          message: `${key}.src must be /images/journal/${entry.id}/${name}.${entry.lang}.webp`,
+        });
     }
     if (entry.branch === "news" && entry.releaseRecord) {
       ctx.addIssue({

@@ -8,25 +8,9 @@ export const LAST_UPDATED_LABEL: Record<Language, string> = {
   "zh-hant": "最後更新",
 };
 
-const INTL_LOCALE: Record<Language, string> = {
-  en: "en",
-  vi: "vi",
-  zh: "zh-CN",
-  "zh-hant": "zh-Hant",
-};
-
-/** Locale-formatted `YYYY-MM-DD`; the date is read as UTC so it never shifts. */
-export function formatLastUpdated(isoDate: string, lang: Language): string {
-  return new Intl.DateTimeFormat(INTL_LOCALE[lang], {
-    dateStyle: "long",
-    timeZone: "UTC",
-  }).format(new Date(`${isoDate}T00:00:00Z`));
-}
-
 export interface LastUpdatedView {
   label: string;
   datetime: string;
-  text: string;
 }
 
 /** Render model: `null` (omit the line) whenever there is no accurate date. */
@@ -38,6 +22,5 @@ export function lastUpdatedView(
   return {
     label: LAST_UPDATED_LABEL[lang],
     datetime: lastmod,
-    text: formatLastUpdated(lastmod, lang),
   };
 }

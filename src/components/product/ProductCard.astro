@@ -27,6 +27,9 @@ interface Props {
   eager?: boolean;
   /** First card only: its thumbnail is the LCP image, fetched at high priority. */
   priority?: boolean;
+  /** `ledger`: a hairline row instead of a raised card (products index only).
+   *  The default card stays for ProductHouse on the home page. */
+  variant?: "card" | "ledger";
 }
 
 const {
@@ -36,7 +39,9 @@ const {
   showThumb = false,
   eager = false,
   priority = false,
+  variant = "card",
 } = Astro.props;
+const ledger = variant === "ledger";
 const thumbLoading = eager || priority ? "eager" : "lazy";
 const thumbFetchPriority = priority ? "high" : undefined;
 const { data } = product;
@@ -67,6 +72,16 @@ const CAPTURES: Record<string, { src: string; width: number; height: number }> =
 const capture = showThumb ? CAPTURES[data.slug] : undefined;
 const showProfileLink = cta.href !== profileHref;
 const ctaIsExternal = cta.external || /^https?:\/\//i.test(cta.href);
+// Owner 2026-10-25: native apps on the roadmap show on the card as their own
+// "in development" chips, never as supported platforms and never linked.
+const nativeRoadmap = (
+  [
+    ["ios", "iOS"],
+    ["android", "Android"],
+  ] as const
+).flatMap(([key, name]) =>
+  data.appAccess?.[key]?.state === "in-development" ? [name] : [],
+);
 ---
 
 <!-- F6: the shell is the size container the card's thumb/body layout
@@ -77,9 +92,13 @@ const ctaIsExternal = cta.external || /^https?:\/\//i.test(cta.href);
     data-product-card
     data-product-tier={data.featuredTier}
     class:list={[
-      "product-card flex min-w-0 max-w-full flex-col rounded-[var(--radius-card)] border border-[var(--border-hairline)] bg-[var(--surface-raised)] p-4 sm:p-6 transition-[transform,box-shadow,border-color] duration-200 ease-[var(--motion-ease-standard)] hover:-translate-y-0.5 hover:border-[color-mix(in_srgb,var(--brand-cobalt)_38%,var(--border-subtle))] hover:shadow-[0_18px_44px_-14px_color-mix(in_srgb,var(--brand-cobalt)_30%,transparent)] motion-reduce:transition-none motion-reduce:hover:translate-y-0 motion-reduce:hover:shadow-none",
-      emphasis === "hero" && "md:p-8",
+      "product-card flex min-w-0 max-w-full flex-col",
+      ledger
+        ? "product-card--ledger"
+        : "rounded-[var(--radius-card)] border border-[var(--border-hairline)] bg-[var(--surface-raised)] p-4 sm:p-6 transition-[transform,box-shadow,border-color] duration-200 ease-[var(--motion-ease-standard)] hover:-translate-y-0.5 hover:border-[color-mix(in_srgb,var(--brand-cobalt)_38%,var(--border-subtle))] hover:shadow-[0_18px_44px_-14px_color-mix(in_srgb,var(--brand-cobalt)_30%,transparent)] motion-reduce:transition-none motion-reduce:hover:translate-y-0 motion-reduce:hover:shadow-none",
+      !ledger && emphasis === "hero" && "md:p-8",
     ]}
+    data-product-variant={variant}
   >
     {showThumb && (
       <div
@@ -154,7 +173,7 @@ const ctaIsExternal = cta.external || /^https?:\/\//i.test(cta.href);
       >
         <a
           href={profileHref}
-          class="inline-flex min-h-11 max-w-full min-w-0 items-center text-inherit no-underline [overflow-wrap:anywhere] hover:underline"
+          class="inline-flex min-h-11 max-w-full min-w-0 items-center text-inherit no-underline [overflow-wrap:anywhere] hover:underline product-card__title-link"
           data-product-continuity="card"
           style={productTransitionStyle("card", data.slug)}
         >
@@ -178,6 +197,14 @@ const ctaIsExternal = cta.external || /^https?:\/\//i.test(cta.href);
           {platform === "web" && !webPreviewOpen(data)
             ? ` · ${AVAILABILITY.inDevelopment[lang]}`
             : ""}
+        </span>
+      ))}
+      {nativeRoadmap.map((name) => (
+        <span
+          data-mobile-state="in-development"
+          class="inline-flex max-w-full min-w-0 items-center gap-1.5 rounded-full border border-dashed border-[var(--border-subtle)] px-2.5 py-0.5 text-xs font-medium text-[var(--text-secondary)] [overflow-wrap:anywhere]"
+        >
+          {name} · {AVAILABILITY.inDevelopment[lang]}
         </span>
       ))}
     </div>
@@ -231,6 +258,21 @@ const ctaIsExternal = cta.external || /^https?:\/\//i.test(cta.href);
   }
   .product-card {
     flex: 1 1 auto;
+  }
+  /* G-06: ledger row. A hairline above, no box, no raise; the thumb/body
+     split below is unchanged. */
+  .product-card--ledger {
+    padding: var(--space-6) 0;
+    border-top: 1px solid var(--c4-hairline);
+  }
+  .product-card--ledger .product-card__title-link:hover,
+  .product-card--ledger .product-card__title-link:focus-visible {
+    color: var(--text-primary);
+    text-decoration: underline;
+  }
+  /* The thumb edge matches the row rule above it, ledger variant only. */
+  .product-card--ledger .product-thumb {
+    border-color: var(--c4-hairline);
   }
   .product-thumb {
     position: relative;

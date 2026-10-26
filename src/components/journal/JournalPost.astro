@@ -1,10 +1,12 @@
 ---
+import Dateline from "@/components/shared/Dateline.astro";
 import Container from "@/components/layout/Container.astro";
 import PageHeader from "@/components/layout/PageHeader.astro";
 import { AUTHORS } from "@/data/authors";
+import JOURNAL_ART from "@/data/journal-art.json";
 import { JOURNAL_COPY, JOURNAL_POST_COPY } from "@/data/journal-copy";
-import { formatDate } from "@/lib/i18n";
 import {
+  journalArtVariant,
   journalFeedPath,
   journalIndexPath,
   partitionSources,
@@ -16,6 +18,11 @@ import type { JournalEntry } from "@/lib/journal-schema";
  * rendered `Content` component of the collection entry. Static HTML only:
  * no client script, no third-party embed. Sources are external https links or
  * plain evidence ids (no evidence anchor route exists for `ev-*` ids).
+ *
+ * Press standard (docs/editorial/JOURNAL_PRESS_STANDARD.md R1): byline with
+ * the author portrait, lead illustration with caption and credit, drop cap,
+ * end-of-article summary infographic, closing rights line. Figures are the
+ * stamped renders listed in src/data/journal-art.json.
  */
 interface Props {
   entry: JournalEntry;
@@ -37,6 +44,32 @@ const sourceHost = (href: string): string | null => {
     return null;
   }
 };
+/** Intrinsic size of a stamped render, from the art manifest. */
+const artSize = (src: string) => {
+  const meta = (
+    JOURNAL_ART as Record<string, { width: number; height: number }>
+  )[src];
+  if (!meta) throw new Error(`${src} is not in src/data/journal-art.json`);
+  return meta;
+};
+const figures = (["hero", "infographic"] as const).flatMap((key) => {
+  const art = entry[key];
+  if (!art) return [];
+  const full = artSize(art.src);
+  const small = journalArtVariant(art.src, "1200");
+  return [
+    {
+      key,
+      ...art,
+      width: full.width,
+      height: full.height,
+      srcset: `${small} ${artSize(small).width}w, ${art.src} ${full.width}w`,
+    },
+  ];
+});
+const hero = figures.find((f) => f.key === "hero");
+const infographic = figures.find((f) => f.key === "infographic");
+const rightsYear = entry.datePublished.slice(0, 4);
 const modified =
   entry.dateModified && entry.dateModified !== entry.datePublished
     ? entry.dateModified
@@ -78,40 +111,100 @@ const modified =
     <p class="journal-post__folio" data-journal-meta>
       <span>
         {post.published}{" "}
-        <time datetime={entry.datePublished} data-journal-published>
-          {formatDate(lang, entry.datePublished)}
-        </time>
+        <Dateline
+          iso={entry.datePublished}
+          lang={lang}
+          class="dateline--inherit"
+          data-journal-published
+        />
       </span>
       {modified ? (
         <>
           <span aria-hidden="true">·</span>
           <span data-journal-updated>
             {post.updated}{" "}
-            <time datetime={modified}>{formatDate(lang, modified)}</time>
+            <Dateline iso={modified} lang={lang} class="dateline--inherit" />
             {entry.updateNote ? <span>{` · ${entry.updateNote}`}</span> : null}
           </span>
         </>
       ) : null}
       <span aria-hidden="true">·</span>
-      <span data-journal-byline>{author.name}</span>
+      <span class="journal-post__byline" data-journal-byline>
+        <img
+          src={author.avatar}
+          alt=""
+          width="24"
+          height="24"
+          decoding="async"
+          class="journal-post__byline-portrait"
+        />
+        {author.name}
+      </span>
     </p>
 
-    {entry.aiAssisted ? (
-      <p class="journal-post__ai" data-journal-ai-disclosure>
-        {post.aiDisclosure}
-      </p>
+    {hero ? (
+      <figure class="journal-figure journal-figure--hero" data-journal-hero>
+        <img
+          src={hero.src}
+          srcset={hero.srcset}
+          sizes="(min-width: 48rem) 46rem, 100vw"
+          alt={hero.alt}
+          width={hero.width}
+          height={hero.height}
+          fetchpriority="high"
+          decoding="async"
+          class="journal-figure__img"
+        />
+        <figcaption class="journal-figure__caption">
+          {hero.caption ? <span>{hero.caption}</span> : null}
+          <span class="journal-figure__credit" data-journal-credit>
+            {post.figureCredit}
+          </span>
+        </figcaption>
+      </figure>
     ) : null}
 
     <div class="journal-post__body mt-10" data-journal-body>
       <Content />
     </div>
 
+    {infographic ? (
+      <section
+        class="journal-post__summary"
+        aria-labelledby="journal-summary"
+        data-journal-infographic
+      >
+        <h2 id="journal-summary" class="journal-post__section-title">
+          {post.summary}
+        </h2>
+        <figure class="journal-figure">
+          <img
+            src={infographic.src}
+            srcset={infographic.srcset}
+            sizes="(min-width: 48rem) 46rem, 100vw"
+            alt={infographic.alt}
+            width={infographic.width}
+            height={infographic.height}
+            loading="lazy"
+            decoding="async"
+            class="journal-figure__img"
+          />
+          <figcaption class="journal-figure__caption">
+            {infographic.caption ? <span>{infographic.caption}</span> : null}
+            <span class="journal-figure__credit" data-journal-credit>
+              {post.figureCredit}
+            </span>
+          </figcaption>
+        </figure>
+      </section>
+    ) : null}
+
     <section
       class="journal-post__sources"
       aria-labelledby="journal-sources"
       data-journal-sources
     >
-      <h2 id="journal-sources" class="journal-post__sources-title">
+      <h2 id="journal-sources" class="journal-post__section-title">
         {post.sources}
       </h2>
       <ul class="journal-post__sources-list">
@@ -165,6 +258,10 @@ const modified =
       </div>
     </aside>
 
+    <p class="journal-post__rights" data-journal-rights>
+      {post.copyright.replace("{year}", rightsYear)}
+    </p>
+
     <p class="journal-post__end">
       <a href={journalIndexPath(lang)}>{post.backToJournal}</a>
       <a href={journalFeedPath(lang)}>{post.rss}</a>
@@ -194,8 +291,56 @@ const modified =
     font-variant-numeric: tabular-nums;
     color: var(--text-secondary);
   }
-  .journal-post__ai {
-    margin: var(--space-4) 0 0;
+  .journal-post__byline {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+  .journal-post__byline-portrait {
+    inline-size: 1.5rem;
+    block-size: 1.5rem;
+    border-radius: 50%;
+  }
+  /* Press standard R1: figures sit on the reading column with a hairline
+     caption rule; the credit names the rights holder. */
+  .journal-figure {
+    margin: var(--space-8) 0 0;
+  }
+  .journal-figure__img {
+    display: block;
+    inline-size: 100%;
+    block-size: auto;
+    border: 1px solid var(--c4-hairline);
+    border-radius: var(--radius-media);
+    background: var(--surface-subtle);
+  }
+  .journal-figure__caption {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: var(--space-1) var(--space-4);
+    margin-block-start: var(--space-3);
+    padding-block-start: var(--space-2);
+    border-block-start: 1px solid var(--c4-hairline);
+    font-size: var(--c4-type-meta);
+    color: var(--text-secondary);
+  }
+  .journal-figure__credit {
+    font-weight: 600;
+    letter-spacing: 0.02em;
+  }
+  .journal-post__summary {
+    margin-block-start: var(--space-12);
+    padding-block-start: var(--space-6);
+    border-block-start: 1px solid var(--c4-hairline);
+  }
+  .journal-post__summary .journal-figure {
+    margin-block-start: var(--space-4);
+  }
+  .journal-post__rights {
+    margin: var(--space-8) 0 0;
     font-size: var(--c4-type-meta);
     color: var(--text-secondary);
   }
@@ -206,7 +351,7 @@ const modified =
     padding-block-start: var(--space-6);
     border-block-start: 1px solid var(--c4-hairline);
   }
-  .journal-post__sources-title {
+  .journal-post__section-title {
     margin: 0;
     font-size: var(--c4-type-evidence);
     font-weight: 600;
@@ -251,8 +396,20 @@ const modified =
     color: var(--text-primary);
     line-height: 1.75;
   }
+  /* Press standard R1: drop cap on the opening paragraph. */
+  .journal-post__body > :global(p:first-of-type)::first-letter {
+    float: inline-start;
+    margin: 0.08em var(--space-2) 0 0;
+    font-size: 3.4em;
+    font-weight: 700;
+    line-height: 0.85;
+    color: var(--text-primary);
+  }
+  /* Section heads: a hairline rule above, the newspaper section break. */
   .journal-post__body :global(h2) {
     margin-block: var(--space-12) var(--space-4);
+    padding-block-start: var(--space-4);
+    border-block-start: 1px solid var(--c4-hairline);
     font-size: var(--c4-type-product);
     font-weight: 600;
     letter-spacing: -0.01em;

@@ -1,5 +1,5 @@
 # Sổ Trọ showcase — real screens of the running application.
-# Captured 2026-09-30 from a local test build of BlueSkyz-Labs/sotro at the
+# Captured 2026-10-25 (GMT+7) from a local test build of BlueSkyz-Labs/sotro at the
 # revision below, with the repository's synthetic demo seed (db/seeds): no real
 # tenant, payment or identity data. Phone screens: 390x844 CSS px at 2x,
 # cropped above the bottom navigation bar; desktop screens: 1440x900 CSS px.
@@ -11,10 +11,11 @@ capture:
   data: synthetic-demo
   environment: local-test-build
   sourceRepository: https://github.com/BlueSkyz-Labs/sotro
-  sourceRevision: b2b3388264c9cf6582f407d0c52f96d05753a755
-  capturedAt: 2026-09-30
+  sourceRevision: 19cba63502446ea9ef1cbc71f88772458b0c1271
+  capturedAt: 2026-10-25
 
-# Silent 49.5 s intro built from the screens below (Vietnamese text burned in).
+# Silent 49.5 s intro built from the 2026-09-30 screens at sotro b2b3388
+# (Vietnamese text burned in); not yet rebuilt from the capture above.
 # A narrated voice-over is an Owner step: no approved TTS or recording exists.
 video:
   src: /products/sotro/showcase/intro.mp4
@@ -55,10 +56,10 @@ screens:
       zh: "只显示需要记住的事，以及本月未收款项。"
       zh-hant: "只顯示需要記住的事，以及本月未收款項。"
     alt:
-      en: Sổ Trọ phone home screen titled “Hôm nay cần làm gì?” with an unpaid-this-month card.
-      vi: Màn hình chính Sổ Trọ trên điện thoại với tiêu đề “Hôm nay cần làm gì?” và thẻ còn chưa thu tháng này.
-      zh: Sổ Trọ 手机首页，标题为“Hôm nay cần làm gì?”，并显示本月未收款卡片。
-      zh-hant: Sổ Trọ 手機首頁，標題為「Hôm nay cần làm gì?」，並顯示本月未收款卡片。
+      en: Sổ Trọ phone home screen titled “Hôm nay cần làm gì?” with a “Việc cần làm ngay” list of urgent tasks.
+      vi: Màn hình chính Sổ Trọ trên điện thoại với tiêu đề “Hôm nay cần làm gì?” và danh sách “Việc cần làm ngay”.
+      zh: Sổ Trọ 手机首页，标题为“Hôm nay cần làm gì?”，并显示“Việc cần làm ngay”紧急事项列表。
+      zh-hant: Sổ Trọ 手機首頁，標題為「Hôm nay cần làm gì?」，並顯示「Việc cần làm ngay」緊急事項列表。
   - id: utilities
     surface: phone
     src: /products/sotro/showcase/op-03-utilities.webp
@@ -75,10 +76,10 @@ screens:
       zh: "选一间房，输入读数，再到下一间。"
       zh-hant: "選一間房，輸入度數，再到下一間。"
     alt:
-      en: Sổ Trọ phone screen “Nhập điện nước” for entering monthly electricity and water readings.
-      vi: Màn hình “Nhập điện nước” trên điện thoại để ghi chỉ số điện nước hằng tháng.
-      zh: Sổ Trọ 手机“Nhập điện nước”页面，用于录入每月水电读数。
-      zh-hant: Sổ Trọ 手機「Nhập điện nước」頁面，用於輸入每月水電讀數。
+      en: Sổ Trọ phone screen “Nhập điện nước” with a “Ghi phòng tiếp theo” button, an offline preparation card and the list of rooms.
+      vi: Màn hình “Nhập điện nước” trên điện thoại với nút “Ghi phòng tiếp theo”, thẻ chuẩn bị khi mất mạng và danh sách phòng.
+      zh: Sổ Trọ 手机“Nhập điện nước”页面，含“Ghi phòng tiếp theo”按钮、离线准备卡片和房间列表。
+      zh-hant: Sổ Trọ 手機「Nhập điện nước」頁面，含「Ghi phòng tiếp theo」按鈕、離線準備卡片和房間清單。
   - id: collect
     surface: phone
     src: /products/sotro/showcase/op-02-payments.webp
@@ -90,15 +91,15 @@ screens:
       zh: "收租"
       zh-hant: "收租"
     caption:
-      en: "see who owes, confirm the amount, then record it. Solar and lunar dates shown."
-      vi: "xem ai còn nợ, xác nhận số tiền rồi ghi nhận. Có lịch dương và âm."
-      zh: "看谁还欠款，先确认金额，再记录。显示公历与农历。"
-      zh-hant: "看誰還欠款，先確認金額，再記錄。顯示國曆與農曆。"
+      en: "see who owes, most urgent first, then mark the money received or send a Zalo message with a bank-transfer QR code."
+      vi: "xem ai còn nợ, việc gấp xếp trước, rồi bấm “Đã nhận tiền” hoặc gửi Zalo kèm mã QR chuyển khoản."
+      zh: "先看谁还欠款，最紧急的排在前面，再记录已收款，或通过 Zalo 发送附转账二维码的消息。"
+      zh-hant: "先看誰還欠款，最緊急的排在前面，再記錄已收款，或透過 Zalo 傳送附轉帳 QR 碼的訊息。"
     alt:
-      en: Sổ Trọ phone screen “Thu tiền” with a solar and lunar calendar strip and payment status counts.
-      vi: Màn hình “Thu tiền” trên điện thoại với dải lịch âm dương và số phòng theo trạng thái thu.
-      zh: Sổ Trọ 手机“Thu tiền”页面，含公历农历日期条与收款状态统计。
-      zh-hant: Sổ Trọ 手機「Thu tiền」頁面，含國曆農曆日期條與收款狀態統計。
+      en: Sổ Trọ phone screen “Thu tiền”; in the “Cần thu” list, Phòng P13 shows an old debt of 5.160.500đ, a “Đã nhận tiền” button and a Zalo send button.
+      vi: Màn hình “Thu tiền” trên điện thoại; trong danh sách “Cần thu”, thẻ Phòng P13 hiện nợ cũ 5.160.500đ, nút “Đã nhận tiền” và nút gửi qua Zalo.
+      zh: Sổ Trọ 手机“Thu tiền”页面，含“Bàn giao tiền mặt”按钮和“Cần thu”列表；第一张卡片 Phòng P13 显示旧欠款 5.160.500đ，并有“Đã nhận tiền”按钮和通过 Zalo 发送的按钮。
+      zh-hant: Sổ Trọ 手機「Thu tiền」頁面，含「Bàn giao tiền mặt」按鈕和「Cần thu」清單；第一張卡片 Phòng P13 顯示舊欠款 5.160.500đ，並有「Đã nhận tiền」按鈕和透過 Zalo 傳送的按鈕。
   - id: rooms
     surface: phone
     src: /products/sotro/showcase/op-04-rooms.webp
@@ -110,15 +111,15 @@ screens:
       zh: "房间"
       zh-hant: "房間"
     caption:
-      en: "vacant rooms are listed first, with a deposit reminder."
-      vi: "phòng trống hiện trước, kèm nhắc thu tiền cọc."
-      zh: "空房排在最前，并提醒收订金。"
-      zh-hant: "空房排在最前，並提醒收訂金。"
+      en: "occupied and vacant counts, filtered by status."
+      vi: "số phòng đang thuê và phòng trống, lọc theo trạng thái."
+      zh: "在租与空房数量，可按状态筛选。"
+      zh-hant: "在租與空房數量，可按狀態篩選。"
     alt:
-      en: Sổ Trọ phone screen “Phòng trọ” listing vacant rooms with a deposit reminder.
-      vi: Màn hình “Phòng trọ” trên điện thoại liệt kê phòng trống kèm lời nhắc nhận cọc.
-      zh: Sổ Trọ 手机“Phòng trọ”页面，列出空房并提醒收取订金。
-      zh-hant: Sổ Trọ 手機「Phòng trọ」頁面，列出空房並提醒收取訂金。
+      en: Sổ Trọ phone screen “Phòng trọ” with occupied and vacant room counts and status filters.
+      vi: Màn hình “Phòng trọ” trên điện thoại với số phòng đang thuê, phòng trống và bộ lọc theo trạng thái.
+      zh: Sổ Trọ 手机“Phòng trọ”页面，显示在租与空房数量及状态筛选。
+      zh-hant: Sổ Trọ 手機「Phòng trọ」頁面，顯示在租與空房數量及狀態篩選。
   - id: pair
     surface: phone
     src: /products/sotro/showcase/op-00-pair.webp
@@ -135,25 +136,25 @@ screens:
       zh: "打开房东的链接，点一下即可。无需账号或密码。"
       zh-hant: "開啟房東的連結，點一下即可。不需帳號或密碼。"
     alt:
-      en: Sổ Trọ phone screen “Kết nối với Sổ Trọ” with a single “connect this phone” button.
-      vi: Màn hình “Kết nối với Sổ Trọ” trên điện thoại với một nút “Kết nối điện thoại này”.
-      zh: Sổ Trọ 手机“Kết nối với Sổ Trọ”页面，只有一个“连接此手机”按钮。
-      zh-hant: Sổ Trọ 手機「Kết nối với Sổ Trọ」頁面，只有一個「連線此手機」按鈕。
+      en: Sổ Trọ phone screen “Ghép nối điện thoại với Sổ Trọ” with a “Kết nối điện thoại này” button.
+      vi: Màn hình “Ghép nối điện thoại với Sổ Trọ” trên điện thoại với nút “Kết nối điện thoại này”.
+      zh: Sổ Trọ 手机“Ghép nối điện thoại với Sổ Trọ”页面，含“Kết nối điện thoại này”按钮。
+      zh-hant: Sổ Trọ 手機「Ghép nối điện thoại với Sổ Trọ」頁面，含「Kết nối điện thoại này」按鈕。
   - id: candlelight
     surface: phone
     src: /products/sotro/showcase/op-05-candlelight.webp
     width: 780
     height: 1440
     title:
-      en: "Night mode"
-      vi: "Chế độ ban đêm"
-      zh: "夜间模式"
-      zh-hant: "夜間模式"
+      en: "Warm night colours"
+      vi: "Màu ấm ban đêm"
+      zh: "夜间暖色"
+      zh-hant: "夜間暖色"
     caption:
-      en: "warmer display from 9 pm; can be switched off."
-      vi: "màn hình ấm hơn từ 21:00; có thể tắt."
-      zh: "晚上 9 点起显示更暖，可关闭。"
-      zh-hant: "晚上 9 點起畫面較暖，可關閉。"
+      en: "an optional warm display for the evening: choose automatic from 9 pm, always on, or off."
+      vi: "màn hình màu ấm tùy chọn cho buổi tối: chọn tự động từ 21:00, luôn bật hoặc tắt."
+      zh: "可选的暖色夜间显示：可选择晚上 9 点起自动、始终开启或关闭。"
+      zh-hant: "可選的暖色夜間顯示：可選擇晚上 9 點起自動、一律開啟或關閉。"
     alt:
       en: Sổ Trọ phone home screen in the warm, dark candlelight display.
       vi: Màn hình chính Sổ Trọ ở chế độ đèn nến tối, tông ấm.
@@ -190,15 +191,15 @@ screens:
       zh: "收款总览"
       zh-hant: "收款總覽"
     caption:
-      en: "paid, due and overdue for the whole building."
-      vi: "đã thu, sắp đến hạn, quá hạn cho cả dãy."
-      zh: "整栋楼的已付、待付、逾期。"
-      zh-hant: "整棟樓的已付、待付、逾期。"
+      en: "a queue of rooms that owe, with the selected room's amount and payment check beside it."
+      vi: "danh sách phòng còn nợ, kèm số tiền và phần đối soát thanh toán của phòng đang chọn."
+      zh: "欠款房间队列，旁边是所选房间的金额与付款核对。"
+      zh-hant: "欠款房間佇列，旁邊是所選房間的金額與付款核對。"
     alt:
-      en: Sổ Trọ owner console “Thu tiền” with paid, due and overdue counts.
-      vi: Khu quản trị Sổ Trọ, trang “Thu tiền” với số phòng đã thu đủ, đến hạn và quá hạn.
-      zh: Sổ Trọ 后台“Thu tiền”页面，显示已收齐、到期与逾期数量。
-      zh-hant: Sổ Trọ 後台「Thu tiền」頁面，顯示已收齊、到期與逾期數量。
+      en: Sổ Trọ owner console “Thu tiền” with the “Cần thu” list and Phòng P13 detail, total 5.160.500đ, with a “Chưa có tài khoản nhận tiền” notice.
+      vi: Khu quản trị Sổ Trọ, trang “Thu tiền” với danh sách “Cần thu” và chi tiết Phòng P13, tổng 5.160.500đ, kèm “Chưa có tài khoản nhận tiền”.
+      zh: Sổ Trọ 房东后台“Thu tiền”页面：左侧为“Cần thu”列表，右侧为 Phòng P13 详情，含合计 5.160.500đ、“Chưa có tài khoản nhận tiền”提示和“Đối soát thanh toán”面板。
+      zh-hant: Sổ Trọ 房東後台「Thu tiền」頁面：左側為「Cần thu」清單，右側為 Phòng P13 詳情，含合計 5.160.500đ、「Chưa có tài khoản nhận tiền」提示和「Đối soát thanh toán」面板。
   - id: family
     surface: desktop
     src: /products/sotro/showcase/mgr-03-devices.webp
@@ -370,7 +371,7 @@ guide:
         zh: 在后台同步查看
         zh-hant: 在後台同步檢視
       body:
-        en: The owner sees the same collection status on a computer, grouped by paid, due and overdue.
-        vi: Chủ trọ thấy cùng tình trạng thu tiền trên máy tính, chia theo đã thu đủ, đến hạn và quá hạn.
-        zh: 房东在电脑上看到同样的收款状态，按已收齐、到期与逾期分组。
-        zh-hant: 房東在電腦上看到同樣的收款狀態，按已收齊、到期與逾期分組。
+        en: The owner sees the same list of rooms that still owe on a computer, with the selected room's amount and payment check.
+        vi: Chủ trọ thấy cùng danh sách phòng còn nợ trên máy tính, kèm số tiền và phần đối soát thanh toán của phòng đang chọn.
+        zh: 房东在电脑上看到同样的欠款房间列表，以及所选房间的金额与付款核对。
+        zh-hant: 房東在電腦上看到同樣的欠款房間清單，以及所選房間的金額與付款核對。

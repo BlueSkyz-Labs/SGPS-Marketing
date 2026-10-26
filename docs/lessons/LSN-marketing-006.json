@@ -1,0 +1,25 @@
+{
+  "captured_at": "2026-10-25T19:45:00Z",
+  "class": "provider-limit-not-checked-locally",
+  "guard": {
+    "kind": "test",
+    "level": "G2",
+    "negative_proof": "tests/architecture/redirects-platform-limits.test.mjs run against public/_redirects at 34beed0 fails with \"dynamic rules 108 > 100\", the same count as the Cloudflare error (line 131 is the 101st rule from the first :slug rule); a synthetic file with one dynamic rule above 101 static rules also fails.",
+    "path": "tests/architecture/redirects-platform-limits.test.mjs (platformCounts, static-after-dynamic ordering)"
+  },
+  "id": "LSN-marketing-006",
+  "project": "marketing",
+  "recurrences": [],
+  "reuse_boundary": "Cloudflare Workers Static Assets _redirects (2,000 static, 100 dynamic, 2,100 total). Any provider rule that wrangler deploy --dry-run does not evaluate needs its own source guard; the dry-run passing is not evidence for it.",
+  "root_cause": "Cloudflare counts every _redirects rule from the first dynamic rule (placeholder or splat) onward as dynamic. Two /products/:slug rules sat near the top of the file, so once #681 added four static rules the dynamic count reached 108 and the server-side upload check rejected the deploy. Local gates and wrangler deploy --dry-run do not run that check, and the failure was only visible in the Workers Builds log, which agents could not read, so it took a day to find.",
+  "rule": "Dynamic _redirects rules go last, and the platform limits are counted in source the way Cloudflare counts them. A failed Workers Build is diagnosed from its build log before guessing at provider-side causes.",
+  "source": {
+    "commit": "eb6c97e",
+    "pr": 701,
+    "repo": "SGPS-Marketing"
+  },
+  "state": "GUARDED",
+  "tags": ["deploy", "cloudflare", "redirects", "provider-limits"],
+  "title": "Cloudflare _redirects dynamic-rule limit broke every deploy from #681",
+  "trigger": "2026-10-25: every Cloudflare Workers Build on main from 8a22dfb (#681) to 34beed0 failed at wrangler deploy with \"Maximum number of dynamic _redirects rules limit of 100 exceeded [code: 100324]\", so production kept serving the #674 build (for example /en/products/vungtaylai/ returned 404)."
+}
