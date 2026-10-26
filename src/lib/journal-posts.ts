@@ -185,13 +185,17 @@ export function buildJournalRss(input: {
  */
 /**
  * Press standard R3: tools/journal-art/render.mjs writes, next to each
- * `<name>.<lang>.webp`, a 1200 px `-1200.webp` and (heroes) a 1200x675
- * `.og.jpg`, all stamped and listed in src/data/journal-art.json.
+ * `<name>.<lang>.webp`, a 1200 px `-1200.webp`, an 800 px `-800.webp` and
+ * (heroes) a 1200x675 `.og.jpg`, all stamped and listed in
+ * src/data/journal-art.json.
  */
-export function journalArtVariant(src: string, variant: "1200" | "og"): string {
-  return variant === "1200"
-    ? src.replace(/\.webp$/, "-1200.webp")
-    : src.replace(/\.webp$/, ".og.jpg");
+export function journalArtVariant(
+  src: string,
+  variant: "1200" | "800" | "og",
+): string {
+  return variant === "og"
+    ? src.replace(/\.webp$/, ".og.jpg")
+    : src.replace(/\.webp$/, `-${variant}.webp`);
 }
 
 export function blogPostingJsonLd(entry: JournalEntry, siteUrl: string) {

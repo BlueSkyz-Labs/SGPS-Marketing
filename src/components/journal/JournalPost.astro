@@ -57,13 +57,14 @@ const figures = (["hero", "infographic"] as const).flatMap((key) => {
   if (!art) return [];
   const full = artSize(art.src);
   const small = journalArtVariant(art.src, "1200");
+  const phone = journalArtVariant(art.src, "800");
   return [
     {
       key,
       ...art,
       width: full.width,
       height: full.height,
-      srcset: `${small} ${artSize(small).width}w, ${art.src} ${full.width}w`,
+      srcset: `${phone} ${artSize(phone).width}w, ${small} ${artSize(small).width}w, ${art.src} ${full.width}w`,
     },
   ];
 });
@@ -132,6 +133,8 @@ const modified =
       <span class="journal-post__byline" data-journal-byline>
         <img
           src={author.avatar}
+          srcset={`${author.avatarSmall} 128w, ${author.avatar} 256w`}
+          sizes="1.5rem"
           alt=""
           width="24"
           height="24"
@@ -241,6 +244,8 @@ const modified =
     >
       <img
         src={author.avatar}
+        srcset={`${author.avatarSmall} 128w, ${author.avatar} 256w`}
+        sizes="3rem"
         alt={author.avatarAlt[lang]}
         width="64"
         height="64"
