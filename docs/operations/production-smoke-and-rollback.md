@@ -8,7 +8,7 @@ guessing.
 ## 1. Deployment authority
 
 - **Cloudflare Workers Builds** is the build and deploy authority
-  (`repo: BlueSkyz-Labs/SGPS-Marketing`, branch `main`).
+  (`repo: BlueSkyz-Labs/blueskyz-web`, branch `main`).
 - **GitHub Actions is source assurance only**: no Cloudflare credentials, no
   deploy commands, read-only tokens, full commit-SHA pins (ADR 0005).
 - Promotion is `branch → PR → Source Assurance → merge → Workers Builds`.

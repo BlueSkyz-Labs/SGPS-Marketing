@@ -215,7 +215,7 @@ test("assurance vocabulary is rejected by the same model as the copy scanner", (
 
 test("machine passport drops private-reporting references", () => {
   const advisory =
-    "https://github.com/BlueSkyz-Labs/SGPS-Marketing/security/advisories/new";
+    "https://github.com/BlueSkyz-Labs/blueskyz-web/security/advisories/new";
   const input = {
     ...INPUT,
     claims: [

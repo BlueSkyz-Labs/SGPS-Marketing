@@ -3,7 +3,7 @@ import { existsSync, readFileSync } from "node:fs";
 import test from "node:test";
 
 const ADVISORY =
-  "https://github.com/BlueSkyz-Labs/SGPS-Marketing/security/advisories/new";
+  "https://github.com/BlueSkyz-Labs/blueskyz-web/security/advisories/new";
 
 test("support empty state offers contact and security recourse", () => {
   // The root src/pages/support.astro is a pure locale-gateway (UX U8)

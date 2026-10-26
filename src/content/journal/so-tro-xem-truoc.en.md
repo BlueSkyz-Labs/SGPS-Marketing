@@ -9,7 +9,7 @@ author: tony-nguyen
 aiAssisted: true
 sources:
   - https://blueskyzlabs.com/en/products/sotro/
-ownerApproval: https://github.com/BlueSkyz-Labs/SGPS-Marketing/pull/671
+ownerApproval: https://github.com/BlueSkyz-Labs/blueskyz-web/pull/671
 hero:
   src: /images/journal/so-tro-xem-truoc/hero.en.webp
   alt: "Sổ Trọ screenshots: the Collect rent page on desktop and two phone screens, Today and Collect rent."

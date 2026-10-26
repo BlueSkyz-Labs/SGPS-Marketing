@@ -10,7 +10,7 @@ sections:
     heading: 如何报告
     content: 请通过 GitHub 私有漏洞报告提交安全问题。
     cta: 打开 GitHub Advisory
-    href: https://github.com/BlueSkyz-Labs/SGPS-Marketing/security/advisories/new
+    href: https://github.com/BlueSkyz-Labs/blueskyz-web/security/advisories/new
   disclosure:
     heading: 披露政策
     content: 我们遵循负责任的披露实践。请在公开披露前给予合理的修复时间。

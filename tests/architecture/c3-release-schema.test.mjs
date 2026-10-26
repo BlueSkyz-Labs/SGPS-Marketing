@@ -12,7 +12,7 @@ try {
 
 const VALID_SOURCE = {
   revision: "abcdef1234567",
-  url: "https://github.com/BlueSkyz-Labs/sgps-marketing/releases/tag/2026-09-25",
+  url: "https://github.com/BlueSkyz-Labs/blueskyz-web/releases/tag/2026-09-25",
   public: true,
   published: true,
   authoredMajorMilestone: false,

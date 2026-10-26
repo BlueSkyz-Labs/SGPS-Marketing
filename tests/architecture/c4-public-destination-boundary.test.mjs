@@ -32,7 +32,7 @@ test("public destinations reject unsafe URLs", () => {
   for (const href of [
     "/en/security/",
     "/vi/products/",
-    "https://github.com/BlueSkyz-Labs/SGPS-Marketing/security/advisories",
+    "https://github.com/BlueSkyz-Labs/blueskyz-web/security/advisories",
     "https://example.com/report?version=1#source",
   ]) {
     assert.equal(isPublicDestination(href), true, `preserve ${href}`);

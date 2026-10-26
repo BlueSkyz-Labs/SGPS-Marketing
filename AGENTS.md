@@ -1,4 +1,4 @@
-# Agent guide — BlueSkyz Labs Web (SGPS-Marketing)
+# Agent guide — BlueSkyz Labs Web (blueskyz-web)
 
 > **2026-10-21 OPERATING RULES (durable):** Read `.claude/OPERATING_RULES.md` every session: Owner comms in Vietnamese with GMT+7 12h times, flow/merge discipline, local hygiene, harness/multi-agent lanes, FinOps and the weekly learning loop.
 

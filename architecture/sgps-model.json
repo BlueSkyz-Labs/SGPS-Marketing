@@ -32,14 +32,14 @@
       "name": "SGPS Marketing",
       "parentId": "domain.corporate-web",
       "owner": "BlueSkyz Labs",
-      "repository": "BlueSkyz-Labs/SGPS-Marketing",
+      "repository": "BlueSkyz-Labs/blueskyz-web",
       "lifecycle": "active",
       "criticality": "medium",
       "dataClassification": "public",
       "trustBoundary": "github-source-build-to-cloudflare-edge",
       "interfaces": ["https://blueskyzlabs.com"],
       "sourceEvidence": {
-        "repository": "BlueSkyz-Labs/SGPS-Marketing",
+        "repository": "BlueSkyz-Labs/blueskyz-web",
         "revision": "f7636a7dbb76bb5463052a64c8c2091a24b6b438",
         "path": "src/"
       }
@@ -55,7 +55,7 @@
       "dataClassification": "public",
       "trustBoundary": "browser-visible-static-output",
       "sourceEvidence": {
-        "repository": "BlueSkyz-Labs/SGPS-Marketing",
+        "repository": "BlueSkyz-Labs/blueskyz-web",
         "revision": "7ae91bf27ad2182f04722a9d3b2fc7dedb1838b4",
         "path": "src/"
       }
@@ -71,7 +71,7 @@
       "dataClassification": "public",
       "trustBoundary": "build-time-truth-validation",
       "sourceEvidence": {
-        "repository": "BlueSkyz-Labs/SGPS-Marketing",
+        "repository": "BlueSkyz-Labs/blueskyz-web",
         "revision": "7600db7a361e7d309cacadac914ab535de3705f8",
         "path": "src/lib/truth.ts"
       }
@@ -88,7 +88,7 @@
       "trustBoundary": "github-actions-read-only",
       "interfaces": ["Quality Gates", "Browser Assurance"],
       "sourceEvidence": {
-        "repository": "BlueSkyz-Labs/SGPS-Marketing",
+        "repository": "BlueSkyz-Labs/blueskyz-web",
         "revision": "f7636a7dbb76bb5463052a64c8c2091a24b6b438",
         "path": ".github/workflows/quality-gates.yml"
       }
@@ -104,7 +104,7 @@
       "dataClassification": "public-owner-gated",
       "trustBoundary": "repository-content",
       "sourceEvidence": {
-        "repository": "BlueSkyz-Labs/SGPS-Marketing",
+        "repository": "BlueSkyz-Labs/blueskyz-web",
         "revision": "4fd0265d7d38012af79266edde7bf8e7e46d0e8e",
         "path": "src/content/products/"
       }
@@ -122,7 +122,7 @@
       "environment": "production",
       "region": "global-edge",
       "sourceEvidence": {
-        "repository": "BlueSkyz-Labs/SGPS-Marketing",
+        "repository": "BlueSkyz-Labs/blueskyz-web",
         "revision": "7ae91bf27ad2182f04722a9d3b2fc7dedb1838b4",
         "path": "wrangler.toml"
       }
@@ -173,7 +173,7 @@
       "environment": "production",
       "region": "global-edge",
       "sourceEvidence": {
-        "repository": "BlueSkyz-Labs/SGPS-Marketing",
+        "repository": "BlueSkyz-Labs/blueskyz-web",
         "revision": "7ae91bf27ad2182f04722a9d3b2fc7dedb1838b4",
         "path": "wrangler.toml"
       }

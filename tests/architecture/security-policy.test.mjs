@@ -20,7 +20,7 @@ test("SECURITY.md routes reports through GitHub private vulnerability reporting"
   assert.match(policy, /Report a vulnerability/i);
   assert.match(
     policy,
-    /github\.com\/BlueSkyz-Labs\/SGPS-Marketing\/security\/advisories\/new/,
+    /github\.com\/BlueSkyz-Labs\/blueskyz-web\/security\/advisories\/new/,
   );
   assert.match(policy, /privately-reporting-a-security-vulnerability/);
   assert.match(policy, /Do not (open|file) a public/i);

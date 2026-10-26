@@ -9,7 +9,7 @@ author: tony-nguyen
 aiAssisted: true
 sources:
   - https://blueskyzlabs.com/en/products/sotro/
-ownerApproval: https://github.com/BlueSkyz-Labs/SGPS-Marketing/pull/699
+ownerApproval: https://github.com/BlueSkyz-Labs/blueskyz-web/pull/699
 hero:
   src: /images/journal/so-tro-ngay-dau-thang/hero.en.webp
   alt: "Sổ Trọ screenshots: the Collect rent page with its list of rooms to collect from on desktop, and three phone screens, Today, meter readings and Collect rent."

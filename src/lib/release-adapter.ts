@@ -45,7 +45,7 @@ export interface PublicReleaseRecord {
 
 const SEMVER = /^\d+\.\d+\.\d+$/;
 const APPROVAL_PR =
-  /^https:\/\/github\.com\/BlueSkyz-Labs\/SGPS-Marketing\/pull\/\d+$/;
+  /^https:\/\/github\.com\/BlueSkyz-Labs\/blueskyz-web\/pull\/\d+$/;
 
 export class ReleaseRecordError extends Error {
   readonly code: string;
@@ -75,7 +75,7 @@ export function toReleaseStory(
   if (!APPROVAL_PR.test(record.approvalPr)) {
     throw new ReleaseRecordError(
       "INVALID_APPROVAL",
-      "approvalPr must be a pull request in BlueSkyz-Labs/SGPS-Marketing",
+      "approvalPr must be a pull request in BlueSkyz-Labs/blueskyz-web",
     );
   }
   return parseReleaseStory(

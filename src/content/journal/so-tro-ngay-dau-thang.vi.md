@@ -9,7 +9,7 @@ author: tony-nguyen
 aiAssisted: true
 sources:
   - https://blueskyzlabs.com/vi/products/sotro/
-ownerApproval: https://github.com/BlueSkyz-Labs/SGPS-Marketing/pull/699
+ownerApproval: https://github.com/BlueSkyz-Labs/blueskyz-web/pull/699
 hero:
   src: /images/journal/so-tro-ngay-dau-thang/hero.vi.webp
   alt: "Ảnh màn hình Sổ Trọ: trang Thu tiền với danh sách Cần thu trên máy tính và ba màn hình điện thoại, Hôm nay, Nhập điện nước và Thu tiền."
