@@ -28,7 +28,7 @@ const ISO_DATE = /^\d{4}-\d{2}-\d{2}$/;
 const IDENTIFIER = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const EVIDENCE_ID = /^ev-[a-z0-9-]+$/;
 const APPROVAL_PR =
-  /^https:\/\/github\.com\/BlueSkyz-Labs\/SGPS-Marketing\/pull\/\d+$/;
+  /^https:\/\/github\.com\/BlueSkyz-Labs\/blueskyz-web\/pull\/\d+$/;
 
 /** `/images/journal/<post-id>/<name>.<lang>.webp`, written by tools/journal-art/render.mjs. */
 const ART_PATH =

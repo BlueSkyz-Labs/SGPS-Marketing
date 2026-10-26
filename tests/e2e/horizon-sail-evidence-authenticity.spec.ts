@@ -81,7 +81,7 @@ for (const { name, mutate } of forgeries) {
       passport
         .locator("[data-evidence-static-sources]")
         .locator(
-          'a[href="https://github.com/BlueSkyz-Labs/SGPS-Marketing/security/advisories/new"]',
+          'a[href="https://github.com/BlueSkyz-Labs/blueskyz-web/security/advisories/new"]',
         ),
     ).toBeVisible();
     await expect(

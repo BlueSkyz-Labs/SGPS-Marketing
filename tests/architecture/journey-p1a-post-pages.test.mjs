@@ -26,7 +26,7 @@ import { jsonLdProblems } from "./lib/seo-html.mjs";
  * test-only: this change publishes no post (the header navigation stays put).
  */
 const SITE_URL = "https://blueskyzlabs.com";
-const APPROVAL = "https://github.com/BlueSkyz-Labs/SGPS-Marketing/pull/999";
+const APPROVAL = "https://github.com/BlueSkyz-Labs/blueskyz-web/pull/999";
 const BASE = {
   id: "fixture-post",
   lang: "vi",

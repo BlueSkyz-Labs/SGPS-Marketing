@@ -9,7 +9,7 @@ author: tony-nguyen
 aiAssisted: true
 sources:
   - https://blueskyzlabs.com/en/products/sotam/
-ownerApproval: https://github.com/BlueSkyz-Labs/SGPS-Marketing/pull/698
+ownerApproval: https://github.com/BlueSkyz-Labs/blueskyz-web/pull/698
 hero:
   src: /images/journal/so-tam-ban-demo/hero.en.webp
   alt: "Five Sổ Tâm phone screens: the welcome card, the Today page with a sample entry, the mood and touchpoint words, the Journal tab and the Memories tab."

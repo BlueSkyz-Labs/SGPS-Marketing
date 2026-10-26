@@ -9,7 +9,7 @@ author: tony-nguyen
 aiAssisted: true
 sources:
   - https://blueskyzlabs.com/vi/products/sotam/
-ownerApproval: https://github.com/BlueSkyz-Labs/SGPS-Marketing/pull/698
+ownerApproval: https://github.com/BlueSkyz-Labs/blueskyz-web/pull/698
 hero:
   src: /images/journal/so-tam-ban-demo/hero.vi.webp
   alt: "Năm màn hình điện thoại của Sổ Tâm: thẻ chào mừng, trang Hôm nay với bài mẫu, các từ tâm trạng và điểm chạm, tab Ghi chép và tab Ký ức."

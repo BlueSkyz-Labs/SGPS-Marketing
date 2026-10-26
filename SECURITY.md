@@ -31,7 +31,7 @@ Use GitHub private vulnerability reporting:
 3. Describe the affected surface, impact, and how to reproduce.
 
 Direct form:
-https://github.com/BlueSkyz-Labs/SGPS-Marketing/security/advisories/new
+https://github.com/BlueSkyz-Labs/blueskyz-web/security/advisories/new
 
 GitHub's reporter guide:
 https://docs.github.com/en/code-security/security-advisories/guidance-on-reporting-and-writing/privately-reporting-a-security-vulnerability

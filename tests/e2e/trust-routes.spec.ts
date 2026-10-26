@@ -61,7 +61,7 @@ test("/security/ exposes private vulnerability reporting CTA", async ({
   await expect(link).toBeVisible();
   await expect(link).toHaveAttribute(
     "href",
-    "https://github.com/BlueSkyz-Labs/SGPS-Marketing/security/advisories/new",
+    "https://github.com/BlueSkyz-Labs/blueskyz-web/security/advisories/new",
   );
 });
 

@@ -10,7 +10,7 @@ sections:
     heading: Cách báo cáo
     content: Vui lòng gửi vấn đề bảo mật qua tính năng báo cáo lỗ hổng riêng tư của GitHub.
     cta: Mở GitHub Advisory
-    href: https://github.com/BlueSkyz-Labs/SGPS-Marketing/security/advisories/new
+    href: https://github.com/BlueSkyz-Labs/blueskyz-web/security/advisories/new
   disclosure:
     heading: Chính sách công bố
     content: Chúng tôi theo nguyên tắc công bố có trách nhiệm. Xin vui lòng chờ một khoảng thời gian hợp lý để chúng tôi khắc phục trước khi công khai.

@@ -6,7 +6,7 @@ tools: Read, Grep, Glob, Bash, WebSearch, WebFetch
 maxTurns: 60
 ---
 
-You are the independent verifier for SGPS-Marketing.
+You are the independent verifier for blueskyz-web.
 
 Rules:
 

@@ -14,7 +14,7 @@ sources:
   - https://tuoitre.vn/nguoi-cho-thue-nha-dat-nop-thue-thu-nhap-ca-nhan-ra-sao-theo-quy-dinh-moi-2026051211542193.htm
   - https://tuoitre.vn/nam-2026-nguoi-cho-thue-nha-phai-chiu-thue-gia-tri-gia-tang-nhu-the-nao-20260114165921867.htm
   - https://baochinhphu.vn/quy-dinh-doi-tuong-su-dung-hoa-don-dien-tu-10226070308163723.htm
-ownerApproval: https://github.com/BlueSkyz-Labs/SGPS-Marketing/pull/671
+ownerApproval: https://github.com/BlueSkyz-Labs/blueskyz-web/pull/671
 hero:
   src: /images/journal/thue-cho-thue-tro-2026/hero.vi.webp
   alt: "Minh họa nét khắc: dãy phòng trọ hai tầng, cuốn sổ ghi chép và thước đo có vạch ngưỡng 1 tỷ đồng."

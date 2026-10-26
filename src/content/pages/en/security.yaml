@@ -10,7 +10,7 @@ sections:
     heading: How to report
     content: Please use GitHub private vulnerability reporting to submit security issues.
     cta: Open GitHub Advisory
-    href: https://github.com/BlueSkyz-Labs/SGPS-Marketing/security/advisories/new
+    href: https://github.com/BlueSkyz-Labs/blueskyz-web/security/advisories/new
   disclosure:
     heading: Disclosure policy
     content: We follow responsible disclosure practices. Please allow reasonable time for remediation before public disclosure.

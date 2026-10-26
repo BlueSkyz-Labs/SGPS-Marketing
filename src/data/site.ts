@@ -40,7 +40,7 @@ export const SITE = {
 
 /** Public GitHub private vulnerability reporting (SECURITY.md). */
 export const SECURITY_ADVISORY_URL =
-  "https://github.com/BlueSkyz-Labs/SGPS-Marketing/security/advisories/new";
+  "https://github.com/BlueSkyz-Labs/blueskyz-web/security/advisories/new";
 
 import type { Language } from "../lib/i18n.ts";
 
