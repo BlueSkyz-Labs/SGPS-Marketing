@@ -44,8 +44,6 @@ const reverse = lockupGeometry(size, "ink");
 const Tag = href ? "a" : "p";
 const className = [
   "brand-lockup inline-flex min-h-11 items-center no-underline",
-  size === "header" && "brand-signal",
-  size === "hero" && "brand-signal",
   adaptive && "brand-lockup--adaptive",
 ]
   .filter(Boolean)

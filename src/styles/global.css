@@ -816,10 +816,6 @@ html[data-intent="evaluate-product"] [data-journey-bar] a[href$="/products/"] {
   z-index: 1;
 }
 
-.brand-signal {
-  letter-spacing: -0.03em;
-}
-
 .reveal {
   opacity: 1;
 }
@@ -828,10 +824,6 @@ html[data-intent="evaluate-product"] [data-journey-bar] a[href$="/products/"] {
   /* Content stays fully opaque for LCP; only transform is progressive. */
   .reveal {
     animation: reveal-rise 400ms cubic-bezier(0.22, 1, 0.36, 1) both;
-  }
-
-  .brand-signal {
-    animation: brand-settle 400ms cubic-bezier(0.22, 1, 0.36, 1) both;
   }
 
   .hero-atmosphere {
@@ -849,16 +841,6 @@ html[data-intent="evaluate-product"] [data-journey-bar] a[href$="/products/"] {
 
     to {
       transform: translateY(0);
-    }
-  }
-
-  @keyframes brand-settle {
-    from {
-      letter-spacing: 0.02em;
-    }
-
-    to {
-      letter-spacing: -0.03em;
     }
   }
 
@@ -908,7 +890,6 @@ html[data-intent="evaluate-product"] [data-journey-bar] a[href$="/products/"] {
   }
 
   .reveal,
-  .brand-signal,
   .hero-atmosphere,
   .hero-mark {
     animation: none;

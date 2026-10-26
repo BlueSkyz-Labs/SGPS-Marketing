@@ -18,7 +18,10 @@ interface Props {
 }
 const { art = null } = Astro.props;
 // 18rem on wide screens, min(78vw, 17rem) on phones; the 480w derivative is
-// enough below 2x on most screens.
+// enough below 2x on most screens. Not lazy: the capture sits beside the copy
+// on wide screens and reaches the first phone viewport, where Lighthouse
+// measured it as the LCP element (sotam, 2026-10-26), so it is fetched
+// eagerly at high priority.
 const SIZES = "(min-width: 64rem) 18rem, min(78vw, 17rem)";
 ---
 
@@ -44,7 +47,7 @@ const SIZES = "(min-width: 64rem) 18rem, min(78vw, 17rem)";
           alt=""
           width={art.width}
           height={art.height}
-          loading="lazy"
+          fetchpriority="high"
           decoding="async"
         />
       </figure>

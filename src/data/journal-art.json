@@ -6,6 +6,13 @@
     "template": "tools/journal-art/figures/so-tam-ban-demo.mjs",
     "rightsHolder": "BlueSkyz Labs"
   },
+  "/images/journal/so-tam-ban-demo/hero.en-800.webp": {
+    "sha256": "3dc6f3c27ee09a43243d087ac29738f5fef2b5e73af6326838dc834430d5b828",
+    "width": 800,
+    "height": 450,
+    "template": "tools/journal-art/figures/so-tam-ban-demo.mjs",
+    "rightsHolder": "BlueSkyz Labs"
+  },
   "/images/journal/so-tam-ban-demo/hero.en.og.jpg": {
     "sha256": "33128952ee8ec7cf223df5c211d041c68276c19fbb7b2b24daff122f1dcc591d",
     "width": 1200,
@@ -24,6 +31,13 @@
     "sha256": "d833d952cde79168d35021d6f8d6f09ca6f312e7728b0e1a2e321576af195006",
     "width": 1200,
     "height": 675,
+    "template": "tools/journal-art/figures/so-tam-ban-demo.mjs",
+    "rightsHolder": "BlueSkyz Labs"
+  },
+  "/images/journal/so-tam-ban-demo/hero.vi-800.webp": {
+    "sha256": "2140387631bb9323506d88bfffe07eb75e0dcd5f4d83a31b96aa203b0bfc9458",
+    "width": 800,
+    "height": 450,
     "template": "tools/journal-art/figures/so-tam-ban-demo.mjs",
     "rightsHolder": "BlueSkyz Labs"
   },
@@ -48,6 +62,13 @@
     "template": "tools/journal-art/figures/so-tam-ban-demo.mjs",
     "rightsHolder": "BlueSkyz Labs"
   },
+  "/images/journal/so-tam-ban-demo/infographic.en-800.webp": {
+    "sha256": "a72edc78e4181de9e83026ba44c4ad3175797e9ce66f655d0f0b6d8bf84822d5",
+    "width": 800,
+    "height": 840,
+    "template": "tools/journal-art/figures/so-tam-ban-demo.mjs",
+    "rightsHolder": "BlueSkyz Labs"
+  },
   "/images/journal/so-tam-ban-demo/infographic.en.webp": {
     "sha256": "a2b01f2b96854f495f07afb5ca81d6bb5118f339b71cb4a4b054e7d9d55d6a39",
     "width": 2400,
@@ -62,6 +83,13 @@
     "template": "tools/journal-art/figures/so-tam-ban-demo.mjs",
     "rightsHolder": "BlueSkyz Labs"
   },
+  "/images/journal/so-tam-ban-demo/infographic.vi-800.webp": {
+    "sha256": "a5502a118b7a074c4427994438672f2b53008e7e65795a4e5cef7ef1eaf53ad5",
+    "width": 800,
+    "height": 840,
+    "template": "tools/journal-art/figures/so-tam-ban-demo.mjs",
+    "rightsHolder": "BlueSkyz Labs"
+  },
   "/images/journal/so-tam-ban-demo/infographic.vi.webp": {
     "sha256": "bfbdbee9ca3064d9be1c5710e22e30d1b941c53b5881f8d21ac807e90b7a7824",
     "width": 2400,
@@ -73,6 +101,13 @@
     "sha256": "75d2d8c7ddbb9bf1949a1133c6860f6c34174f9701f8cbdd25b4f4d9c1d1d754",
     "width": 1200,
     "height": 675,
+    "template": "tools/journal-art/figures/so-tro-ngay-dau-thang.mjs",
+    "rightsHolder": "BlueSkyz Labs"
+  },
+  "/images/journal/so-tro-ngay-dau-thang/hero.en-800.webp": {
+    "sha256": "c48367e959e87ae005a0d66a857adb8ade6c6b5828393e60ebd106b6bc62af03",
+    "width": 800,
+    "height": 450,
     "template": "tools/journal-art/figures/so-tro-ngay-dau-thang.mjs",
     "rightsHolder": "BlueSkyz Labs"
   },
@@ -97,6 +132,13 @@
     "template": "tools/journal-art/figures/so-tro-ngay-dau-thang.mjs",
     "rightsHolder": "BlueSkyz Labs"
   },
+  "/images/journal/so-tro-ngay-dau-thang/hero.vi-800.webp": {
+    "sha256": "05bbb6aef8c28bb434cfd991f1b3a44aa8203445ac99062a826968cffc643875",
+    "width": 800,
+    "height": 450,
+    "template": "tools/journal-art/figures/so-tro-ngay-dau-thang.mjs",
+    "rightsHolder": "BlueSkyz Labs"
+  },
   "/images/journal/so-tro-ngay-dau-thang/hero.vi.og.jpg": {
     "sha256": "4c19b6e3a4fc3c4f49516df634e7d24d4187e96696c7f3601154dbd2f3362320",
     "width": 1200,
@@ -118,6 +160,13 @@
     "template": "tools/journal-art/figures/so-tro-ngay-dau-thang.mjs",
     "rightsHolder": "BlueSkyz Labs"
   },
+  "/images/journal/so-tro-ngay-dau-thang/infographic.en-800.webp": {
+    "sha256": "56f97b5d9a4faa6ac24cfab1b10f75d2d16fb8d2b32f1317c4f7dda53baa46e5",
+    "width": 800,
+    "height": 840,
+    "template": "tools/journal-art/figures/so-tro-ngay-dau-thang.mjs",
+    "rightsHolder": "BlueSkyz Labs"
+  },
   "/images/journal/so-tro-ngay-dau-thang/infographic.en.webp": {
     "sha256": "8f8ab8c52c9188c1bcc35d1854622f1ce4478fd93e6a25aafc88be8b89646609",
     "width": 2400,
@@ -132,6 +181,13 @@
     "template": "tools/journal-art/figures/so-tro-ngay-dau-thang.mjs",
     "rightsHolder": "BlueSkyz Labs"
   },
+  "/images/journal/so-tro-ngay-dau-thang/infographic.vi-800.webp": {
+    "sha256": "72cbef5babd9939cef1d176fce2cded15e4ac7f96355fd82d7047d576a509489",
+    "width": 800,
+    "height": 840,
+    "template": "tools/journal-art/figures/so-tro-ngay-dau-thang.mjs",
+    "rightsHolder": "BlueSkyz Labs"
+  },
   "/images/journal/so-tro-ngay-dau-thang/infographic.vi.webp": {
     "sha256": "e5d4e14d007fc19a81b790a3491761d9fac14aa494fd3eea589f090d947c7a3f",
     "width": 2400,
@@ -143,6 +199,13 @@
     "sha256": "35b9aeda9850aca9d30b7c417423fde2a6b34301176f3710941e1ae03e6ff632",
     "width": 1200,
     "height": 675,
+    "template": "tools/journal-art/figures/so-tro-xem-truoc.mjs",
+    "rightsHolder": "BlueSkyz Labs"
+  },
+  "/images/journal/so-tro-xem-truoc/hero.en-800.webp": {
+    "sha256": "ca4914f7a8105d8669ec1da06983442c1eeba147862ac6bff41c407e654ee307",
+    "width": 800,
+    "height": 450,
     "template": "tools/journal-art/figures/so-tro-xem-truoc.mjs",
     "rightsHolder": "BlueSkyz Labs"
   },
@@ -167,6 +230,13 @@
     "template": "tools/journal-art/figures/so-tro-xem-truoc.mjs",
     "rightsHolder": "BlueSkyz Labs"
   },
+  "/images/journal/so-tro-xem-truoc/hero.vi-800.webp": {
+    "sha256": "71a29536a4ff666ff0b3fbf3745f4df1c3fb828c6816f9645be7c4d2c86b5b35",
+    "width": 800,
+    "height": 450,
+    "template": "tools/journal-art/figures/so-tro-xem-truoc.mjs",
+    "rightsHolder": "BlueSkyz Labs"
+  },
   "/images/journal/so-tro-xem-truoc/hero.vi.og.jpg": {
     "sha256": "40a470a52074eb79d03ad8fe08cc970c7d7da393b6f1331af81fbc070fbb073b",
     "width": 1200,
@@ -188,6 +258,13 @@
     "template": "tools/journal-art/figures/so-tro-xem-truoc.mjs",
     "rightsHolder": "BlueSkyz Labs"
   },
+  "/images/journal/so-tro-xem-truoc/infographic.en-800.webp": {
+    "sha256": "9aa43777ccf2836da8486d5699273141e4cbc3bada6c04a4882d8f8cea6b6c63",
+    "width": 800,
+    "height": 840,
+    "template": "tools/journal-art/figures/so-tro-xem-truoc.mjs",
+    "rightsHolder": "BlueSkyz Labs"
+  },
   "/images/journal/so-tro-xem-truoc/infographic.en.webp": {
     "sha256": "355f7edca60a30d98709508ef305cf4d9e284ff20cb4d6b369e34b788bcf1a56",
     "width": 2400,
@@ -202,6 +279,13 @@
     "template": "tools/journal-art/figures/so-tro-xem-truoc.mjs",
     "rightsHolder": "BlueSkyz Labs"
   },
+  "/images/journal/so-tro-xem-truoc/infographic.vi-800.webp": {
+    "sha256": "ec120849df63e311a1f7ba863ec2971922f3f277ac7486e3de9e1bae8f343daa",
+    "width": 800,
+    "height": 840,
+    "template": "tools/journal-art/figures/so-tro-xem-truoc.mjs",
+    "rightsHolder": "BlueSkyz Labs"
+  },
   "/images/journal/so-tro-xem-truoc/infographic.vi.webp": {
     "sha256": "5a3559fe12397bf2618fafd63bc79b6e28bcf592473ff115ef146fd3c753f232",
     "width": 2400,
@@ -213,6 +297,13 @@
     "sha256": "bdd2be0f7b7bad0ae54c6233d8df317e39540751daaa39d1c0ec9592f34d3b74",
     "width": 1200,
     "height": 675,
+    "template": "tools/journal-art/figures/thue-cho-thue-tro-2026.mjs",
+    "rightsHolder": "BlueSkyz Labs"
+  },
+  "/images/journal/thue-cho-thue-tro-2026/hero.en-800.webp": {
+    "sha256": "ecc588e28b6619ebef1caa8068baee23f5c74e7da1a41cee2cae810f3e0249cb",
+    "width": 800,
+    "height": 450,
     "template": "tools/journal-art/figures/thue-cho-thue-tro-2026.mjs",
     "rightsHolder": "BlueSkyz Labs"
   },
@@ -237,6 +328,13 @@
     "template": "tools/journal-art/figures/thue-cho-thue-tro-2026.mjs",
     "rightsHolder": "BlueSkyz Labs"
   },
+  "/images/journal/thue-cho-thue-tro-2026/hero.vi-800.webp": {
+    "sha256": "8e95b6f119c48ae31b396d6fdbea46d55492416e7b978f37ee40245ac5eb30fd",
+    "width": 800,
+    "height": 450,
+    "template": "tools/journal-art/figures/thue-cho-thue-tro-2026.mjs",
+    "rightsHolder": "BlueSkyz Labs"
+  },
   "/images/journal/thue-cho-thue-tro-2026/hero.vi.og.jpg": {
     "sha256": "b5501ae8b80cf7849200e52974529372026bd4a1963428bd46b3ecf397ad0cc9",
     "width": 1200,
@@ -258,6 +356,13 @@
     "template": "tools/journal-art/figures/thue-cho-thue-tro-2026.mjs",
     "rightsHolder": "BlueSkyz Labs"
   },
+  "/images/journal/thue-cho-thue-tro-2026/infographic.en-800.webp": {
+    "sha256": "a9fb274553f24e5cefc1cadeeefe02cb85b7e190e210aea228c25640199c6994",
+    "width": 800,
+    "height": 1133,
+    "template": "tools/journal-art/figures/thue-cho-thue-tro-2026.mjs",
+    "rightsHolder": "BlueSkyz Labs"
+  },
   "/images/journal/thue-cho-thue-tro-2026/infographic.en.webp": {
     "sha256": "c1dd3b0e88e0362e3b2309d80688222f972c7e96ae5d2bff21c67b07bec4631c",
     "width": 2400,
@@ -272,6 +377,13 @@
     "template": "tools/journal-art/figures/thue-cho-thue-tro-2026.mjs",
     "rightsHolder": "BlueSkyz Labs"
   },
+  "/images/journal/thue-cho-thue-tro-2026/infographic.vi-800.webp": {
+    "sha256": "0a7800212d7abb2f239b259b2c321496520cfa33e2e8ad7cd0a4a6305c95e86b",
+    "width": 800,
+    "height": 1133,
+    "template": "tools/journal-art/figures/thue-cho-thue-tro-2026.mjs",
+    "rightsHolder": "BlueSkyz Labs"
+  },
   "/images/journal/thue-cho-thue-tro-2026/infographic.vi.webp": {
     "sha256": "53564abb45574b5de98f89655eb8a66529eaee15bd436a28344409e61cc26fd4",
     "width": 2400,
@@ -283,6 +395,13 @@
     "sha256": "afc0db559f8c84551040d614a1ad286e3972ace2e1c5230690f2f896f41ff7e2",
     "width": 1200,
     "height": 675,
+    "template": "tools/journal-art/figures/vung-tay-lai-ban-demo.mjs",
+    "rightsHolder": "BlueSkyz Labs"
+  },
+  "/images/journal/vung-tay-lai-ban-demo/hero.en-800.webp": {
+    "sha256": "00d09426dff1f73a85224f9dca96cc69ce2d249a4492b7a2ae4c285163e4fd1a",
+    "width": 800,
+    "height": 450,
     "template": "tools/journal-art/figures/vung-tay-lai-ban-demo.mjs",
     "rightsHolder": "BlueSkyz Labs"
   },
@@ -307,6 +426,13 @@
     "template": "tools/journal-art/figures/vung-tay-lai-ban-demo.mjs",
     "rightsHolder": "BlueSkyz Labs"
   },
+  "/images/journal/vung-tay-lai-ban-demo/hero.vi-800.webp": {
+    "sha256": "0633a21b104a960f5b27417b87aaeb56ca42abee8603be2b76b8766dfd49eb62",
+    "width": 800,
+    "height": 450,
+    "template": "tools/journal-art/figures/vung-tay-lai-ban-demo.mjs",
+    "rightsHolder": "BlueSkyz Labs"
+  },
   "/images/journal/vung-tay-lai-ban-demo/hero.vi.og.jpg": {
     "sha256": "294eb1cb4367d1f2c7fa7a0348f6e4f3e52806b7f6da76db104b0c0e385ce72c",
     "width": 1200,
@@ -328,6 +454,13 @@
     "template": "tools/journal-art/figures/vung-tay-lai-ban-demo.mjs",
     "rightsHolder": "BlueSkyz Labs"
   },
+  "/images/journal/vung-tay-lai-ban-demo/infographic.en-800.webp": {
+    "sha256": "e46652d5518a785236b3b19ea3e183526f1337826dfc2d4fc3de9413920a2c65",
+    "width": 800,
+    "height": 840,
+    "template": "tools/journal-art/figures/vung-tay-lai-ban-demo.mjs",
+    "rightsHolder": "BlueSkyz Labs"
+  },
   "/images/journal/vung-tay-lai-ban-demo/infographic.en.webp": {
     "sha256": "12cd438a92f4e62b7ec39e78555ac072994f6525f7382e45e6f3af0afc731eb0",
     "width": 2400,
@@ -339,6 +472,13 @@
     "sha256": "6a19936f780e9321286b7a63cdd9e2a4416b12d041062e850dbc5601df993a13",
     "width": 1200,
     "height": 1260,
+    "template": "tools/journal-art/figures/vung-tay-lai-ban-demo.mjs",
+    "rightsHolder": "BlueSkyz Labs"
+  },
+  "/images/journal/vung-tay-lai-ban-demo/infographic.vi-800.webp": {
+    "sha256": "812000861b6657c487622eb46846d29eb13dcf6ce091df74489b80135072a6bf",
+    "width": 800,
+    "height": 840,
     "template": "tools/journal-art/figures/vung-tay-lai-ban-demo.mjs",
     "rightsHolder": "BlueSkyz Labs"
   },

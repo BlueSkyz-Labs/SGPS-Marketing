@@ -74,6 +74,11 @@ for (const fig of figures) {
       out.replace(/\.webp$/, "-1200.webp"),
       (img) => img.resize({ width: 1200 }).webp({ quality: 84, effort: 6 }),
     ],
+    // Phones (100vw at 1.75-2x) pick this instead of the 1200 px cut.
+    [
+      out.replace(/\.webp$/, "-800.webp"),
+      (img) => img.resize({ width: 800 }).webp({ quality: 84, effort: 6 }),
+    ],
   ];
   if (fig.name === "hero") {
     variants.push([

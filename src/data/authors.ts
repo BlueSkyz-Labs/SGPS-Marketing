@@ -26,6 +26,7 @@ export interface Author {
   role: Record<AuthorLanguage, string>;
   /** Site-relative paths under `public/`: 256 px (rendered at 64 CSS px) and 512 px. */
   avatar: string;
+  avatarSmall: string;
   avatarLarge: string;
   avatarAlt: Record<AuthorLanguage, string>;
   /** Truthful origin of the portrait, kept next to the asset it describes. */
@@ -43,6 +44,8 @@ export const AUTHORS = {
       en: "Founder & CEO",
     },
     avatar: "/images/authors/tony-nguyen-256.webp",
+    // 128 px cut of the same illustration for the 24-48 px byline and card.
+    avatarSmall: "/images/authors/tony-nguyen-128.webp",
     avatarLarge: "/images/authors/tony-nguyen-512.webp",
     avatarAlt: {
       vi: "Chân dung chibi minh hoạ Tony Nguyen",

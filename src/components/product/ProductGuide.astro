@@ -5,6 +5,7 @@ import type { ShowcaseSchema } from "@/lib/showcase-schema";
 import Container from "@/components/layout/Container.astro";
 import ButtonLink from "@/components/ui/ButtonLink.astro";
 import { webPreviewOpen } from "./product-page-copy";
+import { desktopSmallSrc, phoneSmallSrc } from "./story-copy";
 
 /**
  * GOLIVE W5 — onboarding guide built only from the product's recorded real
@@ -20,6 +21,11 @@ interface Props {
 const { product, showcase, lang } = Astro.props;
 const guide = showcase.guide!;
 const screens = new Map(showcase.screens.map((item) => [item.id, item]));
+// Phone shots are capped at 19rem; desktop shots fill one column of the
+// two-column step from 48rem, the full container below it. Phones then fetch
+// the 480/768 px derivatives instead of the 780/1920 px masters.
+const PHONE_SIZES = "19rem";
+const DESKTOP_SIZES = "(min-width: 48rem) 36rem, calc(100vw - 2.5rem)";
 const productHref = `/${lang}/products/${product.data.slug}/`;
 
 const COPY = {
@@ -125,6 +131,12 @@ const t = COPY[lang];
             <figure class="guide__shot view-rise m-0">
               <img
                 src={shot.src}
+                srcset={
+                  shot.surface === "phone"
+                    ? `${phoneSmallSrc(shot.src)} 480w, ${shot.src} ${shot.width}w`
+                    : `${desktopSmallSrc(shot.src)} 768w, ${shot.src} ${shot.width}w`
+                }
+                sizes={shot.surface === "phone" ? PHONE_SIZES : DESKTOP_SIZES}
                 alt={shot.alt[lang]}
                 width={shot.width}
                 height={shot.height}
