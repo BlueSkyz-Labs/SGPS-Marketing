@@ -48,8 +48,45 @@
 | AD-5 | **Social profiles** for `sameAs` and Open Graph attribution.                                                                                                                                                                    | Only once real profiles exist.                                                                                                                                                | No profile facts exist in the repo.                                      |
 | AD-6 | **Tagline-free identity lockups.** The locked art reads "AI Driving Coach" (Vững Tay Lái) and "AI Journal for Clarity" (Sổ Tâm); neither product has a runtime AI dependency today. Both are held off the profile pages (OG-3). | A brand-kit lockup with no tagline, same mark and wordmark; the hold is lifted only for that file.                                                                            | The logo is LOCKED; only the Owner or brand kit can supply a new file.   |
 
+### 4.1 Owner decisions recorded 2026-10-26 (GMT+7)
+
+The Owner chose the recommended option on the AD-1 decision card and then said to proceed "theo best practice" (per the recommendations), on 2026-10-26.
+
+| ID   | Outcome                                                                                                                                                                                                                                                     |
+| ---- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| AD-1 | **Decided: contact by email.** The conversion is a visitor reaching `/{lang}/contact/` from the Sổ Trọ page and writing to the published business mailbox. No waitlist, no form, no new data store. A first-party waitlist needs its own plan and approval. |
+| AD-2 | **Decided: UTM-tagged landing URLs, read through the existing aggregate analytics.** No ad tag, pixel, cookie or identifier is added, so the published privacy notice and CSP stay true.                                                                    |
+| AD-3 | **Decided: Sổ Trọ only.** Sổ Tâm and Vững Tay Lái stay organic while they are In development.                                                                                                                                                               |
+| AD-4 | **In progress.** The `google-site-verification` TXT record is present in DNS (read 2026-10-26). Whether Search Console has completed verification is an Owner read; Bing is not yet verified by DNS.                                                        |
+| AD-5 | Open (no real profiles yet).                                                                                                                                                                                                                                |
+| AD-6 | Open (brand kit file needed).                                                                                                                                                                                                                               |
+
 ## 5. Not doing
 
 - No fake ratings, reviews, prices, user counts or testimonials in structured data or ads.
 - No `llms.txt`-style special AI files beyond the existing one; Google says they are not needed.
 - No tracking pixel, fingerprinting or cookie before AD-2 is decided.
+
+## 6. Paid-traffic launch kit (AD-1..AD-3 as decided)
+
+No source change is needed: the path already exists on production (read 2026-10-26). The Sổ Trọ page has one primary action (`#profile-showcase`) and one secondary action, "Liên hệ với chúng tôi" / "Contact us", to `/{lang}/contact/`, which lists the business mailbox. Query strings do not change the canonical (`https://blueskyzlabs.com/vi/products/sotro/`), so tagged URLs do not create duplicate pages for search.
+
+**Landing URLs** (the ad account adds the parameters; the site reads none of them):
+
+- Vietnamese (primary market): `https://blueskyzlabs.com/vi/products/sotro/?utm_source={source}&utm_medium=cpc&utm_campaign=sotro-{yyyymm}&utm_content={ad}`
+- English: the same path under `/en/`.
+- Keep `utm_*` values lowercase, ASCII and free of personal data.
+
+**What counts, and where to read it**
+
+- Primary signal: visits to `/vi/contact/` and `/en/contact/` whose referrer is the Sổ Trọ page, plus emails to the business mailbox that mention Sổ Trọ. Both are read by the Owner (Cloudflare Web Analytics dashboard, mailbox).
+- Whether Cloudflare Web Analytics keeps `utm_*` query strings in its reports is NOT VERIFIED. If it does not, campaign split comes from the ad platform's click counts against the contact-page trend.
+- Not measured, by design: mailto clicks, per-visitor journeys, conversions inside the ad platform. Adding any of them is AD-2 territory: privacy notice update and legal review first.
+
+**Before the first ad (Owner)**
+
+1. The ad account and budget are the Owner's; this repository holds no ad credentials or spend.
+2. Ad copy follows `docs/editorial/PUBLIC_CONTENT_STANDARD.md`: Sổ Trọ is "Preview" / "Xem trước", the web app is in preview, Android and iOS are in development. No price, rating, user count or "free forever" claim.
+3. Google Ads destination checks: the page answers 200 on mobile and desktop, has no interstitial, and `robots.txt` blocks no crawler (AdsBot included).
+
+**Agent follow-up after launch:** re-read the landing and contact pages live in vi and en after each copy change, and record the first month's contact-page trend from the Owner's dashboard numbers. Numbers are never estimated.
