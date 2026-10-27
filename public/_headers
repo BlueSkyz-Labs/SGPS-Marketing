@@ -18,15 +18,24 @@
   Cache-Control: public, max-age=31536000, immutable
 
 # Font filenames include their upstream version; the stable public assets below
-# can be replaced in place, so let browsers refresh them regularly.
+# can be replaced in place (same file name, new bytes), so they are not
+# immutable. One day fresh, then up to a week served from cache while the
+# browser revalidates in the background (RFC 5861 stale-while-revalidate):
+# a replaced capture reaches a returning visitor within a day, and repeat
+# visits stop paying a round trip per image. PageSpeed 2026-10-26: these paths
+# were cached 1 h (/images and /social not at all).
 /fonts/*.woff2
   Cache-Control: public, max-age=31536000, immutable
 /products/*
-  Cache-Control: public, max-age=3600
+  Cache-Control: public, max-age=86400, stale-while-revalidate=604800
 /icons/*
-  Cache-Control: public, max-age=3600
+  Cache-Control: public, max-age=86400, stale-while-revalidate=604800
 /brand/*
-  Cache-Control: public, max-age=3600
+  Cache-Control: public, max-age=86400, stale-while-revalidate=604800
+/images/*
+  Cache-Control: public, max-age=86400, stale-while-revalidate=604800
+/social/*
+  Cache-Control: public, max-age=86400, stale-while-revalidate=604800
 
 # Stable workers.dev host (baked SITE.url may be a custom domain while this host still serves the same dist).
 https://blueskyz-web.thinhnguyen-km10.workers.dev/*
