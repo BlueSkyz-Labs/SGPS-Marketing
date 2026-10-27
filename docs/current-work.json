@@ -404,11 +404,6 @@
       "blocks": ["tru-12-source-fit"]
     },
     {
-      "id": "wave-g-stack-landing",
-      "question": "Merge #675 then #676 then #674 (labelled, green), then add owner-approved to #677, #678, #679, #680, #681, #682 in that order; agents never add or bypass the label and the Owner merges gated PRs.",
-      "blocks": ["wave-g-quiet-luxury-touchpoints-2026-10-24"]
-    },
-    {
       "id": "vungtaylai-listing-copy",
       "question": "Vững Tay Lái listing (#681): keep featuredTier featured or move to ecosystem; approve or rewrite the VI phrase 'câu trả lời ưu tiên độ tự tin' (confidence-first answers); decide whether the home hero sentence and PRODUCT_META get Vững Tay Lái copy (new copy in four locales, none invented by agents); confirm no app, sign-in or store link until the VungTayLai Product Truth LOCK is lifted.",
       "blocks": ["vungtaylai-listing-publication"]
