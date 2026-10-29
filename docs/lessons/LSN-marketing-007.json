@@ -1,0 +1,24 @@
+{
+  "id": "LSN-marketing-007",
+  "title": "Owner console steps need absolute values, and search-console status is checked against the served artifact",
+  "project": "marketing",
+  "source": {
+    "repo": "blueskyz-web",
+    "commit": "8ebff53"
+  },
+  "captured_at": "2026-10-29T04:45:00Z",
+  "class": "owner-console-handoff-unverified",
+  "tags": ["seo", "search-console", "robots", "cloudflare", "handoff"],
+  "trigger": "2026-10-27/29: the agent told the Owner to submit the sitemap as \"sitemap.xml\" on a Search Console Domain property; it was refused as \"Invalid sitemap address\". With the absolute URL it was accepted but showed \"Couldn't fetch\" / type Unknown on the day of submission. Reading the served robots.txt during the check showed a Cloudflare managed group, prepended at the edge, that disallows about 40 AI crawlers, which the source route src/pages/robots.txt.ts does not contain.",
+  "root_cause": "The handoff was written from memory of the URL-prefix property flow instead of the property type actually in use, and robots/sitemap checks read the source route, while the edge provider rewrites the served file.",
+  "rule": "A console step handed to the Owner gives the exact absolute value and the expected result for that property type, and search-engine status is diagnosed from the served artifact (URL Inspection live test, served robots.txt and sitemap) before any source change.",
+  "reuse_boundary": "Search Console, Bing Webmaster and similar Owner-run provider consoles, and any file an edge provider may rewrite (robots.txt, headers). Not a reason to change source when the served file is correct; a first-day \"Couldn't fetch\" alone is not evidence of a site defect.",
+  "guard": {
+    "level": "G1",
+    "kind": "checklist",
+    "path": "docs/superpowers/plans/2026-10-24-seo-ads-marketing-readiness.md section 6, \"Before the first ad (Owner)\" items 4 and 5",
+    "judgment_only_reason": "The failing surfaces are Owner-run provider consoles and a Cloudflare dashboard setting; CI cannot read either, and the served robots.txt is rewritten at the edge after the build, so no source test can observe it."
+  },
+  "recurrences": [],
+  "state": "GUARDED"
+}

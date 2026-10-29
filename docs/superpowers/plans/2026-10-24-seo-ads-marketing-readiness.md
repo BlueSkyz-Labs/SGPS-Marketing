@@ -88,5 +88,7 @@ No source change is needed: the path already exists on production (read 2026-10-
 1. The ad account and budget are the Owner's; this repository holds no ad credentials or spend.
 2. Ad copy follows `docs/editorial/PUBLIC_CONTENT_STANDARD.md`: Sổ Trọ is "Preview" / "Xem trước", the web app is in preview, Android and iOS are in development. No price, rating, user count or "free forever" claim.
 3. Google Ads destination checks: the page answers 200 on mobile and desktop, has no interstitial, and `robots.txt` blocks no crawler (AdsBot included).
+4. Search Console: on a Domain property, submit the sitemap as the absolute URL `https://blueskyzlabs.com/sitemap.xml` (a bare `sitemap.xml` is refused as an invalid address). A first-day status of "Couldn't fetch" with type "Unknown" is not a diagnosis: run URL Inspection, then Test live URL, on the sitemap URL before changing anything (LSN-marketing-007).
+5. Read the served `https://blueskyzlabs.com/robots.txt`, not only `src/pages/robots.txt.ts`: as of 2026-10-29, Cloudflare's managed robots.txt prepends its own group that disallows about 40 AI crawlers, which conflicts with Owner decision D-7 (search=yes, ai-input=yes, ai-train=no). Turning it off is an Owner setting in the Cloudflare dashboard.
 
 **Agent follow-up after launch:** re-read the landing and contact pages live in vi and en after each copy change, and record the first month's contact-page trend from the Owner's dashboard numbers. Numbers are never estimated.
