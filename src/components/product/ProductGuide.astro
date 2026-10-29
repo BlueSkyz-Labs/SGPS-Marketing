@@ -132,12 +132,7 @@ const roleHeading = (role: Step["role"]) => {
 <article class="guide" data-product-guide={product.data.slug}>
   <nav class="guide__localnav" aria-label={t.chapters}>
     <div class="guide__localnav-inner">
-      <a
-        class="guide__back"
-        href={productHref}
-        aria-label={t.back}
-        title={t.back}
-      >
+      <a class="guide__back" href={productHref} title={t.back}>
         <span class="guide__back-name">{product.data.name}</span>
         <span class="guide__back-sub">{guide.title[lang]}</span>
       </a>

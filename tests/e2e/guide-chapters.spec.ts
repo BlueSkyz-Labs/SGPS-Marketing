@@ -13,6 +13,11 @@ const PATH = (lang: string) => `/${lang}/products/sotro/guide/`;
 for (const lang of LANGS) {
   test(`${lang}: guide has no WCAG A/AA violations`, async ({ page }) => {
     await page.goto(PATH(lang));
+    const backLink = page.locator(".guide__back");
+    const visibleName = (await backLink.innerText())
+      .replace(/\s+/g, " ")
+      .trim();
+    await expect(backLink).toHaveAccessibleName(visibleName);
     const results = await new AxeBuilder({ page })
       .withTags(["wcag2a", "wcag2aa", "wcag21aa", "wcag22aa"])
       .analyze();
