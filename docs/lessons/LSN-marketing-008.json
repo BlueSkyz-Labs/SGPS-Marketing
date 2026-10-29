@@ -16,7 +16,7 @@
   "source": {
     "commit": "74842431f4018adb6edcb000eb231f9a2d9daebb",
     "pr": 710,
-    "repo": "SGPS-Marketing"
+    "repo": "blueskyz-web"
   },
   "state": "CANDIDATE",
   "tags": ["process", "design", "reference", "network-policy"],
