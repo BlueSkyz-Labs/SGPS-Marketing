@@ -172,15 +172,13 @@ const roleHeading = (role: Step["role"]) => {
 
   {chapters.map((chapter) => {
     const headingId = `${chapter.id}-title`;
+    const rangeId = `${chapter.id}-range`;
     return (
-      <section
-        class="guide__chapter"
-        id={chapter.id}
-        aria-labelledby={headingId}
-        data-guide-chapter
-      >
+      <section class="guide__chapter" id={chapter.id} data-guide-chapter>
         <Container>
-          <p class="guide__eyebrow">{range(chapter)}</p>
+          <p id={rangeId} class="guide__eyebrow">
+            {range(chapter)}
+          </p>
           <h2 id={headingId} class="type-d2 guide__chapter-title">
             {roleHeading(chapter.role)[0]}{" "}
             {roleHeading(chapter.role)[1] ? (
@@ -194,7 +192,7 @@ const roleHeading = (role: Step["role"]) => {
         <div
           class="guide__gallery"
           role="region"
-          aria-labelledby={headingId}
+          aria-labelledby={`${rangeId} ${headingId}`}
           tabindex="0"
           data-gallery
         >

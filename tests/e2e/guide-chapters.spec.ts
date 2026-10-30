@@ -55,6 +55,33 @@ test("chapters follow role runs and keep one step numbering", async ({
   ]);
 });
 
+for (const lang of LANGS) {
+  test(`${lang}: guide chapter regions have unique accessible names`, async ({
+    page,
+  }) => {
+    await page.goto(PATH(lang));
+    if (lang === "en") {
+      await expect(
+        page.locator("#chapter-1 [data-gallery]"),
+      ).toHaveAccessibleName(/^Steps 1–3 Owner.*computer$/);
+      await expect(
+        page.locator("#chapter-2 [data-gallery]"),
+      ).toHaveAccessibleName(/^Steps 4–7 Family.*phone$/);
+      await expect(
+        page.locator("#chapter-3 [data-gallery]"),
+      ).toHaveAccessibleName(/^Step 8 Owner.*computer$/);
+    }
+    const results = await new AxeBuilder({ page })
+      .withRules(["landmark-unique"])
+      .analyze();
+    expect(
+      results.violations.flatMap((v) =>
+        v.nodes.map((node) => `${v.id}: ${node.target.join(" ")}`),
+      ),
+    ).toEqual([]);
+  });
+}
+
 test("the step switcher centres the chosen card and marks it", async ({
   page,
 }) => {
