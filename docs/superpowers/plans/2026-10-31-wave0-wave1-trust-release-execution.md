@@ -1,6 +1,6 @@
 # BlueSkyz Web — Wave 0 / Wave 1 execution handoff (31 October 2026)
 
-**Status:** OWNER-APPROVED START / EXECUTION IN PROGRESS / NOT RELEASE-VERIFIED.  
+**Status:** OWNER-APPROVED START / EXECUTION IN PROGRESS / CI BLOCKED BY #715 / NOT RELEASE-VERIFIED.  
 **Authority:** SGPS FULL, `AGENTS.md`, `docs/current-work.json`, existing decision and evidence records.  
 **Repository:** `BlueSkyz-Labs/blueskyz-web` (formerly SGPS-Marketing).  
 **Live baseline observed:** `main@21875916e127953e56a80f22f381cd56f051038c`, 2026-10-31 GMT+7. Refresh before touching runtime code or merging.  
@@ -25,6 +25,12 @@ Keep `main` unchanged while work is in Draft PR. Do not introduce another design
 | Inherited backlog | #451, #290, #638 open | Reuse their existing owners/plans; signed APK landing waits for product-side artifact |
 
 The 2026-10-27 `docs/current-work.json` note “No PR is open” is **historically dated** and is superseded by this 2026-10-31 live checkpoint. Never rewrite past evidence into a false current state.
+
+## W0.0 — newly discovered P1 security/CI gate (must be resolved before any merge)
+
+On 2026-10-31 the first source-only Draft PR [#714](https://github.com/BlueSkyz-Labs/blueskyz-web/pull/714) ran [Source Assurance 41151416904](https://github.com/BlueSkyz-Labs/blueskyz-web/actions/runs/41151416904) and **FAILED** in `pnpm audit --audit-level=moderate`. Reason: `minimatch <11.0.1`, advisory [GHSA-g3hv-75wg-m249](https://github.com/advisories/GHSA-g3hv-75wg-m249), identified via `eslint` and `@lhci/cli` transitive developer-tool paths. Architecture/type/lint/build/browser jobs were **SKIPPED**; prior #710 green run is now insufficient evidence for future promotion. This is a **source pipeline blocker**, not a verified website vulnerability or production compromise.
+
+**Single-writer remediation:** [#715](https://github.com/BlueSkyz-Labs/blueskyz-web/issues/715), Security/Toolchain agent. Enumerate the `pnpm why minimatch` major-version graph and `optimizationLevel` exposure; prefer compatible upstream upgrades to blanket cross-major override. Any `pnpm-workspace.yaml` / `pnpm-lock.yaml` / tests change may be protected; do not auto-label or merge. Return to #714 only when exact-head audit and full required CI are green. No audit suppression or test skipping.
 
 ## Wave 0 — close current work before adding features
 
@@ -85,6 +91,7 @@ W1.5 and W1.6 remain separate bounded dependencies; neither blocks this docs-onl
 - [x] Existing open-issue ownership preserved (no duplicate umbrella issue).
 - [ ] #710 human visual + native language review complete.
 - [ ] #710 merged through normal protected policy (not authorized by this plan).
+- [ ] #715 compatible security remediation approved, merged and audited; PR #714 CI was FAILED and remains non-PASS.
 - [ ] Local source-only current-work PR all required CI green.
 - [ ] #566 exact deployed Worker/source linkage.
 - [ ] #523 Search Console/Bing and external verification closed with Owner proof.
@@ -94,7 +101,7 @@ W1.5 and W1.6 remain separate bounded dependencies; neither blocks this docs-onl
 
 ## Next agent handoff
 
-1. Fetch `main`, #710 and latest runs again; do not infer an open PR state from this snapshot.
+1. Resolve/check #715 P1 dependency audit blocker through protected security review; no other PR may claim CI PASS from skipped jobs. Then fetch `main`, #710 and latest runs again; do not infer an open PR state from this snapshot.
 2. Finish W0.1 review, file precise actionable defects on #710 if found, or explicitly leave Human E4 pending.
 3. Reconcile this doc and `docs/current-work.json` through exact-head CI on the current Draft PR; do not merge.
 4. Run parallel **read-only** W1 evidence collection where provider access is available; report blockers honestly to Owner.
