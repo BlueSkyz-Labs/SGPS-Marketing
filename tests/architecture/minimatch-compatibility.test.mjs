@@ -20,8 +20,10 @@ test("legacy Lighthouse CI glob/rimraf chain remains compatible with the patched
   const fromRimraf = createRequire(
     fromChromeLauncher.resolve("rimraf/package.json"),
   );
+  const fromLegacyGlob = createRequire(fromRimraf.resolve("glob/package.json"));
   const glob = fromRimraf("glob");
-  const { Minimatch } = fromRimraf("minimatch");
+  // pnpm strict graph: minimatch is a dependency of glob@7, not of rimraf@3.
+  const { Minimatch } = fromLegacyGlob("minimatch");
 
   assert.equal(typeof glob.sync, "function");
   assert.equal(typeof glob.hasMagic, "function");
