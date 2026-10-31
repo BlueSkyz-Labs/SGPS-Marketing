@@ -106,3 +106,9 @@ W1.5 and W1.6 remain separate bounded dependencies; neither blocks this docs-onl
 3. Reconcile this doc and `docs/current-work.json` through exact-head CI on the current Draft PR; do not merge.
 4. Run parallel **read-only** W1 evidence collection where provider access is available; report blockers honestly to Owner.
 5. Start Wave 2 customer-centric enhancements only after these gates are reconciled; no WebGL/3D or new runtime by default.
+
+## Execution addendum — source readbacks on 2026-10-31
+
+- **P1 #715:** protected Draft [#716](https://github.com/BlueSkyz-Labs/blueskyz-web/pull/716) carries a controlled `minimatch@11.0.1` cross-major compatibility candidate, frozen graph and regression test. [CI run 41153013212](https://github.com/BlueSkyz-Labs/blueskyz-web/actions/runs/41153013212) stopped at the **Owner-approved protected-path policy**; dependency audit, ESLint, legacy glob compatibility and browsers were **SKIPPED / NOT VERIFIED**. The agent did not self-label, merge or deploy; approval and independent actual CI remain mandatory. No exemption/audit bypass was introduced.
+- **Product Truth:** new read-only [cross-repo delta evidence](../../evidence/2026-10-31-product-truth-cross-repo-delta.md) compares current product upstream heads to Marketing source pins. Sổ Trọ's authoritative `docs/product/public-profile.json` has the **same blob SHA** as the vendored Marketing snapshot; 444 upstream commits do not by themselves justify re-vendoring or a new product claim. Sổ Tâm / Vững Tay Lái have 770 / 234 intervening commits; runtime/promotability remains unverified and marketing stays source-pinned.
+- **External edge:** current HTTP `robots.txt`, sitemap, and rendered product URLs could not be independently fetched from the available web access; no current Cloudflare production PASS or new edge defect is asserted. Owner Cloudflare / Search Console readback remains a separate external gate.
